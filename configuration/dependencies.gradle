@@ -6,7 +6,7 @@ ext {
 
     compiler = [
             java : JavaVersion.VERSION_1_8,
-            kotlin : '1.2.31'
+            kotlin : '1.3.41'
     ]
 
     daggerVersion = '2.14.+'
@@ -39,7 +39,7 @@ ext {
     ]
 
     presentationDependencies = [
-            "org.jetbrains.kotlin:kotlin-stdlib-jre8:$compiler.kotlin",
+            "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$compiler.kotlin",
             "com.google.dagger:dagger:${daggerVersion}",
             "com.google.dagger:dagger-android-support:${daggerVersion}",
             "android.arch.lifecycle:runtime:$lifecycleVersion",

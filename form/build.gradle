@@ -29,7 +29,7 @@ ext {
     rendererRecyclerViewAdapterVersion = '2.5.0'
     tokenautocompleteVersion = '2.0.8'
     junitVersion = '4.12'
-    testRunnerVersion = '1.0.1'
+    testRunnerVersion = '1.0.2'
     testExpressoVersion = '3.0.1'
     kotlintestVersion = '2.0.7'
     mockitoVersion = '2.15.0'
@@ -41,7 +41,9 @@ dependencies {
     implementation "com.android.support:appcompat-v7:$supportVersion",
             "com.android.support:recyclerview-v7:$supportVersion"
     api "com.github.vivchar:RendererRecyclerViewAdapter:$rendererRecyclerViewAdapterVersion"
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$compiler.kotlin"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.3.41"
+
+    implementation "com.android.support:support-annotations:27.1.1"
 
     // Token Autocomplete
     api "com.splitwise:tokenautocomplete:$tokenautocompleteVersion@aar"
@@ -52,4 +54,5 @@ dependencies {
     androidTestImplementation "com.android.support.test:runner:$testRunnerVersion"
     androidTestImplementation "com.android.support.test.espresso:espresso-core:$testExpressoVersion"
     androidTestImplementation "com.android.support.test.espresso:espresso-contrib:$testExpressoVersion"
+    implementation 'com.android.support.test:runner:1.0.2'
 }
