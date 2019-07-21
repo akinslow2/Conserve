@@ -354,7 +354,7 @@
           "index": 81,
           "hint": "",
           "dataType": "pickerinputrow",
-          "defaultValues": "1:PG&E",
+          "defaultValues": "1:pge",
           "param": "Utility Company",
           "validation": "mandatory",
           "id": "81"

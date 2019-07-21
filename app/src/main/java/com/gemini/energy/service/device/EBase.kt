@@ -39,6 +39,7 @@ abstract class EBase(private val computable: Computable<*>,
     var preAudit: Map<String, Any> = mapOf()
     var featureData: Map<String, Any> = mapOf()
     var electricRateStructure: String = RATE
+    var electricCompanyCode: String = COMPANY_CODE
 
     val usageHoursBusiness = UsageHours()
     val usageHoursSpecific = UsageHours()
@@ -70,12 +71,17 @@ abstract class EBase(private val computable: Computable<*>,
         //is added to the Element Key
         val fix = "Others"
         base.electricRateStructure = preAudit["$fix Electric Rate Structure"] as String
+        base.electricCompanyCode = preAudit["$fix Utility Company"] as String
 
         Timber.d("####### RATE STRUCTURE CHECKER #######")
         Timber.d(electricRateStructure)
+        Timber.d("####### COMPANY CODE CHECKER #######")
+        Timber.d(electricCompanyCode)
 
+        //This is where we are initializing the Electricity Rate Class
+        //Now we are only passing the Rate Structure but we also need to pass the Company Code
         base.electricityRate = utilityRateElectricity.initUtility(
-                Electricity(electricRateStructure)).build()
+                Electricity(electricRateStructure, electricCompanyCode)).build()
 
         Timber.d("####### OBJECT CHECKER #######")
         Timber.d(gasRate.toString())
@@ -250,6 +256,7 @@ abstract class EBase(private val computable: Computable<*>,
 
     companion object {
         private const val RATE = "A-1 TOU"
+        private const val COMPANY_CODE = "pge"
         private val regex = "^.*TOU$".toRegex()
     }
 
