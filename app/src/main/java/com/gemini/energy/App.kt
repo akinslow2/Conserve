@@ -36,6 +36,7 @@ class App : DaggerApplication() {
     }
 
     // TODO: Maybe we would want to initialize Collection here
+    // test to see if it updates
 
     /**
      * Type Counter for Parent - Child
