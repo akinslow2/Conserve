@@ -20,7 +20,7 @@ import java.util.*
 class Cfl (private val computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateElectricity: UtilityRate,
            usageHours: UsageHours, outgoingRows: OutgoingRows, private val context: Context) :
         EBase(computable, utilityRateGas, utilityRateElectricity, usageHours, outgoingRows), IComputable {
-
+// ballastsperfixtures is the equivalent to bulbs per fixture (AK2 - 20190731)
     /**
      * Entry Point
      * */
@@ -36,8 +36,9 @@ class Cfl (private val computable: Computable<*>, utilityRateGas: UtilityRate, u
     private var offPeakHours = 0.0
     private var energyAtPreState = 0.0
 
+    private var bulbcost = 3
     private var seer = 10
-    private var percentHoursReduced = 1.0
+    private var PercentPowerReduced = 0.0
     private var cooling = 1.0
 
     override fun setup() {
@@ -62,7 +63,7 @@ class Cfl (private val computable: Computable<*>, utilityRateGas: UtilityRate, u
         // @Anthony - Verify the Platform Implementation
         // peakHours*.504*peakPrice*powerUsed= cost at Peak rate...
 
-        val powerUsed = actualWatts * ballastsPerFixtures * numberOfFixtures / 1000
+        val powerUsed = actualWatts * numberOfFixtures / 1000
 
         val usageHours = UsageLighting()
         usageHours.peakHours = peakHours
@@ -84,12 +85,13 @@ class Cfl (private val computable: Computable<*>, utilityRateGas: UtilityRate, u
         Timber.d("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
 
         val lifeHours = lightingConfig(ELightingType.CFL)[ELightingIndex.LifeHours.value] as Double
-        val maintenanceSavings = ballastsPerFixtures * numberOfFixtures * 3.0 * usageHoursSpecific.yearly() / lifeHours
 
-        // Delta is going to be Power Used * Percentage Hour Reduced
-        // Percentage Hour Reduced - we get it from the Base - ELighting
+        val maintenanceSavings = ballastsPerFixtures * numberOfFixtures * bulbcost * usageHoursSpecific.yearly() / lifeHours
 
-        val energySavings = energyAtPreState * percentHoursReduced
+        // Delta is going to be Power Used * Percentage Power Reduced
+        // Percentage Power Reduced - we get it from the Base - ELighting
+
+        val energySavings = energyAtPreState * PercentPowerReduced
         val coolingSavings = energySavings * cooling * seer
 
         val energyAtPostState = energyAtPreState - energySavings
