@@ -319,7 +319,7 @@
         {
           "index": 71,
           "hint": "",
-          "dataType": "introw",
+          "dataType": "decimalrow",
           "defaultValues": "",
           "param": "Lighting",
           "validation": "optional",
@@ -328,7 +328,7 @@
         {
           "index": 72,
           "hint": "",
-          "dataType": "introw",
+          "dataType": "decimalrow",
           "defaultValues": "",
           "param": "HVAC",
           "validation": "optional",
@@ -337,7 +337,7 @@
         {
           "index": 73,
           "hint": "",
-          "dataType": "introw",
+          "dataType": "decimalrow",
           "defaultValues": "",
           "param": "Kitchen Equipment",
           "validation": "optional",
