@@ -8,7 +8,7 @@
           "index": 11,
           "hint": "",
           "dataType": "pickerinputrow",
-          "defaultValues": "1:Anthony,2:Ron,3:Johnny,4:Eli",
+          "defaultValues": "1:Anthony,2:Ron,3:Johnny,4:Eli,5:Javi,6:Nick",
           "param": "Name",
           "validation": "mandatory",
           "id": "11"
@@ -109,6 +109,42 @@
           "param": "Facility Type (Others)",
           "validation": "optional",
           "id": "28"
+        },
+        {
+          "index": 29,
+          "hint": "",
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:January,2:February,3:March,4:April,5:May,6:June,7:July,8:August,9:September,10:October,11:November,12:December",
+          "param": "Audit Month",
+          "validation": "mandatory",
+          "id": "29"
+        },
+        {
+          "index": 210,
+          "hint": "",
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:2019,2:2020",
+          "param": "Audit Year",
+          "validation": "mandatory",
+          "id": "210"
+        },
+        {
+          "index": 211,
+          "hint": "",
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:1,2:2,3:3,4:4,5:5,6:6,7:7,8:8,9:9,10:10,11:11,12:12,13:13,14:14,15:15,16:16,17:17,18:18,19:19,20:20,21:21,22:22,23:23,24:24,25:25,26:26,27:27,28:28,29:29,30:30,31:31",
+          "param": "Assessment Start Day",
+          "validation": "mandatory",
+          "id": "211"
+        },
+        {
+          "index": 212,
+          "hint": "",
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:1,2:2,3:3,4:4,5:5,6:6,7:7,8:8,9:9,10:10,11:11,12:12,13:13,14:14,15:15,16:16,17:17,18:18,19:19,20:20,21:21,22:22,23:23,24:24,25:25,26:26,27:27,28:28,29:29,30:30,31:31",
+          "param": "Assessment End Day",
+          "validation": "mandatory",
+          "id": "212"
         }
       ],
       "id": "2"
@@ -132,7 +168,7 @@
           "dataType": "textrow",
           "defaultValues": "",
           "param": "Position",
-          "validation": "mandatory",
+          "validation": "optional",
           "id": "32"
         },
         {
@@ -166,7 +202,7 @@
           "dataType": "introw",
           "defaultValues": "",
           "param": "Number of Vacation Days",
-          "validation": "mandatory",
+          "validation": "optional",
           "id": "41"
         },
         {
@@ -175,7 +211,7 @@
           "dataType": "textrow",
           "defaultValues": "",
           "param": "Monday Operating Hours",
-          "validation": "mandatory",
+          "validation": "optional",
           "id": "42"
         },
         {
@@ -184,7 +220,7 @@
           "dataType": "textrow",
           "defaultValues": "",
           "param": "Tuesday Operating Hours",
-          "validation": "mandatory",
+          "validation": "optional",
           "id": "43"
         },
         {
@@ -193,7 +229,7 @@
           "dataType": "textrow",
           "defaultValues": "",
           "param": "Wednesday Operating Hours",
-          "validation": "mandatory",
+          "validation": "optional",
           "id": "44"
         },
         {
@@ -202,7 +238,7 @@
           "dataType": "textrow",
           "defaultValues": "",
           "param": "Thursday Operating Hours",
-          "validation": "mandatory",
+          "validation": "optional",
           "id": "45"
         },
         {
@@ -211,7 +247,7 @@
           "dataType": "textrow",
           "defaultValues": "",
           "param": "Friday Operating Hours",
-          "validation": "mandatory",
+          "validation": "optional",
           "id": "46"
         },
         {
@@ -220,7 +256,7 @@
           "dataType": "textrow",
           "defaultValues": "",
           "param": "Saturday Operating Hours",
-          "validation": "mandatory",
+          "validation": "optional",
           "id": "47"
         },
         {
@@ -229,7 +265,7 @@
           "dataType": "textrow",
           "defaultValues": "",
           "param": "Sunday Operating Hours",
-          "validation": "mandatory",
+          "validation": "optional",
           "id": "48"
         }
       ],
