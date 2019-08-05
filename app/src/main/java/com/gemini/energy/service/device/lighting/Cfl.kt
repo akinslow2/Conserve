@@ -165,7 +165,7 @@ class Cfl (private val computable: Computable<*>, utilityRateGas: UtilityRate, u
 
     override fun computedFields() = mutableListOf("")
 
-    private fun getFormMapper() = FormMapper(context, R.raw.lighting)
+    private fun getFormMapper() = FormMapper(context, R.raw.cfl)
     private fun getModel() = getFormMapper().decodeJSON()
     private fun getGFormElements() = getFormMapper().mapIdToElements(getModel())
 
