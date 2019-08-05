@@ -142,8 +142,41 @@ class Hvac(private val computable: Computable<*>, utilityRateGas: UtilityRate, u
     private var partPeakHours = 0.0
     private var offPeakHours = 0.0
 
+    /**
+     * Pre Audit Variables
+     */
+
+    var clientname = ""
+    var businessname = ""
+    var auditmonth = ""
+    var audityear = ""
+    var clientaddress = ""
+    var startday = ""
+    var endday = ""
+    var operationhours = ""
+    var bldgarea = ""
+    var utilitycompany = ""
+    var electricstructure = ""
+    var gasstructure = ""
+    var bldgtype = ""
+
+
     override fun setup() {
         try {
+
+            clientname = preAudit["General Client Info Name"]!! as String
+            businessname = preAudit["General Client Info Business Name"]!! as String
+            auditmonth = preAudit["General Client Info Audit Month"]!! as String
+            audityear = preAudit["General Client Info Audit Year"]!! as String
+            clientaddress = preAudit["General Client Info Address"]!! as String
+            startday = preAudit["General Client Info Assessment Start Day"]!! as String
+            endday = preAudit["General Client Info Assessment End Day"]!! as String
+            operationhours = preAudit["Operation Hours Monday Operating Hours"]!! as String
+            bldgarea = preAudit["Area Total (Sq.Ft.)"]!! as String
+            utilitycompany = preAudit["Others Utility Company"]!! as String
+            electricstructure = preAudit["Others Electric Rate Structure"]!! as String
+            gasstructure = preAudit["Others Gas Rate Structure"]!! as String
+            bldgtype = preAudit["General Client Info Facility Type"]!! as String
 
             eer = featureData["EER"]!! as Double
             seer = featureData["SEER"]!! as Double
@@ -347,7 +380,14 @@ class Hvac(private val computable: Computable<*>, utilityRateGas: UtilityRate, u
     /**
      * Define all the fields here - These would be used to Generate the Outgoing Rows or perform the Energy Calculation
      * */
-    override fun preAuditFields() = mutableListOf("")
+    override fun preAuditFields() = mutableListOf("General Client Info Name",
+            "General Client Info Position", "General Client Info Email",
+            "General Client Info Business Name", "General Client Info Audit Month",
+            "General Client Info Audit Year", "General Client Info Address",
+            "General Client Info Assessment Start Day", "General Client Info Assessment End Day",
+            "Operation Hours Monday Operating Hours", "Area Total (Sq.Ft.)",
+            "Others Utility Company", "Others Electric Rate Structure", "Others Gas Rate Structure",
+            "General Client Info Facility Type")
     override fun featureDataFields() = getGFormElements().map { it.value.param!! }.toMutableList()
 
     override fun preStateFields() = mutableListOf("")
