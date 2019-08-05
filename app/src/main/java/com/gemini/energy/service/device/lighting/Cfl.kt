@@ -87,6 +87,8 @@ class Cfl (private val computable: Computable<*>, utilityRateGas: UtilityRate, u
         val lifeHours = lightingConfig(ELightingType.CFL)[ELightingIndex.LifeHours.value] as Double
 
         val maintenanceSavings = LampsPerFixtures * numberOfFixtures * bulbcost * usageHoursSpecific.yearly() / lifeHours
+        // Adding new variables for the report
+        val selfinstallcost = bulbcost * numberOfFixtures * LampsPerFixtures
 
         // Delta is going to be Power Used * Percentage Power Reduced
         // Percentage Power Reduced - we get it from the Base - ELighting
@@ -102,6 +104,7 @@ class Cfl (private val computable: Computable<*>, utilityRateGas: UtilityRate, u
         postRow["__cooling_savings"] = coolingSavings.toString()
         postRow["__energy_savings"] = energySavings.toString()
         postRow["__energy_at_post_state"] = energyAtPostState.toString()
+        postRow["__selfinstall_cost"] = selfinstallcost.toString()
 
         dataHolder.header = postStateFields()
         dataHolder.computable = computable
