@@ -20,7 +20,7 @@ import java.util.*
 class Cfl (private val computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateElectricity: UtilityRate,
            usageHours: UsageHours, outgoingRows: OutgoingRows, private val context: Context) :
         EBase(computable, utilityRateGas, utilityRateElectricity, usageHours, outgoingRows), IComputable {
-// ballastsperfixtures is the equivalent to bulbs per fixture (AK2 - 20190731)
+
     /**
      * Entry Point
      * */
@@ -29,7 +29,7 @@ class Cfl (private val computable: Computable<*>, utilityRateGas: UtilityRate, u
     }
 
     private var actualWatts = 0.0
-    private var ballastsPerFixtures = 0
+    private var LampsPerFixtures = 0
     private var numberOfFixtures = 0
     private var peakHours = 0.0
     private var partPeakHours = 0.0
@@ -44,7 +44,7 @@ class Cfl (private val computable: Computable<*>, utilityRateGas: UtilityRate, u
     override fun setup() {
         try {
             actualWatts = featureData["Actual Watts"]!! as Double
-            ballastsPerFixtures = featureData["Ballasts Per Fixture"]!! as Int
+            LampsPerFixtures = featureData["Lamps Per Fixture"]!! as Int
             numberOfFixtures = featureData["Number of Fixtures"]!! as Int
 
             peakHours = featureData["Peak Hours"]!! as Double
@@ -86,7 +86,7 @@ class Cfl (private val computable: Computable<*>, utilityRateGas: UtilityRate, u
 
         val lifeHours = lightingConfig(ELightingType.CFL)[ELightingIndex.LifeHours.value] as Double
 
-        val maintenanceSavings = ballastsPerFixtures * numberOfFixtures * bulbcost * usageHoursSpecific.yearly() / lifeHours
+        val maintenanceSavings = LampsPerFixtures * numberOfFixtures * bulbcost * usageHoursSpecific.yearly() / lifeHours
 
         // Delta is going to be Power Used * Percentage Power Reduced
         // Percentage Power Reduced - we get it from the Base - ELighting
@@ -132,7 +132,7 @@ class Cfl (private val computable: Computable<*>, utilityRateGas: UtilityRate, u
      * PowerTimeChange >> Energy Efficiency Calculations
      * */
     override fun energyPowerChange(): Double {
-        val powerUsed = actualWatts * ballastsPerFixtures * numberOfFixtures / 1000
+        val powerUsed = actualWatts * LampsPerFixtures * numberOfFixtures / 1000
         val config = lightingConfig(ELightingType.CFL)
         val percentPowerReduced = config[ELightingIndex.PercentPowerReduced.value] as Double
         return powerUsed * percentPowerReduced
