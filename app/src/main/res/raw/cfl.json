@@ -6,6 +6,7 @@
       "elements": [
         {
           "index": 11,
+          "hint": "",
           "dataType": "introw",
           "defaultValues": "",
           "param": "Measured Lux",
@@ -14,6 +15,7 @@
         },
         {
           "index": 12,
+          "hint": "",
           "dataType": "introw",
           "defaultValues": "",
           "param": "Area (Sq. Ft.)",
@@ -22,22 +24,25 @@
         },
         {
           "index": 13,
+          "hint": "",
           "dataType": "pickerinputrow",
-          "defaultValues": "1:LED,2:flourescent,3:halogen,4:high pressure sodium,5:incandescent,6:pulse start metal halide,7:metal halide,8:mercury vapor,9:compact fluorescent,10:halogen incandescent,11:EXIT (Compact Flourescent),12:EXIT (Incandescent),13:EXIT (LED)",
+          "defaultValues": "1:LED,2:Linear Flourescent,3:Halogen,4:High Pressure Sodium,5:Incandescent,6:Metal Halide,7:Mercury Vapor,8:Compact Fluorescent,9:EXIT (Compact Flourescent),10:EXIT (Incandescent),11:EXIT (LED)",
           "param": "Lamp type",
           "validation": "mandatory",
           "id": "13"
         },
         {
           "index": 14,
+          "hint": "",
           "dataType": "introw",
           "defaultValues": "",
-          "param": "Ballasts Per Fixture",
-          "validation": "optional",
+          "param": "Lamps Per Fixture",
+          "validation": "mandatory",
           "id": "14"
         },
         {
           "index": 16,
+          "hint": "",
           "dataType": "introw",
           "defaultValues": "",
           "param": "Number of Fixtures",
@@ -46,18 +51,20 @@
         },
         {
           "index": 17,
+          "hint": "",
           "dataType": "textrow",
           "defaultValues": "",
           "param": "Make",
-          "validation": "",
+          "validation": "optional",
           "id": "17"
         },
         {
           "index": 18,
+          "hint": "",
           "dataType": "textrow",
           "defaultValues": "",
           "param": "Model Number",
-          "validation": "",
+          "validation": "optional",
           "id": "18"
         }
       ],
@@ -69,6 +76,7 @@
       "elements": [
         {
           "index": 21,
+          "hint": "",
           "dataType": "pickerinputrow",
           "defaultValues": "1:Yes,2:No",
           "param": "Controls",
@@ -77,18 +85,20 @@
         },
         {
           "index": 22,
+          "hint": "",
           "dataType": "pickerinputrow",
           "defaultValues": "1:Occupancy Sensor,2:Motion Sensor,3:Daylight Sensor,4:Timer,5:Dimmer",
           "param": "Type of Control",
-          "validation": "",
+          "validation": "optional",
           "id": "22"
         },
         {
           "index": 23,
+          "hint": "",
           "dataType": "introw",
           "defaultValues": "",
           "param": "Number of Lamps Controlled",
-          "validation": "",
+          "validation": "optional",
           "id": "23"
         }
       ],
@@ -99,15 +109,8 @@
       "section": "Power | Usage",
       "elements": [
         {
-          "index": 31,
-          "dataType": "decimalrow",
-          "defaultValues": "",
-          "param": "Nominal Watts",
-          "validation": "",
-          "id": "31"
-        },
-        {
           "index": 32,
+          "hint": "",
           "dataType": "decimalrow",
           "defaultValues": "",
           "param": "Actual Watts",
@@ -118,58 +121,30 @@
       "id": "3"
     },
     {
-      "index": 4,
-      "section": "Ballast",
-      "elements": [
-        {
-          "index": 41,
-          "dataType": "pickerinputrow",
-          "defaultValues": "1:rapid,2:instant,3:programmed",
-          "param": "Strike Time",
-          "validation": "",
-          "id": "41"
-        },
-        {
-          "index": 42,
-          "dataType": "pickerinputrow",
-          "defaultValues": "1:very high,2:high,3:normal,4:reduced",
-          "param": "Ballast Factor",
-          "validation": "",
-          "id": "42"
-        },
-        {
-          "index": 43,
-          "dataType": "pickerinputrow",
-          "defaultValues": "1:electronic,2:magnetic",
-          "param": "Ballast Type",
-          "validation": "",
-          "id": "43"
-        }
-      ],
-      "id": "4"
-    },
-    {
       "index": 5,
       "section": "TOU",
       "elements": [
         {
           "index": 51,
+          "hint": "",
           "dataType": "decimalrow",
           "defaultValues": "",
           "param": "Peak Hours",
-          "validation": "",
+          "validation": "optional",
           "id": "51"
         },
         {
           "index": 52,
+          "hint": "",
           "dataType": "decimalrow",
           "defaultValues": "",
           "param": "Part Peak Hours",
-          "validation": "",
+          "validation": "optional",
           "id": "52"
         },
         {
           "index": 53,
+          "hint": "",
           "dataType": "decimalrow",
           "defaultValues": "",
           "param": "Off Peak Hours",
@@ -186,8 +161,8 @@
         {
           "index": 61,
           "hint": "",
-          "dataType": "textrow",
-          "defaultValues": "",
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:LED,2:Linear Flourescent,3:Halogen,4:High Pressure Sodium,5:Incandescent,6:Metal Halide,7:Mercury Vapor,8:Compact Fluorescent,9:EXIT (Compact Flourescent),10:EXIT (Incandescent),11:EXIT (LED)",
           "param": "Alternate Lamp Type",
           "validation": "optional",
           "id": "61"
@@ -200,15 +175,6 @@
           "param": "Alternate Lamps Per Fixture",
           "validation": "optional",
           "id": "62"
-        },
-        {
-          "index": 63,
-          "hint": "",
-          "dataType": "introw",
-          "defaultValues": "",
-          "param": "Alternate Ballasts Per Fixture",
-          "validation": "optional",
-          "id": "63"
         },
         {
           "index": 64,
@@ -256,41 +222,41 @@
           "id": "68"
         }
       ],
-      "id": "6"
+      "id": "5"
     },
     {
-      "index": 7,
+      "index": 6,
       "section": "Suggested Time",
       "elements": [
         {
-          "index": 71,
+          "index": 61,
           "hint": "",
           "dataType": "introw",
           "defaultValues": "",
-          "param": "Suggested Peak Hours",
+          "param": "Peak Hours",
           "validation": "optional",
-          "id": "71"
+          "id": "61"
         },
         {
-          "index": 72,
+          "index": 62,
           "hint": "",
           "dataType": "introw",
           "defaultValues": "",
-          "param": "Suggested Part Peak Hours",
+          "param": "Part Peak Hours",
           "validation": "optional",
-          "id": "72"
+          "id": "62"
         },
         {
-          "index": 73,
+          "index": 63,
           "hint": "",
           "dataType": "introw",
           "defaultValues": "",
-          "param": "Suggested Off Peak Hours",
+          "param": "Off Peak Hours",
           "validation": "optional",
-          "id": "73"
+          "id": "63"
         }
       ],
-      "id": "7"
+      "id": "6"
     }
   ]
 }
