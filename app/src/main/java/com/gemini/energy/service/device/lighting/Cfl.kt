@@ -27,7 +27,8 @@ class Cfl (private val computable: Computable<*>, utilityRateGas: UtilityRate, u
     override fun compute(): Observable<Computable<*>> {
         return super.compute(extra = ({ Timber.d(it) }))
     }
-
+//create variable here if you want to make it global to the class with private
+    private var percentPowerReduced = 0.0
     private var actualWatts = 0.0
     private var LampsPerFixtures = 0
     private var numberOfFixtures = 0
@@ -38,14 +39,15 @@ class Cfl (private val computable: Computable<*>, utilityRateGas: UtilityRate, u
 
     private var bulbcost = 3
     private var seer = 10
-    private var PercentPowerReduced = 0.0
     private var cooling = 1.0
-
+//Where you extract from user inputs and assign to variables
     override fun setup() {
         try {
             actualWatts = featureData["Actual Watts"]!! as Double
             LampsPerFixtures = featureData["Lamps Per Fixture"]!! as Int
             numberOfFixtures = featureData["Number of Fixtures"]!! as Int
+            val config = lightingConfig(ELightingType.CFL)
+            percentPowerReduced = config[ELightingIndex.PercentPowerReduced.value] as Double
 
             peakHours = featureData["Peak Hours"]!! as Double
             partPeakHours = featureData["Part Peak Hours"]!! as Double
@@ -93,7 +95,7 @@ class Cfl (private val computable: Computable<*>, utilityRateGas: UtilityRate, u
         // Delta is going to be Power Used * Percentage Power Reduced
         // Percentage Power Reduced - we get it from the Base - ELighting
 
-        val energySavings = energyAtPreState * PercentPowerReduced
+        val energySavings = energyAtPreState * percentPowerReduced
         val coolingSavings = energySavings * cooling * seer
 
         val energyAtPostState = energyAtPreState - energySavings
@@ -136,8 +138,6 @@ class Cfl (private val computable: Computable<*>, utilityRateGas: UtilityRate, u
      * */
     override fun energyPowerChange(): Double {
         val powerUsed = actualWatts * LampsPerFixtures * numberOfFixtures / 1000
-        val config = lightingConfig(ELightingType.CFL)
-        val percentPowerReduced = config[ELightingIndex.PercentPowerReduced.value] as Double
         return powerUsed * percentPowerReduced
     }
 
@@ -164,7 +164,7 @@ class Cfl (private val computable: Computable<*>, utilityRateGas: UtilityRate, u
 
     override fun preStateFields() = mutableListOf("")
     override fun postStateFields() = mutableListOf("__life_hours", "__maintenance_savings",
-            "__cooling_savings", "__energy_savings", "__energy_at_post_state")
+            "__cooling_savings", "__energy_savings", "__energy_at_post_state", "__selfinstall_cost")
 
     override fun computedFields() = mutableListOf("")
 
