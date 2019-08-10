@@ -40,6 +40,8 @@ class Cfl (private val computable: Computable<*>, utilityRateGas: UtilityRate, u
     private var bulbcost = 3
     private var seer = 10
     private var cooling = 1.0
+    var electricianCost = 400
+
 //Where you extract from user inputs and assign to variables
     override fun setup() {
         try {
@@ -99,6 +101,9 @@ class Cfl (private val computable: Computable<*>, utilityRateGas: UtilityRate, u
         val coolingSavings = energySavings * cooling * seer
 
         val energyAtPostState = energyAtPreState - energySavings
+        val paybackmonth = selfinstallcost / energySavings * 12
+        val paybackyear = selfinstallcost / energySavings
+        val totalsavings = energySavings + coolingSavings + maintenanceSavings
 
         val postRow = mutableMapOf<String, String>()
         postRow["__life_hours"] = lifeHours.toString()
@@ -107,6 +112,9 @@ class Cfl (private val computable: Computable<*>, utilityRateGas: UtilityRate, u
         postRow["__energy_savings"] = energySavings.toString()
         postRow["__energy_at_post_state"] = energyAtPostState.toString()
         postRow["__selfinstall_cost"] = selfinstallcost.toString()
+        postRow["__payback_month"] = paybackmonth.toString()
+        postRow["__payback_year"] = paybackyear.toString()
+        postRow["__total_savings"] = totalsavings.toString()
 
         dataHolder.header = postStateFields()
         dataHolder.computable = computable
@@ -164,7 +172,8 @@ class Cfl (private val computable: Computable<*>, utilityRateGas: UtilityRate, u
 
     override fun preStateFields() = mutableListOf("")
     override fun postStateFields() = mutableListOf("__life_hours", "__maintenance_savings",
-            "__cooling_savings", "__energy_savings", "__energy_at_post_state", "__selfinstall_cost")
+            "__cooling_savings", "__energy_savings", "__energy_at_post_state", "__selfinstall_cost",
+            "__payback_month", "__payback_year", "__total_savings")
 
     override fun computedFields() = mutableListOf("")
 
