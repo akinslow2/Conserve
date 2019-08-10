@@ -74,6 +74,8 @@ class FeatureDataFragment : BaseFormFragment() {
                 if (model.subType == ELightingType.Halogen.value) {rawId = R.raw.halogen}
                 if (model.subType == ELightingType.Incandescent.value) {rawId = R.raw.incandescent}
                 if (model.subType == ELightingType.LinearFluorescent.value) {rawId = R.raw.linear_fluorescent}
+                if (model.subType == ELightingType.HighPressureSodium.value) {rawId = R.raw.highpressuresodium}
+                if (model.subType == ELightingType.LowPressureSodium.value) {rawId = R.raw.lowpressuresodium}
             }
         }
 
