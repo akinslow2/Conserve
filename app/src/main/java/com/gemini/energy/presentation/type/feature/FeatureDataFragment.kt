@@ -72,8 +72,8 @@ class FeatureDataFragment : BaseFormFragment() {
             else if (model.type == EZoneType.Lighting.value) {
                 if (model.subType == ELightingType.CFL.value) {rawId = R.raw.cfl}
                 if (model.subType == ELightingType.Halogen.value) {rawId = R.raw.halogen}
-                if (model.subType == ELightingType.Incandescent.value) {rawId = R.raw.lighting}
-                if (model.subType == ELightingType.LinearFluorescent.value) {rawId = R.raw.lighting}
+                if (model.subType == ELightingType.Incandescent.value) {rawId = R.raw.incandescent}
+                if (model.subType == ELightingType.LinearFluorescent.value) {rawId = R.raw.linear_fluorescent}
             }
         }
 
