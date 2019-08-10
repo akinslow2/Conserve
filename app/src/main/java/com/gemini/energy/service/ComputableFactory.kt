@@ -13,6 +13,8 @@ import com.gemini.energy.service.device.lighting.Cfl
 import com.gemini.energy.service.device.lighting.Halogen
 import com.gemini.energy.service.device.lighting.Incandescent
 import com.gemini.energy.service.device.lighting.LinearFluorescent
+import com.gemini.energy.service.device.lighting.LowPressureSodium
+import com.gemini.energy.service.device.lighting.HighPressureSodium
 import com.gemini.energy.service.device.plugload.*
 import com.gemini.energy.service.type.UsageHours
 import com.gemini.energy.service.type.UtilityRate
