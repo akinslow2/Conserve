@@ -10,6 +10,7 @@ import com.gemini.energy.service.IComputable
 import com.gemini.energy.service.OutgoingRows
 import com.gemini.energy.service.device.EBase
 import com.gemini.energy.service.type.UsageHours
+import com.gemini.energy.service.type.UsageLighting
 import com.gemini.energy.service.type.UtilityRate
 import com.google.gson.JsonElement
 import io.reactivex.Observable
@@ -26,22 +27,33 @@ class Halogen (private val computable: Computable<*>, utilityRateGas: UtilityRat
     override fun compute(): Observable<Computable<*>> {
         return super.compute(extra = ({ Timber.d(it) }))
     }
-
+    //create variable here if you want to make it global to the class with private
+    private var percentPowerReduced = 0.0
     private var actualWatts = 0.0
-    private var lampsPerFixtures = 0
+    private var LampsPerFixtures = 0
     private var numberOfFixtures = 0
-
+    private var peakHours = 0.0
+    private var partPeakHours = 0.0
+    private var offPeakHours = 0.0
     private var energyAtPreState = 0.0
 
+    private var bulbcost = 3
     private var seer = 10
-    private var percentHoursReduced = 1.0
     private var cooling = 1.0
+    var electricianCost = 400
 
+    //Where you extract from user inputs and assign to variables
     override fun setup() {
         try {
             actualWatts = featureData["Actual Watts"]!! as Double
-            lampsPerFixtures = featureData["Lamps Per Fixture"]!! as Int
+            LampsPerFixtures = featureData["Lamps Per Fixture"]!! as Int
             numberOfFixtures = featureData["Number of Fixtures"]!! as Int
+            val config = lightingConfig(ELightingType.Halogen)
+            percentPowerReduced = config[ELightingIndex.PercentPowerReduced.value] as Double
+
+            peakHours = featureData["Peak Hours"]!! as Double
+            partPeakHours = featureData["Part Peak Hours"]!! as Double
+            offPeakHours = featureData["Off Peak Hours"]!! as Double
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -51,31 +63,58 @@ class Halogen (private val computable: Computable<*>, utilityRateGas: UtilityRat
      * Cost - Pre State
      * */
     override fun costPreState(element: List<JsonElement?>): Double {
-        val powerUsed = actualWatts * lampsPerFixtures * numberOfFixtures / 1000
-        energyAtPreState = powerUsed * usageHoursSpecific.yearly()
 
-        // Usage Hours Specific - Yearly Value is used to Calculate the Cost
-        return costElectricity(powerUsed, usageHoursSpecific, electricityRate)
+        // @Anthony - Verify the Platform Implementation
+        // peakHours*.504*peakPrice*powerUsed= cost at Peak rate...
+
+        val powerUsed = actualWatts * numberOfFixtures / 1000
+
+        val usageHours = UsageLighting()
+        usageHours.peakHours = peakHours
+        usageHours.partPeakHours = partPeakHours
+        usageHours.offPeakHours = offPeakHours
+
+        energyAtPreState = powerUsed * usageHours.yearly()
+
+        return costElectricity(powerUsed, usageHours, electricityRate)
     }
 
     /**
      * Cost - Post State
      * */
     override fun costPostState(element: JsonElement, dataHolder: DataHolder): Double {
+
         Timber.d("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
-        Timber.d("!!! COST POST STATE  - HALOGEN !!!")
+        Timber.d("!!! COST POST STATE - HALOGEN !!!")
         Timber.d("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
 
         val lifeHours = lightingConfig(ELightingType.Halogen)[ELightingIndex.LifeHours.value] as Double
-        val maintenanceSavings = lampsPerFixtures * numberOfFixtures * 3.0 * usageHoursSpecific.yearly() / lifeHours
-        val coolingSavings = energyAtPreState * cooling * seer
-        val energySavings = energyAtPreState * percentHoursReduced
+
+        val maintenanceSavings = LampsPerFixtures * numberOfFixtures * bulbcost * usageHoursSpecific.yearly() / lifeHours
+        // Adding new variables for the report
+        val selfinstallcost = bulbcost * numberOfFixtures * LampsPerFixtures
+
+        // Delta is going to be Power Used * Percentage Power Reduced
+        // Percentage Power Reduced - we get it from the Base - ELighting
+
+        val energySavings = energyAtPreState * percentPowerReduced
+        val coolingSavings = energySavings * cooling * seer
+
+        val energyAtPostState = energyAtPreState - energySavings
+        val paybackmonth = selfinstallcost / energySavings * 12
+        val paybackyear = selfinstallcost / energySavings
+        val totalsavings = energySavings + coolingSavings + maintenanceSavings
 
         val postRow = mutableMapOf<String, String>()
         postRow["__life_hours"] = lifeHours.toString()
         postRow["__maintenance_savings"] = maintenanceSavings.toString()
         postRow["__cooling_savings"] = coolingSavings.toString()
         postRow["__energy_savings"] = energySavings.toString()
+        postRow["__energy_at_post_state"] = energyAtPostState.toString()
+        postRow["__selfinstall_cost"] = selfinstallcost.toString()
+        postRow["__payback_month"] = paybackmonth.toString()
+        postRow["__payback_year"] = paybackyear.toString()
+        postRow["__total_savings"] = totalsavings.toString()
 
         dataHolder.header = postStateFields()
         dataHolder.computable = computable
@@ -83,6 +122,7 @@ class Halogen (private val computable: Computable<*>, utilityRateGas: UtilityRat
         dataHolder.rows?.add(postRow)
 
         return -99.99
+
     }
 
     /**
@@ -97,7 +137,6 @@ class Halogen (private val computable: Computable<*>, utilityRateGas: UtilityRat
 
     /**
      * PowerTimeChange >> Yearly Usage Hours - [Pre | Post]
-     * Pre and Post are the same for Refrigerator - 24 hrs
      * */
     override fun usageHoursPre(): Double = 0.0
     override fun usageHoursPost(): Double = 0.0
@@ -105,7 +144,11 @@ class Halogen (private val computable: Computable<*>, utilityRateGas: UtilityRat
     /**
      * PowerTimeChange >> Energy Efficiency Calculations
      * */
-    override fun energyPowerChange(): Double = 0.0
+    override fun energyPowerChange(): Double {
+        val powerUsed = actualWatts * LampsPerFixtures * numberOfFixtures / 1000
+        return powerUsed * percentPowerReduced
+    }
+
     override fun energyTimeChange(): Double = 0.0
     override fun energyPowerTimeChange(): Double = 0.0
 
@@ -124,12 +167,13 @@ class Halogen (private val computable: Computable<*>, utilityRateGas: UtilityRat
     /**
      * Define all the fields here - These would be used to Generate the Outgoing Rows or perform the Energy Calculation
      * */
-    override fun preAuditFields() = mutableListOf("")
+    override fun preAuditFields() = mutableListOf("General Client Info Name", "General Client Info Position", "General Client Info Email")
     override fun featureDataFields() = getGFormElements().map { it.value.param!! }.toMutableList()
 
     override fun preStateFields() = mutableListOf("")
     override fun postStateFields() = mutableListOf("__life_hours", "__maintenance_savings",
-            "__cooling_savings", "__energy_savings")
+            "__cooling_savings", "__energy_savings", "__energy_at_post_state", "__selfinstall_cost",
+            "__payback_month", "__payback_year", "__total_savings")
 
     override fun computedFields() = mutableListOf("")
 
