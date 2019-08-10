@@ -76,7 +76,9 @@ enum class ELightingType(val value: String) {
     Halogen("Halogen"),
     CFL("CFL"),
     LinearFluorescent("Linear Fluorescent"),
-    Incandescent("Incandescent");
+    Incandescent("Incandescent"),
+    HighPressureSodium("High Pressure Sodium"),
+    LowPressureSodium("Low Pressure Sodium");
 
     companion object {
         private val map = ELightingType.values()
