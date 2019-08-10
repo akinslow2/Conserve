@@ -126,6 +126,11 @@ class LightingFactory(private val utilityRateGas: UtilityRate,
             ELightingType.LinearFluorescent         -> LinearFluorescent(computable,
                     utilityRateGas, utilityRateElectricity, usageHours, outgoingRows, context)
 
+            ELightingType.LowPressureSodium         -> LowPressureSodium(computable,
+                    utilityRateGas, utilityRateElectricity, usageHours, outgoingRows, context)
+
+            ELightingType.HighPressureSodium         -> HighPressureSodium(computable,
+                    utilityRateGas, utilityRateElectricity, usageHours, outgoingRows, context)
         }
     }
 }
