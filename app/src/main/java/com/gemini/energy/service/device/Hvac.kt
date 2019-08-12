@@ -119,6 +119,7 @@ class Hvac(private val computable: Computable<*>, utilityRateGas: UtilityRate, u
      * */
     private var age = 0
 
+
     /**
      * HVAC - British Thermal Unit
      * */
@@ -159,6 +160,7 @@ class Hvac(private val computable: Computable<*>, utilityRateGas: UtilityRate, u
     var electricstructure = ""
     var gasstructure = ""
     var bldgtype = ""
+    private var quantity = 0
 
 
     override fun setup() {
@@ -177,6 +179,8 @@ class Hvac(private val computable: Computable<*>, utilityRateGas: UtilityRate, u
             electricstructure = preAudit["Others Electric Rate Structure"]!! as String
             gasstructure = preAudit["Others Gas Rate Structure"]!! as String
             bldgtype = preAudit["General Client Info Facility Type"]!! as String
+
+            quantity = featureData["Quantity"]!! as Int
 
             eer = featureData["EER"]!! as Double
             seer = featureData["SEER"]!! as Double
@@ -200,6 +204,11 @@ class Hvac(private val computable: Computable<*>, utilityRateGas: UtilityRate, u
         }
     }
 
+    /**
+     * Getting year of device and how much over life it is
+     */
+    private val year = getYear(age)
+    val overage = year - 20
     /**
      * Cost - Pre State
      * */
@@ -236,6 +245,9 @@ class Hvac(private val computable: Computable<*>, utilityRateGas: UtilityRate, u
         Timber.d("HVAC :: Pre Power Used -- [$powerUsed]")
 
         //ToDo -- Multiply by the Quantity
+
+
+
         return costElectricity(powerUsed, usageHours, electricityRate)
     }
 
