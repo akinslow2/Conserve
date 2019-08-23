@@ -229,7 +229,20 @@ class CombinationOven(private val computable: Computable<*>, utilityRateGas: Uti
         return cost.calculate()
 
     }
+    override fun incentives(): Double {
+        return 0.0
+    }
 
+    override fun materialCost(): Double {
+        return 8500.0
+    }
+    override fun laborCost(): Double {
+        return 0.0
+    }
+    //@K2 is this correct?
+    override fun implementationCost(): Double {
+        return (materialCost() + laborCost()) - incentives()
+    }
     /**
      * Cost - Post State
      * */
