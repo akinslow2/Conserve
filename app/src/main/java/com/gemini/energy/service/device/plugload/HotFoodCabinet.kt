@@ -38,6 +38,8 @@ class HotFoodCabinet(private val computable: Computable<*>, utilityRateGas: Util
     private var cabinetVolume = 0.0
     private var idleEnergyRate = 0.0
     private var size = ""
+    private var age = 0.0
+    private var HFC_cost = 500
 
     override fun setup() {
 
@@ -49,6 +51,7 @@ class HotFoodCabinet(private val computable: Computable<*>, utilityRateGas: Util
         cabinetVolume = featureData["Cabinet Volume"]!! as Double
         idleEnergyRate = featureData["Idle Energy Rate"]!! as Double
         size = featureData["Size"]!! as String
+        age = featureData["Age"]!! as Double
 
     }
 
