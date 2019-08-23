@@ -121,6 +121,20 @@ class HotFoodCabinet(private val computable: Computable<*>, utilityRateGas: Util
     override fun usageHoursPre(): Double = usageHours!!.yearly()
     override fun usageHoursPost(): Double = usageHoursBusiness.yearly()
 
+    override fun incentives(): Double {
+        return 0.0
+    }
+
+    override fun materialCost(): Double {
+        return 2500.0
+    }
+    override fun laborCost(): Double {
+        return 0.0
+    }
+    //@K2 is this correct?
+    override fun implementationCost(): Double {
+        return (materialCost() + laborCost()) - incentives()
+    }
     /**
      * PowerTimeChange >> Energy Efficiency Calculations
      * */
