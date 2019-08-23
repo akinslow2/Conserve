@@ -43,6 +43,8 @@ class IceMaker(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRa
 
     /**
      * Cost - Pre State
+     * IceHarvestRate is by day & energyUseRate is per 100lbs so we are normalizing to
+     * powerUsed per hour (kWh)
      * */
     override fun costPreState(elements: List<JsonElement?>): Double {
         val powerUsed = (iceHarvestRate / 24) * (energyUseRate / 100)
@@ -68,6 +70,13 @@ class IceMaker(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRa
         return 3455.00
     }
 
+    override fun laborCost(): Double {
+        return 0.0
+    }
+    //@K2 is this correct?
+    override fun implementationCost(): Double {
+        return (materialCost() + laborCost()) - incentives()
+    }
     /**
      * PowerTimeChange >> Hourly Energy Use - Pre
      * */
