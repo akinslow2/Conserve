@@ -39,6 +39,7 @@ class LinearFluorescent(private val computable: Computable<*>, utilityRateGas: U
         private const val KW_CONVERSION = 0.001
     }
 
+    var electricianCost = 400
     private var actualWatts = 0.0
     private var ballastsPerFixtures = 0
     private var numberOfFixtures = 0
