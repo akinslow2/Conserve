@@ -72,6 +72,20 @@ class PreRinseSpray(private val computable: Computable<*>, utilityRateGas: Utili
         return cost
     }
 
+    override fun incentives(): Double {
+        return 0.0
+    }
+
+    override fun materialCost(): Double {
+        return 100.0
+    }
+    override fun laborCost(): Double {
+        return 0.0
+    }
+    //@K2 is this correct?
+    override fun implementationCost(): Double {
+        return (materialCost() + laborCost()) - incentives()
+    }
     /**
      * Cost - Post State
      * */
