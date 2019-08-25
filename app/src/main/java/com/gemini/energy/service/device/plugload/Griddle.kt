@@ -59,6 +59,7 @@ class Griddle(private val computable: Computable<*>, utilityRateGas: UtilityRate
         productionCapacity = featureData["Production Capacity"]!! as Double
 
         fuelType = featureData["Fuel Type"]!! as String
+        age = featureData["Age"]!! as Double
 
         usageHours = UsageSimple(peakHours, partPeakHours, offPeakHours)
 
