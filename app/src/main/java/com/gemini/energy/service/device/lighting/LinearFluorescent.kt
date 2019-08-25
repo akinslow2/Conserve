@@ -31,7 +31,7 @@ class LinearFluorescent(private val computable: Computable<*>, utilityRateGas: U
         /**
          * Hypothetical Cost of Replacement for Linear Fluorescent
          * */
-        private const val REPLACEMENT_COST = 3.0
+        private const val bulbcost = 3.0
 
         /**
          * Conversion Factor from Watts to Kilo Watts
@@ -45,7 +45,7 @@ class LinearFluorescent(private val computable: Computable<*>, utilityRateGas: U
     private var numberOfFixtures = 0
 
     private var energyAtPreState = 0.0
-    private var seer = 0 //ToDo : @Anthony - Confirm the Unit
+    private var seer = 13
 
     /**
      * Suggested Alternative
@@ -95,23 +95,35 @@ class LinearFluorescent(private val computable: Computable<*>, utilityRateGas: U
 
         val config = lightingConfig(ELightingType.LinearFluorescent)
         val cooling = config[ELightingIndex.Cooling.value] as Double
+        val lifeHours = config[ELightingIndex.LifeHours.value] as Double
 
         //1. Maintenance Savings
         val totalUnits= ballastsPerFixtures * numberOfFixtures
+        val selfinstallcost = bulbcost * numberOfFixtures * ballastsPerFixtures
         val replacementIndex = usageHoursSpecific.yearly() / alternateLifeHours
-        val maintenanceSavings = totalUnits * REPLACEMENT_COST * replacementIndex
+        val maintenanceSavings = totalUnits * bulbcost * replacementIndex
 
         //2. Cooling Savings
-        val coolingSavings = energyAtPreState * cooling * seer // ToDo - Need to revisit
+        val coolingSavings = energyAtPreState * cooling * seer
 
         //3. Energy Savings
         val energySavings = energyPowerChange()
+        val energyAtPostState = energyAtPreState - energySavings
+
+        val paybackmonth = selfinstallcost / energySavings * 12
+        val paybackyear = selfinstallcost / energySavings
+        val totalsavings = energySavings + coolingSavings + maintenanceSavings
 
         val postRow = mutableMapOf<String, String>()
         postRow["__life_hours"] = alternateLifeHours.toString()
         postRow["__maintenance_savings"] = maintenanceSavings.toString()
-        //postRow["__cooling_savings"] = coolingSavings.toString()
+        postRow["__cooling_savings"] = coolingSavings.toString()
         postRow["__energy_savings"] = energySavings.toString()
+        postRow["__energy_at_post_state"] = energyAtPostState.toString()
+        postRow["__selfinstall_cost"] = selfinstallcost.toString()
+        postRow["__payback_month"] = paybackmonth.toString()
+        postRow["__payback_year"] = paybackyear.toString()
+        postRow["__total_savings"] = totalsavings.toString()
 
         dataHolder.header = postStateFields()
         dataHolder.computable = computable
