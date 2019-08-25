@@ -52,6 +52,7 @@ class PreRinseSpray(private val computable: Computable<*>, utilityRateGas: Utili
         waterTemperature = featureData["Water Temperature (oF)"]!! as Int
         efficiency = featureData["Efficiency"]!! as Double
         waterHeater = featureData["Water Heater"]!! as String
+        age = featureData["Age"]!! as Double
 
     }
 
