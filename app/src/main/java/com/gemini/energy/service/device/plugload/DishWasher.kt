@@ -75,6 +75,7 @@ class DishWasher(private val computable: Computable<*>, utilityRateGas: UtilityR
         efficiency = featureData["Efficiency"]!! as Double
         idleEnergyRate = featureData["Idle Energy Rate"]!! as Double
         waterHeater = featureData["Water Heater"]!! as String
+        age = featureData["Age"]!! as Double
 
     }
 
