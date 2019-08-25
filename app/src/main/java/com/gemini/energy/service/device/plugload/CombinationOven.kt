@@ -187,6 +187,7 @@ class CombinationOven(private val computable: Computable<*>, utilityRateGas: Uti
             waterUseSteam = featureData["Steam Water Usage Rate"]!! as Double
 
             steamPanSize = featureData["Size (Steam Pans)"]!! as Int
+            age = featureData["Age"]!! as Double
 
         } catch (e: Exception) {
             e.printStackTrace()
