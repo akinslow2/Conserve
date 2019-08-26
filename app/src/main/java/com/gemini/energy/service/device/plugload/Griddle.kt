@@ -59,6 +59,7 @@ class Griddle(private val computable: Computable<*>, utilityRateGas: UtilityRate
         productionCapacity = featureData["Production Capacity"]!! as Double
 
         fuelType = featureData["Fuel Type"]!! as String
+        age = featureData["Age"]!! as Double
 
         usageHours = UsageSimple(peakHours, partPeakHours, offPeakHours)
 
@@ -79,6 +80,20 @@ class Griddle(private val computable: Computable<*>, utilityRateGas: UtilityRate
         return cost
     }
 
+    override fun incentives(): Double {
+        return 0.0
+    }
+
+    override fun materialCost(): Double {
+        return 1000.0
+    }
+    override fun laborCost(): Double {
+        return 0.0
+    }
+    //@K2 is this correct?
+    override fun implementationCost(): Double {
+        return (materialCost() + laborCost()) - incentives()
+    }
     /**
      * Cost - Post State
      * */

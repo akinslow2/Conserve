@@ -38,6 +38,8 @@ class HotFoodCabinet(private val computable: Computable<*>, utilityRateGas: Util
     private var cabinetVolume = 0.0
     private var idleEnergyRate = 0.0
     private var size = ""
+    private var age = 0.0
+    private var HFC_cost = 500
 
     override fun setup() {
 
@@ -49,6 +51,7 @@ class HotFoodCabinet(private val computable: Computable<*>, utilityRateGas: Util
         cabinetVolume = featureData["Cabinet Volume"]!! as Double
         idleEnergyRate = featureData["Idle Energy Rate"]!! as Double
         size = featureData["Size"]!! as String
+        age = featureData["Age"]!! as Double
 
     }
 
@@ -118,6 +121,20 @@ class HotFoodCabinet(private val computable: Computable<*>, utilityRateGas: Util
     override fun usageHoursPre(): Double = usageHours!!.yearly()
     override fun usageHoursPost(): Double = usageHoursBusiness.yearly()
 
+    override fun incentives(): Double {
+        return 0.0
+    }
+
+    override fun materialCost(): Double {
+        return 2500.0
+    }
+    override fun laborCost(): Double {
+        return 0.0
+    }
+    //@K2 is this correct?
+    override fun implementationCost(): Double {
+        return (materialCost() + laborCost()) - incentives()
+    }
     /**
      * PowerTimeChange >> Energy Efficiency Calculations
      * */

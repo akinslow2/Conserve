@@ -35,6 +35,20 @@ class Refrigerator(private val computable: Computable<*>, utilityRateGas: Utilit
         return costElectricity
     }
 
+    override fun incentives(): Double {
+        return 0.0
+    }
+
+    override fun materialCost(): Double {
+        return 2500.0
+    }
+    override fun laborCost(): Double {
+        return 0.0
+    }
+    //@K2 is this correct?
+    override fun implementationCost(): Double {
+        return (materialCost() + laborCost()) - incentives()
+    }
     /**
      * Cost - Post State
      * */

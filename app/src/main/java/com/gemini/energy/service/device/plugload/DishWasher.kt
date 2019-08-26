@@ -75,6 +75,7 @@ class DishWasher(private val computable: Computable<*>, utilityRateGas: UtilityR
         efficiency = featureData["Efficiency"]!! as Double
         idleEnergyRate = featureData["Idle Energy Rate"]!! as Double
         waterHeater = featureData["Water Heater"]!! as String
+        age = featureData["Age"]!! as Double
 
     }
 
@@ -96,7 +97,20 @@ class DishWasher(private val computable: Computable<*>, utilityRateGas: UtilityR
 
         return if (isGas()) costGas else costElectricity
     }
+    override fun incentives(): Double {
+        return 0.0
+    }
 
+    override fun materialCost(): Double {
+        return 3500.0
+    }
+    override fun laborCost(): Double {
+        return 0.0
+    }
+    //@K2 is this correct?
+    override fun implementationCost(): Double {
+        return (materialCost() + laborCost()) - incentives()
+    }
     /**
      * Cost - Post State
      * */

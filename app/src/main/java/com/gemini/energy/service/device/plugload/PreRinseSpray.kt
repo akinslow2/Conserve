@@ -52,6 +52,7 @@ class PreRinseSpray(private val computable: Computable<*>, utilityRateGas: Utili
         waterTemperature = featureData["Water Temperature (oF)"]!! as Int
         efficiency = featureData["Efficiency"]!! as Double
         waterHeater = featureData["Water Heater"]!! as String
+        age = featureData["Age"]!! as Double
 
     }
 
@@ -72,6 +73,20 @@ class PreRinseSpray(private val computable: Computable<*>, utilityRateGas: Utili
         return cost
     }
 
+    override fun incentives(): Double {
+        return 0.0
+    }
+
+    override fun materialCost(): Double {
+        return 100.0
+    }
+    override fun laborCost(): Double {
+        return 0.0
+    }
+    //@K2 is this correct?
+    override fun implementationCost(): Double {
+        return (materialCost() + laborCost()) - incentives()
+    }
     /**
      * Cost - Post State
      * */
