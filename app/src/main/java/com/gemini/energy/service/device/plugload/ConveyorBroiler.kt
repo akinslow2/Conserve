@@ -41,6 +41,7 @@ class ConveyorBroiler(private val computable: Computable<*>, utilityRateGas: Uti
     private var idleHours = 0
     private var broilerType = ""
     private var conveyorWidth = 0.0
+    private var age = 0.0
 
     override fun setup() {
 
@@ -55,6 +56,7 @@ class ConveyorBroiler(private val computable: Computable<*>, utilityRateGas: Uti
 
         broilerType = featureData["Broiler Type"]!! as String
         conveyorWidth = featureData["Conveyor Width"]!! as Double
+        age = featureData["Age"]!! as Double
 
     }
 
