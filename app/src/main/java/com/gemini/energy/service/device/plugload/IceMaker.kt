@@ -29,6 +29,7 @@ class IceMaker(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRa
     private var energyUseRate = 0.0
     private var alternateIceHarvestRate = 0.0
     private var alternateEnergyUseRate = 0.0
+    private var age = 0.0
 
     override fun setup() {
         try {
@@ -36,6 +37,7 @@ class IceMaker(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRa
             energyUseRate = featureData["Energy Use Rate"]!! as Double
             alternateIceHarvestRate = featureData["Alternate Ice Harvest Rate"]!! as Double
             alternateEnergyUseRate = featureData["Alternate Energy Use Rate"]!! as Double
+            age = featureData["Age"]!! as Double
         } catch (e: Exception) {
             e.printStackTrace()
         }
