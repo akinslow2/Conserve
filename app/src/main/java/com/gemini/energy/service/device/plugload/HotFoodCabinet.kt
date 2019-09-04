@@ -39,7 +39,7 @@ class HotFoodCabinet(private val computable: Computable<*>, utilityRateGas: Util
     private var idleEnergyRate = 0.0
     private var size = ""
     private var age = 0.0
-    private var HFC_cost = 500
+
 
     override fun setup() {
 

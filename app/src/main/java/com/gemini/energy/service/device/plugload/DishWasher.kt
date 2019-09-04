@@ -52,6 +52,7 @@ class DishWasher(private val computable: Computable<*>, utilityRateGas: UtilityR
     private var efficiency = 0.0
     private var idleEnergyRate = 0.0
     private var waterHeater = ""
+    private var age = 0.0
 
     override fun setup() {
 

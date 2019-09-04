@@ -16,6 +16,7 @@ class Refrigerator(private val computable: Computable<*>, utilityRateGas: Utilit
                    usageHours: UsageHours, outgoingRows: OutgoingRows) :
         EBase(computable, utilityRateGas, utilityRateElectricity, usageHours, outgoingRows), IComputable {
 
+    private var age = 0.0
     /**
      * Entry Point
      * */
@@ -23,7 +24,9 @@ class Refrigerator(private val computable: Computable<*>, utilityRateGas: Utilit
         return super.compute(extra = ({ Timber.d(it) }))
     }
 
-    override fun setup() {}
+    override fun setup() {
+        age = featureData["Age"]!! as Double
+    }
 
     /**
      * Cost - Pre State
