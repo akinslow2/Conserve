@@ -20,7 +20,7 @@ import io.reactivex.Single
 import org.json.JSONObject
 import timber.log.Timber
 
-class DishWasher(private val computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateElectricity: UtilityRate,
+class DishWasher(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateElectricity: UtilityRate,
                       usageHours: UsageHours, outgoingRows: OutgoingRows, private val context: Context) :
         EBase(computable, utilityRateGas, utilityRateElectricity, usageHours, outgoingRows), IComputable {
 
@@ -52,7 +52,8 @@ class DishWasher(private val computable: Computable<*>, utilityRateGas: UtilityR
     private var efficiency = 0.0
     private var idleEnergyRate = 0.0
     private var waterHeater = ""
-    private var age = 0.0
+
+    var age = 0.0
 
     override fun setup() {
 
@@ -105,11 +106,12 @@ class DishWasher(private val computable: Computable<*>, utilityRateGas: UtilityR
     override fun materialCost(): Double {
         return 3500.0
     }
+
     override fun laborCost(): Double {
         return 0.0
     }
-    //@K2 is this correct?
-    override fun implementationCost(): Double {
+
+    fun implementationCost(): Double {
         return (materialCost() + laborCost()) - incentives()
     }
     /**
@@ -254,9 +256,9 @@ class DishWasher(private val computable: Computable<*>, utilityRateGas: UtilityR
     /**
      * Additional Costs
      * */
-    override fun materialCost(): Double = 50.0
-    override fun laborCost(): Double = 0.0
-    override fun incentives(): Double = 0.0
+//    override fun materialCost(): Double = 50.0
+//    override fun laborCost(): Double = 0.0
+//    override fun incentives(): Double = 0.0
 
     /**
      * Define all the fields here - These would be used to Generate the Outgoing Rows or perform the Energy Calculation
