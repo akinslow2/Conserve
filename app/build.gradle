@@ -38,12 +38,12 @@ dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     kapt presentationKaptDependencies
     implementation presentationDependencies
-    implementation project(":form")
-    implementation project(":sync")
+    implementation project(':form')
+    implementation project(':sync')
     testImplementation presentationTestDependencies
     androidTestImplementation presentationInstrumentationTestDependencies
-
     compile('com.crashlytics.sdk.android:crashlytics:2.9.4@aar') {
         transitive = true;
     }
+    implementation files('libs/poishadow-all.jar')
 }
