@@ -305,7 +305,7 @@ class Hvac(private val computable: Computable<*>, utilityRateGas: UtilityRate, u
     }
 
     override fun materialCost(): Double {
-        return (6155.00 - 4589.00)
+        return (12000)
     }
     //@K2 is this correct? The labor cost gets pulled from the Parse Server
     override fun implementationCost() = (materialCost() + laborCost()) - incentives()
