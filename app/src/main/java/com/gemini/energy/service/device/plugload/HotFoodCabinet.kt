@@ -16,8 +16,8 @@ import io.reactivex.Observable
 import org.json.JSONObject
 import timber.log.Timber
 
-class HotFoodCabinet(private val computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateElectricity: UtilityRate,
-                      usageHours: UsageHours, outgoingRows: OutgoingRows, private val context: Context) :
+class HotFoodCabinet(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateElectricity: UtilityRate,
+                     usageHours: UsageHours, outgoingRows: OutgoingRows, private val context: Context) :
         EBase(computable, utilityRateGas, utilityRateElectricity, usageHours, outgoingRows), IComputable {
 
     /**
