@@ -17,8 +17,8 @@ import io.reactivex.Observable
 import timber.log.Timber
 import java.util.*
 
-class Cfl (private val computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateElectricity: UtilityRate,
-           usageHours: UsageHours, outgoingRows: OutgoingRows, private val context: Context) :
+class Cfl(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateElectricity: UtilityRate,
+          usageHours: UsageHours, outgoingRows: OutgoingRows, private val context: Context) :
         EBase(computable, utilityRateGas, utilityRateElectricity, usageHours, outgoingRows), IComputable {
 
     /**
@@ -27,6 +27,7 @@ class Cfl (private val computable: Computable<*>, utilityRateGas: UtilityRate, u
     override fun compute(): Observable<Computable<*>> {
         return super.compute(extra = ({ Timber.d(it) }))
     }
+
 //create variable here if you want to make it global to the class with private
     private var percentPowerReduced = 0.0
     private var actualWatts = 0.0
@@ -92,7 +93,7 @@ class Cfl (private val computable: Computable<*>, utilityRateGas: UtilityRate, u
 
         val maintenanceSavings = LampsPerFixtures * numberOfFixtures * bulbcost * usageHoursSpecific.yearly() / lifeHours
         // Adding new variables for the report
-        val selfinstallcost = bulbcost * numberOfFixtures * LampsPerFixtures
+        val selfinstallcost = this.selfinstallcost() //bulbcost * numberOfFixtures * LampsPerFixtures
 
         // Delta is going to be Power Used * Percentage Power Reduced
         // Percentage Power Reduced - we get it from the Base - ELighting
