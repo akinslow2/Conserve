@@ -155,7 +155,8 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
     var startday = ""
     var endday = ""
     var operationhours = ""
-    var bldgarea = ""
+    var bldgarea = 0.0
+    var bldgtype = ""
     var utilitycompany = ""
     var electricstructure = ""
     var gasstructure = ""
@@ -173,7 +174,7 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
             startday = preAudit["General Client Info Assessment Start Day"]!! as String
             endday = preAudit["General Client Info Assessment End Day"]!! as String
             operationhours = preAudit["Operation Hours Monday Operating Hours"]!! as String
-            bldgarea = preAudit["Area Total (Sq.Ft.)"]!! as String
+            bldgarea = preAudit["Area Total (Sq.Ft.)"]!! as Double
             utilitycompany = preAudit["Others Utility Company"]!! as String
             electricstructure = preAudit["Others Electric Rate Structure"]!! as String
             gasstructure = preAudit["Others Gas Rate Structure"]!! as String
