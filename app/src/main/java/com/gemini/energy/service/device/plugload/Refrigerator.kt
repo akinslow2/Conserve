@@ -12,7 +12,8 @@ import io.reactivex.Observable
 import org.json.JSONObject
 import timber.log.Timber
 
-class Refrigerator(private val computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateElectricity: UtilityRate,
+class Refrigerator(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateElectricity: UtilityRate,
+
                    usageHours: UsageHours, outgoingRows: OutgoingRows) :
         EBase(computable, utilityRateGas, utilityRateElectricity, usageHours, outgoingRows), IComputable {
 
