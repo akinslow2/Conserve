@@ -243,8 +243,8 @@ class CombinationOven(computable: Computable<*>, utilityRateGas: UtilityRate, ut
     override fun laborCost(): Double {
         return 0.0
     }
-    //@K2 is this correct?
-    override fun implementationCost(): Double {
+
+    fun implementationCost(): Double {
         return (materialCost() + laborCost()) - incentives()
     }
     /**
