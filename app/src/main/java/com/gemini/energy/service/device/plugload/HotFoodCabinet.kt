@@ -38,7 +38,7 @@ class HotFoodCabinet(computable: Computable<*>, utilityRateGas: UtilityRate, uti
     private var cabinetVolume = 0.0
     private var idleEnergyRate = 0.0
     private var size = ""
-    private var age = 0.0
+    var age = 0.0
 
 
     override fun setup() {
@@ -72,10 +72,12 @@ class HotFoodCabinet(computable: Computable<*>, utilityRateGas: UtilityRate, uti
     /**
      * Cost - Post State
      * */
+    var costPostState = 0.0
     override fun costPostState(element: JsonElement, dataHolder: DataHolder): Double {
         val powerUsed = hourlyEnergyUsagePost(element)[0]
         val costElectricity: Double
         costElectricity = costElectricity(powerUsed, usageHours!!, electricityRate)
+        costPostState = costElectricity
         return costElectricity
     }
 
@@ -132,11 +134,12 @@ class HotFoodCabinet(computable: Computable<*>, utilityRateGas: UtilityRate, uti
     override fun materialCost(): Double {
         return 2500.0
     }
+
     override fun laborCost(): Double {
         return 0.0
     }
-    //@K2 is this correct?
-    override fun implementationCost(): Double {
+
+    fun implementationCost(): Double {
         return (materialCost() + laborCost()) - incentives()
     }
     /**
