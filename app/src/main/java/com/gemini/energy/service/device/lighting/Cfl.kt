@@ -64,9 +64,9 @@ class Cfl(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEle
             val config = lightingConfig(ELightingType.CFL)
             percentPowerReduced = config[ELightingIndex.PercentPowerReduced.value] as Double
 
-            peakHours = featureData["Peak Hours"]!! as Double
-            partPeakHours = featureData["Part Peak Hours"]!! as Double
-            offPeakHours = featureData["Off Peak Hours"]!! as Double
+            peakHours = (featureData["Peak Hours"]!! as Int).toDouble()
+            partPeakHours = (featureData["Part Peak Hours"]!! as Int).toDouble()
+            offPeakHours = (featureData["Off Peak Hours"]!! as Int).toDouble()
         } catch (e: Exception) {
             e.printStackTrace()
         }
