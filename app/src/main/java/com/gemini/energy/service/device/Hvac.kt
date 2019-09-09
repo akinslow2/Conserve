@@ -22,7 +22,7 @@ import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.*
 
-class Hvac(private val computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateElectricity: UtilityRate,
+class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateElectricity: UtilityRate,
            usageHours: UsageHours, outgoingRows: OutgoingRows, private val context: Context) :
         EBase(computable, utilityRateGas, utilityRateElectricity, usageHours, outgoingRows), IComputable {
 
