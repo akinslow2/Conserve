@@ -16,8 +16,8 @@ import io.reactivex.Observable
 import timber.log.Timber
 import java.util.*
 
-class LinearFluorescent(private val computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateElectricity: UtilityRate,
-               usageHours: UsageHours, outgoingRows: OutgoingRows, private val context: Context) :
+class LinearFluorescent(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateElectricity: UtilityRate,
+                        usageHours: UsageHours, outgoingRows: OutgoingRows, private val context: Context) :
         EBase(computable, utilityRateGas, utilityRateElectricity, usageHours, outgoingRows), IComputable {
 
     /**
