@@ -16,7 +16,7 @@ import io.reactivex.Observable
 import org.json.JSONObject
 import timber.log.Timber
 
-class ConveyorBroiler(private val computable: Computable<*>, utilityRateGas: UtilityRate,
+class ConveyorBroiler(computable: Computable<*>, utilityRateGas: UtilityRate,
                       utilityRateElectricity: UtilityRate, usageHours: UsageHours,
                       outgoingRows: OutgoingRows, private val context: Context) :
         EBase(computable, utilityRateGas, utilityRateElectricity, usageHours, outgoingRows), IComputable {
