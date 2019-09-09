@@ -43,6 +43,18 @@ class Cfl(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEle
     private var cooling = 1.0
     var electricianCost = 400
 
+    fun selfinstallcost(): Int {
+        return bulbcost * numberOfFixtures * LampsPerFixtures
+    }
+
+    fun totalSavings(): Double {
+        val lifeHours = lightingConfig(ELightingType.CFL)[ELightingIndex.LifeHours.value] as Double
+        val energySavings = energyAtPreState * percentPowerReduced
+        val coolingSavings = energySavings * cooling * seer
+        val maintenanceSavings = LampsPerFixtures * numberOfFixtures * bulbcost * usageHoursSpecific.yearly() / lifeHours
+        return energySavings + coolingSavings + maintenanceSavings
+    }
+
 //Where you extract from user inputs and assign to variables
     override fun setup() {
         try {
