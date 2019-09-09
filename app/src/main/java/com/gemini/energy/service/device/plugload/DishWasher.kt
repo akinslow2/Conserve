@@ -8,7 +8,6 @@ import com.gemini.energy.service.DataHolder
 import com.gemini.energy.service.IComputable
 import com.gemini.energy.service.OutgoingRows
 import com.gemini.energy.service.device.EBase
-import com.gemini.energy.service.device.Hvac
 import com.gemini.energy.service.type.UsageHours
 import com.gemini.energy.service.type.UsageSimple
 import com.gemini.energy.service.type.UtilityRate
@@ -56,28 +55,31 @@ class DishWasher(computable: Computable<*>, utilityRateGas: UtilityRate, utility
     var age = 0.0
 
     override fun setup() {
+        try {
+            peakHours = featureData["Peak Hours"]!! as Double
+            partPeakHours = featureData["Part Peak Hours"]!! as Double
+            offPeakHours = featureData["Off Peak Hours"]!! as Double
+            usageHoursPre = UsageSimple(peakHours, partPeakHours, offPeakHours)
 
-        peakHours = featureData["Peak Hours"]!! as Double
-        partPeakHours = featureData["Part Peak Hours"]!! as Double
-        offPeakHours = featureData["Off Peak Hours"]!! as Double
-        usageHoursPre = UsageSimple(peakHours, partPeakHours, offPeakHours)
+            suggestedPeakHours = featureData["Suggested Peak Hours"]!! as Double
+            suggestedPartPeakHours = featureData["Suggested Part Peak Hours"]!! as Double
+            suggestedOffPeakHours = featureData["Suggested Off Peak Hours"]!! as Double
+            usageHoursPost = UsageSimple(suggestedPeakHours, suggestedPartPeakHours, suggestedOffPeakHours)
+            Timber.d("## Suggested Time ##")
+            Timber.d(usageHoursPost.toString())
 
-        suggestedPeakHours = featureData["Suggested Peak Hours"]!! as Double
-        suggestedPartPeakHours = featureData["Suggested Part Peak Hours"]!! as Double
-        suggestedOffPeakHours = featureData["Suggested Off Peak Hours"]!! as Double
-        usageHoursPost = UsageSimple(suggestedPeakHours, suggestedPartPeakHours, suggestedOffPeakHours)
-        Timber.d("## Suggested Time ##")
-        Timber.d(usageHoursPost.toString())
-
-        waterConsumption = featureData["Water Consumption"]!! as Double
-        numberOfRacks = featureData["Number of Racks"]!! as Int
-        cyclesPerDay = featureData["Cycles per Day"]!! as Int
-        daysUsed = featureData["Days Used"]!! as Int
-        waterTemperature = featureData["Water Temperature (oF)"]!! as Int
-        efficiency = featureData["Efficiency"]!! as Double
-        idleEnergyRate = featureData["Idle Energy Rate"]!! as Double
-        waterHeater = featureData["Water Heater"]!! as String
-        age = featureData["Age"]!! as Double
+            waterConsumption = featureData["Water Consumption"]!! as Double
+            numberOfRacks = featureData["Number of Racks"]!! as Int
+            cyclesPerDay = featureData["Cycles per Day"]!! as Int
+            daysUsed = featureData["Days Used"]!! as Int
+            waterTemperature = featureData["Water Temperature (oF)"]!! as Int
+            efficiency = featureData["Efficiency"]!! as Double
+            idleEnergyRate = featureData["Idle Energy Rate"]!! as Double
+            waterHeater = featureData["Water Heater"]!! as String
+            age = featureData["Age"]!! as Double
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
 
     }
 
@@ -252,13 +254,6 @@ class DishWasher(computable: Computable<*>, utilityRateGas: UtilityRate, utility
      * Weekly UsageHours Hours apart from the PreAudit
      * */
     override fun usageHoursSpecific() = false
-
-    /**
-     * Additional Costs
-     * */
-//    override fun materialCost(): Double = 50.0
-//    override fun laborCost(): Double = 0.0
-//    override fun incentives(): Double = 0.0
 
     /**
      * Define all the fields here - These would be used to Generate the Outgoing Rows or perform the Energy Calculation
