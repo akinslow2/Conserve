@@ -41,23 +41,31 @@ class ConveyorBroiler(private val computable: Computable<*>, utilityRateGas: Uti
     private var idleHours = 0
     private var broilerType = ""
     private var conveyorWidth = 0.0
-    private var age = 0.0
+    var age = 0.0
 
     override fun setup() {
+        try {
+            peakHours = featureData["Peak Hours"]!! as Double
+            partPeakHours = featureData["Part Peak Hours"]!! as Double
+            offPeakHours = featureData["Off Peak Hours"]!! as Double
+            usageHours = UsageSimple(peakHours, partPeakHours, offPeakHours)
 
-        peakHours = featureData["Peak Hours"]!! as Double
-        partPeakHours = featureData["Part Peak Hours"]!! as Double
-        offPeakHours = featureData["Off Peak Hours"]!! as Double
-        usageHours = UsageSimple(peakHours, partPeakHours, offPeakHours)
+            energyInputRate = featureData["Energy Input Rate"]!! as Double
+            idleEnergyRate = featureData["Idle Energy Rate"]!! as Double
+            idleHours = 1 //ToDo: @Johnny - not to worry at the moment
 
-        energyInputRate = featureData["Energy Input Rate"]!! as Double
-        idleEnergyRate = featureData["Idle Energy Rate"]!! as Double
-        idleHours = 1 //ToDo: @Johnny - not to worry at the moment
+            broilerType = featureData["Broiler Type"]!! as String
+            conveyorWidth = featureData["Conveyor Width"]!! as Double
+            age = featureData["Age"]!! as Double
 
-        broilerType = featureData["Broiler Type"]!! as String
-        conveyorWidth = featureData["Conveyor Width"]!! as Double
-        age = featureData["Age"]!! as Double
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
 
+    }
+
+    fun implementationCost(): Double {
+        return (materialCost() + laborCost()) - incentives()
     }
 
     /**
