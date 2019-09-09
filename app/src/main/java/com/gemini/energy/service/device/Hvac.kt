@@ -7,7 +7,6 @@ import com.gemini.energy.presentation.form.FormMapper
 import com.gemini.energy.service.DataHolder
 import com.gemini.energy.service.IComputable
 import com.gemini.energy.service.OutgoingRows
-import com.gemini.energy.service.type.UsageHVAC
 import com.gemini.energy.service.type.UsageHours
 import com.gemini.energy.service.type.UsageSimple
 import com.gemini.energy.service.type.UtilityRate
@@ -16,7 +15,6 @@ import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import io.reactivex.Observable
 import io.reactivex.Single
-import org.json.JSONArray
 import org.json.JSONObject
 import timber.log.Timber
 import java.text.SimpleDateFormat
@@ -148,10 +146,10 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
      */
 
     var clientname = ""
+    var clientaddress = ""
     var businessname = ""
     var auditmonth = ""
     var audityear = ""
-    var clientaddress = ""
     var startday = ""
     var endday = ""
     var operationhours = ""
@@ -257,6 +255,7 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
         return costElectricity(powerUsed, usageHours, electricityRate)
     }
 
+    var costPostState = 0.0
     /**
      * Cost - Post State
      * */
@@ -279,7 +278,8 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
         val postPowerUsed = power(postSize, postEER)
         val postUsageHours = computable.udf1 as UsageSimple
 
-        return costElectricity(postPowerUsed, postUsageHours, electricityRate)
+        costPostState = costElectricity(postPowerUsed, postUsageHours, electricityRate)
+        return costPostState
     }
 
     /**
@@ -313,8 +313,8 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
     override fun materialCost(): Double {
         return (6155.00 - 4589.00)
     }
-    //@K2 is this correct? The labor cost gets pulled from the Parse Server
-    override fun implementationCost() = (materialCost() + laborCost()) - incentives()
+
+    fun implementationCost() = (materialCost() + laborCost()) - incentives()
     /**
      * PowerTimeChange >> Hourly Energy Use - Pre
      * */
