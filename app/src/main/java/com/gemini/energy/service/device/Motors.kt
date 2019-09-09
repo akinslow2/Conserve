@@ -79,9 +79,10 @@ class Motors(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRate
             alternateHp = featureData["Alternate Horsepower (HP)"]!! as Double
             alternateEfficiency = featureData["Alternate Efficiency"]!! as Double
 
-            peakHours = featureData["Peak Hours"]!! as Double
-            partPeakHours = featureData["Part Peak Hours"]!! as Double
-            offPeakHours = featureData["Off Peak Hours"]!! as Double
+            peakHours = (featureData["Peak Hours"]!! as String).toDoubleOrNull() ?: 0.0
+            peakHours = (featureData["Peak Hours"]!! as String).toDoubleOrNull() ?: 0.0
+            partPeakHours = (featureData["Part Peak Hours"]!! as String).toDoubleOrNull() ?: 0.0
+            offPeakHours = (featureData["Off Peak Hours"]!! as String).toDoubleOrNull() ?: 0.0
         } catch (e: Exception) {
             e.printStackTrace()
         }
