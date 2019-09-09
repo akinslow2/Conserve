@@ -58,6 +58,8 @@ class CombinationOven(computable: Computable<*>, utilityRateGas: UtilityRate, ut
     private var preIdleEnergyRateConvection = 0.0
     private var preIdleEnergyRateSteam = 0.0
 
+    var age = 0.0
+
     /**
      * The Adjustment Factor is taken care within the setup()
      * */
@@ -237,6 +239,7 @@ class CombinationOven(computable: Computable<*>, utilityRateGas: UtilityRate, ut
     override fun materialCost(): Double {
         return 8500.0
     }
+
     override fun laborCost(): Double {
         return 0.0
     }
