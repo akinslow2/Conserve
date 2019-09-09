@@ -26,7 +26,11 @@ class Refrigerator(computable: Computable<*>, utilityRateGas: UtilityRate, utili
     }
 
     override fun setup() {
-        age = featureData["Age"]!! as Double
+        try {
+            age = (featureData["Age"]!! as Int).toDouble()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 
     /**
