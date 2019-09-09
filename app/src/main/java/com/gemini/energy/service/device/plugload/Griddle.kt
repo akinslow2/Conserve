@@ -16,8 +16,8 @@ import io.reactivex.Observable
 import org.json.JSONObject
 import timber.log.Timber
 
-class Griddle(private val computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateElectricity: UtilityRate,
-                     usageHours: UsageHours, outgoingRows: OutgoingRows, private val context: Context) :
+class Griddle(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateElectricity: UtilityRate,
+              usageHours: UsageHours, outgoingRows: OutgoingRows, private val context: Context) :
         EBase(computable, utilityRateGas, utilityRateElectricity, usageHours, outgoingRows), IComputable {
 
     /**
