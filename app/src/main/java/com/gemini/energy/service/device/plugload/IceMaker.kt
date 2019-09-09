@@ -29,7 +29,7 @@ class IceMaker(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRa
     private var energyUseRate = 0.0
     private var alternateIceHarvestRate = 0.0
     private var alternateEnergyUseRate = 0.0
-    private var age = 0.0
+    var age = 0.0
 
     override fun setup() {
         try {
@@ -57,6 +57,7 @@ class IceMaker(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRa
     /**
      * Cost - Post State
      * */
+    var costPostState = 0.0
     override fun costPostState(element: JsonElement, dataHolder: DataHolder): Double {
         return 0.0
     }
@@ -75,8 +76,8 @@ class IceMaker(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRa
     override fun laborCost(): Double {
         return 0.0
     }
-    //@K2 is this correct?
-    override fun implementationCost(): Double {
+
+    fun implementationCost(): Double {
         return (materialCost() + laborCost()) - incentives()
     }
     /**
