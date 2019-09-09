@@ -252,6 +252,7 @@ class CombinationOven(computable: Computable<*>, utilityRateGas: UtilityRate, ut
      * */
     // The post state cost or energy calculation?? for energy I provided the location for that in the last email.
     // Cost is the same process as the pre
+    var costPostState = 0.0
     override fun costPostState(element: JsonElement, dataHolder: DataHolder): Double {
         var preHeatEnergyPS = 0.0
         val preFanEnergyRatePS = 0.0
@@ -300,7 +301,9 @@ class CombinationOven(computable: Computable<*>, utilityRateGas: UtilityRate, ut
             costElectricity(powerUsed, usageHours, utilityRate)
         }
 
-        return cost.calculate()
+        costPostState = cost.calculate()
+
+        return costPostState
 
     }
 
