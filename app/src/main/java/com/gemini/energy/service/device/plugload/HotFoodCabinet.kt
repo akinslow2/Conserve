@@ -42,16 +42,20 @@ class HotFoodCabinet(private val computable: Computable<*>, utilityRateGas: Util
 
 
     override fun setup() {
+        try {
+            peakHours = featureData["Peak Hours"]!! as Double
+            partPeakHours = featureData["Part Peak Hours"]!! as Double
+            offPeakHours = featureData["Off Peak Hours"]!! as Double
+            usageHours = UsageSimple(peakHours, partPeakHours, offPeakHours)
 
-        peakHours = featureData["Peak Hours"]!! as Double
-        partPeakHours = featureData["Part Peak Hours"]!! as Double
-        offPeakHours = featureData["Off Peak Hours"]!! as Double
-        usageHours = UsageSimple(peakHours, partPeakHours, offPeakHours)
+            cabinetVolume = featureData["Cabinet Volume"]!! as Double
+            idleEnergyRate = featureData["Idle Energy Rate"]!! as Double
+            size = featureData["Size"]!! as String
+            age = featureData["Age"]!! as Double
 
-        cabinetVolume = featureData["Cabinet Volume"]!! as Double
-        idleEnergyRate = featureData["Idle Energy Rate"]!! as Double
-        size = featureData["Size"]!! as String
-        age = featureData["Age"]!! as Double
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
 
     }
 
