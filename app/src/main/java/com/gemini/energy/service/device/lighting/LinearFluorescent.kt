@@ -39,7 +39,7 @@ class LinearFluorescent(computable: Computable<*>, utilityRateGas: UtilityRate, 
         private const val KW_CONVERSION = 0.001
     }
 
-    var electricianCost = 400
+    private var percentPowerReduced = 0.0
     private var actualWatts = 0.0
     private var ballastsPerFixtures = 0
     private var numberOfFixtures = 0
@@ -47,6 +47,8 @@ class LinearFluorescent(computable: Computable<*>, utilityRateGas: UtilityRate, 
     private var energyAtPreState = 0.0
     private var seer = 13
 
+    private var cooling = 1.0
+    var electricianCost = 400
     /**
      * Suggested Alternative
      * */
@@ -54,6 +56,21 @@ class LinearFluorescent(computable: Computable<*>, utilityRateGas: UtilityRate, 
     private var alternateNumberOfFixtures = 0
     private var alternateLampsPerFixture = 0
     private var alternateLifeHours = 0
+
+
+    fun selfinstallcost(): Int {
+        return bulbcost.toInt() * numberOfFixtures * ballastsPerFixtures
+    }
+
+    fun totalSavings(): Double {
+        val lifeHours = lightingConfig(ELightingType.CFL)[ELightingIndex.LifeHours.value] as Double
+        val energySavings = energyAtPreState * percentPowerReduced
+        val coolingSavings = energySavings * cooling * seer
+        val maintenanceSavings = ballastsPerFixtures * numberOfFixtures * bulbcost * usageHoursSpecific.yearly() / lifeHours
+        return energySavings + coolingSavings + maintenanceSavings
+    }
+
+
 
     override fun setup() {
         try {
@@ -65,6 +82,9 @@ class LinearFluorescent(computable: Computable<*>, utilityRateGas: UtilityRate, 
             alternateNumberOfFixtures = featureData["Alternate Number of Fixtures"]!! as Int
             alternateLampsPerFixture = featureData["Alternate Lamps Per Fixture"]!! as Int
             alternateLifeHours = featureData["Alternate Life Hours"]!! as Int
+
+            val config = lightingConfig(ELightingType.LinearFluorescent)
+            percentPowerReduced = config[ELightingIndex.PercentPowerReduced.value] as Double
 
         } catch (e: Exception) {
             e.printStackTrace()
