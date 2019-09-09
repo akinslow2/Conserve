@@ -35,9 +35,9 @@ class IceMaker(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRa
         try {
             iceHarvestRate = featureData["Ice Harvest Rate"]!! as Double
             energyUseRate = featureData["Energy Use Rate"]!! as Double
+            age = (featureData["Age"]!! as Int).toDouble()
             alternateIceHarvestRate = featureData["Alternate Ice Harvest Rate"]!! as Double
             alternateEnergyUseRate = featureData["Alternate Energy Use Rate"]!! as Double
-            age = featureData["Age"]!! as Double
         } catch (e: Exception) {
             e.printStackTrace()
         }
