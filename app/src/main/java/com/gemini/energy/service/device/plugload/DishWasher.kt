@@ -119,6 +119,7 @@ class DishWasher(computable: Computable<*>, utilityRateGas: UtilityRate, utility
     /**
      * Cost - Post State
      * */
+    var costPostState = 0.0
     override fun costPostState(element: JsonElement, dataHolder: DataHolder): Double {
         val powerUsedElectric = hourlyEnergyUsagePost(element)[0]
         val thermsUsedGas = hourlyEnergyUsagePost(element)[1]
@@ -129,7 +130,9 @@ class DishWasher(computable: Computable<*>, utilityRateGas: UtilityRate, utility
         val costGas: Double
         costGas = costGas(thermsUsedGas)
 
-        return if (isGas()) costGas else costElectricity
+        costPostState = if (isGas()) costGas else costElectricity
+
+        return costPostState
     }
 
     /**
