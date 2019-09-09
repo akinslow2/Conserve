@@ -40,6 +40,7 @@ class PreRinseSpray(computable: Computable<*>, utilityRateGas: UtilityRate, util
     private var waterTemperature = 0
     private var efficiency = 0.0
     private var waterHeater = ""
+    var age = 0.0
 
     override fun setup() {
         try {
@@ -82,16 +83,18 @@ class PreRinseSpray(computable: Computable<*>, utilityRateGas: UtilityRate, util
     override fun materialCost(): Double {
         return 100.0
     }
+
     override fun laborCost(): Double {
         return 0.0
     }
-    //@K2 is this correct?
-    override fun implementationCost(): Double {
+
+    fun implementationCost(): Double {
         return (materialCost() + laborCost()) - incentives()
     }
     /**
      * Cost - Post State
      * */
+    var costPostState = 0.0
     override fun costPostState(element: JsonElement, dataHolder: DataHolder): Double {
         val powerUsedElectric = hourlyEnergyUsagePost(element)[0]
         val thermsUsedGas = hourlyEnergyUsagePost(element)[1]
@@ -103,6 +106,7 @@ class PreRinseSpray(computable: Computable<*>, utilityRateGas: UtilityRate, util
         costGas = costGas(thermsUsedGas)
 
         val cost = if (isGas()) costGas else costElectricity
+        costPostState = cost
         return cost
     }
 
