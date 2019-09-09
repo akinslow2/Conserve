@@ -24,7 +24,7 @@ import io.reactivex.functions.Function
 import org.json.JSONObject
 import timber.log.Timber
 
-abstract class EBase(private val computable: Computable<*>,
+abstract class EBase(val computable: Computable<*>,
                      private val utilityRateGas: UtilityRate,
                      private val utilityRateElectricity: UtilityRate,
                      val operatingHours: UsageHours,
