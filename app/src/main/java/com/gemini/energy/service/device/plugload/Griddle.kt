@@ -46,23 +46,28 @@ class Griddle(private val computable: Computable<*>, utilityRateGas: UtilityRate
     var age = 0.0
 
     override fun setup() {
+        try {
 
-        peakHours = featureData["Peak Hours"]!! as Double
-        partPeakHours = featureData["Part Peak Hours"]!! as Double
-        offPeakHours = featureData["Off Peak Hours"]!! as Double
 
-        idleEnergy = featureData["Idle Energy"]!! as Int
-        preHeatEnergy = featureData["Preheat Energy"]!! as Int
+            peakHours = featureData["Peak Hours"]!! as Double
+            partPeakHours = featureData["Part Peak Hours"]!! as Double
+            offPeakHours = featureData["Off Peak Hours"]!! as Double
 
-        numberOfSides = featureData["Number of Sides"]!! as String
-        surfaceArea = featureData["Surface Area"]!! as Double
-        nominalWidth = featureData["Nominal Width"]!! as Double
-        productionCapacity = featureData["Production Capacity"]!! as Double
+            idleEnergy = featureData["Idle Energy"]!! as Int
+            preHeatEnergy = featureData["Preheat Energy"]!! as Int
 
-        fuelType = featureData["Fuel Type"]!! as String
-        age = featureData["Age"]!! as Double
+            numberOfSides = featureData["Number of Sides"]!! as String
+            surfaceArea = featureData["Surface Area"]!! as Double
+            nominalWidth = featureData["Nominal Width"]!! as Double
+            productionCapacity = featureData["Production Capacity"]!! as Double
 
-        usageHours = UsageSimple(peakHours, partPeakHours, offPeakHours)
+            fuelType = featureData["Fuel Type"]!! as String
+            age = featureData["Age"]!! as Double
+
+            usageHours = UsageSimple(peakHours, partPeakHours, offPeakHours)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
 
     }
 
