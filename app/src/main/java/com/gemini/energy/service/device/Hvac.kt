@@ -207,8 +207,14 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
     /**
      * Getting year of device and how much over life it is
      */
-    private val year = getYear(age)
-    val overage = year - 20
+    fun year(): Int {
+        return getYear(age)
+    }
+
+    fun overAge(): Int {
+        return age - 20
+    }
+
     /**
      * Cost - Pre State
      * */
