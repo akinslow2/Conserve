@@ -17,7 +17,7 @@ class Refrigerator(computable: Computable<*>, utilityRateGas: UtilityRate, utili
                    usageHours: UsageHours, outgoingRows: OutgoingRows) :
         EBase(computable, utilityRateGas, utilityRateElectricity, usageHours, outgoingRows), IComputable {
 
-    private var age = 0.0
+    var age = 0.0
     /**
      * Entry Point
      * */
@@ -50,20 +50,23 @@ class Refrigerator(computable: Computable<*>, utilityRateGas: UtilityRate, utili
     override fun materialCost(): Double {
         return 2500.0
     }
+
     override fun laborCost(): Double {
         return 0.0
     }
-    //@K2 is this correct?
-    override fun implementationCost(): Double {
+
+    fun implementationCost(): Double {
         return (materialCost() + laborCost()) - incentives()
     }
     /**
      * Cost - Post State
      * */
+    var costPostState = 0.0
     override fun costPostState(element: JsonElement, dataHolder: DataHolder): Double {
         val powerUsed = hourlyEnergyUsagePost(element)[0]
         val costElectricity: Double
         costElectricity = costElectricity(powerUsed, super.usageHoursBusiness, super.electricityRate)
+        costPostState = costElectricity
         return costElectricity
     }
 
