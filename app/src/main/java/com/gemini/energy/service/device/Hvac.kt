@@ -109,7 +109,7 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
      * 2. Secondary Match - [size_btu_per_hr_min > BTU < size_btu_per_hr_max]
      * */
     private var eer = 0.0
-    private var seer = 0.0
+    var seer = 0.0
     private var alternateSeer = 0.0
     private var alternateEer = 0.0
     private var alternateBtu = 0
@@ -117,7 +117,7 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
     /**
      * HVAC - Age
      * */
-    private var age = 0
+    var age = 0
 
 
     /**
@@ -128,7 +128,7 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
     /**
      * HVAC - Tons
      * */
-    private var tons = 0
+    var tons = 0
 
     /**
      * City | State
@@ -159,8 +159,7 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
     var utilitycompany = ""
     var electricstructure = ""
     var gasstructure = ""
-    var bldgtype = ""
-    private var quantity = 0
+    var quantity = 0
 
 
     override fun setup() {
