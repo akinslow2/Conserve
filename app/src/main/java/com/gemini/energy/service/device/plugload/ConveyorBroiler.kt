@@ -73,10 +73,12 @@ class ConveyorBroiler(private val computable: Computable<*>, utilityRateGas: Uti
     /**
      * Cost - Post State
      * */
+    var costPostState = 0.0
     override fun costPostState(element: JsonElement, dataHolder: DataHolder): Double {
         val powerUsed = hourlyEnergyUsagePost(element)[0]
         val costElectricity: Double
         costElectricity = costElectricity(powerUsed, usageHours!!, electricityRate)
+        costPostState = costElectricity
         return costElectricity
     }
 
