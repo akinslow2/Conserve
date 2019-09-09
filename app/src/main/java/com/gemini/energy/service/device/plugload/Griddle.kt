@@ -43,6 +43,7 @@ class Griddle(private val computable: Computable<*>, utilityRateGas: UtilityRate
     private var nominalWidth = 0.0
     private var productionCapacity = 0.0
     private var fuelType = ""
+    var age = 0.0
 
     override fun setup() {
 
@@ -87,16 +88,18 @@ class Griddle(private val computable: Computable<*>, utilityRateGas: UtilityRate
     override fun materialCost(): Double {
         return 1000.0
     }
+
     override fun laborCost(): Double {
         return 0.0
     }
-    //@K2 is this correct?
-    override fun implementationCost(): Double {
+
+    fun implementationCost(): Double {
         return (materialCost() + laborCost()) - incentives()
     }
     /**
      * Cost - Post State
      * */
+    var costPostState = 0.0
     override fun costPostState(element: JsonElement, dataHolder: DataHolder): Double {
         val powerUsed = hourlyEnergyUsagePost(element)[0]
         val cost: Double
