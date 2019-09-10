@@ -469,71 +469,29 @@ class SorterForWordDocumentGenerator {
         )
     }
 
-    // probably done
-    private fun prepareBuildingValuesForEquipment(audit: AuditComponents, lightings: LightingValues, equpments: EquipmentValues, hvacs: HvacValues): BuildingValues? {
+    private fun prepareBuildingValuesForEquipment(lightings: LightingValues?, equpments: EquipmentValues?, hvacs: HvacValues?): BuildingValues {
 
-//        val hvacTotalCost: Int, // 35
-//            implementationCost + implementationCost + …
-        var hvacTotalCost = hvacs.totalCost
+        val buildingTotalSavings = (lightings?.totalsavings ?: 0.0) + (equpments?.totalSavings
+                ?: 0.0) + (hvacs?.totalsavings ?: 0.0)
 
+        val buildingTotalCost = (lightings?.totalCost ?: 0.0) + (hvacs?.totalCost
+                ?: 0.0) + (equpments?.totalCost ?: 0.0)
 
-//        val hvacPaybackYear: Double, // 37
-//            ("HtotalCost") / ("HVACtotalSavings")
-        val hvacPaybackYear = hvacTotalCost / hvacTotalSavings
+        val buildingPayback = buildingTotalCost / buildingTotalSavings
 
-
-//        val hvacPaybackMonth: Int, // 38
-//            ("HtotalCost") / ("HVACtotalSavings")* 12
-        val hvacPaybackMonth = hvacTotalCost / hvacTotalSavings * 12
-
-
-//        val equipmentTotalCost: Int, // 36
-//            ∑implementationCost
-//            if there is an equipment with no implementation cost
-//                    skip it in aggregation
-        val equipmentTotalCost = equpments.totalCost
-
-
-//        val equipmentPaybackYear: Double, // 39
-//             ("EtotalCost") / ("EquipmenttotalSavings")
-        val equipmentPaybackYear = equipmentTotalCost / equpments.totalSavings
-
-
-//        val equipmentPaybackMonth: Int // 40
-//            ("EtotalCost") / ("EquipmenttotalSavings") * 12
-        val equipmentPaybackMonth = equipmentTotalCost / equpments.totalSavings * 12
-
-
-//        val buildingTotalSavings: Int, // 19
-//             "LightingtotalSavings" + "EquipmenttotalSavings" + "HVACtotalSavings"
-        val buildingTotalSavings = lightings.totalsavings + equpments.totalSavings + hvacTotalSavings
-
-
-//        val buildingTotalCost: Int, // 34
-//            LtotalCost + HtotalCost + EtotalCost
-        val buildingTotalCost = lightings.totalCost + hvacTotalCost + equipmentTotalCost
-
-//        val buildingPayback: Double, // 33
-//            buildingTotalCost / buildingTotalSavings * 12
-        val buildingPayback = buildingTotalCost / buildingTotalSavings * 12
-
-
-//        val buildingPaybackMonth: Int, // 41
-//            buildingTotalCost / buildingTotalSavings
-        val buildingPaybackMonth = buildingTotalCost / buildingTotalSavings
-
+        val buildingPaybackMonth = buildingTotalCost / buildingTotalSavings * 12
 
         return BuildingValues(
                 buildingTotalSavings,
                 buildingPayback,
                 buildingPaybackMonth,
                 buildingTotalCost,
-                hvacTotalCost,
-                hvacPaybackYear,
-                hvacPaybackMonth,
-                equipmentTotalCost,
-                equipmentPaybackYear,
-                equipmentPaybackMonth
+                (hvacs?.totalCost ?: 0.0),
+                (hvacs?.totalCost ?: 0.0) / (hvacs?.totalsavings ?: 0.0),
+                (hvacs?.totalCost ?: 0.0) / (hvacs?.totalsavings ?: 0.0) * 12,
+                equpments?.totalCost ?: 0.0,
+                (equpments?.totalCost ?: 0.0) / (equpments?.totalSavings ?: 0.0),
+                (equpments?.totalCost ?: 0.0) / (equpments?.totalSavings ?: 0.0) * 12
         )
     }
 }
