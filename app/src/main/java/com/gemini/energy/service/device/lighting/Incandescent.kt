@@ -32,6 +32,7 @@ class Incandescent(computable: Computable<*>, utilityRateGas: UtilityRate, utili
     private var actualWatts = 0.0
     var LampsPerFixtures = 0
     var numberOfFixtures = 0
+
     private var peakHours = 0.0
     private var partPeakHours = 0.0
     var offPeakHours = 0.0
@@ -41,9 +42,6 @@ class Incandescent(computable: Computable<*>, utilityRateGas: UtilityRate, utili
     var energyAtPostState = 0.0
     var currentPower = 0.0
     var postPower = 0.0
-    fun energySavings(): Double {
-        return energyAtPreState * percentPowerReduced
-    }
 
     private var bulbcost = 3
     private var seer = 10
@@ -53,6 +51,10 @@ class Incandescent(computable: Computable<*>, utilityRateGas: UtilityRate, utili
     private var alternateActualWatts = 0.0
     private var alternateNumberOfFixtures = 0
     private var alternateLampsPerFixture = 0
+
+    fun energySavings(): Double {
+        return energyAtPreState * percentPowerReduced
+    }
 
     fun selfinstallcost(): Int {
         return bulbcost * numberOfFixtures * LampsPerFixtures
@@ -82,6 +84,7 @@ class Incandescent(computable: Computable<*>, utilityRateGas: UtilityRate, utili
             alternateActualWatts = featureData["Alternate Actual Watts"]!! as Double
             alternateNumberOfFixtures = featureData["Alternate Number of Fixtures"]!! as Int
             alternateLampsPerFixture = featureData["Alternate Lamps Per Fixture"]!! as Int
+
             postUsageHours = featureData["Suggested Off Peak Hours"]!! as Int
         } catch (e: Exception) {
             e.printStackTrace()
@@ -176,8 +179,7 @@ class Incandescent(computable: Computable<*>, utilityRateGas: UtilityRate, utili
     override fun energyPowerChange(): Double {
         val powerUsed = actualWatts * LampsPerFixtures * numberOfFixtures / 1000
         currentPower = powerUsed
-        val powerUsedPost = alternateActualWatts * alternateLampsPerFixture * alternateNumberOfFixtures / 1000
-        postPower = powerUsedPost
+        postPower = alternateActualWatts * alternateLampsPerFixture * alternateNumberOfFixtures / 1000
         return powerUsed * percentPowerReduced
     }
 
