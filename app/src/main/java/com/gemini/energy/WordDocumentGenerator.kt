@@ -39,24 +39,45 @@ class WordDocumentGenerator {
     fun triggerGeneration(ebases: MutableList<EBase>) {
         setupNeededForApacheToWork()
         // organization & aggregation
-        val sorter = SorterForWordDocumentGenerator()
+        val values = SorterForWordDocumentGenerator().prepareAllValues(ebases)
 
-        sorter.prepareAllValues(values)
-//        val sortedAudits = sorter.sortEbasesIntoAudits(values)
+        val allDocuments = mutableListOf<XWPFDocument>()
+        for (value in values) {
+            val document = XWPFDocument()
+            generateDocument(value, document)
+            allDocuments.add(document)
+        }
 
+        documents = allDocuments.toList()
+    }
 
-        Log.i("-----moo", "SORTED")
+    // generation
+    private fun generateDocument(value: PreparedForDocument, document: XWPFDocument): XWPFDocument {
+        generateFirstPage(document, value.hvac)
 
-//        // generation
-//        generateFirstPage()
-//        generateHvac()
-//
-//        // lighting
-//        if (true) {
-//            generateLighting()
-//        }
-//
-//        generateClosingPage()
+        generateEnergySavingPotentialPage(
+                document,
+                value.lighting
+                        ?: LightingValues(0.0, 0, 0.0, 0.0, 0.0, 0.0, listOf()),
+                value.building)
+
+        if (value.lighting != null) {
+            generateLightingSavingsPage(document, value.lighting)
+        }
+
+        generateHvacSavingsPage(document, value.hvac, value.building)
+
+        if (value.equipment != null && value.equipment.instances.any()) {
+            generateEquipmentSavingsPage(document, value.equipment)
+        }
+
+        generateFacilityInformationPage(document, value, value.hvac)
+
+        addPageNumbers(document)
+
+        writeDocument(value, document)
+
+        return document
     }
 
 
