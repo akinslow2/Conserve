@@ -311,7 +311,7 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
     }
 
     override fun materialCost(): Double {
-        return (12000)
+        return 12000.0
     }
 
     fun implementationCost() = (materialCost() + laborCost()) - incentives()
