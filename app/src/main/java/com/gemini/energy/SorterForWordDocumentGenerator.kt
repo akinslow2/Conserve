@@ -71,6 +71,26 @@ class SorterForWordDocumentGenerator {
         return zones
     }
 
+    private fun concatenateZoneString(zones: MutableList<String>): String {
+        if (zones.count() == 0) {
+            return ""
+        }
+        if (zones.count() == 1) {
+            return zones[0]
+        }
+
+        var zoneString = ""
+
+        for ((index, zone) in zones.iterator().withIndex()) {
+            if (index == zones.count() - 1) {
+                zoneString += "and an $zone"
+            } else {
+                zoneString += "$zone, "
+            }
+        }
+
+        return zoneString
+    }
 
     private fun sortEbasesIntoAudits(values: MutableList<EBase>): SortedAudits {
         val sorted = mutableMapOf<Long, MutableMap<String, MutableList<EBase>>>()
