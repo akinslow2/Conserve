@@ -97,6 +97,8 @@ data class BuildingValues(
 
 data class PreparedForDocument(
         val auditId: Long,
+        val zoneNames: MutableList<String>,
+        val zoneString: String,
         val hvac: HvacValues,
         val lighting: LightingValues?,
         val equipment: EquipmentValues?,
