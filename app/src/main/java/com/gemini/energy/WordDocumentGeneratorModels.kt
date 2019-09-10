@@ -44,7 +44,24 @@ data class LightingValues(
         val totalCost: Double, // 15
         val paybackMonth: Double, // 16
         val geminiPayback: Double, // 17
-        val paybackYear: Double // 18
+        val paybackYear: Double, // 18
+        val lightingRows: List<LightingDataRow>
+)
+
+data class LightingDataRow(
+        val measure: String,
+        val location: String,
+        val measureDescription: String,
+        val quantity: Double,
+        val currentPowerkW: Double,
+        val usageHours: Double,
+        val postPowerkW: Double,
+        val postUsageHours: Double,
+        val energySavingskWh: Double,
+        val costSavings: Double,
+        val implementationCost: Double,
+        val paybackPeriodMonths: Double,
+        val paybackPeriodYears: Double
 )
 
 data class EquipmentInstances(
