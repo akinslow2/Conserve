@@ -225,6 +225,7 @@ class SorterForWordDocumentGenerator {
         val lowPressureSodium = mutableListOf<LowPressureSodium>()
 
         for (type in audit[lighting]!!) {
+            type.costPreState(listOf(JsonNull.INSTANCE))
             when (type) {
                 is Cfl -> cfls.add(type)
                 is Halogen -> halogens.add(type)
@@ -235,43 +236,44 @@ class SorterForWordDocumentGenerator {
             }
         }
 
-        val totalSavings = 0.0
-        val selfinstallcost = 0
+        var totalSavings = 0.0
+        var selfinstallcost = 0
         var electricianCost = 0
+        val lightingRows = prepareLightingTableRows(audit[lighting]!!)
 
         for (light in cfls) {
-//            NEED TOTAL SAVINGS FROM CFLS
-//            NEED SELF INSTALL COST FROM CFLS
+            totalSavings += light.totalSavings()
+            selfinstallcost += light.selfinstallcost()
             electricianCost += light.electricianCost
         }
 
         for (light in halogens) {
-//            NEED TOTAL SAVINGS FROM HALOGENS
-//            NEED SELF INSTALL COST FROM HALOGENS
+            totalSavings += light.totalSavings()
+            selfinstallcost += light.selfinstallcost()
             electricianCost += light.electricianCost
         }
 
         for (light in highPressureSodiums) {
-//            NEED TOTAL SAVINGS FROM HIGH PRESSURE SODIUM
-//            NEED SELF INSTALL COST FROM HIGH PRESSURE SODIUM
-            light.electricianCost
+            totalSavings += light.totalSavings()
+            selfinstallcost += light.selfinstallcost()
+            electricianCost += light.electricianCost
         }
 
         for (light in incandescents) {
-//            NEED TOTAL SAVINGS FROM INCANDESCENTS
-//            NEED SELF INSTALL COST FROM INCANDESCENTS
+            totalSavings += light.totalSavings()
+            selfinstallcost += light.selfinstallcost()
             electricianCost += light.electricianCost
         }
 
         for (light in linearFluorescents) {
-//            NEED TOTAL SAVINGS FROM LINEAR FLUORESCENTS
-//            NEED SELF INSTALL COST FROM LINEAR FLUORESCENTS
-//            NEED ELECTRICIAN COST FROM LINEAR FLUORESCENTS
+            totalSavings += light.totalSavings()
+            selfinstallcost += light.selfinstallcost()
+            electricianCost += light.electricianCost
         }
 
         for (light in lowPressureSodium) {
-//            NEED TOTAL SAVINGS FROM LOW PRESSURE SODIUM
-//            NEED SELF INSTALL COST FROM LOW PRESSURE SODIUM
+            totalSavings += light.totalSavings()
+            selfinstallcost += light.selfinstallcost()
             electricianCost += light.electricianCost
         }
 
@@ -283,10 +285,11 @@ class SorterForWordDocumentGenerator {
         return LightingValues(
                 totalSavings,
                 selfinstallcost,
-                installCost,
+                installCost.toDouble(),
                 paybackMonth,
                 geminiPayback,
-                paybackYear)
+                paybackYear,
+                lightingRows)
     }
 
     // TODO: implment me!!!
