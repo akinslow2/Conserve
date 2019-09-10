@@ -53,17 +53,22 @@ class SorterForWordDocumentGenerator {
             }
         }
 
-        val eqipPrepared = mutableListOf<EquipmentValues>()
-        for (audit in sortedAudits) {
-            val value = prepareValuesForEquipment(audit.value)
-            if (value != null) {
-                eqipPrepared.add(value)
-            } else {
-                Log.i("-----moo", "no equipment to add for this audit")
+        return returnAble.toList()
+    }
+
+    private fun aggregateZoneNames(audit: AuditComponents): MutableList<String> {
+        val zones = mutableListOf<String>()
+
+        for (component in audit) {
+            for (equipment in component.value) {
+                if (zones.any { i -> i == equipment.computable.zoneName }) {
+                } else {
+                    zones.add(equipment.computable.zoneName)
+                }
             }
         }
 
-        Log.i("-----moo", "DONE")
+        return zones
     }
 
 
