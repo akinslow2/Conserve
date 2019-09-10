@@ -157,50 +157,47 @@ class SorterForWordDocumentGenerator {
         return sorted
     }
 
-    // TODO: implment me!!!
     private fun prepareValuesFromHvac(audit: AuditComponents): HvacValues? {
         if (!audit[hvac]!!.any()) {
             return null
         }
 
-        // TODO: aggregate hvac values as needed
         @Suppress("UNCHECKED_CAST")
         val hvacs = audit[hvac]!! as MutableList<Hvac>
 
-        var costPostState = 0.0 // aggregation value
-        var totalCost = 0
-        val instances = mutableListOf<HvacInstances>() // aggregation value
+        var costPostState = 0.0
+        var totalCost = 0.0
+        var totalSavings = 0.0
+        val instances = mutableListOf<HvacInstances>()
 
         for (hvac in hvacs) {
-            // TODO: figure out how below should be called
-//                hvac.costPostState(element, dataHolder)
-            costPostState += hvac.costPostState(dataHolder = DataHolder(), element = JsonNull())
+            val postState = hvac.buildPostState().blockingGet()
+            val element = postState.getAsJsonArray("results")[0].asJsonObject.get("data")
 
-            // TODO: comment in once merged
-//            totalCost += hvac.totalCost()
+            costPostState += hvac.costPostState(element, DataHolder())
+
+            totalSavings += hvac.energyPowerChange()
+            totalCost += hvac.implementationCost()
 
             instances.add(HvacInstances(
                     hvac.quantity,
-                    hvac.year,
-                    // TODO: implement me
-//                    hvac.age,
-                    20,
+                    hvac.year(),
+                    hvac.age,
                     hvac.tons,
                     hvac.seer,
-                    hvac.overage
+                    hvac.overAge()
             ))
         }
 
         val hvac = audit[hvac]!!.first() as Hvac
 
-
         return HvacValues(
                 instances.toList(),
 
                 hvac.businessname,
-                hvac.clientaddress,
                 hvac.auditmonth,
                 hvac.audityear,
+                hvac.clientaddress,
                 hvac.startday,
                 hvac.endday,
                 hvac.operationhours,
@@ -215,7 +212,6 @@ class SorterForWordDocumentGenerator {
         )
     }
 
-    // probably done
     private fun prepareValuesFromLighting(audit: AuditComponents): LightingValues? {
         if (!audit[lighting]!!.any()) {
             return null
