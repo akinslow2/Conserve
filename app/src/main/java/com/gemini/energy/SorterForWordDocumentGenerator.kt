@@ -97,7 +97,6 @@ class SorterForWordDocumentGenerator {
 
         for (value in values) {
             if (sorted.keys.contains(value.computable.auditId)) {
-
             } else {
                 sorted[value.computable.auditId] = mutableMapOf(
                         hvac to mutableListOf(),
@@ -105,17 +104,17 @@ class SorterForWordDocumentGenerator {
 
                         combinationOven to mutableListOf(),
                         convectionOven to mutableListOf(),
+                        conveyorBroiler to mutableListOf(),
                         conveyorOven to mutableListOf(),
+                        dishWasher to mutableListOf(),
                         fryer to mutableListOf(),
+                        griddle to mutableListOf(),
+                        hotFoodCabinet to mutableListOf(),
                         iceMaker to mutableListOf(),
+                        preRinseSpray to mutableListOf(),
                         rackOven to mutableListOf(),
                         refrigerator to mutableListOf(),
                         steamCooker to mutableListOf(),
-                        griddle to mutableListOf(),
-                        hotFoodCabinet to mutableListOf(),
-                        conveyorBroiler to mutableListOf(),
-                        dishWasher to mutableListOf(),
-                        preRinseSpray to mutableListOf(),
 
                         other to mutableListOf())
             }
@@ -136,17 +135,17 @@ class SorterForWordDocumentGenerator {
                 // TODO: comment in appliances once they have finished being implemented
                 is CombinationOven -> sorted[value.computable.auditId]!![combinationOven]!!.add(value)
 //                is ConvectionOven -> sorted[value.computable.auditId]!![convectionOven]!!.add(value)
+                is ConveyorBroiler -> sorted[value.computable.auditId]!![conveyorBroiler]!!.add(value)
 //                is ConveyorOven -> sorted[value.computable.auditId]!![convectionOven]!!.add(value)
+//                is Dishwasher -> sorted[value.computable.auditId]!![dishWasher]!!.add(value)
 //                is Fryer -> sorted[value.computable.auditId]!![fryer]!!.add(value)
+                is Griddle -> sorted[value.computable.auditId]!![griddle]!!.add(value)
+                is HotFoodCabinet -> sorted[value.computable.auditId]!![hotFoodCabinet]!!.add(value)
                 is IceMaker -> sorted[value.computable.auditId]!![iceMaker]!!.add(value)
+                is PreRinseSpray -> sorted[value.computable.auditId]!![preRinseSpray]!!.add(value)
 //                is RackOven -> sorted[value.computable.auditId]!![rackOven]!!.add(value)
                 is Refrigerator -> sorted[value.computable.auditId]!![refrigerator]!!.add(value)
 //                is SteamCooker -> sorted[value.computable.auditId]!![steamCooker]!!.add(value)
-                is Griddle -> sorted[value.computable.auditId]!![griddle]!!.add(value)
-                is HotFoodCabinet -> sorted[value.computable.auditId]!![hotFoodCabinet]!!.add(value)
-                is ConveyorBroiler -> sorted[value.computable.auditId]!![conveyorBroiler]!!.add(value)
-//                is Dishwasher -> sorted[value.computable.auditId]!![dishWasher]!!.add(value)
-                is PreRinseSpray -> sorted[value.computable.auditId]!![preRinseSpray]!!.add(value)
 
 
                 // Other
@@ -208,7 +207,8 @@ class SorterForWordDocumentGenerator {
                 hvac.gasstructure,
 
                 costPostState,
-                totalCost
+                totalCost,
+                totalSavings
         )
     }
 
