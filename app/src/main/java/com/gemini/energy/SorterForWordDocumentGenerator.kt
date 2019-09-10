@@ -32,28 +32,24 @@ class SorterForWordDocumentGenerator {
         private const val other = "other"
     }
 
-
     fun prepareAllValues(values: MutableList<EBase>): List<PreparedForDocument> {
         val sortedAudits = sortEbasesIntoAudits(values)
 
+        val returnAble = mutableListOf<PreparedForDocument>()
 
-        val hvacPrepared = mutableListOf<HvacValues>()
         for (audit in sortedAudits) {
-            val value = prepareValuesFromHvac(audit.value)
-            if (value != null) {
-                hvacPrepared.add(value)
-            } else {
-                Log.e("-----moo", "ERROR: need hvac to generatre report!!!!!")
-            }
-        }
+            val hvac = prepareValuesFromHvac(audit.value)
+            val lighting = prepareValuesFromLighting(audit.value)
+            val equipment = prepareValuesForEquipment(audit.value)
+            val building = prepareBuildingValuesForEquipment(lighting, equipment, hvac)
 
-        val lightingPrepared = mutableListOf<LightingValues>()
-        for (audit in sortedAudits) {
-            val value = prepareValuesFromLighting(audit.value)
-            if (value != null) {
-                lightingPrepared.add(value)
+            val zones = aggregateZoneNames(audit.value)
+            val zoneString = concatenateZoneString(zones)
+
+            if (hvac == null) {
+                continue
             } else {
-                Log.i("-----moo", "no lighting to add for this audit")
+                returnAble.add(PreparedForDocument(audit.key, zones, zoneString, hvac, lighting, equipment, building))
             }
         }
 
