@@ -2,7 +2,7 @@ package com.gemini.energy
 
 import com.gemini.energy.service.device.EBase
 
-//Map<AuditId: Map<EqupmentType: Equipment>>
+//Map<AuditId: Map<EquipmentType: Equipment>>
 typealias SortedAudits =
         MutableMap<Long, MutableMap<String, MutableList<EBase>>>
 
@@ -69,7 +69,6 @@ data class EquipmentInstances(
         val delta: Double, // 26
         val costElectricity: Double, // 28
         val age: Double, // 29
-        val hfcCost: Int, // 30
         val materialCost: Double, // 32
         val implementationCost: Double,
         val totalsavings: Double
