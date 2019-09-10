@@ -8,29 +8,33 @@ import com.gemini.energy.service.device.Hvac
 import com.gemini.energy.service.device.lighting.*
 import com.gemini.energy.service.device.plugload.*
 import com.google.gson.JsonNull
+import java.text.DecimalFormat
 
 class SorterForWordDocumentGenerator {
     // use these values for sorting types of equipment that need to be aggregated for the report
-    private val hvac = "hvac"
-    private val lighting = "lighting"
+    companion object {
+        private val hvac = "hvac"
+        private val lighting = "lighting"
 
-    private val combinationOven = EApplianceType.CombinationOven.value
-    private val convectionOven = EApplianceType.ConvectionOven.value
-    private val conveyorOven = EApplianceType.ConveyorOven.value
-    private val fryer = EApplianceType.Fryer.value
-    private val iceMaker = EApplianceType.IceMaker.value
-    private val rackOven = EApplianceType.RackOven.value
-    private val refrigerator = EApplianceType.Refrigerator.value
-    private val steamCooker = EApplianceType.SteamCooker.value
-    private val griddle = EApplianceType.Griddle.value
-    private val hotFoodCabinet = EApplianceType.HotFoodCabinet.value
-    private val conveyorBroiler = EApplianceType.ConveyorBroiler.value
-    private val dishWasher = EApplianceType.DishWasher.value
-    private val preRinseSpray = EApplianceType.PreRinseSpray.value
+        private val combinationOven = EApplianceType.CombinationOven.value
+        private val convectionOven = EApplianceType.ConvectionOven.value
+        private val conveyorBroiler = EApplianceType.ConveyorBroiler.value
+        private val conveyorOven = EApplianceType.ConveyorOven.value
+        private val dishWasher = EApplianceType.DishWasher.value
+        private val fryer = EApplianceType.Fryer.value
+        private val griddle = EApplianceType.Griddle.value
+        private val hotFoodCabinet = EApplianceType.HotFoodCabinet.value
+        private val iceMaker = EApplianceType.IceMaker.value
+        private val preRinseSpray = EApplianceType.PreRinseSpray.value
+        private val rackOven = EApplianceType.RackOven.value
+        private val refrigerator = EApplianceType.Refrigerator.value
+        private val steamCooker = EApplianceType.SteamCooker.value
 
-    private val other = "other"
+        private val other = "other"
+    }
 
-    fun prepareAllValues(values: MutableList<EBase>) {
+
+    fun prepareAllValues(values: MutableList<EBase>): List<PreparedForDocument> {
         val sortedAudits = sortEbasesIntoAudits(values)
 
 
