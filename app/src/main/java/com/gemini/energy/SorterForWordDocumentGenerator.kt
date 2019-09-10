@@ -1,6 +1,5 @@
 package com.gemini.energy
 
-import android.util.Log
 import com.gemini.energy.presentation.util.EApplianceType
 import com.gemini.energy.service.DataHolder
 import com.gemini.energy.service.device.EBase
@@ -13,8 +12,8 @@ import java.text.DecimalFormat
 class SorterForWordDocumentGenerator {
     // use these values for sorting types of equipment that need to be aggregated for the report
     companion object {
-        private val hvac = "hvac"
-        private val lighting = "lighting"
+        private const val hvac = "hvac"
+        private const val lighting = "lighting"
 
         private val combinationOven = EApplianceType.CombinationOven.value
         private val convectionOven = EApplianceType.ConvectionOven.value
@@ -30,7 +29,7 @@ class SorterForWordDocumentGenerator {
         private val refrigerator = EApplianceType.Refrigerator.value
         private val steamCooker = EApplianceType.SteamCooker.value
 
-        private val other = "other"
+        private const val other = "other"
     }
 
 
