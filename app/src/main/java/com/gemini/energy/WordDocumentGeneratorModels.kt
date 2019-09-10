@@ -74,7 +74,6 @@ data class EquipmentInstances(
         val totalsavings: Double
 )
 
-
 data class EquipmentValues(
         val instances: List<EquipmentInstances>,
 
