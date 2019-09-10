@@ -38,9 +38,6 @@ data class HvacValues(
         val totalsavings: Double
 )
 
-val hvacTotalSavings = 200
-
-
 data class LightingValues(
         val totalsavings: Double, // 13
         val selfinstallcost: Int, // 14
