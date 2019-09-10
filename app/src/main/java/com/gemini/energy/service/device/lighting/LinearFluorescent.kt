@@ -207,7 +207,8 @@ class LinearFluorescent(computable: Computable<*>, utilityRateGas: UtilityRate, 
 
     override fun preStateFields() = mutableListOf("")
     override fun postStateFields() = mutableListOf("__life_hours", "__maintenance_savings",
-            "__cooling_savings", "__energy_savings")
+            "__cooling_savings", "__energy_savings", "__energy_at_post_state", "__selfinstall_cost",
+            "__payback_month", "__payback_year", "__total_savings")
 
     override fun computedFields() = mutableListOf("")
 
