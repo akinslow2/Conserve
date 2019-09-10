@@ -1,128 +1,21 @@
 package com.gemini.energy
 
-import android.util.Log
+import android.os.Environment
+import com.dropbox.core.DbxException
+import com.dropbox.core.v2.DbxClientV2
+import com.dropbox.core.v2.files.UploadErrorException
+import com.dropbox.core.v2.files.WriteMode
+import com.gemini.energy.presentation.audit.DropBox
 import com.gemini.energy.service.device.EBase
-
-typealias SortedAudits =
-        MutableMap<Long, MutableMap<String, MutableList<EBase>>>
-
-typealias AuditComponents = MutableMap<String, MutableList<EBase>>
-
-
-//interface DocumentSubtype {}
-//
-//data class HvacValues
-//(val businessname: String, //1
-// val clientaddress: String, // 4
-// val auditmonth: String, //2
-// val audityear: String, // 3
-// val startday: String, // 5
-// val endday: String, //6
-// val bldgarea: Double, // 7
-// val bldgtype: String, // 12
-// val operationhours: String, //8
-// val electricstructure: String, //10
-// val utilitycompany: String, //9
-// val gasstructure: String, // 11
-//
-// val costPostState: Double, // 20
-// val quantity: Int, // 21
-// val year: Int, // 22
-// val tons: Int, // 23
-// val seer: Double, // 24
-// val overage: Int // 25
-//): DocumentSubtype
-//
-//data class LightingValues
-//(val totalsavings: Double, // 13
-// val selfinstallcost: Int, //14
-// val installcost: Int, // 15
-// val paybackMonth: Double, //16
-// val geminiPayback: Double, // 17
-// val paybackYear: Double // 18
-//): DocumentSubtype
-//
-//data class EquipmentValues(
-//        val equipmentName: String,
-//        val age: Int,
-//        val delta: Int,
-//        val electricityCost: Int,
-//        val materialCost: Double,
-//        val hfcCost: Int
-//)
-
-
-data class HvacInstances(
-        val quantity: Int, // 21
-        val year: Int, // 22
-        val age: Int, // TODO: implement me???
-        val tons: Int, //23
-        val seer: Double, // 24
-        val overage: Int //25
-)
-
-data class HvacValues(
-        val instances: List<HvacInstances>,
-
-        val businessname: String, //1
-        val auditmonth: String, //2
-        val audityear: String, // 3
-        val clientaddress: String, // 4
-        val startday: String, // 5
-        val endday: String, //6
-        val operationhours: String, //8
-        val bldgarea: Double, // 7
-        val bldgtype: String, // 12
-        val electricstructure: String, //10
-        val utilitycompany: String, //9
-        val gasstructure: String, // 11
-
-        val costPostState: Double, // 20
-        val totalCost: Int
-//        val totalCost: Int
-)
-
-val hvacTotalSavings = 200
-
-
-data class LightingValues(
-        val totalsavings: Double, // 13
-        val selfinstallcost: Int, // 14
-        val totalCost: Int, // 15
-        val paybackMonth: Double, // 16
-        val geminiPayback: Double, // 17
-        val paybackYear: Double // 18
-)
-
-data class EquipmentInstances(
-        val name: String, // 27
-        val delta: Int, // 26
-        val costElectricity: Int, // 28
-        val age: Int, // 29
-        val hfcCost: Int, // 30
-        val materialCost: Int // 32
-)
-
-
-data class EquipmentValues(
-        val instances: List<EquipmentInstances>,
-
-        val totalSavings: Int, // 31
-        val totalCost: Int
-)
-
-data class BuildingValues(
-        val buildingTotalSavings: Double, // 19
-        val buildingPayback: Double, // 33
-        val buildingPaybackMonth: Double, // 41
-        val buildingTotalCost: Int, // 34
-        val hvacTotalCost: Int, // 35
-        val hvacPaybackYear: Int, // 37
-        val hvacPaybackMonth: Int, // 38
-        val equipmentTotalCost: Int, // 36
-        val equipmentPaybackYear: Int, // 39
-        val equipmentPaybackMonth: Int // 40
-)
+import org.apache.poi.wp.usermodel.HeaderFooterType
+import org.apache.poi.xwpf.usermodel.*
+import org.openxmlformats.schemas.wordprocessingml.x2006.main.*
+import java.io.File
+import java.io.FileInputStream
+import java.io.FileOutputStream
+import java.io.IOException
+import java.math.BigInteger
+import java.util.*
 
 
 class WordDocumentGenerator {
