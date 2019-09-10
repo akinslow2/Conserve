@@ -5,6 +5,7 @@ import com.dropbox.core.DbxException
 import com.dropbox.core.v2.DbxClientV2
 import com.dropbox.core.v2.files.UploadErrorException
 import com.dropbox.core.v2.files.WriteMode
+import com.gemini.energy.format
 import com.gemini.energy.presentation.audit.DropBox
 import com.gemini.energy.service.device.EBase
 import org.apache.poi.wp.usermodel.HeaderFooterType

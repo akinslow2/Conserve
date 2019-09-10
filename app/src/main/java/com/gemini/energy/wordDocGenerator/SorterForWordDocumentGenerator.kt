@@ -7,7 +7,6 @@ import com.gemini.energy.service.device.Hvac
 import com.gemini.energy.service.device.lighting.*
 import com.gemini.energy.service.device.plugload.*
 import com.google.gson.JsonNull
-import java.text.DecimalFormat
 
 class SorterForWordDocumentGenerator {
     // use these values for sorting types of equipment that need to be aggregated for the report
