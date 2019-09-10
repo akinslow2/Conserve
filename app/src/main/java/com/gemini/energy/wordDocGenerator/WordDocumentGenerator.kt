@@ -1,4 +1,4 @@
-package com.gemini.energy
+package com.gemini.energy.wordDocGenerator
 
 import android.os.Environment
 import com.dropbox.core.DbxException

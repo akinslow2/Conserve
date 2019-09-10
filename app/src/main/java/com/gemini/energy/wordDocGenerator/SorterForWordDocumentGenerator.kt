@@ -1,4 +1,4 @@
-package com.gemini.energy
+package com.gemini.energy.wordDocGenerator
 
 import com.gemini.energy.presentation.util.EApplianceType
 import com.gemini.energy.service.DataHolder

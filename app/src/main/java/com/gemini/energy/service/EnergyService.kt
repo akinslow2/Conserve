@@ -3,7 +3,6 @@ package com.gemini.energy.service
 
 import android.content.Context
 import com.crashlytics.android.Crashlytics
-import com.gemini.energy.WordDocumentGenerator
 import com.gemini.energy.domain.Schedulers
 import com.gemini.energy.domain.entity.Computable
 import com.gemini.energy.domain.entity.Feature
@@ -11,6 +10,7 @@ import com.gemini.energy.domain.gateway.AuditGateway
 import com.gemini.energy.service.device.EBase
 import com.gemini.energy.service.type.UsageHours
 import com.gemini.energy.service.type.UtilityRate
+import com.gemini.energy.wordDocGenerator.WordDocumentGenerator
 import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
 import io.reactivex.functions.BiFunction
