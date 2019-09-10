@@ -10,6 +10,7 @@ import com.gemini.energy.service.IComputable
 import com.gemini.energy.service.OutgoingRows
 import com.gemini.energy.service.device.EBase
 import com.gemini.energy.service.type.UsageHours
+import com.gemini.energy.service.type.UsageLighting
 import com.gemini.energy.service.type.UtilityRate
 import com.google.gson.JsonElement
 import io.reactivex.Observable
@@ -41,12 +42,19 @@ class LinearFluorescent(computable: Computable<*>, utilityRateGas: UtilityRate, 
 
     private var percentPowerReduced = 0.0
     private var actualWatts = 0.0
-    private var ballastsPerFixtures = 0
-    private var numberOfFixtures = 0
+    var ballastsPerFixtures = 0
+    var numberOfFixtures = 0
 
-    private var energyAtPreState = 0.0
+    private var peakHours = 0.0
+    private var partPeakHours = 0.0
+    var offPeakHours = 0.0
+    var postUsageHours = 0
+
+    var energyAtPreState = 0.0
+    var currentPower = 0.0
+    var postPower = 0.0
+
     private var seer = 13
-
     private var cooling = 1.0
     var electricianCost = 400
     /**
@@ -57,6 +65,9 @@ class LinearFluorescent(computable: Computable<*>, utilityRateGas: UtilityRate, 
     private var alternateLampsPerFixture = 0
     private var alternateLifeHours = 0
 
+    fun energySavings(): Double {
+        return energyAtPreState * percentPowerReduced
+    }
 
     fun selfinstallcost(): Int {
         return bulbcost.toInt() * numberOfFixtures * ballastsPerFixtures
@@ -71,17 +82,22 @@ class LinearFluorescent(computable: Computable<*>, utilityRateGas: UtilityRate, 
     }
 
 
-
     override fun setup() {
         try {
             actualWatts = featureData["Actual Watts"]!! as Double
             ballastsPerFixtures = featureData["Ballasts Per Fixture"]!! as Int
             numberOfFixtures = featureData["Number of Fixtures"]!! as Int
 
+            peakHours = (featureData["Peak Hours"]!! as Int).toDouble()
+            partPeakHours = (featureData["Part Peak Hours"]!! as Int).toDouble()
+            offPeakHours = (featureData["Off Peak Hours"]!! as Int).toDouble()
+
             alternateActualWatts = featureData["Alternate Actual Watts"]!! as Double
             alternateNumberOfFixtures = featureData["Alternate Number of Fixtures"]!! as Int
             alternateLampsPerFixture = featureData["Alternate Lamps Per Fixture"]!! as Int
             alternateLifeHours = featureData["Alternate Life Hours"]!! as Int
+
+            postUsageHours = featureData["Suggested Off Peak Hours"]!! as Int
 
             val config = lightingConfig(ELightingType.LinearFluorescent)
             percentPowerReduced = config[ELightingIndex.PercentPowerReduced.value] as Double
@@ -98,7 +114,12 @@ class LinearFluorescent(computable: Computable<*>, utilityRateGas: UtilityRate, 
         val totalUnits = ballastsPerFixtures * numberOfFixtures
         val powerUsed = actualWatts * totalUnits * KW_CONVERSION
 
-        energyAtPreState = powerUsed * usageHoursSpecific.yearly()
+        val usageHours = UsageLighting()
+        usageHours.peakHours = peakHours
+        usageHours.partPeakHours = partPeakHours
+        usageHours.offPeakHours = offPeakHours
+
+        energyAtPreState = powerUsed * usageHours.yearly()
         Timber.d("******* Power Used :: ($powerUsed) *******")
         Timber.d("******* Energy At Pre State :: ($energyAtPreState) *******")
 
@@ -178,7 +199,9 @@ class LinearFluorescent(computable: Computable<*>, utilityRateGas: UtilityRate, 
         val totalUnitsPost = alternateLampsPerFixture * alternateNumberOfFixtures
 
         val powerUsedPre = actualWatts *  totalUnitsPre * KW_CONVERSION
+        currentPower = powerUsedPre
         val powerUsedPost = alternateActualWatts * totalUnitsPost * KW_CONVERSION
+        postPower = powerUsedPost
         val delta = powerUsedPre - powerUsedPost
 
         return delta * usageHoursPre()
