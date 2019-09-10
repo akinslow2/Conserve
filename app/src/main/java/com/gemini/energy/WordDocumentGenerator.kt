@@ -20,7 +20,24 @@ import java.util.*
 
 class WordDocumentGenerator {
 
-    fun generateDocument(values: MutableList<EBase>) {
+    private lateinit var documents: List<XWPFDocument>
+
+    private val greyColor = "595959"
+    private val tableGreyColor = "D9D9D9"
+    private val greenColor = "70ad47"
+    private val tableGreenColor = "469B43"
+    private val blackColor = "000000"
+    private val whiteColor = "ffffff"
+
+    private val fontAgencyFB = "Agency FB"
+    private val fontUnivers = "Univers LT Std 39 Thin UltraCn"
+
+    private val manuallyGeneratedValue = "INSERTME"
+
+
+    /** Triggers the document generation for each audit and saves docuemnts to appropriate place **/
+    fun triggerGeneration(ebases: MutableList<EBase>) {
+        setupNeededForApacheToWork()
         // organization & aggregation
         val sorter = SorterForWordDocumentGenerator()
 
