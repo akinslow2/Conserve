@@ -31,17 +31,28 @@ class Cfl(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEle
 //create variable here if you want to make it global to the class with private
     private var percentPowerReduced = 0.0
     private var actualWatts = 0.0
-    private var LampsPerFixtures = 0
-    private var numberOfFixtures = 0
+    var LampsPerFixtures = 0
+    var numberOfFixtures = 0
     private var peakHours = 0.0
     private var partPeakHours = 0.0
     private var offPeakHours = 0.0
-    private var energyAtPreState = 0.0
+
+    var energyAtPreState = 0.0
+    var currentPower = 0.0
+    var postPower = 0.0
 
     private var bulbcost = 3
     private var seer = 10
     private var cooling = 1.0
     var electricianCost = 400
+
+    private var alternateActualWatts = 0.0
+    private var alternateNumberOfFixtures = 0
+    private var alternateLampsPerFixture = 0
+
+    fun energySavings(): Double {
+        return energyAtPreState * percentPowerReduced
+    }
 
     fun selfinstallcost(): Int {
         return bulbcost * numberOfFixtures * LampsPerFixtures
@@ -61,12 +72,18 @@ class Cfl(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEle
             actualWatts = featureData["Actual Watts"]!! as Double
             LampsPerFixtures = featureData["Lamps Per Fixture"]!! as Int
             numberOfFixtures = featureData["Number of Fixtures"]!! as Int
+
             val config = lightingConfig(ELightingType.CFL)
             percentPowerReduced = config[ELightingIndex.PercentPowerReduced.value] as Double
 
             peakHours = (featureData["Peak Hours"]!! as Int).toDouble()
             partPeakHours = (featureData["Part Peak Hours"]!! as Int).toDouble()
             offPeakHours = (featureData["Off Peak Hours"]!! as Int).toDouble()
+
+            alternateActualWatts = featureData["Alternate Actual Watts"]!! as Double
+            alternateNumberOfFixtures = featureData["Alternate Number of Fixtures"]!! as Int
+            alternateLampsPerFixture = featureData["Alternate Lamps Per Fixture"]!! as Int
+
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -105,7 +122,7 @@ class Cfl(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEle
 
         val maintenanceSavings = LampsPerFixtures * numberOfFixtures * bulbcost * usageHoursSpecific.yearly() / lifeHours
         // Adding new variables for the report
-        val selfinstallcost = this.selfinstallcost() //bulbcost * numberOfFixtures * LampsPerFixtures
+        val selfinstallcost = this.selfinstallcost()
 
         // Delta is going to be Power Used * Percentage Power Reduced
         // Percentage Power Reduced - we get it from the Base - ELighting
@@ -159,6 +176,8 @@ class Cfl(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEle
      * */
     override fun energyPowerChange(): Double {
         val powerUsed = actualWatts * LampsPerFixtures * numberOfFixtures / 1000
+        currentPower = powerUsed
+        postPower = alternateActualWatts * alternateLampsPerFixture * alternateNumberOfFixtures / 1000
         return powerUsed * percentPowerReduced
     }
 
