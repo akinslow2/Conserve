@@ -51,7 +51,7 @@ class HotFoodCabinet(computable: Computable<*>, utilityRateGas: UtilityRate, uti
             cabinetVolume = featureData["Cabinet Volume"]!! as Double
             idleEnergyRate = featureData["Idle Energy Rate"]!! as Double
             size = featureData["Size"]!! as String
-            age = featureData["Age"]!! as Double
+            age = (featureData["Age"]!! as Int).toDouble()
 
         } catch (e: Exception) {
             e.printStackTrace()

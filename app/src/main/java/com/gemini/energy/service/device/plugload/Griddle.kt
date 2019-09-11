@@ -62,7 +62,7 @@ class Griddle(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRat
             productionCapacity = featureData["Production Capacity"]!! as Double
 
             fuelType = featureData["Fuel Type"]!! as String
-            age = featureData["Age"]!! as Double
+            age = (featureData["Age"]!! as Int).toDouble()
 
             usageHours = UsageSimple(peakHours, partPeakHours, offPeakHours)
         } catch (e: Exception) {

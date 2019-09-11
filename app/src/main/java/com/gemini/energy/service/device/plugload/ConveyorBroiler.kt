@@ -56,7 +56,7 @@ class ConveyorBroiler(computable: Computable<*>, utilityRateGas: UtilityRate,
 
             broilerType = featureData["Broiler Type"]!! as String
             conveyorWidth = featureData["Conveyor Width"]!! as Double
-            age = featureData["Age"]!! as Double
+            age = (featureData["Age"]!! as Int).toDouble()
 
         } catch (e: Exception) {
             e.printStackTrace()
