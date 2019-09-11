@@ -1031,7 +1031,7 @@ class WordDocumentGenerator {
     /** writes document to dropbox and local **/
     private fun writeDocument(value: PreparedForDocument, document: XWPFDocument) {
         val calendar = Calendar.getInstance()
-        val dateTime = "${calendar.get(Calendar.YEAR)}-${calendar.get(Calendar.MONTH)}-${calendar.get(Calendar.DAY_OF_MONTH)}T${calendar.get(Calendar.HOUR)}:${calendar.get(Calendar.MINUTE)}:${calendar.get(Calendar.SECOND)}.${calendar.get(Calendar.MILLISECOND)}"
+        val dateTime = "${calendar.get(Calendar.YEAR)}-${calendar.get(Calendar.MONTH) + 1}-${calendar.get(Calendar.DAY_OF_MONTH)}T${calendar.get(Calendar.HOUR_OF_DAY)}:${calendar.get(Calendar.MINUTE)}:${calendar.get(Calendar.SECOND)}.${calendar.get(Calendar.MILLISECOND)}"
         val docName = "${value.hvac.bldgtype}_${value.hvac.businessname}_$dateTime"
 
         writeDocumentWithName(document, docName)
