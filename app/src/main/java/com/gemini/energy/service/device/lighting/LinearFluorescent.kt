@@ -31,6 +31,7 @@ class LinearFluorescent(private val computable: Computable<*>, utilityRateGas: U
         /**
          * Hypothetical Cost of Replacement for Linear Fluorescent
          * */
+        private const val ledbulbcost = 12.0
         private const val bulbcost = 3.0
 
         /**
@@ -41,11 +42,12 @@ class LinearFluorescent(private val computable: Computable<*>, utilityRateGas: U
 
     var electricianCost = 400
     private var actualWatts = 0.0
-    private var ballastsPerFixtures = 0
+    private var lampsPerFixtures = 0
     private var numberOfFixtures = 0
 
     private var energyAtPreState = 0.0
     private var seer = 13
+    private val LEDlifeHours = 30000
 
     /**
      * Suggested Alternative
@@ -58,7 +60,7 @@ class LinearFluorescent(private val computable: Computable<*>, utilityRateGas: U
     override fun setup() {
         try {
             actualWatts = featureData["Actual Watts"]!! as Double
-            ballastsPerFixtures = featureData["Ballasts Per Fixture"]!! as Int
+            lampsPerFixtures = featureData["Lamps Per Fixture"]!! as Int
             numberOfFixtures = featureData["Number of Fixtures"]!! as Int
 
             alternateActualWatts = featureData["Alternate Actual Watts"]!! as Double
@@ -75,7 +77,7 @@ class LinearFluorescent(private val computable: Computable<*>, utilityRateGas: U
      * Cost - Pre State
      * */
     override fun costPreState(elements: List<JsonElement?>): Double {
-        val totalUnits = ballastsPerFixtures * numberOfFixtures
+        val totalUnits = lampsPerFixtures * numberOfFixtures
         val powerUsed = actualWatts * totalUnits * KW_CONVERSION
 
         energyAtPreState = powerUsed * usageHoursSpecific.yearly()
@@ -97,11 +99,13 @@ class LinearFluorescent(private val computable: Computable<*>, utilityRateGas: U
         val cooling = config[ELightingIndex.Cooling.value] as Double
         val lifeHours = config[ELightingIndex.LifeHours.value] as Double
 
+
         //1. Maintenance Savings
-        val totalUnits= ballastsPerFixtures * numberOfFixtures
-        val selfinstallcost = bulbcost * numberOfFixtures * ballastsPerFixtures
-        val replacementIndex = usageHoursSpecific.yearly() / alternateLifeHours
-        val maintenanceSavings = totalUnits * bulbcost * replacementIndex
+        val totalUnits= lampsPerFixtures * numberOfFixtures
+        val selfinstallcost = ledbulbcost * numberOfFixtures * lampsPerFixtures
+        val replacementIndex = LEDlifeHours / lifeHours
+        val expectedLife = LEDlifeHours / usageHoursSpecific.yearly()
+        val maintenanceSavings = totalUnits * bulbcost * replacementIndex / expectedLife
 
         //2. Cooling Savings
         val coolingSavings = energyAtPreState * cooling * seer
@@ -154,7 +158,7 @@ class LinearFluorescent(private val computable: Computable<*>, utilityRateGas: U
      * PowerTimeChange >> Energy Efficiency Calculations
      * */
     override fun energyPowerChange(): Double {
-        val totalUnitsPre = ballastsPerFixtures * numberOfFixtures
+        val totalUnitsPre = lampsPerFixtures * numberOfFixtures
         val totalUnitsPost = alternateLampsPerFixture * alternateNumberOfFixtures
 
         val powerUsedPre = actualWatts *  totalUnitsPre * KW_CONVERSION
