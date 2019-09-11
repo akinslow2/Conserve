@@ -27,16 +27,16 @@ class IceMaker(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRa
 
     private var iceHarvestRate = 0.0
     private var energyUseRate = 0.0
-    private var alternateIceHarvestRate = 0.0
-    private var alternateEnergyUseRate = 0.0
+    private var alternateIceHarvestRate = 100.0
+    private var alternateEnergyUseRate = 6.9
     private var age = 0.0
 
     override fun setup() {
         try {
             iceHarvestRate = featureData["Ice Harvest Rate"]!! as Double
             energyUseRate = featureData["Energy Use Rate"]!! as Double
-            alternateIceHarvestRate = featureData["Alternate Ice Harvest Rate"]!! as Double
-            alternateEnergyUseRate = featureData["Alternate Energy Use Rate"]!! as Double
+           /** alternateIceHarvestRate = featureData["Alternate Ice Harvest Rate"]!! as Double
+            alternateEnergyUseRate = featureData["Alternate Energy Use Rate"]!! as Double */
             age = featureData["Age"]!! as Double
         } catch (e: Exception) {
             e.printStackTrace()
@@ -65,11 +65,11 @@ class IceMaker(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRa
      * Ice Maker - INCENTIVES | MATERIAL COST
      * */
     override fun incentives(): Double {
-        return 200.00
+        return 75.00
     }
 
     override fun materialCost(): Double {
-        return 3455.00
+        return 3500.00
     }
 
     override fun laborCost(): Double {
