@@ -136,7 +136,7 @@ class SorterForWordDocumentGenerator {
 //                is ConvectionOven -> sorted[value.computable.auditId]!![convectionOven]!!.add(value)
                 is ConveyorBroiler -> sorted[value.computable.auditId]!![conveyorBroiler]!!.add(value)
 //                is ConveyorOven -> sorted[value.computable.auditId]!![convectionOven]!!.add(value)
-//                is Dishwasher -> sorted[value.computable.auditId]!![dishWasher]!!.add(value)
+                is DishWasher -> sorted[value.computable.auditId]!![dishWasher]!!.add(value)
 //                is Fryer -> sorted[value.computable.auditId]!![fryer]!!.add(value)
                 is Griddle -> sorted[value.computable.auditId]!![griddle]!!.add(value)
                 is HotFoodCabinet -> sorted[value.computable.auditId]!![hotFoodCabinet]!!.add(value)
@@ -511,7 +511,10 @@ class SorterForWordDocumentGenerator {
             val single = dishwasher.first()
 
             for (washer in dishwasher) {
-                costElectricity += washer.costPostState
+                val postState = washer.buildPostState().blockingGet()
+                val element = postState.getAsJsonArray("results")[0].asJsonObject.get("data")
+
+                costElectricity += washer.costPostState(element, DataHolder())
                 materialCost += washer.materialCost()
                 implementationCost += washer.implementationCost()
                 savings += washer.costPreState(listOf(null)) - washer.costPostState
