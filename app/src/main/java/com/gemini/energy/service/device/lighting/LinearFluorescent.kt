@@ -108,7 +108,7 @@ class LinearFluorescent(private val computable: Computable<*>, utilityRateGas: U
         val maintenanceSavings = totalUnits * bulbcost * replacementIndex / expectedLife
 
         //2. Cooling Savings
-        val coolingSavings = energyAtPreState * cooling * seer
+        val coolingSavings = energyAtPreState * cooling / seer
 
         //3. Energy Savings
         val energySavings = energyPowerChange()
