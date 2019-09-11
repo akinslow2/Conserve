@@ -98,15 +98,7 @@ class DishWasher(private val computable: Computable<*>, utilityRateGas: UtilityR
 
         return if (isGas()) costGas else costElectricity
     }
-    override fun incentives(): Double {
-        return 0.0
-    }
 
-    override fun materialCost(): Double {
-        return 3500.0
-    }
-    override fun laborCost(): Double {
-        return 0.0
     }
     //@K2 is this correct?
     override fun implementationCost(): Double {
@@ -254,9 +246,9 @@ class DishWasher(private val computable: Computable<*>, utilityRateGas: UtilityR
     /**
      * Additional Costs
      * */
-    override fun materialCost(): Double = 50.0
+    override fun materialCost(): Double = 4500.0
     override fun laborCost(): Double = 0.0
-    override fun incentives(): Double = 0.0
+    override fun incentives(): Double = 600.0
 
     /**
      * Define all the fields here - These would be used to Generate the Outgoing Rows or perform the Energy Calculation
