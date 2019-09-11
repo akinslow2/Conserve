@@ -387,7 +387,7 @@ class WordDocumentGenerator {
         val r1p2 = p2.createRun()
         r1p2.fontFamily = fontAgencyFB
         r1p2.fontSize = 12
-        r1p2.setText("The ${hvac.bldgtype} facility is ${hvac.bldgarea.format(0)} square feet and includes a ${values.zoneString}. The ${hvac.bldgtype} is open daily from ${hvac.operationhours}.")
+        r1p2.setText("The ${hvac.businessname} is ${hvac.bldgarea.format(0)} square feet and includes a ${values.zoneString}. The ${hvac.businessname} is open daily from ${hvac.operationhours}. This building is classified as ${hvac.bldgtype}.")
         r1p2.addBreak()
         r1p2.addBreak()
         r1p2.setText("${hvac.businessname} is on the ${hvac.electricstructure} ${hvac.utilitycompany} electric rate schedule. In the one-year period from $manuallyGeneratedValue through $manuallyGeneratedValue, ${hvac.businessname} consumed $manuallyGeneratedValue kWh, resulting in an electrical cost of $$manuallyGeneratedValue.")
