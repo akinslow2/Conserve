@@ -38,7 +38,7 @@ class ConveyorBroiler(private val computable: Computable<*>, utilityRateGas: Uti
 
     private var energyInputRate = 0.0
     private var idleEnergyRate = 0.0
-    private var idleHours = 0
+    private var idleHours = 0.0
     private var broilerType = ""
     private var conveyorWidth = 0.0
     private var age = 0.0
@@ -52,7 +52,8 @@ class ConveyorBroiler(private val computable: Computable<*>, utilityRateGas: Uti
 
         energyInputRate = featureData["Energy Input Rate"]!! as Double
         idleEnergyRate = featureData["Idle Energy Rate"]!! as Double
-        idleHours = 1 //ToDo: @Johnny - not to worry at the moment
+        idleHours = usageHours * 0.9 // Assuming conveyor is idle 90% of the time
+        //@K2 there is a issue above but not sure what
 
         broilerType = featureData["Broiler Type"]!! as String
         conveyorWidth = featureData["Conveyor Width"]!! as Double
@@ -162,6 +163,20 @@ class ConveyorBroiler(private val computable: Computable<*>, utilityRateGas: Uti
      * */
     override fun usageHoursSpecific() = false
 
+    override fun incentives(): Double {
+        return 0.0
+    }
+
+    override fun materialCost(): Double {
+        return 1000.0
+    }
+    override fun laborCost(): Double {
+        return 0.0
+    }
+    //@K2 is this correct?
+    override fun implementationCost(): Double {
+        return (materialCost() + laborCost()) - incentives()
+    }
     /**
      * Define all the fields here - These would be used to Generate the Outgoing Rows or perform the Energy Calculation
      * */
