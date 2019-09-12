@@ -43,6 +43,7 @@ class Griddle(private val computable: Computable<*>, utilityRateGas: UtilityRate
     private var nominalWidth = 0.0
     private var productionCapacity = 0.0
     private var fuelType = ""
+    private var age = 0.0
 
     override fun setup() {
 
