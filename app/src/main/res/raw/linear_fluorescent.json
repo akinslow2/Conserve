@@ -37,6 +37,14 @@
           "id": "14"
         },
         {
+          "index": 15,
+          "dataType": "introw",
+          "defaultValues": "",
+          "param": "Lamps Per Fixture",
+          "validation": "",
+          "id": "14"
+        },
+        {
           "index": 16,
           "dataType": "introw",
           "defaultValues": "",
