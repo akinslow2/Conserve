@@ -328,11 +328,7 @@ class WordDocumentGenerator {
         val r1p6 = p6.createRun()
         r1p6.fontFamily = fontAgencyFB
         r1p6.fontSize = 12
-        r1p6.setText("The savings represented in the table below do not include:")
-
-        createLightingTable2(document)
-
-        document.createParagraph().createRun().addBreak()
+        r1p6.setText("The savings represented in the table below reflect the maintenance and cooling costs abated because LED bulbs have a longer life and produce considerably less heat.")
 
         createLightingTable3(document, lights)
     }
@@ -713,13 +709,6 @@ class WordDocumentGenerator {
 
         centerTable(table)
         fitTable(table, 4000)
-    }
-
-    private fun createLightingTable2(document: XWPFDocument) {
-        val p = document.createParagraph()
-        val r = p.createRun()
-        r.fontFamily = fontAgencyFB
-        r.setText("•   Demand Savings  •   Maintenance Savings   •   Air-Conditioning Savings   •   Rebate Savings")
     }
 
     private fun createLightingTable3(document: XWPFDocument, lights: LightingValues) {
