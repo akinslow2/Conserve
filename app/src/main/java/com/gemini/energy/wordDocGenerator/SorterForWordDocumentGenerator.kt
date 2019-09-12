@@ -361,7 +361,7 @@ class SorterForWordDocumentGenerator {
                         implmentationCost += light.selfinstallcost()
                     }
                     is LinearFluorescent -> {
-                        quantity += light.ballastsPerFixtures * light.numberOfFixtures
+                        quantity += light.lampsPerFixtures * light.numberOfFixtures
                         currentPowerkW += light.currentPower
                         usageHours += light.offPeakHours
                         postPowerkW += light.postPower

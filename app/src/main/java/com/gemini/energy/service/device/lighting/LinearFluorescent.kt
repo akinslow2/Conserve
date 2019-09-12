@@ -32,6 +32,7 @@ class LinearFluorescent(computable: Computable<*>, utilityRateGas: UtilityRate, 
         /**
          * Hypothetical Cost of Replacement for Linear Fluorescent
          * */
+        private const val ledbulbcost = 12.0
         private const val bulbcost = 3.0
 
         /**
@@ -42,13 +43,16 @@ class LinearFluorescent(computable: Computable<*>, utilityRateGas: UtilityRate, 
 
     private var percentPowerReduced = 0.0
     private var actualWatts = 0.0
-    var ballastsPerFixtures = 0
-    var numberOfFixtures = 0
 
     private var peakHours = 0.0
     private var partPeakHours = 0.0
     var offPeakHours = 0.0
     var postUsageHours = 0
+
+    var lampsPerFixtures = 0
+    var ballastsPerFixtures = 0
+    var numberOfFixtures = 0
+    private val LEDlifeHours = 30000
 
     var energyAtPreState = 0.0
     var currentPower = 0.0
@@ -70,14 +74,14 @@ class LinearFluorescent(computable: Computable<*>, utilityRateGas: UtilityRate, 
     }
 
     fun selfinstallcost(): Int {
-        return bulbcost.toInt() * numberOfFixtures * ballastsPerFixtures
+        return bulbcost.toInt() * numberOfFixtures * lampsPerFixtures
     }
 
     fun totalSavings(): Double {
         val lifeHours = lightingConfig(ELightingType.CFL)[ELightingIndex.LifeHours.value] as Double
         val energySavings = energyAtPreState * percentPowerReduced
         val coolingSavings = energySavings * cooling * seer
-        val maintenanceSavings = ballastsPerFixtures * numberOfFixtures * bulbcost * usageHoursSpecific.yearly() / lifeHours
+        val maintenanceSavings = lampsPerFixtures * numberOfFixtures * bulbcost * usageHoursSpecific.yearly() / lifeHours
         return energySavings + coolingSavings + maintenanceSavings
     }
 
@@ -85,6 +89,7 @@ class LinearFluorescent(computable: Computable<*>, utilityRateGas: UtilityRate, 
     override fun setup() {
         try {
             actualWatts = featureData["Actual Watts"]!! as Double
+            lampsPerFixtures = featureData["Lamps Per Fixture"]!! as Int
             ballastsPerFixtures = featureData["Ballasts Per Fixture"]!! as Int
             numberOfFixtures = featureData["Number of Fixtures"]!! as Int
 
@@ -111,7 +116,7 @@ class LinearFluorescent(computable: Computable<*>, utilityRateGas: UtilityRate, 
      * Cost - Pre State
      * */
     override fun costPreState(elements: List<JsonElement?>): Double {
-        val totalUnits = ballastsPerFixtures * numberOfFixtures
+        val totalUnits = lampsPerFixtures * numberOfFixtures
         val powerUsed = actualWatts * totalUnits * KW_CONVERSION
 
         val usageHours = UsageLighting()
@@ -138,14 +143,16 @@ class LinearFluorescent(computable: Computable<*>, utilityRateGas: UtilityRate, 
         val cooling = config[ELightingIndex.Cooling.value] as Double
         val lifeHours = config[ELightingIndex.LifeHours.value] as Double
 
+
         //1. Maintenance Savings
-        val totalUnits= ballastsPerFixtures * numberOfFixtures
-        val selfinstallcost = bulbcost * numberOfFixtures * ballastsPerFixtures
-        val replacementIndex = usageHoursSpecific.yearly() / alternateLifeHours
-        val maintenanceSavings = totalUnits * bulbcost * replacementIndex
+        val totalUnits = lampsPerFixtures * numberOfFixtures
+        val selfinstallcost = ledbulbcost * numberOfFixtures * lampsPerFixtures
+        val replacementIndex = LEDlifeHours / lifeHours
+        val expectedLife = LEDlifeHours / usageHoursSpecific.yearly()
+        val maintenanceSavings = totalUnits * bulbcost * replacementIndex / expectedLife
 
         //2. Cooling Savings
-        val coolingSavings = energyAtPreState * cooling * seer
+        val coolingSavings = energyAtPreState * cooling / seer
 
         //3. Energy Savings
         val energySavings = energyPowerChange()
@@ -195,7 +202,7 @@ class LinearFluorescent(computable: Computable<*>, utilityRateGas: UtilityRate, 
      * PowerTimeChange >> Energy Efficiency Calculations
      * */
     override fun energyPowerChange(): Double {
-        val totalUnitsPre = ballastsPerFixtures * numberOfFixtures
+        val totalUnitsPre = lampsPerFixtures * numberOfFixtures
         val totalUnitsPost = alternateLampsPerFixture * alternateNumberOfFixtures
 
         val powerUsedPre = actualWatts *  totalUnitsPre * KW_CONVERSION

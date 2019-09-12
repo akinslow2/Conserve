@@ -130,7 +130,7 @@ class Incandescent(computable: Computable<*>, utilityRateGas: UtilityRate, utili
         // Percentage Power Reduced - we get it from the Base - ELighting
 
         val energySavings = energyAtPreState * percentPowerReduced
-        val coolingSavings = energySavings * cooling * seer
+        val coolingSavings = energySavings * cooling / seer
 
         energyAtPostState = energyAtPreState - energySavings
         val paybackmonth = selfinstallcost / energySavings * 12

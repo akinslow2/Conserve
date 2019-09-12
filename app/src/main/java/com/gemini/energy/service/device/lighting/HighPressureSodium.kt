@@ -133,8 +133,8 @@ class HighPressureSodium(computable: Computable<*>, utilityRateGas: UtilityRate,
         // Delta is going to be Power Used * Percentage Power Reduced
         // Percentage Power Reduced - we get it from the Base - ELighting
 
-        var energySavings = energyAtPreState * percentPowerReduced
-        val coolingSavings = energySavings * cooling * seer
+        val energySavings = energyAtPreState * percentPowerReduced
+        val coolingSavings = energySavings * cooling / seer
 
         energyAtPostState = energyAtPreState - energySavings
         val paybackmonth = selfinstallcost / energySavings * 12

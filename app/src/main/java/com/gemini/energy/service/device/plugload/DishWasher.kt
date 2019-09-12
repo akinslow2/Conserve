@@ -101,17 +101,7 @@ class DishWasher(computable: Computable<*>, utilityRateGas: UtilityRate, utility
 
         return if (isGas()) costGas else costElectricity
     }
-    override fun incentives(): Double {
-        return 0.0
-    }
 
-    override fun materialCost(): Double {
-        return 3500.0
-    }
-
-    override fun laborCost(): Double {
-        return 0.0
-    }
 
     fun implementationCost(): Double {
         return (materialCost() + laborCost()) - incentives()
@@ -257,6 +247,14 @@ class DishWasher(computable: Computable<*>, utilityRateGas: UtilityRate, utility
      * Weekly UsageHours Hours apart from the PreAudit
      * */
     override fun usageHoursSpecific() = false
+
+    /**
+     * Additional Costs
+     * */
+    override fun materialCost(): Double = 4500.0
+
+    override fun laborCost(): Double = 0.0
+    override fun incentives(): Double = 600.0
 
     /**
      * Define all the fields here - These would be used to Generate the Outgoing Rows or perform the Energy Calculation
