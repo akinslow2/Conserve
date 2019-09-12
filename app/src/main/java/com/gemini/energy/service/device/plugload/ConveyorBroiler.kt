@@ -132,13 +132,13 @@ class ConveyorBroiler(private val computable: Computable<*>, utilityRateGas: Uti
      * */
     override fun energyPowerChange(): Double {
         val prePower = hourlyEnergyUsagePre()[0]
-        var postPower: Double
-        var delta = 0.0
+        var postPower: 3.6 // a filler for now. >A2 @K2
+        var delta = usageHoursPre() * (prePower - postPower)
 
-        computable.efficientAlternative?.let {
-            postPower = hourlyEnergyUsagePost(it)[0]
-            delta = usageHoursPre() * (prePower - postPower)
-        }
+       // computable.efficientAlternative?.let {
+          //  postPower = hourlyEnergyUsagePost(it)[0]
+       // delta = usageHoursPre() * (prePower - postPower)
+        //}
 
         return delta
     }
