@@ -38,7 +38,7 @@ class ConveyorBroiler(computable: Computable<*>, utilityRateGas: UtilityRate,
 
     private var energyInputRate = 0.0
     private var idleEnergyRate = 0.0
-    private var idleHours = 0
+    private var idleHours = 0.0
     private var broilerType = ""
     private var conveyorWidth = 0.0
     var age = 0.0
@@ -52,21 +52,21 @@ class ConveyorBroiler(computable: Computable<*>, utilityRateGas: UtilityRate,
 
             energyInputRate = featureData["Energy Input Rate"]!! as Double
             idleEnergyRate = featureData["Idle Energy Rate"]!! as Double
-            idleHours = 1 //ToDo: @Johnny - not to worry at the moment
+            idleHours = 1.0 //ToDo: @Johnny - not to worry at the moment
 
             broilerType = featureData["Broiler Type"]!! as String
             conveyorWidth = featureData["Conveyor Width"]!! as Double
             age = (featureData["Age"]!! as Int).toDouble()
 
+            energyInputRate = featureData["Energy Input Rate"]!! as Double
+            idleEnergyRate = featureData["Idle Energy Rate"]!! as Double
+            idleHours = usageHours!!.yearly() * 0.9 // Assuming conveyor is idle 90% of the time
+
         } catch (e: Exception) {
             e.printStackTrace()
         }
-
     }
 
-    fun implementationCost(): Double {
-        return (materialCost() + laborCost()) - incentives()
-    }
 
     /**
      * Cost - Pre State
@@ -172,6 +172,21 @@ class ConveyorBroiler(computable: Computable<*>, utilityRateGas: UtilityRate,
      * */
     override fun usageHoursSpecific() = false
 
+    override fun incentives(): Double {
+        return 0.0
+    }
+
+    override fun materialCost(): Double {
+        return 1000.0
+    }
+
+    override fun laborCost(): Double {
+        return 0.0
+    }
+
+    fun implementationCost(): Double {
+        return (materialCost() + laborCost()) - incentives()
+    }
     /**
      * Define all the fields here - These would be used to Generate the Outgoing Rows or perform the Energy Calculation
      * */
