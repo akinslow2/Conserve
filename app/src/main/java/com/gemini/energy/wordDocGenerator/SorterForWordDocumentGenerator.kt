@@ -292,116 +292,123 @@ class SorterForWordDocumentGenerator {
     }
 
     private fun prepareLightingTableRows(lights: List<EBase>): List<LightingDataRow> {
-        // zones = Map<ZoneName, lights: List<lighting>
-        val zones = mutableMapOf<String, MutableList<EBase>>()
-
-        for (light in lights) {
-            val zoneName = light.computable.zoneName
-
-            if (zones.containsKey(zoneName)) {
-                zones[zoneName]!!.add(light)
-            } else {
-                zones[zoneName] = mutableListOf(light)
-            }
-        }
-
         val rows = mutableListOf<LightingDataRow>()
 
         var measure = 1
-        for (zone in zones) {
-            var quantity = 0.0
-            var currentPowerkW = 0.0
-            var usageHours = 0.0
-            var postPowerkW = 0.0
-            var postUsageHours = 0.0
-            var energySavingskWh = 0.0
-            var totalSavings = 0.0
-            var implmentationCost = 0.0
-
-            for (light in zone.value) {
-                when (light) {
-                    is Cfl -> {
-                        quantity += light.LampsPerFixtures * light.numberOfFixtures
-                        currentPowerkW += light.currentPower
-                        usageHours += light.usageHoursPre()
-                        postPowerkW += light.postPower
-                        postUsageHours += light.usageHoursPost()
-                        energySavingskWh += light.energySavings()
-                        totalSavings += light.totalSavings()
-                        implmentationCost += light.selfinstallcost()
-                    }
-                    is Halogen -> {
-                        quantity += light.LampsPerFixtures * light.numberOfFixtures
-                        currentPowerkW += light.currentPower
-                        usageHours += light.offPeakHours
-                        postPowerkW += light.postPower
-                        postUsageHours += light.postUsageHours
-                        energySavingskWh += light.energySavings()
-                        totalSavings += light.totalSavings()
-                        implmentationCost += light.selfinstallcost()
-                    }
-                    is HighPressureSodium -> {
-                        quantity += light.LampsPerFixtures * light.numberOfFixtures
-                        currentPowerkW += light.currentPower
-                        usageHours += light.offPeakHours
-                        postPowerkW += light.postPower
-                        postUsageHours += light.postUsageHours
-                        energySavingskWh += light.energySavings()
-                        totalSavings += light.totalSavings()
-                        implmentationCost += light.selfinstallcost()
-                    }
-                    is Incandescent -> {
-                        quantity += light.LampsPerFixtures * light.numberOfFixtures
-                        currentPowerkW += light.currentPower
-                        usageHours += light.offPeakHours
-                        postPowerkW += light.postPower
-                        postUsageHours += light.postUsageHours
-                        energySavingskWh += light.energySavings()
-                        totalSavings += light.totalSavings()
-                        implmentationCost += light.selfinstallcost()
-                    }
-                    is LinearFluorescent -> {
-                        quantity += light.lampsPerFixtures * light.numberOfFixtures
-                        currentPowerkW += light.currentPower
-                        usageHours += light.offPeakHours
-                        postPowerkW += light.postPower
-                        postUsageHours += light.postUsageHours
-                        energySavingskWh += light.energySavings()
-                        totalSavings += light.totalSavings()
-                        implmentationCost += light.selfinstallcost()
-                    }
-                    is LowPressureSodium -> {
-                        quantity += light.LampsPerFixtures * light.numberOfFixtures
-                        currentPowerkW += light.currentPower
-                        usageHours += light.offPeakHours
-                        postPowerkW += light.postPower
-                        postUsageHours += light.postUsageHours
-                        energySavingskWh += light.energySavings()
-                        totalSavings += light.totalSavings()
-                        implmentationCost += light.selfinstallcost()
-                    }
+        for (light in lights) {
+            when (light) {
+                is Cfl -> {
+                    rows.add(LightingDataRow(
+                            "$measure",
+                            light.computable.zoneName,
+                            light.computable.auditScopeName,
+                            light.LampsPerFixtures.toDouble() * light.numberOfFixtures.toDouble(),
+                            light.currentPower,
+                            light.offPeakHours,
+                            light.postPower,
+                            light.postUsageHours.toDouble(),
+                            light.energySavings(),
+                            light.totalSavings(),
+                            light.selfinstallcost().toDouble(),
+                            light.selfinstallcost() / light.totalSavings() * 12,
+                            light.selfinstallcost() / light.totalSavings()
+                    ))
+                }
+                is Halogen -> {
+                    rows.add(LightingDataRow(
+                            "$measure",
+                            light.computable.zoneName,
+                            light.computable.auditScopeName,
+                            light.LampsPerFixtures.toDouble() * light.numberOfFixtures.toDouble(),
+                            light.currentPower,
+                            light.offPeakHours,
+                            light.postPower,
+                            light.postUsageHours.toDouble(),
+                            light.energySavings(),
+                            light.totalSavings(),
+                            light.selfinstallcost().toDouble(),
+                            light.selfinstallcost() / light.totalSavings() * 12,
+                            light.selfinstallcost() / light.totalSavings()
+                    ))
+                }
+                is HighPressureSodium -> {
+                    rows.add(LightingDataRow(
+                            "$measure",
+                            light.computable.zoneName,
+                            light.computable.auditScopeName,
+                            light.LampsPerFixtures.toDouble() * light.numberOfFixtures.toDouble(),
+                            light.currentPower,
+                            light.offPeakHours,
+                            light.postPower,
+                            light.postUsageHours.toDouble(),
+                            light.energySavings(),
+                            light.totalSavings(),
+                            light.selfinstallcost().toDouble(),
+                            light.selfinstallcost() / light.totalSavings() * 12,
+                            light.selfinstallcost() / light.totalSavings()
+                    ))
+                }
+                is Incandescent -> {
+                    rows.add(LightingDataRow(
+                            "$measure",
+                            light.computable.zoneName,
+                            light.computable.auditScopeName,
+                            light.LampsPerFixtures.toDouble() * light.numberOfFixtures.toDouble(),
+                            light.currentPower,
+                            light.offPeakHours,
+                            light.postPower,
+                            light.postUsageHours.toDouble(),
+                            light.energySavings(),
+                            light.totalSavings(),
+                            light.selfinstallcost().toDouble(),
+                            light.selfinstallcost() / light.totalSavings() * 12,
+                            light.selfinstallcost() / light.totalSavings()
+                    ))
+                }
+                is LinearFluorescent -> {
+                    rows.add(LightingDataRow(
+                            "$measure",
+                            light.computable.zoneName,
+                            light.computable.auditScopeName,
+                            light.lampsPerFixtures.toDouble() * light.numberOfFixtures.toDouble(),
+                            light.currentPower,
+                            light.offPeakHours,
+                            light.postPower,
+                            light.postUsageHours.toDouble(),
+                            light.energySavings(),
+                            light.totalSavings(),
+                            light.selfinstallcost().toDouble(),
+                            light.selfinstallcost() / light.totalSavings() * 12,
+                            light.selfinstallcost() / light.totalSavings()
+                    ))
+                }
+                is LowPressureSodium -> {
+//                        quantity += light.LampsPerFixtures * light.numberOfFixtures
+//                        currentPowerkW += light.currentPower
+//                        usageHours += light.offPeakHours
+//                        postPowerkW += light.postPower
+//                        postUsageHours += light.postUsageHours
+//                        energySavingskWh += light.energySavings()
+//                        totalSavings += light.totalSavings()
+//                        implmentationCost += light.selfinstallcost()
+                    rows.add(LightingDataRow(
+                            "$measure",
+                            light.computable.zoneName,
+                            light.computable.auditScopeName,
+                            light.LampsPerFixtures.toDouble() * light.numberOfFixtures.toDouble(),
+                            light.currentPower,
+                            light.offPeakHours,
+                            light.postPower,
+                            light.postUsageHours.toDouble(),
+                            light.energySavings(),
+                            light.totalSavings(),
+                            light.selfinstallcost().toDouble(),
+                            light.selfinstallcost() / light.totalSavings() * 12,
+                            light.selfinstallcost() / light.totalSavings()
+                    ))
                 }
             }
 
-            val paybackPeriodMonths = implmentationCost / totalSavings * 12
-            val paybackPeriodYears = implmentationCost / totalSavings
-
-
-            rows.add(LightingDataRow(
-                    "$measure",
-                    zone.key,
-                    "",
-                    quantity,
-                    currentPowerkW,
-                    usageHours,
-                    postPowerkW,
-                    postUsageHours,
-                    energySavingskWh,
-                    totalSavings,
-                    implmentationCost,
-                    paybackPeriodMonths,
-                    paybackPeriodYears
-            ))
             measure += 1
         }
 
