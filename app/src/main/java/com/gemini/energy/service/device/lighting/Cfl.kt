@@ -37,9 +37,12 @@ class Cfl (private val computable: Computable<*>, utilityRateGas: UtilityRate, u
     private var offPeakHours = 0.0
     private var energyAtPreState = 0.0
 
-    private var bulbcost = 3
+    private const val bulbcost = 3
+    private const val ledbulbcost = 6.0
+    private val LEDlifeHours = 30000
     private var seer = 10
     private var cooling = 1.0
+
     var electricianCost = 400
 
 //Where you extract from user inputs and assign to variables
