@@ -41,9 +41,12 @@ class Cfl(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEle
     var currentPower = 0.0
     var postPower = 0.0
 
-    private var bulbcost = 3
+    private const val bulbcost = 3
+    private const val ledbulbcost = 6.0
+    private val LEDlifeHours = 30000
     private var seer = 10
     private var cooling = 1.0
+
     var electricianCost = 400
 
     private var alternateActualWatts = 0.0
