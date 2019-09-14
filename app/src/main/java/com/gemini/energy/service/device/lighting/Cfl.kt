@@ -93,9 +93,14 @@ class Cfl (private val computable: Computable<*>, utilityRateGas: UtilityRate, u
 
         val lifeHours = lightingConfig(ELightingType.CFL)[ELightingIndex.LifeHours.value] as Double
 
-        val maintenanceSavings = LampsPerFixtures * numberOfFixtures * bulbcost * usageHoursSpecific.yearly() / lifeHours
+        val totalUnits= LampsPerFixtures * numberOfFixtures
+
+        val replacementIndex = LEDlifeHours / lifeHours
+        val expectedLife = LEDlifeHours / usageHoursSpecific.yearly()
+        val maintenanceSavings = totalUnits * bulbcost * replacementIndex / expectedLife
+
         // Adding new variables for the report
-        val selfinstallcost = bulbcost * numberOfFixtures * LampsPerFixtures
+        val selfinstallcost = ledbulbcost * numberOfFixtures * LampsPerFixtures
 
         // Delta is going to be Power Used * Percentage Power Reduced
         // Percentage Power Reduced - we get it from the Base - ELighting
