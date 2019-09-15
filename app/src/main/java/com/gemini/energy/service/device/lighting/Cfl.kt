@@ -64,18 +64,19 @@ class Cfl(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEle
         return preEnergy() - energySavings()
     }
     fun energySavings(): Double {
-        return energyAtPreState * percentPowerReduced
+        return preEnergy() * percentPowerReduced
     }
 
     fun selfinstallcost(): Double {
-        return ledbulbcost * numberOfFixtures * LampsPerFixtures
+        return ledbulbcost * alternateNumberOfFixtures * alternateLampsPerFixture
     }
 
     fun totalSavings(): Double {
-        val lifeHours = lightingConfig(ELightingType.CFL)[ELightingIndex.LifeHours.value] as Double
+        val lifeHours = LEDlifeHours
+
         val energySavings = energyAtPreState * percentPowerReduced
-        val coolingSavings = energySavings * cooling * seer
-        val maintenanceSavings = LampsPerFixtures * numberOfFixtures * bulbcost * usageHoursSpecific.yearly() / lifeHours
+        val coolingSavings = energySavings * cooling / seer
+        val maintenanceSavings = alternateLampsPerFixture * alternateNumberOfFixtures * ledbulbcost * postUsageHours / lifeHours
         return energySavings + coolingSavings + maintenanceSavings
     }
 
