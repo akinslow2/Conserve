@@ -35,7 +35,7 @@ class Cfl(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEle
     var numberOfFixtures = 0
     private var peakHours = 0.0
     private var partPeakHours = 0.0
-    private var offPeakHours = 0.0
+    var offPeakHours = 0.0
 
     var energyAtPreState = 0.0
     var currentPower = 0.0
@@ -86,6 +86,9 @@ class Cfl(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEle
             alternateActualWatts = featureData["Alternate Actual Watts"]!! as Double
             alternateNumberOfFixtures = featureData["Alternate Number of Fixtures"]!! as Int
             alternateLampsPerFixture = featureData["Alternate Lamps Per Fixture"]!! as Int
+
+            postUsageHours = featureData["Suggested Off Peak Hours"]!! as Int
+
 
         } catch (e: Exception) {
             e.printStackTrace()
