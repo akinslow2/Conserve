@@ -70,6 +70,16 @@ class LinearFluorescent(computable: Computable<*>, utilityRateGas: UtilityRate, 
     private var alternateLampsPerFixture = 0
     private var alternateLifeHours = 0
 
+    fun preEnergy(): Double {
+        val totalUnitsPre = lampsPerFixtures * numberOfFixtures
+        return actualWatts * totalUnitsPre * KW_CONVERSION * offPeakHours
+    }
+
+    fun postEnergy(): Double {
+        val totalUnitsPost = alternateLampsPerFixture * alternateNumberOfFixtures
+        return alternateActualWatts * totalUnitsPost * KW_CONVERSION * postUsageHours
+    }
+
     fun energySavings(): Double {
         val totalUnitsPost = alternateLampsPerFixture * alternateNumberOfFixtures
         val powerUsedPost = alternateActualWatts * totalUnitsPost * KW_CONVERSION * postUsageHours
