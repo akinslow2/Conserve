@@ -236,55 +236,55 @@ class SorterForWordDocumentGenerator {
         }
 
         var totalSavings = 0.0
-        var selfinstallcost = 0
+        var selfinstallcost = 0.0
         var electricianCost = 0
         val lightingRows = prepareLightingTableRows(audit[lighting]!!)
 
         for (light in cfls) {
             totalSavings += light.totalSavings()
             selfinstallcost += light.selfinstallcost()
-            electricianCost += light.electricianCost
+            electricianCost = light.electricianCost
         }
 
         for (light in halogens) {
             totalSavings += light.totalSavings()
             selfinstallcost += light.selfinstallcost()
-            electricianCost += light.electricianCost
+            electricianCost = light.electricianCost
         }
 
         for (light in highPressureSodiums) {
             totalSavings += light.totalSavings()
             selfinstallcost += light.selfinstallcost()
-            electricianCost += light.electricianCost
+            electricianCost = light.electricianCost
         }
 
         for (light in incandescents) {
             totalSavings += light.totalSavings()
             selfinstallcost += light.selfinstallcost()
-            electricianCost += light.electricianCost
+            electricianCost = light.electricianCost
         }
 
         for (light in linearFluorescents) {
             totalSavings += light.totalSavings()
             selfinstallcost += light.selfinstallcost()
-            electricianCost += light.electricianCost
+            electricianCost = light.electricianCost
         }
 
         for (light in lowPressureSodium) {
             totalSavings += light.totalSavings()
             selfinstallcost += light.selfinstallcost()
-            electricianCost += light.electricianCost
+            electricianCost = light.electricianCost
         }
 
         val installCost = electricianCost + selfinstallcost
         val paybackMonth = selfinstallcost / totalSavings * 12
         val geminiPayback = selfinstallcost / (totalSavings * 0.7)
-        val paybackYear: Double = selfinstallcost.toDouble() / totalSavings
+        val paybackYear: Double = selfinstallcost / totalSavings
 
         return LightingValues(
                 totalSavings,
-                selfinstallcost,
-                installCost.toDouble(),
+                selfinstallcost.toInt(),
+                installCost,
                 paybackMonth,
                 geminiPayback,
                 paybackYear,
@@ -302,14 +302,14 @@ class SorterForWordDocumentGenerator {
                             "$measure",
                             light.computable.zoneName,
                             light.computable.auditScopeName,
-                            light.LampsPerFixtures.toDouble() * light.numberOfFixtures.toDouble(),
-                            light.currentPower,
+                            light.lampsPerFixtures.toDouble() * light.numberOfFixtures.toDouble(),
+                            light.preEnergy(),
                             light.offPeakHours,
-                            light.postPower,
+                            light.postEnergy(),
                             light.postUsageHours.toDouble(),
                             light.energySavings(),
                             light.totalSavings(),
-                            light.selfinstallcost().toDouble(),
+                            light.selfinstallcost(),
                             light.selfinstallcost() / light.totalSavings() * 12,
                             light.selfinstallcost() / light.totalSavings()
                     ))
@@ -319,10 +319,10 @@ class SorterForWordDocumentGenerator {
                             "$measure",
                             light.computable.zoneName,
                             light.computable.auditScopeName,
-                            light.LampsPerFixtures.toDouble() * light.numberOfFixtures.toDouble(),
-                            light.currentPower,
+                            light.lampsPerFixtures.toDouble() * light.numberOfFixtures.toDouble(),
+                            light.preEnergy(),
                             light.offPeakHours,
-                            light.postPower,
+                            light.postEnergy(),
                             light.postUsageHours.toDouble(),
                             light.energySavings(),
                             light.totalSavings(),
@@ -336,10 +336,10 @@ class SorterForWordDocumentGenerator {
                             "$measure",
                             light.computable.zoneName,
                             light.computable.auditScopeName,
-                            light.LampsPerFixtures.toDouble() * light.numberOfFixtures.toDouble(),
-                            light.currentPower,
+                            light.lampsPerFixtures.toDouble() * light.numberOfFixtures.toDouble(),
+                            light.preEnergy(),
                             light.offPeakHours,
-                            light.postPower,
+                            light.postEnergy(),
                             light.postUsageHours.toDouble(),
                             light.energySavings(),
                             light.totalSavings(),
@@ -353,10 +353,10 @@ class SorterForWordDocumentGenerator {
                             "$measure",
                             light.computable.zoneName,
                             light.computable.auditScopeName,
-                            light.LampsPerFixtures.toDouble() * light.numberOfFixtures.toDouble(),
-                            light.currentPower,
+                            light.lampsPerFixtures.toDouble() * light.numberOfFixtures.toDouble(),
+                            light.preEnergy(),
                             light.offPeakHours,
-                            light.postPower,
+                            light.postEnergy(),
                             light.postUsageHours.toDouble(),
                             light.energySavings(),
                             light.totalSavings(),
@@ -371,34 +371,26 @@ class SorterForWordDocumentGenerator {
                             light.computable.zoneName,
                             light.computable.auditScopeName,
                             light.lampsPerFixtures.toDouble() * light.numberOfFixtures.toDouble(),
-                            light.currentPower,
+                            light.preEnergy(),
                             light.offPeakHours,
-                            light.postPower,
+                            light.postEnergy(),
                             light.postUsageHours.toDouble(),
                             light.energySavings(),
                             light.totalSavings(),
-                            light.selfinstallcost().toDouble(),
+                            light.selfinstallcost(),
                             light.selfinstallcost() / light.totalSavings() * 12,
                             light.selfinstallcost() / light.totalSavings()
                     ))
                 }
                 is LowPressureSodium -> {
-//                        quantity += light.LampsPerFixtures * light.numberOfFixtures
-//                        currentPowerkW += light.currentPower
-//                        usageHours += light.offPeakHours
-//                        postPowerkW += light.postPower
-//                        postUsageHours += light.postUsageHours
-//                        energySavingskWh += light.energySavings()
-//                        totalSavings += light.totalSavings()
-//                        implmentationCost += light.selfinstallcost()
                     rows.add(LightingDataRow(
                             "$measure",
                             light.computable.zoneName,
                             light.computable.auditScopeName,
-                            light.LampsPerFixtures.toDouble() * light.numberOfFixtures.toDouble(),
-                            light.currentPower,
+                            light.lampsPerFixtures.toDouble() * light.numberOfFixtures.toDouble(),
+                            light.preEnergy(),
                             light.offPeakHours,
-                            light.postPower,
+                            light.postEnergy(),
                             light.postUsageHours.toDouble(),
                             light.energySavings(),
                             light.totalSavings(),
