@@ -61,6 +61,7 @@ class LinearFluorescent(computable: Computable<*>, utilityRateGas: UtilityRate, 
     private var seer = 13
     private var cooling = 1.0
     var electricianCost = 400
+
     /**
      * Suggested Alternative
      * */
@@ -76,15 +77,15 @@ class LinearFluorescent(computable: Computable<*>, utilityRateGas: UtilityRate, 
         return energyAtPreState - powerUsedPost
     }
 
-    fun selfinstallcost(): Int {
-        return bulbcost.toInt() * numberOfFixtures * lampsPerFixtures
+    fun selfinstallcost(): Double {
+        return ledbulbcost * numberOfFixtures * lampsPerFixtures
     }
 
     fun totalSavings(): Double {
-        val lifeHours = lightingConfig(ELightingType.CFL)[ELightingIndex.LifeHours.value] as Double
         val energySavings = energyAtPreState * percentPowerReduced
-        val coolingSavings = energySavings * cooling * seer
-        val maintenanceSavings = lampsPerFixtures * numberOfFixtures * bulbcost * usageHoursSpecific.yearly() / lifeHours
+        val coolingSavings = energyAtPreState * cooling / seer
+        val maintenanceSavings = alternateLampsPerFixture * alternateNumberOfFixtures * ledbulbcost * postUsageHours / LEDlifeHours
+
         return energySavings + coolingSavings + maintenanceSavings
     }
 
@@ -208,7 +209,7 @@ class LinearFluorescent(computable: Computable<*>, utilityRateGas: UtilityRate, 
         val totalUnitsPre = lampsPerFixtures * numberOfFixtures
         val totalUnitsPost = alternateLampsPerFixture * alternateNumberOfFixtures
 
-        val powerUsedPre = actualWatts *  totalUnitsPre * KW_CONVERSION
+        val powerUsedPre = actualWatts * totalUnitsPre * KW_CONVERSION
         currentPower = powerUsedPre
         val powerUsedPost = alternateActualWatts * totalUnitsPost * KW_CONVERSION
         postPower = powerUsedPost
