@@ -759,7 +759,7 @@ class WordDocumentGenerator {
             val pcell4 = cell4.paragraphs[0]
             pcell4.alignment = ParagraphAlignment.CENTER
             val rcell4 = pcell4.createRun()
-            rcell4.setText((if (isFirst) "Current Power (kW)" else rowItem.currentPowerkW.format(2)))
+            rcell4.setText((if (isFirst) "Current Power (kW)" else rowItem.currentPowerkW.format(0)))
 
             val cell5 = row.getCell(5)
             cell5.verticalAlignment = XWPFTableCell.XWPFVertAlign.CENTER
@@ -773,7 +773,7 @@ class WordDocumentGenerator {
             val pcell6 = cell6.paragraphs[0]
             pcell6.alignment = ParagraphAlignment.CENTER
             val rcell6 = pcell6.createRun()
-            rcell6.setText(if (isFirst) "Post Power (kW)" else rowItem.postPowerkW.format(3))
+            rcell6.setText(if (isFirst) "Post Power (kW)" else rowItem.postPowerkW.format(0))
 
             val cell7 = row.getCell(7)
             cell7.verticalAlignment = XWPFTableCell.XWPFVertAlign.CENTER
