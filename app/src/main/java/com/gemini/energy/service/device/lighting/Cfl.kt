@@ -41,8 +41,8 @@ class Cfl(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEle
     var currentPower = 0.0
     var postPower = 0.0
 
-    private const val bulbcost = 3
-    private const val ledbulbcost = 6.0
+    private val bulbcost = 1.5
+    private val ledbulbcost = 3.0
     private val LEDlifeHours = 30000
     private var seer = 10
     private var cooling = 1.0
@@ -57,8 +57,8 @@ class Cfl(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEle
         return energyAtPreState * percentPowerReduced
     }
 
-    fun selfinstallcost(): Int {
-        return bulbcost * numberOfFixtures * LampsPerFixtures
+    fun selfinstallcost(): Double {
+        return ledbulbcost * numberOfFixtures * LampsPerFixtures
     }
 
     fun totalSavings(): Double {
@@ -123,7 +123,12 @@ class Cfl(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEle
 
         val lifeHours = lightingConfig(ELightingType.CFL)[ELightingIndex.LifeHours.value] as Double
 
-        val maintenanceSavings = LampsPerFixtures * numberOfFixtures * bulbcost * usageHoursSpecific.yearly() / lifeHours
+        val totalUnits= LampsPerFixtures * numberOfFixtures
+
+        val replacementIndex = LEDlifeHours / lifeHours
+        val expectedLife = LEDlifeHours / usageHoursSpecific.yearly()
+        val maintenanceSavings = totalUnits * bulbcost * replacementIndex / expectedLife
+
         // Adding new variables for the report
         val selfinstallcost = this.selfinstallcost()
 
