@@ -54,6 +54,15 @@ class HighPressureSodium(computable: Computable<*>, utilityRateGas: UtilityRate,
 
     var postUsageHours = 0
 
+    fun preEnergy(): Double {
+        val totalUnitsPre = lampsPerFixtures * numberOfFixtures
+        return actualWatts * totalUnitsPre * 0.001 * offPeakHours
+    }
+
+    fun postEnergy(): Double {
+        return preEnergy() - energySavings()
+    }
+
     fun energySavings(): Double {
         return energyAtPreState * percentPowerReduced
     }
@@ -66,7 +75,7 @@ class HighPressureSodium(computable: Computable<*>, utilityRateGas: UtilityRate,
         val lifeHours = lightingConfig(ELightingType.CFL)[ELightingIndex.LifeHours.value] as Double
         val energySavings = energyAtPreState * percentPowerReduced
         val coolingSavings = energySavings * cooling * seer
-        val maintenanceSavings = lampsPerFixtures * numberOfFixtures * bulbcost * usageHoursSpecific.yearly() / lifeHours
+        val maintenanceSavings = lampsPerFixtures * numberOfFixtures * bulbcost * postUsageHours / lifeHours
         return energySavings + coolingSavings + maintenanceSavings
     }
 

@@ -52,6 +52,15 @@ class Halogen(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRat
     private var alternateLampsPerFixture = 0
     var postUsageHours = 0
 
+    fun preEnergy(): Double {
+        val totalUnitsPre = lampsPerFixtures * numberOfFixtures
+        return actualWatts * totalUnitsPre * 0.001 * offPeakHours
+    }
+
+    fun postEnergy(): Double {
+        return preEnergy() - energySavings()
+    }
+
     fun energySavings(): Double {
         return energyAtPreState * percentPowerReduced
     }
