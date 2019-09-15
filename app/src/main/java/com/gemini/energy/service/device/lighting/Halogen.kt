@@ -31,7 +31,7 @@ class Halogen(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRat
     //create variable here if you want to make it global to the class with private
     private var percentPowerReduced = 0.0
     private var actualWatts = 0.0
-    var LampsPerFixtures = 0
+    var lampsPerFixtures = 0
     var numberOfFixtures = 0
     private var peakHours = 0.0
     private var partPeakHours = 0.0
@@ -57,14 +57,14 @@ class Halogen(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRat
     }
 
     fun selfinstallcost(): Int {
-        return bulbcost * numberOfFixtures * LampsPerFixtures
+        return bulbcost * numberOfFixtures * lampsPerFixtures
     }
 
     fun totalSavings(): Double {
         val lifeHours = lightingConfig(ELightingType.CFL)[ELightingIndex.LifeHours.value] as Double
         val energySavings = energyAtPreState * percentPowerReduced
         val coolingSavings = energySavings * cooling * seer
-        val maintenanceSavings = LampsPerFixtures * numberOfFixtures * bulbcost * usageHoursSpecific.yearly() / lifeHours
+        val maintenanceSavings = lampsPerFixtures * numberOfFixtures * bulbcost * usageHoursSpecific.yearly() / lifeHours
         return energySavings + coolingSavings + maintenanceSavings
     }
 
@@ -73,7 +73,7 @@ class Halogen(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRat
     override fun setup() {
         try {
             actualWatts = featureData["Actual Watts"]!! as Double
-            LampsPerFixtures = featureData["Lamps Per Fixture"]!! as Int
+            lampsPerFixtures = featureData["Lamps Per Fixture"]!! as Int
             numberOfFixtures = featureData["Number of Fixtures"]!! as Int
             val config = lightingConfig(ELightingType.Halogen)
             percentPowerReduced = config[ELightingIndex.PercentPowerReduced.value] as Double
@@ -124,9 +124,9 @@ class Halogen(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRat
 
         val lifeHours = lightingConfig(ELightingType.Halogen)[ELightingIndex.LifeHours.value] as Double
 
-        val maintenanceSavings = LampsPerFixtures * numberOfFixtures * bulbcost * usageHoursSpecific.yearly() / lifeHours
+        val maintenanceSavings = lampsPerFixtures * numberOfFixtures * bulbcost * usageHoursSpecific.yearly() / lifeHours
         // Adding new variables for the report
-        val selfinstallcost = bulbcost * numberOfFixtures * LampsPerFixtures
+        val selfinstallcost = bulbcost * numberOfFixtures * lampsPerFixtures
 
         // Delta is going to be Power Used * Percentage Power Reduced
         // Percentage Power Reduced - we get it from the Base - ELighting
@@ -179,7 +179,7 @@ class Halogen(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRat
      * PowerTimeChange >> Energy Efficiency Calculations
      * */
     override fun energyPowerChange(): Double {
-        val powerUsed = actualWatts * LampsPerFixtures * numberOfFixtures / 1000
+        val powerUsed = actualWatts * lampsPerFixtures * numberOfFixtures / 1000
         currentPower = powerUsed
         postPower = alternateActualWatts * alternateLampsPerFixture * alternateNumberOfFixtures / 1000
         return powerUsed * percentPowerReduced
