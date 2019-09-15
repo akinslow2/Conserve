@@ -31,7 +31,7 @@ class Cfl(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEle
 //create variable here if you want to make it global to the class with private
     private var percentPowerReduced = 0.0
     private var actualWatts = 0.0
-    var LampsPerFixtures = 0
+    var lampsPerFixtures = 0
     var numberOfFixtures = 0
     private var peakHours = 0.0
     private var partPeakHours = 0.0
@@ -73,7 +73,7 @@ class Cfl(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEle
     override fun setup() {
         try {
             actualWatts = featureData["Actual Watts"]!! as Double
-            LampsPerFixtures = featureData["Lamps Per Fixture"]!! as Int
+            lampsPerFixtures = featureData["Lamps Per Fixture"]!! as Int
             numberOfFixtures = featureData["Number of Fixtures"]!! as Int
 
             val config = lightingConfig(ELightingType.CFL)
@@ -123,7 +123,7 @@ class Cfl(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEle
 
         val lifeHours = lightingConfig(ELightingType.CFL)[ELightingIndex.LifeHours.value] as Double
 
-        val totalUnits= LampsPerFixtures * numberOfFixtures
+        val totalUnits = lampsPerFixtures * numberOfFixtures
 
         val replacementIndex = LEDlifeHours / lifeHours
         val expectedLife = LEDlifeHours / usageHoursSpecific.yearly()
@@ -183,7 +183,7 @@ class Cfl(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEle
      * PowerTimeChange >> Energy Efficiency Calculations
      * */
     override fun energyPowerChange(): Double {
-        val powerUsed = actualWatts * LampsPerFixtures * numberOfFixtures / 1000
+        val powerUsed = actualWatts * lampsPerFixtures * numberOfFixtures / 1000
         currentPower = powerUsed
         postPower = alternateActualWatts * alternateLampsPerFixture * alternateNumberOfFixtures / 1000
         return powerUsed * percentPowerReduced
