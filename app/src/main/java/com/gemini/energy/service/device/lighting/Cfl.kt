@@ -40,9 +40,11 @@ class Cfl(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEle
     var energyAtPreState = 0.0
     var currentPower = 0.0
     var postPower = 0.0
+    var postUsageHours = 0
 
     private val bulbcost = 1.5
     private val ledbulbcost = 3.0
+
     private val LEDlifeHours = 30000
     private var seer = 10
     private var cooling = 1.0
@@ -79,9 +81,9 @@ class Cfl(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEle
             val config = lightingConfig(ELightingType.CFL)
             percentPowerReduced = config[ELightingIndex.PercentPowerReduced.value] as Double
 
-            peakHours = (featureData["Peak Hours"]!! as Int).toDouble()
-            partPeakHours = (featureData["Part Peak Hours"]!! as Int).toDouble()
-            offPeakHours = (featureData["Off Peak Hours"]!! as Int).toDouble()
+            peakHours = featureData["Peak Hours"]!! as Double
+            partPeakHours = featureData["Part Peak Hours"]!! as Double
+            offPeakHours = featureData["Off Peak Hours"]!! as Double
 
             alternateActualWatts = featureData["Alternate Actual Watts"]!! as Double
             alternateNumberOfFixtures = featureData["Alternate Number of Fixtures"]!! as Int
