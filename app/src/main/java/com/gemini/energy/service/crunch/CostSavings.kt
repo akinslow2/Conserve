@@ -151,7 +151,7 @@ class CostSavings {
              * */
             val dailyEnergyUsePre = dailyEnergyUsagePre()
             val dailyEnergyUsePost = energyUse()
-            var powerValue = (dailyEnergyUsePre - dailyEnergyUsePost) / 24
+            var powerValue = (dailyEnergyUsePre - dailyEnergyUsePost)
 
             // *** This has been done for Lightening Specific - May be applicable to other Equipments as well ***
             val usageHours = firstNotNull(usageHoursSpecific, usageHoursBusiness).yearly()
