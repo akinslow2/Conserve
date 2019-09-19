@@ -71,7 +71,8 @@ data class EquipmentInstances(
         val age: Double, // 29
         val materialCost: Double, // 32
         val implementationCost: Double,
-        val totalsavings: Double
+        val totalsavings: Double,
+        val paybackMonth: Double
 )
 
 data class EquipmentValues(

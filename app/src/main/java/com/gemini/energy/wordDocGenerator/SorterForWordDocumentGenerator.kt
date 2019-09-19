@@ -460,7 +460,8 @@ class SorterForWordDocumentGenerator {
                             single.age,
                             materialCost,
                             implementationCost,
-                            savings
+                            savings,
+                            implementationCost / savings * 12
                     )
             )
         }
@@ -492,7 +493,8 @@ class SorterForWordDocumentGenerator {
                             single.age,
                             materialCost,
                             implementationCost,
-                            savings
+                            savings,
+                            implementationCost / savings * 12
                     )
             )
         }
@@ -527,7 +529,8 @@ class SorterForWordDocumentGenerator {
                             single.age,
                             materialCost,
                             implementationCost,
-                            savings
+                            savings,
+                            implementationCost / savings * 12
                     )
             )
         }
@@ -559,7 +562,8 @@ class SorterForWordDocumentGenerator {
                             single.age,
                             materialCost,
                             implementationCost,
-                            savings
+                            savings,
+                            implementationCost / savings * 12
                     )
             )
         }
@@ -587,7 +591,8 @@ class SorterForWordDocumentGenerator {
                             single.age,
                             materialCost,
                             implementationCost,
-                            savings
+                            savings,
+                            implementationCost / savings * 12
                     )
             )
         }
@@ -615,7 +620,8 @@ class SorterForWordDocumentGenerator {
                             single.age,
                             materialCost,
                             implementationCost,
-                            savings
+                            savings,
+                            implementationCost / savings * 12
                     )
             )
         }
@@ -643,7 +649,8 @@ class SorterForWordDocumentGenerator {
                             single.age,
                             materialCost,
                             implementationCost,
-                            savings
+                            savings,
+                            implementationCost / savings * 12
                     )
             )
         }
@@ -671,7 +678,8 @@ class SorterForWordDocumentGenerator {
                             single.age,
                             materialCost,
                             implementationCost,
-                            savings
+                            savings,
+                            implementationCost / savings * 12
                     )
             )
         }
