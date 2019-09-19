@@ -689,7 +689,7 @@ class SorterForWordDocumentGenerator {
         }
 
         for (instance in instances) {
-            totalSavings += instance.totalsavings
+            totalSavings += instance.costElectricity
             totalCost += instance.implementationCost
         }
 
