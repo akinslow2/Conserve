@@ -211,7 +211,7 @@ class WordDocumentGenerator {
         r2p2.isBold = true
         r2p2.fontSize = 24
         r2p2.color = greenColor
-        r2p2.setText("$${hvac.costPostState.format(0)}")
+        r2p2.setText("$${hvac.totalsavings.format(0)}")
 
         val p3 = document.createParagraph()
         val r1p3 = p3.createRun()
