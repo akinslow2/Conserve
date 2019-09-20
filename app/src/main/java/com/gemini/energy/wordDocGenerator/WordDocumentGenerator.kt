@@ -464,7 +464,7 @@ class WordDocumentGenerator {
         pc1r3.alignment = ParagraphAlignment.CENTER
         val rc1r3 = pc1r3.createRun()
         rc1r3.fontFamily = fontAgencyFB
-        rc1r3.setText("\$${lights.totalsavings.format(0)}")
+        rc1r3.setText("\$${lights.totalCost.format(0)}")
 
         val row4 = table.getRow(4)
         val c0r4 = row4.getCell(0)
@@ -665,7 +665,7 @@ class WordDocumentGenerator {
         pc1r2.alignment = ParagraphAlignment.CENTER
         val rc1r2 = pc1r2.createRun()
         rc1r2.fontFamily = fontAgencyFB
-        rc1r2.setText("\$${lights.selfinstallcost}")
+        rc1r2.setText("\$${lights.totalCost}")
 
         val row3 = table.getRow(3)
 
