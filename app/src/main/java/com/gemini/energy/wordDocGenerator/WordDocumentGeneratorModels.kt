@@ -7,7 +7,7 @@ typealias SortedAudits =
         MutableMap<Long, MutableMap<String, MutableList<EBase>>>
 
 typealias AuditComponents = MutableMap<String, MutableList<EBase>>
-
+//the commented numbers represent the mastersheet id values
 data class HvacInstances(
         val quantity: Int, // 21
         val year: Int, // 22
