@@ -210,7 +210,7 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
     }
 
     fun overAge(): Int {
-        return age - 20
+        return age - 15
     }
 
     /**
