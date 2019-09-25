@@ -278,7 +278,7 @@ class SorterForWordDocumentGenerator {
 
         val installCost = electricianCost + selfinstallcost
         val paybackMonth = selfinstallcost / totalSavings * 12
-        val geminiPayback = selfinstallcost / (totalSavings * 0.7)
+        val geminiPayback = paybackMonth + 4
         val paybackYear: Double = selfinstallcost / totalSavings
 
         return LightingValues(
