@@ -310,7 +310,7 @@ class WordDocumentGenerator {
         val r1p4 = p4.createRun()
         r1p4.fontFamily = fontAgencyFB
         r1p4.fontSize = 12
-        r1p4.setText("Replacing all of your non-LED bulbs and adding controls will cost approximately $${lights.totalCost.format(0)} but will result in a minimum of $${lights.totalsavings.format(0)} in annual savings. This equates to a payback period of approximately ${lights.paybackMonth.format(0)} months. The cost can be reduced to $${lights.selfinstallcost} if you self-install the occupancy sensors. Alternatively, to replace all non-LED bulbs will result in a minimum of $${lights.totalsavings.format(0)} in annual savings and cost approximately $${lights.totalCost.format(0)}. This equates to a payback period of less than ${lights.paybackMonth.format(0)} months. Enlisting the support of Gemini to identify the LED replacement options will increase your payback period to ${lights.geminiPayback.format(0)} months but will save you time and energy. We recommend you replace all non-LED bulbs and ensure the bathroom lights are off at the end of the day.")
+        r1p4.setText("Replacing all of your non-LED bulbs and adding controls will cost approximately $${lights.totalCost.format(0)} but will result in a minimum of $${lights.totalsavings.format(0)} in annual savings. This equates to a payback period of approximately ${lights.paybackMonth.format(0)} months. The cost can be reduced to $${lights.selfinstallcost} if you self-install the occupancy sensors. Alternatively, to replace all non-LED bulbs will result in a minimum of $${lights.totalsavings.format(0)} in annual savings and cost approximately $${lights.totalCost.format(0)}. This equates to a payback period of approximately ${lights.paybackMonth.format(0)} months. Enlisting the support of Gemini to identify the LED replacement options will increase your payback period to ${lights.geminiPayback.format(0)} months. Enlisting Gemini's services will ensure you get all the available rebates/incentives while freeing your time and energy to run your business. We strongly recommend you replace all non-LED bulbs and ensure the bathroom lights are off at the end of the day.")
         r1p4.addBreak()
 
         val p5 = document.createParagraph()
@@ -318,7 +318,7 @@ class WordDocumentGenerator {
         val r1p5 = p5.createRun()
         r1p5.fontFamily = fontAgencyFB
         r1p5.fontSize = 12
-        r1p5.setText("Please see the next page for specifics of each measure. We strongly recommend implementing all measures at once to save time, energy, and money.")
+        r1p5.setText("Please see the next page for specifics of each measure. Each time, after the first time, you go through the rebate/incentive process it requires an on-site review that takes a minimum of 2 weeks; therefore, to save time and energy we strongly recommend implementing all measures at once.")
 
         createLightingTable1(document, lights)
 
