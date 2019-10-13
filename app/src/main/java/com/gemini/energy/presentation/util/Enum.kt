@@ -7,6 +7,7 @@ enum class EZoneType(val value: String) {
 
     Plugload("Plugload"),
     HVAC("HVAC"),
+    WaterHeater("WaterHeater"),
     Lighting("Lighting"),
     Motors("Motors"),
     Others("Others");
@@ -77,8 +78,8 @@ enum class ELightingType(val value: String) {
     CFL("CFL"),
     LinearFluorescent("Linear Fluorescent"),
     Incandescent("Incandescent"),
-    HighPressureSodium("High Pressure Sodium"),
-    LowPressureSodium("Low Pressure Sodium");
+    HPSodium("High Pressure Sodium"),
+    LPSodium("Low Pressure Sodium");
 
     companion object {
         private val map = ELightingType.values()
