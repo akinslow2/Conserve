@@ -68,14 +68,15 @@ class FeatureDataFragment : BaseFormFragment() {
                 if (model.subType == EApplianceType.SampleAppliance.value) {rawId = R.raw.sample_appliance }
             }
             else if (model.type == EZoneType.HVAC.value) {rawId = R.raw.hvac}
+            else if (model.type == EZoneType.WaterHeater.value) {rawId = R.raw.hotwater}
             else if (model.type == EZoneType.Motors.value) {rawId = R.raw.motors}
             else if (model.type == EZoneType.Lighting.value) {
                 if (model.subType == ELightingType.CFL.value) {rawId = R.raw.cfl}
                 if (model.subType == ELightingType.Halogen.value) {rawId = R.raw.halogen}
                 if (model.subType == ELightingType.Incandescent.value) {rawId = R.raw.incandescent}
-                if (model.subType == ELightingType.LinearFluorescent.value) {rawId = R.raw.linear_fluorescent}
-                if (model.subType == ELightingType.HighPressureSodium.value) {rawId = R.raw.highpressuresodium}
-                if (model.subType == ELightingType.LowPressureSodium.value) {rawId = R.raw.lowpressuresodium}
+                if (model.subType == ELightingType.LinearFluorescent.value) {rawId = R.raw.linearfluorescent}
+                if (model.subType == ELightingType.HPSodium.value) {rawId = R.raw.hpsodium}
+                if (model.subType == ELightingType.LPSodium.value) {rawId = R.raw.lpsodium}
             }
         }
 
