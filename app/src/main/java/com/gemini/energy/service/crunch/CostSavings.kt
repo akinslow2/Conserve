@@ -323,8 +323,8 @@ class CostSavings {
              * <<< Implementation Cost >>>
              * */
             //ToDo - @Verify Johnny : How does Quantity Impact this ??
-            fun implementationCost() = (materialCost + laborCost) - incentives
 
+            fun implementationCost() = (materialCost() + laborCost()) - incentives()
             /**
              * <<< Total Cost Saved >>>
              * */
