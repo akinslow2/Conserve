@@ -8,13 +8,14 @@ import com.gemini.energy.presentation.util.ELightingType
 import com.gemini.energy.presentation.util.EZoneType
 import com.gemini.energy.service.device.General
 import com.gemini.energy.service.device.Hvac
+import com.gemini.energy.service.device.WaterHeater
 import com.gemini.energy.service.device.Motors
 import com.gemini.energy.service.device.lighting.Cfl
 import com.gemini.energy.service.device.lighting.Halogen
 import com.gemini.energy.service.device.lighting.Incandescent
 import com.gemini.energy.service.device.lighting.LinearFluorescent
-import com.gemini.energy.service.device.lighting.LowPressureSodium
-import com.gemini.energy.service.device.lighting.HighPressureSodium
+import com.gemini.energy.service.device.lighting.LPSodium
+import com.gemini.energy.service.device.lighting.HPSodium
 import com.gemini.energy.service.device.plugload.*
 import com.gemini.energy.service.type.UsageHours
 import com.gemini.energy.service.type.UtilityRate
@@ -42,6 +43,9 @@ abstract class ComputableFactory {
                         _utilityRateElectricity, usageHours, outgoingRows, context)
 
                 EZoneType.HVAC                      -> HvacFactory(_utilityRateGas,
+                        _utilityRateElectricity, usageHours, outgoingRows, context)
+
+                EZoneType.WaterHeater                      -> WaterHeaterFactory(_utilityRateGas,
                         _utilityRateElectricity, usageHours, outgoingRows, context)
 
                 EZoneType.Lighting                  -> LightingFactory(_utilityRateGas,
@@ -126,10 +130,10 @@ class LightingFactory(private val utilityRateGas: UtilityRate,
             ELightingType.LinearFluorescent         -> LinearFluorescent(computable,
                     utilityRateGas, utilityRateElectricity, usageHours, outgoingRows, context)
 
-            ELightingType.LowPressureSodium         -> LowPressureSodium(computable,
+            ELightingType.LPSodium         -> LPSodium(computable,
                     utilityRateGas, utilityRateElectricity, usageHours, outgoingRows, context)
 
-            ELightingType.HighPressureSodium         -> HighPressureSodium(computable,
+            ELightingType.HPSodium         -> HPSodium(computable,
                     utilityRateGas, utilityRateElectricity, usageHours, outgoingRows, context)
         }
     }
@@ -142,6 +146,17 @@ class HvacFactory(private val utilityRateGas: UtilityRate,
                   private val context: Context) : ComputableFactory() {
 
     override fun build(): IComputable = Hvac(computable,
+            utilityRateGas, utilityRateElectricity, usageHours, outgoingRows, context)
+
+}
+
+class WaterHeaterFactory(private val utilityRateGas: UtilityRate,
+                  private val utilityRateElectricity: UtilityRate,
+                  private val usageHours: UsageHours,
+                  private val outgoingRows: OutgoingRows,
+                  private val context: Context) : ComputableFactory() {
+
+    override fun build(): IComputable = WaterHeater(computable,
             utilityRateGas, utilityRateElectricity, usageHours, outgoingRows, context)
 
 }
