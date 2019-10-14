@@ -68,6 +68,8 @@ class WordDocumentGenerator {
 
         generateHvacSavingsPage(document, value.hvac, value.building)
 
+        generateWaterHeaterSavingsPage(document, value.waterheater)
+
         if (value.equipment != null && value.equipment.instances.any()) {
             generateEquipmentSavingsPage(document, value.equipment)
         }
@@ -229,7 +231,7 @@ class WordDocumentGenerator {
                 val hvacR1P1 = hvacP1.createRun()
                 hvacR1P1.fontFamily = fontAgencyFB
                 hvacR1P1.fontSize = 12
-                hvacR1P1.setText("Your ${instance.quantity} ${instance.tons}-ton HVAC package units are from ${instance.year} with a SEER value of ${instance.seer.format(0)}. They are ${instance.overage} years past their expected end of life use and are at risk of failure. We strongly recommend replacing those package units as soon as possible.")
+                hvacR1P1.setText("Your ${instance.quantity} ${instance.btu}-ton HVAC package units are from ${instance.year} with a SEER value of ${instance.seer.format(0)}. They are ${instance.overage} years past their expected end of life use and are at risk of failure. We strongly recommend replacing those package units as soon as possible.")
 
                 val hvacP2 = document.createParagraph()
                 hvacP2.spacingBetween = 1.5
@@ -266,6 +268,49 @@ class WordDocumentGenerator {
         }
 
         createHvacTable(document, hvac, building)
+    }
+
+    private fun generateWaterHeaterSavingsPage(document: XWPFDocument, waterheater: WaterHeaterValues) {
+        val p1 = document.createParagraph()
+        p1.isPageBreak = true
+        p1.spacingBetween = 1.5
+        val r1p1 = p1.createRun()
+        r1p1.fontFamily = fontAgencyFB
+        r1p1.isBold = true
+        r1p1.isItalic = true
+        r1p1.fontSize = 20
+        r1p1.setText("Water Heating Savings")
+
+        val p2 = document.createParagraph()
+        p2.spacingBetween = 1.5
+        val r1p2 = p2.createRun()
+        r1p2.fontFamily = fontAgencyFB
+        r1p2.fontSize = 18
+        r1p2.setText("Implementation of recommended water heater measures will result in minimum annual savings of ")
+        val r2p2 = p2.createRun()
+        r2p2.fontFamily = fontAgencyFB
+        r2p2.isBold = true
+        r2p2.fontSize = 24
+        r2p2.color = greenColor
+        r2p2.setText("$${waterheater.totalsavings.format(0)}")
+
+        val p3 = document.createParagraph()
+        val r1p3 = p3.createRun()
+        r1p3.fontFamily = fontAgencyFB
+        r1p3.isBold = true
+        r1p3.isItalic = true
+        r1p3.fontSize = 16
+        r1p3.setText("${waterheater.unittype}")
+
+        val p4 = document.createParagraph()
+        p4.spacingBetween = 1.5
+        val r1p4 = p4.createRun()
+        r1p4.fontFamily = fontAgencyFB
+        r1p4.fontSize = 12
+        r1p4.setText("Replacing your water heater(s) will result in a total cost of $${waterheater.totalCost.format(0)} but will result in a minimum of $${waterheater.totalsavings.format(0)} in annual savings. This equates to a payback period of approximately ${waterheater.paybackMonth.format(0)} months. These values assume the support of Gemini. Enlisting Gemini's services will ensure you get all the available rebates/incentives while freeing your time and energy to run your business.")
+        r1p4.addBreak()
+
+        createWaterHeaterTable(document, waterheater)
     }
 
     private fun generateLightingSavingsPage(document: XWPFDocument, lights: LightingValues) {
@@ -920,6 +965,104 @@ class WordDocumentGenerator {
         fitTable(table, 4000)
     }
 
+    private fun createWaterHeaterTable(document: XWPFDocument, waterheater: WaterHeaterValues) {
+        val table = document.createTable(6, 2)
+        val row0 = table.getRow(0)
+
+        val cell0r0 = row0.getCell(0)
+        cell0r0.color = tableGreenColor
+        val pcellr0 = cell0r0.paragraphs[0]
+        pcellr0.alignment = ParagraphAlignment.CENTER
+        val rcell0r0 = cell0r0.paragraphs[0].createRun()
+        rcell0r0.fontFamily = fontAgencyFB
+        rcell0r0.color = whiteColor
+        rcell0r0.isBold = true
+        rcell0r0.setText("Financial Components")
+
+        val cell1r0 = row0.getCell(1)
+        cell1r0.color = tableGreenColor
+        val pcell1r0 = cell1r0.paragraphs[0]
+        pcell1r0.alignment = ParagraphAlignment.CENTER
+        val rcell1r0 = cell1r0.paragraphs[0].createRun()
+        rcell1r0.fontFamily = fontAgencyFB
+        rcell1r0.color = whiteColor
+        rcell1r0.isBold = true
+        rcell1r0.setText("Financial Overview")
+
+        // row 1
+        val row1 = table.getRow(1)
+
+        val c0r1 = row1.getCell(0)
+        val rc0r1 = c0r1.paragraphs[0].createRun()
+        rc0r1.fontFamily = fontAgencyFB
+        rc0r1.isBold = true
+        rc0r1.setText("Total Electrical Cost Savings ($/yr)")
+
+        val c1r1 = row1.getCell(1)
+        val pc1r1 = c1r1.paragraphs[0]
+        pc1r1.alignment = ParagraphAlignment.CENTER
+        val rc1r1 = c1r1.paragraphs[0].createRun()
+        rc1r1.fontFamily = fontAgencyFB
+        rc1r1.setText("\$${waterheater.totalsavings.format(0)}")
+
+        val row2 = table.getRow(2)
+
+        val c0r2 = row2.getCell(0)
+        val rc0r2 = c0r2.paragraphs[0].createRun()
+        rc0r2.fontFamily = fontAgencyFB
+        rc0r2.isBold = true
+        rc0r2.setText("Implementation Cost ($)")
+
+        val c1r2 = row2.getCell(1)
+        val pc1r2 = c1r2.paragraphs[0]
+        pc1r2.alignment = ParagraphAlignment.CENTER
+        val rc1r2 = pc1r2.createRun()
+        rc1r2.fontFamily = fontAgencyFB
+        rc1r2.setText("\$${waterheater.totalCost.format(0)}")
+
+        val row3 = table.getRow(3)
+
+        val c0r3 = row3.getCell(0)
+        val rc0r3 = c0r3.paragraphs[0].createRun()
+        rc0r3.fontFamily = fontAgencyFB
+        rc0r3.isBold = true
+        rc0r3.setText("Payback")
+
+        val row4 = table.getRow(4)
+
+        val c0r4 = row4.getCell(0)
+        val pc0r4 = c0r4.paragraphs[0]
+        pc0r4.alignment = ParagraphAlignment.RIGHT
+        val rc0r4 = pc0r4.createRun()
+        rc0r4.fontFamily = fontAgencyFB
+        rc0r4.setText("Year")
+
+        val c1r4 = row4.getCell(1)
+        val pc1r4 = c1r4.paragraphs[0]
+        pc1r4.alignment = ParagraphAlignment.CENTER
+        val rc1r4 = pc1r4.createRun()
+        rc1r4.fontFamily = fontAgencyFB
+        rc1r4.setText(waterheater.paybackYear.format(2))
+
+        val row5 = table.getRow(5)
+
+        val c0r5 = row5.getCell(0)
+        val pc0r5 = c0r5.paragraphs[0]
+        pc0r5.alignment = ParagraphAlignment.RIGHT
+        val rc0r5 = pc0r5.createRun()
+        rc0r5.fontFamily = fontAgencyFB
+        rc0r5.setText("Month")
+
+        val c1r5 = row5.getCell(1)
+        val pc1r5 = c1r5.paragraphs[0]
+        pc1r5.alignment = ParagraphAlignment.CENTER
+        val rc1r5 = pc1r5.createRun()
+        rc1r5.fontFamily = fontAgencyFB
+        rc1r5.setText(waterheater.paybackMonth.format(0))
+
+        centerTable(table)
+        fitTable(table, 4000)
+    }
     // table utils
     private fun createBullets(document: XWPFDocument, items: Array<String>, size: Int, color: String, isBold: Boolean, isItalic: Boolean) {
         val cTAbstractNum = CTAbstractNum.Factory.newInstance()
