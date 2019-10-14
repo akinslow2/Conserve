@@ -244,9 +244,7 @@ class CombinationOven(computable: Computable<*>, utilityRateGas: UtilityRate, ut
         return 0.0
     }
 
-    fun implementationCost(): Double {
-        return (materialCost() + laborCost()) - incentives()
-    }
+
     /**
      * Cost - Post State
      * */
