@@ -88,9 +88,6 @@ class PreRinseSpray(computable: Computable<*>, utilityRateGas: UtilityRate, util
         return 0.0
     }
 
-    fun implementationCost(): Double {
-        return (materialCost() + laborCost()) - incentives()
-    }
     /**
      * Cost - Post State
      * */
