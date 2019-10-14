@@ -55,10 +55,7 @@ class Refrigerator(computable: Computable<*>, utilityRateGas: UtilityRate, utili
         return 0.0
     }
 
-    fun implementationCost(): Double {
-        return (materialCost() + laborCost()) - incentives()
-    }
-    /**
+     /**
      * Cost - Post State
      * */
     var costPostState = 0.0
