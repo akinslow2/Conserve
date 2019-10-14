@@ -12,7 +12,7 @@ data class HvacInstances(
         val quantity: Int, // 21
         val year: Int, // 22
         val age: Int, // 29
-        val tons: Int, //23
+        val btu: Int, //23
         val seer: Double, // 24
         val overage: Int //25
 )
@@ -36,6 +36,20 @@ data class HvacValues(
         val costPostState: Double, // 20
         val totalCost: Double,
         val totalsavings: Double
+)
+
+data class WaterHeaterValues(
+        val totalsavings: Double,
+        val totalCost: Double,
+        val paybackMonth: Double,
+        val paybackYear: Double,
+        val quantity: Int,
+        val year: Int,
+        val age: Int,
+        val thermaleff: Int,
+        val fueltype: String,
+        val unittype: String,
+        val capacity: Double
 )
 
 data class LightingValues(
