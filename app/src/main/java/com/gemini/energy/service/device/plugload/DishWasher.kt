@@ -103,9 +103,6 @@ class DishWasher(computable: Computable<*>, utilityRateGas: UtilityRate, utility
     }
 
 
-    fun implementationCost(): Double {
-        return (materialCost() + laborCost()) - incentives()
-    }
     /**
      * Cost - Post State
      * */
