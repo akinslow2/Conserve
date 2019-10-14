@@ -139,9 +139,7 @@ class HotFoodCabinet(computable: Computable<*>, utilityRateGas: UtilityRate, uti
         return 0.0
     }
 
-    fun implementationCost(): Double {
-        return (materialCost() + laborCost()) - incentives()
-    }
+
     /**
      * PowerTimeChange >> Energy Efficiency Calculations
      * */
