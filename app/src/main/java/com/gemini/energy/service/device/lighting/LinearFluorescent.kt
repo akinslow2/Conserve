@@ -253,7 +253,7 @@ class LinearFluorescent(computable: Computable<*>, utilityRateGas: UtilityRate, 
 
     override fun computedFields() = mutableListOf("")
 
-    private fun getFormMapper() = FormMapper(context, R.raw.linear_fluorescent)
+    private fun getFormMapper() = FormMapper(context, R.raw.linearfluorescent)
     private fun getModel() = getFormMapper().decodeJSON()
     private fun getGFormElements() = getFormMapper().mapIdToElements(getModel())
 
