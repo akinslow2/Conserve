@@ -4,6 +4,7 @@ import com.gemini.energy.presentation.util.EApplianceType
 import com.gemini.energy.service.DataHolder
 import com.gemini.energy.service.device.EBase
 import com.gemini.energy.service.device.Hvac
+import com.gemini.energy.service.device.WaterHeater
 import com.gemini.energy.service.device.lighting.*
 import com.gemini.energy.service.device.plugload.*
 import com.google.gson.JsonNull
@@ -13,6 +14,7 @@ class SorterForWordDocumentGenerator {
     companion object {
         private const val hvac = "hvac"
         private const val lighting = "lighting"
+        private const val waterheater = "waterheater"
 
         private val combinationOven = EApplianceType.CombinationOven.value
         private val convectionOven = EApplianceType.ConvectionOven.value
@@ -38,9 +40,10 @@ class SorterForWordDocumentGenerator {
 
         for (audit in sortedAudits) {
             val hvac = prepareValuesFromHvac(audit.value)
+            val waterheater = prepareValuesFromWaterHeater(audit.value)
             val lighting = prepareValuesFromLighting(audit.value)
             val equipment = prepareValuesForEquipment(audit.value)
-            val building = prepareBuildingValuesForEquipment(lighting, equipment, hvac)
+            val building = prepareBuildingValuesForEquipment(lighting, equipment, hvac, waterheater)
 
             val zones = aggregateZoneNames(audit.value)
             val zoneString = concatenateZoneString(zones)
@@ -99,6 +102,7 @@ class SorterForWordDocumentGenerator {
             } else {
                 sorted[value.computable.auditId] = mutableMapOf(
                         hvac to mutableListOf(),
+                        waterheater to mutableListOf(),
                         lighting to mutableListOf(),
 
                         combinationOven to mutableListOf(),
@@ -122,13 +126,16 @@ class SorterForWordDocumentGenerator {
                 // Hvac
                 is Hvac -> sorted[value.computable.auditId]!![hvac]!!.add(value)
 
+                // Water Heater
+                is WaterHeater -> sorted[value.computable.auditId]!![waterheater]!!.add(value)
+
                 // Lighting
                 is Cfl -> sorted[value.computable.auditId]!![lighting]!!.add(value)
                 is Halogen -> sorted[value.computable.auditId]!![lighting]!!.add(value)
-                is HighPressureSodium -> sorted[value.computable.auditId]!![lighting]!!.add(value)
+                is HPSodium -> sorted[value.computable.auditId]!![lighting]!!.add(value)
                 is Incandescent -> sorted[value.computable.auditId]!![lighting]!!.add(value)
                 is LinearFluorescent -> sorted[value.computable.auditId]!![lighting]!!.add(value)
-                is LowPressureSodium -> sorted[value.computable.auditId]!![lighting]!!.add(value)
+                is LPSodium -> sorted[value.computable.auditId]!![lighting]!!.add(value)
 
                 // Appliances
                 // TODO: comment in appliances once they have finished being implemented
@@ -181,7 +188,7 @@ class SorterForWordDocumentGenerator {
                     hvac.quantity,
                     hvac.year(),
                     hvac.age,
-                    hvac.tons,
+                    hvac.btu,
                     hvac.seer,
                     hvac.overAge()
             ))
@@ -211,6 +218,46 @@ class SorterForWordDocumentGenerator {
         )
     }
 
+    private fun prepareValuesFromWaterHeater(audit: AuditComponents): WaterHeaterValues? {
+        if (!audit[waterheater]!!.any()) {
+            return null
+        }
+
+        @Suppress("UNCHECKED_CAST")
+        val waterheaters = audit[waterheater]!! as MutableList<WaterHeater>
+
+        var costPostState = 0.0
+        var totalCost = 0.0
+        var totalSavings = 0.0
+
+        for (waterheater in waterheaters) {
+            val postState = waterheater.buildPostState().blockingGet()
+            val element = postState.getAsJsonArray("results")[0].asJsonObject.get("data")
+
+            costPostState += waterheater.costPostState(element, DataHolder())
+
+            totalSavings += waterheater.energyPowerChange()
+            totalCost += waterheater.implementationCost()
+        }
+
+        val waterheater = audit[waterheater]!!.first() as WaterHeater
+        val paybackMonth = (totalCost/ totalSavings * 12) + 4
+        val paybackYear: Double = totalCost / totalSavings + (4/12)
+
+        return WaterHeaterValues(
+                totalSavings,
+                totalCost,
+                paybackMonth,
+                paybackYear,
+                waterheater.quantity,
+                waterheater.year(),
+                waterheater.age,
+                waterheater.thermaleff,
+                waterheater.fueltype,
+                waterheater.unittype,
+                waterheater.capacity)
+    }
+
     private fun prepareValuesFromLighting(audit: AuditComponents): LightingValues? {
         if (!audit[lighting]!!.any()) {
             return null
@@ -218,20 +265,20 @@ class SorterForWordDocumentGenerator {
 
         val cfls = mutableListOf<Cfl>()
         val halogens = mutableListOf<Halogen>()
-        val highPressureSodiums = mutableListOf<HighPressureSodium>()
+        val highPressureSodiums = mutableListOf<HPSodium>()
         val incandescents = mutableListOf<Incandescent>()
         val linearFluorescents = mutableListOf<LinearFluorescent>()
-        val lowPressureSodium = mutableListOf<LowPressureSodium>()
+        val lowPressureSodium = mutableListOf<LPSodium>()
 
         for (type in audit[lighting]!!) {
             type.costPreState(listOf(JsonNull.INSTANCE))
             when (type) {
                 is Cfl -> cfls.add(type)
                 is Halogen -> halogens.add(type)
-                is HighPressureSodium -> highPressureSodiums.add(type)
+                is HPSodium -> highPressureSodiums.add(type)
                 is Incandescent -> incandescents.add(type)
                 is LinearFluorescent -> linearFluorescents.add(type)
-                is LowPressureSodium -> lowPressureSodium.add(type)
+                is LPSodium -> lowPressureSodium.add(type)
             }
         }
 
@@ -277,7 +324,7 @@ class SorterForWordDocumentGenerator {
         }
 
         val installCost = electricianCost + selfinstallcost
-        val paybackMonth = selfinstallcost / totalSavings * 12
+        val paybackMonth = installCost / totalSavings * 12
         val geminiPayback = paybackMonth + 4
         val paybackYear: Double = selfinstallcost / totalSavings
 
@@ -331,7 +378,7 @@ class SorterForWordDocumentGenerator {
                             light.selfinstallcost() / light.totalSavings()
                     ))
                 }
-                is HighPressureSodium -> {
+                is HPSodium -> {
                     rows.add(LightingDataRow(
                             "$measure",
                             light.computable.zoneName,
@@ -382,7 +429,7 @@ class SorterForWordDocumentGenerator {
                             light.selfinstallcost() / light.totalSavings()
                     ))
                 }
-                is LowPressureSodium -> {
+                is LPSodium -> {
                     rows.add(LightingDataRow(
                             "$measure",
                             light.computable.zoneName,
