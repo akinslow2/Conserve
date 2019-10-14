@@ -184,9 +184,6 @@ class ConveyorBroiler(computable: Computable<*>, utilityRateGas: UtilityRate,
         return 0.0
     }
 
-    fun implementationCost(): Double {
-        return (materialCost() + laborCost()) - incentives()
-    }
     /**
      * Define all the fields here - These would be used to Generate the Outgoing Rows or perform the Energy Calculation
      * */
