@@ -17,7 +17,7 @@ import io.reactivex.Observable
 import timber.log.Timber
 import java.util.*
 
-class LowPressureSodium(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateElectricity: UtilityRate,
+class LPSodium(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateElectricity: UtilityRate,
                         usageHours: UsageHours, outgoingRows: OutgoingRows, private val context: Context) :
         EBase(computable, utilityRateGas, utilityRateElectricity, usageHours, outgoingRows), IComputable {
 
@@ -83,7 +83,7 @@ class LowPressureSodium(computable: Computable<*>, utilityRateGas: UtilityRate, 
             actualWatts = featureData["Actual Watts"]!! as Double
             lampsPerFixtures = featureData["Lamps Per Fixture"]!! as Int
             numberOfFixtures = featureData["Number of Fixtures"]!! as Int
-            val config = lightingConfig(ELightingType.LowPressureSodium)
+            val config = lightingConfig(ELightingType.LPSodium)
             percentPowerReduced = config[ELightingIndex.PercentPowerReduced.value] as Double
 
             peakHours = featureData["Peak Hours"]!! as Double
@@ -130,7 +130,7 @@ class LowPressureSodium(computable: Computable<*>, utilityRateGas: UtilityRate, 
         Timber.d("!!! COST POST STATE - HPSodium !!!")
         Timber.d("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
 
-        val lifeHours = lightingConfig(ELightingType.LowPressureSodium)[ELightingIndex.LifeHours.value] as Double
+        val lifeHours = lightingConfig(ELightingType.LPSodium)[ELightingIndex.LifeHours.value] as Double
 
         val maintenanceSavings = lampsPerFixtures * numberOfFixtures * bulbcost * usageHoursSpecific.yearly() / lifeHours
         // Adding new variables for the report
@@ -221,7 +221,7 @@ class LowPressureSodium(computable: Computable<*>, utilityRateGas: UtilityRate, 
 
     override fun computedFields() = mutableListOf("")
 
-    private fun getFormMapper() = FormMapper(context, R.raw.lowpressuresodium)
+    private fun getFormMapper() = FormMapper(context, R.raw.lpsodium)
     private fun getModel() = getFormMapper().decodeJSON()
     private fun getGFormElements() = getFormMapper().mapIdToElements(getModel())
 
