@@ -51,7 +51,7 @@ class SorterForWordDocumentGenerator {
             if (hvac == null) {
                 continue
             } else {
-                returnAble.add(PreparedForDocument(audit.key, zones, zoneString, hvac, lighting, equipment, building))
+                returnAble.add(PreparedForDocument(audit.key, zones, zoneString, hvac, lighting, waterheater, equipment, building))
             }
         }
 
@@ -747,7 +747,7 @@ class SorterForWordDocumentGenerator {
         )
     }
 
-    private fun prepareBuildingValuesForEquipment(lightings: LightingValues?, equpments: EquipmentValues?, hvacs: HvacValues?): BuildingValues {
+    private fun prepareBuildingValuesForEquipment(lightings: LightingValues?, equpments: EquipmentValues?, hvacs: HvacValues?, waterHeater: WaterHeaterValues?): BuildingValues {
 
         val buildingTotalSavings = (lightings?.totalsavings ?: 0.0) + (equpments?.totalSavings
                 ?: 0.0) + (hvacs?.totalsavings ?: 0.0)

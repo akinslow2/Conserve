@@ -115,6 +115,7 @@ data class PreparedForDocument(
         val zoneString: String,
         val hvac: HvacValues,
         val lighting: LightingValues?,
+        val waterHeater: WaterHeaterValues?,
         val equipment: EquipmentValues?,
         val building: BuildingValues
 )

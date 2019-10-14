@@ -68,7 +68,9 @@ class WordDocumentGenerator {
 
         generateHvacSavingsPage(document, value.hvac, value.building)
 
-        generateWaterHeaterSavingsPage(document, value.waterheater)
+        if (value.waterHeater != null) {
+            generateWaterHeaterSavingsPage(document, value.waterHeater)
+        }
 
         if (value.equipment != null && value.equipment.instances.any()) {
             generateEquipmentSavingsPage(document, value.equipment)
