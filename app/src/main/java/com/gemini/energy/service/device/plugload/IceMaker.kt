@@ -81,9 +81,6 @@ class IceMaker(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRa
         return 0.0
     }
 
-    fun implementationCost(): Double {
-        return (materialCost() + laborCost()) - incentives()
-    }
     /**
      * PowerTimeChange >> Hourly Energy Use - Pre
      * */
