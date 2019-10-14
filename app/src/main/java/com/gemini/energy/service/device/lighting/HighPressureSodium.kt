@@ -17,7 +17,7 @@ import io.reactivex.Observable
 import timber.log.Timber
 import java.util.*
 
-class HighPressureSodium(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateElectricity: UtilityRate,
+class HPSodium(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateElectricity: UtilityRate,
                          usageHours: UsageHours, outgoingRows: OutgoingRows, private val context: Context) :
         EBase(computable, utilityRateGas, utilityRateElectricity, usageHours, outgoingRows), IComputable {
 
@@ -86,7 +86,7 @@ class HighPressureSodium(computable: Computable<*>, utilityRateGas: UtilityRate,
             lampsPerFixtures = featureData["Lamps Per Fixture"]!! as Int
             numberOfFixtures = featureData["Number of Fixtures"]!! as Int
 
-            val config = lightingConfig(ELightingType.HighPressureSodium)
+            val config = lightingConfig(ELightingType.HPSodium)
             percentPowerReduced = config[ELightingIndex.PercentPowerReduced.value] as Double
 
             peakHours = featureData["Peak Hours"]!! as Double
@@ -133,7 +133,7 @@ class HighPressureSodium(computable: Computable<*>, utilityRateGas: UtilityRate,
         Timber.d("!!! COST POST STATE - HPSodium !!!")
         Timber.d("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
 
-        val lifeHours = lightingConfig(ELightingType.HighPressureSodium)[ELightingIndex.LifeHours.value] as Double
+        val lifeHours = lightingConfig(ELightingType.HPSodium)[ELightingIndex.LifeHours.value] as Double
 
         val maintenanceSavings = lampsPerFixtures * numberOfFixtures * bulbcost * usageHoursSpecific.yearly() / lifeHours
         // Adding new variables for the report
@@ -224,7 +224,7 @@ class HighPressureSodium(computable: Computable<*>, utilityRateGas: UtilityRate,
 
     override fun computedFields() = mutableListOf("")
 
-    private fun getFormMapper() = FormMapper(context, R.raw.highpressuresodium)
+    private fun getFormMapper() = FormMapper(context, R.raw.hpsodium)
     private fun getModel() = getFormMapper().decodeJSON()
     private fun getGFormElements() = getFormMapper().mapIdToElements(getModel())
 
