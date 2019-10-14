@@ -121,12 +121,10 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
     /**
      * HVAC - British Thermal Unit
      * */
-    private var btu = 0
+    var btu = 0
+    private var gasInput = 0
+    private var gasOutput = 0
 
-    /**
-     * HVAC - Tons
-     * */
-    var tons = 0
 
     /**
      * City | State
@@ -184,7 +182,8 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
             seer = featureData["SEER"]!! as Double
             age = featureData["Age"]!! as Int
             btu = featureData["Cooling Capacity (Btu/hr)"]!! as Int
-            tons = featureData["Cooling Capacity (Tons)"]!! as Int
+            gasInput = featureData["Heating Input (Btu/hr)"]!! as Int
+            gasOutput = featureData["Heating Output (Btu/hr)"]!! as Int
 
             city = featureData["City"]!! as String
             state = featureData["State"]!! as String
@@ -265,17 +264,17 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
         Timber.d("!!! COST POST STATE - HVAC !!!")
         Timber.d("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
 
-        var postSize = 0
-        var postEER = 0.0
+        var postSize = btu
+        var postSEER = 19.0
 
-        try {
-            postSize = element.asJsonObject.get(HVAC_DB_BTU).asInt
-            postEER = element.asJsonObject.get(HVAC_DB_EER).asDouble
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
+       // try {
+       //     postSize = element.asJsonObject.get(HVAC_DB_BTU).asInt
+        //    postEER = element.asJsonObject.get(HVAC_DB_EER).asDouble
+        //} catch (e: Exception) {
+        //    e.printStackTrace()
+        //}
 
-        val postPowerUsed = power(postSize, postEER)
+        val postPowerUsed = power(postSize, postSEER)
         val postUsageHours = computable.udf1 as UsageSimple
 
         costPostState = costElectricity(postPowerUsed, postUsageHours, electricityRate)
@@ -314,7 +313,11 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
         return 12000.0
     }
 
-    fun implementationCost() = (materialCost() + laborCost()) - incentives()
+    override fun laborCost(): Double {
+        return 0.0
+    }
+
+
     /**
      * PowerTimeChange >> Hourly Energy Use - Pre
      * */
@@ -333,24 +336,9 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
 
     /**
      * PowerTimeChange >> Energy Efficiency Calculations
+     * I need to insert the heating and cooling hours based on set-point temp, operation hours, and thermostat schedule
      * */
     override fun energyPowerChange(): Double {
-        var eerPS = 0.0
-
-        // Step 1 : Try to get the Post State EER from the Database
-        val element = computable.efficientAlternative
-        element?.let {
-            try {
-                eerPS = it.asJsonObject.get("eer").asDouble
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
-        }
-
-        // Step 2 : If none found in DB use the given Alternate SEER
-        if (eerPS == 0.0) {
-            eerPS = alternateSeer
-        }
 
         // Step 3 : Get the Delta
         val powerPre = power(btu, eer)
