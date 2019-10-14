@@ -100,9 +100,7 @@ class Griddle(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRat
         return 0.0
     }
 
-    fun implementationCost(): Double {
-        return (materialCost() + laborCost()) - incentives()
-    }
+
     /**
      * Cost - Post State
      * */
