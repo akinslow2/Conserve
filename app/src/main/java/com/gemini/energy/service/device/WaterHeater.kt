@@ -20,7 +20,7 @@ import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.*
 
-class WaterHeater(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateElectricity: UtilityRate,
+abstract class WaterHeater(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateElectricity: UtilityRate,
            usageHours: UsageHours, outgoingRows: OutgoingRows, private val context: Context) :
         EBase(computable, utilityRateGas, utilityRateElectricity, usageHours, outgoingRows), IComputable {
 
@@ -47,7 +47,8 @@ class WaterHeater(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
 
         /**
          * Fetches the EER based on the specific Match Criteria via the Parse API
-         * */
+         * Not needed right now
+
         fun extractEER(elements: List<JsonElement?>): Double {
             elements.forEach {
                 it?.let {
@@ -58,12 +59,12 @@ class WaterHeater(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
             }
             return 0.0
         }
-
+         * */
         /**
          * Fetches the Hours based on the City
          * @Anthony - Verify where we are using the Extracted Hours ??
-         * This is used to calculate the Energy
-         * */
+         * This is used to calculate the Energy but needs to be more robust before using
+
         fun extractHours(elements: List<JsonElement?>): Int {
             elements.forEach {
                 it?.let {
@@ -74,14 +75,14 @@ class WaterHeater(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
             }
             return 0
         }
-
+         * */
         /**
-         * HVAC - Power Consumed
+         * WaterHeater - Power Consumed
          * There could be a case where the User will input the value in KW - If that happens we need to convert the KW
          * int BTU / hr :: 1KW equals 3412.142
          * */
-        fun power(btu: Int, eer: Double) = (btu / eer) * KW_CONVERSION
-
+        fun power(gasInput: Int, thermaleff: Int) = (gasInput / (thermaleff/100)) * KW_CONVERSION
+        fun power2(kW: Double, electriceff: Int) = (kW / (electriceff/100))
         /**
          * Year At - Current minus the Age
          * */
@@ -99,18 +100,6 @@ class WaterHeater(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
         fun firstNotNull (valueFirst: Int, valueSecond: Int) =
                 if (valueFirst == 0) valueSecond else valueFirst
     }
-
-    /**
-     * HVAC - Energy Efficiency Ratio
-     * If not available - Build a match criteria at queryHVACEer()
-     * 1. Primary Match - [year equals (Current Year minus 20)]
-     * 2. Secondary Match - [size_btu_per_hr_min > BTU < size_btu_per_hr_max]
-     * */
-    private var eer = 0.0
-    var seer = 0.0
-    private var alternateSeer = 0.0
-    private var alternateEer = 0.0
-    private var alternateBtu = 0
 
     /**
      * HVAC - Age
@@ -142,6 +131,8 @@ class WaterHeater(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
 
     var quantity = 0
     var thermaleff = 0
+    var electriceff = 0
+    var kW = 0.0
     var fueltype = ""
     var unittype = ""
     var capacity = 0.0
@@ -156,6 +147,8 @@ class WaterHeater(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
             gasInput = featureData["Heating Input (Btu/hr)"]!! as Int
             gasOutput = featureData["Heating Output (Btu/hr)"]!! as Int
             thermaleff = featureData["Thermal Efficiency"]!! as Int
+            electriceff = featureData["Heating Electirc Efficiency"]!! as Int
+            kW = featureData["Heating Power (kW)"]!! as Double
             fueltype = featureData["Fuel Type"]!! as String
             unittype = featureData["Type of Unit"]!! as String
             capacity = featureData["Capacity (U.S. Gal)"]!! as Double
@@ -168,6 +161,7 @@ class WaterHeater(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
             e.printStackTrace()
         }
     }
+     override fun isGas() = fueltype == "Natural Gas"
 
     /**
      * Getting year of device and how much over life it is
@@ -185,41 +179,25 @@ class WaterHeater(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
      * */
     override fun costPreState(elements: List<JsonElement?>): Double {
 
-        // Extracting the EER from the Database - Standard EER
-        // If no value has been inputted by the user
-        if (eer == 0.0) {
-            eer = extractEER(elements)
-        }
-
-        Timber.d("::: PARAM - HVAC :::")
-        Timber.d("EER -- $eer")
-        Timber.d("AGE -- $age")
-        Timber.d("BTU -- $btu")
-        Timber.d("YEAR -- ${getYear(age)}")
-
-        Timber.d("::: DATA EXTRACTOR - HVAC :::")
-        Timber.d(elements.toString())
-
         val usageHours = UsageSimple(peakHours, partPeakHours, offPeakHours)
         computable.udf1 = usageHours
         Timber.d(usageHours.toString())
 
-        val powerUsedCurrent = power(btu, seer)
-        val powerUsedStandard = power(btu, eer)
-        val powerUsedReplaced = power(btu, alternateSeer)
+        val powerUsedGas = power(gasInput, thermaleff) * quantity
+        val powerUsedElectricity = power2(kW, electriceff) * quantity
+        val gascost: Double
+        val ecost: Double
+        val powerUsed = if (isGas()) powerUsedGas else powerUsedElectricity
+        Timber.d("HotWater :: Power Used (Electricity) -- [$powerUsedElectricity]")
+        Timber.d("HotWater :: Power Used (Gas) -- [$powerUsedGas]")
 
-        val powerUsed = if (alternateSeer == 0.0) powerUsedStandard else powerUsedCurrent
-        Timber.d("HVAC :: Power Used (Current) -- [$powerUsedCurrent]")
-        Timber.d("HVAC :: Power Used (Standard) -- [$powerUsedStandard]")
-        Timber.d("HVAC :: Power Used (Replaced) -- [$powerUsedReplaced]")
 
         Timber.d("HVAC :: Pre Power Used -- [$powerUsed]")
+        ecost = costElectricity(powerUsed, usageHours, electricityRate)
 
-        //ToDo -- Multiply by the Quantity
+        gascost = costGas(powerUsed)
 
-
-
-        return costElectricity(powerUsed, usageHours, electricityRate)
+        return if (isGas()) gascost else ecost
     }
 
     var costPostState = 0.0
@@ -232,45 +210,30 @@ class WaterHeater(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
         Timber.d("!!! COST POST STATE - HVAC !!!")
         Timber.d("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
 
-        var postSize = btu
-        var postSEER = 19.0
+        var postthermeff = 95
+        var posteleceff = 350
 
-        // try {
-        //     postSize = element.asJsonObject.get(HVAC_DB_BTU).asInt
-        //    postEER = element.asJsonObject.get(HVAC_DB_EER).asDouble
-        //} catch (e: Exception) {
-        //    e.printStackTrace()
-        //}
 
-        val postPowerUsed = power(postSize, postSEER)
         val postUsageHours = computable.udf1 as UsageSimple
 
-        costPostState = costElectricity(postPowerUsed, postUsageHours, electricityRate)
-        return costPostState
+            val postpowerUsedGas = power(gasInput, postthermeff) * quantity
+            val postpowerUsedElectricity = power2(kW, posteleceff) * quantity
+            val postGcost: Double
+            val postEcost: Double
+            val powerUsed = if (isGas()) postpowerUsedGas else postpowerUsedElectricity
+        Timber.d("HotWater :: Power Used (Electricity) -- [$postpowerUsedElectricity]")
+            Timber.d("HotWater :: Power Used (Gas) -- [$postpowerUsedGas]")
+
+
+            Timber.d("HotWater :: Post Power Used -- [$powerUsed]")
+            postEcost = costElectricity(powerUsed, postUsageHours, electricityRate)
+
+            postGcost = costGas(powerUsed)
+
+             return if (isGas()) postGcost else postEcost
     }
 
-    /**
-     * Manually Builds the Post State Response from the Suggested Alternative
-     * */
-    override fun buildPostState(): Single<JsonObject> {
-        val element = JsonObject()
-        val data = JsonObject()
-        data.addProperty("eer", firstNotNull(alternateSeer, alternateEer))
-        data.addProperty("size_btu_hr", alternateBtu)
-
-        element.add("data", data)
-        element.addProperty("type", HVAC_EFFICIENCY)
-
-        val response = JsonArray()
-        response.add(element)
-
-        val wrapper = JsonObject()
-        wrapper.add("results", response)
-
-        return Single.just(wrapper)
-    }
-
-    /**
+      /**
      * HVAC - INCENTIVES | MATERIAL COST
      * */
     override fun incentives(): Double {
@@ -278,7 +241,7 @@ class WaterHeater(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
     }
 
     override fun materialCost(): Double {
-        return 12000.0
+        return 1000.0
     }
 
     override fun laborCost(): Double {
@@ -308,10 +271,19 @@ class WaterHeater(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
      * */
     override fun energyPowerChange(): Double {
 
-        // Step 3 : Get the Delta
-        val powerPre = power(btu, eer)
-        val powerPost = power(btu, alternateSeer)
-        val delta = (powerPre - powerPost) * usageHoursBusiness.yearly()
+        val powerUsedGas = power(gasInput, thermaleff) * quantity
+        val powerUsedElectricity = power2(kW, electriceff) * quantity
+        val prepowerUsed = if (isGas()) powerUsedGas else powerUsedElectricity
+
+        var postthermeff = 95
+        var posteleceff = 350
+
+        val postpowerUsedGas = power(gasInput, postthermeff) * quantity
+        val postpowerUsedElectricity = power2(kW, posteleceff) * quantity
+        val postpowerUsed = if (isGas()) postpowerUsedGas else postpowerUsedElectricity
+
+        // Step 1 : Get the Delta
+        val delta = (prepowerUsed - postpowerUsed) * 1100
 
         Timber.d("HVAC :: Delta -- $delta")
         //ToDo: Multiply by the Number of Equipment
@@ -321,30 +293,6 @@ class WaterHeater(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
     override fun energyTimeChange(): Double = 0.0
     override fun energyPowerTimeChange(): Double = 0.0
 
-    /**
-     * Energy Efficiency Lookup Query Definition
-     * */
-    override fun efficientLookup() = (firstNotNull(alternateSeer, alternateEer) == 0.0 || alternateBtu == 0)
-    override fun queryEfficientFilter() = JSONObject()
-            .put("type", HVAC_EFFICIENCY)
-            .put("data.size_btu_hr", btu)
-            .toString()
-
-    /**
-     * HVAC specific Query Builders
-     * */
-    override fun queryHVACEer() = JSONObject()
-            .put("type", HVAC_EER)
-            .put("data.year", getYear(age))
-            .put("data.size_btu_per_hr_min", JSONObject().put("\$lte", btu))
-            .put("data.size_btu_per_hr_max", JSONObject().put("\$gte", btu))
-            .toString()
-
-    override fun queryHVACCoolingHours() = JSONObject()
-            .put("type", HVAC_COOLING_HOURS)
-            .put("data.city", city)
-            .put("data.state", state)
-            .toString()
 
     /**
      * State if the Equipment has a Post UsageHours Hours (Specific) ie. A separate set of
@@ -355,14 +303,7 @@ class WaterHeater(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
     /**
      * Define all the fields here - These would be used to Generate the Outgoing Rows or perform the Energy Calculation
      * */
-    override fun preAuditFields() = mutableListOf("General Client Info Name",
-            "General Client Info Position", "General Client Info Email",
-            "General Client Info Business Name", "General Client Info Audit Month",
-            "General Client Info Audit Year", "General Client Info Address",
-            "General Client Info Assessment Start Day", "General Client Info Assessment End Day",
-            "Operation Hours Monday Operating Hours", "Area Total (Sq.Ft.)",
-            "Others Utility Company", "Others Electric Rate Structure", "Others Gas Rate Structure",
-            "General Client Info Facility Type")
+
     override fun featureDataFields() = getGFormElements().map { it.value.param!! }.toMutableList()
 
     override fun preStateFields() = mutableListOf("")
@@ -371,7 +312,7 @@ class WaterHeater(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
 
     override fun computedFields() = mutableListOf("")
 
-    private fun getFormMapper() = FormMapper(context, R.raw.hvac)
+    private fun getFormMapper() = FormMapper(context, R.raw.hotwater)
     private fun getModel() = getFormMapper().decodeJSON()
     private fun getGFormElements() = getFormMapper().mapIdToElements(getModel())
 
