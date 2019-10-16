@@ -20,7 +20,7 @@ import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.*
 
-abstract class WaterHeater(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateElectricity: UtilityRate,
+class WaterHeater(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateElectricity: UtilityRate,
            usageHours: UsageHours, outgoingRows: OutgoingRows, private val context: Context) :
         EBase(computable, utilityRateGas, utilityRateElectricity, usageHours, outgoingRows), IComputable {
 
@@ -300,9 +300,9 @@ abstract class WaterHeater(computable: Computable<*>, utilityRateGas: UtilityRat
      * */
     override fun usageHoursSpecific() = false
 
-    /**
-     * Define all the fields here - These would be used to Generate the Outgoing Rows or perform the Energy Calculation
-     * */
+    override fun efficientLookup()= false
+    override fun queryEfficientFilter()= ""
+    override fun preAuditFields() = mutableListOf("General Client Info Name", "General Client Info Position", "General Client Info Email")
 
     override fun featureDataFields() = getGFormElements().map { it.value.param!! }.toMutableList()
 
