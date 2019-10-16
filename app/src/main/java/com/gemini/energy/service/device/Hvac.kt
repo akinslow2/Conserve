@@ -310,7 +310,7 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
     }
 
     override fun materialCost(): Double {
-        return 12000.0
+        return 7000.0
     }
 
     override fun laborCost(): Double {
@@ -339,11 +339,11 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
      * I need to insert the heating and cooling hours based on set-point temp, operation hours, and thermostat schedule
      * */
     override fun energyPowerChange(): Double {
-
+        val usageHours = peakHours + partPeakHours + offPeakHours
         // Step 3 : Get the Delta
         val powerPre = power(btu, eer)
         val powerPost = power(btu, alternateSeer)
-        val delta = (powerPre - powerPost) * usageHoursBusiness.yearly()
+        val delta = (powerPre - powerPost) * usageHours * quantity
 
         Timber.d("HVAC :: Delta -- $delta")
         //ToDo: Multiply by the Number of Equipment
