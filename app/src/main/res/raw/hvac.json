@@ -6,10 +6,10 @@
       "elements": [
         {
           "index": 11,
-          "hint": "Heat Pump",
-          "dataType": "textrow",
-          "defaultValues": "",
-          "param": "Type",
+          "hint": "",
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:gas pack,2:heat pump,3:heat pump with gas",
+          "param": "Type of Package Unit",
           "validation": "mandatory",
           "id": "11"
         },
@@ -124,18 +124,18 @@
         {
           "index": 114,
           "hint": "",
-          "dataType": "introw",
-          "defaultValues": "",
-          "param": "Age",
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:Yes,2:No",
+          "param": "Economizer",
           "validation": "mandatory",
           "id": "114"
         },
         {
           "index": 115,
           "hint": "",
-          "dataType": "textrow",
+          "dataType": "introw",
           "defaultValues": "",
-          "param": "City",
+          "param": "Age",
           "validation": "mandatory",
           "id": "115"
         },
@@ -144,9 +144,18 @@
           "hint": "",
           "dataType": "textrow",
           "defaultValues": "",
-          "param": "State",
+          "param": "City",
           "validation": "mandatory",
           "id": "116"
+        },
+        {
+          "index": 117,
+          "hint": "",
+          "dataType": "textrow",
+          "defaultValues": "",
+          "param": "State",
+          "validation": "mandatory",
+          "id": "117"
         }
       ],
       "id": "1"
@@ -230,7 +239,7 @@
           "hint": "",
           "dataType": "textrow",
           "defaultValues": "",
-          "param": "Company/Brand",
+          "param": "Thermostat Company/Brand",
           "validation": "optional",
           "id": "35"
         }
