@@ -157,7 +157,8 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
     var electricstructure = ""
     var gasstructure = ""
     var quantity = 0
-
+    var economizer = ""
+    var thermotype = ""
 
     override fun setup() {
         try {
@@ -176,6 +177,7 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
             gasstructure = preAudit["Others Gas Rate Structure"]!! as String
             bldgtype = preAudit["General Client Info Facility Type"]!! as String
 
+
             quantity = featureData["Quantity"]!! as Int
 
             eer = featureData["EER"]!! as Double
@@ -184,6 +186,8 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
             btu = featureData["Cooling Capacity (Btu/hr)"]!! as Int
             gasInput = featureData["Heating Input (Btu/hr)"]!! as Int
             gasOutput = featureData["Heating Output (Btu/hr)"]!! as Int
+            economizer = preAudit["Economizer"]!! as String
+            thermotype = preAudit["Thermostat Type"]!! as String
 
             city = featureData["City"]!! as String
             state = featureData["State"]!! as String
