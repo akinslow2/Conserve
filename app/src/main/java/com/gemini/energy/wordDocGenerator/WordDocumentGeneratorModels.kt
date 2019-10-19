@@ -14,7 +14,9 @@ data class HvacInstances(
         val age: Int, // 29
         val btu: Int, //23
         val seer: Double, // 24
-        val overage: Int //25
+        val overage: Int, //25
+        val economizer: String,
+        val thermotype: String
 )
 
 data class HvacValues(
