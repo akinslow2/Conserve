@@ -190,7 +190,9 @@ class SorterForWordDocumentGenerator {
                     hvac.age,
                     hvac.btu,
                     hvac.seer,
-                    hvac.overAge()
+                    hvac.overAge(),
+                    hvac.economizer,
+                    hvac.thermotype
             ))
         }
 
