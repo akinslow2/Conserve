@@ -233,7 +233,7 @@ class WordDocumentGenerator {
                 val hvacR1P1 = hvacP1.createRun()
                 hvacR1P1.fontFamily = fontAgencyFB
                 hvacR1P1.fontSize = 12
-                hvacR1P1.setText("Your ${instance.quantity} ${instance.btu}-ton HVAC package units are from ${instance.year} with a SEER value of ${instance.seer.format(0)}. They are ${instance.overage} years past their expected end of life use and are at risk of failure. We strongly recommend replacing those package units as soon as possible.")
+                hvacR1P1.setText("Your ${instance.quantity} ${instance.btu}-BTU HVAC package unit(s) are from ${instance.year} with a SEER value of ${instance.seer.format(0)}. They are ${instance.overage} years past their expected end of life use and are at immediate risk of failure. We strongly recommend replacing your package unit(s) as soon as possible.")
 
                 val hvacP2 = document.createParagraph()
                 hvacP2.spacingBetween = 1.5
@@ -251,15 +251,71 @@ class WordDocumentGenerator {
                 )
                 createBullets(document, hvacBullets, 12, blackColor, false, false)
             }
+            if (instance.age < 15 && instance.quantity > 1) {
+                val hvacP1 = document.createParagraph()
+                hvacP1.spacingBetween = 1.5
+                val hvacR1P1 = hvacP1.createRun()
+                hvacR1P1.fontFamily = fontAgencyFB
+                hvacR1P1.fontSize = 12
+                hvacR1P1.setText("Your ${instance.quantity} ${instance.btu}-BTU HVAC package units are from ${instance.year} with a SEER value of ${instance.seer.format(0)} current federal minimum is 13. To ensure your HVAC system is working optimally make sure you are having your package units are being checked by a HVAC technician quarterly. Check you HVAC technician's maintenance scope of work it should include:")
+
+                val hvacBullets = arrayOf(
+                        "Cleaning the condenser",
+                        "Checking the economizer (if applicable)",
+                        "Checking and replacing filters",
+                        "Charging the refrigerant",
+                        "Tightening belts (if applicable)"
+                )
+                createBullets(document, hvacBullets, 12, blackColor, false, false)
+
+                val hvacP2 = document.createParagraph()
+                hvacP2.spacingBetween = 1.5
+                val hvacR1P2 = hvacP2.createRun()
+                hvacR1P2.fontFamily = fontAgencyFB
+                hvacR1P2.fontSize = 12
+                hvacR1P2.setText("If your HVAC technician is not checking all of these components or you do not have an HVAC technician maintaining your units, this will result in increased energy bills and reduce the overall life of your equipment.")
+            }
+            if (instance.age < 15 && instance.quantity == 1) {
+                val hvacP1 = document.createParagraph()
+                hvacP1.spacingBetween = 1.5
+                val hvacR1P1 = hvacP1.createRun()
+                hvacR1P1.fontFamily = fontAgencyFB
+                hvacR1P1.fontSize = 12
+                hvacR1P1.setText("Your ${instance.quantity} ${instance.btu}-BTU HVAC package unit is from ${instance.year} with a SEER value of ${instance.seer.format(0)} current federal minimum is 13. To ensure your HVAC system is working optimally make sure you are having the package unit checked by a HVAC technician quarterly. Check your HVAC technician's maintenance scope of work it should include:")
+
+                val hvacBullets = arrayOf(
+                        "Cleaning the condenser",
+                        "Checking the economizer (if applicable)",
+                        "Checking and replacing filters",
+                        "Charging the refrigerant",
+                        "Tightening belts (if applicable)"
+                )
+                createBullets(document, hvacBullets, 12, blackColor, false, false)
+
+                val hvacP2 = document.createParagraph()
+                hvacP2.spacingBetween = 1.5
+                val hvacR1P2 = hvacP2.createRun()
+                hvacR1P2.fontFamily = fontAgencyFB
+                hvacR1P2.fontSize = 12
+                hvacR1P2.setText("If your HVAC technician is not checking all of these components or you do not have an HVAC technician maintaining your unit, this will result in increased energy bills and reduce the overall life of your equipment.")
+            }
+            if (instance.thermotype == "Analog"){
+                val hvacP3 = document.createParagraph()
+                hvacP3.spacingBetween = 1.5
+                val hvacR1P3 = hvacP3.createRun()
+                hvacR1P3.fontFamily = fontAgencyFB
+                hvacR1P3.fontSize = 12
+                hvacR1P3.setText("We strongly recommend installing a programmable thermostat with a remote control app. Installation of a programmable thermostat with remote programming will cost roughly $600 but will save you thousands of dollars over its life. Having a remote control app is important because the vast majority of people have their programmable thermostat programmed incorrectly. With a remote programmable thermostats you have the ability to easily see what your temperature set-points are and simply adjust them at need from your phone. Imagine having your space comfortable when you enter without having to have the HVAC running the entire time you are away.")
+            }
         }
 
-        if (hvac.instances.any { i -> i.age > 3 }) {
-            val hvacP1 = document.createParagraph()
-            hvacP1.spacingBetween = 1.5
-            val hvacR1P1 = hvacP1.createRun()
-            hvacR1P1.fontFamily = fontAgencyFB
-            hvacR1P1.fontSize = 12
-            hvacR1P1.setText("Benefits of HVAC controls include:")
+        if (hvac.instances.any { i -> i.age < 11 }) {
+            val hvacP3 = document.createParagraph()
+            hvacP3.spacingBetween = 1.5
+            val hvacR1P3 = hvacP3.createRun()
+            hvacR1P3.fontFamily = fontAgencyFB
+            hvacR1P3.fontSize = 12
+            hvacR1P3.setText("You HVAC system could see additional energy savings and an extended life expectancy by adding controls. Benefits of HVAC controls include:")
 
             val hvacBullets = arrayOf(
                     "Better HVAC performance",
