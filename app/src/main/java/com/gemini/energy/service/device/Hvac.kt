@@ -350,7 +350,7 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
         val delta = (powerPre - powerPost) * usageHours * quantity
 
         Timber.d("HVAC :: Delta -- $delta")
-  
+
         return delta
     }
 
