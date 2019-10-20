@@ -212,36 +212,45 @@
           "hint": "",
           "dataType": "decimalrow",
           "defaultValues": "",
-          "param": "Temperature Set Point (oF)",
+          "param": "Temperature Set Point - Heat (F)",
           "validation": "optional",
           "id": "32"
         },
         {
           "index": 33,
           "hint": "",
-          "dataType": "pickerinputrow",
-          "defaultValues": "1:Yes,2:No",
-          "param": "Thermostat Easily Accessible?",
+          "dataType": "decimalrow",
+          "defaultValues": "",
+          "param": "Temperature Set Point - A/C (F)",
           "validation": "optional",
           "id": "33"
         },
         {
           "index": 34,
           "hint": "",
-          "dataType": "decimalrow",
-          "defaultValues": "",
-          "param": "Room Temperature (oF)",
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:Yes,2:No",
+          "param": "Thermostat Easily Accessible?",
           "validation": "optional",
           "id": "34"
         },
         {
           "index": 35,
           "hint": "",
+          "dataType": "decimalrow",
+          "defaultValues": "",
+          "param": "Room Temperature (oF)",
+          "validation": "optional",
+          "id": "35"
+        },
+        {
+          "index": 36,
+          "hint": "",
           "dataType": "textrow",
           "defaultValues": "",
           "param": "Thermostat Company/Brand",
           "validation": "optional",
-          "id": "35"
+          "id": "36"
         }
       ],
       "id": "3"
