@@ -156,7 +156,6 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
     var utilitycompany = ""
     var electricstructure = ""
     var gasstructure = ""
-    var quantity = 0
     var economizer = ""
     var thermotype = ""
 
@@ -177,8 +176,6 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
             gasstructure = preAudit["Others Gas Rate Structure"]!! as String
             bldgtype = preAudit["General Client Info Facility Type"]!! as String
 
-
-            quantity = featureData["Quantity"]!! as Int
 
             eer = featureData["EER"]!! as Double
             seer = featureData["SEER"]!! as Double
@@ -250,9 +247,6 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
         Timber.d("HVAC :: Power Used (Replaced) -- [$powerUsedReplaced]")
 
         Timber.d("HVAC :: Pre Power Used -- [$powerUsed]")
-
-        //ToDo -- Multiply by the Quantity
-
 
 
         return costElectricity(powerUsed, usageHours, electricityRate)
@@ -343,12 +337,14 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
      * I need to insert the heating and cooling hours based on set-point temp, operation hours, and thermostat schedule
      * */
     override fun energyPowerChange(): Double {
-        val usageHours = peakHours + partPeakHours + offPeakHours
-        // Step 3 : Get the Delta
+        val usageHours = UsageSimple(peakHours, partPeakHours, offPeakHours)
+
+          // Step 3 : Get the Delta
         val powerPre = power(btu, eer)
         val powerPost = power(btu, alternateSeer)
-        val delta = (powerPre - powerPost) * usageHours * quantity
+        val eSavings = (powerPre - powerPost)
 
+        val delta = costElectricity(eSavings, usageHours, electricityRate)
         Timber.d("HVAC :: Delta -- $delta")
 
         return delta
