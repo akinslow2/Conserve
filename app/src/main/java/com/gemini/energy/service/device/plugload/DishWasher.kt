@@ -159,8 +159,12 @@ class DishWasher(computable: Computable<*>, utilityRateGas: UtilityRate, utility
         } catch (e: Exception) {
             e.printStackTrace()
         }
+        val hoursInyear: Int = 8760
 
-        return listOf(annualEnergyElectric, annualEnergyGas)
+        var hourlyEnergyGas = annualEnergyGas / hoursInyear
+        var hourlyEnergyElectric = annualEnergyElectric / hoursInyear
+
+        return listOf(hourlyEnergyElectric, hourlyEnergyGas)
     }
 
     /**
@@ -177,7 +181,7 @@ class DishWasher(computable: Computable<*>, utilityRateGas: UtilityRate, utility
             val daysUsedPost = daysUsed
             val waterTemperaturePost = waterTemperature
             val efficiencyPost = efficiency
-            val annualHoursPost = usageHoursPost()
+            val annualHoursPost = usageHoursPre()
             val idleEnergyRatePost = element.asJsonObject.get("idle_energy_rate").asDouble
 
             val alpha = (waterConsumptionPost * numberOfRacksPost * cyclesPerDayPost * daysUsedPost *
@@ -188,8 +192,11 @@ class DishWasher(computable: Computable<*>, utilityRateGas: UtilityRate, utility
         } catch (e: Exception) {
             e.printStackTrace()
         }
+        val hoursInyear: Int = 8760
+        var hourlyEnergyGas = annualEnergyGas / hoursInyear
+        var hourlyEnergyElectric = annualEnergyElectric / hoursInyear
 
-        return listOf(annualEnergyElectric, annualEnergyGas)
+        return listOf(hourlyEnergyElectric, hourlyEnergyGas)
     }
 
     /**
@@ -205,14 +212,19 @@ class DishWasher(computable: Computable<*>, utilityRateGas: UtilityRate, utility
      * ToDo -- Change this into Energy - It is not power !!
      * */
     override fun energyPowerChange(): Double {
-        val prePower = if (isGas()) hourlyEnergyUsagePre()[1] else hourlyEnergyUsagePre()[0]
-        var postPower: Double
-        var delta = 0.0
+        val usageHours = UsageSimple(peakHours, partPeakHours, offPeakHours)
+        //Need to give a more accurate determeination of hours
+        val preEnergy = if (isGas()) hourlyEnergyUsagePre()[1] else hourlyEnergyUsagePre()[0]
+        var postEnergy: Double
+        var savings = 0.0
 
         computable.efficientAlternative?.let {
-            postPower = if (isGas()) hourlyEnergyUsagePost(it)[1] else hourlyEnergyUsagePost(it)[0]
-            delta = prePower - postPower
+            postEnergy = if (isGas()) hourlyEnergyUsagePost(it)[1] else hourlyEnergyUsagePost(it)[0]
+            savings = preEnergy - postEnergy
         }
+
+        val delta = costElectricity(savings, usageHours, electricityRate)
+        Timber.d("HVAC :: Delta -- $delta")
 
         return delta
     }
