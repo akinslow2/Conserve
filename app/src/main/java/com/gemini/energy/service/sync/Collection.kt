@@ -1,5 +1,6 @@
 package com.gemini.energy.service.sync
 
+import android.annotation.SuppressLint
 import com.gemini.energy.App
 import com.gemini.energy.data.local.dao.*
 import com.gemini.energy.data.local.model.*
@@ -16,6 +17,7 @@ import timber.log.Timber
  * -- This class is to be shared amongst all the others
  * -- At any instance this class shows the State of the Local Database
  * */
+@SuppressLint("CheckResult")
 class Collection(private val mListener: Listener?) {
 
     var db: AuditDatabase? = null

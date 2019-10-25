@@ -1,5 +1,8 @@
+@file:Suppress("ControlFlowWithEmptyBody")
+
 package com.gemini.energy.service.sync
 
+import android.annotation.SuppressLint
 import com.gemini.energy.data.local.model.AuditLocalModel
 import com.gemini.energy.data.local.model.FeatureLocalModel
 import com.gemini.energy.data.local.model.TypeLocalModel
@@ -16,6 +19,7 @@ import timber.log.Timber
 import java.lang.StringBuilder
 import java.util.*
 
+@SuppressLint("CheckResult")
 class Syncer(private val parseAPIService: ParseAPI.ParseAPIService,
              private var col: Collection,
              private val mListener: Listener? = null) {
