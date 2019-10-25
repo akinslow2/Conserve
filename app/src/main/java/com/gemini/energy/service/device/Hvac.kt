@@ -159,6 +159,8 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
     var economizer = ""
     var thermotype = ""
 
+    var quantity = 0
+
     override fun setup() {
         try {
 
