@@ -70,8 +70,11 @@ abstract class EBase(val computable: Computable<*>,
         //Others has been added to the Electric Rate Structure as a fix cause the Section Name
         //is added to the Element Key
         val fix = "Others"
-        base.electricRateStructure = preAudit["$fix Electric Rate Structure"] as String
-        base.electricCompanyCode = preAudit["$fix Utility Company"] as String
+
+        if (preAudit.containsKey("$fix Electric Rate Structure") && preAudit.containsKey("$fix Utility Company")) {
+            base.electricRateStructure = preAudit["$fix Electric Rate Structure"] as String
+            base.electricCompanyCode = preAudit["$fix Utility Company"] as String
+        }
 
         Timber.d("####### RATE STRUCTURE CHECKER #######")
         Timber.d(electricRateStructure)
