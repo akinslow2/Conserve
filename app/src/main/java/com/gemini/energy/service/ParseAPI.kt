@@ -52,6 +52,12 @@ class ParseAPI {
         @GET("classes/$SYNC_FEATURE")
         fun fetchFeature(): Single<JsonObject>
 
+        @GET("classes/$SYNC_GRAVES")
+        fun fetchGraves(): Single<JsonObject>
+
+        @POST("classes/$SYNC_GRAVES")
+        fun saveGraves(@Body body: JsonObject): Single<JsonObject>
+
     }
 
     companion object {
@@ -62,6 +68,7 @@ class ParseAPI {
 
         private const val SYNC_AUDIT = "update_test_one_rAudit"
         private const val SYNC_FEATURE = "update_test_one_rFeature"
+        private const val SYNC_GRAVES = "update_test_one_rGraves"
 
         private val okHttpClient = OkHttpClient()
                 .newBuilder()

@@ -3,10 +3,7 @@
 package com.gemini.energy.service.sync
 
 import android.annotation.SuppressLint
-import com.gemini.energy.data.local.model.AuditLocalModel
-import com.gemini.energy.data.local.model.FeatureLocalModel
-import com.gemini.energy.data.local.model.TypeLocalModel
-import com.gemini.energy.data.local.model.ZoneLocalModel
+import com.gemini.energy.data.local.model.*
 import com.gemini.energy.service.ParseAPI
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
@@ -26,10 +23,13 @@ class Syncer(private val parseAPIService: ParseAPI.ParseAPIService,
 
     private val auditTaskHolder: MutableList<Observable<JsonObject>> = mutableListOf()
     private val featureTaskHolder: MutableList<Observable<JsonObject>> = mutableListOf()
+    private val gravesTaskHolder: MutableList<Observable<JsonObject>> = mutableListOf()
 
     private val auditList: MutableList<AuditLocalModel> = mutableListOf()
     private val zoneList: MutableList<ZoneLocalModel> = mutableListOf()
     private val typeList: MutableList<TypeLocalModel> = mutableListOf()
+
+    private val rGraveIds: MutableList<Long> = mutableListOf()
 
     fun refreshCollection(col: Collection) {
         this.col = col
@@ -37,18 +37,42 @@ class Syncer(private val parseAPIService: ParseAPI.ParseAPIService,
 
     private fun prepare() {
         val audit = col.audit
-        audit.forEach {
-            auditList.add(it)
-            buildFeature(it.auditId).forEach {
-                featureTaskHolder.add(parseAPIService.saveFeature(it).toObservable())
-            }
+        audit.forEach { it ->
 
-            auditTaskHolder.add(parseAPIService.saveAudit(buildAudit(it)).toObservable())
+            if (rGraveIds.contains(it.auditId)) { /*DO NOTHING*/ }
+            else {
+                auditList.add(it)
+                buildFeature(it.auditId).forEach {
+                    featureTaskHolder.add(parseAPIService.saveFeature(it).toObservable())
+                }
+
+                auditTaskHolder.add(parseAPIService.saveAudit(buildAudit(it)).toObservable())
+            }
         }
     }
 
     private fun updateGraves() {
-        //ToDo - Update the Graves Table so that all the items have +1
+
+        fun buildGraves(grave: GraveLocalModel): JsonObject {
+            val outgoing = JsonObject()
+            outgoing.addProperty("id", grave.id)
+            outgoing.addProperty("usn", ++grave.usn)
+            outgoing.addProperty("oid", grave.oid)
+            outgoing.addProperty("type", grave.type)
+            return outgoing
+        }
+
+        col.grave.forEach {
+            gravesTaskHolder.add(parseAPIService.saveGraves(buildGraves(it)).toObservable())
+        }
+
+        gravesTaskHolder.merge()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({ Timber.d(it.toString()) }, { it.printStackTrace() }, {
+                    Timber.d("Complete - Graves Upload")
+                    col.grave.forEach { col.gravesDao?.update(it.id, it.usn) }
+                    mListener?.onPostExecute() })
     }
 
     /**
@@ -354,7 +378,19 @@ class Syncer(private val parseAPIService: ParseAPI.ParseAPIService,
                     })
         }
 
-        taskAudit()
+        parseAPIService.fetchGraves().toObservable()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({ it ->
+                    val grave = it.getAsJsonArray("results")
+                    grave.forEach {
+                        try { rGraveIds.add(it.asJsonObject.get("oid").asLong) }
+                        catch (e: Exception) {
+                            e.printStackTrace()
+                        }
+                    }
+
+                }, { it.printStackTrace() }, { taskAudit() })
 
     }
 
@@ -394,24 +430,29 @@ class Syncer(private val parseAPIService: ParseAPI.ParseAPIService,
                 }, { it.printStackTrace() }, {
 
                     Timber.d("Complete - Audit Upload"); uploadFeature()
-                    auditList.forEach {
-                        val query = JSONObject().put("auditId", it.auditId.toString())
+                    val updatedAudit = auditList.toMutableList()
+                    val toDeleteAudit: List<Long> = col.graveAudit.map { it.oid }
+                    toDeleteAudit.distinct().forEach {
+                        updatedAudit.add(AuditLocalModel(it, "", 0, "", Date(), Date()))
+                    }
+
+                    updatedAudit.forEach { _aId ->
+                        val query = JSONObject().put("auditId", _aId.auditId.toString())
                         parseAPIService.fetchAudit(query.toString()).toObservable()
                                 .subscribeOn(Schedulers.io())
                                 .observeOn(AndroidSchedulers.mainThread())
-                                .subscribe({
+                                .subscribe({ it ->
 
                                     val rAudit = it.getAsJsonArray("results")
-
                                     Timber.d("<<< Clean Up - Audit [${rAudit.count()}]>>")
-                                    Timber.d(rAudit.toString())
 
-                                    if (rAudit.count() > 1) {
+                                    if (rAudit.count() > 1 || rGraveIds.contains(_aId.auditId)) {
 
-                                        val maxUSN = rAudit.map {
+                                        var maxUSN = rAudit.map {
                                             it.asJsonObject.get("usn").asInt
                                         }.max()
 
+                                        if (rGraveIds.contains(_aId.auditId)) { maxUSN = -99 }
                                         val clean = rAudit.filter { maxUSN != it.asJsonObject.get("usn").asInt }
                                         clean.forEach {
                                             val objectId = it.asJsonObject.get("objectId").asString
@@ -447,7 +488,7 @@ class Syncer(private val parseAPIService: ParseAPI.ParseAPIService,
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ Timber.d(it.toString()) }, { it.printStackTrace() },
-                        { Timber.d("Complete - Feature Upload"); mListener?.onPostExecute(); updateGraves() })
+                        { Timber.d("Complete - Feature Upload"); updateGraves() })
 
         }
 
@@ -514,7 +555,7 @@ class Syncer(private val parseAPIService: ParseAPI.ParseAPIService,
         val outgoing = JsonObject()
         if (col.zone.containsKey(auditId)) {
             val zone = col.zone[auditId]
-            zone?.let {
+            zone?.let { it ->
                 it.forEach {
 
                     zoneList.add(it)
@@ -526,7 +567,8 @@ class Syncer(private val parseAPIService: ParseAPI.ParseAPIService,
                     inner.addProperty("mod", Date().time)
                     inner.addProperty("id", it.zoneId)
 
-                    outgoing.add(it.zoneId.toString(), inner)
+                    if (rGraveIds.contains(it.zoneId)) { /*DO NOTHING*/ }
+                    else { outgoing.add(it.zoneId.toString(), inner) }
                 }
             }
         }
@@ -541,7 +583,7 @@ class Syncer(private val parseAPIService: ParseAPI.ParseAPIService,
         val outgoing = JsonObject()
         if (col.type.containsKey(auditId)) {
             val type = col.type[auditId]
-            type?.let {
+            type?.let { it ->
                 it.forEach {
 
                     typeList.add(it)
@@ -555,7 +597,8 @@ class Syncer(private val parseAPIService: ParseAPI.ParseAPIService,
                     inner.addProperty("id", it.auditParentId)
                     inner.addProperty("zoneId", it.zoneId)
 
-                    outgoing.add(it.auditParentId.toString(), inner)
+                    if (rGraveIds.contains(it.auditParentId)) { /*DO NOTHING*/ }
+                    else { outgoing.add(it.auditParentId.toString(), inner) }
                 }
             }
         }
