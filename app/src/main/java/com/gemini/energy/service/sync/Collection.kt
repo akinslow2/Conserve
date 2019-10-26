@@ -27,10 +27,10 @@ class Collection(private val mListener: Listener?) {
     var type: HashMap<Long, List<TypeLocalModel>> = hashMapOf()
 
     var featureAudit: HashMap<Long, List<FeatureLocalModel>> = hashMapOf()
-    var featureType: HashMap<Int, List<FeatureLocalModel>> = hashMapOf()
+    var featureType: HashMap<Long, List<FeatureLocalModel>> = hashMapOf()
 
-    private var typeIds: MutableList<Int?> = mutableListOf()
-    var typeIdsByAudit: MutableMap<Long, List<Int?>> = hashMapOf()
+    private var typeIds: MutableList<Long?> = mutableListOf()
+    var typeIdsByAudit: MutableMap<Long, List<Long?>> = hashMapOf()
 
     var graveAudit: MutableList<GraveLocalModel> = mutableListOf()
     var graveZone: MutableList<GraveLocalModel> = mutableListOf()

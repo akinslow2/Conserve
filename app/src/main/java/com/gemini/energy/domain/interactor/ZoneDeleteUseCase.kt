@@ -6,9 +6,9 @@ import com.gemini.energy.domain.gateway.AuditGateway
 import io.reactivex.Observable
 
 class ZoneDeleteUseCase(schedulers: Schedulers, private val auditGateway: AuditGateway)
-    : UseCase<Int, Unit>(schedulers) {
+    : UseCase<Long, Unit>(schedulers) {
 
-    override fun buildObservable(params: Int?): Observable<Unit> {
+    override fun buildObservable(params: Long?): Observable<Unit> {
         return auditGateway.deleteZone(params!!)
     }
 

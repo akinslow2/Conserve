@@ -16,7 +16,7 @@ class FeatureRepository(
         return featureLocalDataSource.getAllByAudit(id)
     }
 
-    fun getAllByType(id: Int): Observable<List<FeatureLocalModel>> {
+    fun getAllByType(id: Long): Observable<List<FeatureLocalModel>> {
         return featureLocalDataSource.getAllByType(id)
     }
 
@@ -28,7 +28,7 @@ class FeatureRepository(
         return featureLocalDataSource.delete(featureMapper.toLocal(feature))
     }
 
-    fun deleteByTypeId(id: Int): Observable<Unit> {
+    fun deleteByTypeId(id: Long): Observable<Unit> {
         return featureLocalDataSource.deleteByTypeId(id)
     }
 
@@ -36,7 +36,7 @@ class FeatureRepository(
         return featureLocalDataSource.deleteByAuditId(id)
     }
 
-    fun deleteByZoneId(id: Int): Observable<Unit> {
+    fun deleteByZoneId(id: Long): Observable<Unit> {
         return featureLocalDataSource.deleteByZoneId(id)
     }
 

@@ -7,9 +7,9 @@ import com.gemini.energy.domain.gateway.AuditGateway
 import io.reactivex.Observable
 
 class ZoneGetUseCase(schedulers: Schedulers, private val auditGateway: AuditGateway):
-        UseCase<Int, Zone>(schedulers) {
+        UseCase<Long, Zone>(schedulers) {
 
-    override fun buildObservable(params: Int?): Observable<Zone> {
+    override fun buildObservable(params: Long?): Observable<Zone> {
         return auditGateway.getZone(params!!)
     }
 }

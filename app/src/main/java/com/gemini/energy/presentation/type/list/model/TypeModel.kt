@@ -5,12 +5,12 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class TypeModel(
-        val id: Int?,
+        val id: Long?,
         var name: String?,
         val type: String?,
         val subType: String?,
 
-        val zoneId: Int?,
+        val zoneId: Long?,
         val auditId: Long?
 ) : Parcelable
 

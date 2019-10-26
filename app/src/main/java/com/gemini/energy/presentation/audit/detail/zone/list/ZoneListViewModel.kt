@@ -1,5 +1,6 @@
 package com.gemini.energy.presentation.audit.detail.zone.list
 
+import android.annotation.SuppressLint
 import android.app.Application
 import android.content.Context
 import android.databinding.ObservableArrayList
@@ -20,7 +21,7 @@ import timber.log.Timber
 class ZoneListViewModel(context: Context,
                         private val zoneGetAllUseCase: ZoneGetAllUseCase,
                         private val zoneDeleteUseCase: ZoneDeleteUseCase,
-                        private val zoneTypeDeleteByZoneUseCase: ZoneTypeDeleteByZoneUseCase,
+                        private val typeDeleteByZoneUseCase: TypeDeleteByZoneUseCase,
                         private val featureDeleteByZoneUseCase: FeatureDeleteByZoneUseCase,
                         private val gravesSaveUseCase: GravesSaveUseCase) :
         BaseAndroidViewModel(context.applicationContext as Application) {
@@ -36,7 +37,7 @@ class ZoneListViewModel(context: Context,
     fun deleteZone(zone: ZoneModel) = addDisposable(
             featureDeleteByZoneUseCase.execute(zone.id)
                     .subscribe {
-                        zoneTypeDeleteByZoneUseCase.execute(zone.id)
+                        typeDeleteByZoneUseCase.execute(zone.id)
                                 .subscribe { delete(zone) }
                     })
 
@@ -70,6 +71,7 @@ class ZoneListViewModel(context: Context,
     private fun delete(zone: ZoneModel): Disposable {
         return zoneDeleteUseCase.execute(zone.id!!)
                 .subscribeWith(object : DisposableObserver<Unit>() {
+                    @SuppressLint("CheckResult")
                     override fun onComplete() {
                         Timber.d("!! ON COMPLETE !!")
                         gravesSaveUseCase.execute(GraveLocalModel(Utils.intNow(), -1, zone.id.toLong(),1))

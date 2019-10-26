@@ -20,7 +20,7 @@ import timber.log.Timber
 
 class TypeListViewModel(context: Context,
 
-                        private val zoneTypeGetAllUseCase: ZoneTypeGetAllUseCase,
+                        private val zoneTypeGetAllUseCase: TypeGetAllUseCase,
                         private val featureGetAllByTypeUseCase: FeatureGetAllByTypeUseCase,
                         private val featureDeleteUseCase: FeatureDeleteUseCase,
                         private val typeDeleteUseCase: TypeDeleteUseCase,
@@ -35,7 +35,7 @@ class TypeListViewModel(context: Context,
     val empty = ObservableBoolean()
     val error = ObservableField<String>()
 
-    fun loadZoneTypeList(zoneId: Int, zoneType: String) = addDisposable(getAll(zoneId, zoneType))
+    fun loadZoneTypeList(zoneId: Long, zoneType: String) = addDisposable(getAll(zoneId, zoneType))
     fun deleteZoneType(type: TypeModel) = addDisposable(
             featureGetAllByTypeUseCase.execute(type.id)
                     .subscribe{
@@ -43,7 +43,7 @@ class TypeListViewModel(context: Context,
                                 .subscribe { delete(type) }
                     })
 
-    private fun getAll(zoneId: Int, zoneType: String): Disposable {
+    private fun getAll(zoneId: Long, zoneType: String): Disposable {
         return zoneTypeGetAllUseCase.execute(listOf(zoneId, zoneType))
                 .subscribeWith(object : DisposableObserver<List<Type>>() {
 

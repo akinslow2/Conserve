@@ -2,15 +2,14 @@ package com.gemini.energy.data.local.model
 
 import android.arch.persistence.room.ColumnInfo
 import android.arch.persistence.room.Entity
-import android.arch.persistence.room.ForeignKey
 import android.arch.persistence.room.PrimaryKey
 import java.util.*
 
 @Entity(tableName = "Zone")
 data class ZoneLocalModel(
-        @PrimaryKey(autoGenerate = true)
+        @PrimaryKey
         @ColumnInfo(name = "id")
-        var zoneId: Int?,
+        var zoneId: Long,
         var name: String,
         var type: String,
         var usn: Int,

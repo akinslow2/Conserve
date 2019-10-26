@@ -5,12 +5,13 @@ import android.content.Context
 import android.util.Log
 import com.gemini.energy.R
 import com.gemini.energy.domain.entity.Type
-import com.gemini.energy.domain.interactor.ZoneTypeGetUseCase
-import com.gemini.energy.domain.interactor.ZoneTypeSaveUseCase
-import com.gemini.energy.domain.interactor.ZoneTypeUpdateUseCase
+import com.gemini.energy.domain.interactor.TypeGetUseCase
+import com.gemini.energy.domain.interactor.TypeSaveUseCase
+import com.gemini.energy.domain.interactor.TypeUpdateUseCase
 import com.gemini.energy.internal.util.BaseAndroidViewModel
 import com.gemini.energy.internal.util.SingleLiveData
 import com.gemini.energy.presentation.type.list.model.TypeModel
+import com.gemini.energy.presentation.util.Utils
 import io.reactivex.disposables.Disposable
 import io.reactivex.observers.DisposableObserver
 import timber.log.Timber
@@ -18,9 +19,9 @@ import java.util.*
 
 class TypeCreateViewModel(context: Context,
 
-                          private val zoneTypeCreateUseCase: ZoneTypeSaveUseCase,
-                          private val zoneTypeGetUseCase: ZoneTypeGetUseCase,
-                          private val zoneTypeUpdateUseCase: ZoneTypeUpdateUseCase) :
+                          private val zoneTypeCreateUseCase: TypeSaveUseCase,
+                          private val zoneTypeGetUseCase: TypeGetUseCase,
+                          private val zoneTypeUpdateUseCase: TypeUpdateUseCase) :
 
         BaseAndroidViewModel(context.applicationContext as Application) {
 
@@ -31,9 +32,9 @@ class TypeCreateViewModel(context: Context,
     val error = _error
 
 
-    fun createZoneType(zoneId: Int, zoneType: String, zoneSubType: String?, zoneTypeTag: String, auditId: Long) {
+    fun createZoneType(zoneId: Long, zoneType: String, zoneSubType: String?, zoneTypeTag: String, auditId: Long) {
         val date = Date()
-        addDisposable(save(Type(null, zoneTypeTag, zoneType, zoneSubType, -1, zoneId, auditId, date, date)))
+        addDisposable(save(Type(Utils.intNow(), zoneTypeTag, zoneType, zoneSubType, -1, zoneId, auditId, date, date)))
     }
 
     fun updateZoneType(type: TypeModel, scopeName: String) = addDisposable(

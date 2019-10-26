@@ -18,13 +18,13 @@ data class Computable<SubType>(
         /**
          * Zone Section
          * */
-        var zoneId: Int,
+        var zoneId: Long,
         var zoneName: String,
 
         /**
          * Categorize Device by Type - Sub Type
          * */
-        var auditScopeId: Int,
+        var auditScopeId: Long,
         var auditScopeName: String,
         var auditScopeType: EZoneType?,
         var auditScopeSubType: SubType?,
@@ -55,12 +55,12 @@ data class Computable<SubType>(
         var outgoingRows: OutgoingRows?) {
 
     constructor(): this(
-            NONE.toLong(), EMPTY, NONE, EMPTY, NONE, EMPTY, null,
+            NONE.toLong(), EMPTY, NONE.toLong(), EMPTY, NONE.toLong(), EMPTY, null,
             null, null, null, false,
             null, mutableListOf(), mutableListOf(), null,
             0.0, null, null)
 
-    constructor(auditScopeSubType: SubType) : this(NONE.toLong(), EMPTY, NONE, EMPTY, NONE, EMPTY,
+    constructor(auditScopeSubType: SubType) : this(NONE.toLong(), EMPTY, NONE.toLong(), EMPTY, NONE.toLong(), EMPTY,
             null, auditScopeSubType, null, null,
             false, null, mutableListOf(), mutableListOf(),
             null, 0.0, null, null)

@@ -15,18 +15,18 @@ interface FeatureDao {
     fun getAllByAudit(id: Long): Maybe<List<FeatureLocalModel>>
 
     @Query("SELECT * FROM feature WHERE type_id = :id ORDER BY form_id")
-    fun getAllByType(id: Int): Maybe<List<FeatureLocalModel>>
+    fun getAllByType(id: Long): Maybe<List<FeatureLocalModel>>
 
     @Delete
     fun deleteByType(feature: List<FeatureLocalModel>)
 
     @Query("DELETE FROM feature WHERE type_id = :id")
-    fun deleteByTypeId(id: Int)
+    fun deleteByTypeId(id: Long)
 
     @Query("DELETE FROM feature WHERE audit_id = :id")
     fun deleteByAuditId(id: Long)
 
     @Query("DELETE FROM feature WHERE zone_id = :id")
-    fun deleteByZoneId(id: Int)
+    fun deleteByZoneId(id: Long)
 
 }

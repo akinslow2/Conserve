@@ -21,9 +21,9 @@ class FeatureGetViewModel(context: Context, private val featureGetAllUseCase: Fe
     val empty = ObservableBoolean()
     val error = ObservableField<String>()
 
-    fun loadFeature(typeId: Int) = addDisposable(getAll(typeId))
+    fun loadFeature(typeId: Long) = addDisposable(getAll(typeId))
 
-    private fun getAll(typeId: Int): Disposable {
+    private fun getAll(typeId: Long): Disposable {
         return featureGetAllUseCase.execute(typeId)
                 .subscribeWith(object : DisposableObserver<List<Feature>>() {
                     override fun onStart() {

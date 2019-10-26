@@ -5,11 +5,10 @@ import com.gemini.energy.domain.UseCase
 import com.gemini.energy.domain.gateway.AuditGateway
 import io.reactivex.Observable
 
-class FeatureDeleteByAuditUseCase(schedulers: Schedulers, private val auditGateway: AuditGateway)
+class TypeDeleteByAuditUseCase(schedulers: Schedulers, private val auditGateway: AuditGateway)
     : UseCase<Long, Unit>(schedulers) {
 
     override fun buildObservable(params: Long?): Observable<Unit> {
-        return auditGateway.deleteFeatureByAuditId(params!!)
+        return auditGateway.deleteTypeByAuditId(params!!)
     }
-
 }

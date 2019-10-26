@@ -8,13 +8,13 @@ import com.gemini.energy.presentation.util.EZoneType
 
 class SystemMapper {
 
-    fun toEntity(type: AuditLocalModel) = Audit(
-            type.auditId,
-            type.name,
-            type.usn,
-            type.objectId,
-            type.createdAt,
-            type.updatedAt
+    fun toEntity(audit: AuditLocalModel) = Audit(
+            audit.auditId,
+            audit.name,
+            audit.usn,
+            audit.objectId,
+            audit.createdAt,
+            audit.updatedAt
     )
 
     fun toEntity(zone: ZoneLocalModel) = Zone(
@@ -29,23 +29,21 @@ class SystemMapper {
             zone.updatedAt
     )
 
-    fun toEntity(auditScopeParent: TypeLocalModel) = Type(
-            auditScopeParent.auditParentId,
-            auditScopeParent.name,
-            auditScopeParent.type,
-            auditScopeParent.subType,
-            auditScopeParent.usn,
+    fun toEntity(type: TypeLocalModel) = Type(
+            type.auditParentId,
+            type.name,
+            type.type,
+            type.subType,
+            type.usn,
 
-            auditScopeParent.zoneId,
-            auditScopeParent.auditId,
+            type.zoneId,
+            type.auditId,
 
-            auditScopeParent.createdAt,
-            auditScopeParent.updatedAt
+            type.createdAt,
+            type.updatedAt
     )
 
     fun toEntity(feature: FeatureLocalModel): Feature {
-
-//        Log.d("$TAG.Thread", "Feature Entity Mapper (${Thread.currentThread().name})")
 
         return Feature(
                 feature.featureId,
@@ -69,9 +67,6 @@ class SystemMapper {
     }
 
     fun toEntity(computable: ComputableLocalModel): Computable<*> {
-
-//        Log.d(TAG, computable.toString())
-//        Log.d("$TAG.Thread", "Computable Entity Mapper (${Thread.currentThread().name})")
 
         val eZoneType = EZoneType.get(computable.auditScopeType)
         val entity = when (eZoneType) {

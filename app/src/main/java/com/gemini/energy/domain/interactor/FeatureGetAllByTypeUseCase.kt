@@ -7,9 +7,9 @@ import com.gemini.energy.domain.gateway.AuditGateway
 import io.reactivex.Observable
 
 class FeatureGetAllByTypeUseCase(schedulers: Schedulers, private val auditGateway: AuditGateway) :
-        UseCase<Int, List<Feature>>(schedulers) {
+        UseCase<Long, List<Feature>>(schedulers) {
 
-    override fun buildObservable(params: Int?): Observable<List<Feature>> {
+    override fun buildObservable(params: Long?): Observable<List<Feature>> {
         return auditGateway.getFeatureByType(params!!)
     }
 

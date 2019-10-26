@@ -1,5 +1,6 @@
 package com.gemini.energy.presentation.audit.dialog
 
+import android.annotation.SuppressLint
 import android.app.Application
 import android.content.Context
 import android.util.Log
@@ -34,6 +35,7 @@ class AuditCreateViewModel(context: Context,
         addDisposable(save(Audit(Utils.intNow(), tag, -1, "", date, date)))
     }
 
+    @SuppressLint("CheckResult")
     fun updateAudit(auditModel: AuditModel, auditTag: String) {
         auditGetUseCase.execute(auditModel.id)
                 .subscribe {

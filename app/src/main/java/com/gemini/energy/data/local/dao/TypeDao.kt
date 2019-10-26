@@ -9,10 +9,10 @@ import java.lang.reflect.Type
 interface TypeDao {
 
     @Query("SELECT * FROM AuditZoneType WHERE id = :id")
-    fun get(id: Int): Maybe<TypeLocalModel>
+    fun get(id: Long): Maybe<TypeLocalModel>
 
     @Query("SELECT * FROM AuditZoneType WHERE zone_id = :id AND type = :type")
-    fun getAllTypeByZone(id: Int, type: String): Maybe<List<TypeLocalModel>>
+    fun getAllTypeByZone(id: Long, type: String): Maybe<List<TypeLocalModel>>
 
     @Query("SELECT * FROM AuditZoneType WHERE audit_id = :id")
     fun getAllTypeByAudit(id: Long): Maybe<List<TypeLocalModel>>
@@ -24,10 +24,10 @@ interface TypeDao {
     fun update(type: TypeLocalModel)
 
     @Query("DELETE FROM AuditZoneType WHERE id = :id")
-    fun delete(id: Int)
+    fun delete(id: Long)
 
     @Query("DELETE FROM AuditZoneType WHERE zone_id = :id")
-    fun deleteByZoneId(id: Int)
+    fun deleteByZoneId(id: Long)
 
     @Query("DELETE FROM AuditZoneType WHERE audit_id = :id")
     fun deleteByAuditId(id: Long)

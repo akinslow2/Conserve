@@ -29,55 +29,47 @@ class AuditGatewayImpl(
     override fun deleteAudit(auditId: Long): Observable<Unit> = auditRepository.delete(auditId)
 
     /*Zone*/
-    override fun getZone(zoneId: Int): Observable<Zone> = zoneRepository.get(zoneId).map { mapper.toEntity(it) }
+    override fun getZone(zoneId: Long): Observable<Zone> = zoneRepository.get(zoneId).map { mapper.toEntity(it) }
     override fun getZoneList(auditId: Long): Observable<List<Zone>> =
             zoneRepository.getAllByAudit(auditId)
                     .map { it.map { mapper.toEntity(it) } }
 
     override fun saveZone(zone: Zone): Observable<Unit> = zoneRepository.save(zone)
     override fun updateZone(zone: Zone): Observable<Unit> = zoneRepository.update(zone)
-    override fun deleteZone(zoneId: Int): Observable<Unit> = zoneRepository.delete(zoneId)
+    override fun deleteZone(zoneId: Long): Observable<Unit> = zoneRepository.delete(zoneId)
     override fun deleteZoneByAuditId(id: Long): Observable<Unit> = zoneRepository.deleteByAuditId(id)
 
-    /*Audit Zone Type*/
-    override fun getAuditScope(id: Int): Observable<Type> =
+    /*Type*/
+    override fun getType(id: Long): Observable<Type> =
             typeRepository.get(id).map { mapper.toEntity(it) }
 
-    override fun getAuditScopeList(zoneId: Int, type: String): Observable<List<Type>> =
+    override fun getTypeList(zoneId: Long, type: String): Observable<List<Type>> =
             typeRepository.getAllTypeByZone(zoneId, type)
                     .map { it.map { mapper.toEntity(it) } }
 
-    override fun getAuditScopeByAudit(auditId: Long): Observable<List<Type>> =
+    override fun getTypeByAudit(auditId: Long): Observable<List<Type>> =
         typeRepository.getAllTypeByAudit(auditId)
                 .map { it.map { mapper.toEntity(it) } }
 
-    override fun saveAuditScope(auditScope: Type) = typeRepository.save(auditScope)
-    override fun updateAuditScope(auditScope: Type): Observable<Unit> = typeRepository.update(auditScope)
-    override fun deleteAuditScope(id: Int): Observable<Unit> = typeRepository.delete(id)
-    override fun deleteAuditScopeByZoneId(id: Int): Observable<Unit> = typeRepository.deleteByZoneId(id)
-    override fun deleteAuditScopeByAuditId(id: Long): Observable<Unit> = typeRepository.deleteByAuditId(id)
+    override fun saveType(auditScope: Type) = typeRepository.save(auditScope)
+    override fun updateType(auditScope: Type): Observable<Unit> = typeRepository.update(auditScope)
+    override fun deleteType(id: Long): Observable<Unit> = typeRepository.delete(id)
+    override fun deleteTypeByZoneId(id: Long): Observable<Unit> = typeRepository.deleteByZoneId(id)
+    override fun deleteTypeByAuditId(id: Long): Observable<Unit> = typeRepository.deleteByAuditId(id)
 
-    /*Feature Data*/
-    override fun getFeature(auditId: Long): Observable<List<Feature>> =
-            featureRepository.getAllByAudit(auditId)
-                    .map { it.map { mapper.toEntity(it) } }
-
-    override fun getFeatureByType(zoneId: Int): Observable<List<Feature>> =
-            featureRepository.getAllByType(zoneId)
-                    .map { it.map { mapper.toEntity(it) } }
-
+    /*Feature*/
     override fun getFeatureByAudit(auditId: Long): Observable<List<Feature>> =
             featureRepository.getAllByAudit(auditId)
                     .map { it.map { mapper.toEntity(it) } }
 
-    override fun saveFeature(feature: List<Feature>): Observable<Unit> = featureRepository.save(feature)
+    override fun getFeatureByType(typeId: Long): Observable<List<Feature>> =
+            featureRepository.getAllByType(typeId)
+                    .map { it.map { mapper.toEntity(it) } }
 
+    override fun saveFeature(feature: List<Feature>): Observable<Unit> = featureRepository.save(feature)
     override fun deleteFeature(feature: List<Feature>): Observable<Unit> =
             featureRepository.delete(feature)
-
-    override fun deleteFeatureByTypeId(id: Int): Observable<Unit> = featureRepository.deleteByTypeId(id)
-    override fun deleteFeatureByAuditId(id: Long): Observable<Unit> = featureRepository.deleteByAuditId(id)
-    override fun deleteFeatureByZoneId(id: Int): Observable<Unit> = featureRepository.deleteByZoneId(id)
+    override fun deleteFeatureByZoneId(id: Long): Observable<Unit> = featureRepository.deleteByZoneId(id)
 
     /*Computable*/
     override fun getComputable(): Observable<List<Computable<*>>> =

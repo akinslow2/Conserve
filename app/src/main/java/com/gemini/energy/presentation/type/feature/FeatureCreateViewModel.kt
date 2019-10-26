@@ -25,7 +25,7 @@ class FeatureCreateViewModel(context: Context,
     private val _error = SingleLiveData<String>()
     val error = _error
 
-    fun createFeature(feature: List<Feature>, typeId: Int) {
+    fun createFeature(feature: List<Feature>, typeId: Long) {
         addDisposable(
                 featureListUseCase.execute(typeId)
                         .subscribe {

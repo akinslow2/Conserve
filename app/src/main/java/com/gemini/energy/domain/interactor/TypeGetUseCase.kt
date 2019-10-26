@@ -6,12 +6,11 @@ import com.gemini.energy.domain.entity.Type
 import com.gemini.energy.domain.gateway.AuditGateway
 import io.reactivex.Observable
 
+class TypeGetUseCase(schedulers: Schedulers, private val auditGateway: AuditGateway):
+        UseCase<Long, Type>(schedulers) {
 
-class ZoneTypeSaveUseCase(schedulers: Schedulers, private val auditGateway: AuditGateway):
-        UseCase<Type, Unit>(schedulers) {
-
-    override fun buildObservable(params: Type?): Observable<Unit> {
-        return auditGateway.saveAuditScope(params!!)
+    override fun buildObservable(params: Long?): Observable<Type> {
+        return auditGateway.getType(params!!)
     }
 
 }

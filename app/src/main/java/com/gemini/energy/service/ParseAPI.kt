@@ -60,8 +60,8 @@ class ParseAPI {
         private val loggingInterceptor = HttpLoggingInterceptor()
                 .setLevel(HttpLoggingInterceptor.Level.BODY)
 
-        private const val SYNC_AUDIT = "sync_test_rAudit"
-        private const val SYNC_FEATURE = "sync_test_rFeature"
+        private const val SYNC_AUDIT = "update_test_one_rAudit"
+        private const val SYNC_FEATURE = "update_test_one_rFeature"
 
         private val okHttpClient = OkHttpClient()
                 .newBuilder()

@@ -70,8 +70,8 @@ class Syncer(private val parseAPIService: ParseAPI.ParseAPIService,
     private fun download() {
 
         val toDeleteAudit: List<Long> = col.graveAudit.map { it.oid }
-        val toDeleteZone: List<Int> = col.graveZone.map { it.oid.toInt() }
-        val toDeleteType: List<Int> = col.graveType.map { it.oid.toInt() }
+        val toDeleteZone: List<Long> = col.graveZone.map { it.oid }
+        val toDeleteType: List<Long> = col.graveType.map { it.oid }
 
         fun splitFields(fields: String): List<String> {
             return fields.split("\\x1f".toRegex())
@@ -106,8 +106,8 @@ class Syncer(private val parseAPIService: ParseAPI.ParseAPIService,
 
                             // *** Load Feature by Type to the Local DB
                             if (typeId != "null") {
-                                if (col.featureType.containsKey(typeId.toInt())) {
-                                    val localFeature = col.featureType[typeId.toInt()]
+                                if (col.featureType.containsKey(typeId.toLong())) {
+                                    val localFeature = col.featureType[typeId.toLong()]
                                     val lMod = localFeature?.map { it.updatedAt.time }?.max()
 
                                     Timber.d("Local Updated At (Feature - Type)")
@@ -121,7 +121,7 @@ class Syncer(private val parseAPIService: ParseAPI.ParseAPIService,
                                         else {
                                             for (i in 0 until formIds.count() - 1) {
                                                 val feature = FeatureLocalModel(id[i].toInt(), formIds[i].toInt(), belongsTo,
-                                                        dataTypes[i], usn, null, zoneId.toInt(), typeId.toInt(), fields[i],
+                                                        dataTypes[i], usn, null, zoneId.toLong(), typeId.toLong(), fields[i],
                                                         values[i], null, null, Date(), Date())
                                                 models.add(feature)
                                             }
@@ -130,11 +130,11 @@ class Syncer(private val parseAPIService: ParseAPI.ParseAPIService,
 
                                 } else {
                                     Timber.d("---------- Feature Type Fresh Entry -----------")
-                                    if (toDeleteType.contains(typeId.toInt())) { /*DO NOTHING*/ }
+                                    if (toDeleteType.contains(typeId.toLong())) { /*DO NOTHING*/ }
                                     else {
                                         for (i in 0 until formIds.count() - 1) {
                                             val feature = FeatureLocalModel(id[i].toInt(), formIds[i].toInt(), belongsTo,
-                                                    dataTypes[i], usn, null, zoneId.toInt(), typeId.toInt(), fields[i],
+                                                    dataTypes[i], usn, null, zoneId.toLong(), typeId.toLong(), fields[i],
                                                     values[i], null, null, Date(), Date())
                                             models.add(feature)
                                         }
@@ -257,7 +257,7 @@ class Syncer(private val parseAPIService: ParseAPI.ParseAPIService,
                                 val iUsn = inner.get("usn").asInt
                                 val iName = inner.get("name").asString
                                 val iMod = inner.get("mod").asString
-                                val iId = inner.get("id").asInt
+                                val iId = inner.get("id").asLong
 
                                 if (col.zone.containsKey(_auditId)) {
                                     val zones = col.zone[_auditId]
@@ -304,8 +304,8 @@ class Syncer(private val parseAPIService: ParseAPI.ParseAPIService,
                                 val iType = inner.get("type").asString
                                 val iSubType = inner.get("subtype").asString
                                 val iMod = inner.get("mod").asString
-                                val iId = inner.get("id").asInt
-                                val iZoneId = inner.get("zoneId").asInt
+                                val iId = inner.get("id").asLong
+                                val iZoneId = inner.get("zoneId").asLong
 
                                 if (col.type.containsKey(_auditId)) {
                                     val types = col.type[_auditId]
@@ -498,7 +498,7 @@ class Syncer(private val parseAPIService: ParseAPI.ParseAPIService,
      * */
     private fun buildZone(auditId: Long): JsonObject {
 
-        fun associatedTypes(zoneId: Int?): JsonArray {
+        fun associatedTypes(zoneId: Long?): JsonArray {
             val outgoing = JsonArray()
             if (col.type.containsKey(auditId)) {
                 val type = col.type[auditId]

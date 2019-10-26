@@ -6,11 +6,11 @@ import com.gemini.energy.domain.gateway.AuditGateway
 import com.gemini.energy.domain.Schedulers
 import io.reactivex.Observable
 
-class ZoneTypeGetAllUseCase(schedulers: Schedulers, private val auditGateway: AuditGateway):
+class TypeGetAllUseCase(schedulers: Schedulers, private val auditGateway: AuditGateway):
         UseCase<List<Any>, List<Type>>(schedulers) {
 
     override fun buildObservable(params: List<Any>?): Observable<List<Type>> {
-        return auditGateway.getAuditScopeList(params?.get(0) as Int, params[1] as String)
+        return auditGateway.getTypeList(params?.get(0) as Long, params[1] as String)
     }
 
 }

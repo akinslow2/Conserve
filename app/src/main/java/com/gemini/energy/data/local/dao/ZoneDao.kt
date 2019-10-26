@@ -8,7 +8,7 @@ import io.reactivex.Maybe
 interface ZoneDao {
 
     @Query("SELECT * FROM Zone WHERE id = :id")
-    fun get(id: Int): Maybe<ZoneLocalModel>
+    fun get(id: Long): Maybe<ZoneLocalModel>
 
     @Query("SELECT * FROM Zone WHERE audit_id = :id")
     fun getAllByAudit(id: Long): Maybe<List<ZoneLocalModel>>
@@ -20,7 +20,7 @@ interface ZoneDao {
     fun update(zone: ZoneLocalModel)
 
     @Query("DELETE FROM Zone WHERE id = :id")
-    fun delete(id: Int)
+    fun delete(id: Long)
 
     @Query("DELETE FROM Zone WHERE audit_id = :id")
     fun deleteByAuditId(id: Long)

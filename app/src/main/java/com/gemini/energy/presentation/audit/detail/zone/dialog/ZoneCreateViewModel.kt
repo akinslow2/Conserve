@@ -10,6 +10,7 @@ import com.gemini.energy.domain.interactor.ZoneUpdateUseCase
 import com.gemini.energy.internal.util.BaseAndroidViewModel
 import com.gemini.energy.internal.util.SingleLiveData
 import com.gemini.energy.presentation.audit.detail.zone.list.model.ZoneModel
+import com.gemini.energy.presentation.util.Utils
 import io.reactivex.disposables.Disposable
 import io.reactivex.observers.DisposableObserver
 import timber.log.Timber
@@ -29,7 +30,7 @@ class ZoneCreateViewModel(context: Context,
 
     fun createZone(auditId: Long, zoneTag: String) {
         val date = Date()
-        addDisposable(save(Zone(null, zoneTag, "Sample Zone", -1, auditId, date, date)))
+        addDisposable(save(Zone(Utils.intNow(), zoneTag, "Sample Zone", -1, auditId, date, date)))
     }
 
     fun updateZone(zoneModel: ZoneModel, zoneTag: String) = addDisposable(

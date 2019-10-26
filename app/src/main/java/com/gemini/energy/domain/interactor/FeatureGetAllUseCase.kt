@@ -10,7 +10,7 @@ class FeatureGetAllUseCase(schedulers: Schedulers, private val auditGateway: Aud
         UseCase<Long, List<Feature>>(schedulers) {
 
     override fun buildObservable(auditId: Long?): Observable<List<Feature>> {
-        return auditGateway.getFeature(auditId!!)
+        return auditGateway.getFeatureByAudit(auditId!!)
     }
 
 }

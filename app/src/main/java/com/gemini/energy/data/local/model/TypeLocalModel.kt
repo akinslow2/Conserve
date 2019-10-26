@@ -8,16 +8,16 @@ import java.util.*
 
 @Entity(tableName = "AuditZoneType")
 data class TypeLocalModel(
-        @PrimaryKey(autoGenerate = true)
+        @PrimaryKey
         @ColumnInfo(name = "id")
-        var auditParentId: Int?,
+        var auditParentId: Long,
         var name: String?,
         var type: String?,
         var subType: String?,
         var usn: Int,
 
         @ColumnInfo(name="zone_id")
-        var zoneId: Int?,
+        var zoneId: Long?,
 
         @ColumnInfo(name = "audit_id")
         var auditId: Long?,

@@ -10,8 +10,8 @@ data class Feature (
         var usn: Int,
 
         val auditId: Long?,
-        val zoneId: Int?,
-        val typeId: Int?,
+        val zoneId: Long?,
+        val typeId: Long?,
 
         var key: String?,
         val valueString: String?,

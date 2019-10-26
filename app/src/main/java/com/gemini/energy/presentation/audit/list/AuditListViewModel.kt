@@ -1,5 +1,6 @@
 package com.gemini.energy.presentation.audit.list
 
+import android.annotation.SuppressLint
 import android.app.Application
 import android.content.Context
 import android.databinding.ObservableArrayList
@@ -23,11 +24,11 @@ import timber.log.Timber
 
 class AuditListViewModel(context: Context,
                          private val auditGetAllUseCase: AuditGetAllUseCase,
-                         private val zoneTypeGetAllByAuditUseCase: ZoneTypeGetAllByAuditUseCase,
+                         private val zoneTypeGetAllByAuditUseCase: TypeGetAllByAuditUseCase,
                          private val featureGetAllByTypeUseCase: FeatureGetAllByTypeUseCase,
                          private val featureGetAllUseCase: FeatureGetAllUseCase,
                          private val featureDeleteUseCase: FeatureDeleteUseCase,
-                         private val typeDeleteByAuditUseCase: ZoneTypeDeleteByAuditUseCase,
+                         private val typeDeleteByAuditUseCase: TypeDeleteByAuditUseCase,
                          private val zoneDeleteByAuditUseCase: ZoneDeleteByAuditUseCase,
                          private val auditDeleteUseCase: AuditDeleteUseCase,
                          private val gravesSaveUseCase: GravesSaveUseCase) :
@@ -102,6 +103,7 @@ class AuditListViewModel(context: Context,
     private fun delete(audit: AuditModel): Disposable? {
         return auditDeleteUseCase.execute(audit.id)
                 .subscribeWith(object : DisposableObserver<Unit>() {
+                    @SuppressLint("CheckResult")
                     override fun onComplete() {
                         Timber.d("!! ON COMPLETE !!")
                         Toast.makeText(context, "Audit Delete Completed.", Toast.LENGTH_SHORT).show()

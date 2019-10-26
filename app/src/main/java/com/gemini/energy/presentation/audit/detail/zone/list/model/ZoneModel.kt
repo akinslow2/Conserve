@@ -5,7 +5,7 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class ZoneModel(
-        val id: Int?,
+        val id: Long,
         val name: String,
         val auditId: Long
 ) : Parcelable

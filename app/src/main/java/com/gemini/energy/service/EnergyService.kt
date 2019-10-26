@@ -158,7 +158,7 @@ class EnergyService(
 
 
         return Observable.zip(
-                auditGateway.getFeature(computable.auditId),
+                auditGateway.getFeatureByAudit(computable.auditId),
                 auditGateway.getFeatureByType(computable.auditScopeId),
                 BiFunction<List<Feature>, List<Feature>, Observable<Computable<*>>> { featurePreAudit, featureAuditScope ->
                     build(computable, featureAuditScope, featurePreAudit)
