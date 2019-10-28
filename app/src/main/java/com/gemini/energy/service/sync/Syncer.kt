@@ -39,7 +39,7 @@ class Syncer(private val parseAPIService: ParseAPI.ParseAPIService,
         val audit = col.audit
         audit.forEach { it ->
 
-            if (rGraveIds.contains(it.auditId)) { /*DO NOTHING*/ }
+            if (rGraveIds.contains(it.auditId)) { deleteLocalAudit(it.auditId) }
             else {
                 auditList.add(it)
                 buildFeature(it.auditId).forEach {
@@ -49,6 +49,24 @@ class Syncer(private val parseAPIService: ParseAPI.ParseAPIService,
                 auditTaskHolder.add(parseAPIService.saveAudit(buildAudit(it)).toObservable())
             }
         }
+    }
+
+    private fun deleteLocalType(id: Long) {
+        col.featureDao?.deleteByTypeId(id)
+        col.typeDao?.delete(id)
+    }
+
+    private fun deleteLocalZone(id: Long) {
+        col.featureDao?.deleteByZoneId(id)
+        col.typeDao?.deleteByZoneId(id)
+        col.zoneDao?.delete(id)
+    }
+
+    private fun deleteLocalAudit(id: Long) {
+        col.featureDao?.deleteByAuditId(id)
+        col.typeDao?.deleteByAuditId(id)
+        col.zoneDao?.deleteByAuditId(id)
+        col.auditDAO?.delete(id)
     }
 
     private fun updateGraves() {
@@ -567,7 +585,7 @@ class Syncer(private val parseAPIService: ParseAPI.ParseAPIService,
                     inner.addProperty("mod", Date().time)
                     inner.addProperty("id", it.zoneId)
 
-                    if (rGraveIds.contains(it.zoneId)) { /*DO NOTHING*/ }
+                    if (rGraveIds.contains(it.zoneId)) { deleteLocalZone(it.zoneId) }
                     else { outgoing.add(it.zoneId.toString(), inner) }
                 }
             }
@@ -597,7 +615,7 @@ class Syncer(private val parseAPIService: ParseAPI.ParseAPIService,
                     inner.addProperty("id", it.auditParentId)
                     inner.addProperty("zoneId", it.zoneId)
 
-                    if (rGraveIds.contains(it.auditParentId)) { /*DO NOTHING*/ }
+                    if (rGraveIds.contains(it.auditParentId)) { deleteLocalType(it.auditParentId) }
                     else { outgoing.add(it.auditParentId.toString(), inner) }
                 }
             }

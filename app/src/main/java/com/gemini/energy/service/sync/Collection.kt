@@ -37,10 +37,10 @@ class Collection(private val mListener: Listener?) {
     var graveZone: MutableList<GraveLocalModel> = mutableListOf()
     var graveType: MutableList<GraveLocalModel> = mutableListOf()
 
-    private var auditDAO: AuditDao? = null
-    private var zoneDao: ZoneDao? = null
-    private var typeDao: TypeDao? = null
-    private var featureDao: FeatureDao? = null
+    var auditDAO: AuditDao? = null
+    var zoneDao: ZoneDao? = null
+    var typeDao: TypeDao? = null
+    var featureDao: FeatureDao? = null
     var gravesDao: GravesDao? = null
 
     private fun load() = audit()?.subscribe({ audit = it }, { it.printStackTrace() }, { zone() })
