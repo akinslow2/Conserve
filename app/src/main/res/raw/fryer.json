@@ -46,7 +46,7 @@
           "dataType": "decimalrow",
           "defaultValues": "",
           "param": "Vat Width",
-          "validation": "optional",
+          "validation": "mandatory",
           "id": "15"
         },
         {
@@ -55,7 +55,7 @@
           "dataType": "pickerinputrow",
           "defaultValues": "1:Gas,2:Electric",
           "param": "Fuel Type",
-          "validation": "optional",
+          "validation": "mandatory",
           "id": "16"
         },
         {
@@ -64,7 +64,7 @@
           "dataType": "textrow",
           "defaultValues": "",
           "param": "Model Number",
-          "validation": "optional",
+          "validation": "mandatory",
           "id": "17"
         },
         {
@@ -73,7 +73,7 @@
           "dataType": "textrow",
           "defaultValues": "",
           "param": "Company",
-          "validation": "optional",
+          "validation": "mandatory",
           "id": "18"
         },
         {
@@ -82,7 +82,7 @@
           "dataType": "introw",
           "defaultValues": "",
           "param": "Quantity",
-          "validation": "optional",
+          "validation": "mandatory",
           "id": "19"
         },
         {
@@ -91,7 +91,7 @@
           "dataType": "introw",
           "defaultValues": "",
           "param": "Age",
-          "validation": "optional",
+          "validation": "mandatory",
           "id": "110"
         },
         {
@@ -100,7 +100,7 @@
           "dataType": "pickerinputrow",
           "defaultValues": "1:Yes,2:No",
           "param": "Control",
-          "validation": "optional",
+          "validation": "mandatory",
           "id": "111"
         }
       ],
@@ -134,7 +134,7 @@
           "dataType": "decimalrow",
           "defaultValues": "",
           "param": "Off Peak Hours",
-          "validation": "optional",
+          "validation": "mandatory",
           "id": "23"
         }
       ],

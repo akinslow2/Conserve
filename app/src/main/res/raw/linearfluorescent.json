@@ -19,7 +19,7 @@
           "dataType": "introw",
           "defaultValues": "",
           "param": "Area (Sq. Ft.)",
-          "validation": "optional",
+          "validation": "mandatory",
           "id": "12"
         },
         {
@@ -28,7 +28,7 @@
           "dataType": "pickerinputrow",
           "defaultValues": "1:LED,2:Linear Flourescent,3:Halogen,4:High Pressure Sodium,5:Incandescent,6:Metal Halide,7:Mercury Vapor,8:Compact Fluorescent,9:EXIT (Compact Flourescent),10:EXIT (Incandescent),11:EXIT (LED)",
           "param": "Lamp type",
-          "validation": "optional",
+          "validation": "mandatory",
           "id": "13"
         },
         {
@@ -46,7 +46,7 @@
           "dataType": "introw",
           "defaultValues": "",
           "param": "Lamps Per Fixture",
-          "validation": "optional",
+          "validation": "mandatory",
           "id": "15"
         },
         {
@@ -55,7 +55,7 @@
           "dataType": "introw",
           "defaultValues": "",
           "param": "Number of Fixtures",
-          "validation": "optional",
+          "validation": "mandatory",
           "id": "16"
         },
         {
@@ -89,7 +89,7 @@
           "dataType": "pickerinputrow",
           "defaultValues": "1:Yes,2:No",
           "param": "Controls",
-          "validation": "optional",
+          "validation": "mandatory",
           "id": "21"
         },
         {
