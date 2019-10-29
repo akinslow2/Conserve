@@ -37,6 +37,8 @@ class Collection(private val mListener: Listener?) {
     var graveZone: MutableList<GraveLocalModel> = mutableListOf()
     var graveType: MutableList<GraveLocalModel> = mutableListOf()
 
+    var graveIds: MutableList<Long> = mutableListOf()
+
     var auditDAO: AuditDao? = null
     var zoneDao: ZoneDao? = null
     var typeDao: TypeDao? = null
@@ -143,6 +145,9 @@ class Collection(private val mListener: Listener?) {
     }
 
     private fun complete() {
+        val graveZoneIds: MutableList<Long> = mutableListOf()
+        val graveTypeIds: MutableList<Long> = mutableListOf()
+        val graveAuditIds: MutableList<Long> = mutableListOf()
 
         val graveObs = gravesDao?.getAll()?.toObservable()
         graveObs?.subscribe({
@@ -153,7 +158,18 @@ class Collection(private val mListener: Listener?) {
                     it.type == 2 -> graveType.add(it)
                 }
                 grave.add(it)
+                graveIds.add(it.oid)
+
+                graveZoneIds.addAll(graveZone.map { it.oid })
+                graveTypeIds.addAll(graveType.map { it.oid })
+                graveAuditIds.addAll(graveAudit.map { it.oid })
+
             }
+
+            Timber.d("Grave Audit - $graveAuditIds")
+            Timber.d("Grave Zone - $graveZoneIds")
+            Timber.d("Grave Type - $graveTypeIds")
+            Timber.d("Grave Ids - $graveIds")
 
         }, { it.printStackTrace() }, {
 
