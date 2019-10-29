@@ -201,6 +201,14 @@ internal abstract class HomeModule {
         @HomeScope
         @Provides
         @JvmStatic
+        internal fun provideZoneTypeGetAllByZoneUseCase(schedulers: Schedulers, auditGateway: AuditGateway):
+                TypeGetAllByZoneUseCase {
+            return TypeGetAllByZoneUseCase(schedulers, auditGateway)
+        }
+
+        @HomeScope
+        @Provides
+        @JvmStatic
         internal fun provideZoneTypeSaveUseCase(schedulers: Schedulers, auditGateway: AuditGateway):
                 TypeSaveUseCase {
             return TypeSaveUseCase(schedulers, auditGateway)
@@ -343,6 +351,7 @@ internal abstract class HomeModule {
                 typeGetUseCase: TypeGetUseCase,
                 typeGetAllUseCase: TypeGetAllUseCase,
                 typeGetAllByAuditUseCase: TypeGetAllByAuditUseCase,
+                typeGetAllByZoneUseCase: TypeGetAllByZoneUseCase,
                 typeSaveUseCase: TypeSaveUseCase,
                 typeUpdateUseCase: TypeUpdateUseCase,
                 typeDeleteUseCase: TypeDeleteUseCase,
@@ -374,7 +383,7 @@ internal abstract class HomeModule {
                             AuditCreateViewModel(context, auditSaveUseCase, auditGetUseCase, auditUpdateUseCase) as T
 
                         modelClass.isAssignableFrom(ZoneListViewModel::class.java) ->
-                            ZoneListViewModel(context, zoneGetAllUseCase, zoneDeleteUseCase,
+                            ZoneListViewModel(context, zoneGetAllUseCase, typeGetAllByZoneUseCase, zoneDeleteUseCase,
                                     typeDeleteByZoneUseCase, featureDeleteByZoneUseCase,
                                     gravesSaveUseCase) as T
 

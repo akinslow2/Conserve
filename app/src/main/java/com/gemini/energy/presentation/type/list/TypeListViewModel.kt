@@ -13,7 +13,6 @@ import com.gemini.energy.domain.interactor.*
 import com.gemini.energy.internal.util.BaseAndroidViewModel
 import com.gemini.energy.presentation.type.list.mapper.TypeMapper
 import com.gemini.energy.presentation.type.list.model.TypeModel
-import com.gemini.energy.presentation.util.Utils
 import io.reactivex.disposables.Disposable
 import io.reactivex.observers.DisposableObserver
 import timber.log.Timber
@@ -76,7 +75,7 @@ class TypeListViewModel(context: Context,
                 .subscribeWith(object : DisposableObserver<Unit>() {
                     override fun onComplete() {
                         Timber.d("!! ON COMPLETE !!")
-                        gravesSaveUseCase.execute(GraveLocalModel(Utils.intNow(),-1, type.id.toLong(),2))
+                        gravesSaveUseCase.execute(GraveLocalModel(type.id,-1,2))
                                 .subscribe { Timber.d("Type to Graves") }
                     }
 

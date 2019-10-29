@@ -13,13 +13,15 @@ import com.gemini.energy.domain.interactor.*
 import com.gemini.energy.internal.util.BaseAndroidViewModel
 import com.gemini.energy.presentation.audit.detail.zone.list.mapper.ZoneMapper
 import com.gemini.energy.presentation.audit.detail.zone.list.model.ZoneModel
-import com.gemini.energy.presentation.util.Utils
+import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
 import io.reactivex.observers.DisposableObserver
+import io.reactivex.rxkotlin.merge
 import timber.log.Timber
 
 class ZoneListViewModel(context: Context,
                         private val zoneGetAllUseCase: ZoneGetAllUseCase,
+                        private val typeGetAllByZoneUseCase: TypeGetAllByZoneUseCase,
                         private val zoneDeleteUseCase: ZoneDeleteUseCase,
                         private val typeDeleteByZoneUseCase: TypeDeleteByZoneUseCase,
                         private val featureDeleteByZoneUseCase: FeatureDeleteByZoneUseCase,
@@ -27,6 +29,7 @@ class ZoneListViewModel(context: Context,
         BaseAndroidViewModel(context.applicationContext as Application) {
 
     private val mapper = ZoneMapper(context)
+    private val taskHolder: MutableList<Observable<Unit>> = mutableListOf()
 
     val loading = ObservableBoolean()
     val result = ObservableArrayList<ZoneModel>()
@@ -37,8 +40,18 @@ class ZoneListViewModel(context: Context,
     fun deleteZone(zone: ZoneModel) = addDisposable(
             featureDeleteByZoneUseCase.execute(zone.id)
                     .subscribe {
-                        typeDeleteByZoneUseCase.execute(zone.id)
-                                .subscribe { delete(zone) }
+                        typeGetAllByZoneUseCase.execute(zone.id)
+                                .subscribe { types ->
+                                    types.forEach { type ->
+                                        val model = GraveLocalModel(type.id, -1,2)
+                                        taskHolder.add(gravesSaveUseCase.execute(model))
+                                    }
+                                    taskHolder.merge()
+                                            .subscribe({}, { it.printStackTrace() }, {
+                                                typeDeleteByZoneUseCase.execute(zone.id)
+                                                        .subscribe { delete(zone) }
+                                            })
+                                }
                     })
 
     private fun getAll(auditId: Long): Disposable {
@@ -74,7 +87,7 @@ class ZoneListViewModel(context: Context,
                     @SuppressLint("CheckResult")
                     override fun onComplete() {
                         Timber.d("!! ON COMPLETE !!")
-                        gravesSaveUseCase.execute(GraveLocalModel(Utils.intNow(), -1, zone.id.toLong(),1))
+                        gravesSaveUseCase.execute(GraveLocalModel(zone.id,-1, 1))
                                 .subscribe { Timber.d("Zone to Graves") }
                     }
 

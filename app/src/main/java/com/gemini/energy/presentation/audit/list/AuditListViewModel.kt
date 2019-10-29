@@ -107,7 +107,7 @@ class AuditListViewModel(context: Context,
                     override fun onComplete() {
                         Timber.d("!! ON COMPLETE !!")
                         Toast.makeText(context, "Audit Delete Completed.", Toast.LENGTH_SHORT).show()
-                        gravesSaveUseCase.execute(GraveLocalModel(Utils.intNow(),-1, audit.id, 0))
+                        gravesSaveUseCase.execute(GraveLocalModel(audit.id, -1, 0))
                                 .subscribe { Timber.d("Audit to Graves") }
                     }
 

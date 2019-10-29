@@ -15,6 +15,8 @@ class TypeRepository(
     fun get(id: Long): Observable<TypeLocalModel> = typeLocalDataSource.get(id)
     fun getAllTypeByZone(id: Long, type: String): Observable<List<TypeLocalModel>> =
             typeLocalDataSource.getAllTypeByZone(id, type)
+    fun getAllTypeByZone(id: Long): Observable<List<TypeLocalModel>> =
+            typeLocalDataSource.getAllTypeByZone(id)
     fun getAllTypeByAudit(id: Long): Observable<List<TypeLocalModel>> =
             typeLocalDataSource.getAllTypeByAudit(id)
 

@@ -47,6 +47,10 @@ class AuditGatewayImpl(
             typeRepository.getAllTypeByZone(zoneId, type)
                     .map { it.map { mapper.toEntity(it) } }
 
+    override fun getTypeListByZone(zoneId: Long): Observable<List<Type>> =
+            typeRepository.getAllTypeByZone(zoneId)
+                    .map { it.map { mapper.toEntity(it) } }
+
     override fun getTypeByAudit(auditId: Long): Observable<List<Type>> =
         typeRepository.getAllTypeByAudit(auditId)
                 .map { it.map { mapper.toEntity(it) } }

@@ -6,8 +6,7 @@ import android.arch.persistence.room.PrimaryKey
 @Entity(tableName = "Graves")
 class GraveLocalModel(
         @PrimaryKey
-        var id: Long,
-        var usn: Int,
         var oid: Long,
+        var usn: Int,
         var type: Int
 )

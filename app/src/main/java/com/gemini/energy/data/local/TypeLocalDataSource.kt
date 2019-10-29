@@ -13,6 +13,9 @@ class TypeLocalDataSource(
     fun getAllTypeByZone(id: Long, type: String): Observable<List<TypeLocalModel>> =
             auditZoneTypeDao.getAllTypeByZone(id, type).toObservable()
 
+    fun getAllTypeByZone(id: Long): Observable<List<TypeLocalModel>> =
+            auditZoneTypeDao.getAllTypeByZone(id).toObservable()
+
     fun getAllTypeByAudit(id: Long): Observable<List<TypeLocalModel>> =
             auditZoneTypeDao.getAllTypeByAudit(id).toObservable()
 

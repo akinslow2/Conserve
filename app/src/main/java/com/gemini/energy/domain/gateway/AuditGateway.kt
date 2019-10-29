@@ -20,6 +20,7 @@ interface AuditGateway {
 
     fun getType(id: Long): Observable<Type>
     fun getTypeList(zoneId: Long, type: String): Observable<List<Type>>
+    fun getTypeListByZone(zoneId:Long): Observable<List<Type>>
     fun getTypeByAudit(auditId: Long): Observable<List<Type>>
     fun saveType(auditScope: Type): Observable<Unit>
     fun updateType(auditScope: Type): Observable<Unit>

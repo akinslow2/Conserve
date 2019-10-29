@@ -14,6 +14,9 @@ interface TypeDao {
     @Query("SELECT * FROM AuditZoneType WHERE zone_id = :id AND type = :type")
     fun getAllTypeByZone(id: Long, type: String): Maybe<List<TypeLocalModel>>
 
+    @Query("SELECT * FROM AuditZoneType WHERE zone_id = :id")
+    fun getAllTypeByZone(id: Long): Maybe<List<TypeLocalModel>>
+
     @Query("SELECT * FROM AuditZoneType WHERE audit_id = :id")
     fun getAllTypeByAudit(id: Long): Maybe<List<TypeLocalModel>>
 
