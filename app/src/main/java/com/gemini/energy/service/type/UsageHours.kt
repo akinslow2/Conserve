@@ -22,6 +22,7 @@ open class UsageHours {
     fun daily() = mapper.dailyHours()
     fun weekly() = mapper.weeklyHours()
     open fun yearly() = mapper.yearlyHours()
+    open fun postyearly() = mapper.yearlyHours()
 
     /**
      * Mapped Peak Hour by UtilityRate Rate Structure
