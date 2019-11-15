@@ -59,7 +59,7 @@ class WordDocumentGenerator {
         generateEnergySavingPotentialPage(
                 document,
                 value.lighting
-                        ?: LightingValues(0.0, 0, 0.0, 0.0, 0.0, 0.0, listOf()),
+                        ?: LightingValues(0.0, 0.0, 0, 0.0, 0.0, 0.0, 0.0, listOf()),
                 value.building)
 
         if (value.lighting != null) {
@@ -395,7 +395,7 @@ class WordDocumentGenerator {
         r2p2.isBold = true
         r2p2.fontSize = 24
         r2p2.color = greenColor
-        r2p2.setText("$${lights.totalsavings.format(0)}")
+        r2p2.setText("$${lights.totalcostsavings.format(0)}")
         r2p2.addBreak()
 
         val p3 = document.createParagraph()
@@ -413,7 +413,7 @@ class WordDocumentGenerator {
         val r1p4 = p4.createRun()
         r1p4.fontFamily = fontAgencyFB
         r1p4.fontSize = 12
-        r1p4.setText("Replacing all of your non-LED bulbs and adding controls will cost approximately $${lights.totalCost.format(0)} but will result in a minimum of $${lights.totalsavings.format(0)} in annual savings. This equates to a payback period of approximately ${lights.paybackMonth.format(0)} months. The cost can be reduced to $${lights.selfinstallcost} if you self-install the occupancy sensors. Alternatively, to replace all non-LED bulbs will result in a minimum of $${lights.totalsavings.format(0)} in annual savings and cost approximately $${lights.totalCost.format(0)}. This equates to a payback period of approximately ${lights.paybackMonth.format(0)} months. Enlisting the support of Gemini to identify the LED replacement options will increase your payback period to ${lights.geminiPayback.format(0)} months. Enlisting Gemini's services will ensure you get all the available rebates/incentives while freeing your time and energy to run your business. We strongly recommend you replace all non-LED bulbs and ensure the bathroom lights are off at the end of the day.")
+        r1p4.setText("Replacing all of your non-LED bulbs and adding controls will cost approximately $${lights.totalCost.format(0)} but will result in a minimum of $${lights.totalcostsavings.format(0)} in annual savings. This equates to a payback period of approximately ${lights.paybackMonth.format(0)} months. The cost can be reduced to $${lights.selfinstallcost} if you self-install the occupancy sensors. Alternatively, to replace all non-LED bulbs will result in a minimum of $${lights.totalcostsavings.format(0)} in annual savings and cost approximately $${lights.totalCost.format(0)}. This equates to a payback period of approximately ${lights.paybackMonth.format(0)} months. Enlisting the support of Gemini to identify the LED replacement options will increase your payback period to ${lights.geminiPayback.format(0)} months. Enlisting Gemini's services will ensure you get all the available rebates/incentives while freeing your time and energy to run your business. We strongly recommend you replace all non-LED bulbs and ensure the bathroom lights are off at the end of the day.")
         r1p4.addBreak()
 
         val p5 = document.createParagraph()
@@ -753,7 +753,7 @@ class WordDocumentGenerator {
         pc1r1.alignment = ParagraphAlignment.CENTER
         val rc1r1 = c1r1.paragraphs[0].createRun()
         rc1r1.fontFamily = fontAgencyFB
-        rc1r1.setText("\$${lights.totalsavings.format(0)}")
+        rc1r1.setText("\$${lights.totalcostsavings.format(0)}")
 
         val row2 = table.getRow(2)
 
