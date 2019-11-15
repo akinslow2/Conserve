@@ -61,13 +61,13 @@ class DishWasher(computable: Computable<*>, utilityRateGas: UtilityRate, utility
             offPeakHours = featureData["Off Peak Hours"]!! as Double
             usageHoursPre = UsageSimple(peakHours, partPeakHours, offPeakHours)
 
-            suggestedPeakHours = featureData["Suggested Peak Hours"]!! as Double
+           /** suggestedPeakHours = featureData["Suggested Peak Hours"]!! as Double
             suggestedPartPeakHours = featureData["Suggested Part Peak Hours"]!! as Double
             suggestedOffPeakHours = featureData["Suggested Off Peak Hours"]!! as Double
             usageHoursPost = UsageSimple(suggestedPeakHours, suggestedPartPeakHours, suggestedOffPeakHours)
             Timber.d("## Suggested Time ##")
             Timber.d(usageHoursPost.toString())
-
+            */
             waterConsumption = featureData["Water Consumption"]!! as Double
             numberOfRacks = featureData["Number of Racks"]!! as Int
             cyclesPerDay = featureData["Cycles per Day"]!! as Int
@@ -205,7 +205,7 @@ class DishWasher(computable: Computable<*>, utilityRateGas: UtilityRate, utility
      * Post - Suggested Time
      * */
     override fun usageHoursPre(): Double = usageHoursPre!!.yearly()
-    override fun usageHoursPost(): Double = usageHoursPost!!.yearly()
+    override fun usageHoursPost(): Double = usageHoursPre!!.yearly()
 
     /**
      * PowerTimeChange >> Energy Efficiency Calculations
