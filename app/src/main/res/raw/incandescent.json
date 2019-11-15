@@ -225,7 +225,7 @@
         {
           "index": 71,
           "hint": "",
-          "dataType": "introw",
+          "dataType": "decimalrow",
           "defaultValues": "",
           "param": "Suggested Peak Hours",
           "validation": "optional",
@@ -234,7 +234,7 @@
         {
           "index": 72,
           "hint": "",
-          "dataType": "introw",
+          "dataType": "decimalrow",
           "defaultValues": "",
           "param": "Suggested Part Peak Hours",
           "validation": "optional",
@@ -243,7 +243,7 @@
         {
           "index": 73,
           "hint": "",
-          "dataType": "introw",
+          "dataType": "decimalrow",
           "defaultValues": "",
           "param": "Suggested Off Peak Hours",
           "validation": "optional",
