@@ -284,54 +284,68 @@ class SorterForWordDocumentGenerator {
             }
         }
 
-        var totalSavings = 0.0
+        var totalCostSavings = 0.0
         var selfinstallcost = 0.0
-        var electricianCost = 0
+        var electricianCost = 0.0
+        var totalEnergySavings = 0.0
         val lightingRows = prepareLightingTableRows(audit[lighting]!!)
 
         for (light in cfls) {
-            totalSavings += light.totalSavings()
+            totalCostSavings += light.totalSavings()
             selfinstallcost += light.selfinstallcost()
-            electricianCost = light.electricianCost
+            electricianCost += light.electricianCost
+            if (electricianCost < 100.0) {electricianCost = 100.0}
+            totalEnergySavings += light.totalEnergySavings()
         }
 
         for (light in halogens) {
-            totalSavings += light.totalSavings()
+            totalCostSavings += light.totalSavings()
             selfinstallcost += light.selfinstallcost()
-            electricianCost = light.electricianCost
+            electricianCost += light.electricianCost
+            if (electricianCost < 100.0) {electricianCost = 100.0}
+            totalEnergySavings += light.totalEnergySavings()
         }
 
         for (light in highPressureSodiums) {
-            totalSavings += light.totalSavings()
+            totalCostSavings += light.totalSavings()
             selfinstallcost += light.selfinstallcost()
-            electricianCost = light.electricianCost
+            electricianCost += light.electricianCost
+            if (electricianCost < 100.0) {electricianCost = 100.0}
+            totalEnergySavings += light.totalEnergySavings()
         }
 
         for (light in incandescents) {
-            totalSavings += light.totalSavings()
+            totalCostSavings += light.totalSavings()
             selfinstallcost += light.selfinstallcost()
-            electricianCost = light.electricianCost
+            electricianCost += light.electricianCost
+            if (electricianCost < 100.0) {electricianCost = 100.0}
+            totalEnergySavings += light.totalEnergySavings()
         }
 
         for (light in linearFluorescents) {
-            totalSavings += light.totalSavings()
+            totalCostSavings += light.totalSavings()
             selfinstallcost += light.selfinstallcost()
-            electricianCost = light.electricianCost
+            electricianCost += light.electricianCost
+            if (electricianCost < 100.0) {electricianCost = 100.0}
+            totalEnergySavings += light.totalEnergySavings()
         }
 
         for (light in lowPressureSodium) {
-            totalSavings += light.totalSavings()
+            totalCostSavings += light.totalSavings()
             selfinstallcost += light.selfinstallcost()
-            electricianCost = light.electricianCost
+            electricianCost += light.electricianCost
+            if (electricianCost < 100.0) {electricianCost = 100.0}
+            totalEnergySavings += light.totalEnergySavings()
         }
 
         val installCost = electricianCost + selfinstallcost
-        val paybackMonth = installCost / totalSavings * 12
+        val paybackMonth = installCost / totalCostSavings * 12
         val geminiPayback = paybackMonth + 4
-        val paybackYear: Double = selfinstallcost / totalSavings
+        val paybackYear: Double = selfinstallcost / totalCostSavings
 
         return LightingValues(
-                totalSavings,
+                totalCostSavings,
+                totalEnergySavings,
                 selfinstallcost.toInt(),
                 installCost,
                 paybackMonth,
@@ -352,11 +366,11 @@ class SorterForWordDocumentGenerator {
                             light.computable.zoneName,
                             light.computable.auditScopeName,
                             light.lampsPerFixtures.toDouble() * light.numberOfFixtures.toDouble(),
-                            light.preEnergy(),
-                            light.offPeakHours,
-                            light.postEnergy(),
-                            light.postUsageHours.toDouble(),
-                            light.energySavings(),
+                            light.prePower(),
+                            light.usageHoursPre(),
+                            light.postPower(),
+                            light.usageHoursPost(),
+                            light.totalEnergySavings(),
                             light.totalSavings(),
                             light.selfinstallcost(),
                             light.selfinstallcost() / light.totalSavings() * 12,
@@ -751,7 +765,7 @@ class SorterForWordDocumentGenerator {
 
     private fun prepareBuildingValuesForEquipment(lightings: LightingValues?, equpments: EquipmentValues?, hvacs: HvacValues?, waterHeater: WaterHeaterValues?): BuildingValues {
 
-        val buildingTotalSavings = (lightings?.totalsavings ?: 0.0) + (equpments?.totalSavings
+        val buildingTotalSavings = (lightings?.totalcostsavings ?: 0.0) + (equpments?.totalSavings
                 ?: 0.0) + (hvacs?.totalsavings ?: 0.0)
 
         val buildingTotalCost = (lightings?.totalCost ?: 0.0) + (hvacs?.totalCost
