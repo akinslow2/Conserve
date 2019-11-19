@@ -80,7 +80,7 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
          * There could be a case where the User will input the value in KW - If that happens we need to convert the KW
          * int BTU / hr :: 1KW equals 3412.142
          * */
-        fun power(btu: Int, eer: Double) = (btu / eer) * KW_CONVERSION
+        fun power(btu: Int, seer: Double) = (btu / seer)
 
         /**
          * Year At - Current minus the Age
@@ -241,12 +241,10 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
 
         val powerUsedCurrent = power(btu, seer)
         val powerUsedStandard = power(btu, eer)
-        val powerUsedReplaced = power(btu, alternateSeer)
 
-        val powerUsed = if (alternateSeer == 0.0) powerUsedStandard else powerUsedCurrent
+        val powerUsed = if (seer == null) powerUsedStandard else powerUsedCurrent
         Timber.d("HVAC :: Power Used (Current) -- [$powerUsedCurrent]")
         Timber.d("HVAC :: Power Used (Standard) -- [$powerUsedStandard]")
-        Timber.d("HVAC :: Power Used (Replaced) -- [$powerUsedReplaced]")
 
         Timber.d("HVAC :: Pre Power Used -- [$powerUsed]")
 
@@ -254,7 +252,7 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
         return costElectricity(powerUsed, usageHours, electricityRate)
     }
 
-    var costPostState = 0.0
+
     /**
      * Cost - Post State
      * */
@@ -265,7 +263,7 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
         Timber.d("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
 
         var postSize = btu
-        var postSEER = 19.0
+        var postSEER = 17.0
 
        // try {
        //     postSize = element.asJsonObject.get(HVAC_DB_BTU).asInt
@@ -275,11 +273,12 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
         //}
 
         val postPowerUsed = power(postSize, postSEER)
-        val postUsageHours = computable.udf1 as UsageSimple
 
-        costPostState = costElectricity(postPowerUsed, postUsageHours, electricityRate)
-        return costPostState
-    }
+        val postUsageHours = UsageSimple(peakHours, partPeakHours, offPeakHours)
+
+
+        return costElectricity(postPowerUsed, postUsageHours, electricityRate)
+        }
 
     /**
      * Manually Builds the Post State Response from the Suggested Alternative
@@ -306,7 +305,8 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
      * HVAC - INCENTIVES | MATERIAL COST
      * */
     override fun incentives(): Double {
-        return energyPowerChange() * 0.15 + (energyPowerChange() / usageHoursBusiness.yearly()) * 150
+        if (utilitycompany == "pge") {return energyPowerChange() * 0.15 + (energyPowerChange() / usageHoursPre()) * 150 }
+        else { return 0.0}
     }
 
     override fun materialCost(): Double {
@@ -316,7 +316,6 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
     override fun laborCost(): Double {
         return 0.0
     }
-
 
     /**
      * PowerTimeChange >> Hourly Energy Use - Pre
@@ -331,7 +330,9 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
     /**
      * PowerTimeChange >> Yearly Usage Hours - [Pre | Post]
      * */
-    override fun usageHoursPre(): Double = 0.0
+    override fun usageHoursPre(): Double {
+        return peakHours + partPeakHours + offPeakHours
+    }
     override fun usageHoursPost(): Double = 0.0
 
     /**
@@ -339,19 +340,35 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
      * I need to insert the heating and cooling hours based on set-point temp, operation hours, and thermostat schedule
      * */
     override fun energyPowerChange(): Double {
-        val usageHours = UsageSimple(peakHours, partPeakHours, offPeakHours)
 
           // Step 3 : Get the Delta
-        val powerPre = power(btu, eer)
+        val powerPre = power(btu, seer)
         val powerPost = power(btu, alternateSeer)
         val eSavings = (powerPre - powerPost)
 
-        val delta = costElectricity(eSavings, usageHours, electricityRate)
+        val delta = eSavings * usageHoursPre()
         Timber.d("HVAC :: Delta -- $delta")
 
         return delta
     }
 
+    fun totalSavings(): Double {
+        //pre
+        val powerUsedCurrent = power(btu, seer)
+        val powerUsedStandard = power(btu, eer)
+        val powerUsed = if (seer == null) powerUsedStandard else powerUsedCurrent
+
+        //post
+        var postSize = btu
+        var postSEER = 17.0
+        val postPowerUsed = power(postSize, postSEER)
+
+        //time
+        val postUsageHours = UsageSimple(peakHours, partPeakHours, offPeakHours)
+
+
+        return costElectricity(powerUsed, postUsageHours, electricityRate) - costElectricity(postPowerUsed, postUsageHours, electricityRate)
+    }
     override fun energyTimeChange(): Double = 0.0
     override fun energyPowerTimeChange(): Double = 0.0
 
