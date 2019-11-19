@@ -181,7 +181,7 @@ class SorterForWordDocumentGenerator {
 
             costPostState += hvac.costPostState(element, DataHolder())
 
-            totalSavings += hvac.energyPowerChange()
+            totalSavings += hvac.totalSavings()
             totalCost += hvac.implementationCost()
 
             instances.add(HvacInstances(
