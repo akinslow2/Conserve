@@ -108,7 +108,7 @@ class WordDocumentGenerator {
         r1p2.fontFamily = fontAgencyFB
         r1p2.fontSize = 12
         r1p2.color = greyColor
-        r1p2.setText("This report presents the results of an energy assessment conducted ${hvac.auditmonth} ${hvac.endday}")
+        r1p2.setText("This report presents the results of an energy assessment conducted ${hvac.auditmonth} ${hvac.startday}")
         val r2p2 = p2.createRun()
         r2p2.fontFamily = fontAgencyFB
         r2p2.fontSize = 12
@@ -275,7 +275,7 @@ class WordDocumentGenerator {
                 hvacR1P2.fontSize = 12
                 hvacR1P2.setText("If your HVAC technician is not checking all of these components or you do not have an HVAC technician maintaining your units, this will result in increased energy bills and reduce the overall life of your equipment.")
             }
-            if (instance.age < 15 && instance.quantity == 1) {
+            if (instance.age < 15 && instance.quantity < 2) {
                 val hvacP1 = document.createParagraph()
                 hvacP1.spacingBetween = 1.5
                 val hvacR1P1 = hvacP1.createRun()
