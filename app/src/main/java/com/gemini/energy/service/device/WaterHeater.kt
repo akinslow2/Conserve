@@ -200,8 +200,7 @@ class WaterHeater(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
         return if (isGas()) gascost else ecost
     }
 
-    var costPostState = 0.0
-    /**
+     /**
      * Cost - Post State
      * */
     override fun costPostState(element: JsonElement, dataHolder: DataHolder): Double {
@@ -288,6 +287,10 @@ class WaterHeater(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
         Timber.d("HVAC :: Delta -- $delta")
         //ToDo: Multiply by the Number of Equipment
         return delta
+    }
+    //fix this ADK2
+    fun totalSavings(): Double {
+        return energyPowerChange() * .18
     }
 
     override fun energyTimeChange(): Double = 0.0
