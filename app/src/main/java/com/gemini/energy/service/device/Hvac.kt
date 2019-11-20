@@ -8,6 +8,7 @@ import com.gemini.energy.service.DataHolder
 import com.gemini.energy.service.IComputable
 import com.gemini.energy.service.OutgoingRows
 import com.gemini.energy.service.type.UsageHours
+import com.gemini.energy.service.type.UsageLighting
 import com.gemini.energy.service.type.UsageSimple
 import com.gemini.energy.service.type.UtilityRate
 import com.google.gson.JsonArray
@@ -47,7 +48,7 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
 
         /**
          * Fetches the EER based on the specific Match Criteria via the Parse API
-         * */
+
         fun extractEER(elements: List<JsonElement?>): Double {
             elements.forEach {
                 it?.let {
@@ -74,7 +75,7 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
             }
             return 0
         }
-
+        * */
         /**
          * HVAC - Power Consumed
          * There could be a case where the User will input the value in KW - If that happens we need to convert the KW
@@ -185,8 +186,9 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
             btu = featureData["Cooling Capacity (Btu/hr)"]!! as Int
             gasInput = featureData["Heating Input (Btu/hr)"]!! as Int
             gasOutput = featureData["Heating Output (Btu/hr)"]!! as Int
-            economizer = preAudit["Economizer"]!! as String
-            thermotype = preAudit["Thermostat Type"]!! as String
+            economizer = featureData["Economizer"]!! as String
+            thermotype = featureData["Thermostat Type"]!! as String
+            quantity = featureData["Quantity"]!! as Int
 
             city = featureData["City"]!! as String
             state = featureData["State"]!! as String
@@ -222,9 +224,9 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
 
         // Extracting the EER from the Database - Standard EER
         // If no value has been inputted by the user
-        if (eer == 0.0) {
-            eer = extractEER(elements)
-        }
+       // if (eer == 0.0) {
+        //    eer = extractEER(elements)
+       // }
 
         Timber.d("::: PARAM - HVAC :::")
         Timber.d("EER -- $eer")
@@ -342,8 +344,8 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
     override fun energyPowerChange(): Double {
 
           // Step 3 : Get the Delta
-        val powerPre = power(btu, seer)
-        val powerPost = power(btu, alternateSeer)
+        val powerPre = btu / seer
+        val powerPost = btu / alternateSeer
         val eSavings = (powerPre - powerPost)
 
         val delta = eSavings * usageHoursPre()
@@ -353,22 +355,16 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
     }
 
     fun totalSavings(): Double {
-        //pre
-        val powerUsedCurrent = power(btu, seer)
-        val powerUsedStandard = power(btu, eer)
-        val powerUsed = if (seer == null) powerUsedStandard else powerUsedCurrent
-
-        //post
-        var postSize = btu
-        var postSEER = 17.0
-        val postPowerUsed = power(postSize, postSEER)
-
-        //time
-        val postUsageHours = UsageSimple(peakHours, partPeakHours, offPeakHours)
-
-
-        return costElectricity(powerUsed, postUsageHours, electricityRate) - costElectricity(postPowerUsed, postUsageHours, electricityRate)
+            val postPower = btu / alternateSeer
+            val usageHours = UsageLighting()
+            usageHours.peakHours = peakHours
+            usageHours.partPeakHours = partPeakHours
+            usageHours.offPeakHours = offPeakHours
+            return costElectricity(postPower, usageHours, electricityRate)
     }
+
+
+
     override fun energyTimeChange(): Double = 0.0
     override fun energyPowerTimeChange(): Double = 0.0
 
