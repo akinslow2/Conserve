@@ -37,11 +37,11 @@ data class HvacValues(
 
         val costPostState: Double, // 20
         val totalCost: Double,
-        val totalsavings: Double
+        val totalSavings: Double
 )
 
 data class WaterHeaterValues(
-        val totalsavings: Double,
+        val totalSavings: Double,
         val totalCost: Double,
         val paybackMonth: Double,
         val paybackYear: Double,
