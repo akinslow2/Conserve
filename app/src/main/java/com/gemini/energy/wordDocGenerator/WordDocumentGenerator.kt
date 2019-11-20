@@ -154,7 +154,7 @@ class WordDocumentGenerator {
         val r1p2 = p2.createRun()
         r1p2.fontFamily = fontAgencyFB
         r1p2.fontSize = 20
-        r1p2.setText("Implementation of all recommended measures will provide savings of")
+        r1p2.setText("Implementation of all recommended measures will provide annual savings of")
         r1p2.addBreak()
         val r2p2 = p2.createRun()
         r2p2.fontFamily = fontAgencyFB
@@ -215,7 +215,7 @@ class WordDocumentGenerator {
         r2p2.isBold = true
         r2p2.fontSize = 24
         r2p2.color = greenColor
-        r2p2.setText("$${hvac.totalsavings.format(0)}")
+        r2p2.setText("$${hvac.totalSavings.format(0)}")
 
         val p3 = document.createParagraph()
         val r1p3 = p3.createRun()
@@ -257,7 +257,7 @@ class WordDocumentGenerator {
                 val hvacR1P1 = hvacP1.createRun()
                 hvacR1P1.fontFamily = fontAgencyFB
                 hvacR1P1.fontSize = 12
-                hvacR1P1.setText("Your ${instance.quantity} ${instance.btu}-BTU HVAC package units are from ${instance.year} with a SEER value of ${instance.seer.format(0)} current federal minimum is 13. To ensure your HVAC system is working optimally make sure you are having your package units are being checked by a HVAC technician quarterly. Check you HVAC technician's maintenance scope of work it should include:")
+                hvacR1P1.setText("Your ${instance.quantity} ${instance.btu}-BTU HVAC package units are from ${instance.year} with a SEER value of ${instance.seer.format(0)}, current federal minimum is 13. To ensure your HVAC system is working optimally make sure you are having your package units are being checked by a HVAC technician quarterly. Check you HVAC technician's maintenance scope of work it should include:")
 
                 val hvacBullets = arrayOf(
                         "Cleaning the condenser",
@@ -281,7 +281,7 @@ class WordDocumentGenerator {
                 val hvacR1P1 = hvacP1.createRun()
                 hvacR1P1.fontFamily = fontAgencyFB
                 hvacR1P1.fontSize = 12
-                hvacR1P1.setText("Your ${instance.quantity} ${instance.btu}-BTU HVAC package unit is from ${instance.year} with a SEER value of ${instance.seer.format(0)} current federal minimum is 13. To ensure your HVAC system is working optimally make sure you are having the package unit checked by a HVAC technician quarterly. Check your HVAC technician's maintenance scope of work it should include:")
+                hvacR1P1.setText("Your ${instance.quantity} ${instance.btu}-BTU HVAC package unit is from ${instance.year} with a SEER value of ${instance.seer.format(0)}, current federal minimum is 13. To ensure your HVAC system is working optimally make sure you are having the package unit checked by a HVAC technician quarterly. Check your HVAC technician's maintenance scope of work it should include:")
 
                 val hvacBullets = arrayOf(
                         "Cleaning the condenser",
@@ -350,7 +350,7 @@ class WordDocumentGenerator {
         r2p2.isBold = true
         r2p2.fontSize = 24
         r2p2.color = greenColor
-        r2p2.setText("$${waterheater.totalsavings.format(0)}")
+        r2p2.setText("$${waterheater.totalSavings.format(0)}")
 
         val p3 = document.createParagraph()
         val r1p3 = p3.createRun()
@@ -365,7 +365,7 @@ class WordDocumentGenerator {
         val r1p4 = p4.createRun()
         r1p4.fontFamily = fontAgencyFB
         r1p4.fontSize = 12
-        r1p4.setText("Replacing your water heater(s) will result in a total cost of $${waterheater.totalCost.format(0)} but will result in a minimum of $${waterheater.totalsavings.format(0)} in annual savings. This equates to a payback period of approximately ${waterheater.paybackMonth.format(0)} months. These values assume the support of Gemini. Enlisting Gemini's services will ensure you get all the available rebates/incentives while freeing your time and energy to run your business.")
+        r1p4.setText("Replacing your water heater(s) will result in a total cost of $${waterheater.totalCost.format(0)} but will result in a minimum of $${waterheater.totalSavings.format(0)} in annual savings. This equates to a payback period of approximately ${waterheater.paybackMonth.format(0)} months. These values assume the support of Gemini. Enlisting Gemini's services will ensure you get all the available rebates/incentives while freeing your time and energy to run your business.")
         r1p4.addBreak()
 
         createWaterHeaterTable(document, waterheater)
@@ -413,7 +413,7 @@ class WordDocumentGenerator {
         val r1p4 = p4.createRun()
         r1p4.fontFamily = fontAgencyFB
         r1p4.fontSize = 12
-        r1p4.setText("Replacing all of your non-LED bulbs and adding controls will cost approximately $${lights.totalCost.format(0)} but will result in a minimum of $${lights.totalcostsavings.format(0)} in annual savings. This equates to a payback period of approximately ${lights.paybackMonth.format(0)} months. The cost can be reduced to $${lights.selfinstallcost} if you self-install the occupancy sensors. Alternatively, to replace all non-LED bulbs will result in a minimum of $${lights.totalcostsavings.format(0)} in annual savings and cost approximately $${lights.totalCost.format(0)}. This equates to a payback period of approximately ${lights.paybackMonth.format(0)} months. Enlisting the support of Gemini to identify the LED replacement options will increase your payback period to ${lights.geminiPayback.format(0)} months. Enlisting Gemini's services will ensure you get all the available rebates/incentives while freeing your time and energy to run your business. We strongly recommend you replace all non-LED bulbs and ensure the bathroom lights are off at the end of the day.")
+        r1p4.setText("Replacing all of your non-LED bulbs and adding controls will cost approximately $${lights.totalCost.format(0)} but will result in a minimum of $${lights.totalcostsavings.format(0)} in annual savings. This equates to a payback period of approximately ${lights.paybackMonth.format(0)} months. The cost can be reduced to $${lights.selfinstallcost} if you self-install the occupancy sensors. Alternatively, to replace all non-LED bulbs will result in a minimum of $${lights.totalcostsavings.format(0)} in annual savings and cost approximately $${lights.totalCost.format(0)}. This equates to a payback period of approximately ${lights.paybackMonth.format(0)} months. These values include the cost of enlisting the support of Gemini to identify the LED replacement options. Enlisting Gemini's services will ensure you get all the available rebates/incentives while freeing your time and energy to run your business. We strongly recommend you replace all non-LED bulbs and ensure the bathroom lights are off at the end of the day.")
         r1p4.addBreak()
 
         val p5 = document.createParagraph()
@@ -962,7 +962,7 @@ class WordDocumentGenerator {
         pc1r1.alignment = ParagraphAlignment.CENTER
         val rc1r1 = c1r1.paragraphs[0].createRun()
         rc1r1.fontFamily = fontAgencyFB
-        rc1r1.setText("\$${hvac.totalsavings.format(0)}")
+        rc1r1.setText("\$${hvac.totalSavings.format(0)}")
 
         val row2 = table.getRow(2)
 
@@ -1061,7 +1061,7 @@ class WordDocumentGenerator {
         pc1r1.alignment = ParagraphAlignment.CENTER
         val rc1r1 = c1r1.paragraphs[0].createRun()
         rc1r1.fontFamily = fontAgencyFB
-        rc1r1.setText("\$${waterheater.totalsavings.format(0)}")
+        rc1r1.setText("\$${waterheater.totalSavings.format(0)}")
 
         val row2 = table.getRow(2)
 
