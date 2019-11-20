@@ -182,7 +182,7 @@ class SorterForWordDocumentGenerator {
             costPostState += hvac.costPostState(element, DataHolder())
 
             totalSavings += hvac.totalSavings()
-            totalCost += hvac.implementationCost()
+            totalCost = hvac.implementationCost()
 
             instances.add(HvacInstances(
                     hvac.quantity,
@@ -238,13 +238,13 @@ class SorterForWordDocumentGenerator {
 
             costPostState += waterheater.costPostState(element, DataHolder())
 
-            totalSavings += waterheater.energyPowerChange()
+            totalSavings += waterheater.totalSavings()
             totalCost += waterheater.implementationCost()
         }
 
         val waterheater = audit[waterheater]!!.first() as WaterHeater
         val paybackMonth = (totalCost/ totalSavings * 12) + 4
-        val paybackYear: Double = totalCost / totalSavings + (4/12)
+        val paybackYear: Double = (totalCost / totalSavings) + (4/12)
 
         return WaterHeaterValues(
                 totalSavings,
@@ -339,7 +339,7 @@ class SorterForWordDocumentGenerator {
         }
 
         val installCost = electricianCost + selfinstallcost
-        val paybackMonth = installCost / totalCostSavings * 12
+        val paybackMonth = selfinstallcost / totalCostSavings * 12
         val geminiPayback = paybackMonth + 4
         val paybackYear: Double = selfinstallcost / totalCostSavings
 
@@ -763,29 +763,29 @@ class SorterForWordDocumentGenerator {
         )
     }
 
-    private fun prepareBuildingValuesForEquipment(lightings: LightingValues?, equpments: EquipmentValues?, hvacs: HvacValues?, waterHeater: WaterHeaterValues?): BuildingValues {
+    private fun prepareBuildingValuesForEquipment(lightings: LightingValues?, equipments: EquipmentValues?, hvacs: HvacValues?, waterHeater: WaterHeaterValues?): BuildingValues {
 
-        val buildingTotalSavings = (lightings?.totalcostsavings ?: 0.0) + (equpments?.totalSavings
-                ?: 0.0) + (hvacs?.totalsavings ?: 0.0)
+        val buildingTotalSavings = (lightings?.totalcostsavings ?: 0.0) + (equipments?.totalSavings
+                ?: 0.0) + (hvacs?.totalSavings ?: 0.0 + (waterHeater?.totalSavings ?: 0.0))
 
         val buildingTotalCost = (lightings?.totalCost ?: 0.0) + (hvacs?.totalCost
-                ?: 0.0) + (equpments?.totalCost ?: 0.0)
+                ?: 0.0) + (equipments?.totalCost ?: 0.0 + (waterHeater?.totalCost ?: 0.0))
 
         val buildingPayback = buildingTotalCost / buildingTotalSavings
 
         val buildingPaybackMonth = buildingTotalCost / buildingTotalSavings * 12
-
+//Waterheater is embedded in the hvac results
         return BuildingValues(
                 buildingTotalSavings,
                 buildingPayback,
                 buildingPaybackMonth,
                 buildingTotalCost,
                 (hvacs?.totalCost ?: 0.0),
-                (hvacs?.totalCost ?: 0.0) / (hvacs?.totalsavings ?: 0.0),
-                (hvacs?.totalCost ?: 0.0) / (hvacs?.totalsavings ?: 0.0) * 12,
-                equpments?.totalCost ?: 0.0,
-                (equpments?.totalCost ?: 0.0) / (equpments?.totalSavings ?: 0.0),
-                (equpments?.totalCost ?: 0.0) / (equpments?.totalSavings ?: 0.0) * 12
+                ((hvacs?.totalCost ?: 0.0) + (waterHeater?.totalCost ?: 0.0)) / ((hvacs?.totalSavings ?: 0.0) + (waterHeater?.totalSavings ?: 0.0)),
+                ((hvacs?.totalCost ?: 0.0) + (waterHeater?.totalCost ?: 0.0))/ ((hvacs?.totalSavings ?: 0.0) + (waterHeater?.totalSavings ?: 0.0)) * 12,
+                equipments?.totalCost ?: 0.0,
+                (equipments?.totalCost ?: 0.0) / (equipments?.totalSavings ?: 0.0),
+                (equipments?.totalCost ?: 0.0) / (equipments?.totalSavings ?: 0.0) * 12
         )
     }
 }
