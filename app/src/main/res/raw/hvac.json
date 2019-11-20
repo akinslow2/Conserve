@@ -90,34 +90,34 @@
           "hint": "",
           "dataType": "introw",
           "defaultValues": "",
-          "param": "Heating Capacity (Btu/hr)",
+          "param": "Heating Output (Btu/hr)",
           "validation": "optional",
           "id": "110"
         },
         {
           "index": 111,
-          "hint": "Boiler",
-          "dataType": "textrow",
+          "hint": "",
+          "dataType": "introw",
           "defaultValues": "",
-          "param": "Heating Type",
+          "param": "Heating Input (Btu/hr)",
           "validation": "optional",
           "id": "111"
         },
         {
           "index": 112,
-          "hint": "",
-          "dataType": "decimalrow",
+          "hint": "Boiler",
+          "dataType": "textrow",
           "defaultValues": "",
-          "param": "Heating Power (kW)",
+          "param": "Heating Type",
           "validation": "optional",
           "id": "112"
         },
         {
           "index": 113,
           "hint": "",
-          "dataType": "pickerinputrow",
-          "defaultValues": "1:Water_Evaporatively,2:Air_Cooled",
-          "param": "Cooling Type",
+          "dataType": "decimalrow",
+          "defaultValues": "",
+          "param": "Heating Power (kW)",
           "validation": "optional",
           "id": "113"
         },
@@ -125,27 +125,27 @@
           "index": 114,
           "hint": "",
           "dataType": "pickerinputrow",
-          "defaultValues": "1:Yes,2:No",
-          "param": "Economizer",
+          "defaultValues": "1:Water_Evaporatively,2:Air_Cooled",
+          "param": "Cooling Type",
           "validation": "optional",
           "id": "114"
         },
         {
           "index": 115,
           "hint": "",
-          "dataType": "introw",
-          "defaultValues": "",
-          "param": "Age",
-          "validation": "mandatory",
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:Yes,2:No",
+          "param": "Economizer",
+          "validation": "optional",
           "id": "115"
         },
         {
           "index": 116,
           "hint": "",
-          "dataType": "textrow",
+          "dataType": "introw",
           "defaultValues": "",
-          "param": "City",
-          "validation": "optional",
+          "param": "Age",
+          "validation": "mandatory",
           "id": "116"
         },
         {
@@ -153,9 +153,18 @@
           "hint": "",
           "dataType": "textrow",
           "defaultValues": "",
-          "param": "State",
+          "param": "City",
           "validation": "optional",
           "id": "117"
+        },
+        {
+          "index": 118,
+          "hint": "",
+          "dataType": "textrow",
+          "defaultValues": "",
+          "param": "State",
+          "validation": "optional",
+          "id": "118"
         }
       ],
       "id": "1"
