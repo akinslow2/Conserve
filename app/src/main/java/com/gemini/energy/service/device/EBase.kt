@@ -312,7 +312,7 @@ abstract class EBase(val computable: Computable<*>,
     open fun laborCost() = 0.0
     open fun incentives() = 0.0
 
-    open fun implementationCost() = (materialCost() + laborCost()) - incentives()
+    open fun implementationCost() = materialCost() + laborCost() - incentives()
 
     abstract fun usageHoursPre(): Double
     abstract fun usageHoursPost(): Double
