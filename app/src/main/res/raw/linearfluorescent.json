@@ -294,7 +294,7 @@
           "hint": "",
           "dataType": "decimalrow",
           "defaultValues": "",
-          "param": "Peak Hours",
+          "param": "Suggested Peak Hours",
           "validation": "optional",
           "id": "71"
         },
@@ -303,7 +303,7 @@
           "hint": "",
           "dataType": "decimalrow",
           "defaultValues": "",
-          "param": "Part Peak Hours",
+          "param": "Suggested Part Peak Hours",
           "validation": "optional",
           "id": "72"
         },
@@ -312,7 +312,7 @@
           "hint": "",
           "dataType": "decimalrow",
           "defaultValues": "",
-          "param": "Off Peak Hours",
+          "param": "Suggested Off Peak Hours",
           "validation": "optional",
           "id": "73"
         }
