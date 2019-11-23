@@ -22,7 +22,8 @@ import java.util.*
 class WordDocumentGenerator {
 
     private lateinit var documents: List<XWPFDocument>
-//Hex #'s used for the colors
+
+    //Hex #'s used for the colors
     private val greyColor = "595959"
     private val tableGreyColor = "D9D9D9"
     private val greenColor = "70ad47"

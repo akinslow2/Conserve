@@ -48,7 +48,7 @@ class SorterForWordDocumentGenerator {
             val zones = aggregateZoneNames(audit.value)
             val zoneString = concatenateZoneString(zones)
 
-            if (hvac == null) {
+            if (hvac == null || hvac.businessname.isBlank()) {
                 continue
             } else {
                 returnAble.add(PreparedForDocument(audit.key, zones, zoneString, hvac, lighting, waterheater, equipment, building))
@@ -774,7 +774,8 @@ class SorterForWordDocumentGenerator {
         val buildingPayback = buildingTotalCost / buildingTotalSavings
 
         val buildingPaybackMonth = buildingTotalCost / buildingTotalSavings * 12
-//Waterheater is embedded in the hvac results
+
+        //Waterheater is embedded in the hvac results
         return BuildingValues(
                 buildingTotalSavings,
                 buildingPayback,
