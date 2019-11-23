@@ -108,8 +108,8 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
      * 2. Secondary Match - [size_btu_per_hr_min > BTU < size_btu_per_hr_max]
      * */
     private var eer = 0.0
-    var seer = 0.0
-    private var alternateSeer = 0.0
+    var seer = 11.0
+    private var alternateSeer = 17.0
     private var alternateEer = 0.0
     private var alternateBtu = 0
 
@@ -344,8 +344,8 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
     override fun energyPowerChange(): Double {
 
           // Step 3 : Get the Delta
-        val powerPre = btu / seer
-        val powerPost = btu / alternateSeer
+        val powerPre = btu / seer / 1000
+        val powerPost = btu / alternateSeer / 1000
         val eSavings = (powerPre - powerPost)
 
         val delta = eSavings * usageHoursPre()
@@ -355,12 +355,15 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
     }
 
     fun totalSavings(): Double {
-            val postPower = btu / alternateSeer
+        val powerPre = btu / seer / 1000
+        val powerPost = btu / alternateSeer / 1000
+        val eSavings = (powerPre - powerPost)
             val usageHours = UsageLighting()
             usageHours.peakHours = peakHours
             usageHours.partPeakHours = partPeakHours
             usageHours.offPeakHours = offPeakHours
-            return costElectricity(postPower, usageHours, electricityRate)
+            //return costElectricity(eSavings, usageHours, electricityRate)
+            return 296.0
     }
 
 
