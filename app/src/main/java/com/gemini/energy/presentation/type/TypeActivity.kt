@@ -40,7 +40,7 @@ class TypeActivity : BaseActivity(),
     * Type Counter - 0 :: Parent Type Activity
     * Type Counter - 1 :: Child Type Activity
     *
-    * Note : Only Plugload and Lighting have Parent | Child rest Types only have Parent
+    * Note : Only Plugload, Refrigeration, and Lighting have Parent | Child rest Types only have Parent
     *
     * */
     override fun onCreate(savedInstanceState: Bundle?) {
