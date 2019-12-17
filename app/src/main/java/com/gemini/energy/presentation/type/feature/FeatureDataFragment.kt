@@ -12,6 +12,7 @@ import com.gemini.energy.presentation.form.model.GElements
 import com.gemini.energy.presentation.type.SharedViewModel
 import com.gemini.energy.presentation.type.list.model.TypeModel
 import com.gemini.energy.presentation.util.EApplianceType
+import com.gemini.energy.presentation.util.ERefrigerationType
 import com.gemini.energy.presentation.util.ELightingType
 import com.gemini.energy.presentation.util.EZoneType
 import com.thejuki.kformmaster.model.BaseFormElement
@@ -53,7 +54,6 @@ class FeatureDataFragment : BaseFormFragment() {
                 if (model.subType == EApplianceType.CombinationOven.value) {rawId = R.raw.combination_oven}
                 if (model.subType == EApplianceType.ConvectionOven.value) {rawId = R.raw.convection_oven}
                 if (model.subType == EApplianceType.ConveyorOven.value) {rawId = R.raw.conveyor_oven}
-                if (model.subType == EApplianceType.Refrigerator.value) {rawId = R.raw.refrigerator_freezer}
                 if (model.subType == EApplianceType.Fryer.value) {rawId = R.raw.fryer}
                 if (model.subType == EApplianceType.IceMaker.value) {rawId = R.raw.icemaker}
                 if (model.subType == EApplianceType.RackOven.value) {rawId = R.raw.rack_oven}
@@ -66,6 +66,13 @@ class FeatureDataFragment : BaseFormFragment() {
 
                 //**Add this line under EZoneType.Plugload.value**
                 if (model.subType == EApplianceType.SampleAppliance.value) {rawId = R.raw.sample_appliance }
+            }
+            else if (model.type == EZoneType.Refrigeration.value) {
+                if (model.subType == ERefrigerationType.WIRefrigerator.value) {rawId = R.raw.walkin_refrigerator}
+                if (model.subType == ERefrigerationType.WIFreezer.value) {rawId = R.raw.walkin_freezer}
+                if (model.subType == ERefrigerationType.WICoolerBox.value) {rawId = R.raw.walkin_coolbox}
+                if (model.subType == ERefrigerationType.Refrigerator.value) {rawId = R.raw.refrigerator}
+                if (model.subType == ERefrigerationType.Freezer.value) {rawId = R.raw.freezer}
             }
             else if (model.type == EZoneType.HVAC.value) {rawId = R.raw.hvac}
             else if (model.type == EZoneType.WaterHeater.value) {rawId = R.raw.hotwater}
