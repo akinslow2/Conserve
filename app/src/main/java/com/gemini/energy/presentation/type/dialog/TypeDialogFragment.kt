@@ -9,6 +9,7 @@ import android.widget.*
 import com.gemini.energy.R
 import com.gemini.energy.presentation.type.list.model.TypeModel
 import com.gemini.energy.presentation.util.EApplianceType
+import com.gemini.energy.presentation.util.ERefrigerationType
 import com.gemini.energy.presentation.util.ELightingType
 import com.gemini.energy.presentation.util.EZoneType
 import com.mobsandgeeks.saripaar.ValidationError
@@ -110,6 +111,7 @@ class TypeDialogFragment : DialogFragment(), Validator.ValidationListener {
 
             EZoneType.Lighting -> ELightingType.options()
             EZoneType.Plugload -> EApplianceType.options()
+            EZoneType.Refrigeration -> ERefrigerationType.options()
             else -> listOf()
 
         })
