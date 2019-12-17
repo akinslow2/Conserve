@@ -8,6 +8,7 @@ enum class EZoneType(val value: String) {
     Plugload("Plugload"),
     HVAC("HVAC"),
     WaterHeater("WaterHeater"),
+    Refrigeration ("Refrigeration"),
     Lighting("Lighting"),
     Motors("Motors"),
     Others("Others");
@@ -33,6 +34,27 @@ enum class EAction(val value: String) {
     Pop("pop");
 
 }
+/*
+* Walk-In Refrigeration -  Refrigeration Type
+*
+* */
+enum class ERefrigerationType(val value: String) {
+
+    WIRefrigerator("Walk-In Refrigerator"),
+    WIFreezer("Walk-In Freezer"),
+    Refrigerator("Refrigerator"),
+    Freezer ("Freezer"),
+    WICoolerBox("Walk-In Cooler Box");
+
+    companion object {
+        private val map = ERefrigerationType.values()
+                .associateBy(ERefrigerationType::value)
+
+        fun get(type: String) = map[type]
+        fun options() = ERefrigerationType.values().map { it.value }.sorted()
+    }
+
+}
 
 
 /*
@@ -46,7 +68,6 @@ enum class EApplianceType(val value: String) {
     Fryer("Fryer"),
     IceMaker("Ice Maker"),
     RackOven("Rack Oven"),
-    Refrigerator("Refrigerator"),
     SteamCooker("Steam Cooker"),
 
     Griddle("Griddle"),
