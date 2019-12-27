@@ -21,8 +21,8 @@ import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.*
 
-class WIRefrigerator(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateElectricity: UtilityRate,
-           usageHours: UsageHours, outgoingRows: OutgoingRows, private val context: Context) :
+class WIFreezer(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateElectricity: UtilityRate,
+                usageHours: UsageHours, outgoingRows: OutgoingRows, private val context: Context) :
         EBase(computable, utilityRateGas, utilityRateElectricity, usageHours, outgoingRows), IComputable {
 
     /**
@@ -316,7 +316,7 @@ class WIRefrigerator(computable: Computable<*>, utilityRateGas: UtilityRate, uti
 
     override fun computedFields() = mutableListOf("")
 
-    private fun getFormMapper() = FormMapper(context, R.raw.hotwater)
+    private fun getFormMapper() = FormMapper(context, R.raw.walkin_freezer)
     private fun getModel() = getFormMapper().decodeJSON()
     private fun getGFormElements() = getFormMapper().mapIdToElements(getModel())
 
