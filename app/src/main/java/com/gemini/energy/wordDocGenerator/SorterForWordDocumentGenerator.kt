@@ -17,6 +17,7 @@ class SorterForWordDocumentGenerator {
         private const val hvac = "hvac"
         private const val lighting = "lighting"
         private const val waterheater = "waterheater"
+        private const val refrigeration = "refrigeration"
 
         private val combinationOven = EApplianceType.CombinationOven.value
         private val convectionOven = EApplianceType.ConvectionOven.value
@@ -29,7 +30,6 @@ class SorterForWordDocumentGenerator {
         private val iceMaker = EApplianceType.IceMaker.value
         private val preRinseSpray = EApplianceType.PreRinseSpray.value
         private val rackOven = EApplianceType.RackOven.value
-        private val refrigerator = EApplianceType.Refrigerator.value
         private val steamCooker = EApplianceType.SteamCooker.value
 
         private const val other = "other"
@@ -106,6 +106,7 @@ class SorterForWordDocumentGenerator {
                         hvac to mutableListOf(),
                         waterheater to mutableListOf(),
                         lighting to mutableListOf(),
+                        refrigeration to mutableListOf(),
 
                         combinationOven to mutableListOf(),
                         convectionOven to mutableListOf(),
@@ -118,7 +119,6 @@ class SorterForWordDocumentGenerator {
                         iceMaker to mutableListOf(),
                         preRinseSpray to mutableListOf(),
                         rackOven to mutableListOf(),
-                        refrigerator to mutableListOf(),
                         steamCooker to mutableListOf(),
 
                         other to mutableListOf())
@@ -139,6 +139,13 @@ class SorterForWordDocumentGenerator {
                 is LinearFluorescent -> sorted[value.computable.auditId]!![lighting]!!.add(value)
                 is LPSodium -> sorted[value.computable.auditId]!![lighting]!!.add(value)
 
+                // Refrigeration
+                is Refrigerator -> sorted[value.computable.auditId]!![refrigeration]!!.add(value)
+                is Freezer -> sorted[value.computable.auditId]!![refrigeration]!!.add(value)
+                is WIFreezer -> sorted[value.computable.auditId]!![refrigeration]!!.add(value)
+                is WIRefrigerator -> sorted[value.computable.auditId]!![refrigeration]!!.add(value)
+                is WICoolerBox -> sorted[value.computable.auditId]!![refrigeration]!!.add(value)
+
                 // Appliances
                 // TODO: comment in appliances once they have finished being implemented
                 is CombinationOven -> sorted[value.computable.auditId]!![combinationOven]!!.add(value)
@@ -152,7 +159,6 @@ class SorterForWordDocumentGenerator {
                 is IceMaker -> sorted[value.computable.auditId]!![iceMaker]!!.add(value)
                 is PreRinseSpray -> sorted[value.computable.auditId]!![preRinseSpray]!!.add(value)
 //                is RackOven -> sorted[value.computable.auditId]!![rackOven]!!.add(value)
-                is Refrigerator -> sorted[value.computable.auditId]!![refrigerator]!!.add(value)
 //                is SteamCooker -> sorted[value.computable.auditId]!![steamCooker]!!.add(value)
 
 
@@ -488,8 +494,6 @@ class SorterForWordDocumentGenerator {
         @Suppress("UNCHECKED_CAST")
         val iceMaker = audit[iceMaker]!! as List<IceMaker>
         @Suppress("UNCHECKED_CAST")
-        val refrigerator = audit[refrigerator]!! as List<Refrigerator>
-        @Suppress("UNCHECKED_CAST")
         val steamCooker = audit[steamCooker]!! as List<SteamCooker>
         @Suppress("UNCHECKED_CAST")
         val griddle = audit[griddle]!! as List<Griddle>
@@ -709,35 +713,6 @@ class SorterForWordDocumentGenerator {
             instances.add(
                     EquipmentInstances(
                             "Pre Rinse Spray",
-                            single.energyPowerChange(),
-                            costElectricity,
-                            single.age,
-                            materialCost,
-                            implementationCost,
-                            savings,
-                            implementationCost / savings * 12
-                    )
-            )
-        }
-
-        if (refrigerator.any()) {
-            var costElectricity = 0.0
-            var materialCost = 0.0
-            var implementationCost = 0.0
-            var savings = 0.0
-
-            val single = refrigerator.first()
-
-            for (item in refrigerator) {
-                costElectricity += item.costPostState
-                materialCost += item.materialCost()
-                implementationCost += item.implementationCost()
-                savings += item.costPreState(listOf(null)) - item.costPostState
-            }
-
-            instances.add(
-                    EquipmentInstances(
-                            "Refrigerator",
                             single.energyPowerChange(),
                             costElectricity,
                             single.age,
