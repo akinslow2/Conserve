@@ -7,6 +7,7 @@ import com.gemini.energy.presentation.form.FormMapper
 import com.gemini.energy.service.DataHolder
 import com.gemini.energy.service.IComputable
 import com.gemini.energy.service.OutgoingRows
+import com.gemini.energy.service.device.EBase
 import com.gemini.energy.service.type.UsageHours
 import com.gemini.energy.service.type.UsageSimple
 import com.gemini.energy.service.type.UtilityRate
