@@ -15,6 +15,7 @@ import com.gemini.energy.service.device.lighting.LinearFluorescent
 import com.gemini.energy.service.device.lighting.LPSodium
 import com.gemini.energy.service.device.lighting.HPSodium
 import com.gemini.energy.service.device.plugload.*
+import com.gemini.energy.service.device.refrigeration.*
 import com.gemini.energy.service.type.UsageHours
 import com.gemini.energy.service.type.UtilityRate
 
@@ -43,7 +44,7 @@ abstract class ComputableFactory {
                 EZoneType.HVAC                      -> HvacFactory(_utilityRateGas,
                         _utilityRateElectricity, usageHours, outgoingRows, context)
 
-                EZoneType.Refrigeration       -> WIRefrigerationFactory(_utilityRateGas,
+                EZoneType.Refrigeration       -> RefrigerationFactory(_utilityRateGas,
                         _utilityRateElectricity, usageHours, outgoingRows, context)
 
                 EZoneType.WaterHeater                      -> WaterHeaterFactory(_utilityRateGas,
@@ -108,7 +109,7 @@ class PlugloadFactory(private val utilityRateGas: UtilityRate,
 
 }
 
-class WIRefrigerationFactory(private val utilityRateGas: UtilityRate,
+class RefrigerationFactory(private val utilityRateGas: UtilityRate,
                       private val utilityRateElectricity: UtilityRate,
                       private val usageHours: UsageHours,
                       private val outgoingRows: OutgoingRows,
@@ -127,10 +128,10 @@ class WIRefrigerationFactory(private val utilityRateGas: UtilityRate,
                     utilityRateGas, utilityRateElectricity, usageHours, outgoingRows, context)
 
             ERefrigerationType.Refrigerator             -> Refrigerator(computable,
-                    utilityRateGas, utilityRateElectricity, usageHours, outgoingRows)
+                    utilityRateGas, utilityRateElectricity, usageHours, outgoingRows, context)
 
             ERefrigerationType.Freezer             -> Freezer(computable,
-                    utilityRateGas, utilityRateElectricity, usageHours, outgoingRows)
+                    utilityRateGas, utilityRateElectricity, usageHours, outgoingRows, context)
         }
     }
 
