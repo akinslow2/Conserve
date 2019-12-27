@@ -116,8 +116,17 @@
           "dataType": "decimalrow",
           "defaultValues": "",
           "param": "Off Peak Hours",
-          "validation": "mandatory",
+          "validation": "",
           "id": "23"
+        },
+        {
+          "index": 24,
+          "hint": "",
+          "dataType": "textrow",
+          "defaultValues": "",
+          "param": "Motor Sensor Serial",
+          "validation": "",
+          "id": "24"
         }
       ],
       "id": "2"
