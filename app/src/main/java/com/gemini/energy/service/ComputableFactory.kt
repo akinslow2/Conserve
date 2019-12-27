@@ -4,12 +4,10 @@ import android.content.Context
 import com.gemini.energy.App
 import com.gemini.energy.domain.entity.Computable
 import com.gemini.energy.presentation.util.EApplianceType
+import com.gemini.energy.presentation.util.ERefrigerationType
 import com.gemini.energy.presentation.util.ELightingType
 import com.gemini.energy.presentation.util.EZoneType
-import com.gemini.energy.service.device.General
-import com.gemini.energy.service.device.Hvac
-import com.gemini.energy.service.device.WaterHeater
-import com.gemini.energy.service.device.Motors
+import com.gemini.energy.service.device.*
 import com.gemini.energy.service.device.lighting.Cfl
 import com.gemini.energy.service.device.lighting.Halogen
 import com.gemini.energy.service.device.lighting.Incandescent
@@ -43,6 +41,9 @@ abstract class ComputableFactory {
                         _utilityRateElectricity, usageHours, outgoingRows, context)
 
                 EZoneType.HVAC                      -> HvacFactory(_utilityRateGas,
+                        _utilityRateElectricity, usageHours, outgoingRows, context)
+
+                EZoneType.Refrigeration       -> WIRefrigerationFactory(_utilityRateGas,
                         _utilityRateElectricity, usageHours, outgoingRows, context)
 
                 EZoneType.WaterHeater                      -> WaterHeaterFactory(_utilityRateGas,
@@ -81,9 +82,6 @@ class PlugloadFactory(private val utilityRateGas: UtilityRate,
 
             EApplianceType.RackOven                 -> RackOven()
 
-            EApplianceType.Refrigerator             -> Refrigerator(computable,
-                    utilityRateGas, utilityRateElectricity, usageHours, outgoingRows)
-
             EApplianceType.SteamCooker              -> SteamCooker()
 
             EApplianceType.Griddle                  -> Griddle(computable,
@@ -105,6 +103,34 @@ class PlugloadFactory(private val utilityRateGas: UtilityRate,
             EApplianceType.SampleAppliance          -> SampleAppliance(computable,
                     utilityRateGas, utilityRateElectricity, usageHours, outgoingRows, context)
 
+        }
+    }
+
+}
+
+class WIRefrigerationFactory(private val utilityRateGas: UtilityRate,
+                      private val utilityRateElectricity: UtilityRate,
+                      private val usageHours: UsageHours,
+                      private val outgoingRows: OutgoingRows,
+                      private val context: Context) : ComputableFactory() {
+
+    override fun build(): IComputable {
+        return when(computable.auditScopeSubType as ERefrigerationType) {
+
+            ERefrigerationType.WIRefrigerator          -> WIRefrigerator(computable,
+                    utilityRateGas, utilityRateElectricity, usageHours, outgoingRows, context)
+
+            ERefrigerationType.WIFreezer             -> WIFreezer(computable,
+                    utilityRateGas, utilityRateElectricity, usageHours, outgoingRows, context)
+
+            ERefrigerationType.WICoolerBox                -> WICoolerBox(computable,
+                    utilityRateGas, utilityRateElectricity, usageHours, outgoingRows, context)
+
+            ERefrigerationType.Refrigerator             -> Refrigerator(computable,
+                    utilityRateGas, utilityRateElectricity, usageHours, outgoingRows)
+
+            ERefrigerationType.Freezer             -> Freezer(computable,
+                    utilityRateGas, utilityRateElectricity, usageHours, outgoingRows)
         }
     }
 
