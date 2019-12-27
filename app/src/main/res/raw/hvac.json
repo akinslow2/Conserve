@@ -373,6 +373,24 @@
           "param": "Suggested Off Peak Hours",
           "validation": "optional",
           "id": "53"
+        },
+        {
+          "index": 54,
+          "hint": "",
+          "dataType": "textrow",
+          "defaultValues": "",
+          "param": "Motor Sensor Serial",
+          "validation": "optional",
+          "id": "54"
+        },
+        {
+          "index": 55,
+          "hint": "",
+          "dataType": "textrow",
+          "defaultValues": "",
+          "param": "Temperature Sensor Serial",
+          "validation": "optional",
+          "id": "55"
         }
       ],
       "id": "5"
