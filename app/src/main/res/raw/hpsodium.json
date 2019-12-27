@@ -150,6 +150,15 @@
           "param": "Off Peak Hours",
           "validation": "optional",
           "id": "43"
+        },
+        {
+          "index": 44,
+          "hint": "",
+          "dataType": "textrow",
+          "defaultValues": "",
+          "param": "Light Sensor Serial",
+          "validation": "",
+          "id": "44"
         }
       ],
       "id": "4"
