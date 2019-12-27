@@ -1,12 +1,14 @@
 package com.gemini.energy.wordDocGenerator
 
 import com.gemini.energy.presentation.util.EApplianceType
+import com.gemini.energy.presentation.util.ERefrigerationType
 import com.gemini.energy.service.DataHolder
 import com.gemini.energy.service.device.EBase
 import com.gemini.energy.service.device.Hvac
 import com.gemini.energy.service.device.WaterHeater
 import com.gemini.energy.service.device.lighting.*
 import com.gemini.energy.service.device.plugload.*
+import com.gemini.energy.service.device.refrigeration.*
 import com.google.gson.JsonNull
 
 class SorterForWordDocumentGenerator {
