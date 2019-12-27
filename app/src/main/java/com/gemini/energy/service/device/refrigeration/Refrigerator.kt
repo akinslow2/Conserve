@@ -1,6 +1,9 @@
 package com.gemini.energy.service.device.refrigeration
 
+import android.content.Context
+import com.gemini.energy.R
 import com.gemini.energy.domain.entity.Computable
+import com.gemini.energy.presentation.form.FormMapper
 import com.gemini.energy.service.DataHolder
 import com.gemini.energy.service.IComputable
 import com.gemini.energy.service.OutgoingRows
@@ -11,9 +14,10 @@ import com.google.gson.JsonElement
 import io.reactivex.Observable
 import org.json.JSONObject
 import timber.log.Timber
+import java.util.*
 
 class Refrigerator(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateElectricity: UtilityRate,
-                   usageHours: UsageHours, outgoingRows: OutgoingRows) :
+                   usageHours: UsageHours, outgoingRows: OutgoingRows, private val context: Context) :
         EBase(computable, utilityRateGas, utilityRateElectricity, usageHours, outgoingRows), IComputable {
 
     var age = 0.0
@@ -155,5 +159,9 @@ class Refrigerator(computable: Computable<*>, utilityRateGas: UtilityRate, utili
 
     override fun computedFields() = mutableListOf("__daily_operating_hours", "__weekly_operating_hours",
             "__yearly_operating_hours", "__electric_cost")
+
+    private fun getFormMapper() = FormMapper(context, R.raw.refrigerator)
+    private fun getModel() = getFormMapper().decodeJSON()
+    private fun getGFormElements() = getFormMapper().mapIdToElements(getModel())
 
 }
