@@ -22,7 +22,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class WICoolerBox(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateElectricity: UtilityRate,
-           usageHours: UsageHours, outgoingRows: OutgoingRows, private val context: Context) :
+                  usageHours: UsageHours, outgoingRows: OutgoingRows, private val context: Context) :
         EBase(computable, utilityRateGas, utilityRateElectricity, usageHours, outgoingRows), IComputable {
 
     /**
@@ -38,13 +38,6 @@ class WICoolerBox(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
          * Conversion Factor from Watts to Kilo Watts
          * */
         private const val KW_CONVERSION = 0.001
-
-        private const val HVAC_EER = "hvac_eer"
-        private const val HVAC_COOLING_HOURS = "cooling_hours"
-        private const val HVAC_EFFICIENCY = "hvac_efficiency"
-
-        private const val HVAC_DB_BTU = "size_btu_hr"
-        private const val HVAC_DB_EER = "eer"
 
         /**
          * Fetches the EER based on the specific Match Criteria via the Parse API
