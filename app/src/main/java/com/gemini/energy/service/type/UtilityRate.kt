@@ -121,9 +121,8 @@ class Electricity(private val rateStructure: String, private val companyCode: St
 
     override fun getTOU(structure: HashMap<String, List<String>>) = TOU(
             structure[ERateKey.SummerOn.value]!![0].toDouble(),
-            structure[ERateKey.SummerPart.value]!![0].toDouble(),
             structure[ERateKey.SummerOff.value]!![0].toDouble(),
-            structure[ERateKey.WinterPart.value]!![0].toDouble(),
+            structure[ERateKey.WinterOn.value]!![0].toDouble(),
             structure[ERateKey.WinterOff.value]!![0].toDouble())
 
     override fun getNoneTOU(structure: HashMap<String, List<String>>) = TOUNone(
