@@ -38,7 +38,10 @@ abstract class EBase(val computable: Computable<*>,
 
     var preAudit: Map<String, Any> = mapOf()
     var featureData: Map<String, Any> = mapOf()
+    //ToDo: Should make the initializers different for gas and electricity
     var electricRateStructure: String = RATE
+    var gasRateStructure: String = RATE
+    var gasCompanyCode: String = COMPANY_CODE
     var electricCompanyCode: String = COMPANY_CODE
 
     val usageHoursBusiness = UsageHours()
@@ -66,14 +69,19 @@ abstract class EBase(val computable: Computable<*>,
      * Electricity | Gas Utility Rate Setup
      * */
     private fun setupUtility(base: EBase) {
-        base.gasRate = utilityRateGas.initUtility(Gas()).build()
+        base.gasRate = utilityRateGas.initUtility(Gas(gasRateStructure, gasCompanyCode)).build()
         //Others has been added to the Electric Rate Structure as a fix cause the Section Name
         //is added to the Element Key
         val fix = "Others"
 
-        if (preAudit.containsKey("$fix Electric Rate Structure") && preAudit.containsKey("$fix Utility Company")) {
+        if (preAudit.containsKey("$fix Gas Rate Structure") && preAudit.containsKey("$fix Gas Utility Company")) {
+            base.gasRateStructure = preAudit["$fix Gas Rate Structure"] as String
+            base.gasCompanyCode = preAudit["$fix Gas Utility Company"] as String
+        }
+
+        if (preAudit.containsKey("$fix Electric Rate Structure") && preAudit.containsKey("$fix Electric Utility Company")) {
             base.electricRateStructure = preAudit["$fix Electric Rate Structure"] as String
-            base.electricCompanyCode = preAudit["$fix Utility Company"] as String
+            base.electricCompanyCode = preAudit["$fix Electric Utility Company"] as String
         }
 
         Timber.d("####### RATE STRUCTURE CHECKER #######")
@@ -172,13 +180,18 @@ abstract class EBase(val computable: Computable<*>,
         val extractorHVAC = listOf(dataExtractHVAC(queryHVACCoolingHours()),
                 dataExtractHVAC(queryHVACEer()))
 
-        val extractorMotor = listOf(dataExtractMotors(queryMotorEfficiency()))
+        val extractorMotor = listOf(dataExtractMotors(queryMotorEfficiency()),dataExtractMotors(queryBEDMotorVFDprescriptivekwh()),
+                dataExtractMotors(queryBEDMotorVFDprescriptivekw()))
+
+        val extractorThermostat = listOf(dataExtractThermostat(queryThermostatDeemed()))
+
         val extractorNone = listOf(Observable.just(JsonArray()))
 
         // ** Extractor List gets called depending on the Zone Type **
         val remoteExtract = when (computable.auditScopeType) {
             EZoneType.HVAC      -> extractorHVAC
             EZoneType.Motors    -> extractorMotor
+            EZoneType.Thermostat -> extractorThermostat
             else                -> extractorNone
         }
 
@@ -367,7 +380,13 @@ abstract class EBase(val computable: Computable<*>,
      * Motors Query - Fetch Efficiency
      * */
     open fun queryMotorEfficiency() = ""
+    open fun queryBEDMotorVFDprescriptivekwh() = ""
+    open fun queryBEDMotorVFDprescriptivekw() = ""
 
+    /**
+     * Thermostat Query
+     */
+    open fun queryThermostatDeemed() = ""
     /**
      * Get the Specific Query Result from the Parse API
      * */
@@ -419,6 +438,11 @@ abstract class EBase(val computable: Computable<*>,
                 .toObservable()
     }
 
+    private fun dataExtractThermostat(query: String): Observable<JsonArray> {
+        return parseAPIService.fetchThermostat(query)
+                .map { it.getAsJsonArray("results") }
+                .toObservable()
+    }
     /**
      * UsageHours Hours
      * 1. Pre - Business Hours (Found at PreAudit)

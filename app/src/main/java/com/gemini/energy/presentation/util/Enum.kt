@@ -11,6 +11,7 @@ enum class EZoneType(val value: String) {
     Refrigeration ("Refrigeration"),
     Lighting("Lighting"),
     Motors("Motors"),
+    Thermostat( "Thermostat"),
     Others("Others");
 
     companion object {
