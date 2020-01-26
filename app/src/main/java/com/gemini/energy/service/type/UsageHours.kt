@@ -38,9 +38,9 @@ open class UsageHours {
         val usageByPeak = mapper.mappedHoursYearly()
         return TOU(
                 usageByPeak[ERateKey.SummerOn]!! * WEIGHT_SUMMER,
-                usageByPeak[ERateKey.SummerOff]!! * WEIGHT_SUMMER,
+                usageByPeak[ERateKey.SummerOff]!! * (WEIGHT_Off / 2),
                 usageByPeak[ERateKey.WinterOn]!! * WEIGHT_WINTER,
-                usageByPeak[ERateKey.WinterOff]!! * WEIGHT_WINTER
+                usageByPeak[ERateKey.WinterOff]!! * ( WEIGHT_Off / 2)
         )
     }
 
@@ -49,14 +49,15 @@ open class UsageHours {
      * */
     open fun nonTimeOfUse(): TOUNone {
         return TOUNone(
-                yearly() * WEIGHT_SUMMER,
-                yearly() * WEIGHT_WINTER
+                yearly() / 2,
+                yearly() / 2
         )
     }
 
     companion object {
-        private const val WEIGHT_SUMMER = .504
-        private const val WEIGHT_WINTER = .496
+        private const val WEIGHT_SUMMER = .333
+        private const val WEIGHT_Off = .334
+        private const val WEIGHT_WINTER = .333
     }
 
     fun initUsage(usage: Map<EDay, String?>): UsageHours {
@@ -221,14 +222,14 @@ open class UsageHours {
 
             }
 
-            private fun isSummerPeak(now: Date) = inBetween(now, getTime("12:01"), getTime("17:59"))
+            private fun isSummerPeak(now: Date) = inBetween(now, getTime("12:00"), getTime("18:00"))
 
-            private fun isSummerOffPeak(now: Date) = inBetween(now, getTime("18:00"), getTime("23:59")) ||
+            private fun isSummerOffPeak(now: Date) = inBetween(now, getTime("18:00"), getTime("00:00")) ||
                     inBetween(now, getTime("00:00"), getTime("12:00"))
 
-            private fun isWinterPeak(now: Date) = inBetween(now, getTime("06:01"), getTime("10:00"))
+            private fun isWinterPeak(now: Date) = inBetween(now, getTime("06:00"), getTime("10:00"))
 
-            private fun isWinterOffPeak(now: Date) = inBetween(now, getTime("10:01"), getTime("23:59")) ||
+            private fun isWinterOffPeak(now: Date) = inBetween(now, getTime("10:01"), getTime("00:00")) ||
                     inBetween(now, getTime("00:00"), getTime("06:00"))
 
         }

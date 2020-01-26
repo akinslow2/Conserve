@@ -28,6 +28,9 @@ class ParseAPI {
         @GET("classes/Thermostat")
         fun fetchThermostat(@Query("where") where: String): Single<JsonObject>
 
+        @GET("classes/Lighting")
+        fun fetchLightControls(@Query("where") where: String): Single<JsonObject>
+
         @POST("classes/$SYNC_AUDIT")
         fun saveAudit(@Body body: JsonObject): Single<JsonObject>
 
