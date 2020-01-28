@@ -8,16 +8,16 @@
           "index": 11,
           "hint": "",
           "dataType": "pickerinputrow",
-          "defaultValues": "1:Ultra-low Temperature Freezer,2:Solid Door Freezer,3:Solid Door Refrigerator,4:Glass Door Refrigerator",
+          "defaultValues": "1:Ultra-low Temperature,2:Solid Door,3:Transparent Door",
           "param": "Equipment Type",
-          "validation": "mandatory",
+          "validation": "optional",
           "id": "11"
         },
         {
           "index": 12,
           "hint": "",
           "dataType": "pickerinputrow",
-          "defaultValues": "1:Milk or Beverage Cabinet,2:Other,3:Pass-Through,4:Reach-in,5:Undercounter,6:Wedge Case,7:Work-Top Table,8:Roll-in",
+          "defaultValues": "1:Vertical,2:Chest",
           "param": "Style Type",
           "validation": "optional",
           "id": "12"
@@ -28,7 +28,7 @@
           "dataType": "decimalrow",
           "defaultValues": "",
           "param": "Total Volume",
-          "validation": "mandatory",
+          "validation": "optional",
           "id": "13"
         },
         {
@@ -37,7 +37,7 @@
           "dataType": "textrow",
           "defaultValues": "",
           "param": "Model Number",
-          "validation": "mandatory",
+          "validation": "optional",
           "id": "14"
         },
         {
@@ -46,7 +46,7 @@
           "dataType": "textrow",
           "defaultValues": "",
           "param": "Company",
-          "validation": "mandatory",
+          "validation": "optional",
           "id": "15"
         },
         {
@@ -55,7 +55,7 @@
           "dataType": "introw",
           "defaultValues": "",
           "param": "Age",
-          "validation": "mandatory",
+          "validation": "optional",
           "id": "16"
         },
         {
@@ -63,8 +63,8 @@
           "hint": "",
           "dataType": "pickerinputrow",
           "defaultValues": "1:Yes,2:No",
-          "param": "Control",
-          "validation": "mandatory",
+          "param": "Plug Load Control",
+          "validation": "optional",
           "id": "17"
         },
         {
@@ -73,7 +73,7 @@
           "dataType": "introw",
           "defaultValues": "",
           "param": "Quantity",
-          "validation": "mandatory",
+          "validation": "optional",
           "id": "18"
         },
         {
@@ -84,29 +84,47 @@
           "param": "Daily Energy Used",
           "validation": "optional",
           "id": "19"
+        },
+        {
+          "index": 110,
+          "hint": "",
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:Yes,2:No",
+          "param": "Does reach-in unit have doors?",
+          "validation": "optional",
+          "id": "110"
+        },
+        {
+          "index": 111,
+          "hint": "(Rq)",
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:pre1993,2:Between1993and2001",
+          "param": "Estimated Age",
+          "validation": "optional",
+          "id": "111"
         }
       ],
       "id": "1"
     },
     {
       "index": 2,
-      "section": "TOU",
+      "section": "Additional",
       "elements": [
         {
           "index": 21,
           "hint": "",
-          "dataType": "decimalrow",
-          "defaultValues": "",
-          "param": "Peak Hours",
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:Yes,2:No",
+          "param": "Energy Star Rating?",
           "validation": "optional",
           "id": "21"
         },
         {
           "index": 22,
           "hint": "",
-          "dataType": "decimalrow",
-          "defaultValues": "",
-          "param": "Part Peak Hours",
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:Yes,2:No",
+          "param": "LED lighting?",
           "validation": "optional",
           "id": "22"
         },
@@ -115,33 +133,42 @@
           "hint": "",
           "dataType": "decimalrow",
           "defaultValues": "",
-          "param": "Off Peak Hours",
-          "validation": "mandatory",
+          "param": "Temperature Setting",
+          "validation": "",
           "id": "23"
+        },
+        {
+          "index": 24,
+          "hint": "",
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:poor,2:adequate,3:strong",
+          "param": "Quality of Door Seal",
+          "validation": "",
+          "id": "24"
         }
       ],
       "id": "2"
     },
     {
       "index": 3,
-      "section": "Labor Cost",
+      "section": "Time of Use",
       "elements": [
         {
           "index": 31,
           "hint": "",
-          "dataType": "introw",
+          "dataType": "decimalrow",
           "defaultValues": "",
-          "param": "Zip Code",
-          "validation": "",
+          "param": "Peak Hours",
+          "validation": "optional",
           "id": "31"
         },
         {
           "index": 32,
           "hint": "",
-          "dataType": "textrow",
+          "dataType": "decimalrow",
           "defaultValues": "",
-          "param": "Profession",
-          "validation": "",
+          "param": "Off Peak Hours",
+          "validation": "optional",
           "id": "32"
         }
       ],
@@ -149,34 +176,16 @@
     },
     {
       "index": 4,
-      "section": "Suggested Time",
+      "section": "Labor Cost",
       "elements": [
         {
           "index": 41,
           "hint": "",
-          "dataType": "decimalrow",
+          "dataType": "introw",
           "defaultValues": "",
-          "param": "Suggested Peak Hours",
+          "param": "Zip Code",
           "validation": "optional",
           "id": "41"
-        },
-        {
-          "index": 42,
-          "hint": "",
-          "dataType": "decimalrow",
-          "defaultValues": "",
-          "param": "Suggested Part Peak Hours",
-          "validation": "optional",
-          "id": "42"
-        },
-        {
-          "index": 43,
-          "hint": "",
-          "dataType": "decimalrow",
-          "defaultValues": "",
-          "param": "Suggested Off Peak Hours",
-          "validation": "optional",
-          "id": "43"
         }
       ],
       "id": "4"

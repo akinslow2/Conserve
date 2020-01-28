@@ -295,6 +295,10 @@ class WIFreezer(computable: Computable<*>, utilityRateGas: UtilityRate, utilityR
     }
 
     override fun energyTimeChange(): Double = 0.0
+    //Calculating TRM Net Savings for Evaporator Fan Motor (pg. 103)
+    val freerider = 0.95
+    val spillover = 1.05
+    //Values recieved wil be savings per fan
     override fun energyPowerTimeChange(): Double = 0.0
 
 

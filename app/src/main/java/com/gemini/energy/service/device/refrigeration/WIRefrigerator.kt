@@ -271,6 +271,7 @@ class WIRefrigerator(computable: Computable<*>, utilityRateGas: UtilityRate, uti
      * */
     override fun energyPowerChange(): Double {
 
+
         val powerUsedGas = power(gasInput, thermaleff) * quantity
         val powerUsedElectricity = power2(kW, electriceff) * quantity
         val prepowerUsed = if (isGas()) powerUsedGas else powerUsedElectricity
@@ -295,6 +296,10 @@ class WIRefrigerator(computable: Computable<*>, utilityRateGas: UtilityRate, uti
     }
 
     override fun energyTimeChange(): Double = 0.0
+    //Calculating TRM Net Savings for Evaporator Fan Motor (pg. 103)
+    val freerider = 0.95
+    val spillover = 1.05
+    //Values recieved wil be savings per fan
     override fun energyPowerTimeChange(): Double = 0.0
 
 

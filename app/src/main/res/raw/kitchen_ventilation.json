@@ -1,0 +1,88 @@
+{
+  "geminiForm": [
+    {
+      "index": 1,
+      "section": "Kitchen Hood",
+      "elements": [
+        {
+          "index": 11,
+          "hint": "",
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:manual,2:automatic",
+          "param": "Controls",
+          "validation": "optional",
+          "id": "11"
+        },
+        {
+          "index": 12,
+          "hint": "",
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:manual,2:automatic",
+          "param": "temperature interlocked controls",
+          "validation": "optional",
+          "id": "12"
+        },
+        {
+          "index": 13,
+          "hint": "",
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:manual,2:automatic",
+          "param": "smoke sensor controls",
+          "validation": "optional",
+          "id": "13"
+        },
+        {
+          "index": 14,
+          "hint": "",
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:yes,2:no",
+          "param": "Does kitchen hood completely cover kitchen area?",
+          "validation": "optional",
+          "id": "14"
+        }
+      ],
+      "id": "1"
+    },
+    {
+      "index": 2,
+      "section": "MakeUp Air",
+      "elements": [
+        {
+          "index": 21,
+          "hint": "",
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:yes,2:no",
+          "param": "tempered makeup air?",
+          "validation": "optional",
+          "id": "21"
+        }
+      ],
+      "id": "2"
+    },
+    {
+      "index": 3,
+      "section": "Time of Use",
+      "elements": [
+        {
+          "index": 31,
+          "hint": "",
+          "dataType": "decimalrow",
+          "defaultValues": "",
+          "param": "Peak Hours",
+          "validation": "optional",
+          "id": "31"
+        },
+        {
+          "index": 32,
+          "hint": "",
+          "dataType": "decimalrow",
+          "defaultValues": "",
+          "param": "Off Peak Hours",
+          "validation": "optional",
+          "id": "32"
+        }
+      ],
+      "id": "3"
+    }
+  ]
+}

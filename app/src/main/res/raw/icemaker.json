@@ -28,14 +28,14 @@
           "dataType": "pickerinputrow",
           "defaultValues": "1:Cube,2:Continuous",
           "param": "Ice Type",
-          "validation": "mandatory",
+          "validation": "optional",
           "id": "13"
         },
         {
           "index": 14,
-          "hint": "",
+          "hint": "(Rq)",
           "dataType": "pickerinputrow",
-          "defaultValues": "1:IMH-A,2:RCRC-A,3:RCU-A,4:SC-A",
+          "defaultValues": "1:Ice Making Head,2:Remote Condensing Unit,3:Self Contained Unit",
           "param": "Machine Type",
           "validation": "optional",
           "id": "14"
@@ -46,7 +46,7 @@
           "dataType": "textrow",
           "defaultValues": "",
           "param": "Model Number",
-          "validation": "mandatory",
+          "validation": "optional",
           "id": "15"
         },
         {
@@ -55,7 +55,7 @@
           "dataType": "textrow",
           "defaultValues": "",
           "param": "Company",
-          "validation": "mandatory",
+          "validation": "optional",
           "id": "16"
         },
         {
@@ -64,7 +64,7 @@
           "dataType": "introw",
           "defaultValues": "",
           "param": "Quantity",
-          "validation": "mandatory",
+          "validation": "optional",
           "id": "17"
         },
         {
@@ -73,7 +73,7 @@
           "dataType": "introw",
           "defaultValues": "",
           "param": "Age",
-          "validation": "mandatory",
+          "validation": "optional",
           "id": "18"
         },
         {
@@ -82,79 +82,95 @@
           "dataType": "pickerinputrow",
           "defaultValues": "1:Yes,2:No",
           "param": "Control",
-          "validation": "mandatory",
+          "validation": "optional",
           "id": "19"
+        },
+        {
+          "index": 110,
+          "hint": "",
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:Yes,2:No",
+          "param": "Energy Star?",
+          "validation": "optional",
+          "id": "110"
+        },
+        {
+          "index": 111,
+          "hint": "(Rq)",
+          "dataType": "introw",
+          "defaultValues": "",
+          "param": "Harvest Rate",
+          "validation": "optional",
+          "id": "111"
         }
       ],
       "id": "1"
     },
     {
       "index": 2,
-      "section": "TOU",
+      "section": "Storage Bin",
       "elements": [
         {
           "index": 21,
           "hint": "",
-          "dataType": "decimalrow",
-          "defaultValues": "",
-          "param": "Peak Hours",
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:Yes,2:No",
+          "param": "Well insulated?",
           "validation": "optional",
           "id": "21"
-        },
-        {
-          "index": 22,
-          "hint": "",
-          "dataType": "decimalrow",
-          "defaultValues": "",
-          "param": "Part Peak Hours",
-          "validation": "optional",
-          "id": "22"
-        },
-        {
-          "index": 23,
-          "hint": "",
-          "dataType": "decimalrow",
-          "defaultValues": "",
-          "param": "Off Peak Hours",
-          "validation": "mandatory",
-          "id": "23"
         }
       ],
       "id": "2"
     },
     {
       "index": 3,
-      "section": "Suggested Time",
+      "section": "\n",
       "elements": [
         {
           "index": 31,
           "hint": "",
-          "dataType": "decimalrow",
-          "defaultValues": "",
-          "param": "Suggested Peak Hours",
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:Yes,2:No",
+          "param": "Ice level sensor?",
           "validation": "optional",
           "id": "31"
         },
         {
           "index": 32,
           "hint": "",
-          "dataType": "decimalrow",
-          "defaultValues": "",
-          "param": "Suggested Part Peak Hours",
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:Yes,2:No",
+          "param": "Ice level sensor in use?",
           "validation": "optional",
           "id": "32"
-        },
-        {
-          "index": 33,
-          "hint": "",
-          "dataType": "decimalrow",
-          "defaultValues": "",
-          "param": "Suggested Off Peak Hours",
-          "validation": "optional",
-          "id": "33"
         }
       ],
       "id": "3"
+    },
+    {
+      "index": 4,
+      "section": "Time of Use",
+      "elements": [
+        {
+          "index": 41,
+          "hint": "",
+          "dataType": "decimalrow",
+          "defaultValues": "",
+          "param": "Peak Hours",
+          "validation": "optional",
+          "id": "41"
+        },
+        {
+          "index": 42,
+          "hint": "",
+          "dataType": "decimalrow",
+          "defaultValues": "",
+          "param": "Off Peak Hours",
+          "validation": "optional",
+          "id": "42"
+        }
+      ],
+      "id": "4"
     }
   ]
 }
