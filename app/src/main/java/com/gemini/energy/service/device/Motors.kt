@@ -174,16 +174,16 @@ class Motors(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRate
                     (grossBEDkwhsavings * (1 + summerLLF) * (freerider + spillover - 1) * summerRPF)
 
         //1c. BED Prescriptive Savings for VFD - Based on table on pg. 70 of Vermont TRM
-        var VFDeSavings = if (OTF == "yes") {
-            extractEnergySavings(elements) / 0.9
-        } else {
-            extractEnergySavings(elements)
-        }
+        //var VFDeSavings = if (OTF == "yes") {
+        //    extractEnergySavings(elements) / 0.9
+        //} else {
+        //    extractEnergySavings(elements)
+        //}
         //2. Demand Saving
         val demandSavings = energyPowerChange() / usageHoursPre()
 
         //2a. BED Prescriptive Savings for VFD - Based on pg. 70 of Vermont TRM
-        var VFDdSavings = extractDemandSavings(elements) * hp * KW_CONVERSION
+        //var VFDdSavings = extractDemandSavings(elements) * hp * KW_CONVERSION
 
 
         //3. Implementation Cost
@@ -198,8 +198,8 @@ class Motors(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRate
         postRow["__implementation_cost"] = implementationCost.toString()
         postRow["__Gross_Savings_BLPM_circulator_pump"] = grossBEDkwhsavings.toString()
         postRow["__Net_Savings__BLPM_circulator_pump"] = netBEDkwhsavings.toString()
-        postRow["__VFD_Prescriptive_Energy_Savings"] = VFDeSavings.toString()
-        postRow["__VFD_Prescriptive_Demand_Savings"] = VFDdSavings.toString()
+        //postRow["__VFD_Prescriptive_Energy_Savings"] = VFDeSavings.toString()
+        //postRow["__VFD_Prescriptive_Demand_Savings"] = VFDdSavings.toString()
 
         dataHolder.header = postStateFields()
         dataHolder.computable = computable

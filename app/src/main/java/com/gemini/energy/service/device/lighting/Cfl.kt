@@ -252,7 +252,7 @@ class Cfl(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEle
         postusageHours.postoffPeakHours = postoffPeakHours
 
         if (postusageHours.yearly() == null){
-            return extractControlPercentSaved(elements) }
+           return 5.0 }//extractControlPercentSaved(elements) }
         else { return postusageHours.yearly()}
     }
 
@@ -354,7 +354,7 @@ class Cfl(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEle
 
     override fun computedFields() = mutableListOf("")
 
-    private fun getFormMapper() = FormMapper(context, R.raw.cfl)
+    private fun getFormMapper() = FormMapper(context, R.raw.CFL)
     private fun getModel() = getFormMapper().decodeJSON()
     private fun getGFormElements() = getFormMapper().mapIdToElements(getModel())
 

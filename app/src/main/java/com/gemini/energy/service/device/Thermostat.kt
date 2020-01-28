@@ -110,14 +110,14 @@ class Thermostat (computable: Computable<*>, utilityRateGas: UtilityRate, utilit
          * */
         override fun costPostState(element: JsonElement, dataHolder: DataHolder): Double {
 
-            var presciptive_kW_savings = extractThermostatDeemedkW(elements)
-            var presciptive_kWh_savings = extractThermostatDeemedkWh(elements)
-            var implementationCost = extractThermostatDeemedCost(elements)
+            //var presciptive_kW_savings = extractThermostatDeemedkW(elements)
+           // var presciptive_kWh_savings = extractThermostatDeemedkWh(elements)
+            //var implementationCost = extractThermostatDeemedCost(elements)
 
             val postRow = mutableMapOf<String, String>()
-            postRow["__prescriptive_kWh_savings"] = presciptive_kWh_savings.toString()
-            postRow["__prescriptive_kW_savings"] = presciptive_kW_savings.toString()
-            postRow["__implementation_cost"] = implementationCost.toString()
+          //  postRow["__prescriptive_kWh_savings"] = presciptive_kWh_savings.toString()
+            //postRow["__prescriptive_kW_savings"] = presciptive_kW_savings.toString()
+            //postRow["__implementation_cost"] = implementationCost.toString()
 
 
             dataHolder.header = postStateFields()
@@ -158,11 +158,11 @@ class Thermostat (computable: Computable<*>, utilityRateGas: UtilityRate, utilit
         override fun efficientLookup() = false
         override fun queryEfficientFilter() = ""
 
-        override fun queryThermostatDeemed() = JSONObject()
-                .put("type", ThermostatDeemed)
-                .put("data.Heating_Fuel", heatingFuel)
-                .put("data.Cooling_Fuel", coolingFuel)
-                .toString()
+       // override fun queryThermostatDeemed() = JSONObject()
+         //       .put("type", ThermostatDeemed)
+           //     .put("data.Heating_Fuel", heatingFuel)
+             //   .put("data.Cooling_Fuel", coolingFuel)
+             //   .toString()
 
         /**
          * State if the Equipment has a Post UsageHours Hours (Specific) ie. A separate set of

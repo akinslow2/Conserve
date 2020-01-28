@@ -320,7 +320,7 @@ class WIFreezer(computable: Computable<*>, utilityRateGas: UtilityRate, utilityR
 
     override fun computedFields() = mutableListOf("")
 
-    private fun getFormMapper() = FormMapper(context, R.raw.walkin_freezer)
+    private fun getFormMapper() = FormMapper(context, R.raw.Walkin_freezer)
     private fun getModel() = getFormMapper().decodeJSON()
     private fun getGFormElements() = getFormMapper().mapIdToElements(getModel())
 
