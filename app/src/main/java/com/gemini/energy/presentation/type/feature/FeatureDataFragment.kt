@@ -69,7 +69,7 @@ class FeatureDataFragment : BaseFormFragment() {
             }
             else if (model.type == EZoneType.Refrigeration.value) {
                 if (model.subType == ERefrigerationType.WIRefrigerator.value) {rawId = R.raw.walkin_refrigerator}
-                if (model.subType == ERefrigerationType.WIFreezer.value) {rawId = R.raw.Walkin_freezer}
+                if (model.subType == ERefrigerationType.WIFreezer.value) {rawId = R.raw.walkin_freezer}
                 if (model.subType == ERefrigerationType.WICoolerBox.value) {rawId = R.raw.walkin_coolbox}
                 if (model.subType == ERefrigerationType.Refrigerator.value) {rawId = R.raw.refrigerator}
                 if (model.subType == ERefrigerationType.Freezer.value) {rawId = R.raw.freezer}
@@ -79,7 +79,7 @@ class FeatureDataFragment : BaseFormFragment() {
             else if (model.type == EZoneType.Motors.value) {rawId = R.raw.motors}
             else if (model.type == EZoneType.Thermostat.value) {rawId = R.raw.thermostat}
             else if (model.type == EZoneType.Lighting.value) {
-                if (model.subType == ELightingType.CFL.value) {rawId = R.raw.CFL}
+                if (model.subType == ELightingType.CFL.value) {rawId = R.raw.cfl}
                 if (model.subType == ELightingType.Halogen.value) {rawId = R.raw.halogen}
                 if (model.subType == ELightingType.Incandescent.value) {rawId = R.raw.incandescent}
                 if (model.subType == ELightingType.LinearFluorescent.value) {rawId = R.raw.linearfluorescent}
