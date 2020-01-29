@@ -39,21 +39,12 @@ class Thermostat (computable: Computable<*>, utilityRateGas: UtilityRate, utilit
              * via the Parse API
              * */
             //Need to pull multiple at once if feasible otherwise it is a lot of code
-            fun extractThermostatDeemedkWh(elements: List<JsonElement?>): Double {
+            //K2-Database
+            fun extractThermostatDeemed(elements: List<JsonElement?>): Double {
                 elements.forEach {
                     it?.let {
                         if (it.asJsonObject.has("Total_kWh")) {
                             return it.asJsonObject.get("Total_kWh").asDouble
-                        }
-                    }
-                }
-                return 0.0
-            }
-            fun extractThermostatDeemedkW(elements: List<JsonElement?>): Double {
-                elements.forEach {
-                    it?.let {
-                        if (it.asJsonObject.has("kW")) {
-                            return it.asJsonObject.get("kW").asDouble
                         }
                     }
                 }
@@ -158,11 +149,12 @@ class Thermostat (computable: Computable<*>, utilityRateGas: UtilityRate, utilit
         override fun efficientLookup() = false
         override fun queryEfficientFilter() = ""
 
-       // override fun queryThermostatDeemed() = JSONObject()
-         //       .put("type", ThermostatDeemed)
-           //     .put("data.Heating_Fuel", heatingFuel)
-             //   .put("data.Cooling_Fuel", coolingFuel)
-             //   .toString()
+//K2-Database
+        override fun queryThermostatDeemed() = JSONObject()
+               .put("type", ThermostatDeemed)
+               .put("data.Heating_Fuel", heatingFuel)
+               .put("data.Cooling_Fuel", coolingFuel)
+               .toString()
 
         /**
          * State if the Equipment has a Post UsageHours Hours (Specific) ie. A separate set of

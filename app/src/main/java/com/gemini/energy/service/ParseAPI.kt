@@ -24,7 +24,7 @@ class ParseAPI {
 
         @GET("classes/Motors")
         fun fetchMotors(@Query("where") where: String): Single<JsonObject>
-
+        //K2-Database
         @GET("classes/Thermostat")
         fun fetchThermostat(@Query("where") where: String): Single<JsonObject>
 
