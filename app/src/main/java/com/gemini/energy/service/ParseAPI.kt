@@ -4,7 +4,6 @@ import com.google.gson.JsonObject
 import io.reactivex.Single
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
-import org.json.JSONObject
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
@@ -93,13 +92,12 @@ class ParseAPI {
             val retrofit = Retrofit.Builder()
                     .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                     .addConverterFactory(GsonConverterFactory.create())
-                    .baseUrl("http://ec2-18-216-25-245.us-east-2.compute.amazonaws.com.compute.amazonaws.com:80/parse/")
+                    .baseUrl("http://ec2-18-216-25-245.us-east-2.compute.amazonaws.com:80/parse/")
                     .client(okHttpClient.build())
                     .build()
 
             return retrofit.create(ParseAPIService::class.java)
         }
-
     }
 }
 
