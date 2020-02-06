@@ -1,0 +1,63 @@
+{
+  "geminiForm": [
+    {
+      "index": 1,
+      "section": "Sample Appliance",
+      "elements": [
+        {
+          "index": 11,
+          "hint": "integer",
+          "dataType": "introw",
+          "defaultValues": "",
+          "param": "Section One Parameter One",
+          "validation": "optional",
+          "id": "11"
+        },
+        {
+          "index": 12,
+          "hint": "decimal",
+          "dataType": "decimalrow",
+          "defaultValues": "",
+          "param": "Section One Parameter Two",
+          "validation": "optional",
+          "id": "12"
+        },
+        {
+          "index": 13,
+          "hint": "dropdown",
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:Item One,2:Item Two",
+          "param": "Section One Parameter Three",
+          "validation": "mandatory",
+          "id": "13"
+        }
+      ],
+      "id": "1"
+    },
+    {
+      "index": 2,
+      "section": "Another Section",
+      "elements": [
+        {
+          "index": 21,
+          "hint": "text",
+          "dataType": "textrow",
+          "defaultValues": "",
+          "param": "Section Two Parameter One",
+          "validation": "optional",
+          "id": "21"
+        },
+        {
+          "index": 22,
+          "hint": "text",
+          "dataType": "textrow",
+          "defaultValues": "",
+          "param": "Section Two Parameter Two",
+          "validation": "optional",
+          "id": "22"
+        }
+      ],
+      "id": "2"
+    }
+  ]
+}

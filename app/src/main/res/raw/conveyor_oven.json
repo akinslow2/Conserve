@@ -1,0 +1,205 @@
+{
+  "geminiForm": [
+    {
+      "index": 1,
+      "section": "Coveyor Oven",
+      "elements": [
+        {
+          "index": 11,
+          "hint": "ft.",
+          "dataType": "decimalrow",
+          "defaultValues": "",
+          "param": "Oven Length",
+          "validation": "mandatory",
+          "id": "11"
+        },
+        {
+          "index": 12,
+          "hint": "in.",
+          "dataType": "decimalrow",
+          "defaultValues": "",
+          "param": "Conveyor Width",
+          "validation": "mandatory",
+          "id": "12"
+        },
+        {
+          "index": 13,
+          "hint": "",
+          "dataType": "textrow",
+          "defaultValues": "",
+          "param": "Model Number",
+          "validation": "mandatory",
+          "id": "13"
+        },
+        {
+          "index": 14,
+          "hint": "",
+          "dataType": "textrow",
+          "defaultValues": "",
+          "param": "Model Name",
+          "validation": "mandatory",
+          "id": "14"
+        },
+        {
+          "index": 15,
+          "hint": "",
+          "dataType": "textrow",
+          "defaultValues": "",
+          "param": "Company",
+          "validation": "mandatory",
+          "id": "15"
+        },
+        {
+          "index": 16,
+          "hint": "",
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:Gas,2:Electric",
+          "param": "Fuel type",
+          "validation": "mandatory",
+          "id": "16"
+        },
+        {
+          "index": 17,
+          "hint": "",
+          "dataType": "introw",
+          "defaultValues": "",
+          "param": "Quantity",
+          "validation": "mandatory",
+          "id": "17"
+        },
+        {
+          "index": 18,
+          "hint": "",
+          "dataType": "introw",
+          "defaultValues": "",
+          "param": "Age",
+          "validation": "mandatory",
+          "id": "18"
+        },
+        {
+          "index": 19,
+          "hint": "",
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:Yes,2:No",
+          "param": "Control",
+          "validation": "mandatory",
+          "id": "19"
+        },
+        {
+          "index": 110,
+          "hint": "",
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:Yes,2:No",
+          "param": "Is Fan Used",
+          "validation": "mandatory",
+          "id": "110"
+        },
+        {
+          "index": 111,
+          "hint": "Btu",
+          "dataType": "introw",
+          "defaultValues": "",
+          "param": "Pre-heat Energy",
+          "validation": "optional",
+          "id": "111"
+        },
+        {
+          "index": 112,
+          "hint": "Btu/h",
+          "dataType": "introw",
+          "defaultValues": "",
+          "param": "Idle Rate",
+          "validation": "optional",
+          "id": "112"
+        },
+        {
+          "index": 113,
+          "hint": "lbs/h",
+          "dataType": "introw",
+          "defaultValues": "",
+          "param": "Production Capacity",
+          "validation": "optional",
+          "id": "113"
+        },
+        {
+          "index": 114,
+          "hint": "kW",
+          "dataType": "decimalrow",
+          "defaultValues": "",
+          "param": "Fan/Control Energy Rate",
+          "validation": "optional",
+          "id": "114"
+        }
+      ],
+      "id": "1"
+    },
+    {
+      "index": 2,
+      "section": "TOU",
+      "elements": [
+        {
+          "index": 21,
+          "hint": "",
+          "dataType": "decimalrow",
+          "defaultValues": "",
+          "param": "Peak Hours",
+          "validation": "optional",
+          "id": "21"
+        },
+        {
+          "index": 22,
+          "hint": "",
+          "dataType": "decimalrow",
+          "defaultValues": "",
+          "param": "Part Peak Hours",
+          "validation": "optional",
+          "id": "22"
+        },
+        {
+          "index": 23,
+          "hint": "",
+          "dataType": "decimalrow",
+          "defaultValues": "",
+          "param": "Off Peak Hours",
+          "validation": "mandatory",
+          "id": "23"
+        }
+      ],
+      "id": "2"
+    },
+    {
+      "index": 3,
+      "section": "Suggested Time",
+      "elements": [
+        {
+          "index": 31,
+          "hint": "",
+          "dataType": "decimalrow",
+          "defaultValues": "",
+          "param": "Suggested Peak Hours",
+          "validation": "optional",
+          "id": "31"
+        },
+        {
+          "index": 32,
+          "hint": "",
+          "dataType": "decimalrow",
+          "defaultValues": "",
+          "param": "Suggested Part Peak Hours",
+          "validation": "optional",
+          "id": "32"
+        },
+        {
+          "index": 33,
+          "hint": "",
+          "dataType": "decimalrow",
+          "defaultValues": "",
+          "param": "Suggested Off Peak Hours",
+          "validation": "optional",
+          "id": "33"
+        }
+      ],
+      "id": "3"
+    }
+  ]
+}
