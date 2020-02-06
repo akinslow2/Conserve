@@ -182,7 +182,7 @@ abstract class EBase(val computable: Computable<*>,
 
         val extractorMotor = listOf(dataExtractMotors(queryMotorEfficiency()),dataExtractMotors(queryBEDMotorVFDprescriptivekwh()),
                 dataExtractMotors(queryBEDMotorVFDprescriptivekw()))
-//K2-Database
+
         val extractorThermostat = listOf(dataExtractThermostat(queryThermostatDeemed()),
                 dataExtractThermostat(queryThermostatDeemedCost()))
 
@@ -391,7 +391,7 @@ abstract class EBase(val computable: Computable<*>,
     /**
      * Thermostat Query
      */
-    //K2-Database
+
     open fun queryThermostatDeemed() = ""
     open fun queryThermostatDeemedCost() = ""
 
@@ -450,7 +450,7 @@ abstract class EBase(val computable: Computable<*>,
                 .map { it.getAsJsonArray("results") }
                 .toObservable()
     }
-    //K2-Database
+
     private fun dataExtractThermostat(query: String): Observable<JsonArray> {
         return parseAPIService.fetchThermostat(query)
                 .map { it.getAsJsonArray("results") }
