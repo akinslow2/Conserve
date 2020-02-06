@@ -78,14 +78,12 @@ class Thermostat (computable: Computable<*>, utilityRateGas: UtilityRate, utilit
 
         override fun setup() {
             try {
-                utilitycompany = preAudit["Others Utility Company"]!! as String
-                heatingFuel = featureData["Heat Fuel Source"]!! as String
-                coolingFuel = featureData["Cool Fuel Source"]!! as String
+                utilitycompany = preAudit["Others Electric Utility Company"]!! as String
+                heatingFuel = featureData["Heat Fuel"]!! as String
+                coolingFuel = featureData["Cool Fuel"]!! as String
 
-                peakHours = (featureData["Peak Hours"]!! as String).toDoubleOrNull() ?: 0.0
-                peakHours = (featureData["Peak Hours"]!! as String).toDoubleOrNull() ?: 0.0
-                partPeakHours = (featureData["Part Peak Hours"]!! as String).toDoubleOrNull() ?: 0.0
-                offPeakHours = (featureData["Off Peak Hours"]!! as String).toDoubleOrNull() ?: 0.0
+                peakHours = featureData["Peak Hours"]!! as Double
+                offPeakHours = featureData["Off Peak Hours"]!! as Double
             } catch (e: Exception) {
                 e.printStackTrace()
             }
