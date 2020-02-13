@@ -8,7 +8,7 @@
           "index": 11,
           "hint": "",
           "dataType": "pickerinputrow",
-          "defaultValues": "1:Anthony,2:Ron,3:Johnny,4:Eli,5:Javi,6:Nick",
+          "defaultValues": "1:Bob,2:Gretchen,3:Jake,4:J.C.",
           "param": "Name",
           "validation": "mandatory",
           "id": "11"
@@ -19,7 +19,7 @@
           "dataType": "emailrow",
           "defaultValues": "",
           "param": "Email",
-          "validation": "mandatory",
+          "validation": "optional",
           "id": "12"
         },
         {
@@ -28,7 +28,7 @@
           "dataType": "phonerow",
           "defaultValues": "",
           "param": "Phone Number",
-          "validation": "mandatory",
+          "validation": "optional",
           "id": "13"
         }
       ],
@@ -53,7 +53,7 @@
           "dataType": "textrow",
           "defaultValues": "",
           "param": "Position",
-          "validation": "mandatory",
+          "validation": "optional",
           "id": "22"
         },
         {
@@ -62,7 +62,7 @@
           "dataType": "emailrow",
           "defaultValues": "",
           "param": "Email",
-          "validation": "mandatory",
+          "validation": "optional",
           "id": "23"
         },
         {
@@ -71,7 +71,7 @@
           "dataType": "phonerow",
           "defaultValues": "",
           "param": "Phone Number",
-          "validation": "mandatory",
+          "validation": "optional",
           "id": "24"
         },
         {
@@ -123,7 +123,7 @@
           "index": 210,
           "hint": "",
           "dataType": "pickerinputrow",
-          "defaultValues": "1:2019,2:2020",
+          "defaultValues": "1:2020.0",
           "param": "Audit Year",
           "validation": "mandatory",
           "id": "210"
@@ -143,7 +143,7 @@
           "dataType": "pickerinputrow",
           "defaultValues": "1:1,2:2,3:3,4:4,5:5,6:6,7:7,8:8,9:9,10:10,11:11,12:12,13:13,14:14,15:15,16:16,17:17,18:18,19:19,20:20,21:21,22:22,23:23,24:24,25:25,26:26,27:27,28:28,29:29,30:30,31:31",
           "param": "Assessment End Day",
-          "validation": "mandatory",
+          "validation": "optional",
           "id": "212"
         }
       ],
@@ -159,7 +159,7 @@
           "dataType": "textrow",
           "defaultValues": "",
           "param": "Name",
-          "validation": "mandatory",
+          "validation": "optional",
           "id": "31"
         },
         {
@@ -281,7 +281,7 @@
           "dataType": "decimalrow",
           "defaultValues": "",
           "param": "Total (Sq.Ft.)",
-          "validation": "mandatory",
+          "validation": "optional",
           "id": "51"
         },
         {
@@ -350,105 +350,331 @@
     },
     {
       "index": 7,
-      "section": "Maintenace Interval",
+      "section": "HVAC Maintenance",
       "elements": [
         {
           "index": 71,
           "hint": "",
-          "dataType": "decimalrow",
-          "defaultValues": "",
-          "param": "Lighting",
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:PM contract,2:self-maintained",
+          "param": "Contract Type",
           "validation": "optional",
           "id": "71"
         },
         {
           "index": 72,
           "hint": "",
-          "dataType": "decimalrow",
+          "dataType": "introw",
           "defaultValues": "",
-          "param": "HVAC",
+          "param": "HVAC Maintenance Frequency (times/year)",
           "validation": "optional",
           "id": "72"
         },
         {
           "index": 73,
           "hint": "",
-          "dataType": "decimalrow",
+          "dataType": "textrow",
           "defaultValues": "",
-          "param": "Kitchen Equipment",
+          "param": "HVAC Contractor's Name",
           "validation": "optional",
           "id": "73"
+        },
+        {
+          "index": 74,
+          "hint": "",
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:PM contract,2:self-maintained",
+          "param": "Controls Contract Type",
+          "validation": "optional",
+          "id": "74"
+        },
+        {
+          "index": 75,
+          "hint": "",
+          "dataType": "introw",
+          "defaultValues": "",
+          "param": "Controls Maintenance Frequency (times/year)",
+          "validation": "optional",
+          "id": "75"
+        },
+        {
+          "index": 76,
+          "hint": "",
+          "dataType": "textrow",
+          "defaultValues": "",
+          "param": "Controls Contractor's Name",
+          "validation": "optional",
+          "id": "76"
         }
       ],
       "id": "7"
     },
     {
       "index": 8,
-      "section": "Others",
+      "section": "Refrigeration Maintenance",
       "elements": [
         {
           "index": 81,
           "hint": "",
           "dataType": "pickerinputrow",
-          "defaultValues": "1:pge,2:nes",
-          "param": "Electric Utility Company",
-          "validation": "mandatory",
+          "defaultValues": "1:PM contract,2:self-maintained",
+          "param": "Contract Type",
+          "validation": "optional",
           "id": "81"
         },
         {
           "index": 82,
           "hint": "",
-          "dataType": "pickerinputrow",
-          "defaultValues": "1:pge,2:piedmontgas,3:N/A",
-          "param": "Gas Utility Company",
-          "validation": "mandatory",
+          "dataType": "introw",
+          "defaultValues": "",
+          "param": "Maintenance Frequency (times/year)",
+          "validation": "optional",
           "id": "82"
         },
         {
           "index": 83,
           "hint": "",
-          "dataType": "pickerinputrow",
-          "defaultValues": "1:G-NR1,2:MTNG-rate35,3:MTNG-rate41,4:N/A",
-          "param": "Gas Rate Structure",
-          "validation": "mandatory",
+          "dataType": "textrow",
+          "defaultValues": "",
+          "param": "Contractor's Name",
+          "validation": "optional",
           "id": "83"
-        },
-        {
-          "index": 84,
-          "hint": "",
-          "dataType": "pickerinputrow",
-          "defaultValues": "1:A-1,2:A-1 TOU,3:A-6 TOU,4:A-10,5:A-10 TOU,6:E-19 TOU,7:GSA-1,8:GSA-2,9:TGSA-1,10:TGSA-2",
-          "param": "Electric Rate Structure",
-          "validation": "mandatory",
-          "id": "84"
         }
       ],
       "id": "8"
     },
     {
       "index": 9,
-      "section": "Additions",
+      "section": "Lighting Maintenance",
       "elements": [
         {
           "index": 91,
-          "hint": "Roof",
+          "hint": "",
           "dataType": "textrow",
           "defaultValues": "",
-          "param": "Where is your package unit",
-          "validation": "mandatory",
+          "param": "How often do you clean your lighting?",
+          "validation": "optional",
           "id": "91"
         },
         {
           "index": 92,
           "hint": "",
-          "dataType": "pickerinputrow",
-          "defaultValues": "1:yes,2:no",
-          "param": "Are you able to provide access to all areas including the roof?",
-          "validation": "mandatory",
+          "dataType": "textrow",
+          "defaultValues": "",
+          "param": "How often do you maintain your lighting fixtures?",
+          "validation": "optional",
           "id": "92"
         }
       ],
       "id": "9"
+    },
+    {
+      "index": 10,
+      "section": "General Envelope",
+      "elements": [
+        {
+          "index": 101,
+          "hint": "",
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:basement,2:ground floor,3:upper floor",
+          "param": "Business Location",
+          "validation": "optional",
+          "id": "101"
+        },
+        {
+          "index": 102,
+          "hint": "",
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:yes,2:no",
+          "param": "Poorly insulated",
+          "validation": "optional",
+          "id": "102"
+        },
+        {
+          "index": 103,
+          "hint": "",
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:yes,2:no",
+          "param": "Loose building",
+          "validation": "optional",
+          "id": "103"
+        }
+      ],
+      "id": "10"
+    },
+    {
+      "index": 11,
+      "section": "Glazing",
+      "elements": [
+        {
+          "index": 111,
+          "hint": "",
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:N,2:NE,3:E,4:SE,5:S,6:SW,7:W,8:NW",
+          "param": "Fa\u00e7ade orientation",
+          "validation": "optional",
+          "id": "111"
+        },
+        {
+          "index": 112,
+          "hint": "",
+          "dataType": "decimalrow",
+          "defaultValues": "",
+          "param": "Age of Windows",
+          "validation": "optional",
+          "id": "112"
+        },
+        {
+          "index": 113,
+          "hint": "",
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:single pane,2:double pane",
+          "param": "Window Type",
+          "validation": "optional",
+          "id": "113"
+        },
+        {
+          "index": 114,
+          "hint": "",
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:yes,2:no",
+          "param": "Skylights",
+          "validation": "optional",
+          "id": "114"
+        },
+        {
+          "index": 115,
+          "hint": "",
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:yes,2:no",
+          "param": "Thermal Bridging Issues",
+          "validation": "optional",
+          "id": "115"
+        }
+      ],
+      "id": "11"
+    },
+    {
+      "index": 12,
+      "section": "Others",
+      "elements": [
+        {
+          "index": 121,
+          "hint": "",
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:Burlington Electric Department",
+          "param": "Electric Utility Company",
+          "validation": "mandatory",
+          "id": "121"
+        },
+        {
+          "index": 122,
+          "hint": "",
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:Vermont Gas",
+          "param": "Gas Utility Company",
+          "validation": "optional",
+          "id": "122"
+        },
+        {
+          "index": 123,
+          "hint": "",
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:G1,2:G2,3:G3,4:G4",
+          "param": "Gas Rate Structure",
+          "validation": "optional",
+          "id": "123"
+        },
+        {
+          "index": 124,
+          "hint": "",
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:SG,2:ST,3:LG,4:LGmax,5:LT,6:PS,7:PSmax",
+          "param": "Electric Rate Structure",
+          "validation": "mandatory",
+          "id": "124"
+        }
+      ],
+      "id": "12"
+    },
+    {
+      "index": 13,
+      "section": "General Site Access and Notes",
+      "elements": [
+        {
+          "index": 131,
+          "hint": "Roof",
+          "dataType": "textrow",
+          "defaultValues": "",
+          "param": "Where is your HVAC equipment",
+          "validation": "optional",
+          "id": "131"
+        },
+        {
+          "index": 132,
+          "hint": "",
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:yes,2:no",
+          "param": "Are you able to provide access to all areas including the roof?",
+          "validation": "optional",
+          "id": "132"
+        },
+        {
+          "index": 133,
+          "hint": "",
+          "dataType": "textarearow",
+          "defaultValues": "",
+          "param": "General site notes",
+          "validation": "optional",
+          "id": "133"
+        },
+        {
+          "index": 134,
+          "hint": "",
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:Monday,2:Tuesday,3:Wednesday,4:Thursday,5:Friday,6:Saturday,7:Sunday",
+          "param": "Typical Day you restock the Walk-In Fridge/Freezer",
+          "validation": "optional",
+          "id": "134"
+        },
+        {
+          "index": 135,
+          "hint": "",
+          "dataType": "textrow",
+          "defaultValues": "",
+          "param": "How many years ago was Walk-In Fridge/Freezer Installed?",
+          "validation": "optional",
+          "id": "135"
+        },
+        {
+          "index": 136,
+          "hint": "",
+          "dataType": "textrow",
+          "defaultValues": "",
+          "param": "If coolbox, how often do you have to replace the AC unit?",
+          "validation": "optional",
+          "id": "136"
+        },
+        {
+          "index": 137,
+          "hint": "",
+          "dataType": "textarearow",
+          "defaultValues": "",
+          "param": "Any issues with heating/cooling of space?",
+          "validation": "optional",
+          "id": "137"
+        },
+        {
+          "index": 138,
+          "hint": "",
+          "dataType": "textarearow",
+          "defaultValues": "",
+          "param": "Seasonal issues? e.g., comfort or equipment failures?",
+          "validation": "optional",
+          "id": "138"
+        }
+      ],
+      "id": "13"
     }
   ]
 }
