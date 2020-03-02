@@ -101,7 +101,7 @@ class Thermostat (computable: Computable<*>, utilityRateGas: UtilityRate, utilit
      * Cost - Post State
      * */
     override fun costPostState(element: JsonElement, dataHolder: DataHolder): Double {
-
+//@k2 please make these active so that the they also spit out the values in the CSV
         //var presciptive_kW_savings = extractThermostatDeemedkW(elements)
         // var presciptive_kWh_savings = extractThermostatDeemedkWh(elements)
         //var implementationCost = extractThermostatDeemedCost(elements)

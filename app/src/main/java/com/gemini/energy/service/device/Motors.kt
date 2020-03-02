@@ -34,7 +34,7 @@ class Motors(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRate
          * */
         private const val KW_CONVERSION = 0.746
         private const val MOTOR_EFFICIENCY = "motor_efficiency"
-        private const val TYPE1 = "BED_VFD_Prescriptive_kWh"
+        private const val TYPE1 = "HVAC_VFDPrescriptive"
         private const val TYPE2 = "BED_VFD_Prescriptive_kW"
         /**
          * Fetches the Motor Efficiency (NEMA-Premium) based on the specific Match Criteria
@@ -172,7 +172,7 @@ class Motors(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRate
         val summerLLF = 11.2
         var netBEDkwhsavings = (grossBEDkwhsavings * (1 + winterLLF) * (freerider + spillover - 1) * winterRPF) +
                     (grossBEDkwhsavings * (1 + summerLLF) * (freerider + spillover - 1) * summerRPF)
-
+//@k2 please make these active so that the they also spit out the values in the CSV
         //1c. BED Prescriptive Savings for VFD - Based on table on pg. 70 of Vermont TRM
         //var VFDeSavings = if (OTF == "yes") {
         //    extractEnergySavings(elements) / 0.9
@@ -198,6 +198,7 @@ class Motors(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRate
         postRow["__implementation_cost"] = implementationCost.toString()
         postRow["__Gross_Savings_BLPM_circulator_pump"] = grossBEDkwhsavings.toString()
         postRow["__Net_Savings__BLPM_circulator_pump"] = netBEDkwhsavings.toString()
+        //@k2 please make these active so that the they also spit out the values in the CSV
         //postRow["__VFD_Prescriptive_Energy_Savings"] = VFDeSavings.toString()
         //postRow["__VFD_Prescriptive_Demand_Savings"] = VFDdSavings.toString()
 
@@ -256,14 +257,14 @@ class Motors(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRate
     .put("type", TYPE1)
     .put("data.hp", hp)
     .put("data.purpose", motortype)
-    .toString()    //check to make sure it is correct
+    .toString()    //check to make sure it is correct @k2
 
 
     override fun queryBEDMotorVFDprescriptivekw() = JSONObject()
-            .put("type", TYPE2)
+            .put("type", TYPE1)
             .put("data.hp", hp)
             .put("data.purpose", motortype)
-            .toString()    //check to make sure it is correct
+            .toString()    //check to make sure it is correct @k2
     override fun energyTimeChange(): Double = 0.0
     override fun energyPowerTimeChange(): Double = 0.0
 
