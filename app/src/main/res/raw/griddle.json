@@ -10,7 +10,7 @@
           "dataType": "pickerinputrow",
           "defaultValues": "1:Single,2:Double",
           "param": "Number of Sides",
-          "validation": "mandatory",
+          "validation": "optional",
           "id": "11"
         },
         {
@@ -19,7 +19,7 @@
           "dataType": "decimalrow",
           "defaultValues": "",
           "param": "Surface Area",
-          "validation": "mandatory",
+          "validation": "optional",
           "id": "12"
         },
         {
@@ -28,7 +28,7 @@
           "dataType": "decimalrow",
           "defaultValues": "",
           "param": "Nominal Width",
-          "validation": "mandatory",
+          "validation": "optional",
           "id": "13"
         },
         {
@@ -73,7 +73,7 @@
           "dataType": "pickerinputrow",
           "defaultValues": "1:Gas,2:Electric",
           "param": "Fuel Type",
-          "validation": "mandatory",
+          "validation": "optional",
           "id": "18"
         },
         {
@@ -82,7 +82,7 @@
           "dataType": "textrow",
           "defaultValues": "",
           "param": "Model Number",
-          "validation": "mandatory",
+          "validation": "optional",
           "id": "19"
         },
         {
@@ -91,7 +91,7 @@
           "dataType": "textrow",
           "defaultValues": "",
           "param": "Company",
-          "validation": "mandatory",
+          "validation": "optional",
           "id": "110"
         },
         {
@@ -100,7 +100,7 @@
           "dataType": "introw",
           "defaultValues": "",
           "param": "Quantity",
-          "validation": "mandatory",
+          "validation": "optional",
           "id": "111"
         },
         {
@@ -109,7 +109,7 @@
           "dataType": "introw",
           "defaultValues": "",
           "param": "Age",
-          "validation": "mandatory",
+          "validation": "optional",
           "id": "112"
         },
         {
@@ -118,7 +118,7 @@
           "dataType": "pickerinputrow",
           "defaultValues": "1:Yes,2:No",
           "param": "Control",
-          "validation": "mandatory",
+          "validation": "optional",
           "id": "113"
         }
       ],
@@ -152,7 +152,7 @@
           "dataType": "decimalrow",
           "defaultValues": "",
           "param": "Off Peak Hours",
-          "validation": "mandatory",
+          "validation": "optional",
           "id": "23"
         }
       ],
