@@ -194,7 +194,6 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
             state = featureData["State"]!! as String
 
             peakHours = featureData["Peak Hours"]!! as Double
-            partPeakHours = featureData["Part Peak Hours"]!! as Double
             offPeakHours = featureData["Off Peak Hours"]!! as Double
 
             alternateSeer = featureData["Alternate SEER"]!! as Double
@@ -358,13 +357,13 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
     fun totalSavings(): Double {
         val powerPre = btu / seer / 1000
         val powerPost = btu / alternateSeer / 1000
-        val eSavings = (powerPre - powerPost)
+        var eSavings = (powerPre - powerPost)
             val usageHours = UsageLighting()
             usageHours.peakHours = peakHours
             usageHours.partPeakHours = partPeakHours
             usageHours.offPeakHours = offPeakHours
-            //return costElectricity(eSavings, usageHours, electricityRate)
-            return 296.0
+            return costElectricity(eSavings, usageHours, electricityRate)
+            //return 296.0 just for testing
     }
 
 

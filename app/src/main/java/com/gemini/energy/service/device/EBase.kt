@@ -178,16 +178,15 @@ abstract class EBase(val computable: Computable<*>,
 
         // ** Prepare a list of Observable - Extractor that is required by each of the Zone Type **
         val extractorHVAC = listOf(dataExtractHVAC(queryHVACCoolingHours()),
-                dataExtractHVAC(queryHVACEer()))
+                dataExtractHVAC(queryHVACEer()), dataExtractHVAC(queryMotorVFDprescriptive))
 
-        val extractorMotor = listOf(dataExtractMotors(queryMotorEfficiency()),dataExtractMotors(queryBEDMotorVFDprescriptivekwh()),
-                dataExtractMotors(queryBEDMotorVFDprescriptivekw()))
+        val extractorMotor = listOf(dataExtractMotors(queryMotorEfficiency()))
 
         val extractorThermostat = listOf(dataExtractThermostat(queryThermostatDeemed()),
                 dataExtractThermostat(queryThermostatDeemedCost()))
 
         val extractorLightControls = listOf(dataExtractLightControls(queryControlPercentSaved()),
-                dataExtractLightControls(queryAssumedHours()))
+                dataExtractLightControls(queryAssumedHours()),dataExtractLightControls(queryControlPercentSaved2()))
 
         val extractorNone = listOf(Observable.just(JsonArray()))
 
@@ -380,13 +379,13 @@ abstract class EBase(val computable: Computable<*>,
      * */
     open fun queryHVACCoolingHours() = ""
     open fun queryHVACEer() = ""
-
+    open fun queryMotorVFDprescriptive() = ""
     /**
      * Motors Query - Fetch Efficiency
      * */
     open fun queryMotorEfficiency() = ""
-    open fun queryBEDMotorVFDprescriptivekwh() = ""
-    open fun queryBEDMotorVFDprescriptivekw() = ""
+
+
 
     /**
      * Thermostat Query
@@ -399,6 +398,7 @@ abstract class EBase(val computable: Computable<*>,
      * Light Controls
      */
     open fun queryControlPercentSaved() = ""
+    open fun queryControlPercentSaved2() = ""
     open fun queryAssumedHours() = ""
     /**
      * Get the Specific Query Result from the Parse API

@@ -14,6 +14,7 @@ import com.gemini.energy.service.type.UsageLighting
 import com.gemini.energy.service.type.UtilityRate
 import com.google.gson.JsonElement
 import io.reactivex.Observable
+import org.json.JSONObject
 import timber.log.Timber
 import java.util.*
 
@@ -29,6 +30,55 @@ class LinearFluorescent(computable: Computable<*>, utilityRateGas: UtilityRate, 
     }
 
     companion object {
+            private const val LightControls = "lighting_lightingcontrols"
+            private const val ControlHours = "lighting_lightingcontrolhours"
+
+            /**
+             * Fetches the Deemed Criteria at once
+             * via the Parse API
+             * */
+
+            //Need to pull multiple at once if feasible otherwise it is a lot of code
+            fun extractControlPercentSaved(elements: List<JsonElement?>): Double {
+                elements.forEach {
+                    it?.let {
+                        if (it.asJsonObject.has("percent_savings")) {
+                            return it.asJsonObject.get("percent_savings").asDouble
+                        }
+                    }
+                }
+                return 0.0
+            }
+            fun extractEquipmentCost(elements: List<JsonElement?>): Double {
+                elements.forEach {
+                    it?.let {
+                        if (it.asJsonObject.has("equipment_cost")) {
+                            return it.asJsonObject.get("equipment_cost").asDouble
+                        }
+                    }
+                }
+                return 0.0
+            }
+            fun extractMeasureCode(elements: List<JsonElement?>): Double {
+                elements.forEach {
+                    it?.let {
+                        if (it.asJsonObject.has("measure_code")) {
+                            return it.asJsonObject.get("measure_code").asDouble
+                        }
+                    }
+                }
+                return 0.0
+            }
+            fun extractAssumedHours(elements: List<JsonElement?>): Double {
+                elements.forEach {
+                    it?.let {
+                        if (it.asJsonObject.has("hours")) {
+                            return it.asJsonObject.get("hours").asDouble
+                        }
+                    }
+                }
+                return 0.0
+            }
         /**
          * Hypothetical Cost of Replacement for Linear Fluorescent
          * */
@@ -43,6 +93,10 @@ class LinearFluorescent(computable: Computable<*>, utilityRateGas: UtilityRate, 
 
     private var percentPowerReduced = 0.0
     private var actualWatts = 0.0
+
+    private var ControlType1 = ""
+    private var ControlType2 = ""
+    private var bType = ""
 
     private var peakHours = 0.0
     private var partPeakHours = 0.0
@@ -90,8 +144,11 @@ class LinearFluorescent(computable: Computable<*>, utilityRateGas: UtilityRate, 
             ballastsPerFixtures = featureData["Ballasts Per Fixture"]!! as Int
             numberOfFixtures = featureData["Number of Fixtures"]!! as Int
 
+            ControlType1 = featureData["Suggested Control Type1"]!! as String
+            ControlType2 = featureData["Suggested Control Type2"]!! as String
+            bType = featureData["Building Type"]!! as String
+
             peakHours = featureData["Peak Hours"]!! as Double
-            partPeakHours = featureData["Part Peak Hours"]!! as Double
             offPeakHours = featureData["Off Peak Hours"]!! as Double
 
             alternateActualWatts = featureData["Alternate Actual Watts"]!! as Double
@@ -179,6 +236,13 @@ class LinearFluorescent(computable: Computable<*>, utilityRateGas: UtilityRate, 
         val paybackyear = selfinstallcost / energySavings
         val totalsavings = energySavings + coolingSavings + maintenanceSavings
 
+        //@k2interactive please make sure this works and is pushed out to the post CSV
+        // val controlCost = extractEquipmentCost(elements)
+        // val measureCode = extractMeasureCode(elements)
+        // val prescriptiveHours = extractAssumedHours(elements)
+        // val percentSaved = extractControlPercentSaved(elements)
+        // val prescriptiveSaved = preEnergy() * percentSaved
+
         val postRow = mutableMapOf<String, String>()
         postRow["__life_hours"] = lifeHours.toString()
         postRow["__maintenance_savings"] = maintenanceSavings.toString()
@@ -189,6 +253,12 @@ class LinearFluorescent(computable: Computable<*>, utilityRateGas: UtilityRate, 
         postRow["__payback_month"] = paybackmonth.toString()
         postRow["__payback_year"] = paybackyear.toString()
         postRow["__total_savings"] = totalsavings.toString()
+        //@k2interactive
+        //postRow["__lighting_control_prescriptive_cost"] = controlCost.toString()
+        //postRow["__lighting_control_measure_code"] = measureCode.toString()
+        //postRow["__lighting_control_prescriptive_hours"] = prescriptiveHours.toString()
+        //postRow["__lighting_control_prescriptive_savings"] = prescriptiveSaved.toString()
+        //postRow["__lighting_control_prescriptive_percent"] = percentSaved.toString()
 
         dataHolder.header = postStateFields()
         dataHolder.computable = computable
@@ -255,10 +325,14 @@ class LinearFluorescent(computable: Computable<*>, utilityRateGas: UtilityRate, 
         return ledbulbcost * alternateNumberOfFixtures * alternateLampsPerFixture
     }
     fun totalEnergySavings(): Double {
-        if (controls != null) {
+        if (controls == "yes") {
             val coolingSavings = (preEnergy() - energyPowerChange()) * cooling / seer
             return (preEnergy() - energyPowerChange()) + coolingSavings
-        } else {
+        } else if(ControlType1 != null || ControlType2 != null){
+            val coolingSavings = (preEnergy() - energyTimeChange()) * cooling / seer
+            return (preEnergy() - energyTimeChange()) + coolingSavings
+        }
+        else {
             val coolingSavings = (preEnergy() - energyPowerTimeChange()) * cooling / seer
             return (preEnergy() - energyPowerTimeChange()) + coolingSavings
         }
@@ -289,7 +363,20 @@ class LinearFluorescent(computable: Computable<*>, utilityRateGas: UtilityRate, 
      * */
     override fun efficientLookup() = false
     override fun queryEfficientFilter() = ""
+    override fun queryControlPercentSaved() = JSONObject()
+            .put("type", LightControls)
+            .put("data.Type", ControlType1)
+            .toString()
 
+    override fun queryControlPercentSaved2() = JSONObject()
+            .put("type", LightControls)
+            .put("data.Type", ControlType2)
+            .toString()
+
+    override fun queryAssumedHours() = JSONObject()
+            .put("type", ControlHours)
+            .put("data.location_type", bType)
+            .toString()
     /**
      * State if the Equipment has a Post UsageHours Hours (Specific) ie. A separate set of
      * Weekly UsageHours Hours apart from the PreAudit
@@ -303,7 +390,9 @@ class LinearFluorescent(computable: Computable<*>, utilityRateGas: UtilityRate, 
     override fun featureDataFields() = getGFormElements().map { it.value.param!! }.toMutableList()
 
     override fun preStateFields() = mutableListOf("")
-    override fun postStateFields() = mutableListOf("__life_hours", "__maintenance_savings",
+    override fun postStateFields() = mutableListOf("__lighting_control_measure_code", "__lighting_control_prescriptive_hours",
+            "__lighting_control_prescriptive_cost", "__lighting_control_prescriptive_savings",
+            "__lighting_control_prescriptive_percent", "__life_hours", "__maintenance_savings",
             "__cooling_savings", "__energy_savings", "__energy_at_post_state", "__selfinstall_cost",
             "__payback_month", "__payback_year", "__total_savings")
 

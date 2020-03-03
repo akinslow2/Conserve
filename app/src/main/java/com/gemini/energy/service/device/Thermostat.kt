@@ -38,10 +38,10 @@ class Thermostat (computable: Computable<*>, utilityRateGas: UtilityRate, utilit
          * Fetches the Deemed Criteria at once
          * via the Parse API
          * */
-        // Both total_kwh and total_cost can be found from the call to
+        // Both total_kwh, kw, and total_cost can be found from the call to
         // dataExtractThermostat with the string from queryThermostatDeemed
-        // that data should be sent to the costPreState function
-        fun extractThermostatDeemed(elements: List<JsonElement?>): Double {
+        // that data should be sent to the costPostState function
+        fun extractThermostatreplacementkWh(elements: List<JsonElement?>): Double {
             elements.forEach {
                 it?.let {
                     if (it.asJsonObject.has("total_kwh")) {
@@ -51,8 +51,17 @@ class Thermostat (computable: Computable<*>, utilityRateGas: UtilityRate, utilit
             }
             return 0.0
         }
-
-        fun extractThermostatDeemedCost(elements: List<JsonElement?>): Double {
+        fun extractThermostatreplacementkW(elements: List<JsonElement?>): Double {
+            elements.forEach {
+                it?.let {
+                    if (it.asJsonObject.has("kw")) {
+                        return it.asJsonObject.get("kw").asDouble
+                    }
+                }
+            }
+            return 0.0
+        }
+        fun extractThermostatreplacementCost(elements: List<JsonElement?>): Double {
             elements.forEach {
                 it?.let {
                     if (it.asJsonObject.has("total_cost")) {
@@ -64,10 +73,8 @@ class Thermostat (computable: Computable<*>, utilityRateGas: UtilityRate, utilit
         }
     }
 
-    var utilitycompany = ""
     private var heatingFuel = ""
     private var coolingFuel = ""
-    private var efficiency = 0.0
 
 
     /**
@@ -76,12 +83,10 @@ class Thermostat (computable: Computable<*>, utilityRateGas: UtilityRate, utilit
 
 
     private var peakHours = 0.0
-    private var partPeakHours = 0.0
     private var offPeakHours = 0.0
 
     override fun setup() {
         try {
-            utilitycompany = preAudit["Others Electric Utility Company"]!! as String
             heatingFuel = featureData["Heat Fuel"]!! as String
             coolingFuel = featureData["Cool Fuel"]!! as String
 
@@ -101,15 +106,16 @@ class Thermostat (computable: Computable<*>, utilityRateGas: UtilityRate, utilit
      * Cost - Post State
      * */
     override fun costPostState(element: JsonElement, dataHolder: DataHolder): Double {
-//@k2 please make these active so that the they also spit out the values in the CSV
-        //var presciptive_kW_savings = extractThermostatDeemedkW(elements)
-        // var presciptive_kWh_savings = extractThermostatDeemedkWh(elements)
-        //var implementationCost = extractThermostatDeemedCost(elements)
+//@k2interactive please make these active so that the they also spit out the values in the CSV
+        //var presciptive_kW_savings = extractThermostatreplacementkW(elements)
+        // var presciptive_kWh_savings = extractThermostatreplacementkWh(elements)
+        //var implementationCost = extractThermostatreplacementCost(elements)
 
         val postRow = mutableMapOf<String, String>()
+        //@k2interactive
         //  postRow["__prescriptive_kWh_savings"] = presciptive_kWh_savings.toString()
         //postRow["__prescriptive_kW_savings"] = presciptive_kW_savings.toString()
-        //postRow["__implementation_cost"] = implementationCost.toString()
+        //postRow["__prescriptive_implementation_cost"] = implementationCost.toString()
 
 
         dataHolder.header = postStateFields()
@@ -173,10 +179,10 @@ class Thermostat (computable: Computable<*>, utilityRateGas: UtilityRate, utilit
     override fun preAuditFields() = mutableListOf("")
 
     override fun featureDataFields() = getGFormElements().map { it.value.param!! }.toMutableList()
-
+//@k2interactive please add variables heatingfuel and coolingfuel in the prestate fields below
     override fun preStateFields() = mutableListOf("")
     override fun postStateFields() = mutableListOf("__prescriptive_kWh_savings", "__prescriptive_kW_savings",
-            "__implementation_cost")
+            "__prescriptive_implementation_cost")
 
     override fun computedFields() = mutableListOf("")
 

@@ -43,6 +43,8 @@ class CombinationOven(computable: Computable<*>, utilityRateGas: UtilityRate, ut
         private const val ADJUSTMENT_PRE_HEAT = 0.25
         fun adjustPreHeat(value: Double) = value * ADJUSTMENT_PRE_HEAT
 
+        private const val oven_retrofit = "combination_ovens_retrofits"
+
     }
 
     private fun isElectric() = fuelType == "Electric"
@@ -375,6 +377,7 @@ class CombinationOven(computable: Computable<*>, utilityRateGas: UtilityRate, ut
      * */
     override fun efficientLookup() = true
     override fun queryEfficientFilter() = JSONObject()
+            .put("type", oven_retrofit)
             .put("data.size", steamPanSize)
             .toString()
 

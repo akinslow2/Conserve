@@ -31,8 +31,8 @@ class Cfl(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEle
 
     companion object {
 
-        private const val LightControls = "Light_Controls"
-        private const val ControlHours = "Light_Control_Hours"
+        private const val LightControls = "lighting_lightingcontrols"
+        private const val ControlHours = "lighting_lightingcontrolhours"
 
         /**
          * Fetches the Deemed Criteria at once
@@ -43,8 +43,8 @@ class Cfl(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEle
         fun extractControlPercentSaved(elements: List<JsonElement?>): Double {
             elements.forEach {
                 it?.let {
-                    if (it.asJsonObject.has("Percent_Savings")) {
-                        return it.asJsonObject.get("Percent_Savings").asDouble
+                    if (it.asJsonObject.has("percent_savings")) {
+                        return it.asJsonObject.get("percent_savings").asDouble
                     }
                 }
             }
@@ -53,8 +53,18 @@ class Cfl(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEle
         fun extractEquipmentCost(elements: List<JsonElement?>): Double {
             elements.forEach {
                 it?.let {
-                    if (it.asJsonObject.has("Equipment_Cost")) {
-                        return it.asJsonObject.get("Equipment_Cost").asDouble
+                    if (it.asJsonObject.has("equipment_cost")) {
+                        return it.asJsonObject.get("equipment_cost").asDouble
+                    }
+                }
+            }
+            return 0.0
+        }
+        fun extractMeasureCode(elements: List<JsonElement?>): Double {
+            elements.forEach {
+                it?.let {
+                    if (it.asJsonObject.has("measure_code")) {
+                        return it.asJsonObject.get("measure_code").asDouble
                     }
                 }
             }
@@ -63,8 +73,8 @@ class Cfl(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEle
         fun extractAssumedHours(elements: List<JsonElement?>): Double {
             elements.forEach {
                 it?.let {
-                    if (it.asJsonObject.has("Hours")) {
-                        return it.asJsonObject.get("Hours").asDouble
+                    if (it.asJsonObject.has("hours")) {
+                        return it.asJsonObject.get("hours").asDouble
                     }
                 }
             }
@@ -125,7 +135,6 @@ class Cfl(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEle
             bType = featureData["Building Type"]!! as String
 
             peakHours = featureData["Peak Hours"]!! as Double
-            partPeakHours = featureData["Part Peak Hours"]!! as Double
             offPeakHours = featureData["Off Peak Hours"]!! as Double
 
             alternateActualWatts = featureData["Alternate Actual Watts"]!! as Double
@@ -209,6 +218,12 @@ class Cfl(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEle
         val paybackmonth = selfinstallcost / energySavings * 12
         val paybackyear = selfinstallcost / energySavings
         val totalsavings = energySavings + coolingSavings + maintenanceSavings
+        //@k2interactive please make sure this works and is pushed out to the post CSV
+       // val controlCost = extractEquipmentCost(elements)
+        // val measureCode = extractMeasureCode(elements)
+        // val prescriptiveHours = extractAssumedHours(elements)
+        // val percentSaved = extractControlPercentSaved(elements)
+        // val prescriptiveSaved = preEnergy() * percentSaved
 
         val postRow = mutableMapOf<String, String>()
         postRow["__life_hours"] = lifeHours.toString()
@@ -220,6 +235,12 @@ class Cfl(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEle
         postRow["__payback_month"] = paybackmonth.toString()
         postRow["__payback_year"] = paybackyear.toString()
         postRow["__total_savings"] = totalsavings.toString()
+        //@k2interactive
+        //postRow["__lighting_control_prescriptive_cost"] = controlCost.toString()
+        //postRow["__lighting_control_measure_code"] = measureCode.toString()
+        //postRow["__lighting_control_prescriptive_hours"] = prescriptiveHours.toString()
+        //postRow["__lighting_control_prescriptive_savings"] = prescriptiveSaved.toString()
+        //postRow["__lighting_control_prescriptive_percent"] = percentSaved.toString()
 
         dataHolder.header = postStateFields()
         dataHolder.computable = computable
@@ -329,9 +350,14 @@ class Cfl(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEle
             .put("data.Type", ControlType1)
             .toString()
 
+    override fun queryControlPercentSaved2() = JSONObject()
+            .put("type", LightControls)
+            .put("data.Type", ControlType2)
+            .toString()
+
     override fun queryAssumedHours() = JSONObject()
             .put("type", ControlHours)
-            .put("data.Building_Type", bType)
+            .put("data.location_type", bType)
             .toString()
 
 
@@ -348,7 +374,9 @@ class Cfl(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEle
     override fun featureDataFields() = getGFormElements().map { it.value.param!! }.toMutableList()
 
     override fun preStateFields() = mutableListOf("")
-    override fun postStateFields() = mutableListOf("__life_hours", "__maintenance_savings",
+    override fun postStateFields() = mutableListOf("__lighting_control_measure_code", "__lighting_control_prescriptive_hours",
+            "__lighting_control_prescriptive_cost", "__lighting_control_prescriptive_savings",
+            "__lighting_control_prescriptive_percent", "__life_hours", "__maintenance_savings",
             "__cooling_savings", "__energy_savings", "__energy_at_post_state", "__selfinstall_cost",
             "__payback_month", "__payback_year", "__total_savings")
 
@@ -357,6 +385,7 @@ class Cfl(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEle
     private fun getFormMapper() = FormMapper(context, R.raw.cfl)
     private fun getModel() = getFormMapper().decodeJSON()
     private fun getGFormElements() = getFormMapper().mapIdToElements(getModel())
+
 
 
 }
