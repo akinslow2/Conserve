@@ -193,11 +193,11 @@ abstract class EBase(val computable: Computable<*>,
 
         // ** Extractor List gets called depending on the Zone Type **
         val remoteExtract = when (computable.auditScopeType) {
-            EZoneType.HVAC      -> extractorHVAC
-            EZoneType.Motors    -> extractorMotor
+            EZoneType.HVAC -> extractorHVAC
+            EZoneType.Motors -> extractorMotor
             EZoneType.Thermostat -> extractorThermostat
             EZoneType.Lighting -> extractorLightControls
-            else                -> extractorNone
+            else -> extractorNone
         }
 
         return energyPreState.getObservable(remoteExtract) {
@@ -394,6 +394,7 @@ abstract class EBase(val computable: Computable<*>,
     open fun queryThermostatDeemedkW() = ""
     open fun queryThermostatDeemedkWh() = ""
     open fun queryThermostatDeemedCost() = ""
+    open fun queryThermostatDeemed() = ""
 
     /**
      * Light Controls
