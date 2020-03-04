@@ -178,7 +178,7 @@ abstract class EBase(val computable: Computable<*>,
 
         // ** Prepare a list of Observable - Extractor that is required by each of the Zone Type **
         val extractorHVAC = listOf(dataExtractHVAC(queryHVACCoolingHours()),
-                dataExtractHVAC(queryHVACEer()), dataExtractHVAC(queryMotorVFDprescriptive))
+                dataExtractHVAC(queryHVACEer()), dataExtractHVAC(queryMotorVFDprescriptive()))
 
         val extractorMotor = listOf(dataExtractMotors(queryMotorEfficiency()))
 
