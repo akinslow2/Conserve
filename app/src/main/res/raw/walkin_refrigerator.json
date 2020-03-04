@@ -2,7 +2,7 @@
   "geminiForm": [
     {
       "index": 1,
-      "section": "Walk-In Refrigerator",
+      "section": "Refrigerator",
       "elements": [
         {
           "index": 11,
@@ -10,7 +10,7 @@
           "dataType": "pickerinputrow",
           "defaultValues": "1:Ultra-low Temperature Freezer,2:Solid Door Freezer,3:Solid Door Refrigerator,4:Glass Door Refrigerator",
           "param": "Equipment Type",
-          "validation": "",
+          "validation": "mandatory",
           "id": "11"
         },
         {
@@ -28,7 +28,7 @@
           "dataType": "decimalrow",
           "defaultValues": "",
           "param": "Total Volume",
-          "validation": "",
+          "validation": "mandatory",
           "id": "13"
         },
         {
@@ -37,7 +37,7 @@
           "dataType": "textrow",
           "defaultValues": "",
           "param": "Model Number",
-          "validation": "",
+          "validation": "mandatory",
           "id": "14"
         },
         {
@@ -46,7 +46,7 @@
           "dataType": "textrow",
           "defaultValues": "",
           "param": "Company",
-          "validation": "",
+          "validation": "mandatory",
           "id": "15"
         },
         {
@@ -55,7 +55,7 @@
           "dataType": "introw",
           "defaultValues": "",
           "param": "Age",
-          "validation": "",
+          "validation": "mandatory",
           "id": "16"
         },
         {
@@ -64,7 +64,7 @@
           "dataType": "pickerinputrow",
           "defaultValues": "1:Yes,2:No",
           "param": "Control",
-          "validation": "",
+          "validation": "mandatory",
           "id": "17"
         },
         {
@@ -73,7 +73,7 @@
           "dataType": "introw",
           "defaultValues": "",
           "param": "Quantity",
-          "validation": "",
+          "validation": "mandatory",
           "id": "18"
         },
         {
@@ -118,6 +118,15 @@
           "param": "Off Peak Hours",
           "validation": "",
           "id": "23"
+        },
+        {
+          "index": 24,
+          "hint": "",
+          "dataType": "textrow",
+          "defaultValues": "",
+          "param": "Motor Sensor Serial",
+          "validation": "",
+          "id": "24"
         }
       ],
       "id": "2"

@@ -74,7 +74,7 @@ class TypeListFragment : DaggerFragment(),
 
     /*
     * Type Id is used to query the specific Type
-    * [Plugload - Motors - HVAC - Lighting - Others]
+    * [Plugload - Motors - HVAC - Thermostat - Lighting - Others]
     * */
     private var typeId: Int? = null
 

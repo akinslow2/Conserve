@@ -308,7 +308,8 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
      * */
     override fun incentives(): Double {
         if (utilitycompany == "pge") {return energyPowerChange() * 0.15 + (energyPowerChange() / usageHoursPre()) * 150 }
-        else { return 0.0}
+        if (utilitycompany == "nes"){ return 0.0}
+        else {return 0.00}
     }
 
     override fun materialCost(): Double {
