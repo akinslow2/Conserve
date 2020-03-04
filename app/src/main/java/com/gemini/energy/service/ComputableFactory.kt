@@ -56,6 +56,9 @@ abstract class ComputableFactory {
                 EZoneType.Motors                    -> MotorFactory(_utilityRateGas,
                         _utilityRateElectricity, usageHours, outgoingRows, context)
 
+                EZoneType.Thermostat                    -> ThermostatFactory(_utilityRateGas,
+                        _utilityRateElectricity, usageHours, outgoingRows, context)
+
                 EZoneType.Others                   -> GeneralFactory()
             }
        }
@@ -199,6 +202,16 @@ class MotorFactory(private val utilityRateGas: UtilityRate,
 
 }
 
+class ThermostatFactory(private val utilityRateGas: UtilityRate,
+                   private val utilityRateElectricity: UtilityRate,
+                   private val usageHours: UsageHours,
+                   private val outgoingRows: OutgoingRows,
+                   private val context: Context) : ComputableFactory() {
+
+    override fun build() = Thermostat(computable,
+            utilityRateGas, utilityRateElectricity, usageHours, outgoingRows, context)
+
+}
 class GeneralFactory : ComputableFactory() {
     override fun build() = General()
 }

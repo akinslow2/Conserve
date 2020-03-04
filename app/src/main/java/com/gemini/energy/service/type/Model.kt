@@ -5,9 +5,8 @@ package com.gemini.energy.service.type
  * */
 interface IUsageType {
     fun summerOn(): Double
-    fun summerPart(): Double
     fun summerOff(): Double
-    fun winterPart(): Double
+    fun winterOn(): Double
     fun winterOff(): Double
 
     fun summerNone(): Double
@@ -17,7 +16,6 @@ interface IUsageType {
     fun winterExcess(): Double
 
     fun peak(): Double
-    fun partPeak(): Double
     fun noPeak(): Double
 
     fun weightedAverage(): Double
@@ -28,29 +26,26 @@ interface IUsageType {
  * */
 data class TOU(
         private var summerOn: Double,
-        private var summerPart: Double,
         private var summerOff: Double,
-        private var winterPart: Double,
+        private var winterOn: Double,
         private var winterOff: Double,
 
         private var peak: Double,
-        private var partPeak: Double,
         private var noPeak: Double
 
 ) : IUsageType {
 
-    constructor(): this(0.0, 0.0, 0.0)
+    constructor(): this(0.0, 0.0)
 
-    constructor(summerOn: Double, summerPart: Double, summerOff: Double, winterPart: Double, winterOff: Double):
-            this(summerOn, summerPart, summerOff, winterPart, winterOff, 0.0, 0.0, 0.0)
+    constructor(summerOn: Double, summerOff: Double, winterOn: Double, winterOff: Double):
+            this(summerOn, summerOff, winterOn, winterOff, 0.0, 0.0)
 
-    constructor(peak: Double, partPeak: Double, noPeak: Double): this(0.0, 0.0,
-            0.0, 0.0, 0.0, peak, partPeak, noPeak)
+    constructor(peak: Double, noPeak: Double): this(0.0,
+            0.0, 0.0, 0.0, peak, noPeak)
 
     override fun summerOn() = summerOn
-    override fun summerPart() = summerPart
     override fun summerOff() = summerOff
-    override fun winterPart() = winterPart
+    override fun winterOn() = winterOn
     override fun winterOff() = winterOff
 
     override fun summerNone() = 0.0
@@ -60,20 +55,18 @@ data class TOU(
     override fun winterExcess() = 0.0
 
     override fun peak() = peak
-    override fun partPeak() = partPeak
     override fun noPeak() = noPeak
 
-    override fun weightedAverage() = (((summerOn() + summerPart() + summerOff()) / 3) * 0.504) +
-            (((winterPart() + winterOff()) / 2) * 0.496)
+    override fun weightedAverage() = (((summerOn() + summerOff()) / 2) * 0.5) +
+            (((winterOn() + winterOff()) / 2) * 0.5)
 
     override fun toString(): String {
         return ">>> Summer On : $summerOn \n" +
-                ">>> Summer Part : $summerPart \n" +
                 ">>> Summer Off : $summerOff \n" +
-                ">>> Winter Part : $winterPart \n" +
+                ">>> Winter Part : $winterOn \n" +
                 ">>> Winter Off : $winterOff \n" +
 
-                ">>> Peak : $peak >>> Part Peak : $partPeak >>> No Peak : $noPeak"
+                ">>> Peak : $peak >>> No Peak : $noPeak"
     }
 
 }
@@ -96,9 +89,8 @@ data class TOUNone(
             this(summerNone, summerExcess, winterNone, winterExcess, 0.0)
 
     override fun summerOn() = 0.0
-    override fun summerPart() = 0.0
     override fun summerOff() = 0.0
-    override fun winterPart() = 0.0
+    override fun winterOn() = 0.0
     override fun winterOff() = 0.0
 
     override fun summerNone() = summerNone
@@ -108,10 +100,9 @@ data class TOUNone(
     override fun winterExcess() = winterExcess
 
     override fun peak() = 0.0
-    override fun partPeak() = 0.0
     override fun noPeak() = noPeak
 
-    override fun weightedAverage() = (summerNone() * 0.504 + winterNone() * 0.496)
+    override fun weightedAverage() = (summerNone() * 0.5 + winterNone() * 0.5)
 
     override fun toString(): String {
         return ">>> Summer None : $summerNone \n" +

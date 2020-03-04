@@ -183,11 +183,7 @@ abstract class EBase(val computable: Computable<*>,
         val extractorMotor = listOf(dataExtractMotors(queryMotorEfficiency()),dataExtractMotors(queryBEDMotorVFDprescriptivekwh()),
                 dataExtractMotors(queryBEDMotorVFDprescriptivekw()))
 
-        val extractorThermostat = listOf(dataExtractThermostat(queryThermostatDeemedkW()),
-                dataExtractThermostat(queryThermostatDeemedkWh()),dataExtractThermostat(queryThermostatDeemedCost()))
-
-        val extractorLightControls = listOf(dataExtractLightControls(queryControlPercentSaved()),
-                dataExtractLightControls(queryAssumedHours()))
+        val extractorThermostat = listOf(dataExtractThermostat(queryThermostatDeemed()))
 
         val extractorNone = listOf(Observable.just(JsonArray()))
 
@@ -196,7 +192,6 @@ abstract class EBase(val computable: Computable<*>,
             EZoneType.HVAC      -> extractorHVAC
             EZoneType.Motors    -> extractorMotor
             EZoneType.Thermostat -> extractorThermostat
-            EZoneType.Lighting -> extractorLightControls
             else                -> extractorNone
         }
 
@@ -391,15 +386,7 @@ abstract class EBase(val computable: Computable<*>,
     /**
      * Thermostat Query
      */
-    open fun queryThermostatDeemedkW() = ""
-    open fun queryThermostatDeemedkWh() = ""
-    open fun queryThermostatDeemedCost() = ""
-
-    /**
-     * Light Controls
-     */
-    open fun queryControlPercentSaved() = ""
-    open fun queryAssumedHours() = ""
+    open fun queryThermostatDeemed() = ""
     /**
      * Get the Specific Query Result from the Parse API
      * */
@@ -453,12 +440,6 @@ abstract class EBase(val computable: Computable<*>,
 
     private fun dataExtractThermostat(query: String): Observable<JsonArray> {
         return parseAPIService.fetchThermostat(query)
-                .map { it.getAsJsonArray("results") }
-                .toObservable()
-    }
-
-    private fun dataExtractLightControls(query: String): Observable<JsonArray> {
-        return parseAPIService.fetchLightControls(query)
                 .map { it.getAsJsonArray("results") }
                 .toObservable()
     }

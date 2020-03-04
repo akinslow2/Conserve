@@ -77,6 +77,7 @@ class FeatureDataFragment : BaseFormFragment() {
             else if (model.type == EZoneType.HVAC.value) {rawId = R.raw.hvac}
             else if (model.type == EZoneType.WaterHeater.value) {rawId = R.raw.hotwater}
             else if (model.type == EZoneType.Motors.value) {rawId = R.raw.motors}
+            else if (model.type == EZoneType.Thermostat.value) {rawId = R.raw.thermostat}
             else if (model.type == EZoneType.Lighting.value) {
                 if (model.subType == ELightingType.CFL.value) {rawId = R.raw.cfl}
                 if (model.subType == ELightingType.Halogen.value) {rawId = R.raw.halogen}

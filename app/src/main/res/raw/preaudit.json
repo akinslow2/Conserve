@@ -390,8 +390,8 @@
           "index": 81,
           "hint": "",
           "dataType": "pickerinputrow",
-          "defaultValues": "1:pge",
-          "param": "Utility Company",
+          "defaultValues": "1:pge, 2:nes",
+          "param": "Electric Utility Company",
           "validation": "mandatory",
           "id": "81"
         },
@@ -399,19 +399,27 @@
           "index": 82,
           "hint": "",
           "dataType": "pickerinputrow",
-          "defaultValues": "1:G-NR1",
-          "param": "Gas Rate Structure",
+          "defaultValues": "1:pge, 2:piedmontgas, 3:N/A",
+          "param": "Gas Utility Company",
           "validation": "mandatory",
           "id": "82"
-        },
-        {
+        },{
           "index": 83,
           "hint": "",
           "dataType": "pickerinputrow",
-          "defaultValues": "1:A-1,2:A-1 TOU,3:A-6 TOU,4:A-10,5:A-10 TOU,6:E-19 TOU",
-          "param": "Electric Rate Structure",
+          "defaultValues": "1:G-NR1, 2:MTNG-rate35, 3:MTNG-rate41, 4:N/A",
+          "param": "Gas Rate Structure",
           "validation": "mandatory",
           "id": "83"
+        },
+        {
+          "index": 84,
+          "hint": "",
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:A-1,2:A-1 TOU,3:A-6 TOU,4:A-10,5:A-10 TOU,6:E-19 TOU, 7:GSA-1, 8:GSA-2, 9:TGSA-1, 10:TGSA-2",
+          "param": "Electric Rate Structure",
+          "validation": "mandatory",
+          "id": "84"
         }
       ],
       "id": "8"

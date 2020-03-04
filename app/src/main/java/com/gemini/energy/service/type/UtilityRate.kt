@@ -121,9 +121,8 @@ class Electricity(private val rateStructure: String, private val companyCode: St
 
     override fun getTOU(structure: HashMap<String, List<String>>) = TOU(
             structure[ERateKey.SummerOn.value]!![0].toDouble(),
-            structure[ERateKey.SummerPart.value]!![0].toDouble(),
             structure[ERateKey.SummerOff.value]!![0].toDouble(),
-            structure[ERateKey.WinterPart.value]!![0].toDouble(),
+            structure[ERateKey.WinterOn.value]!![0].toDouble(),
             structure[ERateKey.WinterOff.value]!![0].toDouble())
 
     override fun getNoneTOU(structure: HashMap<String, List<String>>) = TOUNone(
@@ -131,7 +130,7 @@ class Electricity(private val rateStructure: String, private val companyCode: St
             structure[ERateKey.WinterNone.value]!![0].toDouble())
 }
 
-class Gas(private val rateStructure: String = "") : IUtility {
+class Gas(private val rateStructure: String = "", private val companyCode: String = "") : IUtility {
 
     override fun getKey(columns: List<String>) = keys
     override fun getValue(columns: List<String>, header: String): List<List<String>> {
@@ -144,7 +143,7 @@ class Gas(private val rateStructure: String = "") : IUtility {
         return outgoing
     }
 
-    override fun getResourcePath() = "utility/pge_gas.csv"
+    override fun getResourcePath() = "utility/${companyCode}_gas.csv"
     override fun getSeparator() = ','
     override fun getRowIdentifier(): Regex {
         return ".*".toRegex()

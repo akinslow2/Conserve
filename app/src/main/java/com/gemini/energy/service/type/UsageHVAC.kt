@@ -18,8 +18,7 @@ class UsageHVAC(usageHours: UsageHours, isTOU: Boolean,
      * Ratio for each of the Peaks | Part Peak | No Peak
      * Get the Specific Mapped Hours for each of the above cases and dividing by the Total Platform Hours
      * */
-    private fun getPeakRatio() = mappedHours.summerOn() / total
-    private fun getPartPeakRatio() = (mappedHours.summerPart() + mappedHours.winterPart()) / total
+    private fun getPeakRatio() = (mappedHours.summerOn() + mappedHours.winterOn()) / total
     private fun getOffPeakRatio() = (mappedHours.summerOff() + mappedHours.winterOff() +
             mappedHours.summerNone() + mappedHours.winterNone()) / total
 
@@ -27,33 +26,29 @@ class UsageHVAC(usageHours: UsageHours, isTOU: Boolean,
      * Used to Define TOU | TOUNone
      * */
     private var peakHours = 0.0
-    private var partPeakHours = 0.0
     private var offPeakHours = 0.0
 
     init {
         peakHours = hoursExtract * getPeakRatio()
-        partPeakHours = hoursExtract * getPartPeakRatio()
         offPeakHours = hoursExtract * getOffPeakRatio()
     }
 
     override fun timeOfUse(): TOU {
-        return TOU(peakHours, partPeakHours, offPeakHours)
+        return TOU(peakHours, offPeakHours)
     }
 
     override fun nonTimeOfUse(): TOUNone {
         return TOUNone(offPeakHours)
     }
 
-    override fun yearly() = peakHours + partPeakHours + offPeakHours
+    override fun yearly() = peakHours + offPeakHours
 
     override fun toString(): String {
         return ">>> Extracted Total Hours : $hoursExtract \n" +
                 ">>> Internal Total Hours : $total \n" +
                 ">>> Peak Hours : $peakHours \n" +
-                ">>> Part Peak Hours : $partPeakHours \n" +
                 ">>> Off Peak Hours : $offPeakHours \n" +
                 ">>> Ratio Peak : ${getPeakRatio()} \n" +
-                ">>> Ratio Part Peak : ${getPartPeakRatio()} \n" +
                 ">>> Ratio Off Peak : ${getOffPeakRatio()}"
     }
 }

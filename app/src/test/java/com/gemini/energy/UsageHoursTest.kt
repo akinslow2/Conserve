@@ -30,18 +30,15 @@ class UsageHoursTest {
 
         val mappedDaily = energyUsageOne.mappedPeakHourDaily()
         assertEquals(0.0714, mappedDaily[ERateKey.SummerOn].toString().toDouble(), 0.01)
-        assertEquals(0.5, mappedDaily[ERateKey.SummerPart].toString().toDouble(), 0.01)
-        assertEquals(0.571, mappedDaily[ERateKey.WinterPart].toString().toDouble(), 0.01)
+        assertEquals(0.571, mappedDaily[ERateKey.WinterOn].toString().toDouble(), 0.01)
 
         val mappedWeeklyOne = energyUsageOne.mappedPeakHourWeekly()
         assertEquals(0.5, mappedWeeklyOne[ERateKey.SummerOn].toString().toDouble(), 0.01)
-        assertEquals(3.5, mappedWeeklyOne[ERateKey.SummerPart].toString().toDouble(), 0.01)
-        assertEquals(4.0, mappedWeeklyOne[ERateKey.WinterPart].toString().toDouble(), 0.01)
+        assertEquals(4.0, mappedWeeklyOne[ERateKey.WinterOn].toString().toDouble(), 0.01)
 
         val mappedYearly = energyUsageOne.mappedPeakHourYearly()
         assertEquals(26.07, mappedYearly[ERateKey.SummerOn].toString().toDouble(), 0.01)
-        assertEquals(182.5, mappedYearly[ERateKey.SummerPart].toString().toDouble(), 0.01)
-        assertEquals(208.57, mappedYearly[ERateKey.WinterPart].toString().toDouble(), 0.01)
+        assertEquals(208.57, mappedYearly[ERateKey.WinterOn].toString().toDouble(), 0.01)
 
         // *** Test Case 2 *** //
 
@@ -62,10 +59,9 @@ class UsageHoursTest {
         val mappedDailyTwo = energyUsageTwo.mappedPeakHourDaily()
         assertEquals(0.5952, mappedDailyTwo[ERateKey.SummerOn].toString().toDouble(), 0.01)
         assertEquals(0.2142, mappedDailyTwo[ERateKey.SummerOff].toString().toDouble(), 0.01)
-        assertEquals(1.7381, mappedDailyTwo[ERateKey.SummerPart].toString().toDouble(), 0.01)
 
         assertEquals(0.21428, mappedDailyTwo[ERateKey.WinterOff].toString().toDouble(), 0.01)
-        assertEquals(2.3333, mappedDailyTwo[ERateKey.WinterPart].toString().toDouble(), 0.01)
+        assertEquals(2.3333, mappedDailyTwo[ERateKey.WinterOn].toString().toDouble(), 0.01)
 
         /**
          * Mapped TOU by Week
@@ -73,10 +69,9 @@ class UsageHoursTest {
         val mappedWeeklyTwo = energyUsageTwo.mappedPeakHourWeekly()
         assertEquals(4.166, mappedWeeklyTwo[ERateKey.SummerOn].toString().toDouble(), 0.01)
         assertEquals(1.5, mappedWeeklyTwo[ERateKey.SummerOff].toString().toDouble(), 0.01)
-        assertEquals(12.166, mappedWeeklyTwo[ERateKey.SummerPart].toString().toDouble(), 0.01)
 
         assertEquals(1.5, mappedWeeklyTwo[ERateKey.WinterOff].toString().toDouble(), 0.01)
-        assertEquals(16.333, mappedWeeklyTwo[ERateKey.WinterPart].toString().toDouble(), 0.01)
+        assertEquals(16.333, mappedWeeklyTwo[ERateKey.WinterOn].toString().toDouble(), 0.01)
 
         /**
          * Mapped TOU by Year
@@ -84,10 +79,9 @@ class UsageHoursTest {
         val mappedYearlyTwo = energyUsageTwo.mappedPeakHourYearly()
         assertEquals(217.2619, mappedYearlyTwo[ERateKey.SummerOn].toString().toDouble(), 0.01)
         assertEquals(78.2142, mappedYearlyTwo[ERateKey.SummerOff].toString().toDouble(), 0.01)
-        assertEquals(634.4047, mappedYearlyTwo[ERateKey.SummerPart].toString().toDouble(), 0.01)
 
         assertEquals(78.2142, mappedYearlyTwo[ERateKey.WinterOff].toString().toDouble(), 0.01)
-        assertEquals(851.667, mappedYearlyTwo[ERateKey.WinterPart].toString().toDouble(), 0.01)
+        assertEquals(851.667, mappedYearlyTwo[ERateKey.WinterOn].toString().toDouble(), 0.01)
 
     }
 
