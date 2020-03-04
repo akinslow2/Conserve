@@ -14,7 +14,6 @@ import com.gemini.energy.service.type.UsageLighting
 import com.gemini.energy.service.type.UtilityRate
 import com.google.gson.JsonElement
 import io.reactivex.Observable
-import org.json.JSONObject
 import timber.log.Timber
 import java.util.*
 
@@ -29,49 +28,7 @@ class Cfl(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEle
         return super.compute(extra = ({ Timber.d(it) }))
     }
 
-    companion object {
-
-        private const val LightControls = "Light_Controls"
-        private const val ControlHours = "Light_Control_Hours"
-
-        /**
-         * Fetches the Deemed Criteria at once
-         * via the Parse API
-         * */
-
-        //Need to pull multiple at once if feasible otherwise it is a lot of code
-        fun extractControlPercentSaved(elements: List<JsonElement?>): Double {
-            elements.forEach {
-                it?.let {
-                    if (it.asJsonObject.has("Percent_Savings")) {
-                        return it.asJsonObject.get("Percent_Savings").asDouble
-                    }
-                }
-            }
-            return 0.0
-        }
-        fun extractEquipmentCost(elements: List<JsonElement?>): Double {
-            elements.forEach {
-                it?.let {
-                    if (it.asJsonObject.has("Equipment_Cost")) {
-                        return it.asJsonObject.get("Equipment_Cost").asDouble
-                    }
-                }
-            }
-            return 0.0
-        }
-        fun extractAssumedHours(elements: List<JsonElement?>): Double {
-            elements.forEach {
-                it?.let {
-                    if (it.asJsonObject.has("Hours")) {
-                        return it.asJsonObject.get("Hours").asDouble
-                    }
-                }
-            }
-            return 0.0
-        }
-    }
-    //create variable here if you want to make it global to the class with private
+//create variable here if you want to make it global to the class with private
     private var percentPowerReduced = 0.0
     private var actualWatts = 0.0
     var lampsPerFixtures = 0
@@ -80,10 +37,6 @@ class Cfl(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEle
     private var partPeakHours = 0.0
     var offPeakHours = 0.0
 
-
-    private var ControlType1 = ""
-    private var ControlType2 = ""
-    private var bType = ""
 
     var postPower = 0.0
     var postUsageHours = 0
@@ -119,10 +72,6 @@ class Cfl(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEle
 
             val config = lightingConfig(ELightingType.CFL)
             percentPowerReduced = config[ELightingIndex.PercentPowerReduced.value] as Double
-
-            ControlType1 = featureData["Suggested Control Type1"]!! as String
-            ControlType2 = featureData["Suggested Control Type2"]!! as String
-            bType = featureData["Building Type"]!! as String
 
             peakHours = featureData["Peak Hours"]!! as Double
             partPeakHours = featureData["Part Peak Hours"]!! as Double
@@ -252,7 +201,7 @@ class Cfl(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEle
         postusageHours.postoffPeakHours = postoffPeakHours
 
         if (postusageHours.yearly() == null){
-            return extractControlPercentSaved(elements) }
+            return  usageHoursPre()}
         else { return postusageHours.yearly()}
     }
 
@@ -286,14 +235,10 @@ class Cfl(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEle
         return ledbulbcost * alternateNumberOfFixtures * alternateLampsPerFixture
     }
     fun totalEnergySavings(): Double {
-        if (controls == "yes") {
+        if (controls != null) {
             val coolingSavings = (preEnergy() - energyPowerChange()) * cooling / seer
             return (preEnergy() - energyPowerChange()) + coolingSavings
-        } else if(ControlType1 != null || ControlType2 != null){
-            val coolingSavings = (preEnergy() - energyTimeChange()) * cooling / seer
-            return (preEnergy() - energyTimeChange()) + coolingSavings
-        }
-        else {
+        } else {
             val coolingSavings = (preEnergy() - energyPowerTimeChange()) * cooling / seer
             return (preEnergy() - energyPowerTimeChange()) + coolingSavings
         }
@@ -323,17 +268,6 @@ class Cfl(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEle
      * */
     override fun efficientLookup() = false
     override fun queryEfficientFilter() = ""
-
-    override fun queryControlPercentSaved() = JSONObject()
-            .put("type", LightControls)
-            .put("data.Type", ControlType1)
-            .toString()
-
-    override fun queryAssumedHours() = JSONObject()
-            .put("type", ControlHours)
-            .put("data.Building_Type", bType)
-            .toString()
-
 
     /**
      * State if the Equipment has a Post UsageHours Hours (Specific) ie. A separate set of

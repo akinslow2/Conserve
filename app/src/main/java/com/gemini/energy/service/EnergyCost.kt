@@ -40,15 +40,17 @@ class CostElectric(private val usageHours: UsageHours, private val utilityRate: 
     private fun costSummer(): Double {
 
         val costSummerOn = hours.summerOn() * power * rate.summerOn()
-         val costSummerOff = hours.summerOff() * power * rate.summerOff()
+        val costSummerPart = hours.summerPart() * power * rate.summerPart()
+        val costSummerOff = hours.summerOff() * power * rate.summerOff()
 
         if (isTOU(structure) && debug) {
             Timber.d("## TOU Cost - Summer ##")
             Timber.d(">>> Summer On : $costSummerOn")
+            Timber.d(">>> Summer Part : $costSummerPart")
             Timber.d(">>> Summer Off : $costSummerOff")
         }
 
-        val summerTOU = costSummerOn + costSummerOff
+        val summerTOU = costSummerOn + costSummerPart + costSummerOff
         val summerTOUNone = hours.summerNone() * power * rate.summerNone()
 
         if (isNoTOU(structure) && debug) {
@@ -65,16 +67,16 @@ class CostElectric(private val usageHours: UsageHours, private val utilityRate: 
      * */
     private fun costWinter(): Double {
 
-        val costWinterOn = hours.winterOn() * power * rate.winterOn()
+        val costWinterPart = hours.winterPart() * power * rate.winterPart()
         val costWinterOff = hours.winterOff() * power * rate.winterOff()
 
         if (isTOU(structure) && debug) {
             Timber.d("## TOU Cost - Winter ##")
-            Timber.d(">>> Winter Part : $costWinterOn")
+            Timber.d(">>> Winter Part : $costWinterPart")
             Timber.d(">>> Winter Off : $costWinterOff")
         }
 
-        val winterTOU = costWinterOn + costWinterOff
+        val winterTOU = costWinterPart + costWinterOff
         val winterTOUNone = hours.winterNone() * power * rate.winterNone()
 
         if (isNoTOU(structure) && debug) {
@@ -91,15 +93,17 @@ class CostElectric(private val usageHours: UsageHours, private val utilityRate: 
      * */
     private fun costBlendedSeason(): Double {
         val costPeak = hours.peak() * power * rate.weightedAverage()
-         val costNoPeak = hours.noPeak() * power * rate.weightedAverage()
+        val costPartPeak = hours.partPeak() * power * rate.weightedAverage()
+        val costNoPeak = hours.noPeak() * power * rate.weightedAverage()
 
         if (debug) {
             Timber.d("## Blended Cost - No Season ##")
             Timber.d(">>> Cost Peak : $costPeak")
+            Timber.d(">>> Cost Part Peak : $costPartPeak")
             Timber.d(">>> Cost No Peak : $costNoPeak")
         }
 
-        return costPeak + costNoPeak
+        return costPeak + costPartPeak + costNoPeak
     }
 
     private fun logIUsageType() {

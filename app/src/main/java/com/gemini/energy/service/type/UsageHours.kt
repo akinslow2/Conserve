@@ -38,9 +38,10 @@ open class UsageHours {
         val usageByPeak = mapper.mappedHoursYearly()
         return TOU(
                 usageByPeak[ERateKey.SummerOn]!! * WEIGHT_SUMMER,
-                usageByPeak[ERateKey.SummerOff]!! * (WEIGHT_Off / 2),
-                usageByPeak[ERateKey.WinterOn]!! * WEIGHT_WINTER,
-                usageByPeak[ERateKey.WinterOff]!! * ( WEIGHT_Off / 2)
+                usageByPeak[ERateKey.SummerPart]!! * WEIGHT_SUMMER,
+                usageByPeak[ERateKey.SummerOff]!! * WEIGHT_SUMMER,
+                usageByPeak[ERateKey.WinterPart]!! * WEIGHT_WINTER,
+                usageByPeak[ERateKey.WinterOff]!! * WEIGHT_WINTER
         )
     }
 
@@ -49,15 +50,14 @@ open class UsageHours {
      * */
     open fun nonTimeOfUse(): TOUNone {
         return TOUNone(
-                yearly() / 2,
-                yearly() / 2
+                yearly() * WEIGHT_SUMMER,
+                yearly() * WEIGHT_WINTER
         )
     }
 
     companion object {
-        private const val WEIGHT_SUMMER = .333
-        private const val WEIGHT_Off = .334
-        private const val WEIGHT_WINTER = .333
+        private const val WEIGHT_SUMMER = .504
+        private const val WEIGHT_WINTER = .496
     }
 
     fun initUsage(usage: Map<EDay, String?>): UsageHours {
@@ -117,6 +117,11 @@ open class UsageHours {
                                     outgoing[ERateKey.SummerOff] = tmp!! + delta
                                 }
 
+                                if (isSummerPartialPeak(current)) {
+                                    val tmp = outgoing[ERateKey.SummerPart]
+                                    outgoing[ERateKey.SummerPart] = tmp!! + delta
+                                }
+
                                 if (isSummerPeak(current)) {
                                     val tmp = outgoing[ERateKey.SummerOn]
                                     outgoing[ERateKey.SummerOn] = tmp!! + delta
@@ -127,9 +132,9 @@ open class UsageHours {
                                     outgoing[ERateKey.WinterOff] = tmp!! + delta
                                 }
 
-                                if (isWinterPeak(current)) {
-                                    val tmp = outgoing[ERateKey.WinterOn]
-                                    outgoing[ERateKey.WinterOn] = tmp!! + delta
+                                if (isWinterPartialPeak(current)) {
+                                    val tmp = outgoing[ERateKey.WinterPart]
+                                    outgoing[ERateKey.WinterPart] = tmp!! + delta
                                 }
 
                                 calendar.time = current
@@ -224,13 +229,16 @@ open class UsageHours {
 
             private fun isSummerPeak(now: Date) = inBetween(now, getTime("12:00"), getTime("18:00"))
 
-            private fun isSummerOffPeak(now: Date) = inBetween(now, getTime("18:00"), getTime("00:00")) ||
-                    inBetween(now, getTime("00:00"), getTime("12:00"))
+            private fun isSummerPartialPeak(now: Date) = inBetween(now, getTime("08:30"), getTime("12:00")) ||
+                    inBetween(now, getTime("18:00"), getTime("21:30"))
 
-            private fun isWinterPeak(now: Date) = inBetween(now, getTime("06:00"), getTime("10:00"))
+            private fun isSummerOffPeak(now: Date) = inBetween(now, getTime("21:30"), getTime("23:59")) ||
+                    inBetween(now, getTime("00:00"), getTime("08:30"))
 
-            private fun isWinterOffPeak(now: Date) = inBetween(now, getTime("10:01"), getTime("00:00")) ||
-                    inBetween(now, getTime("00:00"), getTime("06:00"))
+            private fun isWinterPartialPeak(now: Date) = inBetween(now, getTime("08:30"), getTime("21:30"))
+
+            private fun isWinterOffPeak(now: Date) = inBetween(now, getTime("21:30"), getTime("23:59")) ||
+                    inBetween(now, getTime("00:00"), getTime("08:30"))
 
         }
     }
