@@ -34,8 +34,7 @@ class Motors(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRate
          * */
         private const val KW_CONVERSION = 0.746
         private const val MOTOR_EFFICIENCY = "motor_efficiency"
-        private const val TYPE1 = "BED_VFD_Prescriptive_kWh"
-        private const val TYPE2 = "BED_VFD_Prescriptive_kW"
+
         /**
          * Fetches the Motor Efficiency (NEMA-Premium) based on the specific Match Criteria
          * via the Parse API
@@ -50,38 +49,14 @@ class Motors(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRate
             }
             return 0.0
         }
-        fun extractDemandSavings(elements: List<JsonElement?>): Double {
-            elements.forEach {
-                it?.let {
-                    if (it.asJsonObject.has("Demand_Savings")) {
-                        return it.asJsonObject.get("Demand_Savings").asDouble
-                    }
-                }
-            }
-            return 0.0
-        }
-        fun extractEnergySavings(elements: List<JsonElement?>): Double {
-            elements.forEach {
-                it?.let {
-                    if (it.asJsonObject.has("Energy_Savings")) {
-                        return it.asJsonObject.get("Energy_Savings").asDouble
-                    }
-                }
-            }
-            return 0.0
-        }
+
     }
-    var utilitycompany = ""
+
     private var srs = 0
     private var mrs = 0
     private var nrs = 0
     private var hp = 0.0
     private var efficiency = 0.0
-
-    //Vermont Prescriptive Savings Inputs
-    private var motortype = ""
-    private var OTF = "" //yes equal 1 and no or null equals 0.9
-    private var controls = "" //yes equals .27 no or null equals 0
 
     /**
      * Suggested Alternative
@@ -95,16 +70,12 @@ class Motors(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRate
 
     override fun setup() {
         try {
-            utilitycompany = preAudit["Others Utility Company"]!! as String
-            motortype = featureData["Purpose"]!! as String
             srs = featureData["Synchronous Rotational Speed (SRS)"]!! as Int
             mrs = featureData["Measured Rotational Speed (MRS)"]!! as Int
             nrs = featureData["Nameplate Rotational Speed (NRS)"]!! as Int
             hp = featureData["Horsepower (HP)"]!! as Double
             efficiency = featureData["Efficiency"]!! as Double
 
-            OTF = featureData["Operational Testing Will Be Conducted"]!! as String
-            controls = featureData["Controls"]!! as String
             alternateHp = featureData["Alternate Horsepower (HP)"]!! as Double
             alternateEfficiency = featureData["Alternate Efficiency"]!! as Double
 
@@ -153,38 +124,8 @@ class Motors(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRate
         //1. Energy Savings
         val energySavings = energyPowerChange()
 
-        //1a. BED Prescriptive Gross Energy Savings (kWh) for BLPM circulator pump
-        val kwBase = hp * KW_CONVERSION
-        val kwEff = alternateHp * KW_CONVERSION
-        val hours = 4592 //according to TRM pg. 80
-        var grossBEDkwhsavings = 0.0
-        if (utilitycompany == "Burlington Electric Department" && controls == "yes") {
-            grossBEDkwhsavings = kwBase - kwEff * (1 - 0.73) * hours // //according to Vermont TRM pg. 80
-        } else  {
-            grossBEDkwhsavings = kwBase - kwEff * hours ////according to Vermont TRM pg. 80
-        }
-        //1b. BED Prescriptive Net Energy Savings (kWh) for BLPM circulator pump
-        val freerider = 0.95
-        val spillover = 1.0
-        val winterRPF = 0.99 // RPF = rating period factor
-        val summerRPF = 0.01 //see pg. 80 of Vermont TRM
-        val winterLLF = 1.3 // LLF = line lost factor
-        val summerLLF = 11.2
-        var netBEDkwhsavings = (grossBEDkwhsavings * (1 + winterLLF) * (freerider + spillover - 1) * winterRPF) +
-                    (grossBEDkwhsavings * (1 + summerLLF) * (freerider + spillover - 1) * summerRPF)
-
-        //1c. BED Prescriptive Savings for VFD - Based on table on pg. 70 of Vermont TRM
-        var VFDeSavings = if (OTF == "yes") {
-            extractEnergySavings(elements) / 0.9
-        } else {
-            extractEnergySavings(elements)
-        }
         //2. Demand Saving
         val demandSavings = energyPowerChange() / usageHoursPre()
-
-        //2a. BED Prescriptive Savings for VFD - Based on pg. 70 of Vermont TRM
-        var VFDdSavings = extractDemandSavings(elements) * hp * KW_CONVERSION
-
 
         //3. Implementation Cost
         // ToDo - The below cost would be a look up in the future.
@@ -196,10 +137,6 @@ class Motors(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRate
         postRow["__energy_savings"] = energySavings.toString()
         postRow["__demand_savings"] = demandSavings.toString()
         postRow["__implementation_cost"] = implementationCost.toString()
-        postRow["__Gross_Savings_BLPM_circulator_pump"] = grossBEDkwhsavings.toString()
-        postRow["__Net_Savings__BLPM_circulator_pump"] = netBEDkwhsavings.toString()
-        postRow["__VFD_Prescriptive_Energy_Savings"] = VFDeSavings.toString()
-        postRow["__VFD_Prescriptive_Demand_Savings"] = VFDdSavings.toString()
 
         dataHolder.header = postStateFields()
         dataHolder.computable = computable
@@ -252,18 +189,6 @@ class Motors(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRate
         return delta
     }
 
-    override fun queryBEDMotorVFDprescriptivekwh() = JSONObject()
-    .put("type", TYPE1)
-    .put("data.hp", hp)
-    .put("data.purpose", motortype)
-    .toString()    //check to make sure it is correct
-
-
-    override fun queryBEDMotorVFDprescriptivekw() = JSONObject()
-            .put("type", TYPE2)
-            .put("data.hp", hp)
-            .put("data.purpose", motortype)
-            .toString()    //check to make sure it is correct
     override fun energyTimeChange(): Double = 0.0
     override fun energyPowerTimeChange(): Double = 0.0
 
@@ -294,8 +219,7 @@ class Motors(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRate
 
     override fun preStateFields() = mutableListOf("")
     override fun postStateFields() = mutableListOf("__life_hours", "__maintenance_savings",
-            "__cooling_savings", "__energy_savings","__Gross_Savings_BLPM_circulator_pump","__Net_Savings__BLPM_circulator_pump",
-            "__VFD_Prescriptive_Energy_Savings", "__VFD_Prescriptive_Demand_Savings")
+            "__cooling_savings", "__energy_savings")
 
     override fun computedFields() = mutableListOf("")
 

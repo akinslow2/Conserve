@@ -131,7 +131,7 @@ class Electricity(private val rateStructure: String, private val companyCode: St
             structure[ERateKey.WinterNone.value]!![0].toDouble())
 }
 
-class Gas(private val rateStructure: String = "", private val companyCode: String = "") : IUtility {
+class Gas(private val rateStructure: String = "") : IUtility {
 
     override fun getKey(columns: List<String>) = keys
     override fun getValue(columns: List<String>, header: String): List<List<String>> {
@@ -144,7 +144,7 @@ class Gas(private val rateStructure: String = "", private val companyCode: Strin
         return outgoing
     }
 
-    override fun getResourcePath() = "utility/${companyCode}_gas.csv"
+    override fun getResourcePath() = "utility/pge_gas.csv"
     override fun getSeparator() = ','
     override fun getRowIdentifier(): Regex {
         return ".*".toRegex()
