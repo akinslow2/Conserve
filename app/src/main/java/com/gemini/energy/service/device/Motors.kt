@@ -60,6 +60,14 @@ class Motors(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRate
             }
             return 0.0
         }
+
+        // TODO: TEST ME
+        fun extractDemandSavings(element: JsonElement): Double {
+            if (element.asJsonObject.has("Demand_Savings")) {
+                return element.asJsonObject.get("Demand_Savings").asDouble
+            }
+            return 0.0
+        }
         fun extractEnergySavings(elements: List<JsonElement?>): Double {
             elements.forEach {
                 it?.let {
@@ -67,6 +75,14 @@ class Motors(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRate
                         return it.asJsonObject.get("Energy_Savings").asDouble
                     }
                 }
+            }
+            return 0.0
+        }
+
+        // TODO: TEST ME
+        fun extractEnergySavings(element: JsonElement): Double {
+            if (element.asJsonObject.has("Energy_Savings")) {
+                return element.asJsonObject.get("Energy_Savings").asDouble
             }
             return 0.0
         }
@@ -175,15 +191,15 @@ class Motors(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRate
 
         //1c. BED Prescriptive Savings for VFD - Based on table on pg. 70 of Vermont TRM
         var VFDeSavings = if (OTF == "yes") {
-            extractEnergySavings(elements) / 0.9
+            extractEnergySavings(element) / 0.9
         } else {
-            extractEnergySavings(elements)
+            extractEnergySavings(element)
         }
         //2. Demand Saving
         val demandSavings = energyPowerChange() / usageHoursPre()
 
         //2a. BED Prescriptive Savings for VFD - Based on pg. 70 of Vermont TRM
-        var VFDdSavings = extractDemandSavings(elements) * hp * KW_CONVERSION
+        var VFDdSavings = extractDemandSavings(element) * hp * KW_CONVERSION
 
 
         //3. Implementation Cost

@@ -49,6 +49,14 @@ class Thermostat (computable: Computable<*>, utilityRateGas: UtilityRate, utilit
                 }
                 return 0.0
             }
+
+            // TODO: Test me
+            fun extractThermostatDeemedkWh(element: JsonElement): Double {
+                if (element.asJsonObject.has("Total_kWh")) {
+                    return element.asJsonObject.get("Total_kWh").asDouble
+                }
+                return 0.0
+            }
             fun extractThermostatDeemedkW(elements: List<JsonElement?>): Double {
                 elements.forEach {
                     it?.let {
@@ -59,6 +67,14 @@ class Thermostat (computable: Computable<*>, utilityRateGas: UtilityRate, utilit
                 }
                 return 0.0
             }
+
+            // TODO: Test me
+            fun extractThermostatDeemedkW(element: JsonElement): Double {
+                if (element.asJsonObject.has("kW")) {
+                    return element.asJsonObject.get("kW").asDouble
+                }
+                return 0.0
+            }
             fun extractThermostatDeemedCost(elements: List<JsonElement?>): Double {
                 elements.forEach {
                     it?.let {
@@ -66,6 +82,14 @@ class Thermostat (computable: Computable<*>, utilityRateGas: UtilityRate, utilit
                             return it.asJsonObject.get("Total_Cost").asDouble
                         }
                     }
+                }
+                return 0.0
+            }
+
+            // TODO: Test me
+            fun extractThermostatDeemedCost(element: JsonElement): Double {
+                if (element.asJsonObject.has("Total_Cost")) {
+                    return element.asJsonObject.get("Total_Cost").asDouble
                 }
                 return 0.0
             }
@@ -110,9 +134,9 @@ class Thermostat (computable: Computable<*>, utilityRateGas: UtilityRate, utilit
          * */
         override fun costPostState(element: JsonElement, dataHolder: DataHolder): Double {
 
-            var presciptive_kW_savings = extractThermostatDeemedkW(elements)
-            var presciptive_kWh_savings = extractThermostatDeemedkWh(elements)
-            var implementationCost = extractThermostatDeemedCost(elements)
+            var presciptive_kW_savings = extractThermostatDeemedkW(element)
+            var presciptive_kWh_savings = extractThermostatDeemedkWh(element)
+            var implementationCost = extractThermostatDeemedCost(element)
 
             val postRow = mutableMapOf<String, String>()
             postRow["__prescriptive_kWh_savings"] = presciptive_kWh_savings.toString()
