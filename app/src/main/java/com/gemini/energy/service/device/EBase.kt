@@ -452,6 +452,9 @@ abstract class EBase(val computable: Computable<*>,
     }
 
     private fun dataExtractThermostat(query: String): Observable<JsonArray> {
+        if (query.isEmpty()) {
+            return Observable.just(JsonArray())
+        }
         return parseAPIService.fetchThermostat(query)
                 .map { it.getAsJsonArray("results") }
                 .toObservable()
