@@ -141,9 +141,9 @@ class Cfl(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEle
             alternateNumberOfFixtures = featureData["Alternate Number of Fixtures"]!! as Int
             alternateLampsPerFixture = featureData["Alternate Lamps Per Fixture"]!! as Int
 
-            postpeakHours = featureData["Suggested Peak Hours"]!! as Double
-            postpartPeakHours = featureData["Suggested Part Peak Hours"]!! as Double
-            postoffPeakHours = featureData["Suggested Off Peak Hours"]!! as Double
+//            postpeakHours = featureData["Suggested Peak Hours"]!! as Double
+//            postpartPeakHours = featureData["Suggested Part Peak Hours"]!! as Double
+//            postoffPeakHours = featureData["Suggested Off Peak Hours"]!! as Double
 
             controls = featureData["Type of Control"]!! as String
 
