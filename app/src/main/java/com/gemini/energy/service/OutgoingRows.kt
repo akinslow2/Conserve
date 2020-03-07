@@ -29,6 +29,8 @@ class DataHolder {
                 .append("${value?.auditScopeName?.toLowerCase()?.replace("[^a-zA-Z0-9]".toRegex(), "_")}/")
 
                 .toString()
+
+        field = value
     }
 
     /**
