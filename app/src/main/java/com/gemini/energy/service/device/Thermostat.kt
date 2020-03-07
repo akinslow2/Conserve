@@ -179,8 +179,9 @@ class Thermostat (computable: Computable<*>, utilityRateGas: UtilityRate, utilit
     override fun preAuditFields() = mutableListOf("")
 
     override fun featureDataFields() = getGFormElements().map { it.value.param!! }.toMutableList()
-//@k2interactive please add variables heatingfuel and coolingfuel in the prestate fields below
-    override fun preStateFields() = mutableListOf("")
+
+    override fun preStateFields() = mutableListOf("heatingfuel", "coolingfuel")
+
     override fun postStateFields() = mutableListOf("__prescriptive_kWh_savings", "__prescriptive_kW_savings",
             "__prescriptive_implementation_cost")
 
