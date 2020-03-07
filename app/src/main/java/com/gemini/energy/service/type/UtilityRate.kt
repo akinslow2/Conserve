@@ -40,7 +40,9 @@ open class UtilityRate(private val context: Context) {
                     val result = parseLine(it, getSeparator())
                     utility.getKey(result)
                             .forEachIndexed { index, key ->
-                                outgoing[key] = utility.getValue(result, header)[index]
+                                val value = utility.getValue(result, header)
+                                if (index < value.count())
+                                    outgoing[key] = value[index]
                             }
                 }
             }
@@ -137,9 +139,13 @@ class Gas(private val rateStructure: String = "", private val companyCode: Strin
     override fun getKey(columns: List<String>) = keys
     override fun getValue(columns: List<String>, header: String): List<List<String>> {
         val outgoing: MutableList<List<String>> = mutableListOf()
-        val lookup = header.split(getSeparator())
+        val lookup = header.split(getSeparator()).filter { it.isNotBlank() }
+
         keys.forEach {
-            outgoing.add(listOf(columns[lookup.indexOf(it)]))
+            val index = lookup.indexOf(it)
+            if (index >= 0 && index < columns.count()) {
+                outgoing.add(listOf(columns[index]))
+            }
         }
 
         return outgoing
