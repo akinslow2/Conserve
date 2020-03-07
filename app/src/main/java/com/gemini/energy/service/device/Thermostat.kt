@@ -15,8 +15,8 @@ import org.json.JSONObject
 import timber.log.Timber
 import java.util.*
 
-class Thermostat (computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateElectricity: UtilityRate,
-                  usageHours: UsageHours, outgoingRows: OutgoingRows, private val context: Context) :
+class Thermostat(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateElectricity: UtilityRate,
+                 usageHours: UsageHours, outgoingRows: OutgoingRows, private val context: Context) :
         EBase(computable, utilityRateGas, utilityRateElectricity, usageHours, outgoingRows), IComputable {
 
     /**
@@ -51,6 +51,15 @@ class Thermostat (computable: Computable<*>, utilityRateGas: UtilityRate, utilit
             }
             return 0.0
         }
+
+        // TODO: Test me
+        fun extractThermostatreplacementkWh(element: JsonElement): Double {
+            if (element.asJsonObject.has("total_kwh")) {
+                return element.asJsonObject.get("total_kwh").asDouble
+            }
+            return 0.0
+        }
+
         fun extractThermostatreplacementkW(elements: List<JsonElement?>): Double {
             elements.forEach {
                 it?.let {
@@ -61,6 +70,15 @@ class Thermostat (computable: Computable<*>, utilityRateGas: UtilityRate, utilit
             }
             return 0.0
         }
+
+        // TODO: Test me
+        fun extractThermostatreplacementkW(element: JsonElement): Double {
+            if (element.asJsonObject.has("kw")) {
+                return element.asJsonObject.get("kw").asDouble
+            }
+            return 0.0
+        }
+
         fun extractThermostatreplacementCost(elements: List<JsonElement?>): Double {
             elements.forEach {
                 it?.let {
@@ -68,6 +86,14 @@ class Thermostat (computable: Computable<*>, utilityRateGas: UtilityRate, utilit
                         return it.asJsonObject.get("total_cost").asDouble
                     }
                 }
+            }
+            return 0.0
+        }
+
+        // TODO: Test me
+        fun extractThermostatreplacementCost(element: JsonElement): Double {
+            if (element.asJsonObject.has("total_cost")) {
+                return element.asJsonObject.get("total_cost").asDouble
             }
             return 0.0
         }
@@ -107,15 +133,15 @@ class Thermostat (computable: Computable<*>, utilityRateGas: UtilityRate, utilit
      * */
     override fun costPostState(element: JsonElement, dataHolder: DataHolder): Double {
 //@k2interactive please make these active so that the they also spit out the values in the CSV
-        //var presciptive_kW_savings = extractThermostatreplacementkW(elements)
-        // var presciptive_kWh_savings = extractThermostatreplacementkWh(elements)
-        //var implementationCost = extractThermostatreplacementCost(elements)
+        val presciptive_kW_savings = extractThermostatreplacementkW(element)
+        val presciptive_kWh_savings = extractThermostatreplacementkWh(element)
+        val implementationCost = extractThermostatreplacementCost(element)
 
         val postRow = mutableMapOf<String, String>()
         //@k2interactive
-        //  postRow["__prescriptive_kWh_savings"] = presciptive_kWh_savings.toString()
-        //postRow["__prescriptive_kW_savings"] = presciptive_kW_savings.toString()
-        //postRow["__prescriptive_implementation_cost"] = implementationCost.toString()
+        postRow["__prescriptive_kWh_savings"] = presciptive_kWh_savings.toString()
+        postRow["__prescriptive_kW_savings"] = presciptive_kW_savings.toString()
+        postRow["__prescriptive_implementation_cost"] = implementationCost.toString()
 
 
         dataHolder.header = postStateFields()

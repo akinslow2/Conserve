@@ -49,6 +49,14 @@ class LinearFluorescent(computable: Computable<*>, utilityRateGas: UtilityRate, 
                 }
                 return 0.0
             }
+
+        // TODO: Test me
+        fun extractControlPercentSaved(element: JsonElement): Double {
+            if (element.asJsonObject.has("percent_savings")) {
+                return element.asJsonObject.get("percent_savings").asDouble
+            }
+            return 0.0
+        }
             fun extractEquipmentCost(elements: List<JsonElement?>): Double {
                 elements.forEach {
                     it?.let {
@@ -59,6 +67,14 @@ class LinearFluorescent(computable: Computable<*>, utilityRateGas: UtilityRate, 
                 }
                 return 0.0
             }
+
+        // TODO: Test me
+        fun extractEquipmentCost(element: JsonElement): Double {
+            if (element.asJsonObject.has("equipment_cost")) {
+                return element.asJsonObject.get("equipment_cost").asDouble
+            }
+            return 0.0
+        }
             fun extractMeasureCode(elements: List<JsonElement?>): Double {
                 elements.forEach {
                     it?.let {
@@ -69,6 +85,14 @@ class LinearFluorescent(computable: Computable<*>, utilityRateGas: UtilityRate, 
                 }
                 return 0.0
             }
+
+        // TODO: Test me
+        fun extractMeasureCode(element: JsonElement): Double {
+            if (element.asJsonObject.has("measure_code")) {
+                return element.asJsonObject.get("measure_code").asDouble
+            }
+            return 0.0
+        }
             fun extractAssumedHours(elements: List<JsonElement?>): Double {
                 elements.forEach {
                     it?.let {
@@ -79,6 +103,14 @@ class LinearFluorescent(computable: Computable<*>, utilityRateGas: UtilityRate, 
                 }
                 return 0.0
             }
+
+        // TODO: Test me
+        fun extractAssumedHours(element: JsonElement): Double {
+            if (element.asJsonObject.has("hours")) {
+                return element.asJsonObject.get("hours").asDouble
+            }
+            return 0.0
+        }
         /**
          * Hypothetical Cost of Replacement for Linear Fluorescent
          * */
@@ -237,11 +269,11 @@ class LinearFluorescent(computable: Computable<*>, utilityRateGas: UtilityRate, 
         val totalsavings = energySavings + coolingSavings + maintenanceSavings
 
         //@k2interactive please make sure this works and is pushed out to the post CSV
-        // val controlCost = extractEquipmentCost(elements)
-        // val measureCode = extractMeasureCode(elements)
-        // val prescriptiveHours = extractAssumedHours(elements)
-        // val percentSaved = extractControlPercentSaved(elements)
-        // val prescriptiveSaved = preEnergy() * percentSaved
+        val controlCost = extractEquipmentCost(element)
+        val measureCode = extractMeasureCode(element)
+        val prescriptiveHours = extractAssumedHours(element)
+        val percentSaved = extractControlPercentSaved(element)
+        val prescriptiveSaved = preEnergy() * percentSaved
 
         val postRow = mutableMapOf<String, String>()
         postRow["__life_hours"] = lifeHours.toString()
@@ -254,11 +286,11 @@ class LinearFluorescent(computable: Computable<*>, utilityRateGas: UtilityRate, 
         postRow["__payback_year"] = paybackyear.toString()
         postRow["__total_savings"] = totalsavings.toString()
         //@k2interactive
-        //postRow["__lighting_control_prescriptive_cost"] = controlCost.toString()
-        //postRow["__lighting_control_measure_code"] = measureCode.toString()
-        //postRow["__lighting_control_prescriptive_hours"] = prescriptiveHours.toString()
-        //postRow["__lighting_control_prescriptive_savings"] = prescriptiveSaved.toString()
-        //postRow["__lighting_control_prescriptive_percent"] = percentSaved.toString()
+        postRow["__lighting_control_prescriptive_cost"] = controlCost.toString()
+        postRow["__lighting_control_measure_code"] = measureCode.toString()
+        postRow["__lighting_control_prescriptive_hours"] = prescriptiveHours.toString()
+        postRow["__lighting_control_prescriptive_savings"] = prescriptiveSaved.toString()
+        postRow["__lighting_control_prescriptive_percent"] = percentSaved.toString()
 
         dataHolder.header = postStateFields()
         dataHolder.computable = computable
