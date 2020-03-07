@@ -2,7 +2,6 @@ package com.gemini.energy.service.type
 
 import android.content.Context
 import com.gemini.energy.presentation.util.ERateKey
-import timber.log.Timber
 
 open class UtilityRate(private val context: Context) {
 
@@ -171,10 +170,16 @@ class Gas(private val rateStructure: String = "", private val companyCode: Strin
 
     companion object {
         private val keys = listOf(
-                ERateKey.Slab1.value, ERateKey.Slab2.value, ERateKey.Slab3.value,
-                ERateKey.Slab4.value, ERateKey.Slab5.value, ERateKey.Surcharge.value,
-                ERateKey.SummerTransport.value, ERateKey.WinterTransport.value,
-                ERateKey.SummerExcess.value, ERateKey.WinterExcess.value)
+                ERateKey.Slab1.value,
+                ERateKey.Slab2.value,
+                ERateKey.Slab3.value,
+                ERateKey.Slab4.value,
+                ERateKey.Slab5.value,
+                ERateKey.Surcharge.value,
+                ERateKey.SummerTransport.value,
+                ERateKey.WinterTransport.value,
+                ERateKey.SummerExcess.value,
+                ERateKey.WinterExcess.value)
 
         const val FIRST_SLAB = 4000.0
 
