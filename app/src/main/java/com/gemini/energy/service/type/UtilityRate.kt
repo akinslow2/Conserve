@@ -2,7 +2,6 @@ package com.gemini.energy.service.type
 
 import android.content.Context
 import com.gemini.energy.presentation.util.ERateKey
-import timber.log.Timber
 
 open class UtilityRate(private val context: Context) {
 
@@ -40,6 +39,7 @@ open class UtilityRate(private val context: Context) {
                     val result = parseLine(it, getSeparator())
                     utility.getKey(result)
                             .forEachIndexed { index, key ->
+                                //                                IndexOutOfBoundsException: Index: 9, Size: 9
                                 outgoing[key] = utility.getValue(result, header)[index]
                             }
                 }
@@ -137,7 +137,11 @@ class Gas(private val rateStructure: String = "", private val companyCode: Strin
         val outgoing: MutableList<List<String>> = mutableListOf()
         val lookup = header.split(getSeparator())
         keys.forEach {
-            outgoing.add(listOf(columns[lookup.indexOf(it)]))
+            //            ArrayIndexOutOfBoundsException: length=15; index=-1
+            val index = lookup.indexOf(it)
+            if (index > 0 && index < columns.count()) {
+                outgoing.add(listOf(columns[index]))
+            }
         }
 
         return outgoing
