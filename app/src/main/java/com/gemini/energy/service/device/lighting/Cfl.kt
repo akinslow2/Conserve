@@ -120,9 +120,9 @@ class Cfl(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEle
             val config = lightingConfig(ELightingType.CFL)
             percentPowerReduced = config[ELightingIndex.PercentPowerReduced.value] as Double
 
-            ControlType1 = featureData["Suggested Control Type1"]!! as String
-            ControlType2 = featureData["Suggested Control Type2"]!! as String
-            bType = featureData["Building Type"]!! as String
+//            ControlType1 = featureData["Suggested Control Type1"]!! as String
+//            ControlType2 = featureData["Suggested Control Type2"]!! as String
+//            bType = featureData["Building Type"]!! as String
 
             peakHours = featureData["Peak Hours"]!! as Double
             partPeakHours = featureData["Part Peak Hours"]!! as Double

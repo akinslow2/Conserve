@@ -40,7 +40,10 @@ open class UtilityRate(private val context: Context) {
                     utility.getKey(result)
                             .forEachIndexed { index, key ->
                                 //                                IndexOutOfBoundsException: Index: 9, Size: 9
-                                outgoing[key] = utility.getValue(result, header)[index]
+                                val value = utility.getValue(result, header)
+                                if (index < value.count()) {
+                                    outgoing[key] = utility.getValue(result, header)[index]
+                                }
                             }
                 }
             }
@@ -157,6 +160,7 @@ class Gas(private val rateStructure: String = "", private val companyCode: Strin
 
     override fun getTOU(structure: HashMap<String, List<String>>) = TOU()
 
+    // TODO: k2interactive figure out why GasWinter is not in structure
     override fun getNoneTOU(structure: HashMap<String, List<String>>) = TOUNone(
             structure[ERateKey.GasSummer.value]!![0].toDouble(),
             structure[ERateKey.SummerExcess.value]!![0].toDouble(),
