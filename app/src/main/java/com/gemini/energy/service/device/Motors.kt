@@ -63,6 +63,7 @@ class Motors(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRate
         }
 
         // TODO: Test me
+        // TODO: @k2interactive this query relates to queryMotorVFDprescriptive() located in the PARSE HVAC class just fyi: type "hvac_vfdprescriptive"
         fun extractDemandSavings(element: JsonElement): Double {
             if (element.asJsonObject.has("demand_savings")) {
                 return element.asJsonObject.get("demand_savings").asDouble
@@ -82,6 +83,7 @@ class Motors(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRate
         }
 
         // TODO: Test me
+        // TODO: @k2interactive this query relates to queryMotorVFDprescriptive() located in the PARSE HVAC class just fyi: type "hvac_vfdprescriptive"
         fun extractEnergySavings(element: JsonElement): Double {
             if (element.asJsonObject.has("energy_savings")) {
                 return element.asJsonObject.get("energy_savings").asDouble
@@ -101,12 +103,16 @@ class Motors(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRate
         }
 
         // TODO: Test me
+        // TODO: @k2interactive this query relates to queryMotorVFDprescriptive() located in the PARSE HVAC class just fyi: type "hvac_vfdprescriptive"
         fun extractInstallCost(element: JsonElement): Double {
             if (element.asJsonObject.has("total_installed_cost")) {
                 return element.asJsonObject.get("total_installed_cost").asDouble
             }
             return 0.0
         }
+     // TODO: @k2interactive  You also will need to add four queries - see Code-Additions_March10 doc - in the Gemini Platform Dropbox folder - for more details.
+        //  TODO: Located in "hvac_vfdprescriptive" filtered with "queryMotorVFDprescriptive"
+
     }
 
     var utilitycompany = ""
@@ -221,8 +227,12 @@ class Motors(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRate
         val demandSavings = energyPowerChange() / usageHoursPre()
 
         //2a. BED Prescriptive Savings for VFD - Based on pg. 70 of Vermont TRM
-        var VFDdSavings = extractDemandSavings(element) * hp * KW_CONVERSION
+        var VFDdSavings = extractDemandSavings(element)
 
+        // TODO: @k2interactive Here is where the equations from Code-Additions_March10 doc - in the Gemini Platform Dropbox folder - should go.
+        //TODO: @k2interactive please make sure the var net_kwh_savings & net_kw_savings are added to the CSV output: "__VFD_Net_Prescriptive_Energy" & "__VFD_Net_Prescriptive_Demand"
+        // In the word doc equations I state the variables kwh & kw are pulled from the Parse.
+        // That is true but I also have transformed them into "VFDeSavings" and "VFDdSavings" in the equations above - which you should use.
 
         //3. Implementation Cost
         // ToDo - The below cost would be a look up in the future.
@@ -239,6 +249,7 @@ class Motors(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRate
         postRow["__Gross_Savings_BLPM_circulator_pump"] = grossBEDkwhsavings.toString()
         postRow["__Net_Savings__BLPM_circulator_pump"] = netBEDkwhsavings.toString()
         //@k2interactive please make these active so that the they also spit out the values in the CSV
+        //TODO: @k2interactive please change the two immediately below to: "__VFD_Gross_Prescriptive_Energy" & "__VFD_Gross_Prescriptive_Demand"
         postRow["__VFD_Prescriptive_Energy_Savings"] = VFDeSavings.toString()
         postRow["__VFD_Prescriptive_Demand_Savings"] = VFDdSavings.toString()
         postRow["__VFD_Prescriptive_Install_Cost"] = VFDinstallCost.toString()

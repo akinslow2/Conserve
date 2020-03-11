@@ -46,8 +46,7 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
         private const val HVAC_DB_BTU = "size_btu_hr"
         private const val HVAC_DB_EER = "eer"
 // TODO: @k2interactive please insert queries from thermostat here.
-//  You also will need to add four queries - see Code-Additions_March10 doc - in the Gemini Platform Dropbox folder - for more details.
-//  The query filter that is being transferred over from the thermostats (i.e., queryThermostatDeemed) works for these new queries as well, as they are all in the same data string
+
         /**
          * Fetches the EER based on the specific Match Criteria via the Parse API
 
