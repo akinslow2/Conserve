@@ -133,7 +133,7 @@ class Motors(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRate
 
     override fun setup() {
         try {
-            utilitycompany = preAudit["Others Utility Company"]!! as String
+            utilitycompany = preAudit["Others Electric Utility Company"]!! as String
             motortype = featureData["Purpose"]!! as String
             srs = featureData["Synchronous Rotational Speed (SRS)"]!! as Int
             mrs = featureData["Measured Rotational Speed (MRS)"]!! as Int

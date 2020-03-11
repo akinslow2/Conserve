@@ -32,6 +32,7 @@ class Thermostat(computable: Computable<*>, utilityRateGas: UtilityRate, utility
          * Conversion Factor from Horse Power to Kilo Watts
          * */
         private const val KW_CONVERSION = 0.746
+        // TODO: @k2interactive please make sure that this query is moved to the HVAC class
         private const val ThermostatDeemed = "thermostat_thermostatdeemed"
 
         /**
@@ -41,6 +42,7 @@ class Thermostat(computable: Computable<*>, utilityRateGas: UtilityRate, utility
         // Both total_kwh, kw, and total_cost can be found from the call to
         // dataExtractThermostat with the string from queryThermostatDeemed
         // that data should be sent to the costPostState function
+        // TODO: @k2interactive please make sure that this query is moved to the HVAC class
         fun extractThermostatreplacementkWh(elements: List<JsonElement?>): Double {
             elements.forEach {
                 it?.let {
@@ -51,7 +53,7 @@ class Thermostat(computable: Computable<*>, utilityRateGas: UtilityRate, utility
             }
             return 0.0
         }
-
+        // TODO: @k2interactive please make sure that this query is moved to the HVAC class
         // TODO: Test me
         fun extractThermostatreplacementkWh(element: JsonElement): Double {
             if (element.asJsonObject.has("total_kwh")) {
@@ -71,6 +73,7 @@ class Thermostat(computable: Computable<*>, utilityRateGas: UtilityRate, utility
             return 0.0
         }
 
+        // TODO: @k2interactive please make sure that this query is moved to the HVAC class
         // TODO: Test me
         fun extractThermostatreplacementkW(element: JsonElement): Double {
             if (element.asJsonObject.has("kw")) {
@@ -89,7 +92,7 @@ class Thermostat(computable: Computable<*>, utilityRateGas: UtilityRate, utility
             }
             return 0.0
         }
-
+        // TODO: @k2interactive please make sure that this query is moved to the HVAC class
         // TODO: Test me
         fun extractThermostatreplacementCost(element: JsonElement): Double {
             if (element.asJsonObject.has("total_cost")) {
@@ -98,7 +101,8 @@ class Thermostat(computable: Computable<*>, utilityRateGas: UtilityRate, utility
             return 0.0
         }
     }
-
+    // TODO: @k2interactive heatingFuel and coolingFuel must be in the HVAC class for the query
+    //  let me know if these type of comments are unneccessary
     private var heatingFuel = ""
     private var coolingFuel = ""
 
@@ -113,6 +117,8 @@ class Thermostat(computable: Computable<*>, utilityRateGas: UtilityRate, utility
 
     override fun setup() {
         try {
+            // TODO: @k2interactive heatingFuel and coolingFuel must to be in the HVAC class for the query
+            //  I added them into the HVAC input parameters already
             heatingFuel = featureData["Heat Fuel"]!! as String
             coolingFuel = featureData["Cool Fuel"]!! as String
 
@@ -132,6 +138,7 @@ class Thermostat(computable: Computable<*>, utilityRateGas: UtilityRate, utility
      * Cost - Post State
      * */
     override fun costPostState(element: JsonElement, dataHolder: DataHolder): Double {
+        // TODO: @k2interactive please move these query related items to HVAC
 //@k2interactive please make these active so that the they also spit out the values in the CSV
         val presciptive_kW_savings = extractThermostatreplacementkW(element)
         val presciptive_kWh_savings = extractThermostatreplacementkWh(element)
@@ -184,7 +191,7 @@ class Thermostat(computable: Computable<*>, utilityRateGas: UtilityRate, utility
     override fun efficientLookup() = false
 
     override fun queryEfficientFilter() = ""
-
+    // TODO: @k2interactive please make sure that this query filter is moved to the HVAC class
     override fun queryThermostatDeemed(): String {
         return JSONObject()
                 .put("type", ThermostatDeemed)
@@ -206,6 +213,8 @@ class Thermostat(computable: Computable<*>, utilityRateGas: UtilityRate, utility
 
     override fun featureDataFields() = getGFormElements().map { it.value.param!! }.toMutableList()
 
+    // TODO: @k2interactive please make sure that these two prestatefields and three poststatefields are moved to the HVAC
+    //  thermostat should not be producing these values anymore.
     override fun preStateFields() = mutableListOf("heatingfuel", "coolingfuel")
 
     override fun postStateFields() = mutableListOf("__prescriptive_kWh_savings", "__prescriptive_kW_savings",

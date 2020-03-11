@@ -177,11 +177,15 @@ abstract class EBase(val computable: Computable<*>,
         energyPreState.computable = computable
 
         // ** Prepare a list of Observable - Extractor that is required by each of the Zone Type **
+        // TODO: @k2interactive please make sure that the queryThermostatDeemed is correctly pulling from
+        //  the PARSE dashboard thermostat class even though you have relocated it to the HVAC class
+
         val extractorHVAC = listOf(dataExtractHVAC(queryHVACCoolingHours()),
                 dataExtractHVAC(queryHVACEer()), dataExtractHVAC(queryMotorVFDprescriptive()))
 
         val extractorMotor = listOf(dataExtractMotors(queryMotorEfficiency()))
 
+        // TODO: @k2interactive the queryThermostatDeemedCost is not used anymore, please remove from all locations
         val extractorThermostat = listOf(dataExtractThermostat(queryThermostatDeemed()),
                 dataExtractThermostat(queryThermostatDeemedCost()))
 

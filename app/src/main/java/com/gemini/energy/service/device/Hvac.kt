@@ -45,7 +45,9 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
 
         private const val HVAC_DB_BTU = "size_btu_hr"
         private const val HVAC_DB_EER = "eer"
-
+// TODO: @k2interactive please insert queries from thermostat here.
+//  You also will need to add four queries - see Code-Additions_March10 doc - in the Gemini Platform Dropbox folder - for more details.
+//  The query filter that is being transferred over from the thermostats (i.e., queryThermostatDeemed) works for these new queries as well, as they are all in the same data string
         /**
          * Fetches the EER based on the specific Match Criteria via the Parse API
 
@@ -143,7 +145,8 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
     /**
      * Pre Audit Variables
      */
-
+// TODO: @k2interactive Please add make it so there are Monday operationhours (Moperationhours); Tuesday operation hours (Toperationhours) etc.
+//  for the entire week. Additionally I would like them called in the fun setup() and pushed in the preauditfields csv
     var clientname = ""
     var clientaddress = ""
     var businessname = ""
@@ -164,7 +167,7 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
 
     override fun setup() {
         try {
-
+ // TODO: @k2interactive I changed this to match the parameters - but left the section name in front, not sure that is correct
             clientname = preAudit["General Client Info Name"]!! as String
             businessname = preAudit["General Client Info Business Name"]!! as String
             auditmonth = preAudit["General Client Info Audit Month"]!! as String
@@ -174,7 +177,7 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
             endday = preAudit["General Client Info Assessment End Day"]!! as String
             operationhours = preAudit["Operation Hours Monday Operating Hours"]!! as String
             bldgarea = preAudit["Area Total (Sq.Ft.)"]!! as Double
-            utilitycompany = preAudit["Others Utility Company"]!! as String
+            utilitycompany = preAudit["Others Electric Utility Company"]!! as String
             electricstructure = preAudit["Others Electric Rate Structure"]!! as String
             gasstructure = preAudit["Others Gas Rate Structure"]!! as String
             bldgtype = preAudit["General Client Info Facility Type"]!! as String
@@ -305,10 +308,9 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
     /**
      * HVAC - INCENTIVES | MATERIAL COST
      * */
+
     override fun incentives(): Double {
-        if (utilitycompany == "pge") {return energyPowerChange() * 0.15 + (energyPowerChange() / usageHoursPre()) * 150 }
-        if (utilitycompany == "nes"){ return 0.0}
-        else {return 0.00}
+        return 0.0
     }
 
     override fun materialCost(): Double {
@@ -411,7 +413,7 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
             "General Client Info Audit Year", "General Client Info Address",
             "General Client Info Assessment Start Day", "General Client Info Assessment End Day",
             "Operation Hours Monday Operating Hours", "Area Total (Sq.Ft.)",
-            "Others Utility Company", "Others Electric Rate Structure", "Others Gas Rate Structure",
+            "Electric Utility Company", "Others Electric Rate Structure", "Others Gas Rate Structure",
             "General Client Info Facility Type")
     override fun featureDataFields() = getGFormElements().map { it.value.param!! }.toMutableList()
 
