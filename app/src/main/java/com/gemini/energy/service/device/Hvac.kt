@@ -420,6 +420,14 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
             .put("data.state", state)
             .toString()
 
+    override fun queryThermostatDeemed(): String {
+        return JSONObject()
+                .put("type", "thermostat_thermostatdeemed")
+                .put("data.heating_fuel", heatingFuel)
+                .put("data.cooling_fuel", coolingFuel)
+                .toString()
+    }
+
     /**
      * State if the Equipment has a Post UsageHours Hours (Specific) ie. A separate set of
      * Weekly UsageHours Hours apart from the PreAudit

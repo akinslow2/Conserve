@@ -11,7 +11,6 @@ import com.gemini.energy.service.type.UsageHours
 import com.gemini.energy.service.type.UtilityRate
 import com.google.gson.JsonElement
 import io.reactivex.Observable
-import org.json.JSONObject
 import timber.log.Timber
 import java.util.*
 
@@ -117,13 +116,6 @@ class Thermostat(computable: Computable<*>, utilityRateGas: UtilityRate, utility
 
     override fun setup() {
         try {
-            // TODO: @k2interactive heatingFuel and coolingFuel must to be in the HVAC class for the query
-            //  I added them into the HVAC input parameters already
-//            heatingFuel = featureData["Heat Fuel"]!! as String
-//            coolingFuel = featureData["Cool Fuel"]!! as String
-
-//            peakHours = featureData["Peak Hours"]!! as Double
-//            offPeakHours = featureData["Off Peak Hours"]!! as Double
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -191,14 +183,6 @@ class Thermostat(computable: Computable<*>, utilityRateGas: UtilityRate, utility
     override fun efficientLookup() = false
 
     override fun queryEfficientFilter() = ""
-    // TODO: @k2interactive please make sure that this query filter is moved to the HVAC class
-    override fun queryThermostatDeemed(): String {
-        return JSONObject()
-                .put("type", ThermostatDeemed)
-                .put("data.heating_fuel", heatingFuel)
-                .put("data.cooling_fuel", coolingFuel)
-                .toString()
-    }
 
     /**
      * State if the Equipment has a Post UsageHours Hours (Specific) ie. A separate set of
