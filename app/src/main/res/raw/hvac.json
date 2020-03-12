@@ -17,44 +17,44 @@
           "index": 12,
           "hint": "",
           "dataType": "pickerinputrow",
-          "defaultValues": "1:Central boiler,2:central furnace,3:central chiller,4:gas-fired rooftop unit (RTU),5:Energy Recovery Ventilator (ERV),6:heat pump,7:window AC,8:gas-fired unit heater,9:hydronic radiators,10:electric space heaters,11:standalone fans",
-          "param": "HVAC System1",
+          "defaultValues": "1:ductless heat pump,2:VRF,3:air-to-air,4:air-to-water,5:water-to-water",
+          "param": "If Heat Pump What Type",
           "validation": "optional",
           "id": "12"
         },
         {
           "index": 13,
           "hint": "",
-          "dataType": "pickerinputrow",
-          "defaultValues": "1:Central boiler,2:central furnace,3:central chiller,4:gas-fired rooftop unit (RTU),5:Energy Recovery Ventilator (ERV),6:heat pump,7:window AC,8:gas-fired unit heater,9:hydronic radiators,10:electric space heaters,11:standalone fans",
-          "param": "HVAC System2",
+          "dataType": "textrow",
+          "defaultValues": "",
+          "param": "Make",
           "validation": "optional",
           "id": "13"
         },
         {
           "index": 14,
           "hint": "",
-          "dataType": "pickerinputrow",
-          "defaultValues": "1:ductless heat pump,2:VRF,3:air-to-air,4:air-to-water,5:water-to-water",
-          "param": "If Heat Pump What Type",
+          "dataType": "textrow",
+          "defaultValues": "",
+          "param": "Model Number",
           "validation": "optional",
           "id": "14"
         },
         {
           "index": 15,
           "hint": "",
-          "dataType": "textrow",
+          "dataType": "introw",
           "defaultValues": "",
-          "param": "Make",
+          "param": "Age installed (years)",
           "validation": "optional",
           "id": "15"
         },
         {
           "index": 16,
           "hint": "",
-          "dataType": "textrow",
+          "dataType": "introw",
           "defaultValues": "",
-          "param": "Model Number",
+          "param": "Age replaced (years)",
           "validation": "optional",
           "id": "16"
         },
@@ -63,7 +63,7 @@
           "hint": "",
           "dataType": "introw",
           "defaultValues": "",
-          "param": "Age installed (years)",
+          "param": "Year planned to replace",
           "validation": "optional",
           "id": "17"
         },
@@ -72,25 +72,25 @@
           "hint": "",
           "dataType": "introw",
           "defaultValues": "",
-          "param": "Age replaced (years)",
+          "param": "Quantity",
           "validation": "optional",
           "id": "18"
         },
         {
           "index": 19,
           "hint": "",
-          "dataType": "introw",
+          "dataType": "decimalrow",
           "defaultValues": "",
-          "param": "Year planned to replace",
+          "param": "EER",
           "validation": "optional",
           "id": "19"
         },
         {
           "index": 110,
           "hint": "",
-          "dataType": "introw",
+          "dataType": "decimalrow",
           "defaultValues": "",
-          "param": "Quantity",
+          "param": "SEER",
           "validation": "optional",
           "id": "110"
         },
@@ -99,25 +99,25 @@
           "hint": "",
           "dataType": "decimalrow",
           "defaultValues": "",
-          "param": "EER",
+          "param": "HSPF",
           "validation": "optional",
           "id": "111"
         },
         {
           "index": 112,
           "hint": "",
-          "dataType": "decimalrow",
+          "dataType": "introw",
           "defaultValues": "",
-          "param": "SEER",
+          "param": "Cooling Capacity (Btu/hr)",
           "validation": "optional",
           "id": "112"
         },
         {
           "index": 113,
           "hint": "",
-          "dataType": "decimalrow",
+          "dataType": "introw",
           "defaultValues": "",
-          "param": "HSPF",
+          "param": "Heating Output (Btu/hr)",
           "validation": "optional",
           "id": "113"
         },
@@ -126,43 +126,43 @@
           "hint": "",
           "dataType": "introw",
           "defaultValues": "",
-          "param": "Cooling Capacity (Btu/hr)",
+          "param": "Heating Input (Btu/hr)",
           "validation": "optional",
           "id": "114"
         },
         {
           "index": 115,
           "hint": "",
-          "dataType": "introw",
+          "dataType": "decimalrow",
           "defaultValues": "",
-          "param": "Heating Output (Btu/hr)",
+          "param": "Heating Electirc Efficiency",
           "validation": "optional",
           "id": "115"
         },
         {
           "index": 116,
           "hint": "",
-          "dataType": "introw",
+          "dataType": "decimalrow",
           "defaultValues": "",
-          "param": "Heating Input (Btu/hr)",
+          "param": "Heating Power (kW)",
           "validation": "optional",
           "id": "116"
         },
         {
           "index": 117,
           "hint": "",
-          "dataType": "decimalrow",
-          "defaultValues": "",
-          "param": "Heating Electirc Efficiency",
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:Water_Evaporatively,2:Air_Cooled",
+          "param": "Cooling Type",
           "validation": "optional",
           "id": "117"
         },
         {
           "index": 118,
           "hint": "",
-          "dataType": "decimalrow",
-          "defaultValues": "",
-          "param": "Heating Power (kW)",
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:yes,2:no",
+          "param": "Variable speed",
           "validation": "optional",
           "id": "118"
         },
@@ -170,28 +170,10 @@
           "index": 119,
           "hint": "",
           "dataType": "pickerinputrow",
-          "defaultValues": "1:Water_Evaporatively,2:Air_Cooled",
-          "param": "Cooling Type",
-          "validation": "optional",
-          "id": "119"
-        },
-        {
-          "index": 120,
-          "hint": "",
-          "dataType": "pickerinputrow",
-          "defaultValues": "1:yes,2:no",
-          "param": "Variable speed",
-          "validation": "optional",
-          "id": "120"
-        },
-        {
-          "index": 121,
-          "hint": "",
-          "dataType": "pickerinputrow",
           "defaultValues": "1:yes,2:no",
           "param": "Humidity controls",
           "validation": "optional",
-          "id": "121"
+          "id": "119"
         }
       ],
       "id": "1"
@@ -291,82 +273,107 @@
     },
     {
       "index": 5,
-      "section": "Suggested Alternative",
+      "section": "Thermostat Controls",
       "elements": [
         {
           "index": 51,
-          "hint": "(Rq)",
-          "dataType": "introw",
-          "defaultValues": "",
-          "param": "Alternate Cooling Capacity (Btu/hr)",
+          "hint": "(Rq for Thermostat)",
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:natural gas,2:oil,3:propane,4:electric,5:unknown",
+          "param": "Heat Fuel",
           "validation": "optional",
           "id": "51"
         },
         {
           "index": 52,
+          "hint": "(Rq for Thermostat)",
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:natural gas,2:oil,3:propane,4:electric,5:not applicable",
+          "param": "Cool Fuel",
+          "validation": "optional",
+          "id": "52"
+        }
+      ],
+      "id": "5"
+    },
+    {
+      "index": 6,
+      "section": "Suggested Alternative",
+      "elements": [
+        {
+          "index": 61,
+          "hint": "(Rq)",
+          "dataType": "introw",
+          "defaultValues": "",
+          "param": "Alternate Cooling Capacity (Btu/hr)",
+          "validation": "optional",
+          "id": "61"
+        },
+        {
+          "index": 62,
           "hint": "",
           "dataType": "introw",
           "defaultValues": "",
           "param": "Quantity",
           "validation": "optional",
-          "id": "52"
+          "id": "62"
         },
         {
-          "index": 53,
+          "index": 63,
           "hint": "",
           "dataType": "introw",
           "defaultValues": "",
           "param": "Alternate Cooling Capacity (Tons)",
           "validation": "optional",
-          "id": "53"
+          "id": "63"
         },
         {
-          "index": 54,
+          "index": 64,
           "hint": "",
           "dataType": "introw",
           "defaultValues": "",
           "param": "Alternate Heating Capacity",
           "validation": "optional",
-          "id": "54"
+          "id": "64"
         },
         {
-          "index": 55,
+          "index": 65,
           "hint": "",
           "dataType": "decimalrow",
           "defaultValues": "",
           "param": "Alternate SEER",
           "validation": "optional",
-          "id": "55"
+          "id": "65"
         },
         {
-          "index": 56,
-          "hint": "(Rq)",
+          "index": 66,
+          "hint": "(Rq for VFD)",
           "dataType": "pickerinputrow",
           "defaultValues": "1:Boiler Draft Fan,2:Cooling Tower Fan,3:Cooling Water Pump,4:Heating Hot Water Pump,5:Return Fan,6:Supply Fan,7:Water Source Heat Pump (WSHP) Circulation Pump",
           "param": "Location for potential VFD",
           "validation": "optional",
-          "id": "56"
+          "id": "66"
         },
         {
-          "index": 57,
-          "hint": "(Rq)",
+          "index": 67,
+          "hint": "(Rq for VFD)",
           "dataType": "pickerinputrow",
           "defaultValues": "1:2,2:3,3:5,4:7.5,5:10,6:15,7:20,8:25,9:30,10:40,11:50,12:60,13:75,14:100",
           "param": "Size of Pump/Fan Motor for potential VFD (HP)",
           "validation": "optional",
-          "id": "57"
+          "id": "67"
         },
         {
-          "index": 58,
+          "index": 68,
           "hint": "(Rq)",
           "dataType": "pickerinputrow",
           "defaultValues": "1:Single,2:Multi",
           "param": "Mini Split Heat Pump Outlet",
           "validation": "optional",
-          "id": "58"
+          "id": "68"
         }
       ],
-      "id": "5"
+      "id": "6"
     }
   ]
 }

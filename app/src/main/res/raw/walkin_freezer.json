@@ -166,7 +166,7 @@
         },
         {
           "index": 216,
-          "hint": "(Rq)",
+          "hint": "Rq for condensing unit",
           "dataType": "pickerinputrow",
           "defaultValues": "1:Medium,2:Low",
           "param": "Temp",
@@ -175,7 +175,7 @@
         },
         {
           "index": 217,
-          "hint": "(Rq)",
+          "hint": "Rq for condensing unit",
           "dataType": "pickerinputrow",
           "defaultValues": "1:1,2:1.5,3:2,4:2.5,5:3,6:3.5,7:4,8:4.5,9:5",
           "param": "Condensor Compressor Size (HP)",
@@ -184,7 +184,7 @@
         },
         {
           "index": 218,
-          "hint": "",
+          "hint": "Rq for condensing unit",
           "dataType": "pickerinputrow",
           "defaultValues": "1:1,2:3",
           "param": "Compressor Phase",
@@ -342,7 +342,7 @@
         },
         {
           "index": 414,
-          "hint": "<25F, 25-40F, 41-65F (Rq)",
+          "hint": "<25F, 25-40F, 41-65F Rq for FanMotor Controls",
           "dataType": "pickerinputrow",
           "defaultValues": "1:Low,2:Medium,3:High",
           "param": "Temperature Range",
@@ -351,7 +351,7 @@
         },
         {
           "index": 415,
-          "hint": "(Rq)",
+          "hint": "Rq for FanMotor Controls",
           "dataType": "pickerinputrow",
           "defaultValues": "1:SP,2:ECM,3:Synchronous,4:Unknown",
           "param": "Fan Motor Type",
@@ -360,7 +360,7 @@
         },
         {
           "index": 416,
-          "hint": "(Rq)",
+          "hint": "Rq for FanMotor Replacement",
           "dataType": "pickerinputrow",
           "defaultValues": "1:Brushless Permanent Magnet,2:Synchronous",
           "param": "Motor Type",
@@ -369,7 +369,7 @@
         },
         {
           "index": 417,
-          "hint": "(Rq)",
+          "hint": "Rq for FanMotor Repalcement",
           "dataType": "pickerinputrow",
           "defaultValues": "1:Case,2:Walk-In",
           "param": "Refrigeration Type",

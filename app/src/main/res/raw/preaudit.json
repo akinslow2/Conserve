@@ -123,7 +123,7 @@
           "index": 210,
           "hint": "",
           "dataType": "pickerinputrow",
-          "defaultValues": "1:2020.0",
+          "defaultValues": "1:2020",
           "param": "Audit Year",
           "validation": "optional",
           "id": "210"
@@ -207,7 +207,7 @@
         },
         {
           "index": 42,
-          "hint": "9:00 12:00, 13:00 18:00",
+          "hint": "",
           "dataType": "textrow",
           "defaultValues": "",
           "param": "Monday Operating Hours",
@@ -216,7 +216,7 @@
         },
         {
           "index": 43,
-          "hint": "9:00 12:00, 13:00 18:01",
+          "hint": "",
           "dataType": "textrow",
           "defaultValues": "",
           "param": "Tuesday Operating Hours",
@@ -225,7 +225,7 @@
         },
         {
           "index": 44,
-          "hint": "9:00 12:00, 13:00 18:02",
+          "hint": "",
           "dataType": "textrow",
           "defaultValues": "",
           "param": "Wednesday Operating Hours",
@@ -234,7 +234,7 @@
         },
         {
           "index": 45,
-          "hint": "9:00 12:00, 13:00 18:03",
+          "hint": "",
           "dataType": "textrow",
           "defaultValues": "",
           "param": "Thursday Operating Hours",
@@ -243,7 +243,7 @@
         },
         {
           "index": 46,
-          "hint": "9:00 12:00, 13:00 18:04",
+          "hint": "",
           "dataType": "textrow",
           "defaultValues": "",
           "param": "Friday Operating Hours",
@@ -252,7 +252,7 @@
         },
         {
           "index": 47,
-          "hint": "9:00 12:00, 13:00 18:05",
+          "hint": "",
           "dataType": "textrow",
           "defaultValues": "",
           "param": "Saturday Operating Hours",
@@ -261,7 +261,7 @@
         },
         {
           "index": 48,
-          "hint": "9:00 12:00, 13:00 18:06",
+          "hint": "",
           "dataType": "textrow",
           "defaultValues": "",
           "param": "Sunday Operating Hours",
@@ -405,6 +405,15 @@
           "param": "Controls Contractor's Name",
           "validation": "optional",
           "id": "76"
+        },
+        {
+          "index": 77,
+          "hint": "",
+          "dataType": "",
+          "defaultValues": "",
+          "param": "",
+          "validation": "",
+          "id": "77"
         }
       ],
       "id": "7"
@@ -603,7 +612,7 @@
       "elements": [
         {
           "index": 131,
-          "hint": "Roof",
+          "hint": "",
           "dataType": "textrow",
           "defaultValues": "",
           "param": "Where is your HVAC equipment",

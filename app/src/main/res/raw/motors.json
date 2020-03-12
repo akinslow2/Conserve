@@ -6,7 +6,7 @@
       "elements": [
         {
           "index": 11,
-          "hint": "",
+          "hint": "(Rq2)",
           "dataType": "pickerinputrow",
           "defaultValues": "1:Boiler Draft Fan,2:Cooling Tower Fan,3:Water Source Heat Pump (WSHP) Circulation Pump,4:Supply Fan,5:Return Fan,6:Cooling Water Pump,7:Heating Hot Water Pump,8:brushless permanent magnet (BLPM) circulator pump",
           "param": "Purpose",
@@ -15,7 +15,7 @@
         },
         {
           "index": 12,
-          "hint": "",
+          "hint": "(Rq2)",
           "dataType": "textrow",
           "defaultValues": "",
           "param": "Make",
@@ -141,7 +141,7 @@
         },
         {
           "index": 116,
-          "hint": "",
+          "hint": "(Rq2) BLPM Circ Pump",
           "dataType": "pickerinputrow",
           "defaultValues": "1:yes,2:no",
           "param": "Controls",
