@@ -127,7 +127,7 @@ class RefrigerationFactory(private val utilityRateGas: UtilityRate,
             ERefrigerationType.WIFreezer             -> WIFreezer(computable,
                     utilityRateGas, utilityRateElectricity, usageHours, outgoingRows, context)
 
-            ERefrigerationType.WICoolerBox                -> WICoolerBox(computable,
+            ERefrigerationType.WICoolerBot                -> WICoolerBot(computable,
                     utilityRateGas, utilityRateElectricity, usageHours, outgoingRows, context)
 
             ERefrigerationType.Refrigerator             -> Refrigerator(computable,

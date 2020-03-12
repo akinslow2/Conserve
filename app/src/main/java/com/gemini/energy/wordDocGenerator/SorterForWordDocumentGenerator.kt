@@ -11,6 +11,9 @@ import com.gemini.energy.service.device.plugload.*
 import com.gemini.energy.service.device.refrigeration.*
 import com.google.gson.JsonNull
 
+// TODO: @k2interactive Please complete the addition of refrigeration here. The values are totalCost += refrigeration.installcost()|
+//  totalSavings += refrigeration.grosskwhsavings()
+
 class SorterForWordDocumentGenerator {
     // use these values for sorting types of equipment that need to be aggregated for the report
     companion object {
@@ -144,7 +147,7 @@ class SorterForWordDocumentGenerator {
                 is Freezer -> sorted[value.computable.auditId]!![refrigeration]!!.add(value)
                 is WIFreezer -> sorted[value.computable.auditId]!![refrigeration]!!.add(value)
                 is WIRefrigerator -> sorted[value.computable.auditId]!![refrigeration]!!.add(value)
-                is WICoolerBox -> sorted[value.computable.auditId]!![refrigeration]!!.add(value)
+                is WICoolerBot -> sorted[value.computable.auditId]!![refrigeration]!!.add(value)
 
                 // Appliances
                 // TODO: comment in appliances once they have finished being implemented
@@ -741,7 +744,7 @@ class SorterForWordDocumentGenerator {
     }
 
     private fun prepareBuildingValuesForEquipment(lightings: LightingValues?, equipments: EquipmentValues?, hvacs: HvacValues?, waterHeater: WaterHeaterValues?): BuildingValues {
-
+// TODO: @k2interactive please include refrigeration (totalkwhsavings in the buildingTotalSavings and buildingTotalCost
         val buildingTotalSavings = (lightings?.totalcostsavings ?: 0.0) + (equipments?.totalSavings
                 ?: 0.0) + (hvacs?.totalSavings ?: 0.0 + (waterHeater?.totalSavings ?: 0.0))
 
@@ -752,7 +755,8 @@ class SorterForWordDocumentGenerator {
 
         val buildingPaybackMonth = buildingTotalCost / buildingTotalSavings * 12
 
-        //Waterheater is embedded in the hvac results
+        // TODO: @k2interactive refrigeration should have totalCost, PaybackYear, and PaybackMonth returned as well
+        // TODO: @k2interactive currently waterheater is embedded in the hvac results below, I would like it seperated out.
         return BuildingValues(
                 buildingTotalSavings,
                 buildingPayback,

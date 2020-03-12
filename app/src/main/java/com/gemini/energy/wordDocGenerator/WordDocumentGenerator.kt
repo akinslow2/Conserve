@@ -85,6 +85,9 @@ class WordDocumentGenerator {
 
         return document
     }
+// TODO: @k2interactive please add a page for refrigeration. Desired text for now should simply be:
+//  Implementing all refrigeration measures will result in a minimum savings of (refrigeration.totalSavings).
+//  The estimated cost is (refrigeration.totalCost), resulting in a payback of (refrigeration.PaybackMonth) months.
 
     // generate pages
     private fun generateFirstPage(document: XWPFDocument, hvac: HvacValues) {

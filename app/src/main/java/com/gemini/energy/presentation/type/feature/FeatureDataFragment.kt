@@ -70,7 +70,7 @@ class FeatureDataFragment : BaseFormFragment() {
             else if (model.type == EZoneType.Refrigeration.value) {
                 if (model.subType == ERefrigerationType.WIRefrigerator.value) {rawId = R.raw.walkin_refrigerator}
                 if (model.subType == ERefrigerationType.WIFreezer.value) {rawId = R.raw.walkin_freezer}
-                if (model.subType == ERefrigerationType.WICoolerBox.value) {rawId = R.raw.walkin_coolbox}
+                if (model.subType == ERefrigerationType.WICoolerBot.value) {rawId = R.raw.walkin_coolbox}
                 if (model.subType == ERefrigerationType.Refrigerator.value) {rawId = R.raw.refrigerator}
                 if (model.subType == ERefrigerationType.Freezer.value) {rawId = R.raw.freezer}
             }

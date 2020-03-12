@@ -45,7 +45,7 @@ enum class ERefrigerationType(val value: String) {
     WIFreezer("Walk-In Freezer"),
     Refrigerator("Refrigerator"),
     Freezer ("Freezer"),
-    WICoolerBox("Walk-In Cooler Box");
+    WICoolerBot("Walk-In Cooler Bot");
 
     companion object {
         private val map = ERefrigerationType.values()
