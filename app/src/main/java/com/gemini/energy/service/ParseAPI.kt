@@ -10,8 +10,6 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.*
 
 class ParseAPI {
-
-    // TODO: @k2ineractive: track these down and prevent http call if query is null
     interface ParseAPIService {
         @GET("classes/PlugLoad")
         fun fetchPlugload(@Query("where") where: String): Single<JsonObject>

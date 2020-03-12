@@ -416,6 +416,9 @@ abstract class EBase(val computable: Computable<*>,
      * Get the Specific Query Result from the Parse API
      * */
     private fun starValidator(query: String): Observable<Boolean> {
+        if (query.isEmpty()) {
+            return Observable.just(false)
+        }
         return parseAPIService.fetchPlugload(query)
                 .map { it.getAsJsonArray("results").size() == 0 }
                 .toObservable()
@@ -432,8 +435,17 @@ abstract class EBase(val computable: Computable<*>,
         Timber.d("Efficient Lookup -- [${efficientLookup()}]")
         val query = queryEfficientFilter()
 
-        fun switcherHVAC() = if (efficientLookup()) parseAPIService.fetchHVAC(query) else buildPostState()
-        fun switcherPlugload() = if (efficientLookup() && !isEnergyStar) parseAPIService.fetchPlugload(query) else buildPostState()
+        fun switcherHVAC() =
+                if (efficientLookup() && query.isNotBlank())
+                    parseAPIService.fetchHVAC(query)
+                else
+                    buildPostState()
+
+        fun switcherPlugload() =
+                if (efficientLookup() && !isEnergyStar && query.isNotBlank())
+                    parseAPIService.fetchPlugload(query)
+                else
+                    buildPostState()
 
         val result = when (computable.auditScopeType) {
             EZoneType.HVAC          -> switcherHVAC()
@@ -445,6 +457,9 @@ abstract class EBase(val computable: Computable<*>,
     }
 
     private fun laborCost(query: String): Observable<JsonArray> {
+        if (query.isEmpty()) {
+            return Observable.just(JsonArray())
+        }
         return parseAPIService.fetchLaborCost(query)
                 .map { it.getAsJsonArray("results") }
                 .toObservable()
@@ -452,12 +467,18 @@ abstract class EBase(val computable: Computable<*>,
 
 
     private fun dataExtractHVAC(query: String): Observable<JsonArray> {
+        if (query.isEmpty()) {
+            return Observable.just(JsonArray())
+        }
         return parseAPIService.fetchHVAC(query)
                 .map { it.getAsJsonArray("results") }
                 .toObservable()
     }
 
     private fun dataExtractMotors(query: String): Observable<JsonArray> {
+        if (query.isEmpty()) {
+            return Observable.just(JsonArray())
+        }
         return parseAPIService.fetchMotors(query)
                 .map { it.getAsJsonArray("results") }
                 .toObservable()
@@ -473,6 +494,9 @@ abstract class EBase(val computable: Computable<*>,
     }
 
     private fun dataExtractLightControls(query: String): Observable<JsonArray> {
+        if (query.isEmpty()) {
+            return Observable.just(JsonArray())
+        }
         return parseAPIService.fetchLightControls(query)
                 .map { it.getAsJsonArray("results") }
                 .toObservable()
