@@ -194,6 +194,7 @@ abstract class EBase(val computable: Computable<*>,
 
         val extractorNone = listOf(Observable.just(JsonArray()))
 
+        // TODO: @k2interactive please add an extractorRefrigeration that grabs data from the Refrigeration Class in the Parse Dashboard - queryCondensingUnit
         // ** Extractor List gets called depending on the Zone Type **
         val remoteExtract = when (computable.auditScopeType) {
             EZoneType.HVAC      -> extractorHVAC
@@ -384,6 +385,13 @@ abstract class EBase(val computable: Computable<*>,
     open fun queryHVACCoolingHours() = ""
     open fun queryHVACEer() = ""
     open fun queryMotorVFDprescriptive() = ""
+
+    // TODO: @k2interactive here you can add the Refrigeration Query group
+    // TODO: @k2interactive there are five of them: below are the five with their respective type String name in Parse Dashboard [query - "type name in Parse"]
+    //  queryCondensingUnit - "refrigeration_condensingunit" | queryEvaporatorFanMotor - "refrigeration_condensingunit" |
+    //  queryEvaporatorFanMotorControls - "refrigeration_evaporatorfanmotorcontrols" | queryReachIn - "refrigeration_reachinfreezerrefrigerator" |
+    //  queryReplacement - "refrigeration_refrigeratorreplacement"
+
     /**
      * Motors Query - Fetch Efficiency
      * */

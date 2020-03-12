@@ -8,6 +8,8 @@ typealias SortedAudits =
 
 typealias AuditComponents = MutableMap<String, MutableList<EBase>>
 //the commented numbers represent the mastersheet id values
+
+// TODO: @k2interactive Please add refrigeration here.
 data class HvacInstances(
         val quantity: Int, // 21
         val year: Int, // 22
