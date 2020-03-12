@@ -119,11 +119,11 @@ class Thermostat(computable: Computable<*>, utilityRateGas: UtilityRate, utility
         try {
             // TODO: @k2interactive heatingFuel and coolingFuel must to be in the HVAC class for the query
             //  I added them into the HVAC input parameters already
-            heatingFuel = featureData["Heat Fuel"]!! as String
-            coolingFuel = featureData["Cool Fuel"]!! as String
+//            heatingFuel = featureData["Heat Fuel"]!! as String
+//            coolingFuel = featureData["Cool Fuel"]!! as String
 
-            peakHours = featureData["Peak Hours"]!! as Double
-            offPeakHours = featureData["Off Peak Hours"]!! as Double
+//            peakHours = featureData["Peak Hours"]!! as Double
+//            offPeakHours = featureData["Off Peak Hours"]!! as Double
         } catch (e: Exception) {
             e.printStackTrace()
         }

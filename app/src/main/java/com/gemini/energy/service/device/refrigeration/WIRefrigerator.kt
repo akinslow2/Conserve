@@ -9,14 +9,9 @@ import com.gemini.energy.service.IComputable
 import com.gemini.energy.service.OutgoingRows
 import com.gemini.energy.service.device.EBase
 import com.gemini.energy.service.type.UsageHours
-import com.gemini.energy.service.type.UsageSimple
 import com.gemini.energy.service.type.UtilityRate
-import com.google.gson.JsonArray
 import com.google.gson.JsonElement
-import com.google.gson.JsonObject
 import io.reactivex.Observable
-import io.reactivex.Single
-import org.json.JSONObject
 import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.*
@@ -181,10 +176,10 @@ class WIRefrigerator(computable: Computable<*>, utilityRateGas: UtilityRate, uti
 
     var quantity = 0
     var kW = 0.0
-    var capacity = 0
+    var capacity = 0.0
 
     var condensorTemp = ""
-    var condesorCompressor = 0
+    var condesorCompressor = 0.0
     var condensorCompressorphase = 0
 
     var motortype = ""
@@ -199,11 +194,10 @@ class WIRefrigerator(computable: Computable<*>, utilityRateGas: UtilityRate, uti
             quantity = featureData["Quantity"]!! as Int
 
             age = featureData["Age"]!! as Int
-         //   btu = featureData["Cooling Capacity (Btu/hr)"]!! as Int
-         //   gasInput = featureData["Heating Input (Btu/hr)"]!! as Int
-         //   gasOutput = featureData["Heating Output (Btu/hr)"]!! as Int
-            condesorCompressor = featureData["Condensor Compressor Size (HP)"]!! as Int
-            condensorCompressorphase = featureData["Compressor Phase"]!! as Int
+            condesorCompressor = (featureData["Condensor Compressor Size (HP)"]!! as String).toDoubleOrNull()
+                    ?: 0.0
+            condensorCompressorphase = (featureData["Compressor Phase"]!! as String).toIntOrNull()
+                    ?: 0
             condensorTemp = featureData["Temp"]!! as String
 
             motortype = featureData["Motor Type"]!! as String
@@ -214,13 +208,9 @@ class WIRefrigerator(computable: Computable<*>, utilityRateGas: UtilityRate, uti
 
             kW = featureData["Heating Power (kW)"]!! as Double
 
-        //    unittype = featureData["Type of Unit"]!! as String
-            capacity = featureData["Capacity (BTU)"]!! as Int
+            capacity = featureData["Capacity (BTU)"]!! as Double
             peakHours = featureData["Peak Hours"]!! as Double
-         //   partPeakHours = featureData["Part Peak Hours"]!! as Double
             offPeakHours = featureData["Off Peak Hours"]!! as Double
-
-
         } catch (e: Exception) {
             e.printStackTrace()
         }
