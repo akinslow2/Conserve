@@ -4,7 +4,6 @@ import com.gemini.energy.presentation.util.EDay
 import com.gemini.energy.presentation.util.ERateKey
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.HashMap
 
 
 open class UsageHours {
@@ -21,6 +20,8 @@ open class UsageHours {
      * */
     fun daily() = mapper.dailyHours()
     fun weekly() = mapper.weeklyHours()
+    // TODO: @k2interactive
+    //  kotlin.UninitializedPropertyAccessException: lateinit property mapper has not been initialized
     open fun yearly() = mapper.yearlyHours()
     open fun postyearly() = mapper.yearlyHours()
 
