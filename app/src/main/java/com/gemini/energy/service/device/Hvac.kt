@@ -154,6 +154,13 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
     var startday = ""
     var endday = ""
     var operationhours = ""
+    var mondayOperationHours = ""
+    var tuesdayOperationHours = ""
+    var wednesdayOperationHours = ""
+    var thursdayOperationHours = ""
+    var fridayOperationHours = ""
+    var saturdayOperationHours = ""
+    var sundayOperationHours = ""
     var bldgarea = 0.0
     var bldgtype = ""
     var utilitycompany = ""
@@ -175,6 +182,15 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
             startday = preAudit["General Client Info Assessment Start Day"]!! as String
             endday = preAudit["General Client Info Assessment End Day"]!! as String
             operationhours = preAudit["Operation Hours Monday Operating Hours"]!! as String
+
+            mondayOperationHours = preAudit["Operation Hours Monday Operating Hours"]!! as String
+            tuesdayOperationHours = preAudit["Operation Hours Tuesday Operating Hours"]!! as String
+            wednesdayOperationHours = preAudit["Operation Hours Wednesday Operating Hours"]!! as String
+            thursdayOperationHours = preAudit["Operation Hours Thursday Operating Hours"]!! as String
+            fridayOperationHours = preAudit["Operation Hours Friday Operating Hours"]!! as String
+            saturdayOperationHours = preAudit["Operation Hours Saturday Operating Hours"]!! as String
+            sundayOperationHours = preAudit["Operation Hours Sunday Operating Hours"]!! as String
+
             bldgarea = preAudit["Area Total (Sq.Ft.)"]!! as Double
             utilitycompany = preAudit["Others Electric Utility Company"]!! as String
             electricstructure = preAudit["Others Electric Rate Structure"]!! as String
