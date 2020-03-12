@@ -176,9 +176,9 @@ class LinearFluorescent(computable: Computable<*>, utilityRateGas: UtilityRate, 
             ballastsPerFixtures = featureData["Ballasts Per Fixture"]!! as Int
             numberOfFixtures = featureData["Number of Fixtures"]!! as Int
 
-            ControlType1 = featureData["Suggested Control Type1"]!! as String
-            ControlType2 = featureData["Suggested Control Type2"]!! as String
-            bType = featureData["Building Type"]!! as String
+            ControlType1 = featureData["Type of Control"]!! as String
+            ControlType2 = featureData["Type of Control2"]!! as String
+//            bType = featureData["Building Type"]!! as String
 
             peakHours = featureData["Peak Hours"]!! as Double
             offPeakHours = featureData["Off Peak Hours"]!! as Double
@@ -190,12 +190,11 @@ class LinearFluorescent(computable: Computable<*>, utilityRateGas: UtilityRate, 
 
             val config = lightingConfig(ELightingType.LinearFluorescent)
             percentPowerReduced = config[ELightingIndex.PercentPowerReduced.value] as Double
-            postpeakHours = featureData["Suggested Peak Hours"]!! as Double
-            postpartPeakHours = featureData["Suggested Part Peak Hours"]!! as Double
-            postoffPeakHours = featureData["Suggested Off Peak Hours"]!! as Double
+//            postpeakHours = featureData["Suggested Peak Hours"]!! as Double
+//            postpartPeakHours = featureData["Suggested Part Peak Hours"]!! as Double
+//            postoffPeakHours = featureData["Suggested Off Peak Hours"]!! as Double
 
             controls = featureData["Type of Control"]!! as String
-
         } catch (e: Exception) {
             e.printStackTrace()
         }
