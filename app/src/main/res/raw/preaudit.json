@@ -405,15 +405,6 @@
           "param": "Controls Contractor's Name",
           "validation": "optional",
           "id": "76"
-        },
-        {
-          "index": 77,
-          "hint": "",
-          "dataType": "",
-          "defaultValues": "",
-          "param": "",
-          "validation": "",
-          "id": "77"
         }
       ],
       "id": "7"
