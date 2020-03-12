@@ -180,17 +180,22 @@ abstract class EBase(val computable: Computable<*>,
         // TODO: @k2interactive please make sure that the queryThermostatDeemed is correctly pulling from
         //  the PARSE dashboard thermostat class even though you have relocated it to the HVAC class
 
-        val extractorHVAC = listOf(dataExtractHVAC(queryHVACCoolingHours()),
-                dataExtractHVAC(queryHVACEer()), dataExtractHVAC(queryMotorVFDprescriptive()))
+        val extractorHVAC = listOf(
+                dataExtractHVAC(queryHVACCoolingHours()),
+                dataExtractHVAC(queryHVACEer()),
+                dataExtractHVAC(queryMotorVFDprescriptive()),
+                dataExtractThermostat(queryThermostatDeemed()))
 
-        val extractorMotor = listOf(dataExtractMotors(queryMotorEfficiency()))
+        val extractorMotor = listOf(
+                dataExtractMotors(queryMotorEfficiency()))
 
-        // TODO: @k2interactive the queryThermostatDeemedCost is not used anymore, please remove from all locations
-        val extractorThermostat = listOf(dataExtractThermostat(queryThermostatDeemed()),
-                dataExtractThermostat(queryThermostatDeemedCost()))
+        val extractorThermostat = listOf(
+                dataExtractThermostat(queryThermostatDeemed()))
 
-        val extractorLightControls = listOf(dataExtractLightControls(queryControlPercentSaved()),
-                dataExtractLightControls(queryAssumedHours()),dataExtractLightControls(queryControlPercentSaved2()))
+        val extractorLightControls = listOf(
+                dataExtractLightControls(queryControlPercentSaved()),
+                dataExtractLightControls(queryAssumedHours()),
+                dataExtractLightControls(queryControlPercentSaved2()))
 
         val extractorNone = listOf(Observable.just(JsonArray()))
 
@@ -392,9 +397,9 @@ abstract class EBase(val computable: Computable<*>,
     //  queryEvaporatorFanMotorControls - "refrigeration_evaporatorfanmotorcontrols" | queryReachIn - "refrigeration_reachinfreezerrefrigerator" |
     //  queryReplacement - "refrigeration_refrigeratorreplacement"
     open fun queryEvaporatorFanMotor() = ""
-
     open fun queryCondensingUnit() = ""
     open fun queryEvaporatorFanMotorControls() = ""
+
 
     /**
      * Motors Query - Fetch Efficiency
@@ -402,13 +407,11 @@ abstract class EBase(val computable: Computable<*>,
     open fun queryMotorEfficiency() = ""
 
 
-
     /**
      * Thermostat Query
      */
 
     open fun queryThermostatDeemed() = ""
-    open fun queryThermostatDeemedCost() = ""
 
     /**
      * Light Controls
@@ -416,6 +419,8 @@ abstract class EBase(val computable: Computable<*>,
     open fun queryControlPercentSaved() = ""
     open fun queryControlPercentSaved2() = ""
     open fun queryAssumedHours() = ""
+
+
     /**
      * Get the Specific Query Result from the Parse API
      * */
