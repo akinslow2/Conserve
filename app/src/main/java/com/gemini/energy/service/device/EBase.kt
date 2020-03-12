@@ -391,6 +391,10 @@ abstract class EBase(val computable: Computable<*>,
     //  queryCondensingUnit - "refrigeration_condensingunit" | queryEvaporatorFanMotor - "refrigeration_condensingunit" |
     //  queryEvaporatorFanMotorControls - "refrigeration_evaporatorfanmotorcontrols" | queryReachIn - "refrigeration_reachinfreezerrefrigerator" |
     //  queryReplacement - "refrigeration_refrigeratorreplacement"
+    open fun queryEvaporatorFanMotor() = ""
+
+    open fun queryCondensingUnit() = ""
+    open fun queryEvaporatorFanMotorControls() = ""
 
     /**
      * Motors Query - Fetch Efficiency

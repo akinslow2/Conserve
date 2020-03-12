@@ -12,6 +12,7 @@ import com.gemini.energy.service.type.UsageHours
 import com.gemini.energy.service.type.UtilityRate
 import com.google.gson.JsonElement
 import io.reactivex.Observable
+import org.json.JSONObject
 import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.*
@@ -40,112 +41,112 @@ class WIFreezer(computable: Computable<*>, utilityRateGas: UtilityRate, utilityR
             return dateFormatter.format(calendar.time).toInt()
         }
 
-        fun firstNotNull (valueFirst: Double, valueSecond: Double) =
+        fun firstNotNull(valueFirst: Double, valueSecond: Double) =
                 if (valueFirst == 0.0) valueSecond else valueFirst
 
-        fun firstNotNull (valueFirst: Int, valueSecond: Int) =
+        fun firstNotNull(valueFirst: Int, valueSecond: Int) =
                 if (valueFirst == 0) valueSecond else valueFirst
 
 // TODO: @k2interactive make the following queries active.
 
 // This relates to queryCondensingUnit
-        /**
+
         fun extractCondensingUnitcompressorkWh(element: JsonElement): Double {
-        if (element.asJsonObject.has("cu_scroll_compressor_kWh")) {
-        return element.asJsonObject.get("cu_scroll_compressor_kWh").asDouble
-        }
-        return 0.0
+            if (element.asJsonObject.has("cu_scroll_compressor_kWh")) {
+                return element.asJsonObject.get("cu_scroll_compressor_kWh").asDouble
+            }
+            return 0.0
         }
 
         fun extractCondensingUnitcompressorkW(element: JsonElement): Double {
-        if (element.asJsonObject.has("cu_scroll_compressor_kW")) {
-        return element.asJsonObject.get("cu_scroll_compressor_kW").asDouble
-        }
-        return 0.0
+            if (element.asJsonObject.has("cu_scroll_compressor_kW")) {
+                return element.asJsonObject.get("cu_scroll_compressor_kW").asDouble
+            }
+            return 0.0
         }
 
         fun extractCondensingUnitcondensorkWh(element: JsonElement): Double {
-        if (element.asJsonObject.has("cu_condenser_fan_kwh")) {
-        return element.asJsonObject.get("cu_condenser_fan_kwh").asDouble
-        }
-        return 0.0
+            if (element.asJsonObject.has("cu_condenser_fan_kwh")) {
+                return element.asJsonObject.get("cu_condenser_fan_kwh").asDouble
+            }
+            return 0.0
         }
 
         fun extractCondensingUnitcondensorkW(element: JsonElement): Double {
-        if (element.asJsonObject.has("cu_condenser_fan_kw")) {
-        return element.asJsonObject.get("cu_condenser_fan_kw").asDouble
-        }
-        return 0.0
+            if (element.asJsonObject.has("cu_condenser_fan_kw")) {
+                return element.asJsonObject.get("cu_condenser_fan_kw").asDouble
+            }
+            return 0.0
         }
 
         fun extractCondensingUnitheadkWh(element: JsonElement): Double {
-        if (element.asJsonObject.has("cu_floating_head_pressure_controls_kwh")) {
-        return element.asJsonObject.get("cu_floating_head_pressure_controls_kwh").asDouble
-        }
-        return 0.0
+            if (element.asJsonObject.has("cu_floating_head_pressure_controls_kwh")) {
+                return element.asJsonObject.get("cu_floating_head_pressure_controls_kwh").asDouble
+            }
+            return 0.0
         }
 
         fun extractCondensingUnitheadkW(element: JsonElement): Double {
-        if (element.asJsonObject.has("cu_floating_head_pressure_controls_kw")) {
-        return element.asJsonObject.get("cu_floating_head_pressure_controls_kw").asDouble
-        }
-        return 0.0
+            if (element.asJsonObject.has("cu_floating_head_pressure_controls_kw")) {
+                return element.asJsonObject.get("cu_floating_head_pressure_controls_kw").asDouble
+            }
+            return 0.0
         }
 
         fun extractCondensingUnitIncrementalCost(element: JsonElement): Double {
-        if (element.asJsonObject.has("cu_incremental_cost")) {
-        return element.asJsonObject.get("cu_incremental_cost").asDouble
+            if (element.asJsonObject.has("cu_incremental_cost")) {
+                return element.asJsonObject.get("cu_incremental_cost").asDouble
+            }
+            return 0.0
         }
-        return 0.0
-        }
-         */
+
 //This relates to queryEvaporatorFanMotor
-        /**
+
         fun extractEvapFanMotorkWh(element: JsonElement): Double {
-        if (element.asJsonObject.has("ev_energy_savings")) {
-        return element.asJsonObject.get("ev_energy_savings").asDouble
-        }
-        return 0.0
+            if (element.asJsonObject.has("ev_energy_savings")) {
+                return element.asJsonObject.get("ev_energy_savings").asDouble
+            }
+            return 0.0
         }
 
         fun extractEvapFanMotorkW(element: JsonElement): Double {
-        if (element.asJsonObject.has("ev_demand_savings")) {
-        return element.asJsonObject.get("ev_demand_savings").asDouble
-        }
-        return 0.0
+            if (element.asJsonObject.has("ev_demand_savings")) {
+                return element.asJsonObject.get("ev_demand_savings").asDouble
+            }
+            return 0.0
         }
 
         fun extractEvapFanMotorIncrementalCost(element: JsonElement): Double {
-        if (element.asJsonObject.has("ev_installation_cost")) {
-        return element.asJsonObject.get("ev_installation_cost").asDouble
+            if (element.asJsonObject.has("ev_installation_cost")) {
+                return element.asJsonObject.get("ev_installation_cost").asDouble
+            }
+            return 0.0
         }
-        return 0.0
-        }
-         */
+
 
 //This relates to queryEvaporatorFanMotorControls
-        /**
+
         fun extractEvapFanMotorControlskWh(element: JsonElement): Double {
-        if (element.asJsonObject.has("evf_energy_savings")) {
-        return element.asJsonObject.get("evf_energy_savings").asDouble
-        }
-        return 0.0
+            if (element.asJsonObject.has("evf_energy_savings")) {
+                return element.asJsonObject.get("evf_energy_savings").asDouble
+            }
+            return 0.0
         }
 
         fun extractEvapFanMotorControlskW(element: JsonElement): Double {
-        if (element.asJsonObject.has("evf_demand_savings")) {
-        return element.asJsonObject.get("evf_demand_savings").asDouble
-        }
-        return 0.0
+            if (element.asJsonObject.has("evf_demand_savings")) {
+                return element.asJsonObject.get("evf_demand_savings").asDouble
+            }
+            return 0.0
         }
 
         fun extractEvapFanMotorControlsCost(element: JsonElement): Double {
-        if (element.asJsonObject.has("evf_cost")) {
-        return element.asJsonObject.get("evf_cost").asDouble
+            if (element.asJsonObject.has("evf_cost")) {
+                return element.asJsonObject.get("evf_cost").asDouble
+            }
+            return 0.0
         }
-        return 0.0
-        }
-         */
+
     }
 
     /**
@@ -318,6 +319,7 @@ class WIFreezer(computable: Computable<*>, utilityRateGas: UtilityRate, utilityR
      * PowerTimeChange >> Yearly Usage Hours - [Pre | Post]
      * */
     override fun usageHoursPre(): Double = 0.0
+
     override fun usageHoursPost(): Double = 0.0
 
     /**
@@ -348,42 +350,35 @@ class WIFreezer(computable: Computable<*>, utilityRateGas: UtilityRate, utilityR
      * */
     override fun usageHoursSpecific() = false
 
-    override fun efficientLookup()= false
-    override fun queryEfficientFilter()= ""
+    override fun efficientLookup() = false
+    override fun queryEfficientFilter() = ""
 
-//TODO: @k2interactive make the below query filters active - (the functions will need to be created in EBase - see TODOs at EBase line 389)
-    /**override fun queryEvaporatorFanMotor(): String {
-    return JSONObject()
-    .put("type", refrigeration_evaporatorfanmotor)
-    .put("data.motor_type", motortype)
-    .put("data.refrigeration_type", fridgetype)
-    .toString()
-    }*/
+    //TODO: @k2interactive make the below query filters active - (the functions will need to be created in EBase - see TODOs at EBase line 389)
+    override fun queryEvaporatorFanMotor(): String {
+        return JSONObject()
+                .put("type", "refrigeration_evaporatorfanmotor")
+                .put("data.motor_type", motortype)
+                .put("data.refrigeration_type", fridgetype)
+                .toString()
+    }
 
-    /**override fun queryCondensingUnit(): String {
-    return JSONObject()
-    .put("type", refrigeration_condensingunit)
-    .put("data.phase", condensorCompressorphase)
-    .put("data.temp", condensorTemp)
-    .put("data.hp", condesorCompressor)
-    .toString()
-    }*/
+    override fun queryCondensingUnit(): String {
+        return JSONObject()
+                .put("type", "refrigeration_condensingunit")
+                .put("data.phase", condensorCompressorphase)
+                .put("data.temp", condensorTemp)
+                .put("data.hp", condesorCompressor)
+                .toString()
+    }
 
-    /**override fun queryEvaporatorFanMotorControls(): String {
-    return JSONObject()
-    .put("type", refrigeration_evaporatorfanmotorcontrols)
-    .put("data.motor_type", fanmotortype)
-    .put("data.temperature_range", temprange)
-    .toString()
-    }*/
+    override fun queryEvaporatorFanMotorControls(): String {
+        return JSONObject()
+                .put("type", "refrigeration_evaporatorfanmotorcontrols")
+                .put("data.motor_type", fanmotortype)
+                .put("data.temperature_range", temprange)
+                .toString()
+    }
 
-    /**override fun queryEvaporatorFanMotorControls(): String {
-    return JSONObject()
-    .put("type", refrigeration_evaporatorfanmotorcontrols)
-    .put("data.motor_type", fanmotortype)
-    .put("data.temperature_range", temprange)
-    .toString()
-    }*/
 
     override fun preAuditFields() = mutableListOf("")
 
@@ -394,7 +389,7 @@ class WIFreezer(computable: Computable<*>, utilityRateGas: UtilityRate, utilityR
 
     override fun computedFields() = mutableListOf("")
 
-      private fun getFormMapper() = FormMapper(context, R.raw.walkin_freezer)
+    private fun getFormMapper() = FormMapper(context, R.raw.walkin_freezer)
     private fun getModel() = getFormMapper().decodeJSON()
     private fun getGFormElements() = getFormMapper().mapIdToElements(getModel())
 
