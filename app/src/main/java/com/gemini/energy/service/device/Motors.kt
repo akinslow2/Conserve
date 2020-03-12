@@ -141,7 +141,7 @@ class Motors(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRate
         try {
             utilitycompany = preAudit["Others Electric Utility Company"]!! as String
             motortype = featureData["Purpose"]!! as String
-            srs = featureData["Synchronous Rotational Speed (SRS)"]!! as Int
+            srs = (featureData["Synchronous Rotational Speed (SRS)"]!! as String).toIntOrNull() ?: 0
             mrs = featureData["Measured Rotational Speed (MRS)"]!! as Int
             nrs = featureData["Nameplate Rotational Speed (NRS)"]!! as Int
             hp = featureData["Horsepower (HP)"]!! as Double
@@ -152,10 +152,8 @@ class Motors(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRate
             alternateHp = featureData["Alternate Horsepower (HP)"]!! as Double
             alternateEfficiency = featureData["Alternate Efficiency"]!! as Double
 
-            peakHours = (featureData["Peak Hours"]!! as String).toDoubleOrNull() ?: 0.0
-            peakHours = (featureData["Peak Hours"]!! as String).toDoubleOrNull() ?: 0.0
-            partPeakHours = (featureData["Part Peak Hours"]!! as String).toDoubleOrNull() ?: 0.0
-            offPeakHours = (featureData["Off Peak Hours"]!! as String).toDoubleOrNull() ?: 0.0
+            peakHours = featureData["Peak Hours"]!! as Double
+            offPeakHours = featureData["Off Peak Hours"]!! as Double
         } catch (e: Exception) {
             e.printStackTrace()
         }
