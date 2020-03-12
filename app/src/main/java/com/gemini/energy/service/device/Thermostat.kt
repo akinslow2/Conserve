@@ -209,18 +209,14 @@ class Thermostat(computable: Computable<*>, utilityRateGas: UtilityRate, utility
     /**
      * Define all the fields here - These would be used to Generate the Outgoing Rows or perform the Energy Calculation
      * */
-    override fun preAuditFields() = mutableListOf("")
+    override fun preAuditFields() = mutableListOf<String>()
 
     override fun featureDataFields() = getGFormElements().map { it.value.param!! }.toMutableList()
 
-    // TODO: @k2interactive please make sure that these two prestatefields and three poststatefields are moved to the HVAC
-    //  thermostat should not be producing these values anymore.
-    override fun preStateFields() = mutableListOf("heatingfuel", "coolingfuel")
+    override fun preStateFields() = mutableListOf<String>()
+    override fun postStateFields() = mutableListOf<String>()
 
-    override fun postStateFields() = mutableListOf("__prescriptive_kWh_savings", "__prescriptive_kW_savings",
-            "__prescriptive_implementation_cost")
-
-    override fun computedFields() = mutableListOf("")
+    override fun computedFields() = mutableListOf<String>()
 
     private fun getFormMapper() = FormMapper(context, R.raw.thermostat)
     private fun getModel() = getFormMapper().decodeJSON()

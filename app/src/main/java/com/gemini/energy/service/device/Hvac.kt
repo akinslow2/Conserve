@@ -439,9 +439,16 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
             "General Client Info Facility Type")
     override fun featureDataFields() = getGFormElements().map { it.value.param!! }.toMutableList()
 
-    override fun preStateFields() = mutableListOf("")
-    override fun postStateFields() = mutableListOf("__life_hours", "__maintenance_savings",
-            "__cooling_savings", "__energy_savings", "__energy_at_post_state")
+    override fun preStateFields() = mutableListOf("heatingfuel", "coolingfuel")
+    override fun postStateFields() = mutableListOf(
+            "__life_hours",
+            "__maintenance_savings",
+            "__cooling_savings",
+            "__energy_savings",
+            "__energy_at_post_state",
+            "__prescriptive_kWh_savings",
+            "__prescriptive_kW_savings",
+            "__prescriptive_implementation_cost")
 
     override fun computedFields() = mutableListOf("")
 
