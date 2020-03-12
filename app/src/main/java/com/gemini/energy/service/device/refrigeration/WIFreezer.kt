@@ -177,10 +177,11 @@ class WIFreezer(computable: Computable<*>, utilityRateGas: UtilityRate, utilityR
 
     var quantity = 0
     var kW = 0.0
-    var capacity = 0
+    var condensorCapacity = 0
+    var evaporatorCapacity = 0.0
 
     var condensorTemp = ""
-    var condesorCompressor = 0
+    var condesorCompressor = 0.0
     var condensorCompressorphase = 0
 
     var motortype = ""
@@ -195,11 +196,10 @@ class WIFreezer(computable: Computable<*>, utilityRateGas: UtilityRate, utilityR
             quantity = featureData["Quantity"]!! as Int
 
             age = featureData["Age"]!! as Int
-            //   btu = featureData["Cooling Capacity (Btu/hr)"]!! as Int
-            //   gasInput = featureData["Heating Input (Btu/hr)"]!! as Int
-            //   gasOutput = featureData["Heating Output (Btu/hr)"]!! as Int
-            condesorCompressor = featureData["Condensor Compressor Size (HP)"]!! as Int
-            condensorCompressorphase = featureData["Compressor Phase"]!! as Int
+            condesorCompressor = (featureData["Condensor Compressor Size (HP)"]!! as String).toDoubleOrNull()
+                    ?: 0.0
+            condensorCompressorphase = (featureData["Compressor Phase"]!! as String).toIntOrNull()
+                    ?: 0
             condensorTemp = featureData["Temp"]!! as String
 
             motortype = featureData["Motor Type"]!! as String
@@ -210,13 +210,10 @@ class WIFreezer(computable: Computable<*>, utilityRateGas: UtilityRate, utilityR
 
             kW = featureData["Heating Power (kW)"]!! as Double
 
-            //    unittype = featureData["Type of Unit"]!! as String
-            capacity = featureData["Capacity (BTU)"]!! as Int
+            condensorCapacity = featureData["Condenser Capacity (BTU)"]!! as Int
+            evaporatorCapacity = featureData["Evaporator Capacity (BTU)"]!! as Double
             peakHours = featureData["Peak Hours"]!! as Double
-            //   partPeakHours = featureData["Part Peak Hours"]!! as Double
             offPeakHours = featureData["Off Peak Hours"]!! as Double
-
-
         } catch (e: Exception) {
             e.printStackTrace()
         }
