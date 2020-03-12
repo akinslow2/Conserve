@@ -70,7 +70,7 @@
           "hint": "",
           "dataType": "introw",
           "defaultValues": "",
-          "param": "Capacity (BTU)",
+          "param": "Condenser Capacity (BTU)",
           "validation": "optional",
           "id": "25"
         },
@@ -255,7 +255,7 @@
           "hint": "",
           "dataType": "decimalrow",
           "defaultValues": "",
-          "param": "Capacity (BTU)",
+          "param": "Evaporator Capacity (BTU)",
           "validation": "",
           "id": "44"
         },
