@@ -45,7 +45,66 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
 
         private const val HVAC_DB_BTU = "size_btu_hr"
         private const val HVAC_DB_EER = "eer"
-// TODO: @k2interactive please insert queries from thermostat here.
+
+        // Both total_kwh, kw, and total_cost can be found from the call to
+        // dataExtractThermostat with the string from queryThermostatDeemed
+        // that data should be sent to the costPostState function
+        fun extractThermostatreplacementkWh(elements: List<JsonElement?>): Double {
+            elements.forEach {
+                it?.let {
+                    if (it.asJsonObject.has("total_kwh")) {
+                        return it.asJsonObject.get("total_kwh").asDouble
+                    }
+                }
+            }
+            return 0.0
+        }
+
+        // TODO: Test me
+        fun extractThermostatreplacementkWh(element: JsonElement): Double {
+            if (element.asJsonObject.has("total_kwh")) {
+                return element.asJsonObject.get("total_kwh").asDouble
+            }
+            return 0.0
+        }
+
+        fun extractThermostatreplacementkW(elements: List<JsonElement?>): Double {
+            elements.forEach {
+                it?.let {
+                    if (it.asJsonObject.has("kw")) {
+                        return it.asJsonObject.get("kw").asDouble
+                    }
+                }
+            }
+            return 0.0
+        }
+
+        // TODO: Test me
+        fun extractThermostatreplacementkW(element: JsonElement): Double {
+            if (element.asJsonObject.has("kw")) {
+                return element.asJsonObject.get("kw").asDouble
+            }
+            return 0.0
+        }
+
+        fun extractThermostatreplacementCost(elements: List<JsonElement?>): Double {
+            elements.forEach {
+                it?.let {
+                    if (it.asJsonObject.has("total_cost")) {
+                        return it.asJsonObject.get("total_cost").asDouble
+                    }
+                }
+            }
+            return 0.0
+        }
+
+        // TODO: Test me
+        fun extractThermostatreplacementCost(element: JsonElement): Double {
+            if (element.asJsonObject.has("total_cost")) {
+                return element.asJsonObject.get("total_cost").asDouble
+            }
+            return 0.0
+        }
 
         /**
          * Fetches the EER based on the specific Match Criteria via the Parse API
@@ -291,6 +350,21 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
         var postSize = btu
         var postSEER = 17.0
 
+        //@k2interactive please make these active so that the they also spit out the values in the CSV
+        val presciptive_kW_savings = extractThermostatreplacementkW(element)
+        val presciptive_kWh_savings = extractThermostatreplacementkWh(element)
+        val implementationCost = extractThermostatreplacementCost(element)
+
+        val postRow = mutableMapOf<String, String>()
+        postRow["__prescriptive_kWh_savings"] = presciptive_kWh_savings.toString()
+        postRow["__prescriptive_kW_savings"] = presciptive_kW_savings.toString()
+        postRow["__prescriptive_implementation_cost"] = implementationCost.toString()
+
+        dataHolder.header = postStateFields()
+        dataHolder.computable = computable
+        dataHolder.fileName = "${Date().time}_post_state.csv"
+        dataHolder.rows?.add(postRow)
+
        // try {
        //     postSize = element.asJsonObject.get(HVAC_DB_BTU).asInt
         //    postEER = element.asJsonObject.get(HVAC_DB_EER).asDouble
@@ -304,7 +378,7 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
 
 
         return costElectricity(postPowerUsed, postUsageHours, electricityRate)
-        }
+    }
 
     /**
      * Manually Builds the Post State Response from the Suggested Alternative

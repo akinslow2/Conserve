@@ -12,7 +12,6 @@ import com.gemini.energy.service.type.UtilityRate
 import com.google.gson.JsonElement
 import io.reactivex.Observable
 import timber.log.Timber
-import java.util.*
 
 class Thermostat(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateElectricity: UtilityRate,
                  usageHours: UsageHours, outgoingRows: OutgoingRows, private val context: Context) :
@@ -31,79 +30,8 @@ class Thermostat(computable: Computable<*>, utilityRateGas: UtilityRate, utility
          * Conversion Factor from Horse Power to Kilo Watts
          * */
         private const val KW_CONVERSION = 0.746
-        // TODO: @k2interactive please make sure that this query is moved to the HVAC class
-        private const val ThermostatDeemed = "thermostat_thermostatdeemed"
 
-        /**
-         * Fetches the Deemed Criteria at once
-         * via the Parse API
-         * */
-        // Both total_kwh, kw, and total_cost can be found from the call to
-        // dataExtractThermostat with the string from queryThermostatDeemed
-        // that data should be sent to the costPostState function
-        // TODO: @k2interactive please make sure that this query is moved to the HVAC class
-        fun extractThermostatreplacementkWh(elements: List<JsonElement?>): Double {
-            elements.forEach {
-                it?.let {
-                    if (it.asJsonObject.has("total_kwh")) {
-                        return it.asJsonObject.get("total_kwh").asDouble
-                    }
-                }
-            }
-            return 0.0
-        }
-        // TODO: @k2interactive please make sure that this query is moved to the HVAC class
-        // TODO: Test me
-        fun extractThermostatreplacementkWh(element: JsonElement): Double {
-            if (element.asJsonObject.has("total_kwh")) {
-                return element.asJsonObject.get("total_kwh").asDouble
-            }
-            return 0.0
-        }
-
-        fun extractThermostatreplacementkW(elements: List<JsonElement?>): Double {
-            elements.forEach {
-                it?.let {
-                    if (it.asJsonObject.has("kw")) {
-                        return it.asJsonObject.get("kw").asDouble
-                    }
-                }
-            }
-            return 0.0
-        }
-
-        // TODO: @k2interactive please make sure that this query is moved to the HVAC class
-        // TODO: Test me
-        fun extractThermostatreplacementkW(element: JsonElement): Double {
-            if (element.asJsonObject.has("kw")) {
-                return element.asJsonObject.get("kw").asDouble
-            }
-            return 0.0
-        }
-
-        fun extractThermostatreplacementCost(elements: List<JsonElement?>): Double {
-            elements.forEach {
-                it?.let {
-                    if (it.asJsonObject.has("total_cost")) {
-                        return it.asJsonObject.get("total_cost").asDouble
-                    }
-                }
-            }
-            return 0.0
-        }
-        // TODO: @k2interactive please make sure that this query is moved to the HVAC class
-        // TODO: Test me
-        fun extractThermostatreplacementCost(element: JsonElement): Double {
-            if (element.asJsonObject.has("total_cost")) {
-                return element.asJsonObject.get("total_cost").asDouble
-            }
-            return 0.0
-        }
     }
-    // TODO: @k2interactive heatingFuel and coolingFuel must be in the HVAC class for the query
-    //  let me know if these type of comments are unneccessary
-    private var heatingFuel = ""
-    private var coolingFuel = ""
 
 
     /**
@@ -111,11 +39,10 @@ class Thermostat(computable: Computable<*>, utilityRateGas: UtilityRate, utility
      * */
 
 
-    private var peakHours = 0.0
-    private var offPeakHours = 0.0
 
     override fun setup() {
         try {
+
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -130,26 +57,7 @@ class Thermostat(computable: Computable<*>, utilityRateGas: UtilityRate, utility
      * Cost - Post State
      * */
     override fun costPostState(element: JsonElement, dataHolder: DataHolder): Double {
-        // TODO: @k2interactive please move these query related items to HVAC
-//@k2interactive please make these active so that the they also spit out the values in the CSV
-        val presciptive_kW_savings = extractThermostatreplacementkW(element)
-        val presciptive_kWh_savings = extractThermostatreplacementkWh(element)
-        val implementationCost = extractThermostatreplacementCost(element)
-
-        val postRow = mutableMapOf<String, String>()
-        //@k2interactive
-        postRow["__prescriptive_kWh_savings"] = presciptive_kWh_savings.toString()
-        postRow["__prescriptive_kW_savings"] = presciptive_kW_savings.toString()
-        postRow["__prescriptive_implementation_cost"] = implementationCost.toString()
-
-
-        dataHolder.header = postStateFields()
-        dataHolder.computable = computable
-        dataHolder.fileName = "${Date().time}_post_state.csv"
-        dataHolder.rows?.add(postRow)
-
         return -99.99
-
     }
 
     /**
