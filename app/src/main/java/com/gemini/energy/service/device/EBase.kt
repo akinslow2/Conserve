@@ -177,9 +177,6 @@ abstract class EBase(val computable: Computable<*>,
         energyPreState.computable = computable
 
         // ** Prepare a list of Observable - Extractor that is required by each of the Zone Type **
-        // TODO: @k2interactive please make sure that the queryThermostatDeemed is correctly pulling from
-        //  the PARSE dashboard thermostat class even though you have relocated it to the HVAC class
-
         val extractorHVAC = listOf(
                 dataExtractHVAC(queryHVACCoolingHours()),
                 dataExtractHVAC(queryHVACEer()),
@@ -202,11 +199,11 @@ abstract class EBase(val computable: Computable<*>,
         // TODO: @k2interactive please add an extractorRefrigeration that grabs data from the Refrigeration Class in the Parse Dashboard - queryCondensingUnit
         // ** Extractor List gets called depending on the Zone Type **
         val remoteExtract = when (computable.auditScopeType) {
-            EZoneType.HVAC      -> extractorHVAC
-            EZoneType.Motors    -> extractorMotor
+            EZoneType.HVAC -> extractorHVAC
+            EZoneType.Motors -> extractorMotor
             EZoneType.Thermostat -> extractorThermostat
             EZoneType.Lighting -> extractorLightControls
-            else                -> extractorNone
+            else -> extractorNone
         }
 
         return energyPreState.getObservable(remoteExtract) {
@@ -445,8 +442,8 @@ abstract class EBase(val computable: Computable<*>,
         val query = queryEfficientFilter()
 
         fun switcherHVAC() =
-                if (efficientLookup() && query.isNotBlank())
-                    parseAPIService.fetchHVAC(query)
+                if (query.isNotBlank())
+                    parseAPIService.fetchThermostat(queryThermostatDeemed())
                 else
                     buildPostState()
 

@@ -46,63 +46,21 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
         private const val HVAC_DB_BTU = "size_btu_hr"
         private const val HVAC_DB_EER = "eer"
 
-        // Both total_kwh, kw, and total_cost can be found from the call to
-        // dataExtractThermostat with the string from queryThermostatDeemed
-        // that data should be sent to the costPostState function
-        fun extractThermostatreplacementkWh(elements: List<JsonElement?>): Double {
-            elements.forEach {
-                it?.let {
-                    if (it.asJsonObject.has("total_kwh")) {
-                        return it.asJsonObject.get("total_kwh").asDouble
-                    }
-                }
-            }
-            return 0.0
-        }
-
-        // TODO: Test me
         fun extractThermostatreplacementkWh(element: JsonElement): Double {
-            if (element.asJsonObject.has("total_kwh")) {
+            if (element.asJsonObject.has("total_kwh"))
                 return element.asJsonObject.get("total_kwh").asDouble
-            }
             return 0.0
         }
 
-        fun extractThermostatreplacementkW(elements: List<JsonElement?>): Double {
-            elements.forEach {
-                it?.let {
-                    if (it.asJsonObject.has("kw")) {
-                        return it.asJsonObject.get("kw").asDouble
-                    }
-                }
-            }
-            return 0.0
-        }
-
-        // TODO: Test me
         fun extractThermostatreplacementkW(element: JsonElement): Double {
-            if (element.asJsonObject.has("kw")) {
+            if (element.asJsonObject.has("kw"))
                 return element.asJsonObject.get("kw").asDouble
-            }
             return 0.0
         }
 
-        fun extractThermostatreplacementCost(elements: List<JsonElement?>): Double {
-            elements.forEach {
-                it?.let {
-                    if (it.asJsonObject.has("total_cost")) {
-                        return it.asJsonObject.get("total_cost").asDouble
-                    }
-                }
-            }
-            return 0.0
-        }
-
-        // TODO: Test me
         fun extractThermostatreplacementCost(element: JsonElement): Double {
-            if (element.asJsonObject.has("total_cost")) {
+            if (element.asJsonObject.has("total_cost"))
                 return element.asJsonObject.get("total_cost").asDouble
-            }
             return 0.0
         }
 
@@ -344,10 +302,9 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
         Timber.d("!!! COST POST STATE - HVAC !!!")
         Timber.d("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
 
-        var postSize = btu
-        var postSEER = 17.0
+        val postSize = btu
+        val postSEER = 17.0
 
-        //@k2interactive please make these active so that the they also spit out the values in the CSV
         val presciptive_kW_savings = extractThermostatreplacementkW(element)
         val presciptive_kWh_savings = extractThermostatreplacementkWh(element)
         val implementationCost = extractThermostatreplacementCost(element)
@@ -469,7 +426,8 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
     /**
      * Energy Efficiency Lookup Query Definition
      * */
-    override fun efficientLookup() = (firstNotNull(alternateSeer, alternateEer) == 0.0 || alternateBtu == 0)
+    override fun efficientLookup() =
+            (firstNotNull(alternateSeer, alternateEer) == 0.0 || alternateBtu == 0)
     override fun queryEfficientFilter() = JSONObject()
             .put("type", HVAC_EFFICIENCY)
             .put("data.size_btu_hr", btu)
@@ -530,6 +488,7 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
             "Operation Hours Friday Operating Hours",
             "Operation Hours Saturday Operating Hours",
             "Operation Hours Sunday Operating Hours")
+
     override fun featureDataFields() = getGFormElements().map { it.value.param!! }.toMutableList()
 
     override fun preStateFields() = mutableListOf("heatingfuel", "coolingfuel")
@@ -543,7 +502,7 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
             "__prescriptive_kW_savings",
             "__prescriptive_implementation_cost")
 
-    override fun computedFields() = mutableListOf("")
+    override fun computedFields() = mutableListOf<String>()
 
     private fun getFormMapper() = FormMapper(context, R.raw.hvac)
     private fun getModel() = getFormMapper().decodeJSON()
