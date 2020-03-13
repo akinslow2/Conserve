@@ -9,14 +9,9 @@ import com.gemini.energy.service.IComputable
 import com.gemini.energy.service.OutgoingRows
 import com.gemini.energy.service.device.EBase
 import com.gemini.energy.service.type.UsageHours
-import com.gemini.energy.service.type.UsageSimple
 import com.gemini.energy.service.type.UtilityRate
-import com.google.gson.JsonArray
 import com.google.gson.JsonElement
-import com.google.gson.JsonObject
 import io.reactivex.Observable
-import io.reactivex.Single
-import org.json.JSONObject
 import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.*
@@ -156,6 +151,16 @@ class WICoolerBot(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
 
 
         return 5.0 // TODO: AK2 needs to calculate this
+    }
+
+    fun installCost(): Double {
+//        sum of the costs pulled from the PARSE
+        return 0.0
+    }
+
+    fun grosskwhSavings(): Double {
+//        sum of the gross energy savings pulled from the PARSE
+        return 0.0
     }
 
     /**

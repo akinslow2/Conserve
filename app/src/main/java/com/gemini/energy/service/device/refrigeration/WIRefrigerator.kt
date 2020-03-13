@@ -243,6 +243,17 @@ class WIRefrigerator(computable: Computable<*>, utilityRateGas: UtilityRate, uti
 //  the sum of the costs pulled from the PARSE combined with a fun installcost() and all pushed to the report.
 //  I added a comment in SorterForWordDocumentGenerator.kt line 14 to match to this.
 
+    fun installCost(): Double {
+//        sum of the costs pulled from the PARSE
+        return 0.0
+    }
+
+    fun grosskwhSavings(): Double {
+//        sum of the gross energy savings pulled from the PARSE
+        return 0.0
+    }
+
+
     /** Condensing unit gross and net savings: energy (kwh) and demand (kw)
     CU_gross_energy_savings = extractCondensingUnitcompressorkWh(element) +
     extractCondensingUnitcondensorkWh(element) + extractCondensingUnitheadkWh(element)

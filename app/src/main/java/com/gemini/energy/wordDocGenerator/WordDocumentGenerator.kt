@@ -60,7 +60,15 @@ class WordDocumentGenerator {
         generateEnergySavingPotentialPage(
                 document,
                 value.lighting
-                        ?: LightingValues(0.0, 0.0, 0, 0.0, 0.0, 0.0, 0.0, listOf()),
+                        ?: LightingValues(
+                                0.0,
+                                0.0,
+                                0,
+                                0.0,
+                                0.0,
+                                0.0,
+                                0.0,
+                                listOf()),
                 value.building)
 
         if (value.lighting != null) {
@@ -77,6 +85,10 @@ class WordDocumentGenerator {
             generateEquipmentSavingsPage(document, value.equipment)
         }
 
+        if (value.refrigeration != null) {
+            generateRefrigerationSavingsPage(document, value.refrigeration)
+        }
+
         generateFacilityInformationPage(document, value, value.hvac)
 
         addPageNumbers(document)
@@ -85,9 +97,6 @@ class WordDocumentGenerator {
 
         return document
     }
-// TODO: @k2interactive please add a page for refrigeration. Desired text for now should simply be:
-//  Implementing all refrigeration measures will result in a minimum savings of (refrigeration.totalSavings).
-//  The estimated cost is (refrigeration.totalCost), resulting in a payback of (refrigeration.PaybackMonth) months.
 
     // generate pages
     private fun generateFirstPage(document: XWPFDocument, hvac: HvacValues) {
@@ -362,7 +371,7 @@ class WordDocumentGenerator {
         r1p3.isBold = true
         r1p3.isItalic = true
         r1p3.fontSize = 16
-        r1p3.setText("${waterheater.unittype}")
+        r1p3.setText(waterheater.unittype)
 
         val p4 = document.createParagraph()
         p4.spacingBetween = 1.5
@@ -472,6 +481,38 @@ class WordDocumentGenerator {
             r1p3.setText("Your ${equip.name} is ${equip.age.format(0)} years old and as a result is annually consuming ${equip.delta.format(0)} kWh more energy than a newer version. We recommend you replace the ${equip.name} with a newer version to save $${equip.costElectricity.format(0)} of dollars per year. The cost for a new ${equip.name} is roughly $${equip.materialCost.format(0)} with an expected payback period for this replacement is ${equip.paybackMonth.format(0)} months.")
             r1p3.addBreak()
         }
+    }
+
+    private fun generateRefrigerationSavingsPage(document: XWPFDocument, refrigeration: RefrigerationValues) {
+        val p1 = document.createParagraph()
+        p1.spacingBetween = 1.5
+        p1.isPageBreak = true
+        val r1p1 = p1.createRun()
+        r1p1.fontFamily = fontAgencyFB
+        r1p1.isBold = true
+        r1p1.isItalic = true
+        r1p1.fontSize = 20
+        r1p1.setText("Refrigeration Savings")
+
+        val p2 = document.createParagraph()
+        p2.spacingBetween = 1.5
+        val r1p2 = p2.createRun()
+        r1p2.fontFamily = fontAgencyFB
+        r1p2.fontSize = 18
+        r1p2.setText("Implementing all refrigeration measures will result in a minimum savings of  ")
+        val r2p2 = p2.createRun()
+        r2p2.fontFamily = fontAgencyFB
+        r2p2.isBold = true
+        r2p2.fontSize = 24
+        r2p2.color = greenColor
+        r2p2.setText("$${refrigeration.totalSavings.format(0)}.")
+
+        val p3 = document.createParagraph()
+        p3.spacingBetween = 1.5
+        val r1p3 = p3.createRun()
+        r1p3.fontFamily = fontAgencyFB
+        r1p3.fontSize = 18
+        r1p3.setText("The estimated cost is ${refrigeration.totalCost.format(0)}, resulting in a payback of ${refrigeration.paybackMonth.format(0)} months.")
     }
 
     private fun generateFacilityInformationPage(document: XWPFDocument, values: PreparedForDocument, hvac: HvacValues) {
@@ -1125,6 +1166,7 @@ class WordDocumentGenerator {
         centerTable(table)
         fitTable(table, 4000)
     }
+
     // table utils
     private fun createBullets(document: XWPFDocument, items: Array<String>, size: Int, color: String, isBold: Boolean, isItalic: Boolean) {
         val cTAbstractNum = CTAbstractNum.Factory.newInstance()

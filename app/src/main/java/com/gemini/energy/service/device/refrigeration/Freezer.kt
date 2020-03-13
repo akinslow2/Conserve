@@ -69,6 +69,16 @@ class Freezer(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRat
         return costElectricity
     }
 
+    fun installCost(): Double {
+//        sum of the costs pulled from the PARSE
+        return 0.0
+    }
+
+    fun grosskwhSavings(): Double {
+//        sum of the gross energy savings pulled from the PARSE
+        return 0.0
+    }
+
     /**
      * PowerTimeChange >> Hourly Energy Use - Pre
      * */

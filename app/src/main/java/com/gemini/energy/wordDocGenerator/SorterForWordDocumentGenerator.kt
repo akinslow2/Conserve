@@ -1,7 +1,6 @@
 package com.gemini.energy.wordDocGenerator
 
 import com.gemini.energy.presentation.util.EApplianceType
-import com.gemini.energy.presentation.util.ERefrigerationType
 import com.gemini.energy.service.DataHolder
 import com.gemini.energy.service.device.EBase
 import com.gemini.energy.service.device.Hvac
@@ -11,8 +10,6 @@ import com.gemini.energy.service.device.plugload.*
 import com.gemini.energy.service.device.refrigeration.*
 import com.google.gson.JsonNull
 
-// TODO: @k2interactive Please complete the addition of refrigeration here. The values are totalCost += refrigeration.installcost()|
-//  totalSavings += refrigeration.grosskwhsavings()
 
 class SorterForWordDocumentGenerator {
     // use these values for sorting types of equipment that need to be aggregated for the report
@@ -48,7 +45,8 @@ class SorterForWordDocumentGenerator {
             val waterheater = prepareValuesFromWaterHeater(audit.value)
             val lighting = prepareValuesFromLighting(audit.value)
             val equipment = prepareValuesForEquipment(audit.value)
-            val building = prepareBuildingValuesForEquipment(lighting, equipment, hvac, waterheater)
+            val refrigeration = prepareValuesFromRefrigeration(audit.value)
+            val building = prepareBuildingValuesForEquipment(lighting, equipment, hvac, waterheater, refrigeration)
 
             val zones = aggregateZoneNames(audit.value)
             val zoneString = concatenateZoneString(zones)
@@ -56,7 +54,16 @@ class SorterForWordDocumentGenerator {
             if (hvac == null || hvac.businessname.isBlank()) {
                 continue
             } else {
-                returnAble.add(PreparedForDocument(audit.key, zones, zoneString, hvac, lighting, waterheater, equipment, building))
+                returnAble.add(PreparedForDocument(
+                        audit.key,
+                        zones,
+                        zoneString,
+                        hvac,
+                        lighting,
+                        waterheater,
+                        refrigeration,
+                        equipment,
+                        building))
             }
         }
 
@@ -269,6 +276,64 @@ class SorterForWordDocumentGenerator {
                 waterheater.fueltype,
                 waterheater.unittype,
                 waterheater.capacity)
+    }
+
+    private fun prepareValuesFromRefrigeration(audit: AuditComponents): RefrigerationValues? {
+        if (!audit[refrigeration]!!.any()) {
+            return null
+        }
+
+        val wiRefigerators = mutableListOf<WIRefrigerator>()
+        val wiFreezers = mutableListOf<WIFreezer>()
+        val refrigerators = mutableListOf<Refrigerator>()
+        val freezers = mutableListOf<Freezer>()
+        val wiCoolerBot = mutableListOf<WICoolerBot>()
+
+        for (type in audit[refrigeration]!!) {
+            when (type) {
+                is WIRefrigerator -> wiRefigerators.add(type)
+                is WIFreezer -> wiFreezers.add(type)
+                is Refrigerator -> refrigerators.add(type)
+                is Freezer -> freezers.add(type)
+                is WICoolerBot -> wiCoolerBot.add(type)
+            }
+        }
+
+        var totalCost = 0.0
+        var totalSavings = 0.0
+
+        for (fridge in wiRefigerators) {
+            totalCost += fridge.installCost()
+            totalSavings += fridge.grosskwhSavings()
+        }
+
+        for (fridge in wiFreezers) {
+            totalCost += fridge.installCost()
+            totalSavings += fridge.grosskwhSavings()
+        }
+
+        for (fridge in refrigerators) {
+            totalCost += fridge.installCost()
+            totalSavings += fridge.grosskwhSavings()
+        }
+
+        for (fridge in freezers) {
+            totalCost += fridge.installCost()
+            totalSavings += fridge.grosskwhSavings()
+        }
+
+        for (fridge in wiCoolerBot) {
+            totalCost += fridge.installCost()
+            totalSavings += fridge.grosskwhSavings()
+        }
+
+        val paybackMonth = if (totalSavings == 0.0) 0.0 else totalCost / totalSavings * 12
+
+        return RefrigerationValues(
+                totalCost,
+                totalSavings,
+                paybackMonth
+        )
     }
 
     private fun prepareValuesFromLighting(audit: AuditComponents): LightingValues? {
@@ -743,13 +808,23 @@ class SorterForWordDocumentGenerator {
         )
     }
 
-    private fun prepareBuildingValuesForEquipment(lightings: LightingValues?, equipments: EquipmentValues?, hvacs: HvacValues?, waterHeater: WaterHeaterValues?): BuildingValues {
-// TODO: @k2interactive please include refrigeration (totalkwhsavings in the buildingTotalSavings and buildingTotalCost
-        val buildingTotalSavings = (lightings?.totalcostsavings ?: 0.0) + (equipments?.totalSavings
-                ?: 0.0) + (hvacs?.totalSavings ?: 0.0 + (waterHeater?.totalSavings ?: 0.0))
+    private fun prepareBuildingValuesForEquipment(
+            lightings: LightingValues?,
+            equipments: EquipmentValues?,
+            hvacs: HvacValues?,
+            waterHeater: WaterHeaterValues?,
+            refrigeration: RefrigerationValues?): BuildingValues {
+        val buildingTotalSavings = (lightings?.totalcostsavings ?: 0.0) +
+                (equipments?.totalSavings ?: 0.0) +
+                (hvacs?.totalSavings ?: 0.0) +
+                (waterHeater?.totalSavings ?: 0.0) +
+                (refrigeration?.totalSavings ?: 0.0)
 
-        val buildingTotalCost = (lightings?.totalCost ?: 0.0) + (hvacs?.totalCost
-                ?: 0.0) + (equipments?.totalCost ?: 0.0 + (waterHeater?.totalCost ?: 0.0))
+        val buildingTotalCost = (lightings?.totalCost ?: 0.0) +
+                (hvacs?.totalCost ?: 0.0) +
+                (equipments?.totalCost ?: 0.0) +
+                (waterHeater?.totalCost ?: 0.0) +
+                (refrigeration?.totalCost ?: 0.0)
 
         val buildingPayback = buildingTotalCost / buildingTotalSavings
 

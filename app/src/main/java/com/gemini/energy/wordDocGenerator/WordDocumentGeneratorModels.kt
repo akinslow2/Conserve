@@ -9,7 +9,6 @@ typealias SortedAudits =
 typealias AuditComponents = MutableMap<String, MutableList<EBase>>
 //the commented numbers represent the mastersheet id values
 
-// TODO: @k2interactive Please add refrigeration here.
 data class HvacInstances(
         val quantity: Int, // 21
         val year: Int, // 22
@@ -83,6 +82,12 @@ data class LightingDataRow(
         val paybackPeriodYears: Double
 )
 
+data class RefrigerationValues(
+        val totalCost: Double,
+        val totalSavings: Double,
+        val paybackMonth: Double
+)
+
 data class EquipmentInstances(
         val name: String, // 27
         val delta: Double, // 26
@@ -121,6 +126,7 @@ data class PreparedForDocument(
         val hvac: HvacValues,
         val lighting: LightingValues?,
         val waterHeater: WaterHeaterValues?,
+        val refrigeration: RefrigerationValues?,
         val equipment: EquipmentValues?,
         val building: BuildingValues
 )

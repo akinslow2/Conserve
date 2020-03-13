@@ -14,7 +14,6 @@ import com.google.gson.JsonElement
 import io.reactivex.Observable
 import org.json.JSONObject
 import timber.log.Timber
-import java.util.*
 
 class Refrigerator(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateElectricity: UtilityRate,
                    usageHours: UsageHours, outgoingRows: OutgoingRows, private val context: Context) :
@@ -68,6 +67,16 @@ class Refrigerator(computable: Computable<*>, utilityRateGas: UtilityRate, utili
         costElectricity = costElectricity(powerUsed, super.usageHoursBusiness, super.electricityRate)
         costPostState = costElectricity
         return costElectricity
+    }
+
+    fun installCost(): Double {
+//        sum of the costs pulled from the PARSE
+        return 0.0
+    }
+
+    fun grosskwhSavings(): Double {
+//        sum of the gross energy savings pulled from the PARSE
+        return 0.0
     }
 
     /**
