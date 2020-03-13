@@ -28,6 +28,7 @@ class Halogen(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRat
     override fun compute(): Observable<Computable<*>> {
         return super.compute(extra = ({ Timber.d(it) }))
     }
+
     companion object {
 
         private const val LightControls = "lighting_lightingcontrols"
@@ -37,74 +38,27 @@ class Halogen(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRat
          * Fetches the Deemed Criteria at once
          * via the Parse API
          * */
-
-        //Need to pull multiple at once if feasible otherwise it is a lot of code
-        fun extractControlPercentSaved(elements: List<JsonElement?>): Double {
-            elements.forEach {
-                it?.let {
-                    if (it.asJsonObject.has("percent_savings")) {
-                        return it.asJsonObject.get("percent_savings").asDouble
-                    }
-                }
-            }
-            return 0.0
-        }
-
-        // TODO: Test me
         fun extractControlPercentSaved(element: JsonElement): Double {
             if (element.asJsonObject.has("percent_savings")) {
                 return element.asJsonObject.get("percent_savings").asDouble
             }
             return 0.0
         }
-        fun extractEquipmentCost(elements: List<JsonElement?>): Double {
-            elements.forEach {
-                it?.let {
-                    if (it.asJsonObject.has("equipment_cost")) {
-                        return it.asJsonObject.get("equipment_cost").asDouble
-                    }
-                }
-            }
-            return 0.0
-        }
 
-        // TODO: Test me
         fun extractEquipmentCost(element: JsonElement): Double {
             if (element.asJsonObject.has("equipment_cost")) {
                 return element.asJsonObject.get("equipment_cost").asDouble
             }
             return 0.0
         }
-        fun extractMeasureCode(elements: List<JsonElement?>): Double {
-            elements.forEach {
-                it?.let {
-                    if (it.asJsonObject.has("measure_code")) {
-                        return it.asJsonObject.get("measure_code").asDouble
-                    }
-                }
-            }
-            return 0.0
-        }
 
-        // TODO: Test me
-        fun extractMeasureCode(element: JsonElement): Double {
+        fun extractMeasureCode(element: JsonElement): String {
             if (element.asJsonObject.has("measure_code")) {
-                return element.asJsonObject.get("measure_code").asDouble
+                return element.asJsonObject.get("measure_code").asString
             }
-            return 0.0
-        }
-        fun extractAssumedHours(elements: List<JsonElement?>): Double {
-            elements.forEach {
-                it?.let {
-                    if (it.asJsonObject.has("hours")) {
-                        return it.asJsonObject.get("hours").asDouble
-                    }
-                }
-            }
-            return 0.0
+            return ""
         }
 
-        // TODO: Test me
         fun extractAssumedHours(element: JsonElement): Double {
             if (element.asJsonObject.has("hours")) {
                 return element.asJsonObject.get("hours").asDouble
@@ -112,6 +66,7 @@ class Halogen(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRat
             return 0.0
         }
     }
+
     //create variable here if you want to make it global to the class with private
     private var percentPowerReduced = 0.0
     private var actualWatts = 0.0
@@ -151,7 +106,6 @@ class Halogen(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRat
     private var alternateLampsPerFixture = 0
 
 
-
     //Where you extract from user inputs and assign to variables
     override fun setup() {
         try {
@@ -173,9 +127,9 @@ class Halogen(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRat
             alternateNumberOfFixtures = featureData["Alternate Number of Fixtures"]!! as Int
             alternateLampsPerFixture = featureData["Alternate Lamps Per Fixture"]!! as Int
 
-            postpeakHours = featureData["Suggested Peak Hours"]!! as Double
-            postpartPeakHours = featureData["Suggested Part Peak Hours"]!! as Double
-            postoffPeakHours = featureData["Suggested Off Peak Hours"]!! as Double
+//            postpeakHours = featureData["Suggested Peak Hours"]!! as Double
+//            postpartPeakHours = featureData["Suggested Part Peak Hours"]!! as Double
+//            postoffPeakHours = featureData["Suggested Off Peak Hours"]!! as Double
 
             controls = featureData["Type of Control"]!! as String
 
@@ -183,6 +137,7 @@ class Halogen(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRat
             e.printStackTrace()
         }
     }
+
     /**
      * Time | Energy | Power - Pre State
      * */
@@ -192,9 +147,11 @@ class Halogen(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRat
         usageHours.peakHours = peakHours
         usageHours.partPeakHours = partPeakHours
         usageHours.offPeakHours = offPeakHours
-        if (usageHours.yearly() < 1.0){
-            return  preauditHours.yearly()}
-        else { return usageHours.yearly()}
+        if (usageHours.yearly() < 1.0) {
+            return preauditHours.yearly()
+        } else {
+            return usageHours.yearly()
+        }
     }
 
     fun preEnergy(): Double {
@@ -205,6 +162,7 @@ class Halogen(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRat
     fun prePower(): Double {
         return actualWatts * numberOfFixtures * lampsPerFixtures / 1000
     }
+
     /**
      * Cost - Pre State
      * */
@@ -250,13 +208,11 @@ class Halogen(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRat
         val paybackmonth = selfinstallcost / energySavings * 12
         val paybackyear = selfinstallcost / energySavings
         val totalsavings = energySavings + coolingSavings + maintenanceSavings
-        //@k2interactiveinteractive   please make sure this works and is pushed out to the post CSV
-         val controlCost = extractEquipmentCost(element)
-         val measureCode = extractMeasureCode(element)
-         val prescriptiveHours = extractAssumedHours(element)
-         val percentSaved = extractControlPercentSaved(element)
-         val prescriptiveSaved = preEnergy() * percentSaved
-
+        val controlCost = extractEquipmentCost(element)
+        val measureCode = extractMeasureCode(element)
+        val prescriptiveHours = extractAssumedHours(element)
+        val percentSaved = extractControlPercentSaved(element)
+        val prescriptiveSaved = preEnergy() * percentSaved
 
         val postRow = mutableMapOf<String, String>()
         postRow["__life_hours"] = lifeHours.toString()
@@ -268,9 +224,8 @@ class Halogen(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRat
         postRow["__payback_month"] = paybackmonth.toString()
         postRow["__payback_year"] = paybackyear.toString()
         postRow["__total_savings"] = totalsavings.toString()
-        //@k2interactive
         postRow["__lighting_control_prescriptive_cost"] = controlCost.toString()
-        postRow["__lighting_control_measure_code"] = measureCode.toString()
+        postRow["__lighting_control_measure_code"] = measureCode
         postRow["__lighting_control_prescriptive_hours"] = prescriptiveHours.toString()
         postRow["__lighting_control_prescriptive_savings"] = prescriptiveSaved.toString()
         postRow["__lighting_control_prescriptive_percent"] = percentSaved.toString()
@@ -305,9 +260,11 @@ class Halogen(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRat
         postusageHours.postpartPeakHours = postpartPeakHours
         postusageHours.postoffPeakHours = postoffPeakHours
 
-        if (postusageHours.yearly() == null){
-            return  usageHoursPre()}
-        else { return postusageHours.yearly()}
+        if (postusageHours.yearly() == null) {
+            return usageHoursPre()
+        } else {
+            return postusageHours.yearly()
+        }
     }
 
     /**
@@ -318,9 +275,10 @@ class Halogen(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRat
     }
 
     override fun energyTimeChange(): Double {
-        return  actualWatts * numberOfFixtures * lampsPerFixtures / 1000 * usageHoursPost()
+        return actualWatts * numberOfFixtures * lampsPerFixtures / 1000 * usageHoursPost()
 
     }
+
     override fun energyPowerTimeChange(): Double {
         return prePower() * percentPowerReduced * usageHoursPost()
     }
@@ -332,6 +290,7 @@ class Halogen(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRat
     fun postEnergy(): Double {
         return preEnergy() - energySavings()
     }
+
     fun energySavings(): Double {
         return preEnergy() * percentPowerReduced
     }
@@ -339,15 +298,15 @@ class Halogen(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRat
     fun selfinstallcost(): Double {
         return ledbulbcost * alternateNumberOfFixtures * alternateLampsPerFixture
     }
+
     fun totalEnergySavings(): Double {
         if (controls == "yes") {
             val coolingSavings = (preEnergy() - energyPowerChange()) * cooling / seer
             return (preEnergy() - energyPowerChange()) + coolingSavings
-        } else if(ControlType1 != null || ControlType2 != null){
+        } else if (ControlType1 != null || ControlType2 != null) {
             val coolingSavings = (preEnergy() - energyTimeChange()) * cooling / seer
             return (preEnergy() - energyTimeChange()) + coolingSavings
-        }
-        else {
+        } else {
             val coolingSavings = (preEnergy() - energyPowerTimeChange()) * cooling / seer
             return (preEnergy() - energyPowerTimeChange()) + coolingSavings
         }
@@ -355,16 +314,15 @@ class Halogen(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRat
     }
 
     fun totalSavings(): Double {
-        if (controls == null && usageHoursPost() != null){
-            val postPower = energyPowerTimeChange()/usageHoursPost()
+        if (controls == null && usageHoursPost() != null) {
+            val postPower = energyPowerTimeChange() / usageHoursPost()
             val postusageHours = UsageLighting()
             postusageHours.postpeakHours = postpeakHours
             postusageHours.postpartPeakHours = postpartPeakHours
             postusageHours.postoffPeakHours = postoffPeakHours
             return costElectricity(postPower, postusageHours, electricityRate)
-        }
-        else {
-            val postPower = energyPowerChange()/usageHoursPre()
+        } else {
+            val postPower = energyPowerChange() / usageHoursPre()
             val usageHours = UsageLighting()
             usageHours.peakHours = peakHours
             usageHours.partPeakHours = partPeakHours
@@ -377,21 +335,23 @@ class Halogen(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRat
      * Energy Efficiency Lookup Query Definition
      * */
     override fun efficientLookup() = false
-    override fun queryEfficientFilter() = ""
+
+    override fun queryEfficientFilter() = queryControlPercentSaved()
     override fun queryControlPercentSaved() = JSONObject()
             .put("type", LightControls)
-            .put("data.Type", ControlType1)
+            .put("data.type", ControlType1)
             .toString()
 
     override fun queryControlPercentSaved2() = JSONObject()
             .put("type", LightControls)
-            .put("data.Type", ControlType2)
+            .put("data.type", ControlType2)
             .toString()
 
     override fun queryAssumedHours() = JSONObject()
             .put("type", ControlHours)
             .put("data.location_type", bType)
             .toString()
+
     /**
      * State if the Equipment has a Post UsageHours Hours (Specific) ie. A separate set of
      * Weekly UsageHours Hours apart from the PreAudit
@@ -401,17 +361,31 @@ class Halogen(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRat
     /**
      * Define all the fields here - These would be used to Generate the Outgoing Rows or perform the Energy Calculation
      * */
-    override fun preAuditFields() = mutableListOf("General Client Info Name", "General Client Info Position", "General Client Info Email")
+    override fun preAuditFields() = mutableListOf(
+            "General Client Info Name",
+            "General Client Info Position",
+            "General Client Info Email")
+
     override fun featureDataFields() = getGFormElements().map { it.value.param!! }.toMutableList()
 
-    override fun preStateFields() = mutableListOf("")
-    override fun postStateFields() = mutableListOf("__lighting_control_measure_code", "__lighting_control_prescriptive_hours",
-            "__lighting_control_prescriptive_cost", "__lighting_control_prescriptive_savings",
-            "__lighting_control_prescriptive_percent", "__life_hours", "__maintenance_savings",
-            "__cooling_savings", "__energy_savings", "__energy_at_post_state", "__selfinstall_cost",
-            "__payback_month", "__payback_year", "__total_savings")
+    override fun preStateFields() = mutableListOf<String>()
+    override fun postStateFields() = mutableListOf(
+            "__lighting_control_measure_code",
+            "__lighting_control_prescriptive_hours",
+            "__lighting_control_prescriptive_cost",
+            "__lighting_control_prescriptive_savings",
+            "__lighting_control_prescriptive_percent",
+            "__life_hours",
+            "__maintenance_savings",
+            "__cooling_savings",
+            "__energy_savings",
+            "__energy_at_post_state",
+            "__selfinstall_cost",
+            "__payback_month",
+            "__payback_year",
+            "__total_savings")
 
-    override fun computedFields() = mutableListOf("")
+    override fun computedFields() = mutableListOf<String>()
 
     private fun getFormMapper() = FormMapper(context, R.raw.halogen)
     private fun getModel() = getFormMapper().decodeJSON()
