@@ -49,32 +49,31 @@ class WIRefrigerator(computable: Computable<*>, utilityRateGas: UtilityRate, uti
 
 // TODO: @k2interactive make the following queries active.
 
-// This relates to queryCondensingUnit
-
+        // This relates to queryCondensingUnit
         fun extractCondensingUnitcompressorkWh(element: JsonElement): Double {
-            if (element.asJsonObject.has("cu_scroll_compressor_kWh")) {
-                return element.asJsonObject.get("cu_scroll_compressor_kWh").asDouble
+            if (element.asJsonObject.has("cu_scroll_compressor_kwh")) {
+                return element.asJsonObject.get("cu_scroll_compressor_kwh").asDouble
             }
             return 0.0
         }
 
         fun extractCondensingUnitcompressorkW(element: JsonElement): Double {
-            if (element.asJsonObject.has("cu_scroll_compressor_kW")) {
-                return element.asJsonObject.get("cu_scroll_compressor_kW").asDouble
+            if (element.asJsonObject.has("cu_scroll_compressor_kw")) {
+                return element.asJsonObject.get("cu_scroll_compressor_kw").asDouble
             }
             return 0.0
         }
 
         fun extractCondensingUnitcondensorkWh(element: JsonElement): Double {
-            if (element.asJsonObject.has("cu_condenser_fan_kwh")) {
-                return element.asJsonObject.get("cu_condenser_fan_kwh").asDouble
+            if (element.asJsonObject.has("cu_condenser_fans_kwh")) {
+                return element.asJsonObject.get("cu_condenser_fans_kwh").asDouble
             }
             return 0.0
         }
 
         fun extractCondensingUnitcondensorkW(element: JsonElement): Double {
-            if (element.asJsonObject.has("cu_condenser_fan_kw")) {
-                return element.asJsonObject.get("cu_condenser_fan_kw").asDouble
+            if (element.asJsonObject.has("cu_condenser_fans_kw")) {
+                return element.asJsonObject.get("cu_condenser_fans_kw").asDouble
             }
             return 0.0
         }
@@ -100,8 +99,7 @@ class WIRefrigerator(computable: Computable<*>, utilityRateGas: UtilityRate, uti
             return 0.0
         }
 
-//This relates to queryEvaporatorFanMotor
-
+        //This relates to queryEvaporatorFanMotor
         fun extractEvapFanMotorkWh(element: JsonElement): Double {
             if (element.asJsonObject.has("ev_energy_savings")) {
                 return element.asJsonObject.get("ev_energy_savings").asDouble
@@ -124,8 +122,7 @@ class WIRefrigerator(computable: Computable<*>, utilityRateGas: UtilityRate, uti
         }
 
 
-//This relates to queryEvaporatorFanMotorControls
-
+        //This relates to queryEvaporatorFanMotorControls
         fun extractEvapFanMotorControlskWh(element: JsonElement): Double {
             if (element.asJsonObject.has("evf_energy_savings")) {
                 return element.asJsonObject.get("evf_energy_savings").asDouble
@@ -336,8 +333,6 @@ class WIRefrigerator(computable: Computable<*>, utilityRateGas: UtilityRate, uti
      * I need to insert the heating and cooling hours based on set-point temp, operation hours, and thermostat schedule
      * */
     override fun energyPowerChange(): Double {
-
-
         return 0.0 // TODO: AK2 needs to calculate
     }
 
@@ -387,15 +382,31 @@ class WIRefrigerator(computable: Computable<*>, utilityRateGas: UtilityRate, uti
                 .toString()
     }
 
+    override fun queryReachIn(): String {
+        return JSONObject()
+                .put("type", "refrigeration_reachinfreezerrefrigerator")
+                .toString()
+    }
 
-    override fun preAuditFields() = mutableListOf("")
+    override fun queryReplacement(): String {
+        return JSONObject()
+                .put("type", "refrigeration_refrigeratorreplacement")
+                .toString()
+    }
+
+
+    override fun preAuditFields() = mutableListOf<String>()
 
     override fun featureDataFields() = getGFormElements().map { it.value.param!! }.toMutableList()
 
-    override fun preStateFields() = mutableListOf("")
-    override fun postStateFields() = mutableListOf("")
+    override fun preStateFields() = mutableListOf<String>()
+    override fun postStateFields() = mutableListOf(
+            "__HE_Condensing_Unit_Gross_kwh",
+            "__HE_Condensing_Unit_Gross_kw",
+            "__HE_Condensing_Unit_Net_kwh",
+            "__HE_Condensing_Unit_Net_kw")
 
-    override fun computedFields() = mutableListOf("")
+    override fun computedFields() = mutableListOf<String>()
 
     private fun getFormMapper() = FormMapper(context, R.raw.walkin_refrigerator)
     private fun getModel() = getFormMapper().decodeJSON()

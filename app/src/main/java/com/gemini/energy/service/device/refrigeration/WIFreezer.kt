@@ -50,31 +50,30 @@ class WIFreezer(computable: Computable<*>, utilityRateGas: UtilityRate, utilityR
 // TODO: @k2interactive make the following queries active.
 
 // This relates to queryCondensingUnit
-
         fun extractCondensingUnitcompressorkWh(element: JsonElement): Double {
-            if (element.asJsonObject.has("cu_scroll_compressor_kWh")) {
-                return element.asJsonObject.get("cu_scroll_compressor_kWh").asDouble
+    if (element.asJsonObject.has("cu_scroll_compressor_kwh")) {
+        return element.asJsonObject.get("cu_scroll_compressor_kwh").asDouble
             }
             return 0.0
         }
 
         fun extractCondensingUnitcompressorkW(element: JsonElement): Double {
-            if (element.asJsonObject.has("cu_scroll_compressor_kW")) {
-                return element.asJsonObject.get("cu_scroll_compressor_kW").asDouble
+            if (element.asJsonObject.has("cu_scroll_compressor_kw")) {
+                return element.asJsonObject.get("cu_scroll_compressor_kw").asDouble
             }
             return 0.0
         }
 
         fun extractCondensingUnitcondensorkWh(element: JsonElement): Double {
-            if (element.asJsonObject.has("cu_condenser_fan_kwh")) {
-                return element.asJsonObject.get("cu_condenser_fan_kwh").asDouble
+            if (element.asJsonObject.has("cu_condenser_fans_kwh")) {
+                return element.asJsonObject.get("cu_condenser_fans_kwh").asDouble
             }
             return 0.0
         }
 
         fun extractCondensingUnitcondensorkW(element: JsonElement): Double {
-            if (element.asJsonObject.has("cu_condenser_fan_kw")) {
-                return element.asJsonObject.get("cu_condenser_fan_kw").asDouble
+            if (element.asJsonObject.has("cu_condenser_fans_kw")) {
+                return element.asJsonObject.get("cu_condenser_fans_kw").asDouble
             }
             return 0.0
         }
@@ -101,7 +100,6 @@ class WIFreezer(computable: Computable<*>, utilityRateGas: UtilityRate, utilityR
         }
 
 //This relates to queryEvaporatorFanMotor
-
         fun extractEvapFanMotorkWh(element: JsonElement): Double {
             if (element.asJsonObject.has("ev_energy_savings")) {
                 return element.asJsonObject.get("ev_energy_savings").asDouble
@@ -125,7 +123,6 @@ class WIFreezer(computable: Computable<*>, utilityRateGas: UtilityRate, utilityR
 
 
 //This relates to queryEvaporatorFanMotorControls
-
         fun extractEvapFanMotorControlskWh(element: JsonElement): Double {
             if (element.asJsonObject.has("evf_energy_savings")) {
                 return element.asJsonObject.get("evf_energy_savings").asDouble
