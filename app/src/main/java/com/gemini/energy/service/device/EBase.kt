@@ -456,9 +456,16 @@ abstract class EBase(val computable: Computable<*>,
                 else
                     buildPostState()
 
+        fun switcherMotors() =
+                if (query.isNotBlank())
+                    parseAPIService.fetchHVAC(query)
+                else
+                    buildPostState()
+
         val result = when (computable.auditScopeType) {
             EZoneType.HVAC          -> switcherHVAC()
             EZoneType.Plugload      -> switcherPlugload()
+            EZoneType.Motors -> switcherMotors()
             else                    -> buildPostState() // This gives an empty JSON !!
         }
 

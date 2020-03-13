@@ -43,75 +43,54 @@ class Motors(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRate
         fun extractNemaPremium(elements: List<JsonElement?>): Double {
             elements.forEach {
                 it?.let {
-                    if (it.asJsonObject.has("cee_specification_nema_premium")) {
+                    if (it.asJsonObject.has("cee_specification_nema_premium"))
                         return it.asJsonObject.get("cee_specification_nema_premium").asDouble
-                    }
                 }
             }
             return 0.0
         }
 
-        fun extractDemandSavings(elements: List<JsonElement?>): Double {
-            elements.forEach {
-                it?.let {
-                    if (it.asJsonObject.has("demand_savings")) {
-                        return it.asJsonObject.get("demand_savings").asDouble
-                    }
-                }
-            }
-            return 0.0
-        }
-
-        // TODO: Test me
-        // TODO: @k2interactive this query relates to queryMotorVFDprescriptive() located in the PARSE HVAC class just fyi: type "hvac_vfdprescriptive"
         fun extractDemandSavings(element: JsonElement): Double {
-            if (element.asJsonObject.has("demand_savings")) {
+            if (element.asJsonObject.has("demand_savings"))
                 return element.asJsonObject.get("demand_savings").asDouble
-            }
             return 0.0
         }
 
-        fun extractEnergySavings(elements: List<JsonElement?>): Double {
-            elements.forEach {
-                it?.let {
-                    if (it.asJsonObject.has("energy_savings")) {
-                        return it.asJsonObject.get("energy_savings").asDouble
-                    }
-                }
-            }
-            return 0.0
-        }
-
-        // TODO: Test me
-        // TODO: @k2interactive this query relates to queryMotorVFDprescriptive() located in the PARSE HVAC class just fyi: type "hvac_vfdprescriptive"
         fun extractEnergySavings(element: JsonElement): Double {
-            if (element.asJsonObject.has("energy_savings")) {
+            if (element.asJsonObject.has("energy_savings"))
                 return element.asJsonObject.get("energy_savings").asDouble
-            }
             return 0.0
         }
 
-        fun extractInstallCost(elements: List<JsonElement?>): Double {
-            elements.forEach {
-                it?.let {
-                    if (it.asJsonObject.has("total_installed_cost")) {
-                        return it.asJsonObject.get("total_installed_cost").asDouble
-                    }
-                }
-            }
-            return 0.0
-        }
-
-        // TODO: Test me
-        // TODO: @k2interactive this query relates to queryMotorVFDprescriptive() located in the PARSE HVAC class just fyi: type "hvac_vfdprescriptive"
         fun extractInstallCost(element: JsonElement): Double {
-            if (element.asJsonObject.has("total_installed_cost")) {
+            if (element.asJsonObject.has("total_installed_cost"))
                 return element.asJsonObject.get("total_installed_cost").asDouble
-            }
             return 0.0
         }
-     // TODO: @k2interactive  You also will need to add four queries - see Code-Additions_March10 doc - in the Gemini Platform Dropbox folder - for more details.
-        //  TODO: Located in "hvac_vfdprescriptive" filtered with "queryMotorVFDprescriptive"
+
+        fun extractOffRpf(element: JsonElement): Double {
+            if (element.asJsonObject.has("off"))
+                return element.asJsonObject.get("off").asDouble
+            return 0.0
+        }
+
+        fun extractOnRpf(element: JsonElement): Double {
+            if (element.asJsonObject.has("on"))
+                return element.asJsonObject.get("on").asDouble
+            return 0.0
+        }
+
+        fun extractSummerCF(element: JsonElement): Double {
+            if (element.asJsonObject.has("summer"))
+                return element.asJsonObject.get("summer").asDouble
+            return 0.0
+        }
+
+        fun extractWinterCF(element: JsonElement): Double {
+            if (element.asJsonObject.has("winter"))
+                return element.asJsonObject.get("winter").asDouble
+            return 0.0
+        }
 
     }
 
@@ -215,22 +194,25 @@ class Motors(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRate
         var netBEDkwhsavings = (grossBEDkwhsavings * (1 + winterLLF) * (freerider + spillover - 1) * winterRPF) +
                 (grossBEDkwhsavings * (1 + summerLLF) * (freerider + spillover - 1) * summerRPF)
 
-//@k2interactive please make these active so that the they also spit out the values in the CSV
         //1c. BED Prescriptive Savings for VFD - Based on table on pg. 70 of Vermont TRM
-        var VFDeSavings = if (OTF == "yes") {
-            extractEnergySavings(element) / 0.9
-        } else {
-            extractEnergySavings(element)
-        }
+        var VFDeSavings =
+                if (OTF == "yes") {
+                    extractEnergySavings(element) / 0.9
+                } else {
+                    extractEnergySavings(element)
+                }
         val demandSavings = energyPowerChange() / usageHoursPre()
 
         //2a. BED Prescriptive Savings for VFD - Based on pg. 70 of Vermont TRM
         var VFDdSavings = extractDemandSavings(element)
 
-        // TODO: @k2interactive Here is where the equations from Code-Additions_March10 doc - in the Gemini Platform Dropbox folder - should go.
-        //TODO: @k2interactive please make sure the var net_kwh_savings & net_kw_savings are added to the CSV output: "__VFD_Net_Prescriptive_Energy" & "__VFD_Net_Prescriptive_Demand"
-        // In the word doc equations I state the variables kwh & kw are pulled from the Parse.
-        // That is true but I also have transformed them into "VFDeSavings" and "VFDdSavings" in the equations above - which you should use.
+        val offRPF = extractOffRpf(element)
+        val onRPF = extractOnRpf(element)
+        val netkwhSavings = VFDeSavings * (1 + 0.121) * (0.95 + 1 - 1) * offRPF + VFDeSavings * (1 + 0.149) * (0.95 + 1 - 1) * onRPF
+
+        val summerCF = extractSummerCF(element)
+        val winterCF = extractWinterCF(element)
+        val netkwSavings = VFDeSavings * (1 + 0.112) * (0.95 + 1 - 1) * summerCF + VFDdSavings * (1 + 0.113) * (0.95 + 1 - 1) * winterCF
 
         //3. Implementation Cost
         // ToDo - The below cost would be a look up in the future.
@@ -246,10 +228,11 @@ class Motors(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRate
         postRow["__implementation_cost"] = implementationCost.toString()
         postRow["__Gross_Savings_BLPM_circulator_pump"] = grossBEDkwhsavings.toString()
         postRow["__Net_Savings__BLPM_circulator_pump"] = netBEDkwhsavings.toString()
-        //@k2interactive please make these active so that the they also spit out the values in the CSV
         postRow["__VFD_Gross_Prescriptive_Energy"] = VFDeSavings.toString()
         postRow["__VFD_Gross_Prescriptive_Demand"] = VFDdSavings.toString()
         postRow["__VFD_Prescriptive_Install_Cost"] = VFDinstallCost.toString()
+        postRow["__VFD_Net_Prescriptive_Energy"] = netkwhSavings.toString()
+        postRow["__VFD_Net_Prescriptive_Demand"] = netkwSavings.toString()
 
         dataHolder.header = postStateFields()
         dataHolder.computable = computable
@@ -318,7 +301,7 @@ class Motors(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRate
      * */
     override fun efficientLookup() = false
 
-    override fun queryEfficientFilter() = ""
+    override fun queryEfficientFilter() = queryMotorVFDprescriptive()
 
     override fun queryMotorEfficiency() = JSONObject()
             .put("type", MOTOR_EFFICIENCY)
@@ -336,16 +319,27 @@ class Motors(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRate
     /**
      * Define all the fields here - These would be used to Generate the Outgoing Rows or perform the Energy Calculation
      * */
-    override fun preAuditFields() = mutableListOf("")
+    override fun preAuditFields() = mutableListOf<String>()
 
     override fun featureDataFields() = getGFormElements().map { it.value.param!! }.toMutableList()
 
-    override fun preStateFields() = mutableListOf("")
-    override fun postStateFields() = mutableListOf("__life_hours", "__maintenance_savings",
-            "__cooling_savings", "__energy_savings", "__Gross_Savings_BLPM_circulator_pump", "__Net_Savings__BLPM_circulator_pump",
-            "__VFD_Prescriptive_Energy_Savings", "__VFD_Prescriptive_Demand_Savings")
+    override fun preStateFields() = mutableListOf<String>()
+    override fun postStateFields() = mutableListOf(
+            "__life_hours",
+            "__maintenance_savings",
+            "__cooling_savings",
+            "__energy_savings",
+            "__demand_savings",
+            "__implementation_cost",
+            "__Gross_Savings_BLPM_circulator_pump",
+            "__Net_Savings__BLPM_circulator_pump",
+            "__VFD_Gross_Prescriptive_Energy",
+            "__VFD_Gross_Prescriptive_Demand",
+            "__VFD_Prescriptive_Install_Cost",
+            "__VFD_Net_Prescriptive_Energy",
+            "__VFD_Net_Prescriptive_Demand")
 
-    override fun computedFields() = mutableListOf("")
+    override fun computedFields() = mutableListOf<String>()
 
     private fun getFormMapper() = FormMapper(context, R.raw.motors)
     private fun getModel() = getFormMapper().decodeJSON()
