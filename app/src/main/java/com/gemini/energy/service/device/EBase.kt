@@ -194,6 +194,13 @@ abstract class EBase(val computable: Computable<*>,
                 dataExtractLightControls(queryAssumedHours()),
                 dataExtractLightControls(queryControlPercentSaved2()))
 
+        val extractorRefrigeration = listOf(
+                dataExtractRefrigerationControls(queryEvaporatorFanMotor()),
+                dataExtractRefrigerationControls(queryCondensingUnit()),
+                dataExtractRefrigerationControls(queryEvaporatorFanMotorControls()),
+                dataExtractRefrigerationControls(queryReachIn()),
+                dataExtractRefrigerationControls(queryReplacement())
+        )
         val extractorNone = listOf(Observable.just(JsonArray()))
 
         // TODO: @k2interactive please add an extractorRefrigeration that grabs data from the Refrigeration Class in the Parse Dashboard - queryCondensingUnit
@@ -203,6 +210,7 @@ abstract class EBase(val computable: Computable<*>,
             EZoneType.Motors -> extractorMotor
             EZoneType.Thermostat -> extractorThermostat
             EZoneType.Lighting -> extractorLightControls
+            EZoneType.Refrigeration -> extractorRefrigeration
             else -> extractorNone
         }
 
@@ -389,13 +397,18 @@ abstract class EBase(val computable: Computable<*>,
     open fun queryMotorVFDprescriptive() = ""
 
     // TODO: @k2interactive here you can add the Refrigeration Query group
-    // TODO: @k2interactive there are five of them: below are the five with their respective type String name in Parse Dashboard [query - "type name in Parse"]
-    //  queryCondensingUnit - "refrigeration_condensingunit" | queryEvaporatorFanMotor - "refrigeration_condensingunit" |
-    //  queryEvaporatorFanMotorControls - "refrigeration_evaporatorfanmotorcontrols" | queryReachIn - "refrigeration_reachinfreezerrefrigerator" |
+    // TODO: @k2interactive there are five of them: below are the five with their
+    //  respective type String name in Parse Dashboard [query - "type name in Parse"]
+    //  queryCondensingUnit - "refrigeration_condensingunit" |
+    //  queryEvaporatorFanMotor - "refrigeration_condensingunit" |
+    //  queryEvaporatorFanMotorControls - "refrigeration_evaporatorfanmotorcontrols" |
+    //  queryReachIn - "refrigeration_reachinfreezerrefrigerator" |
     //  queryReplacement - "refrigeration_refrigeratorreplacement"
-    open fun queryEvaporatorFanMotor() = ""
     open fun queryCondensingUnit() = ""
+    open fun queryEvaporatorFanMotor() = ""
     open fun queryEvaporatorFanMotorControls() = ""
+    open fun queryReachIn() = ""
+    open fun queryReplacement() = ""
 
 
     /**
@@ -464,11 +477,22 @@ abstract class EBase(val computable: Computable<*>,
                 else
                     buildPostState()
 
+        fun switcherRefrigeration() =
+                if (query.isNotBlank())
+//                    TODO: @k2interactive refactor so we can send all that are needed
+//                    queryEvaporatorFanMotor, queryCondensingUnit, queryEvaporatorFanMotorControls
+//                    queryReachIn, queryReplacement
+//                    for poststate.csv fields
+                    parseAPIService.fetchRefrigerationControls(query)
+                else
+                    buildPostState()
+
         val result = when (computable.auditScopeType) {
             EZoneType.HVAC          -> switcherHVAC()
             EZoneType.Lighting -> switcherLighting()
             EZoneType.Motors -> switcherMotors()
             EZoneType.Plugload      -> switcherPlugload()
+            EZoneType.Refrigeration -> switcherRefrigeration()
             else                    -> buildPostState() // This gives an empty JSON !!
         }
 
@@ -517,6 +541,15 @@ abstract class EBase(val computable: Computable<*>,
             return Observable.just(JsonArray())
         }
         return parseAPIService.fetchLightControls(query)
+                .map { it.getAsJsonArray("results") }
+                .toObservable()
+    }
+
+    private fun dataExtractRefrigerationControls(query: String): Observable<JsonArray> {
+        if (query.isEmpty()) {
+            return Observable.just(JsonArray())
+        }
+        return parseAPIService.fetchRefrigerationControls(query)
                 .map { it.getAsJsonArray("results") }
                 .toObservable()
     }
