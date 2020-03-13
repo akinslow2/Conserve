@@ -459,10 +459,20 @@ abstract class EBase(val computable: Computable<*>,
                 else
                     buildPostState()
 
+        fun switcherLighting() =
+                if (query.isNotBlank())
+//                    TODO: @k2interactive refactor so we can send both
+//                    queryControlPercentSaved and queryAssumedHours
+//                    for poststate.csv fields
+                    parseAPIService.fetchLightControls(query)
+                else
+                    buildPostState()
+
         val result = when (computable.auditScopeType) {
             EZoneType.HVAC          -> switcherHVAC()
-            EZoneType.Plugload      -> switcherPlugload()
+            EZoneType.Lighting -> switcherLighting()
             EZoneType.Motors -> switcherMotors()
+            EZoneType.Plugload      -> switcherPlugload()
             else                    -> buildPostState() // This gives an empty JSON !!
         }
 

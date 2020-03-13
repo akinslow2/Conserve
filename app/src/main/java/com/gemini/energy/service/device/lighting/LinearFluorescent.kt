@@ -30,87 +30,42 @@ class LinearFluorescent(computable: Computable<*>, utilityRateGas: UtilityRate, 
     }
 
     companion object {
-            private const val LightControls = "lighting_lightingcontrols"
-            private const val ControlHours = "lighting_lightingcontrolhours"
+        private const val LightControls = "lighting_lightingcontrols"
+        private const val ControlHours = "lighting_lightingcontrolhours"
 
-            /**
-             * Fetches the Deemed Criteria at once
-             * via the Parse API
-             * */
+        /**
+         * Fetches the Deemed Criteria at once
+         * via the Parse API
+         * */
 
-            //Need to pull multiple at once if feasible otherwise it is a lot of code
-            fun extractControlPercentSaved(elements: List<JsonElement?>): Double {
-                elements.forEach {
-                    it?.let {
-                        if (it.asJsonObject.has("percent_savings")) {
-                            return it.asJsonObject.get("percent_savings").asDouble
-                        }
-                    }
-                }
-                return 0.0
-            }
-
-        // TODO: Test me
         fun extractControlPercentSaved(element: JsonElement): Double {
             if (element.asJsonObject.has("percent_savings")) {
                 return element.asJsonObject.get("percent_savings").asDouble
             }
             return 0.0
         }
-            fun extractEquipmentCost(elements: List<JsonElement?>): Double {
-                elements.forEach {
-                    it?.let {
-                        if (it.asJsonObject.has("equipment_cost")) {
-                            return it.asJsonObject.get("equipment_cost").asDouble
-                        }
-                    }
-                }
-                return 0.0
-            }
 
-        // TODO: Test me
         fun extractEquipmentCost(element: JsonElement): Double {
             if (element.asJsonObject.has("equipment_cost")) {
                 return element.asJsonObject.get("equipment_cost").asDouble
             }
             return 0.0
         }
-            fun extractMeasureCode(elements: List<JsonElement?>): Double {
-                elements.forEach {
-                    it?.let {
-                        if (it.asJsonObject.has("measure_code")) {
-                            return it.asJsonObject.get("measure_code").asDouble
-                        }
-                    }
-                }
-                return 0.0
-            }
 
-        // TODO: Test me
-        fun extractMeasureCode(element: JsonElement): Double {
+        fun extractMeasureCode(element: JsonElement): String {
             if (element.asJsonObject.has("measure_code")) {
-                return element.asJsonObject.get("measure_code").asDouble
+                return element.asJsonObject.get("measure_code").asString
             }
-            return 0.0
+            return ""
         }
-            fun extractAssumedHours(elements: List<JsonElement?>): Double {
-                elements.forEach {
-                    it?.let {
-                        if (it.asJsonObject.has("hours")) {
-                            return it.asJsonObject.get("hours").asDouble
-                        }
-                    }
-                }
-                return 0.0
-            }
 
-        // TODO: Test me
         fun extractAssumedHours(element: JsonElement): Double {
             if (element.asJsonObject.has("hours")) {
                 return element.asJsonObject.get("hours").asDouble
             }
             return 0.0
         }
+
         /**
          * Hypothetical Cost of Replacement for Linear Fluorescent
          * */
@@ -178,7 +133,8 @@ class LinearFluorescent(computable: Computable<*>, utilityRateGas: UtilityRate, 
 
             ControlType1 = featureData["Type of Control"]!! as String
             ControlType2 = featureData["Type of Control2"]!! as String
-//            bType = featureData["Building Type"]!! as String
+
+            bType = preAudit["General Client Info Facility Type"]!! as String
 
             peakHours = featureData["Peak Hours"]!! as Double
             offPeakHours = featureData["Off Peak Hours"]!! as Double
@@ -199,6 +155,7 @@ class LinearFluorescent(computable: Computable<*>, utilityRateGas: UtilityRate, 
             e.printStackTrace()
         }
     }
+
     /**
      * Time | Energy | Power - Pre State
      * */
@@ -208,9 +165,11 @@ class LinearFluorescent(computable: Computable<*>, utilityRateGas: UtilityRate, 
         usageHours.peakHours = peakHours
         usageHours.partPeakHours = partPeakHours
         usageHours.offPeakHours = offPeakHours
-        if (usageHours.yearly() < 1.0){
-            return  preauditHours.yearly()}
-        else { return usageHours.yearly()}
+        if (usageHours.yearly() < 1.0) {
+            return preauditHours.yearly()
+        } else {
+            return usageHours.yearly()
+        }
     }
 
     fun preEnergy(): Double {
@@ -221,6 +180,7 @@ class LinearFluorescent(computable: Computable<*>, utilityRateGas: UtilityRate, 
     fun prePower(): Double {
         return actualWatts * numberOfFixtures * lampsPerFixtures / 1000
     }
+
     /**
      * Cost - Pre State
      * */
@@ -252,7 +212,6 @@ class LinearFluorescent(computable: Computable<*>, utilityRateGas: UtilityRate, 
         val expectedLife = LEDlifeHours / usageHoursSpecific.yearly()
         val maintenanceSavings = totalUnits * bulbcost * replacementIndex / expectedLife
 
-        // Adding new variables for the report
         val selfinstallcost = this.selfinstallcost()
 
         // Delta is going to be Power Used * Percentage Power Reduced
@@ -261,13 +220,11 @@ class LinearFluorescent(computable: Computable<*>, utilityRateGas: UtilityRate, 
         val energySavings = preEnergy() * percentPowerReduced
         val coolingSavings = energySavings * cooling / seer
 
-
         val energyAtPostState = preEnergy() - energySavings
         val paybackmonth = selfinstallcost / energySavings * 12
         val paybackyear = selfinstallcost / energySavings
         val totalsavings = energySavings + coolingSavings + maintenanceSavings
 
-        //@k2interactive please make sure this works and is pushed out to the post CSV
         val controlCost = extractEquipmentCost(element)
         val measureCode = extractMeasureCode(element)
         val prescriptiveHours = extractAssumedHours(element)
@@ -284,7 +241,6 @@ class LinearFluorescent(computable: Computable<*>, utilityRateGas: UtilityRate, 
         postRow["__payback_month"] = paybackmonth.toString()
         postRow["__payback_year"] = paybackyear.toString()
         postRow["__total_savings"] = totalsavings.toString()
-        //@k2interactive
         postRow["__lighting_control_prescriptive_cost"] = controlCost.toString()
         postRow["__lighting_control_measure_code"] = measureCode.toString()
         postRow["__lighting_control_prescriptive_hours"] = prescriptiveHours.toString()
@@ -321,9 +277,11 @@ class LinearFluorescent(computable: Computable<*>, utilityRateGas: UtilityRate, 
         postusageHours.postpartPeakHours = postpartPeakHours
         postusageHours.postoffPeakHours = postoffPeakHours
 
-        if (postusageHours.yearly() == null){
-            return  usageHoursPre()}
-        else { return postusageHours.yearly()}
+        if (postusageHours.yearly() == null) {
+            return usageHoursPre()
+        } else {
+            return postusageHours.yearly()
+        }
     }
 
     /**
@@ -334,9 +292,10 @@ class LinearFluorescent(computable: Computable<*>, utilityRateGas: UtilityRate, 
     }
 
     override fun energyTimeChange(): Double {
-        return  actualWatts * numberOfFixtures * lampsPerFixtures / 1000 * usageHoursPost()
+        return actualWatts * numberOfFixtures * lampsPerFixtures / 1000 * usageHoursPost()
 
     }
+
     override fun energyPowerTimeChange(): Double {
         return prePower() * percentPowerReduced * usageHoursPost()
     }
@@ -348,6 +307,7 @@ class LinearFluorescent(computable: Computable<*>, utilityRateGas: UtilityRate, 
     fun postEnergy(): Double {
         return preEnergy() - energySavings()
     }
+
     fun energySavings(): Double {
         return preEnergy() * percentPowerReduced
     }
@@ -355,15 +315,15 @@ class LinearFluorescent(computable: Computable<*>, utilityRateGas: UtilityRate, 
     fun selfinstallcost(): Double {
         return ledbulbcost * alternateNumberOfFixtures * alternateLampsPerFixture
     }
+
     fun totalEnergySavings(): Double {
         if (controls == "yes") {
             val coolingSavings = (preEnergy() - energyPowerChange()) * cooling / seer
             return (preEnergy() - energyPowerChange()) + coolingSavings
-        } else if(ControlType1 != null || ControlType2 != null){
+        } else if (ControlType1 != null || ControlType2 != null) {
             val coolingSavings = (preEnergy() - energyTimeChange()) * cooling / seer
             return (preEnergy() - energyTimeChange()) + coolingSavings
-        }
-        else {
+        } else {
             val coolingSavings = (preEnergy() - energyPowerTimeChange()) * cooling / seer
             return (preEnergy() - energyPowerTimeChange()) + coolingSavings
         }
@@ -371,16 +331,15 @@ class LinearFluorescent(computable: Computable<*>, utilityRateGas: UtilityRate, 
     }
 
     fun totalSavings(): Double {
-        if (controls == null && usageHoursPost() != null){
-            val postPower = energyPowerTimeChange()/usageHoursPost()
+        if (controls == null && usageHoursPost() != null) {
+            val postPower = energyPowerTimeChange() / usageHoursPost()
             val postusageHours = UsageLighting()
             postusageHours.postpeakHours = postpeakHours
             postusageHours.postpartPeakHours = postpartPeakHours
             postusageHours.postoffPeakHours = postoffPeakHours
             return costElectricity(postPower, postusageHours, electricityRate)
-        }
-        else {
-            val postPower = energyPowerChange()/usageHoursPre()
+        } else {
+            val postPower = energyPowerChange() / usageHoursPre()
             val usageHours = UsageLighting()
             usageHours.peakHours = peakHours
             usageHours.partPeakHours = partPeakHours
@@ -393,21 +352,23 @@ class LinearFluorescent(computable: Computable<*>, utilityRateGas: UtilityRate, 
      * Energy Efficiency Lookup Query Definition
      * */
     override fun efficientLookup() = false
-    override fun queryEfficientFilter() = ""
+
+    override fun queryEfficientFilter() = queryControlPercentSaved()
     override fun queryControlPercentSaved() = JSONObject()
             .put("type", LightControls)
-            .put("data.Type", ControlType1)
+            .put("data.type", ControlType1)
             .toString()
 
     override fun queryControlPercentSaved2() = JSONObject()
             .put("type", LightControls)
-            .put("data.Type", ControlType2)
+            .put("data.type", ControlType2)
             .toString()
 
     override fun queryAssumedHours() = JSONObject()
             .put("type", ControlHours)
             .put("data.location_type", bType)
             .toString()
+
     /**
      * State if the Equipment has a Post UsageHours Hours (Specific) ie. A separate set of
      * Weekly UsageHours Hours apart from the PreAudit
@@ -417,15 +378,26 @@ class LinearFluorescent(computable: Computable<*>, utilityRateGas: UtilityRate, 
     /**
      * Define all the fields here - These would be used to Generate the Outgoing Rows or perform the Energy Calculation
      * */
-    override fun preAuditFields() = mutableListOf("")
+    override fun preAuditFields() = mutableListOf<String>()
+
     override fun featureDataFields() = getGFormElements().map { it.value.param!! }.toMutableList()
 
-    override fun preStateFields() = mutableListOf("")
-    override fun postStateFields() = mutableListOf("__lighting_control_measure_code", "__lighting_control_prescriptive_hours",
-            "__lighting_control_prescriptive_cost", "__lighting_control_prescriptive_savings",
-            "__lighting_control_prescriptive_percent", "__life_hours", "__maintenance_savings",
-            "__cooling_savings", "__energy_savings", "__energy_at_post_state", "__selfinstall_cost",
-            "__payback_month", "__payback_year", "__total_savings")
+    override fun preStateFields() = mutableListOf<String>()
+    override fun postStateFields() = mutableListOf(
+            "__lighting_control_measure_code",
+            "__lighting_control_prescriptive_hours",
+            "__lighting_control_prescriptive_cost",
+            "__lighting_control_prescriptive_savings",
+            "__lighting_control_prescriptive_percent",
+            "__life_hours",
+            "__maintenance_savings",
+            "__cooling_savings",
+            "__energy_savings",
+            "__energy_at_post_state",
+            "__selfinstall_cost",
+            "__payback_month",
+            "__payback_year",
+            "__total_savings")
 
     override fun computedFields() = mutableListOf("")
 
