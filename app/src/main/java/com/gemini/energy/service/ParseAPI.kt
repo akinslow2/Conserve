@@ -29,6 +29,9 @@ class ParseAPI {
         @GET("classes/Lighting")
         fun fetchLightControls(@Query("where") where: String): Single<JsonObject>
 
+        @GET("classes/Refrigeration")
+        fun fetchRefrigerationControls(@Query("where") where: String): Single<JsonObject>
+
         @POST("classes/$SYNC_AUDIT")
         fun saveAudit(@Body body: JsonObject): Single<JsonObject>
 
