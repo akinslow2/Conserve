@@ -28,7 +28,7 @@ class EnergyPreState {
     }
 
     fun getObservable(remoteExtract: List<Observable<JsonArray>>, cost: (List<JsonElement?>) -> Double): Observable<DataHolder> {
-        return Observable.zip(remoteExtract, { responses ->
+        return Observable.zip(remoteExtract) { responses ->
             Timber.d("##### Pre-State Energy Calculation - (${thread()}) #####")
             val jsonElement: MutableList<JsonElement?> = mutableListOf()
             responses.forEach { response ->
@@ -68,8 +68,7 @@ class EnergyPreState {
             Timber.d(dataHolderPreState.toString())
 
             dataHolderPreState
-        })
-
+        }
     }
 
     private fun thread() = Thread.currentThread().name

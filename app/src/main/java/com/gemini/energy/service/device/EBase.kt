@@ -441,11 +441,7 @@ abstract class EBase(val computable: Computable<*>,
         Timber.d("Efficient Lookup -- [${efficientLookup()}]")
         val query = queryEfficientFilter()
 
-        fun switcherHVAC() =
-                if (query.isNotBlank())
-                    parseAPIService.fetchThermostat(queryThermostatDeemed())
-                else
-                    buildPostState()
+        fun switcherHVAC() = parseAPIService.fetchThermostat(queryThermostatDeemed())
 
         fun switcherPlugload() =
                 if (efficientLookup() && !isEnergyStar && query.isNotBlank())
