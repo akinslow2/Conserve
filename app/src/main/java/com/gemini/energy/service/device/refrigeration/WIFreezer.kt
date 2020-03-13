@@ -356,7 +356,7 @@ class WIFreezer(computable: Computable<*>, utilityRateGas: UtilityRate, utilityR
     override fun usageHoursSpecific() = false
 
     override fun efficientLookup() = false
-    override fun queryEfficientFilter() = ""
+    override fun queryEfficientFilter() = queryEvaporatorFanMotor()
 
     //TODO: @k2interactive make the below query filters active - (the functions will need to be created in EBase - see TODOs at EBase line 389)
     override fun queryEvaporatorFanMotor(): String {
