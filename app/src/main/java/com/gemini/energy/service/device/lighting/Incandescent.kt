@@ -38,74 +38,27 @@ class Incandescent(computable: Computable<*>, utilityRateGas: UtilityRate, utili
          * Fetches the Deemed Criteria at once
          * via the Parse API
          * */
-
-        //Need to pull multiple at once if feasible otherwise it is a lot of code
-        fun extractControlPercentSaved(elements: List<JsonElement?>): Double {
-            elements.forEach {
-                it?.let {
-                    if (it.asJsonObject.has("percent_savings")) {
-                        return it.asJsonObject.get("percent_savings").asDouble
-                    }
-                }
-            }
-            return 0.0
-        }
-
-        // TODO: Test me
         fun extractControlPercentSaved(element: JsonElement): Double {
             if (element.asJsonObject.has("percent_savings")) {
                 return element.asJsonObject.get("percent_savings").asDouble
             }
             return 0.0
         }
-        fun extractEquipmentCost(elements: List<JsonElement?>): Double {
-            elements.forEach {
-                it?.let {
-                    if (it.asJsonObject.has("equipment_cost")) {
-                        return it.asJsonObject.get("equipment_cost").asDouble
-                    }
-                }
-            }
-            return 0.0
-        }
 
-        // TODO: Test me
         fun extractEquipmentCost(element: JsonElement): Double {
             if (element.asJsonObject.has("equipment_cost")) {
                 return element.asJsonObject.get("equipment_cost").asDouble
             }
             return 0.0
         }
-        fun extractMeasureCode(elements: List<JsonElement?>): Double {
-            elements.forEach {
-                it?.let {
-                    if (it.asJsonObject.has("measure_code")) {
-                        return it.asJsonObject.get("measure_code").asDouble
-                    }
-                }
-            }
-            return 0.0
-        }
 
-        // TODO: Test me
-        fun extractMeasureCode(element: JsonElement): Double {
+        fun extractMeasureCode(element: JsonElement): String {
             if (element.asJsonObject.has("measure_code")) {
-                return element.asJsonObject.get("measure_code").asDouble
+                return element.asJsonObject.get("measure_code").asString
             }
-            return 0.0
-        }
-        fun extractAssumedHours(elements: List<JsonElement?>): Double {
-            elements.forEach {
-                it?.let {
-                    if (it.asJsonObject.has("hours")) {
-                        return it.asJsonObject.get("hours").asDouble
-                    }
-                }
-            }
-            return 0.0
+            return ""
         }
 
-        // TODO: Test me
         fun extractAssumedHours(element: JsonElement): Double {
             if (element.asJsonObject.has("hours")) {
                 return element.asJsonObject.get("hours").asDouble
@@ -177,10 +130,6 @@ class Incandescent(computable: Computable<*>, utilityRateGas: UtilityRate, utili
             alternateNumberOfFixtures = featureData["Alternate Number of Fixtures"]!! as Int
             alternateLampsPerFixture = featureData["Alternate Lamps Per Fixture"]!! as Int
 
-            postpeakHours = featureData["Suggested Peak Hours"]!! as Double
-            postpartPeakHours = featureData["Suggested Part Peak Hours"]!! as Double
-            postoffPeakHours = featureData["Suggested Off Peak Hours"]!! as Double
-
             controls = featureData["Type of Control"]!! as String
 
         } catch (e: Exception) {
@@ -219,7 +168,6 @@ class Incandescent(computable: Computable<*>, utilityRateGas: UtilityRate, utili
         usageHours.partPeakHours = partPeakHours
         usageHours.offPeakHours = offPeakHours
 
-
         return costElectricity(prePower(), usageHours, electricityRate)
     }
 
@@ -227,7 +175,6 @@ class Incandescent(computable: Computable<*>, utilityRateGas: UtilityRate, utili
      * Cost - Post State
      * */
     override fun costPostState(element: JsonElement, dataHolder: DataHolder): Double {
-
         Timber.d("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
         Timber.d("!!! COST POST STATE - Incandescent !!!")
         Timber.d("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
@@ -240,7 +187,6 @@ class Incandescent(computable: Computable<*>, utilityRateGas: UtilityRate, utili
         val expectedLife = LEDlifeHours / usageHoursSpecific.yearly()
         val maintenanceSavings = totalUnits * bulbcost * replacementIndex / expectedLife
 
-        // Adding new variables for the report
         val selfinstallcost = this.selfinstallcost()
 
         // Delta is going to be Power Used * Percentage Power Reduced
@@ -249,13 +195,10 @@ class Incandescent(computable: Computable<*>, utilityRateGas: UtilityRate, utili
         val energySavings = preEnergy() * percentPowerReduced
         val coolingSavings = energySavings * cooling / seer
 
-
         val energyAtPostState = preEnergy() - energySavings
         val paybackmonth = selfinstallcost / energySavings * 12
         val paybackyear = selfinstallcost / energySavings
         val totalsavings = energySavings + coolingSavings + maintenanceSavings
-
-        //@k2interactive please make sure this works and is pushed out to the post CSV
         val controlCost = extractEquipmentCost(element)
         val measureCode = extractMeasureCode(element)
         val prescriptiveHours = extractAssumedHours(element)
@@ -272,7 +215,6 @@ class Incandescent(computable: Computable<*>, utilityRateGas: UtilityRate, utili
         postRow["__payback_month"] = paybackmonth.toString()
         postRow["__payback_year"] = paybackyear.toString()
         postRow["__total_savings"] = totalsavings.toString()
-        //@k2interactive
         postRow["__lighting_control_prescriptive_cost"] = controlCost.toString()
         postRow["__lighting_control_measure_code"] = measureCode.toString()
         postRow["__lighting_control_prescriptive_hours"] = prescriptiveHours.toString()
@@ -285,7 +227,6 @@ class Incandescent(computable: Computable<*>, utilityRateGas: UtilityRate, utili
         dataHolder.rows?.add(postRow)
 
         return -99.99
-
     }
 
     /**
@@ -380,15 +321,16 @@ class Incandescent(computable: Computable<*>, utilityRateGas: UtilityRate, utili
      * Energy Efficiency Lookup Query Definition
      * */
     override fun efficientLookup() = false
-    override fun queryEfficientFilter() = ""
+
+    override fun queryEfficientFilter() = queryControlPercentSaved()
     override fun queryControlPercentSaved() = JSONObject()
             .put("type", LightControls)
-            .put("data.Type", ControlType1)
+            .put("data.type", ControlType1)
             .toString()
 
     override fun queryControlPercentSaved2() = JSONObject()
             .put("type", LightControls)
-            .put("data.Type", ControlType2)
+            .put("data.type", ControlType2)
             .toString()
 
     override fun queryAssumedHours() = JSONObject()
@@ -404,17 +346,32 @@ class Incandescent(computable: Computable<*>, utilityRateGas: UtilityRate, utili
     /**
      * Define all the fields here - These would be used to Generate the Outgoing Rows or perform the Energy Calculation
      * */
-    override fun preAuditFields() = mutableListOf("General Client Info Name", "General Client Info Position", "General Client Info Email")
+    override fun preAuditFields() = mutableListOf(
+            "General Client Info Name",
+            "General Client Info Position",
+            "General Client Info Email")
+
     override fun featureDataFields() = getGFormElements().map { it.value.param!! }.toMutableList()
 
-    override fun preStateFields() = mutableListOf("")
-    override fun postStateFields() = mutableListOf("__lighting_control_measure_code", "__lighting_control_prescriptive_hours",
-            "__lighting_control_prescriptive_cost", "__lighting_control_prescriptive_savings",
-            "__lighting_control_prescriptive_percent", "__life_hours", "__maintenance_savings",
-            "__cooling_savings", "__energy_savings", "__energy_at_post_state", "__selfinstall_cost",
-            "__payback_month", "__payback_year", "__total_savings")
+    override fun preStateFields() = mutableListOf<String>()
 
-    override fun computedFields() = mutableListOf("")
+    override fun postStateFields() = mutableListOf(
+            "__lighting_control_measure_code",
+            "__lighting_control_prescriptive_hours",
+            "__lighting_control_prescriptive_cost",
+            "__lighting_control_prescriptive_savings",
+            "__lighting_control_prescriptive_percent",
+            "__life_hours",
+            "__maintenance_savings",
+            "__cooling_savings",
+            "__energy_savings",
+            "__energy_at_post_state",
+            "__selfinstall_cost",
+            "__payback_month",
+            "__payback_year",
+            "__total_savings")
+
+    override fun computedFields() = mutableListOf<String>()
 
     private fun getFormMapper() = FormMapper(context, R.raw.incandescent)
     private fun getModel() = getFormMapper().decodeJSON()
