@@ -247,9 +247,8 @@ class Motors(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRate
         postRow["__Gross_Savings_BLPM_circulator_pump"] = grossBEDkwhsavings.toString()
         postRow["__Net_Savings__BLPM_circulator_pump"] = netBEDkwhsavings.toString()
         //@k2interactive please make these active so that the they also spit out the values in the CSV
-        //TODO: @k2interactive please change the two immediately below to: "__VFD_Gross_Prescriptive_Energy" & "__VFD_Gross_Prescriptive_Demand"
-        postRow["__VFD_Prescriptive_Energy_Savings"] = VFDeSavings.toString()
-        postRow["__VFD_Prescriptive_Demand_Savings"] = VFDdSavings.toString()
+        postRow["__VFD_Gross_Prescriptive_Energy"] = VFDeSavings.toString()
+        postRow["__VFD_Gross_Prescriptive_Demand"] = VFDdSavings.toString()
         postRow["__VFD_Prescriptive_Install_Cost"] = VFDinstallCost.toString()
 
         dataHolder.header = postStateFields()
