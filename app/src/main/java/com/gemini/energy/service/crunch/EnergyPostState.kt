@@ -59,7 +59,7 @@ class EnergyPostState {
 
             val costMinimum = costCollector.min()
             val efficientAlternative = dataHolderPostState.rows?.filter {
-                it.getValue("__electric_cost").toDouble() == costMinimum
+                it.containsKey("__electric_cost") && it.getValue("__electric_cost").toDouble() == costMinimum
             }
 
             computable.energyPostStateLeastCost = efficientAlternative ?: mutableListOf()
