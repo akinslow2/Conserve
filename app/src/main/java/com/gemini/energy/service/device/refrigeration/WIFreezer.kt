@@ -389,10 +389,14 @@ class WIFreezer(computable: Computable<*>, utilityRateGas: UtilityRate, utilityR
 
     override fun featureDataFields() = getGFormElements().map { it.value.param!! }.toMutableList()
 
-    override fun preStateFields() = mutableListOf("")
-    override fun postStateFields() = mutableListOf("")
+    override fun preStateFields() = mutableListOf<String>()
+    override fun postStateFields() = mutableListOf(
+            "__HE_Condensing_Unit_Gross_kwh",
+            "__HE_Condensing_Unit_Gross_kw",
+            "__HE_Condensing_Unit_Net_kwh",
+            "__HE_Condensing_Unit_Net_kw")
 
-    override fun computedFields() = mutableListOf("")
+    override fun computedFields() = mutableListOf<String>()
 
     private fun getFormMapper() = FormMapper(context, R.raw.walkin_freezer)
     private fun getModel() = getFormMapper().decodeJSON()
