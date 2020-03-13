@@ -203,8 +203,6 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
     /**
      * Pre Audit Variables
      */
-// TODO: @k2interactive Please add make it so there are Monday operationhours (Moperationhours); Tuesday operation hours (Toperationhours) etc.
-//  for the entire week. Additionally I would like them called in the fun setup() and pushed in the preauditfields csv
     var clientname = ""
     var clientaddress = ""
     var businessname = ""
@@ -235,7 +233,6 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
 
     override fun setup() {
         try {
- // TODO: @k2interactive I changed this to match the parameters - but left the section name in front, not sure that is correct
             clientname = preAudit["General Client Info Name"]!! as String
             businessname = preAudit["General Client Info Business Name"]!! as String
             auditmonth = preAudit["General Client Info Audit Month"]!! as String
@@ -511,14 +508,28 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
     /**
      * Define all the fields here - These would be used to Generate the Outgoing Rows or perform the Energy Calculation
      * */
-    override fun preAuditFields() = mutableListOf("General Client Info Name",
-            "General Client Info Position", "General Client Info Email",
-            "General Client Info Business Name", "General Client Info Audit Month",
-            "General Client Info Audit Year", "General Client Info Address",
-            "General Client Info Assessment Start Day", "General Client Info Assessment End Day",
-            "Operation Hours Monday Operating Hours", "Area Total (Sq.Ft.)",
-            "Electric Utility Company", "Others Electric Rate Structure", "Others Gas Rate Structure",
-            "General Client Info Facility Type")
+    override fun preAuditFields() = mutableListOf(
+            "General Client Info Name",
+            "General Client Info Position",
+            "General Client Info Email",
+            "General Client Info Business Name",
+            "General Client Info Audit Month",
+            "General Client Info Audit Year",
+            "General Client Info Address",
+            "General Client Info Assessment Start Day",
+            "General Client Info Assessment End Day",
+            "Area Total (Sq.Ft.)",
+            "Electric Utility Company",
+            "Others Electric Rate Structure",
+            "Others Gas Rate Structure",
+            "General Client Info Facility Type",
+            "Operation Hours Monday Operating Hours",
+            "Operation Hours Tuesday Operating Hours",
+            "Operation Hours Wednesday Operating Hours",
+            "Operation Hours Thursday Operating Hours",
+            "Operation Hours Friday Operating Hours",
+            "Operation Hours Saturday Operating Hours",
+            "Operation Hours Sunday Operating Hours")
     override fun featureDataFields() = getGFormElements().map { it.value.param!! }.toMutableList()
 
     override fun preStateFields() = mutableListOf("heatingfuel", "coolingfuel")
