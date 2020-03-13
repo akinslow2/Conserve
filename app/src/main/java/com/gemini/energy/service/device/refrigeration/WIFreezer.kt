@@ -384,8 +384,19 @@ class WIFreezer(computable: Computable<*>, utilityRateGas: UtilityRate, utilityR
                 .toString()
     }
 
+    override fun queryReachIn(): String {
+        return JSONObject()
+                .put("type", "refrigeration_reachinfreezerrefrigerator")
+                .toString()
+    }
 
-    override fun preAuditFields() = mutableListOf("")
+    override fun queryReplacement(): String {
+        return JSONObject()
+                .put("type", "refrigeration_refrigeratorreplacement")
+                .toString()
+    }
+
+    override fun preAuditFields() = mutableListOf<String>()
 
     override fun featureDataFields() = getGFormElements().map { it.value.param!! }.toMutableList()
 
