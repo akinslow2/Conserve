@@ -186,6 +186,10 @@ class WIFreezer(computable: Computable<*>, utilityRateGas: UtilityRate, utilityR
 
     var fanmotortype = ""
     var temprange = ""
+    var Nfan = 0
+
+    var electricstructure = ""
+
 
     override fun setup() {
         try {
@@ -193,11 +197,19 @@ class WIFreezer(computable: Computable<*>, utilityRateGas: UtilityRate, utilityR
             quantity = featureData["Quantity"]!! as Int
 
             age = featureData["Age"]!! as Int
+
+           // TODO: @k2interactive the two variables below should be a double and int respectively just want to make sure that is happening here.
             condesorCompressor = (featureData["Condensor Compressor Size (HP)"]!! as String).toDoubleOrNull()
                     ?: 0.0
             condensorCompressorphase = (featureData["Compressor Phase"]!! as String).toIntOrNull()
                     ?: 0
             condensorTemp = featureData["Temp"]!! as String
+
+            // TODO: @k2interactive please check the parameter directly below for any errors.
+            //  I added them to the input parameter excel sheet as well. See new input parameters in dropbox.
+            Nfan = featureData["Quantity of fans"]!! as Int
+            electricstructure = preAudit["Others Electric Rate Structure"]!! as String
+
 
             motortype = featureData["Motor Type"]!! as String
             fridgetype = featureData["Refrigeration Type"]!! as String
@@ -251,7 +263,8 @@ class WIFreezer(computable: Computable<*>, utilityRateGas: UtilityRate, utilityR
 //        sum of the gross energy savings pulled from the PARSE
         return 0.0
     }
-
+    // TODO: @k2interactive equations to bring out of comment
+    
     /** Condensing unit gross and net savings: energy (kwh) and demand (kw)
     CU_gross_energy_savings = extractCondensingUnitcompressorkWh(element) +
     extractCondensingUnitcondensorkWh(element) + extractCondensingUnitheadkWh(element)
@@ -280,9 +293,71 @@ class WIFreezer(computable: Computable<*>, utilityRateGas: UtilityRate, utilityR
     (extractCondensingUnitheadkW(element) * (1 + 0.112) * (1 + 1 – 1) * 0.0)
 
     // CSV header should be titled __HE_Condensing_Unit_Net_kw
+     */
+
+     // TODO: @k2interactive equations to bring out of comment
+    /** Evaporator fan coil control measure gross and net savings: energy (kwh) and demand (kw)
+
+    evapFancontrol_gross_energy_savings = extractEvapFanMotorControlskWh(element) * Nfan
+
+    // CSV header should be titled __EVAP_Fan_Control_Gross_kwh
+
+    evapFancontrol_demand_savings = extractEvapFanMotorControlskW(element) * Nfan
+
+    // CSV header should be titled __EVAP_Fan_Control_Gross_kw
+
+    evapFancontrol_net_energy_savings = (evapFancontrol_gross_energy_savings * (1 + 0.121) * (0.95 + 1.05 – 1) * 0.59) +
+                                        (evapFancontrol_gross_energy_savings * (1 + 0.149) * (0.95 + 1.05 – 1) * 0.41)
+
+    // CSV header should be titled __EVAP_Fan_Control_Net_kwh
+
+    evapFancontrol_net_demand_savings = (evapFancontrol_demand_savings * (1 + 0.113) * (1 + 1 – 1) * 0.831) +
+                                        (evapFancontrol_demand_savings * (1 + 0.112) * (1 + 1 – 1) * 0.831)
+
+    // CSV header should be titled __EVAP_Fan_Control_Net_kw
+
+    evapFancontrol_cost = extractEvapFanMotorControlsCost(element) * Nfan
+
+     // CSV header should be titled __EVAP_Fan_Control_Cost
+
+    // TODO: @k2interactive please make it so this measure code is pushed to the CSV only if the PARSE pulls a value down.
+    val measureCode = if (extractEvapFanMotorControlskWh(element) != Null) {
+    return "RFRFMCON" .....
+
+    //CSV header should be titled __measure_code
+
+     */
+
+    // TODO: @k2interactive equations to bring out of comment
+    /** Evaporator fan motor replacement measure gross and net savings: energy (kwh) and demand (kw)
+
+    evapFanmotor_gross_energy_savings = extractEvapFanMotorkWh(element)
+
+    // CSV header should be titled __EVAP_Fan_Motor_Gross_kwh
+
+    evapFanmotor_demand_savings = extractEvapFanMotorkW(element)
+
+    // CSV header should be titled __EVAP_Fan_Motor_Gross_kw
+
+    evapFanmotor_net_energy_savings = (evapFanmotor_gross_energy_savings * (1 + 0.121) * (0.95 + 1.05 – 1) * 0.524) +
+                                        (evapFanmotor_gross_energy_savings * (1 + 0.149) * (0.95 + 1.05 – 1) * 0.476)
+
+    // CSV header should be titled __EVAP_Fan_Motor_Net_kwh
+
+    evapFanmotor_net_demand_savings = (evapFanmotor_demand_savings * (1 + 0.113) * (1 + 1 – 1) * 1) +
+                                        (evapFanmotor_demand_savings * (1 + 0.112) * (1 + 1 – 1) * 1)
+
+    // CSV header should be titled __EVAP_Fan_Motor_Net_kw
+
+    evapFanmotor_cost = extractEvapFanMotorIncrementalCost(element)
+
+    // CSV header should be titled __EVAP_Fan_Motor_Retrofit_Cost
 
 
      */
+
+
+
     /**
      * Cost - Post State
      * */
@@ -336,7 +411,11 @@ class WIFreezer(computable: Computable<*>, utilityRateGas: UtilityRate, utilityR
     override fun energyPowerChange(): Double {
         return 0.0 // TODO: AK2 needs to calculate
     }
-
+// TODO: @k2interactive currently the way to get cost from energy is with the function costElectricity(eSavings, usageHours, electricityRate) this requires
+//  power (e.g., eSavings), hours (e.g., usageHours), and electricityRate. I would like two more functions to create cost.
+//  The first requires energy and electricityRate.
+//  The second, requires power and demandRate. I believe the variable demandRate will need to be created. demandRate would be demand_charge column in the BED_electric.csv
+//  UtilityRate.kt may be useful in this endeavor. The current costElectricity function is in EBase.kt line 602
     fun totalSavings(): Double {
         return energyPowerChange() * .15 // TODO: AK2 needs to calculate this
     }
@@ -383,7 +462,8 @@ class WIFreezer(computable: Computable<*>, utilityRateGas: UtilityRate, utilityR
                 .put("data.temperature_range", temprange)
                 .toString()
     }
-
+// TODO: @k2interactive these two below do not need to be in any of the Refrigeration classes that start with WI...
+//  as they are for normal refrigerators and freezers not Walkin-Ins (WI). Please move them to freezer and refrigerator classes
     override fun queryReachIn(): String {
         return JSONObject()
                 .put("type", "refrigeration_reachinfreezerrefrigerator")

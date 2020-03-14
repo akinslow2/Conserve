@@ -149,7 +149,7 @@ class Gas(private val rateStructure: String = "", private val companyCode: Strin
 
         return outgoing
     }
-
+// TODO: @k2interactive I think the way the code below is setup, if I delete pge_gas the platform would be messed up. Is that correct?
     // HACK - don't have all files for company codes, use this for now
 //    override fun getResourcePath() = "utility/${companyCode}_gas.csv"
     override fun getResourcePath() = "utility/pge_gas.csv"
