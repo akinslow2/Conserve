@@ -264,7 +264,7 @@ class WIFreezer(computable: Computable<*>, utilityRateGas: UtilityRate, utilityR
         return 0.0
     }
     // TODO: @k2interactive equations to bring out of comment
-    
+
     /** Condensing unit gross and net savings: energy (kwh) and demand (kw)
     CU_gross_energy_savings = extractCondensingUnitcompressorkWh(element) +
     extractCondensingUnitcondensorkWh(element) + extractCondensingUnitheadkWh(element)
