@@ -269,6 +269,10 @@ class WIRefrigerator(computable: Computable<*>, utilityRateGas: UtilityRate, uti
                         (extractCondensingUnitHeadkW(element) * (1 + 0.113) * (1 + 1 - 1) * 1) +
                         (extractCondensingUnitHeadkW(element) * (1 + 0.112) * (1 + 1 - 1) * 0.0)
 
+
+//        @Anthony should we add fan control and fan motor savings and costs here?
+
+
         grosskwhSavings = cuGrossEnergySavings + cuNetEnergySavings
 
         // Prepare data for csv
