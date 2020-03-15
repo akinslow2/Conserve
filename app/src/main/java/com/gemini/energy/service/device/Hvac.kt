@@ -33,7 +33,6 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
     }
 
     companion object {
-
         /**
          * Conversion Factor from Watts to Kilo Watts
          * */
@@ -68,14 +67,14 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
          * Fetches the EER based on the specific Match Criteria via the Parse API
 
         fun extractEER(elements: List<JsonElement?>): Double {
-            elements.forEach {
-                it?.let {
-                    if (it.asJsonObject.has("eer")) {
-                        return it.asJsonObject.get("eer").asDouble
-                    }
-                }
-            }
-            return 0.0
+        elements.forEach {
+        it?.let {
+        if (it.asJsonObject.has("eer")) {
+        return it.asJsonObject.get("eer").asDouble
+        }
+        }
+        }
+        return 0.0
         }
 
         /**
@@ -84,16 +83,17 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
          * This is used to calculate the Energy
          * */
         fun extractHours(elements: List<JsonElement?>): Int {
-            elements.forEach {
-                it?.let {
-                    if (it.asJsonObject.has("hours")) {
-                        return it.asJsonObject.get("hours").asInt
-                    }
-                }
-            }
-            return 0
+        elements.forEach {
+        it?.let {
+        if (it.asJsonObject.has("hours")) {
+        return it.asJsonObject.get("hours").asInt
         }
-        * */
+        }
+        }
+        return 0
+        }
+         * */
+
         /**
          * HVAC - Power Consumed
          * There could be a case where the User will input the value in KW - If that happens we need to convert the KW
@@ -112,10 +112,10 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
             return dateFormatter.format(calendar.time).toInt()
         }
 
-        fun firstNotNull (valueFirst: Double, valueSecond: Double) =
+        fun firstNotNull(valueFirst: Double, valueSecond: Double) =
                 if (valueFirst == 0.0) valueSecond else valueFirst
 
-        fun firstNotNull (valueFirst: Int, valueSecond: Int) =
+        fun firstNotNull(valueFirst: Int, valueSecond: Int) =
                 if (valueFirst == 0) valueSecond else valueFirst
     }
 
@@ -136,14 +136,12 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
      * */
     var age = 0
 
-
     /**
      * HVAC - British Thermal Unit
      * */
     var btu = 0
     private var gasInput = 0
     private var gasOutput = 0
-
 
     /**
      * City | State
@@ -254,9 +252,9 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
 
         // Extracting the EER from the Database - Standard EER
         // If no value has been inputted by the user
-       // if (eer == 0.0) {
+        // if (eer == 0.0) {
         //    eer = extractEER(elements)
-       // }
+        // }
 
         Timber.d("::: PARAM - HVAC :::")
         Timber.d("EER -- $eer")
@@ -280,10 +278,8 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
 
         Timber.d("HVAC :: Pre Power Used -- [$powerUsed]")
 
-
         return costElectricity(powerUsed, usageHours, electricityRate)
     }
-
 
     /**
      * Cost - Post State
@@ -311,17 +307,15 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
         dataHolder.fileName = "${Date().time}_post_state.csv"
         dataHolder.rows?.add(postRow)
 
-       // try {
-       //     postSize = element.asJsonObject.get(HVAC_DB_BTU).asInt
+        // try {
+//            postSize = element.asJsonObject.get(HVAC_DB_BTU).asInt
         //    postEER = element.asJsonObject.get(HVAC_DB_EER).asDouble
         //} catch (e: Exception) {
         //    e.printStackTrace()
         //}
 
         val postPowerUsed = power(postSize, postSEER)
-
         val postUsageHours = UsageSimple(peakHours, partPeakHours, offPeakHours)
-
 
         return costElectricity(postPowerUsed, postUsageHours, electricityRate)
     }
@@ -332,6 +326,7 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
     override fun buildPostState(): Single<JsonObject> {
         val element = JsonObject()
         val data = JsonObject()
+
         data.addProperty("eer", firstNotNull(alternateSeer, alternateEer))
         data.addProperty("size_btu_hr", alternateBtu)
 
@@ -376,9 +371,8 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
     /**
      * PowerTimeChange >> Yearly Usage Hours - [Pre | Post]
      * */
-    override fun usageHoursPre(): Double {
-        return peakHours + partPeakHours + offPeakHours
-    }
+    override fun usageHoursPre() = peakHours + partPeakHours + offPeakHours
+
     override fun usageHoursPost(): Double = 0.0
 
     /**
@@ -386,8 +380,7 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
      * I need to insert the heating and cooling hours based on set-point temp, operation hours, and thermostat schedule
      * */
     override fun energyPowerChange(): Double {
-
-          // Step 3 : Get the Delta
+        // Step 3 : Get the Delta
         val powerPre = btu / seer / 1000
         val powerPost = btu / alternateSeer / 1000
         val eSavings = (powerPre - powerPost)
@@ -402,15 +395,13 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
         val powerPre = btu / seer / 1000
         val powerPost = btu / alternateSeer / 1000
         var eSavings = (powerPre - powerPost)
-            val usageHours = UsageLighting()
-            usageHours.peakHours = peakHours
-            usageHours.partPeakHours = partPeakHours
-            usageHours.offPeakHours = offPeakHours
-            return costElectricity(eSavings, usageHours, electricityRate)
-            //return 296.0 just for testing
+        val usageHours = UsageLighting()
+        usageHours.peakHours = peakHours
+        usageHours.partPeakHours = partPeakHours
+        usageHours.offPeakHours = offPeakHours
+        return costElectricity(eSavings, usageHours, electricityRate)
+        //return 296.0 just for testing
     }
-
-
 
     override fun energyTimeChange(): Double = 0.0
     override fun energyPowerTimeChange(): Double = 0.0
@@ -420,6 +411,7 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
      * */
     override fun efficientLookup() =
             (firstNotNull(alternateSeer, alternateEer) == 0.0 || alternateBtu == 0)
+
     override fun queryEfficientFilter() = JSONObject()
             .put("type", HVAC_EFFICIENCY)
             .put("data.size_btu_hr", btu)

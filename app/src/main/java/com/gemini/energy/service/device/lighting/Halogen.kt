@@ -30,7 +30,6 @@ class Halogen(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRat
     }
 
     companion object {
-
         private const val LightControls = "lighting_lightingcontrols"
         private const val ControlHours = "lighting_lightingcontrolhours"
 
@@ -39,30 +38,26 @@ class Halogen(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRat
          * via the Parse API
          * */
         fun extractControlPercentSaved(element: JsonElement): Double {
-            if (element.asJsonObject.has("percent_savings")) {
+            if (element.asJsonObject.has("percent_savings"))
                 return element.asJsonObject.get("percent_savings").asDouble
-            }
             return 0.0
         }
 
         fun extractEquipmentCost(element: JsonElement): Double {
-            if (element.asJsonObject.has("equipment_cost")) {
+            if (element.asJsonObject.has("equipment_cost"))
                 return element.asJsonObject.get("equipment_cost").asDouble
-            }
             return 0.0
         }
 
         fun extractMeasureCode(element: JsonElement): String {
-            if (element.asJsonObject.has("measure_code")) {
+            if (element.asJsonObject.has("measure_code"))
                 return element.asJsonObject.get("measure_code").asString
-            }
             return ""
         }
 
         fun extractAssumedHours(element: JsonElement): Double {
-            if (element.asJsonObject.has("hours")) {
+            if (element.asJsonObject.has("hours"))
                 return element.asJsonObject.get("hours").asDouble
-            }
             return 0.0
         }
     }
@@ -127,10 +122,6 @@ class Halogen(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRat
             alternateNumberOfFixtures = featureData["Alternate Number of Fixtures"]!! as Int
             alternateLampsPerFixture = featureData["Alternate Lamps Per Fixture"]!! as Int
 
-//            postpeakHours = featureData["Suggested Peak Hours"]!! as Double
-//            postpartPeakHours = featureData["Suggested Part Peak Hours"]!! as Double
-//            postoffPeakHours = featureData["Suggested Off Peak Hours"]!! as Double
-
             controls = featureData["Type of Control"]!! as String
 
         } catch (e: Exception) {
@@ -147,11 +138,11 @@ class Halogen(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRat
         usageHours.peakHours = peakHours
         usageHours.partPeakHours = partPeakHours
         usageHours.offPeakHours = offPeakHours
-        if (usageHours.yearly() < 1.0) {
+
+        if (usageHours.yearly() < 1.0)
             return preauditHours.yearly()
-        } else {
+        else
             return usageHours.yearly()
-        }
     }
 
     fun preEnergy(): Double {
@@ -167,12 +158,10 @@ class Halogen(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRat
      * Cost - Pre State
      * */
     override fun costPreState(element: List<JsonElement?>): Double {
-
         val usageHours = UsageLighting()
         usageHours.peakHours = peakHours
         usageHours.partPeakHours = partPeakHours
         usageHours.offPeakHours = offPeakHours
-
 
         return costElectricity(prePower(), usageHours, electricityRate)
     }
@@ -202,7 +191,6 @@ class Halogen(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRat
 
         val energySavings = preEnergy() * percentPowerReduced
         val coolingSavings = energySavings * cooling / seer
-
 
         val energyAtPostState = preEnergy() - energySavings
         val paybackmonth = selfinstallcost / energySavings * 12
@@ -236,7 +224,6 @@ class Halogen(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRat
         dataHolder.rows?.add(postRow)
 
         return -99.99
-
     }
 
     /**
@@ -260,44 +247,35 @@ class Halogen(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRat
         postusageHours.postpartPeakHours = postpartPeakHours
         postusageHours.postoffPeakHours = postoffPeakHours
 
-        if (postusageHours.yearly() == null) {
+        if (postusageHours.yearly() > 1.0)
             return usageHoursPre()
-        } else {
-            return postusageHours.yearly()
-        }
+
+        return postusageHours.yearly()
     }
 
     /**
      * PowerTimeChange >> Energy Efficiency Calculations
      * */
-    override fun energyPowerChange(): Double {
-        return preEnergy() * (1 - percentPowerReduced)
-    }
+    override fun energyPowerChange() =
+            preEnergy() * (1 - percentPowerReduced)
 
-    override fun energyTimeChange(): Double {
-        return actualWatts * numberOfFixtures * lampsPerFixtures / 1000 * usageHoursPost()
+    override fun energyTimeChange() =
+            actualWatts * numberOfFixtures * lampsPerFixtures / 1000 * usageHoursPost()
 
-    }
+    override fun energyPowerTimeChange() =
+            prePower() * percentPowerReduced * usageHoursPost()
 
-    override fun energyPowerTimeChange(): Double {
-        return prePower() * percentPowerReduced * usageHoursPost()
-    }
+    fun postPower() =
+            prePower() * (1 - percentPowerReduced)
 
-    fun postPower(): Double {
-        return prePower() * (1 - percentPowerReduced)
-    }
+    fun postEnergy() =
+            preEnergy() - energySavings()
 
-    fun postEnergy(): Double {
-        return preEnergy() - energySavings()
-    }
+    fun energySavings() =
+            preEnergy() * percentPowerReduced
 
-    fun energySavings(): Double {
-        return preEnergy() * percentPowerReduced
-    }
-
-    fun selfinstallcost(): Double {
-        return ledbulbcost * alternateNumberOfFixtures * alternateLampsPerFixture
-    }
+    fun selfinstallcost() =
+            ledbulbcost * alternateNumberOfFixtures * alternateLampsPerFixture
 
     fun totalEnergySavings(): Double {
         if (controls == "yes") {
@@ -310,7 +288,6 @@ class Halogen(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRat
             val coolingSavings = (preEnergy() - energyPowerTimeChange()) * cooling / seer
             return (preEnergy() - energyPowerTimeChange()) + coolingSavings
         }
-
     }
 
     fun totalSavings(): Double {
@@ -392,5 +369,4 @@ class Halogen(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRat
     private fun getFormMapper() = FormMapper(context, R.raw.halogen)
     private fun getModel() = getFormMapper().decodeJSON()
     private fun getGFormElements() = getFormMapper().mapIdToElements(getModel())
-
 }

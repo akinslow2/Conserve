@@ -37,32 +37,27 @@ class LinearFluorescent(computable: Computable<*>, utilityRateGas: UtilityRate, 
          * Fetches the Deemed Criteria at once
          * via the Parse API
          * */
-
         fun extractControlPercentSaved(element: JsonElement): Double {
-            if (element.asJsonObject.has("percent_savings")) {
+            if (element.asJsonObject.has("percent_savings"))
                 return element.asJsonObject.get("percent_savings").asDouble
-            }
             return 0.0
         }
 
         fun extractEquipmentCost(element: JsonElement): Double {
-            if (element.asJsonObject.has("equipment_cost")) {
+            if (element.asJsonObject.has("equipment_cost"))
                 return element.asJsonObject.get("equipment_cost").asDouble
-            }
             return 0.0
         }
 
         fun extractMeasureCode(element: JsonElement): String {
-            if (element.asJsonObject.has("measure_code")) {
+            if (element.asJsonObject.has("measure_code"))
                 return element.asJsonObject.get("measure_code").asString
-            }
             return ""
         }
 
         fun extractAssumedHours(element: JsonElement): Double {
-            if (element.asJsonObject.has("hours")) {
+            if (element.asJsonObject.has("hours"))
                 return element.asJsonObject.get("hours").asDouble
-            }
             return 0.0
         }
 
@@ -127,6 +122,7 @@ class LinearFluorescent(computable: Computable<*>, utilityRateGas: UtilityRate, 
     private var suggestedControlType1 = ""
     private var suggestedControlType2 = ""
 
+
     override fun setup() {
         try {
             actualWatts = featureData["Actual Watts"]!! as Double
@@ -180,20 +176,16 @@ class LinearFluorescent(computable: Computable<*>, utilityRateGas: UtilityRate, 
         return actualWatts * totalUnitsPre * 0.001 * usageHoursPre()
     }
 
-    fun prePower(): Double {
-        return actualWatts * numberOfFixtures * lampsPerFixtures / 1000
-    }
+    fun prePower() = actualWatts * numberOfFixtures * lampsPerFixtures / 1000
 
     /**
      * Cost - Pre State
      * */
     override fun costPreState(element: List<JsonElement?>): Double {
-
         val usageHours = UsageLighting()
         usageHours.peakHours = peakHours
         usageHours.partPeakHours = partPeakHours
         usageHours.offPeakHours = offPeakHours
-
 
         return costElectricity(prePower(), usageHours, electricityRate)
     }
@@ -256,7 +248,6 @@ class LinearFluorescent(computable: Computable<*>, utilityRateGas: UtilityRate, 
         dataHolder.rows?.add(postRow)
 
         return -99.99
-
     }
 
     /**
@@ -272,15 +263,13 @@ class LinearFluorescent(computable: Computable<*>, utilityRateGas: UtilityRate, 
     /**
      * Post Yearly Usage Hours
      * */
-
-
     override fun usageHoursPost(): Double {
         val postusageHours = UsageLighting()
         postusageHours.postpeakHours = postpeakHours
         postusageHours.postpartPeakHours = postpartPeakHours
         postusageHours.postoffPeakHours = postoffPeakHours
 
-        if (postusageHours.yearly() == null) {
+        if (postusageHours.yearly() < 1.0) {
             return usageHoursPre()
         } else {
             return postusageHours.yearly()
@@ -290,34 +279,20 @@ class LinearFluorescent(computable: Computable<*>, utilityRateGas: UtilityRate, 
     /**
      * PowerTimeChange >> Energy Efficiency Calculations
      * */
-    override fun energyPowerChange(): Double {
-        return preEnergy() * (1 - percentPowerReduced)
-    }
+    override fun energyPowerChange() = preEnergy() * (1 - percentPowerReduced)
 
-    override fun energyTimeChange(): Double {
-        return actualWatts * numberOfFixtures * lampsPerFixtures / 1000 * usageHoursPost()
+    override fun energyTimeChange() =
+            actualWatts * numberOfFixtures * lampsPerFixtures / 1000 * usageHoursPost()
 
-    }
+    override fun energyPowerTimeChange() = prePower() * percentPowerReduced * usageHoursPost()
 
-    override fun energyPowerTimeChange(): Double {
-        return prePower() * percentPowerReduced * usageHoursPost()
-    }
+    fun postPower() = prePower() * (1 - percentPowerReduced)
 
-    fun postPower(): Double {
-        return prePower() * (1 - percentPowerReduced)
-    }
+    fun postEnergy() = preEnergy() - energySavings()
 
-    fun postEnergy(): Double {
-        return preEnergy() - energySavings()
-    }
+    fun energySavings() = preEnergy() * percentPowerReduced
 
-    fun energySavings(): Double {
-        return preEnergy() * percentPowerReduced
-    }
-
-    fun selfinstallcost(): Double {
-        return ledbulbcost * alternateNumberOfFixtures * alternateLampsPerFixture
-    }
+    fun selfinstallcost() = ledbulbcost * alternateNumberOfFixtures * alternateLampsPerFixture
 
     fun totalEnergySavings(): Double {
         if (controls == "Yes") {
@@ -330,7 +305,6 @@ class LinearFluorescent(computable: Computable<*>, utilityRateGas: UtilityRate, 
             val coolingSavings = (preEnergy() - energyPowerTimeChange()) * cooling / seer
             return (preEnergy() - energyPowerTimeChange()) + coolingSavings
         }
-
     }
 
     fun totalSavings(): Double {
@@ -405,7 +379,6 @@ class LinearFluorescent(computable: Computable<*>, utilityRateGas: UtilityRate, 
             "__total_savings")
 
     override fun computedFields() = mutableListOf("")
-
     private fun getFormMapper() = FormMapper(context, R.raw.linearfluorescent)
     private fun getModel() = getFormMapper().decodeJSON()
     private fun getGFormElements() = getFormMapper().mapIdToElements(getModel())

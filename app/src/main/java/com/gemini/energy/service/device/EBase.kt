@@ -28,7 +28,7 @@ abstract class EBase(val computable: Computable<*>,
                      private val utilityRateGas: UtilityRate,
                      private val utilityRateElectricity: UtilityRate,
                      val operatingHours: UsageHours,
-                     val outgoingRows: OutgoingRows)  {
+                     val outgoingRows: OutgoingRows) {
 
     lateinit var schedulers: Schedulers
     lateinit var gasRate: UtilityRate
@@ -38,6 +38,7 @@ abstract class EBase(val computable: Computable<*>,
 
     var preAudit: Map<String, Any> = mapOf()
     var featureData: Map<String, Any> = mapOf()
+
     //ToDo: Should make the initializers different for gas and electricity
     var electricRateStructure: String = RATE
     var gasRateStructure: String = RATE
@@ -97,7 +98,6 @@ abstract class EBase(val computable: Computable<*>,
         Timber.d("####### OBJECT CHECKER #######")
         Timber.d(gasRate.toString())
         Timber.d(electricityRate.toString())
-
     }
 
     /**
@@ -317,6 +317,7 @@ abstract class EBase(val computable: Computable<*>,
 
     //ToDo - Where is this used ?? Cleanup
     abstract fun preStateFields(): MutableList<String>
+
     abstract fun postStateFields(): MutableList<String>
 
     //ToDo - Where is this used ?? Cleanup
@@ -328,18 +329,21 @@ abstract class EBase(val computable: Computable<*>,
      * The Equipment Classes define how the calculations are supposed to be done
      * */
     abstract fun costPreState(elements: List<JsonElement?>): Double
+
     abstract fun costPostState(element: JsonElement, dataHolder: DataHolder): Double
 
     /**
      * Power Time Change
      * */
     abstract fun hourlyEnergyUsagePre(): List<Double>
+
     abstract fun hourlyEnergyUsagePost(element: JsonElement): List<Double>
 
     /**
      * Other Costs
      * */
     open fun materialCost() = 0.0
+
     open fun laborCost() = 0.0
     open fun incentives() = 0.0
 
@@ -357,6 +361,7 @@ abstract class EBase(val computable: Computable<*>,
      * Energy Efficiency Calculations
      * */
     abstract fun energyPowerChange(): Double
+
     abstract fun energyTimeChange(): Double
     abstract fun energyPowerTimeChange(): Double
 
@@ -391,13 +396,16 @@ abstract class EBase(val computable: Computable<*>,
      * Need a better alternative that covers the Use-Case where the query parameters can be specific to the
      * States.
      * */
-    // hvac queries
+
+    /** hvac queries **/
     open fun queryHVACCoolingHours() = ""
+
     open fun queryHVACEer() = ""
     open fun queryMotorVFDprescriptive() = ""
 
-    // refrigeration queries
+    /** refrigeration queries **/
     open fun queryCondensingUnit() = ""
+
     open fun queryEvaporatorFanMotor() = ""
     open fun queryEvaporatorFanMotorControls() = ""
     open fun queryReachIn() = ""
@@ -413,13 +421,13 @@ abstract class EBase(val computable: Computable<*>,
     /**
      * Thermostat Query
      */
-
     open fun queryThermostatDeemed() = ""
 
     /**
      * Light Controls
      */
     open fun queryControlPercentSaved() = ""
+
     open fun queryControlPercentSaved2() = ""
     open fun queryAssumedHours() = ""
 
@@ -428,9 +436,9 @@ abstract class EBase(val computable: Computable<*>,
      * Get the Specific Query Result from the Parse API
      * */
     private fun starValidator(query: String): Observable<Boolean> {
-        if (query.isEmpty()) {
+        if (query.isEmpty())
             return Observable.just(false)
-        }
+
         return parseAPIService.fetchPlugload(query)
                 .map { it.getAsJsonArray("results").size() == 0 }
                 .toObservable()
@@ -474,23 +482,23 @@ abstract class EBase(val computable: Computable<*>,
                 else buildPostState()
 
         val result = when (computable.auditScopeType) {
-            EZoneType.HVAC          -> switcherHVAC()
+            EZoneType.HVAC -> switcherHVAC()
             EZoneType.Lighting -> switcherLighting()
             EZoneType.Motors -> switcherMotors()
-            EZoneType.Plugload      -> switcherPlugload()
+            EZoneType.Plugload -> switcherPlugload()
             EZoneType.Refrigeration -> switcherRefrigeration()
             EZoneType.Thermostat -> switcherThermostat()
             EZoneType.WaterHeater -> switcherWaterHeater()
-            else                    -> buildPostState() // This gives an empty JSON !!
+            else -> buildPostState() // This gives an empty JSON !!
         }
 
         return result.map { it.getAsJsonArray("results") }.toObservable()
     }
 
     private fun laborCost(query: String): Observable<JsonArray> {
-        if (query.isEmpty()) {
+        if (query.isEmpty())
             return Observable.just(JsonArray())
-        }
+
         return parseAPIService.fetchLaborCost(query)
                 .map { it.getAsJsonArray("results") }
                 .toObservable()
@@ -498,49 +506,50 @@ abstract class EBase(val computable: Computable<*>,
 
 
     private fun dataExtractHVAC(query: String): Observable<JsonArray> {
-        if (query.isEmpty()) {
+        if (query.isEmpty())
             return Observable.just(JsonArray())
-        }
+
         return parseAPIService.fetchHVAC(query)
                 .map { it.getAsJsonArray("results") }
                 .toObservable()
     }
 
     private fun dataExtractMotors(query: String): Observable<JsonArray> {
-        if (query.isEmpty()) {
+        if (query.isEmpty())
             return Observable.just(JsonArray())
-        }
+
         return parseAPIService.fetchMotors(query)
                 .map { it.getAsJsonArray("results") }
                 .toObservable()
     }
 
     private fun dataExtractThermostat(query: String): Observable<JsonArray> {
-        if (query.isEmpty()) {
+        if (query.isEmpty())
             return Observable.just(JsonArray())
-        }
+
         return parseAPIService.fetchThermostat(query)
                 .map { it.getAsJsonArray("results") }
                 .toObservable()
     }
 
     private fun dataExtractLightControls(query: String): Observable<JsonArray> {
-        if (query.isEmpty()) {
+        if (query.isEmpty())
             return Observable.just(JsonArray())
-        }
+
         return parseAPIService.fetchLightControls(query)
                 .map { it.getAsJsonArray("results") }
                 .toObservable()
     }
 
     private fun dataExtractRefrigerationControls(query: String): Observable<JsonArray> {
-        if (query.isEmpty()) {
+        if (query.isEmpty())
             return Observable.just(JsonArray())
-        }
+
         return parseAPIService.fetchRefrigerationControls(query)
                 .map { it.getAsJsonArray("results") }
                 .toObservable()
     }
+
     /**
      * UsageHours Hours
      * 1. Pre - Business Hours (Found at PreAudit)
@@ -552,11 +561,11 @@ abstract class EBase(val computable: Computable<*>,
         for (eDay in EDay.values()) {
             //This key is fixed as the Section Name is being appended to Element Key
             val fixed = "Operation Hours " + eDay.value
-            if (preAudit.containsKey(fixed)) {
+
+            if (preAudit.containsKey(fixed))
                 usage.add(preAudit[fixed] as String)
-            } else {
+            else
                 usage.add("")
-            }
         }
 
         Timber.d(usage.toString())
@@ -570,11 +579,10 @@ abstract class EBase(val computable: Computable<*>,
         val usage = mutableListOf<String>()
 
         for (eDay in EDay.values()) {
-            if (featureData.containsKey(eDay.value)) {
+            if (featureData.containsKey(eDay.value))
                 usage.add(featureData[eDay.value] as String)
-            } else {
+            else
                 usage.add("")
-            }
         }
 
         Timber.d(usage.toString())
@@ -600,7 +608,7 @@ abstract class EBase(val computable: Computable<*>,
      * ToDo: The Gas Rate should be an Average calculated from all the Rates for that Year.
      * */
     fun costGas(energyUsed: Double): Double {
-        val gas= gasRate.nonTimeOfUse()
+        val gas = gasRate.nonTimeOfUse()
         val rateFirst = (gas.summerNone() + gas.winterNone()) / 2
         val rateExcess = (gas.summerExcess() + gas.winterExcess()) / 2
 
@@ -626,10 +634,11 @@ abstract class EBase(val computable: Computable<*>,
     }
 
     fun lightingConfig(type: ELightingType) = when (type) {
-                ELightingType.CFL -> listOf(15000.0, 0.25, 0.8)
-                ELightingType.Halogen -> listOf(5000.0, 0.75, 0.95)
-                ELightingType.Incandescent -> listOf(2500.0, 0.9, 0, 9)
-                ELightingType.LinearFluorescent -> listOf(10000.0, 0.85, 0.85)
-                ELightingType.HPSodium -> listOf(24000.0, 0.25, 0.85)
-                ELightingType.LPSodium -> listOf(18000.0, 0.25, 0.85)}
+        ELightingType.CFL -> listOf(15000.0, 0.25, 0.8)
+        ELightingType.Halogen -> listOf(5000.0, 0.75, 0.95)
+        ELightingType.Incandescent -> listOf(2500.0, 0.9, 0, 9)
+        ELightingType.LinearFluorescent -> listOf(10000.0, 0.85, 0.85)
+        ELightingType.HPSodium -> listOf(24000.0, 0.25, 0.85)
+        ELightingType.LPSodium -> listOf(18000.0, 0.25, 0.85)
+    }
 }

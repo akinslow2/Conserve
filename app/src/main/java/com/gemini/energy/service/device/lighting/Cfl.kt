@@ -30,7 +30,6 @@ class Cfl(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEle
     }
 
     companion object {
-
         private const val LightControls = "lighting_lightingcontrols"
         private const val ControlHours = "lighting_lightingcontrolhours"
 
@@ -38,7 +37,6 @@ class Cfl(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEle
          * Fetches the Deemed Criteria at once
          * via the Parse API
          * */
-
         fun extractControlPercentSaved(element: JsonElement): Double {
             if (element.asJsonObject.has("percent_savings")) {
                 return element.asJsonObject.get("percent_savings").asDouble
@@ -67,6 +65,7 @@ class Cfl(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEle
             return 0.0
         }
     }
+
     //create variable here if you want to make it global to the class with private
     private var percentPowerReduced = 0.0
     private var actualWatts = 0.0
@@ -75,7 +74,6 @@ class Cfl(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEle
     private var peakHours = 0.0
     private var partPeakHours = 0.0
     var offPeakHours = 0.0
-
 
     private var ControlType1 = ""
     private var ControlType2 = ""
@@ -132,6 +130,7 @@ class Cfl(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEle
             e.printStackTrace()
         }
     }
+
     /**
      * Time | Energy | Power - Pre State
      * */
@@ -141,9 +140,11 @@ class Cfl(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEle
         usageHours.peakHours = peakHours
         usageHours.partPeakHours = partPeakHours
         usageHours.offPeakHours = offPeakHours
-        if (usageHours.yearly() < 1.0){
-            return  preauditHours.yearly()}
-        else { return usageHours.yearly()}
+        if (usageHours.yearly() < 1.0) {
+            return preauditHours.yearly()
+        } else {
+            return usageHours.yearly()
+        }
     }
 
     fun preEnergy(): Double {
@@ -151,19 +152,16 @@ class Cfl(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEle
         return actualWatts * totalUnitsPre * 0.001 * usageHoursPre()
     }
 
-    fun prePower(): Double {
-        return actualWatts * numberOfFixtures * lampsPerFixtures / 1000
-    }
+    fun prePower() = actualWatts * numberOfFixtures * lampsPerFixtures / 1000
+
     /**
      * Cost - Pre State
      * */
     override fun costPreState(element: List<JsonElement?>): Double {
-
         val usageHours = UsageLighting()
         usageHours.peakHours = peakHours
         usageHours.partPeakHours = partPeakHours
         usageHours.offPeakHours = offPeakHours
-
 
         return costElectricity(prePower(), usageHours, electricityRate)
     }
@@ -192,7 +190,6 @@ class Cfl(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEle
 
         val energySavings = preEnergy() * percentPowerReduced
         val coolingSavings = energySavings * cooling / seer
-
 
         val energyAtPostState = preEnergy() - energySavings
         val paybackmonth = selfinstallcost / energySavings * 12
@@ -226,7 +223,6 @@ class Cfl(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEle
         dataHolder.rows?.add(postRow)
 
         return -99.99
-
     }
 
     /**
@@ -242,74 +238,59 @@ class Cfl(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEle
     /**
      * Post Yearly Usage Hours
      * */
-
-
     override fun usageHoursPost(): Double {
         val postusageHours = UsageLighting()
         postusageHours.postpeakHours = postpeakHours
         postusageHours.postpartPeakHours = postpartPeakHours
         postusageHours.postoffPeakHours = postoffPeakHours
 
-        if (postusageHours.yearly() == null){
-           return 5.0 }//extractControlPercentSaved(elements) }
-        else { return postusageHours.yearly()}
+        if (postusageHours.yearly() < 1.0)
+            return 5.0
+        return postusageHours.yearly()
     }
 
     /**
      * PowerTimeChange >> Energy Efficiency Calculations
      * */
-    override fun energyPowerChange(): Double {
-        return preEnergy() * (1 - percentPowerReduced)
-    }
+    override fun energyPowerChange() = preEnergy() * (1 - percentPowerReduced)
 
-    override fun energyTimeChange(): Double {
-        return  actualWatts * numberOfFixtures * lampsPerFixtures / 1000 * usageHoursPost()
+    override fun energyTimeChange() =
+            actualWatts * numberOfFixtures * lampsPerFixtures / 1000 * usageHoursPost()
 
-    }
-    override fun energyPowerTimeChange(): Double {
-        return prePower() * percentPowerReduced * usageHoursPost()
-    }
 
-    fun postPower(): Double {
-        return prePower() * (1 - percentPowerReduced)
-    }
+    override fun energyPowerTimeChange() = prePower() * percentPowerReduced * usageHoursPost()
 
-    fun postEnergy(): Double {
-        return preEnergy() - energySavings()
-    }
-    fun energySavings(): Double {
-        return preEnergy() * percentPowerReduced
-    }
+    fun postPower() = prePower() * (1 - percentPowerReduced)
 
-    fun selfinstallcost(): Double {
-        return ledbulbcost * alternateNumberOfFixtures * alternateLampsPerFixture
-    }
+    fun postEnergy() = preEnergy() - energySavings()
+
+    fun energySavings() = preEnergy() * percentPowerReduced
+
+    fun selfinstallcost() = ledbulbcost * alternateNumberOfFixtures * alternateLampsPerFixture
+
     fun totalEnergySavings(): Double {
         if (controls == "yes") {
             val coolingSavings = (preEnergy() - energyPowerChange()) * cooling / seer
             return (preEnergy() - energyPowerChange()) + coolingSavings
-        } else if(ControlType1 != null || ControlType2 != null){
+        } else if (ControlType1 != null || ControlType2 != null) {
             val coolingSavings = (preEnergy() - energyTimeChange()) * cooling / seer
             return (preEnergy() - energyTimeChange()) + coolingSavings
-        }
-        else {
+        } else {
             val coolingSavings = (preEnergy() - energyPowerTimeChange()) * cooling / seer
             return (preEnergy() - energyPowerTimeChange()) + coolingSavings
         }
-
     }
 
     fun totalSavings(): Double {
-        if (controls == null && usageHoursPost() != null){
-            val postPower = energyPowerTimeChange()/usageHoursPost()
+        if (controls == null && usageHoursPost() != null) {
+            val postPower = energyPowerTimeChange() / usageHoursPost()
             val postusageHours = UsageLighting()
             postusageHours.postpeakHours = postpeakHours
             postusageHours.postpartPeakHours = postpartPeakHours
             postusageHours.postoffPeakHours = postoffPeakHours
             return costElectricity(postPower, postusageHours, electricityRate)
-        }
-        else {
-            val postPower = energyPowerChange()/usageHoursPre()
+        } else {
+            val postPower = energyPowerChange() / usageHoursPre()
             val usageHours = UsageLighting()
             usageHours.peakHours = peakHours
             usageHours.partPeakHours = partPeakHours
@@ -317,6 +298,7 @@ class Cfl(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEle
             return costElectricity(postPower, usageHours, electricityRate)
         }
     }
+
     /**
      * Energy Efficiency Lookup Query Definition
      * */
@@ -340,7 +322,6 @@ class Cfl(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEle
             .put("data.location_type", bType)
             .toString()
 
-
     /**
      * State if the Equipment has a Post UsageHours Hours (Specific) ie. A separate set of
      * Weekly UsageHours Hours apart from the PreAudit
@@ -354,9 +335,11 @@ class Cfl(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEle
             "General Client Info Name",
             "General Client Info Position",
             "General Client Info Email")
+
     override fun featureDataFields() = getGFormElements().map { it.value.param!! }.toMutableList()
 
     override fun preStateFields() = mutableListOf<String>()
+
     override fun postStateFields() = mutableListOf(
             "__lighting_control_measure_code",
             "__lighting_control_prescriptive_hours",
@@ -374,7 +357,6 @@ class Cfl(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEle
             "__total_savings")
 
     override fun computedFields() = mutableListOf<String>()
-
     private fun getFormMapper() = FormMapper(context, R.raw.cfl)
     private fun getModel() = getFormMapper().decodeJSON()
     private fun getGFormElements() = getFormMapper().mapIdToElements(getModel())

@@ -19,7 +19,7 @@ import timber.log.Timber
 import java.util.*
 
 class LPSodium(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateElectricity: UtilityRate,
-                        usageHours: UsageHours, outgoingRows: OutgoingRows, private val context: Context) :
+               usageHours: UsageHours, outgoingRows: OutgoingRows, private val context: Context) :
         EBase(computable, utilityRateGas, utilityRateElectricity, usageHours, outgoingRows), IComputable {
 
     /**
@@ -30,7 +30,6 @@ class LPSodium(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRa
     }
 
     companion object {
-
         private const val LightControls = "lighting_lightingcontrols"
         private const val ControlHours = "lighting_lightingcontrolhours"
 
@@ -39,34 +38,31 @@ class LPSodium(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRa
          * via the Parse API
          * */
         fun extractControlPercentSaved(element: JsonElement): Double {
-            if (element.asJsonObject.has("percent_savings")) {
+            if (element.asJsonObject.has("percent_savings"))
                 return element.asJsonObject.get("percent_savings").asDouble
-            }
             return 0.0
         }
 
         fun extractEquipmentCost(element: JsonElement): Double {
-            if (element.asJsonObject.has("equipment_cost")) {
+            if (element.asJsonObject.has("equipment_cost"))
                 return element.asJsonObject.get("equipment_cost").asDouble
-            }
             return 0.0
         }
 
         fun extractMeasureCode(element: JsonElement): String {
-            if (element.asJsonObject.has("measure_code")) {
+            if (element.asJsonObject.has("measure_code"))
                 return element.asJsonObject.get("measure_code").asString
-            }
             return ""
         }
 
         fun extractAssumedHours(element: JsonElement): Double {
-            if (element.asJsonObject.has("hours")) {
+            if (element.asJsonObject.has("hours"))
                 return element.asJsonObject.get("hours").asDouble
-            }
             return 0.0
         }
     }
-//create variable here if you want to make it global to the class with private
+
+    //create variable here if you want to make it global to the class with private
     private var percentPowerReduced = 0.0
     private var actualWatts = 0.0
     var lampsPerFixtures = 0
@@ -134,6 +130,7 @@ class LPSodium(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRa
             e.printStackTrace()
         }
     }
+
     /**
      * Time | Energy | Power - Pre State
      * */
@@ -143,9 +140,11 @@ class LPSodium(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRa
         usageHours.peakHours = peakHours
         usageHours.partPeakHours = partPeakHours
         usageHours.offPeakHours = offPeakHours
-        if (usageHours.yearly() < 1.0){
-            return  preauditHours.yearly()}
-        else { return usageHours.yearly()}
+        if (usageHours.yearly() < 1.0) {
+            return preauditHours.yearly()
+        } else {
+            return usageHours.yearly()
+        }
     }
 
     fun preEnergy(): Double {
@@ -153,19 +152,16 @@ class LPSodium(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRa
         return actualWatts * totalUnitsPre * 0.001 * usageHoursPre()
     }
 
-    fun prePower(): Double {
-        return actualWatts * numberOfFixtures * lampsPerFixtures / 1000
-    }
+    fun prePower() = actualWatts * numberOfFixtures * lampsPerFixtures / 1000
+
     /**
      * Cost - Pre State
      * */
     override fun costPreState(element: List<JsonElement?>): Double {
-
         val usageHours = UsageLighting()
         usageHours.peakHours = peakHours
         usageHours.partPeakHours = partPeakHours
         usageHours.offPeakHours = offPeakHours
-
 
         return costElectricity(prePower(), usageHours, electricityRate)
     }
@@ -187,7 +183,6 @@ class LPSodium(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRa
         val expectedLife = LEDlifeHours / usageHoursSpecific.yearly()
         val maintenanceSavings = totalUnits * bulbcost * replacementIndex / expectedLife
 
-        // Adding new variables for the report
         val selfinstallcost = this.selfinstallcost()
 
         // Delta is going to be Power Used * Percentage Power Reduced
@@ -243,77 +238,60 @@ class LPSodium(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRa
     /**
      * Post Yearly Usage Hours
      * */
-
-
     override fun usageHoursPost(): Double {
         val postusageHours = UsageLighting()
         postusageHours.postpeakHours = postpeakHours
         postusageHours.postpartPeakHours = postpartPeakHours
         postusageHours.postoffPeakHours = postoffPeakHours
 
-        if (postusageHours.yearly() == null){
-            return  usageHoursPre()}
-        else { return postusageHours.yearly()}
+        if (postusageHours.yearly() > 1.0) {
+            return usageHoursPre()
+        } else {
+            return postusageHours.yearly()
+        }
     }
 
     /**
      * PowerTimeChange >> Energy Efficiency Calculations
      * */
-    override fun energyPowerChange(): Double {
-        return preEnergy() * (1 - percentPowerReduced)
-    }
+    override fun energyPowerChange() = preEnergy() * (1 - percentPowerReduced)
 
-    override fun energyTimeChange(): Double {
-        return  actualWatts * numberOfFixtures * lampsPerFixtures / 1000 * usageHoursPost()
+    override fun energyTimeChange() =
+            actualWatts * numberOfFixtures * lampsPerFixtures / 1000 * usageHoursPost()
 
-    }
+    override fun energyPowerTimeChange() = prePower() * percentPowerReduced * usageHoursPost()
 
-    override fun energyPowerTimeChange(): Double {
-        return prePower() * percentPowerReduced * usageHoursPost()
-    }
+    fun postPower() = prePower() * (1 - percentPowerReduced)
 
-    fun postPower(): Double {
-        return prePower() * (1 - percentPowerReduced)
-    }
+    fun postEnergy() = preEnergy() - energySavings()
 
-    fun postEnergy(): Double {
-        return preEnergy() - energySavings()
-    }
+    fun energySavings() = preEnergy() * percentPowerReduced
 
-    fun energySavings(): Double {
-        return preEnergy() * percentPowerReduced
-    }
-
-    fun selfinstallcost(): Double {
-        return ledbulbcost * alternateNumberOfFixtures * alternateLampsPerFixture
-    }
+    fun selfinstallcost() = ledbulbcost * alternateNumberOfFixtures * alternateLampsPerFixture
 
     fun totalEnergySavings(): Double {
         if (controls == "yes") {
             val coolingSavings = (preEnergy() - energyPowerChange()) * cooling / seer
             return (preEnergy() - energyPowerChange()) + coolingSavings
-        } else if(ControlType1 != null || ControlType2 != null){
+        } else if (ControlType1 != null || ControlType2 != null) {
             val coolingSavings = (preEnergy() - energyTimeChange()) * cooling / seer
             return (preEnergy() - energyTimeChange()) + coolingSavings
-        }
-        else {
+        } else {
             val coolingSavings = (preEnergy() - energyPowerTimeChange()) * cooling / seer
             return (preEnergy() - energyPowerTimeChange()) + coolingSavings
         }
-
     }
 
     fun totalSavings(): Double {
-        if (controls == null && usageHoursPost() != null){
-            val postPower = energyPowerTimeChange()/usageHoursPost()
+        if (controls == null && usageHoursPost() != null) {
+            val postPower = energyPowerTimeChange() / usageHoursPost()
             val postusageHours = UsageLighting()
             postusageHours.postpeakHours = postpeakHours
             postusageHours.postpartPeakHours = postpartPeakHours
             postusageHours.postoffPeakHours = postoffPeakHours
             return costElectricity(postPower, postusageHours, electricityRate)
-        }
-        else {
-            val postPower = energyPowerChange()/usageHoursPre()
+        } else {
+            val postPower = energyPowerChange() / usageHoursPre()
             val usageHours = UsageLighting()
             usageHours.peakHours = peakHours
             usageHours.partPeakHours = partPeakHours
@@ -321,6 +299,7 @@ class LPSodium(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRa
             return costElectricity(postPower, usageHours, electricityRate)
         }
     }
+
     /**
      * Energy Efficiency Lookup Query Definition
      * */
@@ -343,6 +322,7 @@ class LPSodium(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRa
             .put("type", ControlHours)
             .put("data.location_type", bType)
             .toString()
+
     /**
      * State if the Equipment has a Post UsageHours Hours (Specific) ie. A separate set of
      * Weekly UsageHours Hours apart from the PreAudit
@@ -378,7 +358,6 @@ class LPSodium(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRa
             "__total_savings")
 
     override fun computedFields() = mutableListOf<String>()
-
     private fun getFormMapper() = FormMapper(context, R.raw.lpsodium)
     private fun getModel() = getFormMapper().decodeJSON()
     private fun getGFormElements() = getFormMapper().mapIdToElements(getModel())
