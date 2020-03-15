@@ -238,13 +238,6 @@ class WIFreezer(computable: Computable<*>, utilityRateGas: UtilityRate, utilityR
         return 0.0 // TODO: AK2 needs to calculate this.
     }
 
-// TODO: @k2interactive enter walkin equations below.
-//  The energy savings (kwh) and demand savings (kw) pulled from the PARSE dashboard are the gross values.
-//  The net values are created using the equations below.
-//  The gross & net savings for both kwh and kw as well as the cost (pulled from PARSE) should be crunched to the CSV.
-//
-
-
     /** assigned in costPostState **/
     var installCost = 0.0
     var grosskwhSavings = 0.0
