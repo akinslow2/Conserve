@@ -57,10 +57,11 @@ class Freezer(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRat
         return 0.0
     }
 
-     /**
+    /**
      * Cost - Post State
      * */
     var costPostState = 0.0
+
     override fun costPostState(element: JsonElement, dataHolder: DataHolder): Double {
         val powerUsed = hourlyEnergyUsagePost(element)[0]
         val costElectricity: Double
@@ -117,6 +118,7 @@ class Freezer(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRat
      * Pre and Post are the same for Refrigerator - 24 hrs
      * */
     override fun usageHoursPre(): Double = usageHoursBusiness.yearly()
+
     override fun usageHoursPost(): Double = usageHoursBusiness.yearly()
 
     /**
@@ -142,12 +144,25 @@ class Freezer(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRat
      * Energy Efficiency Lookup Query Definition
      * */
     override fun efficientLookup() = true
+
     override fun queryEfficientFilter() = JSONObject()
             .put("data.style_type", featureData["Product Type"])
             .put("data.total_volume", JSONObject()
                     .put("\$gte", featureData["Total Volume"] as Double - 2)
                     .put("\$lte", featureData["Total Volume"] as Double + 2))
             .toString()
+
+    override fun queryReachIn(): String {
+        return JSONObject()
+                .put("type", "refrigeration_reachinfreezerrefrigerator")
+                .toString()
+    }
+
+    override fun queryReplacement(): String {
+        return JSONObject()
+                .put("type", "refrigeration_refrigeratorreplacement")
+                .toString()
+    }
 
     /**
      * State if the Equipment has a Post UsageHours Hours (Specific) ie. A separate set of
@@ -159,12 +174,28 @@ class Freezer(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRat
      * Define all the fields here - These would be used to Generate the Outgoing Rows or perform the Energy Calculation
      * */
     override fun preAuditFields() = mutableListOf("Number of Vacation days")
-    override fun featureDataFields() = mutableListOf("Company", "Model Number", "Fridge Capacity", "Age", "Control",
-            "Daily Energy Used", "Product Type", "Total Volume")
+
+    override fun featureDataFields() = mutableListOf(
+            "Company",
+            "Model Number",
+            "Fridge Capacity",
+            "Age",
+            "Control",
+            "Daily Energy Used",
+            "Product Type",
+            "Total Volume")
 
     override fun preStateFields() = mutableListOf("Daily Energy Used (kWh)")
-    override fun postStateFields() = mutableListOf("company", "model_number", "style_type",
-            "total_volume", "daily_energy_use", "rebate", "pgne_measure_code", "purchase_price_per_unit", "vendor")
+    override fun postStateFields() = mutableListOf(
+            "company",
+            "model_number",
+            "style_type",
+            "total_volume",
+            "daily_energy_use",
+            "rebate",
+            "pgne_measure_code",
+            "purchase_price_per_unit",
+            "vendor")
 
     override fun computedFields() = mutableListOf("__daily_operating_hours", "__weekly_operating_hours",
             "__yearly_operating_hours", "__electric_cost")

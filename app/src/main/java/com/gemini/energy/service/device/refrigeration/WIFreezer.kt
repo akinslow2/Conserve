@@ -407,10 +407,13 @@ class WIFreezer(computable: Computable<*>, utilityRateGas: UtilityRate, utilityR
     override fun energyPowerChange(): Double {
         return 0.0 // TODO: AK2 needs to calculate
     }
-// TODO: @k2interactive currently the way to get cost from energy is with the function costElectricity(eSavings, usageHours, electricityRate) this requires
+
+    // TODO: @k2interactive currently the way to get cost from energy is with the function
+//  costElectricity(eSavings, usageHours, electricityRate) this requires
 //  power (e.g., eSavings), hours (e.g., usageHours), and electricityRate. I would like two more functions to create cost.
 //  The first requires energy and electricityRate.
-//  The second, requires power and demandRate. I believe the variable demandRate will need to be created. demandRate would be demand_charge column in the BED_electric.csv
+//  The second, requires power and demandRate. I believe the variable demandRate will need to be
+//  created. demandRate would be demand_charge column in the BED_electric.csv
 //  UtilityRate.kt may be useful in this endeavor. The current costElectricity function is in EBase.kt line 602
     fun totalSavings(): Double {
         return energyPowerChange() * .15 // TODO: AK2 needs to calculate this
@@ -456,19 +459,6 @@ class WIFreezer(computable: Computable<*>, utilityRateGas: UtilityRate, utilityR
                 .put("type", "refrigeration_evaporatorfanmotorcontrols")
                 .put("data.motor_type", fanmotortype)
                 .put("data.temperature_range", temprange)
-                .toString()
-    }
-// TODO: @k2interactive these two below do not need to be in any of the Refrigeration classes that start with WI...
-//  as they are for normal refrigerators and freezers not Walkin-Ins (WI). Please move them to freezer and refrigerator classes
-    override fun queryReachIn(): String {
-        return JSONObject()
-                .put("type", "refrigeration_reachinfreezerrefrigerator")
-                .toString()
-    }
-
-    override fun queryReplacement(): String {
-        return JSONObject()
-                .put("type", "refrigeration_refrigeratorreplacement")
                 .toString()
     }
 
