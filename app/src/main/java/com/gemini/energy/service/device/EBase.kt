@@ -287,7 +287,7 @@ abstract class EBase(val computable: Computable<*>,
 
         return prerequisite().map(mapper)
     }
-    // TODO: @k2interactive not sure if this is needed or will possibly cause troubles
+
     companion object {
         private const val RATE = "A-1 TOU"
         private const val COMPANY_CODE = "pge"
