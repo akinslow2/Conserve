@@ -135,10 +135,10 @@ class LinearFluorescent(computable: Computable<*>, utilityRateGas: UtilityRate, 
             numberOfFixtures = featureData["Number of Fixtures"]!! as Int
 
             controls = featureData["Controls"]!! as String
-            ControlType1 = featureData["Type of Control"]!! as String
-            ControlType2 = featureData["Type of Control2"]!! as String
+            ControlType1 = featureData["Suggested Control Type1"]!! as String
+            ControlType2 = featureData["Suggested Control Type2"]!! as String
 
-            bType = preAudit["General Client Info Facility Type"]!! as String
+            bType = featureData["Building Type"]!! as String
 
             peakHours = featureData["Peak Hours"]!! as Double
             offPeakHours = featureData["Off Peak Hours"]!! as Double
