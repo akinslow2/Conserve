@@ -203,7 +203,6 @@ abstract class EBase(val computable: Computable<*>,
         )
         val extractorNone = listOf(Observable.just(JsonArray()))
 
-        // TODO: @k2interactive please add an extractorRefrigeration that grabs data from the Refrigeration Class in the Parse Dashboard - queryCondensingUnit
         // ** Extractor List gets called depending on the Zone Type **
         val remoteExtract = when (computable.auditScopeType) {
             EZoneType.HVAC -> extractorHVAC

@@ -227,14 +227,14 @@ class WICoolerBot(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
     override fun queryEfficientFilter()= ""
 
 
-    override fun preAuditFields() = mutableListOf("")
+    override fun preAuditFields() = mutableListOf<String>()
 
     override fun featureDataFields() = getGFormElements().map { it.value.param!! }.toMutableList()
 
-    override fun preStateFields() = mutableListOf("")
-    override fun postStateFields() = mutableListOf("")
+    override fun preStateFields() = mutableListOf<String>()
+    override fun postStateFields() = mutableListOf<String>()
 
-    override fun computedFields() = mutableListOf("")
+    override fun computedFields() = mutableListOf<String>()
 
     private fun getFormMapper() = FormMapper(context, R.raw.walkin_coolbot)
     private fun getModel() = getFormMapper().decodeJSON()
