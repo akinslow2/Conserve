@@ -450,36 +450,29 @@ abstract class EBase(val computable: Computable<*>,
 
         fun switcherHVAC() = parseAPIService.fetchThermostat(queryThermostatDeemed())
 
-        fun switcherPlugload() =
-                if (efficientLookup() && !isEnergyStar && query.isNotBlank())
-                    parseAPIService.fetchPlugload(query)
-                else
-                    buildPostState()
+        fun switcherLighting() =
+                if (query.isNotBlank()) parseAPIService.fetchLightControls(query)
+                else buildPostState()
 
         fun switcherMotors() =
-                if (query.isNotBlank())
-                    parseAPIService.fetchHVAC(query)
-                else
-                    buildPostState()
+                if (query.isNotBlank()) parseAPIService.fetchHVAC(query)
+                else buildPostState()
 
-        fun switcherLighting() =
-                if (query.isNotBlank())
-//                    TODO: @k2interactive refactor so we can send both
-//                    queryControlPercentSaved and queryAssumedHours
-//                    for poststate.csv fields
-                    parseAPIService.fetchLightControls(query)
-                else
-                    buildPostState()
+        fun switcherPlugload() =
+                if (efficientLookup() && !isEnergyStar && query.isNotBlank()) parseAPIService.fetchPlugload(query)
+                else buildPostState()
 
         fun switcherRefrigeration() =
-                if (query.isNotBlank())
-//                    TODO: @k2interactive refactor so we can send all that are needed
-//                    queryEvaporatorFanMotor, queryCondensingUnit, queryEvaporatorFanMotorControls
-//                    queryReachIn, queryReplacement
-//                    for poststate.csv fields
-                    parseAPIService.fetchRefrigerationControls(query)
-                else
-                    buildPostState()
+                if (query.isNotBlank()) parseAPIService.fetchRefrigerationControls(query)
+                else buildPostState()
+
+        fun switcherThermostat() =
+                if (query.isNotBlank()) parseAPIService.fetchThermostat(query)
+                else buildPostState()
+
+        fun switcherWaterHeater() =
+                if (query.isNotBlank()) parseAPIService.fetchWaterHeater(query)
+                else buildPostState()
 
         val result = when (computable.auditScopeType) {
             EZoneType.HVAC          -> switcherHVAC()
@@ -487,6 +480,8 @@ abstract class EBase(val computable: Computable<*>,
             EZoneType.Motors -> switcherMotors()
             EZoneType.Plugload      -> switcherPlugload()
             EZoneType.Refrigeration -> switcherRefrigeration()
+            EZoneType.Thermostat -> switcherThermostat()
+            EZoneType.WaterHeater -> switcherWaterHeater()
             else                    -> buildPostState() // This gives an empty JSON !!
         }
 
