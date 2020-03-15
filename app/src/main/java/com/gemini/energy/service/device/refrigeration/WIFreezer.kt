@@ -381,12 +381,22 @@ class WIFreezer(computable: Computable<*>, utilityRateGas: UtilityRate, utilityR
 
     // TODO: @k2interactive currently the way to get cost from energy is with the function
     //  costElectricity(eSavings, usageHours, electricityRate)
-    //  this requires power (e.g., eSavings), hours (e.g., usageHours), and electricityRate.
+    //  this requires power: Double (e.g., eSavings), hours: UsageHours (e.g., usageHours), and electricityRate: UtilityRate.
     //  I would like two more functions to create cost.
     //  • first requires energy and electricityRate.
-    //  • second, requires power and demandRate. I believe the variable demandRate will need to be created.
+    //  • second, requires power: Double and demandRate: Double. I believe the variable demandRate will need to be created.
     //      demandRate would be demand_charge column in the BED_electric.csv
     //  UtilityRate.kt may be useful in this endeavor. The current costElectricity function is in EBase.kt line 602
+
+
+//    @Anthony: by the above comment do you mean creating functions like
+//      fun costElectricity(power: Double, electricityRate: UtilityRate): Double
+//      fun costElectricity(power: Double, demandRate: Double)
+
+//    @Anthony: it seems that you want those functions added in ebase,
+//    should they be overriden in this file?
+
+
     fun totalSavings(): Double {
         return energyPowerChange() * .15 // TODO: AK2 needs to calculate this
     }
