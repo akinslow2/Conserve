@@ -105,7 +105,7 @@
           "index": 22,
           "hint": "",
           "dataType": "pickerinputrow",
-          "defaultValues": "1:Wall Switch Occupancy Sensor,2:Fixture-Mounted Occupancy Sensor,3:Remote-Mounted Occupancy Sensor,4:Fixture-Mounted Daylight Sensor,5:Remote-Mounted Daylight Sensor,6:Integrated Occupancy Sensor for LED Interior Fixtures < 10,000 Lumens,7:Integrated Occupancy Sensor for LEDInterior Fixtures >= 10,000 Lumens,8:Integrated Dual Occupancy Sensor & Daylight Sensor for LED Interior Fixtures < 10,000 Lumens,9:Integrated Dual Occupancy Sensor & Daylight Sensor for LED Interior Fixtures >= 10,000 Lumens,10:Fixture-Mounted Dual Occupancy Sensor & Daylight Sensor for LED Interior Fixtures < 10,000 Lumens,11:Fixture-Mounted Dual Occupancy Sensor & Daylight Sensor for LED Interior Fixtures >= 10,000 Lumens,12:Refrigerator Case Occupancy Sensor,13:Freezer Case Occupancy Sensor,14:Exterior Occupancy Sensor",
+          "defaultValues": "1:Occupancy Sensor,2:Motion Sensor,3:Daylight Sensor,4:Timer,5:Dimmer,6:High Level Trim",
           "param": "Type of Control",
           "validation": "optional",
           "id": "22"
@@ -299,6 +299,33 @@
           "param": "Alternate Life Hours",
           "validation": "optional",
           "id": "68"
+        },
+        {
+          "index": 69,
+          "hint": "(Rq)",
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:Wall Switch Occupancy Sensor,2:Fixture-Mounted Occupancy Sensor,3:Remote-Mounted Occupancy Sensor,4:Fixture-Mounted Daylight Sensor,5:Remote-Mounted Daylight Sensor,6:Integrated Occupancy Sensor for LED Interior Fixtures < 10,7:000 Lumens,8:Integrated Occupancy Sensor for LED Interior Fixtures >= 10,9:000 Lumens,10:Integrated Dual Occupancy & Daylight Sensor for LED Interior Fixtures < 10,11:000 Lumens,12:Integrated Dual Occupancy & Daylight Sensor for LED Interior Fixtures >= 10,13:000 Lumens,14:Fixture-Mounted Dual Occupancy & Daylight Sensor for LED Interior Fixtures < 10,15:000 Lumens,16:Fixture-Mounted Dual Occupancy & Daylight Sensor for LED Interior Fixtures >= 10,17:000 Lumens,18:Refrigerator Case Occupancy Sensor,19:Freezer Case Occupancy Sensor,20:Exterior Occupancy Sensor",
+          "param": "Suggested Control Type1",
+          "validation": "optional",
+          "id": "69"
+        },
+        {
+          "index": 610,
+          "hint": "",
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:Wall Switch Occupancy Sensor,2:Fixture-Mounted Occupancy Sensor,3:Remote-Mounted Occupancy Sensor,4:Fixture-Mounted Daylight Sensor,5:Remote-Mounted Daylight Sensor,6:Integrated Occupancy Sensor for LED Interior Fixtures < 10,7:000 Lumens,8:Integrated Occupancy Sensor for LED Interior Fixtures >= 10,9:000 Lumens,10:Integrated Dual Occupancy & Daylight Sensor for LED Interior Fixtures < 10,11:000 Lumens,12:Integrated Dual Occupancy & Daylight Sensor for LED Interior Fixtures >= 10,13:000 Lumens,14:Fixture-Mounted Dual Occupancy & Daylight Sensor for LED Interior Fixtures < 10,15:000 Lumens,16:Fixture-Mounted Dual Occupancy & Daylight Sensor for LED Interior Fixtures >= 10,17:000 Lumens,18:Refrigerator Case Occupancy Sensor,19:Freezer Case Occupancy Sensor,20:Exterior Occupancy Sensor",
+          "param": "Suggested Control Type2",
+          "validation": "optional",
+          "id": "610"
+        },
+        {
+          "index": 611,
+          "hint": "(Rq)",
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:Manufacturing,2:Lodging/Hospitality,3:K-12 Schools,4:Hospital,5:Grocery/Convenience Store,6:Office,7:Public Assembly,8:Public Safety,9:Religious,10:Restaurant,11:Retail,12:Service,13:University/College,14:Warehouse,15:Exterior",
+          "param": "Building Type",
+          "validation": "optional",
+          "id": "611"
         }
       ],
       "id": "6"

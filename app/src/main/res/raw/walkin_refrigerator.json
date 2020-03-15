@@ -17,9 +17,9 @@
           "index": 12,
           "hint": "",
           "dataType": "pickerinputrow",
-          "defaultValues": "1:",
+          "defaultValues": "1:weak,2:adequate,3:strong",
           "param": "quality of door seal",
-          "validation": "",
+          "validation": "optional",
           "id": "12"
         }
       ],
@@ -70,7 +70,7 @@
           "hint": "",
           "dataType": "introw",
           "defaultValues": "",
-          "param": "Capacity (BTU)",
+          "param": "Condenser Capacity (BTU)",
           "validation": "optional",
           "id": "25"
         },
@@ -255,7 +255,7 @@
           "hint": "",
           "dataType": "decimalrow",
           "defaultValues": "",
-          "param": "Capacity (BTU)",
+          "param": "Evaporator Capacity (BTU)",
           "validation": "",
           "id": "44"
         },
@@ -306,7 +306,7 @@
         },
         {
           "index": 410,
-          "hint": "",
+          "hint": "Rq for FanMotor Controls",
           "dataType": "introw",
           "defaultValues": "",
           "param": "Quantity of fans",
@@ -342,9 +342,9 @@
         },
         {
           "index": 414,
-          "hint": "<25F, 25-40F, 41-65F Rq for FanMotor Controls",
+          "hint": "<41F, 41-65F Rq for FanMotor Controls",
           "dataType": "pickerinputrow",
-          "defaultValues": "1:Low,2:Medium,3:High",
+          "defaultValues": "1:Medium,2:High",
           "param": "Temperature Range",
           "validation": "optional",
           "id": "414"
@@ -371,7 +371,7 @@
           "index": 417,
           "hint": "Rq for FanMotor Repalcement",
           "dataType": "pickerinputrow",
-          "defaultValues": "1:Case,2:Walk-In",
+          "defaultValues": "1:Walk-In",
           "param": "Refrigeration Type",
           "validation": "optional",
           "id": "417"

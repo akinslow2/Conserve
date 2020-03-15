@@ -17,7 +17,7 @@
           "index": 12,
           "hint": "",
           "dataType": "pickerinputrow",
-          "defaultValues": "1:",
+          "defaultValues": "1:weak,2:adequate,3:strong",
           "param": "quality of door seal",
           "validation": "",
           "id": "12"
@@ -306,7 +306,7 @@
         },
         {
           "index": 410,
-          "hint": "",
+          "hint": "Rq for FanMotor Controls",
           "dataType": "introw",
           "defaultValues": "",
           "param": "Quantity of fans",
@@ -342,9 +342,9 @@
         },
         {
           "index": 414,
-          "hint": "<25F, 25-40F, 41-65F Rq for FanMotor Controls",
+          "hint": "Rq for FanMotor Controls",
           "dataType": "pickerinputrow",
-          "defaultValues": "1:Low,2:Medium,3:High",
+          "defaultValues": "1:Low",
           "param": "Temperature Range",
           "validation": "optional",
           "id": "414"

@@ -96,7 +96,7 @@
           "index": 22,
           "hint": "",
           "dataType": "pickerinputrow",
-          "defaultValues": "1:Wall Switch Occupancy Sensor,2:Fixture-Mounted Occupancy Sensor,3:Remote-Mounted Occupancy Sensor,4:Fixture-Mounted Daylight Sensor,5:Remote-Mounted Daylight Sensor,6:Integrated Occupancy Sensor for LED Interior Fixtures < 10,000 Lumens,7:Integrated Occupancy Sensor for LEDInterior Fixtures >= 10,000 Lumens,8:Integrated Dual Occupancy Sensor & Daylight Sensor for LED Interior Fixtures < 10,000 Lumens,9:Integrated Dual Occupancy Sensor & Daylight Sensor for LED Interior Fixtures >= 10,000 Lumens,10:Fixture-Mounted Dual Occupancy Sensor & Daylight Sensor for LED Interior Fixtures < 10,000 Lumens,11:Fixture-Mounted Dual Occupancy Sensor & Daylight Sensor for LED Interior Fixtures >= 10,000 Lumens,12:Refrigerator Case Occupancy Sensor,13:Freezer Case Occupancy Sensor,14:Exterior Occupancy Sensor",
+          "defaultValues": "1:Occupancy Sensor,2:Motion Sensor,3:Daylight Sensor,4:Timer,5:Dimmer,6:High Level Trim",
           "param": "Type of Control",
           "validation": "optional",
           "id": "22"

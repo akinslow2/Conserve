@@ -174,6 +174,15 @@
           "param": "Humidity controls",
           "validation": "optional",
           "id": "119"
+        },
+        {
+          "index": 120,
+          "hint": "",
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:yes,2:no",
+          "param": "Economizer",
+          "validation": "optional",
+          "id": "120"
         }
       ],
       "id": "1"
@@ -273,11 +282,11 @@
     },
     {
       "index": 5,
-      "section": "Fuel",
+      "section": "Thermostat Controls",
       "elements": [
         {
           "index": 51,
-          "hint": "(Rq)",
+          "hint": "(Rq for Thermostat)",
           "dataType": "pickerinputrow",
           "defaultValues": "1:natural gas,2:oil,3:propane,4:electric,5:unknown",
           "param": "Heat Fuel",
@@ -286,7 +295,7 @@
         },
         {
           "index": 52,
-          "hint": "(Rq)",
+          "hint": "(Rq for Thermostat)",
           "dataType": "pickerinputrow",
           "defaultValues": "1:natural gas,2:oil,3:propane,4:electric,5:not applicable",
           "param": "Cool Fuel",
@@ -298,107 +307,82 @@
     },
     {
       "index": 6,
-      "section": "Thermostat Controls",
-      "elements": [
-        {
-          "index": 61,
-          "hint": "(Rq for Thermostat)",
-          "dataType": "pickerinputrow",
-          "defaultValues": "1:natural gas,2:oil,3:propane,4:electric,5:unknown",
-          "param": "Heat Fuel",
-          "validation": "optional",
-          "id": "61"
-        },
-        {
-          "index": 62,
-          "hint": "(Rq for Thermostat)",
-          "dataType": "pickerinputrow",
-          "defaultValues": "1:natural gas,2:oil,3:propane,4:electric,5:not applicable",
-          "param": "Cool Fuel",
-          "validation": "optional",
-          "id": "62"
-        }
-      ],
-      "id": "6"
-    },
-    {
-      "index": 7,
       "section": "Suggested Alternative",
       "elements": [
         {
-          "index": 71,
+          "index": 61,
           "hint": "(Rq)",
           "dataType": "introw",
           "defaultValues": "",
           "param": "Alternate Cooling Capacity (Btu/hr)",
           "validation": "optional",
-          "id": "71"
+          "id": "61"
         },
         {
-          "index": 72,
+          "index": 62,
           "hint": "",
           "dataType": "introw",
           "defaultValues": "",
           "param": "Quantity",
           "validation": "optional",
-          "id": "72"
+          "id": "62"
         },
         {
-          "index": 73,
+          "index": 63,
           "hint": "",
           "dataType": "introw",
           "defaultValues": "",
           "param": "Alternate Cooling Capacity (Tons)",
           "validation": "optional",
-          "id": "73"
+          "id": "63"
         },
         {
-          "index": 74,
+          "index": 64,
           "hint": "",
           "dataType": "introw",
           "defaultValues": "",
           "param": "Alternate Heating Capacity",
           "validation": "optional",
-          "id": "74"
+          "id": "64"
         },
         {
-          "index": 75,
+          "index": 65,
           "hint": "",
           "dataType": "decimalrow",
           "defaultValues": "",
           "param": "Alternate SEER",
           "validation": "optional",
-          "id": "75"
+          "id": "65"
         },
         {
-          "index": 76,
+          "index": 66,
           "hint": "(Rq for VFD)",
           "dataType": "pickerinputrow",
           "defaultValues": "1:Boiler Draft Fan,2:Cooling Tower Fan,3:Cooling Water Pump,4:Heating Hot Water Pump,5:Return Fan,6:Supply Fan,7:Water Source Heat Pump (WSHP) Circulation Pump",
           "param": "Location for potential VFD",
           "validation": "optional",
-          "id": "76"
+          "id": "66"
         },
         {
-          "index": 77,
+          "index": 67,
           "hint": "(Rq for VFD)",
           "dataType": "pickerinputrow",
           "defaultValues": "1:2,2:3,3:5,4:7.5,5:10,6:15,7:20,8:25,9:30,10:40,11:50,12:60,13:75,14:100",
           "param": "Size of Pump/Fan Motor for potential VFD (HP)",
           "validation": "optional",
-          "id": "77"
+          "id": "67"
         },
         {
-          "index": 78,
+          "index": 68,
           "hint": "(Rq)",
           "dataType": "pickerinputrow",
           "defaultValues": "1:Single,2:Multi",
           "param": "Mini Split Heat Pump Outlet",
           "validation": "optional",
-          "id": "78"
+          "id": "68"
         }
       ],
-      "id": "7"
+      "id": "6"
     }
   ]
 }
