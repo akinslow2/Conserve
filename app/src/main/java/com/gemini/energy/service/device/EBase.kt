@@ -392,18 +392,12 @@ abstract class EBase(val computable: Computable<*>,
      * Need a better alternative that covers the Use-Case where the query parameters can be specific to the
      * States.
      * */
+    // hvac queries
     open fun queryHVACCoolingHours() = ""
     open fun queryHVACEer() = ""
     open fun queryMotorVFDprescriptive() = ""
 
-    // TODO: @k2interactive here you can add the Refrigeration Query group
-    // TODO: @k2interactive there are five of them: below are the five with their
-    //  respective type String name in Parse Dashboard [query - "type name in Parse"]
-    //  queryCondensingUnit - "refrigeration_condensingunit" |
-    //  queryEvaporatorFanMotor - "refrigeration_condensingunit" |
-    //  queryEvaporatorFanMotorControls - "refrigeration_evaporatorfanmotorcontrols" |
-    //  queryReachIn - "refrigeration_reachinfreezerrefrigerator" |
-    //  queryReplacement - "refrigeration_refrigeratorreplacement"
+    // refrigeration queries
     open fun queryCondensingUnit() = ""
     open fun queryEvaporatorFanMotor() = ""
     open fun queryEvaporatorFanMotorControls() = ""
