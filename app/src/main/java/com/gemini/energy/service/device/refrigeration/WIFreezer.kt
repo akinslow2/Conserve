@@ -47,45 +47,43 @@ class WIFreezer(computable: Computable<*>, utilityRateGas: UtilityRate, utilityR
         fun firstNotNull(valueFirst: Int, valueSecond: Int) =
                 if (valueFirst == 0) valueSecond else valueFirst
 
-// TODO: @k2interactive make the following queries active.
-
-// This relates to queryCondensingUnit
-        fun extractCondensingUnitcompressorkWh(element: JsonElement): Double {
-    if (element.asJsonObject.has("cu_scroll_compressor_kwh")) {
-        return element.asJsonObject.get("cu_scroll_compressor_kwh").asDouble
+        // This relates to queryCondensingUnit
+        fun extractCondensingUnitCompressorKWh(element: JsonElement): Double {
+            if (element.asJsonObject.has("cu_scroll_compressor_kwh")) {
+                return element.asJsonObject.get("cu_scroll_compressor_kwh").asDouble
             }
             return 0.0
         }
 
-        fun extractCondensingUnitcompressorkW(element: JsonElement): Double {
+        fun extractCondensingUnitCompressorKW(element: JsonElement): Double {
             if (element.asJsonObject.has("cu_scroll_compressor_kw")) {
                 return element.asJsonObject.get("cu_scroll_compressor_kw").asDouble
             }
             return 0.0
         }
 
-        fun extractCondensingUnitcondensorkWh(element: JsonElement): Double {
+        fun extractCondensingUnitCondensorKWh(element: JsonElement): Double {
             if (element.asJsonObject.has("cu_condenser_fans_kwh")) {
                 return element.asJsonObject.get("cu_condenser_fans_kwh").asDouble
             }
             return 0.0
         }
 
-        fun extractCondensingUnitcondensorkW(element: JsonElement): Double {
+        fun extractCondensingUnitCondensorKW(element: JsonElement): Double {
             if (element.asJsonObject.has("cu_condenser_fans_kw")) {
                 return element.asJsonObject.get("cu_condenser_fans_kw").asDouble
             }
             return 0.0
         }
 
-        fun extractCondensingUnitheadkWh(element: JsonElement): Double {
+        fun extractCondensingUnitHeadKWh(element: JsonElement): Double {
             if (element.asJsonObject.has("cu_floating_head_pressure_controls_kwh")) {
                 return element.asJsonObject.get("cu_floating_head_pressure_controls_kwh").asDouble
             }
             return 0.0
         }
 
-        fun extractCondensingUnitheadkW(element: JsonElement): Double {
+        fun extractCondensingUnitHeadKW(element: JsonElement): Double {
             if (element.asJsonObject.has("cu_floating_head_pressure_controls_kw")) {
                 return element.asJsonObject.get("cu_floating_head_pressure_controls_kw").asDouble
             }
@@ -99,7 +97,7 @@ class WIFreezer(computable: Computable<*>, utilityRateGas: UtilityRate, utilityR
             return 0.0
         }
 
-//This relates to queryEvaporatorFanMotor
+        //This relates to queryEvaporatorFanMotor
         fun extractEvapFanMotorkWh(element: JsonElement): Double {
             if (element.asJsonObject.has("ev_energy_savings")) {
                 return element.asJsonObject.get("ev_energy_savings").asDouble
@@ -122,7 +120,7 @@ class WIFreezer(computable: Computable<*>, utilityRateGas: UtilityRate, utilityR
         }
 
 
-//This relates to queryEvaporatorFanMotorControls
+        //This relates to queryEvaporatorFanMotorControls
         fun extractEvapFanMotorControlskWh(element: JsonElement): Double {
             if (element.asJsonObject.has("evf_energy_savings")) {
                 return element.asJsonObject.get("evf_energy_savings").asDouble
@@ -151,12 +149,10 @@ class WIFreezer(computable: Computable<*>, utilityRateGas: UtilityRate, utilityR
      * */
     var age = 0
 
-
     /**
      * HVAC - British Thermal Unit
      * */
     var btu = 0
-
 
     /**
      * City | State
@@ -170,7 +166,6 @@ class WIFreezer(computable: Computable<*>, utilityRateGas: UtilityRate, utilityR
     private var peakHours = 0.0
     private var partPeakHours = 0.0
     private var offPeakHours = 0.0
-
 
     var quantity = 0
     var kW = 0.0
@@ -259,99 +254,6 @@ class WIFreezer(computable: Computable<*>, utilityRateGas: UtilityRate, utilityR
 //        sum of the gross energy savings pulled from the PARSE
         return 0.0
     }
-    // TODO: @k2interactive equations to bring out of comment
-
-    /** Condensing unit gross and net savings: energy (kwh) and demand (kw)
-    CU_gross_energy_savings = extractCondensingUnitcompressorkWh(element) +
-    extractCondensingUnitcondensorkWh(element) + extractCondensingUnitheadkWh(element)
-
-    // CSV header should be titled __HE_Condensing_Unit_Gross_kwh
-
-    CU_gross_demand_savings = extractCondensingUnitcompressorkW(element) +
-    extractCondensingUnitcondensorkW(element) + extractCondensingUnitheadkW(element)
-
-    // CSV header should be titled __HE_Condensing_Unit_Gross_kw
-
-    CU_net_energy_savings = (extractCondensingUnitcompressorkWh(element) * (1 + 0.121) * (1 + 1 – 1) * 0.5) +
-    (extractCondensingUnitcompressorkWh(element) * (1 + 0.149) * (1 + 1 – 1) * 0.5) +
-    (extractCondensingUnitcondensorkWh(element) * (1 + 0.121) * (1 + 1 – 1) * 0.5583) +
-    (extractCondensingUnitcondensorkWh(element) * (1 + 0.149) * (1 + 1 – 1) * 0.4018) +
-    (extractCondensingUnitheadkWh(element) * (1 + 0.121) * (1 + 1 – 1) * 0.539) +
-    (extractCondensingUnitheadkWh(element) * (1 + 0.149) * (1 + 1 – 1) * 0.462)
-
-    // CSV header should be titled __HE_Condensing_Unit_Net_kwh
-
-    CU_net_demand_savings = (extractCondensingUnitcompressorkW(element) * (1 + 0.113) * (1 + 1 – 1) * 0.69) +
-    (extractCondensingUnitcompressorkW(element) * (1 + 0.112) * (1 + 1 – 1) * 0.772) +
-    (extractCondensingUnitcondensorkW(element) * (1 + 0.113) * (1 + 1 – 1) * 1) +
-    (extractCondensingUnitcondensorkW(element) * (1 + 0.112) * (1 + 1 – 1) * 0.0115) +
-    (extractCondensingUnitheadkW(element) * (1 + 0.113) * (1 + 1 – 1) * 1) +
-    (extractCondensingUnitheadkW(element) * (1 + 0.112) * (1 + 1 – 1) * 0.0)
-
-    // CSV header should be titled __HE_Condensing_Unit_Net_kw
-     */
-
-     // TODO: @k2interactive equations to bring out of comment
-    /** Evaporator fan coil control measure gross and net savings: energy (kwh) and demand (kw)
-
-    evapFancontrol_gross_energy_savings = extractEvapFanMotorControlskWh(element) * Nfan
-
-    // CSV header should be titled __EVAP_Fan_Control_Gross_kwh
-
-    evapFancontrol_demand_savings = extractEvapFanMotorControlskW(element) * Nfan
-
-    // CSV header should be titled __EVAP_Fan_Control_Gross_kw
-
-    evapFancontrol_net_energy_savings = (evapFancontrol_gross_energy_savings * (1 + 0.121) * (0.95 + 1.05 – 1) * 0.59) +
-                                        (evapFancontrol_gross_energy_savings * (1 + 0.149) * (0.95 + 1.05 – 1) * 0.41)
-
-    // CSV header should be titled __EVAP_Fan_Control_Net_kwh
-
-    evapFancontrol_net_demand_savings = (evapFancontrol_demand_savings * (1 + 0.113) * (1 + 1 – 1) * 0.831) +
-                                        (evapFancontrol_demand_savings * (1 + 0.112) * (1 + 1 – 1) * 0.831)
-
-    // CSV header should be titled __EVAP_Fan_Control_Net_kw
-
-    evapFancontrol_cost = extractEvapFanMotorControlsCost(element) * Nfan
-
-     // CSV header should be titled __EVAP_Fan_Control_Cost
-
-    // TODO: @k2interactive please make it so this measure code is pushed to the CSV only if the PARSE pulls a value down.
-    val measureCode = if (extractEvapFanMotorControlskWh(element) != Null) {
-    return "RFRFMCON" .....
-
-    //CSV header should be titled __measure_code
-
-     */
-
-    // TODO: @k2interactive equations to bring out of comment
-    /** Evaporator fan motor replacement measure gross and net savings: energy (kwh) and demand (kw)
-
-    evapFanmotor_gross_energy_savings = extractEvapFanMotorkWh(element)
-
-    // CSV header should be titled __EVAP_Fan_Motor_Gross_kwh
-
-    evapFanmotor_demand_savings = extractEvapFanMotorkW(element)
-
-    // CSV header should be titled __EVAP_Fan_Motor_Gross_kw
-
-    evapFanmotor_net_energy_savings = (evapFanmotor_gross_energy_savings * (1 + 0.121) * (0.95 + 1.05 – 1) * 0.524) +
-                                        (evapFanmotor_gross_energy_savings * (1 + 0.149) * (0.95 + 1.05 – 1) * 0.476)
-
-    // CSV header should be titled __EVAP_Fan_Motor_Net_kwh
-
-    evapFanmotor_net_demand_savings = (evapFanmotor_demand_savings * (1 + 0.113) * (1 + 1 – 1) * 1) +
-                                        (evapFanmotor_demand_savings * (1 + 0.112) * (1 + 1 – 1) * 1)
-
-    // CSV header should be titled __EVAP_Fan_Motor_Net_kw
-
-    evapFanmotor_cost = extractEvapFanMotorIncrementalCost(element)
-
-    // CSV header should be titled __EVAP_Fan_Motor_Retrofit_Cost
-
-
-     */
-
 
 
     /**
@@ -363,6 +265,86 @@ class WIFreezer(computable: Computable<*>, utilityRateGas: UtilityRate, utilityR
         Timber.d("!!! COST POST STATE - WALK-IN Refrigerator !!!")
         Timber.d("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
 
+        // MARK: Condensing unit gross and net savings: energy (kwh) and demand (kw)
+        val cuGrossEnergySavings = extractCondensingUnitCompressorKWh(element) +
+                extractCondensingUnitCondensorKWh(element) +
+                extractCondensingUnitHeadKWh(element)
+
+        val cuGrossDemandSavings =
+                extractCondensingUnitCompressorKW(element) +
+                        extractCondensingUnitCondensorKW(element) +
+                        extractCondensingUnitHeadKW(element)
+
+        val cuNetEnergySavings =
+                (extractCondensingUnitCompressorKWh(element) * (1 + 0.121) * (1 + 1 - 1) * 0.5) +
+                        (extractCondensingUnitCompressorKWh(element) * (1 + 0.149) * (1 + 1 - 1) * 0.5) +
+                        (extractCondensingUnitCondensorKWh(element) * (1 + 0.121) * (1 + 1 - 1) * 0.5583) +
+                        (extractCondensingUnitCondensorKWh(element) * (1 + 0.149) * (1 + 1 - 1) * 0.4018) +
+                        (extractCondensingUnitHeadKWh(element) * (1 + 0.121) * (1 + 1 - 1) * 0.539) +
+                        (extractCondensingUnitHeadKWh(element) * (1 + 0.149) * (1 + 1 - 1) * 0.462)
+
+        val cuNetDemandSavings =
+                (extractCondensingUnitCompressorKW(element) * (1 + 0.113) * (1 + 1 - 1) * 0.69) +
+                        (extractCondensingUnitCompressorKW(element) * (1 + 0.112) * (1 + 1 - 1) * 0.772) +
+                        (extractCondensingUnitCondensorKW(element) * (1 + 0.113) * (1 + 1 - 1) * 1) +
+                        (extractCondensingUnitCondensorKW(element) * (1 + 0.112) * (1 + 1 - 1) * 0.0115) +
+                        (extractCondensingUnitHeadKW(element) * (1 + 0.113) * (1 + 1 - 1) * 1) +
+                        (extractCondensingUnitHeadKW(element) * (1 + 0.112) * (1 + 1 - 1) * 0.0)
+
+        // MARK: Evaporator fan coil control measure gross and net savings: energy (kwh) and demand (kw)
+        val efccGrossEnergySavings = extractEvapFanMotorControlskWh(element) * Nfan
+        val efccDemandSavings = extractEvapFanMotorControlskW(element) * Nfan
+
+        val efccNetEnergySavings =
+                (efccGrossEnergySavings * (1 + 0.121) * (0.95 + 1.05 - 1) * 0.59) +
+                        (efccGrossEnergySavings * (1 + 0.149) * (0.95 + 1.05 - 1) * 0.41)
+
+        val efccNetDemandSavings =
+                (efccDemandSavings * (1 + 0.113) * (1 + 1 - 1) * 0.831) +
+                        (efccDemandSavings * (1 + 0.112) * (1 + 1 - 1) * 0.831)
+
+        val efccCost = extractEvapFanMotorControlsCost(element) * Nfan
+
+        // MARK: Evaporator fan motor replacement measure gross and net savings: energy (kwh) and demand (kw)
+        val efmGrossEnergySavings = extractEvapFanMotorkWh(element)
+        val efmDemandSavings = extractEvapFanMotorkW(element)
+        val efmCost = extractEvapFanMotorIncrementalCost(element)
+
+        val efmNetEnergySavings =
+                (efmGrossEnergySavings * (1 + 0.121) * (0.95 + 1.05 - 1) * 0.524) +
+                        (efmDemandSavings * (1 + 0.149) * (0.95 + 1.05 - 1) * 0.476)
+
+        val efmnetDemandSavings =
+                (efmDemandSavings * (1 + 0.113) * (1 + 1 - 1) * 1) +
+                        (efmDemandSavings * (1 + 0.112) * (1 + 1 - 1) * 1)
+
+
+        // Prepare data for csv
+        val postRow = mutableMapOf<String, String>()
+        postRow["__HE_Condensing_Unit_Gross_kwh"] = cuGrossEnergySavings.toString()
+        postRow["__HE_Condensing_Unit_Gross_kw"] = cuGrossDemandSavings.toString()
+        postRow["__HE_Condensing_Unit_Net_kwh"] = cuNetEnergySavings.toString()
+        postRow["__HE_Condensing_Unit_Net_kw"] = cuNetDemandSavings.toString()
+
+        postRow["__EVAP_Fan_Control_Gross_kwh"] = efccGrossEnergySavings.toString()
+        postRow["__EVAP_Fan_Control_Gross_kw"] = efccDemandSavings.toString()
+        postRow["__EVAP_Fan_Control_Net_kwh"] = efccNetEnergySavings.toString()
+        postRow["__EVAP_Fan_Control_Net_kw"] = efccNetDemandSavings.toString()
+        postRow["__EVAP_Fan_Control_Cost"] = efccCost.toString()
+
+        postRow["__EVAP_Fan_Motor_Gross_kwh"] = efmGrossEnergySavings.toString()
+        postRow["__EVAP_Fan_Motor_Gross_kw"] = efmDemandSavings.toString()
+        postRow["__EVAP_Fan_Motor_Net_kwh"] = efmNetEnergySavings.toString()
+        postRow["__EVAP_Fan_Motor_Net_kw"] = efmnetDemandSavings.toString()
+        postRow["__EVAP_Fan_Motor_Retrofit_Cost"] = efmCost.toString()
+
+        if (extractEvapFanMotorControlskWh(element) != 0.0)
+            postRow["__measure_code"] = "RFRFMCON"
+
+        dataHolder.header = postStateFields()
+        dataHolder.computable = computable
+        dataHolder.fileName = "${Date().time}_post_state.csv"
+        dataHolder.rows?.add(postRow)
 
         return 5.0 // TODO: AK2 needs to calculate this
     }
@@ -409,12 +391,12 @@ class WIFreezer(computable: Computable<*>, utilityRateGas: UtilityRate, utilityR
     }
 
     // TODO: @k2interactive currently the way to get cost from energy is with the function
-//  costElectricity(eSavings, usageHours, electricityRate) this requires
-//  power (e.g., eSavings), hours (e.g., usageHours), and electricityRate. I would like two more functions to create cost.
-//  The first requires energy and electricityRate.
-//  The second, requires power and demandRate. I believe the variable demandRate will need to be
-//  created. demandRate would be demand_charge column in the BED_electric.csv
-//  UtilityRate.kt may be useful in this endeavor. The current costElectricity function is in EBase.kt line 602
+    //  costElectricity(eSavings, usageHours, electricityRate) this requires
+    //  power (e.g., eSavings), hours (e.g., usageHours), and electricityRate. I would like two more functions to create cost.
+    //  The first requires energy and electricityRate.
+    //  The second, requires power and demandRate. I believe the variable demandRate will need to be
+    //  created. demandRate would be demand_charge column in the BED_electric.csv
+    //  UtilityRate.kt may be useful in this endeavor. The current costElectricity function is in EBase.kt line 602
     fun totalSavings(): Double {
         return energyPowerChange() * .15 // TODO: AK2 needs to calculate this
     }
@@ -434,9 +416,10 @@ class WIFreezer(computable: Computable<*>, utilityRateGas: UtilityRate, utilityR
     override fun usageHoursSpecific() = false
 
     override fun efficientLookup() = false
-    override fun queryEfficientFilter() = queryEvaporatorFanMotor()
+    override fun queryEfficientFilter(): String {
+        return "{\"\$or\":[" + queryEvaporatorFanMotor() + "," + queryCondensingUnit() + "," + queryEvaporatorFanMotorControls() + "]}"
+    }
 
-    //TODO: @k2interactive make the below query filters active - (the functions will need to be created in EBase - see TODOs at EBase line 389)
     override fun queryEvaporatorFanMotor(): String {
         return JSONObject()
                 .put("type", "refrigeration_evaporatorfanmotor")
@@ -471,7 +454,18 @@ class WIFreezer(computable: Computable<*>, utilityRateGas: UtilityRate, utilityR
             "__HE_Condensing_Unit_Gross_kwh",
             "__HE_Condensing_Unit_Gross_kw",
             "__HE_Condensing_Unit_Net_kwh",
-            "__HE_Condensing_Unit_Net_kw")
+            "__HE_Condensing_Unit_Net_kw",
+            "__EVAP_Fan_Control_Gross_kwh",
+            "__EVAP_Fan_Control_Gross_kw",
+            "__EVAP_Fan_Control_Net_kwh",
+            "__EVAP_Fan_Control_Net_kw",
+            "__EVAP_Fan_Control_Cost",
+            "__measure_code",
+            "__EVAP_Fan_Motor_Gross_kwh",
+            "__EVAP_Fan_Motor_Gross_kw",
+            "__EVAP_Fan_Motor_Net_kwh",
+            "__EVAP_Fan_Motor_Net_kw",
+            "__EVAP_Fan_Motor_Retrofit_Cost")
 
     override fun computedFields() = mutableListOf<String>()
 
