@@ -193,23 +193,18 @@ class WIFreezer(computable: Computable<*>, utilityRateGas: UtilityRate, utilityR
 
     override fun setup() {
         try {
-
             quantity = featureData["Quantity"]!! as Int
 
             age = featureData["Age"]!! as Int
 
-           // TODO: @k2interactive the two variables below should be a double and int respectively just want to make sure that is happening here.
             condesorCompressor = (featureData["Condensor Compressor Size (HP)"]!! as String).toDoubleOrNull()
                     ?: 0.0
             condensorCompressorphase = (featureData["Compressor Phase"]!! as String).toIntOrNull()
                     ?: 0
             condensorTemp = featureData["Temp"]!! as String
 
-            // TODO: @k2interactive please check the parameter directly below for any errors.
-            //  I added them to the input parameter excel sheet as well. See new input parameters in dropbox.
             Nfan = featureData["Quantity of fans"]!! as Int
             electricstructure = preAudit["Others Electric Rate Structure"]!! as String
-
 
             motortype = featureData["Motor Type"]!! as String
             fridgetype = featureData["Refrigeration Type"]!! as String
@@ -221,6 +216,7 @@ class WIFreezer(computable: Computable<*>, utilityRateGas: UtilityRate, utilityR
 
             condensorCapacity = featureData["Condenser Capacity (BTU)"]!! as Int
             evaporatorCapacity = featureData["Evaporator Capacity (BTU)"]!! as Double
+
             peakHours = featureData["Peak Hours"]!! as Double
             offPeakHours = featureData["Off Peak Hours"]!! as Double
         } catch (e: Exception) {
