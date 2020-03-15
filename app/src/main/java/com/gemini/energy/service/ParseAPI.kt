@@ -11,26 +11,29 @@ import retrofit2.http.*
 
 class ParseAPI {
     interface ParseAPIService {
-        @GET("classes/PlugLoad")
-        fun fetchPlugload(@Query("where") where: String): Single<JsonObject>
+        @GET("classes/HVAC")
+        fun fetchHVAC(@Query("where") where: String): Single<JsonObject>
 
         @GET("classes/LaborCost")
         fun fetchLaborCost(@Query("where") where: String): Single<JsonObject>
 
-        @GET("classes/HVAC")
-        fun fetchHVAC(@Query("where") where: String): Single<JsonObject>
+        @GET("classes/Lighting")
+        fun fetchLightControls(@Query("where") where: String): Single<JsonObject>
 
         @GET("classes/Motors")
         fun fetchMotors(@Query("where") where: String): Single<JsonObject>
 
-        @GET("classes/Thermostat")
-        fun fetchThermostat(@Query("where") where: String): Single<JsonObject>
-
-        @GET("classes/Lighting")
-        fun fetchLightControls(@Query("where") where: String): Single<JsonObject>
+        @GET("classes/PlugLoad")
+        fun fetchPlugload(@Query("where") where: String): Single<JsonObject>
 
         @GET("classes/Refrigeration")
         fun fetchRefrigerationControls(@Query("where") where: String): Single<JsonObject>
+
+        @GET("classes/Thermostat")
+        fun fetchThermostat(@Query("where") where: String): Single<JsonObject>
+
+        @GET("classes/WaterHeater")
+        fun fetchWaterHeater(@Query("where") where: String): Single<JsonObject>
 
         @POST("classes/$SYNC_AUDIT")
         fun saveAudit(@Body body: JsonObject): Single<JsonObject>
