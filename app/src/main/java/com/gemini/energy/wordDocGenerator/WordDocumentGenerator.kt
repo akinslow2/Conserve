@@ -512,7 +512,7 @@ class WordDocumentGenerator {
         val r1p3 = p3.createRun()
         r1p3.fontFamily = fontAgencyFB
         r1p3.fontSize = 18
-        r1p3.setText("The estimated cost is ${refrigeration.totalCost.format(0)}, resulting in a payback of ${refrigeration.paybackMonth.format(0)} months.")
+        r1p3.setText("The estimated cost is ${refrigeration.totalCost.format(2)}, resulting in a payback of ${refrigeration.paybackMonth.format(2)} months.")
     }
 
     private fun generateFacilityInformationPage(document: XWPFDocument, values: PreparedForDocument, hvac: HvacValues) {
