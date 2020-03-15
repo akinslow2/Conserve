@@ -29,7 +29,6 @@ class WIRefrigerator(computable: Computable<*>, utilityRateGas: UtilityRate, uti
     }
 
     companion object {
-
         /**
          * Year At - Current minus the Age
          * */
@@ -47,45 +46,43 @@ class WIRefrigerator(computable: Computable<*>, utilityRateGas: UtilityRate, uti
         fun firstNotNull(valueFirst: Int, valueSecond: Int) =
                 if (valueFirst == 0) valueSecond else valueFirst
 
-// TODO: @k2interactive make the following queries active.
-
         // This relates to queryCondensingUnit
-        fun extractCondensingUnitcompressorkWh(element: JsonElement): Double {
+        fun extractCondensingUnitCompressorkWh(element: JsonElement): Double {
             if (element.asJsonObject.has("cu_scroll_compressor_kwh")) {
                 return element.asJsonObject.get("cu_scroll_compressor_kwh").asDouble
             }
             return 0.0
         }
 
-        fun extractCondensingUnitcompressorkW(element: JsonElement): Double {
+        fun extractCondensingUnitCompressorkW(element: JsonElement): Double {
             if (element.asJsonObject.has("cu_scroll_compressor_kw")) {
                 return element.asJsonObject.get("cu_scroll_compressor_kw").asDouble
             }
             return 0.0
         }
 
-        fun extractCondensingUnitcondensorkWh(element: JsonElement): Double {
+        fun extractCondensingUnitCondensorkWh(element: JsonElement): Double {
             if (element.asJsonObject.has("cu_condenser_fans_kwh")) {
                 return element.asJsonObject.get("cu_condenser_fans_kwh").asDouble
             }
             return 0.0
         }
 
-        fun extractCondensingUnitcondensorkW(element: JsonElement): Double {
+        fun extractCondensingUnitCondensorkW(element: JsonElement): Double {
             if (element.asJsonObject.has("cu_condenser_fans_kw")) {
                 return element.asJsonObject.get("cu_condenser_fans_kw").asDouble
             }
             return 0.0
         }
 
-        fun extractCondensingUnitheadkWh(element: JsonElement): Double {
+        fun extractCondensingUnitHeadkWh(element: JsonElement): Double {
             if (element.asJsonObject.has("cu_floating_head_pressure_controls_kwh")) {
                 return element.asJsonObject.get("cu_floating_head_pressure_controls_kwh").asDouble
             }
             return 0.0
         }
 
-        fun extractCondensingUnitheadkW(element: JsonElement): Double {
+        fun extractCondensingUnitHeadkW(element: JsonElement): Double {
             if (element.asJsonObject.has("cu_floating_head_pressure_controls_kw")) {
                 return element.asJsonObject.get("cu_floating_head_pressure_controls_kw").asDouble
             }
@@ -121,7 +118,6 @@ class WIRefrigerator(computable: Computable<*>, utilityRateGas: UtilityRate, uti
             return 0.0
         }
 
-
         //This relates to queryEvaporatorFanMotorControls
         fun extractEvapFanMotorControlskWh(element: JsonElement): Double {
             if (element.asJsonObject.has("evf_energy_savings")) {
@@ -143,7 +139,6 @@ class WIRefrigerator(computable: Computable<*>, utilityRateGas: UtilityRate, uti
             }
             return 0.0
         }
-
     }
 
     /**
@@ -151,12 +146,10 @@ class WIRefrigerator(computable: Computable<*>, utilityRateGas: UtilityRate, uti
      * */
     var age = 0
 
-
     /**
      * HVAC - British Thermal Unit
      * */
     var btu = 0
-
 
     /**
      * City | State
@@ -171,11 +164,9 @@ class WIRefrigerator(computable: Computable<*>, utilityRateGas: UtilityRate, uti
     private var partPeakHours = 0.0
     private var offPeakHours = 0.0
 
-
     var quantity = 0
     var kW = 0.0
 
-    //    var capacity = 0.0
     var condensorCapacity = 0
     var evaporatorCapacity = 0.0
 
@@ -255,37 +246,6 @@ class WIRefrigerator(computable: Computable<*>, utilityRateGas: UtilityRate, uti
     }
 
 
-    /** Condensing unit gross and net savings: energy (kwh) and demand (kw)
-    CU_gross_energy_savings = extractCondensingUnitcompressorkWh(element) +
-    extractCondensingUnitcondensorkWh(element) + extractCondensingUnitheadkWh(element)
-
-    // CSV header should be titled __HE_Condensing_Unit_Gross_kwh
-
-    CU_gross_demand_savings = extractCondensingUnitcompressorkW(element) +
-    extractCondensingUnitcondensorkW(element) + extractCondensingUnitheadkW(element)
-
-    // CSV header should be titled __HE_Condensing_Unit_Gross_kw
-
-    CU_net_energy_savings = (extractCondensingUnitcompressorkWh(element) * (1 + 0.121) * (1 + 1 – 1) * 0.5) +
-    (extractCondensingUnitcompressorkWh(element) * (1 + 0.149) * (1 + 1 – 1) * 0.5) +
-    (extractCondensingUnitcondensorkWh(element) * (1 + 0.121) * (1 + 1 – 1) * 0.5583) +
-    (extractCondensingUnitcondensorkWh(element) * (1 + 0.149) * (1 + 1 – 1) * 0.4018) +
-    (extractCondensingUnitheadkWh(element) * (1 + 0.121) * (1 + 1 – 1) * 0.539) +
-    (extractCondensingUnitheadkWh(element) * (1 + 0.149) * (1 + 1 – 1) * 0.462)
-
-    // CSV header should be titled __HE_Condensing_Unit_Net_kwh
-
-    CU_net_demand_savings = (extractCondensingUnitcompressorkW(element) * (1 + 0.113) * (1 + 1 – 1) * 0.69) +
-    (extractCondensingUnitcompressorkW(element) * (1 + 0.112) * (1 + 1 – 1) * 0.772) +
-    (extractCondensingUnitcondensorkW(element) * (1 + 0.113) * (1 + 1 – 1) * 1) +
-    (extractCondensingUnitcondensorkW(element) * (1 + 0.112) * (1 + 1 – 1) * 0.0115) +
-    (extractCondensingUnitheadkW(element) * (1 + 0.113) * (1 + 1 – 1) * 1) +
-    (extractCondensingUnitheadkW(element) * (1 + 0.112) * (1 + 1 – 1) * 0.0)
-
-    // CSV header should be titled __HE_Condensing_Unit_Net_kw
-
-
-     */
     /**
      * Cost - Post State
      * */
@@ -295,6 +255,43 @@ class WIRefrigerator(computable: Computable<*>, utilityRateGas: UtilityRate, uti
         Timber.d("!!! COST POST STATE - WALK-IN Refrigerator !!!")
         Timber.d("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
 
+        // MARK: Condensing unit gross and net savings: energy (kwh) and demand (kw)
+        val cuGrossEnergySavings =
+                extractCondensingUnitCompressorkWh(element) +
+                        extractCondensingUnitCondensorkWh(element) +
+                        extractCondensingUnitHeadkWh(element)
+
+        val cuGrossDemandSavings =
+                extractCondensingUnitCompressorkW(element) +
+                        extractCondensingUnitCondensorkW(element) +
+                        extractCondensingUnitHeadkW(element)
+
+        val cuNetEnergySavings = (extractCondensingUnitCompressorkWh(element) * (1 + 0.121) * (1 + 1 - 1) * 0.5) +
+                (extractCondensingUnitCompressorkWh(element) * (1 + 0.149) * (1 + 1 - 1) * 0.5) +
+                (extractCondensingUnitCondensorkWh(element) * (1 + 0.121) * (1 + 1 - 1) * 0.5583) +
+                (extractCondensingUnitCondensorkWh(element) * (1 + 0.149) * (1 + 1 - 1) * 0.4018) +
+                (extractCondensingUnitHeadkWh(element) * (1 + 0.121) * (1 + 1 - 1) * 0.539) +
+                (extractCondensingUnitHeadkWh(element) * (1 + 0.149) * (1 + 1 - 1) * 0.462)
+
+        val cuNetDemandSavings =
+                (extractCondensingUnitCompressorkW(element) * (1 + 0.113) * (1 + 1 - 1) * 0.69) +
+                        (extractCondensingUnitCompressorkW(element) * (1 + 0.112) * (1 + 1 - 1) * 0.772) +
+                        (extractCondensingUnitCondensorkW(element) * (1 + 0.113) * (1 + 1 - 1) * 1) +
+                        (extractCondensingUnitCondensorkW(element) * (1 + 0.112) * (1 + 1 - 1) * 0.0115) +
+                        (extractCondensingUnitHeadkW(element) * (1 + 0.113) * (1 + 1 - 1) * 1) +
+                        (extractCondensingUnitHeadkW(element) * (1 + 0.112) * (1 + 1 - 1) * 0.0)
+
+        // Prepare data for csv
+        val postRow = mutableMapOf<String, String>()
+        postRow["__HE_Condensing_Unit_Gross_kwh"] = cuGrossEnergySavings.toString()
+        postRow["__HE_Condensing_Unit_Gross_kw"] = cuGrossDemandSavings.toString()
+        postRow["__HE_Condensing_Unit_Net_kwh"] = cuNetEnergySavings.toString()
+        postRow["__HE_Condensing_Unit_Net_kw"] = cuNetDemandSavings.toString()
+
+        dataHolder.header = postStateFields()
+        dataHolder.computable = computable
+        dataHolder.fileName = "${Date().time}_post_state.csv"
+        dataHolder.rows?.add(postRow)
 
         return 5.0 // TODO: AK2 needs to calculate this
     }
@@ -359,7 +356,9 @@ class WIRefrigerator(computable: Computable<*>, utilityRateGas: UtilityRate, uti
     override fun usageHoursSpecific() = false
 
     override fun efficientLookup() = false
-    override fun queryEfficientFilter() = ""
+    override fun queryEfficientFilter(): String {
+        return "{\"\$or\":[" + queryEvaporatorFanMotor() + "," + queryCondensingUnit() + "," + queryEvaporatorFanMotorControls() + "]}"
+    }
 
     override fun queryEvaporatorFanMotor(): String {
         return JSONObject()
