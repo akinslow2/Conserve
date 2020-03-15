@@ -124,6 +124,9 @@ class LinearFluorescent(computable: Computable<*>, utilityRateGas: UtilityRate, 
     private var alternateLampsPerFixture = 0
     private var alternateLifeHours = 0
 
+    private var suggestedControlType1 = ""
+    private var suggestedControlType2 = ""
+
     override fun setup() {
         try {
             actualWatts = featureData["Actual Watts"]!! as Double
@@ -131,6 +134,7 @@ class LinearFluorescent(computable: Computable<*>, utilityRateGas: UtilityRate, 
             ballastsPerFixtures = featureData["Ballasts Per Fixture"]!! as Int
             numberOfFixtures = featureData["Number of Fixtures"]!! as Int
 
+            controls = featureData["Controls"]!! as String
             ControlType1 = featureData["Type of Control"]!! as String
             ControlType2 = featureData["Type of Control2"]!! as String
 
@@ -146,11 +150,10 @@ class LinearFluorescent(computable: Computable<*>, utilityRateGas: UtilityRate, 
 
             val config = lightingConfig(ELightingType.LinearFluorescent)
             percentPowerReduced = config[ELightingIndex.PercentPowerReduced.value] as Double
-//            postpeakHours = featureData["Suggested Peak Hours"]!! as Double
-//            postpartPeakHours = featureData["Suggested Part Peak Hours"]!! as Double
-//            postoffPeakHours = featureData["Suggested Off Peak Hours"]!! as Double
 
-            controls = featureData["Type of Control"]!! as String
+            suggestedControlType1 = featureData["Suggested Control Type1"]!! as String
+            suggestedControlType2 = featureData["Suggested Control Type2"]!! as String
+
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -317,7 +320,7 @@ class LinearFluorescent(computable: Computable<*>, utilityRateGas: UtilityRate, 
     }
 
     fun totalEnergySavings(): Double {
-        if (controls == "yes") {
+        if (controls == "Yes") {
             val coolingSavings = (preEnergy() - energyPowerChange()) * cooling / seer
             return (preEnergy() - energyPowerChange()) + coolingSavings
         } else if (ControlType1 != null || ControlType2 != null) {
