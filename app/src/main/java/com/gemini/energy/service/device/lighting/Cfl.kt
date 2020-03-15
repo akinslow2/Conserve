@@ -322,7 +322,8 @@ class Cfl(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEle
      * */
     override fun efficientLookup() = false
 
-    override fun queryEfficientFilter() = queryControlPercentSaved()
+    override fun queryEfficientFilter() =
+            "{\"\$or\":[" + queryControlPercentSaved() + "," + queryAssumedHours() + "]}"
 
     override fun queryControlPercentSaved() = JSONObject()
             .put("type", LightControls)
