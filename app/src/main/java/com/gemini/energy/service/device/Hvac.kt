@@ -105,7 +105,7 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
          * Year At - Current minus the Age
          * */
         private val dateFormatter = SimpleDateFormat("yyyy", Locale.ENGLISH)
-// TODO: @k2interactive Not sure if this is doing this but I need this to take a year and provide me with the age. So if I insert 1990 as the input variable for age it will tell me it is 30 years old.
+
         fun getYear(age: Int): Int {
             val calendar = Calendar.getInstance()
             calendar.add(Calendar.YEAR, "-$age".toInt()) //** Subtracting the Age **
