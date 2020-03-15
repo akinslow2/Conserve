@@ -4,11 +4,14 @@ import com.gemini.energy.domain.entity.Computable
 import com.gemini.energy.service.DataHolder
 import com.google.gson.JsonArray
 import com.google.gson.JsonElement
+import com.google.gson.JsonObject
 import io.reactivex.functions.Function
 import timber.log.Timber
 import java.util.*
 
+
 class EnergyPostState {
+
 
     class Mapper : Function<JsonArray, DataHolder> {
         lateinit var postStateFields: MutableList<String>
@@ -26,33 +29,33 @@ class EnergyPostState {
             val dataHolderPostState = initDataHolder()
             val costCollector = mutableListOf<Double>()
             val costToElement: MutableMap<Double, JsonElement> = hashMapOf()
-            var jsonElements: List<JsonElement> = listOf()
+            var combinedElement = JsonObject()
 
             try {
-                jsonElements = response.map { it.asJsonObject.get("data") }
+                val jsonElements = response.map { it.asJsonObject.get("data") }
+                combinedElement = merge(jsonElements) ?: JsonObject()
             } catch (ex: Exception) {
                 ex.printStackTrace()
             }
 
-            jsonElements.forEach { element ->
-                val postRow = mutableMapOf<String, String>()
-                postStateFields.forEach { key ->
-                    var value = ""
-                    if (element.asJsonObject.has(key)) {
-                        value = element.asJsonObject.get(key).asString
-                    }
-                    postRow[key] = value
+            val postRow = mutableMapOf<String, String>()
+            postStateFields.forEach { key ->
+                var value = ""
+                if (combinedElement.asJsonObject.has(key)) {
+                    value = combinedElement.asJsonObject.get(key).asString
                 }
-
-                val cost = cost(element, dataHolderPostState)
-                postRow["__electric_cost"] = cost.toString()
-
-                costCollector.add(cost)
-                costToElement[cost] = element
-
-                dataHolderPostState.rows?.add(postRow)
-                computable.energyPostState?.add(postRow)
+                postRow[key] = value
             }
+
+            val cost = cost(combinedElement, dataHolderPostState)
+            postRow["__electric_cost"] = cost.toString()
+
+            costCollector.add(cost)
+            costToElement[cost] = combinedElement
+
+            dataHolderPostState.rows?.add(postRow)
+            computable.energyPostState?.add(postRow)
+
 
             Timber.d("## Data Holder - POST STATE  - (${thread()}) ##")
             Timber.d(dataHolderPostState.toString())
@@ -84,6 +87,14 @@ class EnergyPostState {
 
         private fun thread() = Thread.currentThread().name
 
+        private fun merge(jsonObjects: List<JsonElement>): JsonObject? {
+            val jsonObject = JsonObject()
+            for (each in jsonObjects) {
+                val keys = each.asJsonObject.keySet()
+                for (key in keys)
+                    jsonObject.add(key, each.asJsonObject.get(key))
+            }
+            return jsonObject
+        }
     }
-
 }
