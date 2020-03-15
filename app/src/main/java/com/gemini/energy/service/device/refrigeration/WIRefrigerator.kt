@@ -174,7 +174,10 @@ class WIRefrigerator(computable: Computable<*>, utilityRateGas: UtilityRate, uti
 
     var quantity = 0
     var kW = 0.0
-    var capacity = 0.0
+
+    //    var capacity = 0.0
+    var condensorCapacity = 0
+    var evaporatorCapacity = 0.0
 
     var condensorTemp = ""
     var condesorCompressor = 0.0
@@ -188,7 +191,6 @@ class WIRefrigerator(computable: Computable<*>, utilityRateGas: UtilityRate, uti
 
     override fun setup() {
         try {
-
             quantity = featureData["Quantity"]!! as Int
 
             age = featureData["Age"]!! as Int
@@ -206,7 +208,9 @@ class WIRefrigerator(computable: Computable<*>, utilityRateGas: UtilityRate, uti
 
             kW = featureData["Heating Power (kW)"]!! as Double
 
-            capacity = featureData["Capacity (BTU)"]!! as Double
+            condensorCapacity = featureData["Condenser Capacity (BTU)"]!! as Int
+            evaporatorCapacity = featureData["Evaporator Capacity (BTU)"]!! as Double
+
             peakHours = featureData["Peak Hours"]!! as Double
             offPeakHours = featureData["Off Peak Hours"]!! as Double
         } catch (e: Exception) {
