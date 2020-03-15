@@ -303,13 +303,13 @@ class SorterForWordDocumentGenerator {
         var totalSavings = 0.0
 
         for (fridge in wiRefigerators) {
-            totalCost += fridge.installCost()
-            totalSavings += fridge.grosskwhSavings()
+            totalCost += fridge.installCost
+            totalSavings += fridge.grosskwhSavings
         }
 
         for (fridge in wiFreezers) {
-            totalCost += fridge.installCost()
-            totalSavings += fridge.grosskwhSavings()
+            totalCost += fridge.installCost
+            totalSavings += fridge.grosskwhSavings
         }
 
         for (fridge in refrigerators) {

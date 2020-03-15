@@ -237,25 +237,17 @@ class WIFreezer(computable: Computable<*>, utilityRateGas: UtilityRate, utilityR
 
         return 0.0 // TODO: AK2 needs to calculate this.
     }
+
 // TODO: @k2interactive enter walkin equations below.
 //  The energy savings (kwh) and demand savings (kw) pulled from the PARSE dashboard are the gross values.
 //  The net values are created using the equations below.
 //  The gross & net savings for both kwh and kw as well as the cost (pulled from PARSE) should be crunched to the CSV.
-//  I also want the sum of the gross energy savings pulled from the PARSE combined with a fun grosskwhsavings() &
-//  the sum of the costs pulled from the PARSE combined with a fun installcost() and all pushed to the report.
-//  I added a comment in SorterForWordDocumentGenerator.kt line 14 to match to this.
-
-    fun installCost(): Double {
-//        sum of the costs pulled from the PARSE
-        return 0.0
-    }
-
-    fun grosskwhSavings(): Double {
-//        sum of the gross energy savings pulled from the PARSE
-        return 0.0
-    }
+//
 
 
+    /** assigned in costPostState **/
+    var installCost = 0.0
+    var grosskwhSavings = 0.0
     /**
      * Cost - Post State
      * */
@@ -266,9 +258,10 @@ class WIFreezer(computable: Computable<*>, utilityRateGas: UtilityRate, utilityR
         Timber.d("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
 
         // MARK: Condensing unit gross and net savings: energy (kwh) and demand (kw)
-        val cuGrossEnergySavings = extractCondensingUnitCompressorKWh(element) +
-                extractCondensingUnitCondensorKWh(element) +
-                extractCondensingUnitHeadKWh(element)
+        val cuGrossEnergySavings =
+                extractCondensingUnitCompressorKWh(element) +
+                        extractCondensingUnitCondensorKWh(element) +
+                        extractCondensingUnitHeadKWh(element)
 
         val cuGrossDemandSavings =
                 extractCondensingUnitCompressorKW(element) +
@@ -293,31 +286,34 @@ class WIFreezer(computable: Computable<*>, utilityRateGas: UtilityRate, utilityR
 
         // MARK: Evaporator fan coil control measure gross and net savings: energy (kwh) and demand (kw)
         val efccGrossEnergySavings = extractEvapFanMotorControlskWh(element) * Nfan
-        val efccDemandSavings = extractEvapFanMotorControlskW(element) * Nfan
+        val efccGrossDemandSavings = extractEvapFanMotorControlskW(element) * Nfan
 
         val efccNetEnergySavings =
                 (efccGrossEnergySavings * (1 + 0.121) * (0.95 + 1.05 - 1) * 0.59) +
                         (efccGrossEnergySavings * (1 + 0.149) * (0.95 + 1.05 - 1) * 0.41)
 
         val efccNetDemandSavings =
-                (efccDemandSavings * (1 + 0.113) * (1 + 1 - 1) * 0.831) +
-                        (efccDemandSavings * (1 + 0.112) * (1 + 1 - 1) * 0.831)
+                (efccGrossDemandSavings * (1 + 0.113) * (1 + 1 - 1) * 0.831) +
+                        (efccGrossDemandSavings * (1 + 0.112) * (1 + 1 - 1) * 0.831)
 
         val efccCost = extractEvapFanMotorControlsCost(element) * Nfan
 
         // MARK: Evaporator fan motor replacement measure gross and net savings: energy (kwh) and demand (kw)
         val efmGrossEnergySavings = extractEvapFanMotorkWh(element)
-        val efmDemandSavings = extractEvapFanMotorkW(element)
+        val efmGrossDemandSavings = extractEvapFanMotorkW(element)
         val efmCost = extractEvapFanMotorIncrementalCost(element)
 
         val efmNetEnergySavings =
                 (efmGrossEnergySavings * (1 + 0.121) * (0.95 + 1.05 - 1) * 0.524) +
-                        (efmDemandSavings * (1 + 0.149) * (0.95 + 1.05 - 1) * 0.476)
+                        (efmGrossDemandSavings * (1 + 0.149) * (0.95 + 1.05 - 1) * 0.476)
 
-        val efmnetDemandSavings =
-                (efmDemandSavings * (1 + 0.113) * (1 + 1 - 1) * 1) +
-                        (efmDemandSavings * (1 + 0.112) * (1 + 1 - 1) * 1)
+        val efNnetDemandSavings =
+                (efmGrossDemandSavings * (1 + 0.113) * (1 + 1 - 1) * 1) +
+                        (efmGrossDemandSavings * (1 + 0.112) * (1 + 1 - 1) * 1)
 
+
+        installCost = efccCost + efmCost
+        grosskwhSavings = cuGrossEnergySavings + efccGrossEnergySavings + efmGrossEnergySavings
 
         // Prepare data for csv
         val postRow = mutableMapOf<String, String>()
@@ -327,15 +323,15 @@ class WIFreezer(computable: Computable<*>, utilityRateGas: UtilityRate, utilityR
         postRow["__HE_Condensing_Unit_Net_kw"] = cuNetDemandSavings.toString()
 
         postRow["__EVAP_Fan_Control_Gross_kwh"] = efccGrossEnergySavings.toString()
-        postRow["__EVAP_Fan_Control_Gross_kw"] = efccDemandSavings.toString()
+        postRow["__EVAP_Fan_Control_Gross_kw"] = efccGrossDemandSavings.toString()
         postRow["__EVAP_Fan_Control_Net_kwh"] = efccNetEnergySavings.toString()
         postRow["__EVAP_Fan_Control_Net_kw"] = efccNetDemandSavings.toString()
         postRow["__EVAP_Fan_Control_Cost"] = efccCost.toString()
 
         postRow["__EVAP_Fan_Motor_Gross_kwh"] = efmGrossEnergySavings.toString()
-        postRow["__EVAP_Fan_Motor_Gross_kw"] = efmDemandSavings.toString()
+        postRow["__EVAP_Fan_Motor_Gross_kw"] = efmGrossDemandSavings.toString()
         postRow["__EVAP_Fan_Motor_Net_kwh"] = efmNetEnergySavings.toString()
-        postRow["__EVAP_Fan_Motor_Net_kw"] = efmnetDemandSavings.toString()
+        postRow["__EVAP_Fan_Motor_Net_kw"] = efNnetDemandSavings.toString()
         postRow["__EVAP_Fan_Motor_Retrofit_Cost"] = efmCost.toString()
 
         if (extractEvapFanMotorControlskWh(element) != 0.0)
@@ -391,11 +387,12 @@ class WIFreezer(computable: Computable<*>, utilityRateGas: UtilityRate, utilityR
     }
 
     // TODO: @k2interactive currently the way to get cost from energy is with the function
-    //  costElectricity(eSavings, usageHours, electricityRate) this requires
-    //  power (e.g., eSavings), hours (e.g., usageHours), and electricityRate. I would like two more functions to create cost.
-    //  The first requires energy and electricityRate.
-    //  The second, requires power and demandRate. I believe the variable demandRate will need to be
-    //  created. demandRate would be demand_charge column in the BED_electric.csv
+    //  costElectricity(eSavings, usageHours, electricityRate)
+    //  this requires power (e.g., eSavings), hours (e.g., usageHours), and electricityRate.
+    //  I would like two more functions to create cost.
+    //  • first requires energy and electricityRate.
+    //  • second, requires power and demandRate. I believe the variable demandRate will need to be created.
+    //      demandRate would be demand_charge column in the BED_electric.csv
     //  UtilityRate.kt may be useful in this endeavor. The current costElectricity function is in EBase.kt line 602
     fun totalSavings(): Double {
         return energyPowerChange() * .15 // TODO: AK2 needs to calculate this

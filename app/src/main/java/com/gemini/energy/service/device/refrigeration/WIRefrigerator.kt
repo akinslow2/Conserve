@@ -227,24 +227,11 @@ class WIRefrigerator(computable: Computable<*>, utilityRateGas: UtilityRate, uti
 
         return 0.0 // TODO: AK2 needs to calculate this.
     }
-// TODO: @k2interactive enter walkin equations below.
-//  The energy savings (kwh) and demand savings (kw) pulled from the PARSE dashboard are the gross values.
-//  The net values are created using the equations below.
-//  The gross & net savings for both kwh and kw as well as the cost (pulled from PARSE) should be crunched to the CSV.
-//  I also want the sum of the gross energy savings pulled from the PARSE combined with a fun grosskwhsavings() &
-//  the sum of the costs pulled from the PARSE combined with a fun installcost() and all pushed to the report.
-//  I added a comment in SorterForWordDocumentGenerator.kt line 14 to match to this.
 
-    fun installCost(): Double {
-//        sum of the costs pulled from the PARSE
-        return 0.0
-    }
 
-    fun grosskwhSavings(): Double {
-//        sum of the gross energy savings pulled from the PARSE
-        return 0.0
-    }
-
+    /** values assigned in costPostState **/
+    var installCost = 0.0
+    var grosskwhSavings = 0.0
 
     /**
      * Cost - Post State
@@ -266,12 +253,13 @@ class WIRefrigerator(computable: Computable<*>, utilityRateGas: UtilityRate, uti
                         extractCondensingUnitCondensorkW(element) +
                         extractCondensingUnitHeadkW(element)
 
-        val cuNetEnergySavings = (extractCondensingUnitCompressorkWh(element) * (1 + 0.121) * (1 + 1 - 1) * 0.5) +
-                (extractCondensingUnitCompressorkWh(element) * (1 + 0.149) * (1 + 1 - 1) * 0.5) +
-                (extractCondensingUnitCondensorkWh(element) * (1 + 0.121) * (1 + 1 - 1) * 0.5583) +
-                (extractCondensingUnitCondensorkWh(element) * (1 + 0.149) * (1 + 1 - 1) * 0.4018) +
-                (extractCondensingUnitHeadkWh(element) * (1 + 0.121) * (1 + 1 - 1) * 0.539) +
-                (extractCondensingUnitHeadkWh(element) * (1 + 0.149) * (1 + 1 - 1) * 0.462)
+        val cuNetEnergySavings =
+                (extractCondensingUnitCompressorkWh(element) * (1 + 0.121) * (1 + 1 - 1) * 0.5) +
+                        (extractCondensingUnitCompressorkWh(element) * (1 + 0.149) * (1 + 1 - 1) * 0.5) +
+                        (extractCondensingUnitCondensorkWh(element) * (1 + 0.121) * (1 + 1 - 1) * 0.5583) +
+                        (extractCondensingUnitCondensorkWh(element) * (1 + 0.149) * (1 + 1 - 1) * 0.4018) +
+                        (extractCondensingUnitHeadkWh(element) * (1 + 0.121) * (1 + 1 - 1) * 0.539) +
+                        (extractCondensingUnitHeadkWh(element) * (1 + 0.149) * (1 + 1 - 1) * 0.462)
 
         val cuNetDemandSavings =
                 (extractCondensingUnitCompressorkW(element) * (1 + 0.113) * (1 + 1 - 1) * 0.69) +
@@ -280,6 +268,8 @@ class WIRefrigerator(computable: Computable<*>, utilityRateGas: UtilityRate, uti
                         (extractCondensingUnitCondensorkW(element) * (1 + 0.112) * (1 + 1 - 1) * 0.0115) +
                         (extractCondensingUnitHeadkW(element) * (1 + 0.113) * (1 + 1 - 1) * 1) +
                         (extractCondensingUnitHeadkW(element) * (1 + 0.112) * (1 + 1 - 1) * 0.0)
+
+        grosskwhSavings = cuGrossEnergySavings + cuNetEnergySavings
 
         // Prepare data for csv
         val postRow = mutableMapOf<String, String>()
