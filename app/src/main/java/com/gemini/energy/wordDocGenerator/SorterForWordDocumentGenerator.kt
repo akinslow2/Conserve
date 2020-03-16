@@ -833,10 +833,12 @@ class SorterForWordDocumentGenerator {
         // TODO: @k2interactive refrigeration should have totalCost, PaybackYear, and PaybackMonth returned as well
 //        @Anthony by this do you mean building values should also have a refrigerationTotalCost
 //        refrigerationPaybackYear and refrigerationPaybackMonth variables as well
+        // @k2interactive - Yes
 
         // TODO: @k2interactive currently waterheater is embedded in the hvac results below, I would like it seperated out.
 //        @Anthony by this do you mean remove water heater from hvac calculations and create waterHeaterTotalCost
 //        waterHeaterPaybackYear and waterHeaterPaybackMonth variables in BuildingValues?
+        // @k2interactive - Yes
 
 
 

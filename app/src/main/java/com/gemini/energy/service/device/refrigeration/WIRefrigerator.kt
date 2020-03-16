@@ -33,7 +33,8 @@ class WIRefrigerator(computable: Computable<*>, utilityRateGas: UtilityRate, uti
          * Year At - Current minus the Age
          * */
         private val dateFormatter = SimpleDateFormat("yyyy", Locale.ENGLISH)
-
+// TODO: @k2interactive I would like this changed. Such that the field anaylst should insert the year not the age and as a result the age would be created.
+//  For example, I  insert 1995 into the input parameter then the output is 25. Please do this for anywhere this formula exists.
         fun getYear(age: Int): Int {
             val calendar = Calendar.getInstance()
             calendar.add(Calendar.YEAR, "-$age".toInt()) //** Subtracting the Age **
@@ -271,7 +272,7 @@ class WIRefrigerator(computable: Computable<*>, utilityRateGas: UtilityRate, uti
 
 
 //        @Anthony should we add fan control and fan motor savings and costs here?
-
+//      @K2interactive yes please.
 
         grosskwhSavings = cuGrossEnergySavings + cuNetEnergySavings
 

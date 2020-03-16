@@ -393,8 +393,20 @@ class WIFreezer(computable: Computable<*>, utilityRateGas: UtilityRate, utilityR
 //      fun costElectricity(power: Double, electricityRate: UtilityRate): Double
 //      fun costElectricity(power: Double, demandRate: Double)
 
+//      @k2interactive yes but the first one would be
+//      (energy: Double, electricityRate: UtilityRate): Double
+    //  for context [energy = power * time],
+    //  I need a function that does energy and electricityRate & power and demandRate
+    //  is because sometimes that is cleaner. Especially since
+    //  the electricity rate is $/kwh (energy) & $/kw (demand)
+
 //    @Anthony: it seems that you want those functions added in ebase,
 //    should they be overriden in this file?
+
+    // @k2interactive the reason I thought they should be in Ebase is so that it would not need to be
+    // re-created in every class.I will leave it to you to decide what is more efficient.
+    // But yes it would need to be overridden. To add the correct energy or power.
+
 
 
     fun totalSavings(): Double {

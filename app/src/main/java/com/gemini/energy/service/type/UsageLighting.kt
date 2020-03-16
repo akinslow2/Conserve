@@ -18,6 +18,7 @@ class UsageLighting : UsageHours() {
     }
 
     //@Anthony - Verify if the Yearly hours is the sum as belows - regardless of TOU on No TOU
+    //@k2interactive - yes
     override fun yearly() = peakHours + partPeakHours + offPeakHours
     override fun postyearly() = postpeakHours + postpartPeakHours + postoffPeakHours
 }
