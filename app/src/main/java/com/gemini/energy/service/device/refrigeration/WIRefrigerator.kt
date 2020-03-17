@@ -14,7 +14,6 @@ import com.google.gson.JsonElement
 import io.reactivex.Observable
 import org.json.JSONObject
 import timber.log.Timber
-import java.text.SimpleDateFormat
 import java.util.*
 
 class WIRefrigerator(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateElectricity: UtilityRate,
@@ -29,16 +28,13 @@ class WIRefrigerator(computable: Computable<*>, utilityRateGas: UtilityRate, uti
     }
 
     companion object {
-        /**
-         * Year At - Current minus the Age
-         * */
-        private val dateFormatter = SimpleDateFormat("yyyy", Locale.ENGLISH)
-// TODO: @k2interactive I would like this changed. Such that the field anaylst should insert the year not the age and as a result the age would be created.
-//  For example, I  insert 1995 into the input parameter then the output is 25. Please do this for anywhere this formula exists.
-        fun getYear(age: Int): Int {
-            val calendar = Calendar.getInstance()
-            calendar.add(Calendar.YEAR, "-$age".toInt()) //** Subtracting the Age **
-            return dateFormatter.format(calendar.time).toInt()
+        fun getAge(year: Int): Int {
+            val currentYear = Calendar.getInstance().get(Calendar.YEAR)
+            return currentYear - year
+        }
+
+        fun overAge(year: Int): Int {
+            return getAge(year) - 15
         }
 
         fun firstNotNull(valueFirst: Double, valueSecond: Double) =
@@ -145,7 +141,8 @@ class WIRefrigerator(computable: Computable<*>, utilityRateGas: UtilityRate, uti
     /**
      * HVAC - Age
      * */
-    var age = 0
+//    var age = 0
+    var year = 0
 
     /**
      * HVAC - British Thermal Unit
@@ -185,8 +182,8 @@ class WIRefrigerator(computable: Computable<*>, utilityRateGas: UtilityRate, uti
     override fun setup() {
         try {
             quantity = featureData["Quantity"]!! as Int
+            year = featureData["Year"]!! as Int
 
-            age = featureData["Age"]!! as Int
             condesorCompressor = (featureData["Condensor Compressor Size (HP)"]!! as String).toDoubleOrNull()
                     ?: 0.0
             condensorCompressorphase = (featureData["Compressor Phase"]!! as String).toIntOrNull()
@@ -213,16 +210,6 @@ class WIRefrigerator(computable: Computable<*>, utilityRateGas: UtilityRate, uti
         }
     }
 
-    /**
-     * Getting year of device and how much over life it is
-     */
-    fun year(): Int {
-        return getYear(age)
-    }
-
-    fun overAge(): Int {
-        return age - 15
-    }
 
     /**
      * Cost - Pre State
@@ -231,7 +218,6 @@ class WIRefrigerator(computable: Computable<*>, utilityRateGas: UtilityRate, uti
 
         return 0.0 // TODO: AK2 needs to calculate this.
     }
-
 
     /** values assigned in costPostState **/
     var installCost = 0.0
@@ -449,5 +435,4 @@ class WIRefrigerator(computable: Computable<*>, utilityRateGas: UtilityRate, uti
     private fun getFormMapper() = FormMapper(context, R.raw.walkin_refrigerator)
     private fun getModel() = getFormMapper().decodeJSON()
     private fun getGFormElements() = getFormMapper().mapIdToElements(getModel())
-
 }
