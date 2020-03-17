@@ -13,7 +13,6 @@ import com.gemini.energy.service.type.UtilityRate
 import com.google.gson.JsonElement
 import io.reactivex.Observable
 import timber.log.Timber
-import java.text.SimpleDateFormat
 import java.util.*
 
 class WICoolerBot(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateElectricity: UtilityRate,
@@ -28,13 +27,6 @@ class WICoolerBot(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
     }
 
     companion object {
-
-        /**
-         * Year At - Current minus the Age
-         * */
-        private val dateFormatter = SimpleDateFormat("yyyy", Locale.ENGLISH)
-
-
         /**
          * Getting age of device and how much over life it is
          */
