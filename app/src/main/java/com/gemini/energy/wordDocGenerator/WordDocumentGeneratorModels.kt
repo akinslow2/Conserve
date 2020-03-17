@@ -116,7 +116,13 @@ data class BuildingValues(
         val hvacPaybackMonth: Double, // 38
         val equipmentTotalCost: Double, // 36
         val equipmentPaybackYear: Double, // 39
-        val equipmentPaybackMonth: Double // 40
+        val equipmentPaybackMonth: Double, // 40
+        val refrigerationTotalCost: Double,
+        val refrigerationPaybackYear: Double,
+        val refrigerationPaybackMonth: Double,
+        val waterHeaterTotalCost: Double,
+        val waterHeaterPaybackYear: Double,
+        val waterHeaterPaybackMonth: Double
 )
 
 data class PreparedForDocument(

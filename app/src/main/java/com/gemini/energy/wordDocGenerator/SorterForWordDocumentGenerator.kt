@@ -261,8 +261,8 @@ class SorterForWordDocumentGenerator {
         }
 
         val waterheater = audit[waterheater]!!.first() as WaterHeater
-        val paybackMonth = (totalCost/ totalSavings * 12) + 4
-        val paybackYear: Double = (totalCost / totalSavings) + (4/12)
+        val paybackMonth = (totalCost / totalSavings * 12) + 4
+        val paybackYear: Double = (totalCost / totalSavings) + (4 / 12)
 
         return WaterHeaterValues(
                 totalSavings,
@@ -370,7 +370,9 @@ class SorterForWordDocumentGenerator {
             totalCostSavings += light.totalSavings()
             selfinstallcost += light.selfinstallcost()
             electricianCost += light.electricianCost
-            if (electricianCost < 100.0) {electricianCost = 100.0}
+            if (electricianCost < 100.0) {
+                electricianCost = 100.0
+            }
             totalEnergySavings += light.totalEnergySavings()
         }
 
@@ -378,7 +380,9 @@ class SorterForWordDocumentGenerator {
             totalCostSavings += light.totalSavings()
             selfinstallcost += light.selfinstallcost()
             electricianCost += light.electricianCost
-            if (electricianCost < 100.0) {electricianCost = 100.0}
+            if (electricianCost < 100.0) {
+                electricianCost = 100.0
+            }
             totalEnergySavings += light.totalEnergySavings()
         }
 
@@ -386,7 +390,9 @@ class SorterForWordDocumentGenerator {
             totalCostSavings += light.totalSavings()
             selfinstallcost += light.selfinstallcost()
             electricianCost += light.electricianCost
-            if (electricianCost < 100.0) {electricianCost = 100.0}
+            if (electricianCost < 100.0) {
+                electricianCost = 100.0
+            }
             totalEnergySavings += light.totalEnergySavings()
         }
 
@@ -394,7 +400,9 @@ class SorterForWordDocumentGenerator {
             totalCostSavings += light.totalSavings()
             selfinstallcost += light.selfinstallcost()
             electricianCost += light.electricianCost
-            if (electricianCost < 100.0) {electricianCost = 100.0}
+            if (electricianCost < 100.0) {
+                electricianCost = 100.0
+            }
             totalEnergySavings += light.totalEnergySavings()
         }
 
@@ -402,7 +410,9 @@ class SorterForWordDocumentGenerator {
             totalCostSavings += light.totalSavings()
             selfinstallcost += light.selfinstallcost()
             electricianCost += light.electricianCost
-            if (electricianCost < 100.0) {electricianCost = 100.0}
+            if (electricianCost < 100.0) {
+                electricianCost = 100.0
+            }
             totalEnergySavings += light.totalEnergySavings()
         }
 
@@ -410,7 +420,9 @@ class SorterForWordDocumentGenerator {
             totalCostSavings += light.totalSavings()
             selfinstallcost += light.selfinstallcost()
             electricianCost += light.electricianCost
-            if (electricianCost < 100.0) {electricianCost = 100.0}
+            if (electricianCost < 100.0) {
+                electricianCost = 100.0
+            }
             totalEnergySavings += light.totalEnergySavings()
         }
 
@@ -462,10 +474,10 @@ class SorterForWordDocumentGenerator {
                             light.preEnergy(),
                             light.offPeakHours,
                             light.postEnergy(),
-                            light.usageHoursPost().toDouble(),
+                            light.usageHoursPost(),
                             light.energySavings(),
                             light.totalSavings(),
-                            light.selfinstallcost().toDouble(),
+                            light.selfinstallcost(),
                             light.selfinstallcost() / light.totalSavings() * 12,
                             light.selfinstallcost() / light.totalSavings()
                     ))
@@ -479,10 +491,10 @@ class SorterForWordDocumentGenerator {
                             light.preEnergy(),
                             light.offPeakHours,
                             light.postEnergy(),
-                            light.usageHoursPost().toDouble(),
+                            light.usageHoursPost(),
                             light.energySavings(),
                             light.totalSavings(),
-                            light.selfinstallcost().toDouble(),
+                            light.selfinstallcost(),
                             light.selfinstallcost() / light.totalSavings() * 12,
                             light.selfinstallcost() / light.totalSavings()
                     ))
@@ -496,10 +508,10 @@ class SorterForWordDocumentGenerator {
                             light.preEnergy(),
                             light.offPeakHours,
                             light.postEnergy(),
-                            light.usageHoursPost().toDouble(),
+                            light.usageHoursPost(),
                             light.energySavings(),
                             light.totalSavings(),
-                            light.selfinstallcost().toDouble(),
+                            light.selfinstallcost(),
                             light.selfinstallcost() / light.totalSavings() * 12,
                             light.selfinstallcost() / light.totalSavings()
                     ))
@@ -513,7 +525,7 @@ class SorterForWordDocumentGenerator {
                             light.preEnergy(),
                             light.offPeakHours,
                             light.postEnergy(),
-                            light.usageHoursPost().toDouble(),
+                            light.usageHoursPost(),
                             light.energySavings(),
                             light.totalSavings(),
                             light.selfinstallcost(),
@@ -530,16 +542,15 @@ class SorterForWordDocumentGenerator {
                             light.preEnergy(),
                             light.offPeakHours,
                             light.postEnergy(),
-                            light.usageHoursPost().toDouble(),
+                            light.usageHoursPost(),
                             light.energySavings(),
                             light.totalSavings(),
-                            light.selfinstallcost().toDouble(),
+                            light.selfinstallcost(),
                             light.selfinstallcost() / light.totalSavings() * 12,
                             light.selfinstallcost() / light.totalSavings()
                     ))
                 }
             }
-
             measure += 1
         }
 
@@ -814,6 +825,17 @@ class SorterForWordDocumentGenerator {
             hvacs: HvacValues?,
             waterHeater: WaterHeaterValues?,
             refrigeration: RefrigerationValues?): BuildingValues {
+
+        fun calculatePaybackYear(cost: Double?, savings: Double?) =
+                if (cost != null && savings != null && savings > 0.0)
+                    cost / savings
+                else 0.0
+
+        fun calculatePaybackMonth(cost: Double?, savings: Double?) =
+                if (cost != null && savings != null && savings > 0.0)
+                    cost / savings * 12
+                else 0.0
+
         val buildingTotalSavings = (lightings?.totalcostsavings ?: 0.0) +
                 (equipments?.totalSavings ?: 0.0) +
                 (hvacs?.totalSavings ?: 0.0) +
@@ -826,33 +848,31 @@ class SorterForWordDocumentGenerator {
                 (waterHeater?.totalCost ?: 0.0) +
                 (refrigeration?.totalCost ?: 0.0)
 
-        val buildingPayback = buildingTotalCost / buildingTotalSavings
+        val buildingPayback =
+                if (buildingTotalSavings == 0.0) 0.0
+                else buildingTotalCost / buildingTotalSavings
 
-        val buildingPaybackMonth = buildingTotalCost / buildingTotalSavings * 12
-
-        // TODO: @k2interactive refrigeration should have totalCost, PaybackYear, and PaybackMonth returned as well
-//        @Anthony by this do you mean building values should also have a refrigerationTotalCost
-//        refrigerationPaybackYear and refrigerationPaybackMonth variables as well
-        // @k2interactive - Yes
-
-        // TODO: @k2interactive currently waterheater is embedded in the hvac results below, I would like it seperated out.
-//        @Anthony by this do you mean remove water heater from hvac calculations and create waterHeaterTotalCost
-//        waterHeaterPaybackYear and waterHeaterPaybackMonth variables in BuildingValues?
-        // @k2interactive - Yes
-
-
+        val buildingPaybackMonth =
+                if (buildingTotalSavings == 0.0) 0.0
+                else buildingTotalCost / buildingTotalSavings * 12
 
         return BuildingValues(
                 buildingTotalSavings,
                 buildingPayback,
                 buildingPaybackMonth,
                 buildingTotalCost,
-                (hvacs?.totalCost ?: 0.0),
-                ((hvacs?.totalCost ?: 0.0) + (waterHeater?.totalCost ?: 0.0)) / ((hvacs?.totalSavings ?: 0.0) + (waterHeater?.totalSavings ?: 0.0)),
-                ((hvacs?.totalCost ?: 0.0) + (waterHeater?.totalCost ?: 0.0))/ ((hvacs?.totalSavings ?: 0.0) + (waterHeater?.totalSavings ?: 0.0)) * 12,
+                hvacs?.totalCost ?: 0.0,
+                calculatePaybackYear(hvacs?.totalCost, hvacs?.totalSavings),
+                calculatePaybackMonth(hvacs?.totalCost, hvacs?.totalSavings),
                 equipments?.totalCost ?: 0.0,
-                (equipments?.totalCost ?: 0.0) / (equipments?.totalSavings ?: 0.0),
-                (equipments?.totalCost ?: 0.0) / (equipments?.totalSavings ?: 0.0) * 12
+                calculatePaybackYear(equipments?.totalCost, equipments?.totalSavings),
+                calculatePaybackMonth(equipments?.totalCost, equipments?.totalSavings),
+                refrigeration?.totalCost ?: 0.0,
+                calculatePaybackYear(refrigeration?.totalCost, refrigeration?.totalSavings),
+                calculatePaybackMonth(refrigeration?.totalCost, refrigeration?.totalSavings),
+                waterHeater?.totalCost ?: 0.0,
+                calculatePaybackYear(waterHeater?.totalCost, waterHeater?.totalSavings),
+                calculatePaybackMonth(waterHeater?.totalCost, waterHeater?.totalSavings)
         )
     }
 }
