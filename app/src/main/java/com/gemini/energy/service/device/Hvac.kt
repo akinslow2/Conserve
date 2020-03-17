@@ -18,7 +18,6 @@ import io.reactivex.Observable
 import io.reactivex.Single
 import org.json.JSONObject
 import timber.log.Timber
-import java.text.SimpleDateFormat
 import java.util.*
 
 class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateElectricity: UtilityRate,
@@ -102,14 +101,11 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
         fun power(btu: Int, seer: Double) = (btu / seer)
 
         /**
-         * Year At - Current minus the Age
-         * */
-        private val dateFormatter = SimpleDateFormat("yyyy", Locale.ENGLISH)
-
-        fun getYear(age: Int): Int {
-            val calendar = Calendar.getInstance()
-            calendar.add(Calendar.YEAR, "-$age".toInt()) //** Subtracting the Age **
-            return dateFormatter.format(calendar.time).toInt()
+         * Getting age of device
+         */
+        fun getAge(year: Int): Int {
+            val currentYear = Calendar.getInstance().get(Calendar.YEAR)
+            return currentYear - year
         }
 
         fun firstNotNull(valueFirst: Double, valueSecond: Double) =
@@ -134,7 +130,10 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
     /**
      * HVAC - Age
      * */
-    var age = 0
+    var year = 0
+
+    fun overAge() = getAge(year) - 15
+    fun age() = getAge(year)
 
     /**
      * HVAC - British Thermal Unit
@@ -217,7 +216,7 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
 
             eer = featureData["EER"]!! as Double
             seer = featureData["SEER"]!! as Double
-            age = featureData["Age installed (years)"]!! as Int
+            year = featureData["Year"]!! as Int
             btu = featureData["Cooling Capacity (Btu/hr)"]!! as Int
             gasInput = featureData["Heating Input (Btu/hr)"]!! as Int
             gasOutput = featureData["Heating Output (Btu/hr)"]!! as Int
@@ -234,16 +233,6 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
         }
     }
 
-    /**
-     * Getting year of device and how much over life it is
-     */
-    fun year(): Int {
-        return getYear(age)
-    }
-
-    fun overAge(): Int {
-        return age - 15
-    }
 
     /**
      * Cost - Pre State
@@ -258,9 +247,9 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
 
         Timber.d("::: PARAM - HVAC :::")
         Timber.d("EER -- $eer")
-        Timber.d("AGE -- $age")
+        Timber.d("AGE -- ${getAge(year)}")
         Timber.d("BTU -- $btu")
-        Timber.d("YEAR -- ${getYear(age)}")
+        Timber.d("YEAR -- ${year}")
 
         Timber.d("::: DATA EXTRACTOR - HVAC :::")
         Timber.d(elements.toString())
@@ -394,7 +383,7 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
     fun totalSavings(): Double {
         val powerPre = btu / seer / 1000
         val powerPost = btu / alternateSeer / 1000
-        var eSavings = (powerPre - powerPost)
+        val eSavings = (powerPre - powerPost)
         val usageHours = UsageLighting()
         usageHours.peakHours = peakHours
         usageHours.partPeakHours = partPeakHours
@@ -422,7 +411,7 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
      * */
     override fun queryHVACEer() = JSONObject()
             .put("type", HVAC_EER)
-            .put("data.year", getYear(age))
+            .put("data.year", year)
             .put("data.size_btu_per_hr_min", JSONObject().put("\$lte", btu))
             .put("data.size_btu_per_hr_max", JSONObject().put("\$gte", btu))
             .toString()
@@ -491,5 +480,4 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
     private fun getFormMapper() = FormMapper(context, R.raw.hvac)
     private fun getModel() = getFormMapper().decodeJSON()
     private fun getGFormElements() = getFormMapper().mapIdToElements(getModel())
-
 }

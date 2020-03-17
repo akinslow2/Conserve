@@ -204,8 +204,8 @@ class SorterForWordDocumentGenerator {
 
             instances.add(HvacInstances(
                     hvac.quantity,
-                    hvac.year(),
-                    hvac.age,
+                    hvac.year,
+                    hvac.age(),
                     hvac.btu,
                     hvac.seer,
                     hvac.overAge(),

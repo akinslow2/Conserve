@@ -45,7 +45,7 @@
           "hint": "",
           "dataType": "introw",
           "defaultValues": "",
-          "param": "Age installed (years)",
+          "param": "Year",
           "validation": "optional",
           "id": "15"
         },
