@@ -99,6 +99,8 @@ class Refrigerator(computable: Computable<*>, utilityRateGas: UtilityRate, utili
         costElectricity = costElectricity(powerUsed, super.usageHoursBusiness, super.electricityRate)
         costPostState = costElectricity
         return costElectricity
+    }
+
 // TODO: @k2interactive add the following equations please
       /**  val grossDeemedReplacementkwh = extractDeemedfridgeReplacementkwh(element)
         val grossDeemedReplacementkw = extractDeemedfridgeReplacementkw(element)
@@ -111,13 +113,14 @@ class Refrigerator(computable: Computable<*>, utilityRateGas: UtilityRate, utili
         val netDeemedReplacementkW =
                 (grossDeemedReplacementkw(element) * (1 + 0.113) * (1 + 1 - 1) * 0.979) +
                         (grossDeemedReplacementkw(element) * (1 + 0.112) * (1 + 1 - 1) * 1.186)
-    } */
+       */
 // TODO: @k2interactive added this here, please correct
-  /**  fun installCost(): Double {
-        val increCost = extractDeemedfridgeReplacementcost(element)
-        val totalCost = increCost * 4 //@AK2 fill
-        return totalCost
-    } */
+      fun installCost(): Double {
+//        val increCost = extractDeemedfridgeReplacementcost(element)
+//        val totalCost = increCost * 4 //@AK2 fill
+//        return totalCost
+          return 0.0
+      }
 
 
     fun grosskwhSavings(): Double {
