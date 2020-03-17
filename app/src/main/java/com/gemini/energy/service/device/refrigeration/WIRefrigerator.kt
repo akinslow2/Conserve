@@ -180,6 +180,7 @@ class WIRefrigerator(computable: Computable<*>, utilityRateGas: UtilityRate, uti
 
     var fanmotortype = ""
     var temprange = ""
+    var Nfan = 0
 
     override fun setup() {
         try {
@@ -191,6 +192,8 @@ class WIRefrigerator(computable: Computable<*>, utilityRateGas: UtilityRate, uti
             condensorCompressorphase = (featureData["Compressor Phase"]!! as String).toIntOrNull()
                     ?: 0
             condensorTemp = featureData["Temp"]!! as String
+
+            Nfan = featureData["Quantity of fans"]!! as Int
 
             motortype = featureData["Motor Type"]!! as String
             fridgetype = featureData["Refrigeration Type"]!! as String
@@ -270,11 +273,35 @@ class WIRefrigerator(computable: Computable<*>, utilityRateGas: UtilityRate, uti
                         (extractCondensingUnitHeadkW(element) * (1 + 0.113) * (1 + 1 - 1) * 1) +
                         (extractCondensingUnitHeadkW(element) * (1 + 0.112) * (1 + 1 - 1) * 0.0)
 
+        // MARK: Evaporator fan coil control measure gross and net savings: energy (kwh) and demand (kw)
+        val efccGrossEnergySavings = extractEvapFanMotorControlskWh(element) * Nfan
+        val efccGrossDemandSavings = extractEvapFanMotorControlskW(element) * Nfan
 
-//        @Anthony should we add fan control and fan motor savings and costs here?
-//      @K2interactive yes please.
+        val efccNetEnergySavings =
+                (efccGrossEnergySavings * (1 + 0.121) * (0.95 + 1.05 - 1) * 0.59) +
+                        (efccGrossEnergySavings * (1 + 0.149) * (0.95 + 1.05 - 1) * 0.41)
 
-        grosskwhSavings = cuGrossEnergySavings + cuNetEnergySavings
+        val efccNetDemandSavings =
+                (efccGrossDemandSavings * (1 + 0.113) * (1 + 1 - 1) * 0.831) +
+                        (efccGrossDemandSavings * (1 + 0.112) * (1 + 1 - 1) * 0.831)
+
+        val efccCost = extractEvapFanMotorControlsCost(element) * Nfan
+
+        // MARK: Evaporator fan motor replacement measure gross and net savings: energy (kwh) and demand (kw)
+        val efmGrossEnergySavings = extractEvapFanMotorkWh(element)
+        val efmGrossDemandSavings = extractEvapFanMotorkW(element)
+        val efmCost = extractEvapFanMotorIncrementalCost(element)
+
+        val efmNetEnergySavings =
+                (efmGrossEnergySavings * (1 + 0.121) * (0.95 + 1.05 - 1) * 0.524) +
+                        (efmGrossDemandSavings * (1 + 0.149) * (0.95 + 1.05 - 1) * 0.476)
+
+        val efNnetDemandSavings =
+                (efmGrossDemandSavings * (1 + 0.113) * (1 + 1 - 1) * 1) +
+                        (efmGrossDemandSavings * (1 + 0.112) * (1 + 1 - 1) * 1)
+
+        installCost = efccCost + efmCost
+        grosskwhSavings = cuGrossEnergySavings + efccGrossEnergySavings + efmGrossEnergySavings
 
         // Prepare data for csv
         val postRow = mutableMapOf<String, String>()
@@ -282,6 +309,21 @@ class WIRefrigerator(computable: Computable<*>, utilityRateGas: UtilityRate, uti
         postRow["__HE_Condensing_Unit_Gross_kw"] = cuGrossDemandSavings.toString()
         postRow["__HE_Condensing_Unit_Net_kwh"] = cuNetEnergySavings.toString()
         postRow["__HE_Condensing_Unit_Net_kw"] = cuNetDemandSavings.toString()
+
+        postRow["__EVAP_Fan_Control_Gross_kwh"] = efccGrossEnergySavings.toString()
+        postRow["__EVAP_Fan_Control_Gross_kw"] = efccGrossDemandSavings.toString()
+        postRow["__EVAP_Fan_Control_Net_kwh"] = efccNetEnergySavings.toString()
+        postRow["__EVAP_Fan_Control_Net_kw"] = efccNetDemandSavings.toString()
+        postRow["__EVAP_Fan_Control_Cost"] = efccCost.toString()
+
+        postRow["__EVAP_Fan_Motor_Gross_kwh"] = efmGrossEnergySavings.toString()
+        postRow["__EVAP_Fan_Motor_Gross_kw"] = efmGrossDemandSavings.toString()
+        postRow["__EVAP_Fan_Motor_Net_kwh"] = efmNetEnergySavings.toString()
+        postRow["__EVAP_Fan_Motor_Net_kw"] = efNnetDemandSavings.toString()
+        postRow["__EVAP_Fan_Motor_Retrofit_Cost"] = efmCost.toString()
+
+        if (extractEvapFanMotorControlskWh(element) != 0.0)
+            postRow["__measure_code"] = "RFRFMCON"
 
         dataHolder.header = postStateFields()
         dataHolder.computable = computable
@@ -389,7 +431,18 @@ class WIRefrigerator(computable: Computable<*>, utilityRateGas: UtilityRate, uti
             "__HE_Condensing_Unit_Gross_kwh",
             "__HE_Condensing_Unit_Gross_kw",
             "__HE_Condensing_Unit_Net_kwh",
-            "__HE_Condensing_Unit_Net_kw")
+            "__HE_Condensing_Unit_Net_kw",
+            "__EVAP_Fan_Control_Gross_kwh",
+            "__EVAP_Fan_Control_Gross_kw",
+            "__EVAP_Fan_Control_Net_kwh",
+            "__EVAP_Fan_Control_Net_kw",
+            "__EVAP_Fan_Control_Cost",
+            "__measure_code",
+            "__EVAP_Fan_Motor_Gross_kwh",
+            "__EVAP_Fan_Motor_Gross_kw",
+            "__EVAP_Fan_Motor_Net_kwh",
+            "__EVAP_Fan_Motor_Net_kw",
+            "__EVAP_Fan_Motor_Retrofit_Cost")
 
     override fun computedFields() = mutableListOf<String>()
 
