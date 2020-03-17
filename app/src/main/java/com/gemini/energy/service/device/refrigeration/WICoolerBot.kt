@@ -34,16 +34,21 @@ class WICoolerBot(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
          * */
         private val dateFormatter = SimpleDateFormat("yyyy", Locale.ENGLISH)
 
-        fun getYear(age: Int): Int {
-            val calendar = Calendar.getInstance()
-            calendar.add(Calendar.YEAR, "-$age".toInt()) //** Subtracting the Age **
-            return dateFormatter.format(calendar.time).toInt()
+
+        /**
+         * Getting age of device and how much over life it is
+         */
+        fun getAge(year: Int): Int {
+            val currentYear = Calendar.getInstance().get(Calendar.YEAR)
+            return currentYear - year
         }
 
-        fun firstNotNull (valueFirst: Double, valueSecond: Double) =
+        fun overAge(year: Int) = getAge(year) - 15
+
+        fun firstNotNull(valueFirst: Double, valueSecond: Double) =
                 if (valueFirst == 0.0) valueSecond else valueFirst
 
-        fun firstNotNull (valueFirst: Int, valueSecond: Int) =
+        fun firstNotNull(valueFirst: Int, valueSecond: Int) =
                 if (valueFirst == 0) valueSecond else valueFirst
 
     }
@@ -51,14 +56,12 @@ class WICoolerBot(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
     /**
      * HVAC - Age
      * */
-    var age = 0
-
+    var year = 0
 
     /**
      * HVAC - British Thermal Unit
      * */
     var btu = 0
-
 
     /**
      * City | State
@@ -73,9 +76,8 @@ class WICoolerBot(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
     private var partPeakHours = 0.0
     private var offPeakHours = 0.0
 
-
     var quantity = 0
-    var kW = 0.0
+    var kWh = 0.0
     var capacity = 0
 
     var condensorTemp = ""
@@ -88,55 +90,26 @@ class WICoolerBot(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
     var fanmotortype = ""
     var temprange = ""
 
+
     override fun setup() {
         try {
-
             quantity = featureData["Quantity"]!! as Int
+            year = featureData["Year"]!! as Int
 
-            age = featureData["Age"]!! as Int
-            //   btu = featureData["Cooling Capacity (Btu/hr)"]!! as Int
-            //   gasInput = featureData["Heating Input (Btu/hr)"]!! as Int
-            //   gasOutput = featureData["Heating Output (Btu/hr)"]!! as Int
-           // condesorCompressor = featureData["Condensor Compressor Size (HP)"]!! as Int
-           // condensorCompressorphase = featureData["Compressor Phase"]!! as Int
-           // condensorTemp = featureData["Temp"]!! as String
+            kWh = featureData["Daily Energy Used"]!! as Double
 
-           // motortype = featureData["Motor Type"]!! as String
-           // fridgetype = featureData["Refrigeration Type"]!! as String
-
-            //fanmotortype = featureData["Fan Motor Type"]!! as String
-           // temprange = featureData["Temperature Range"]!! as String
-
-            kW = featureData["Heating Power (kW)"]!! as Double
-
-            //    unittype = featureData["Type of Unit"]!! as String
-            capacity = featureData["Capacity (BTU)"]!! as Int
             peakHours = featureData["Peak Hours"]!! as Double
-            //   partPeakHours = featureData["Part Peak Hours"]!! as Double
             offPeakHours = featureData["Off Peak Hours"]!! as Double
-
-
         } catch (e: Exception) {
             e.printStackTrace()
         }
     }
 
-    /**
-     * Getting year of device and how much over life it is
-     */
-    fun year(): Int {
-        return getYear(age)
-    }
-
-    fun overAge(): Int {
-        return age - 15
-    }
 
     /**
      * Cost - Pre State
      * */
     override fun costPreState(elements: List<JsonElement?>): Double {
-
         return 0.0 // TODO: AK2 needs to calculate this.
     }
 
@@ -154,12 +127,12 @@ class WICoolerBot(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
     }
 
     fun installCost(): Double {
-//        sum of the costs pulled from the PARSE
+//     TODO:   sum of the costs pulled from the PARSE
         return 0.0
     }
 
     fun grosskwhSavings(): Double {
-//        sum of the gross energy savings pulled from the PARSE
+//     TODO:   sum of the gross energy savings pulled from the PARSE
         return 0.0
     }
 
@@ -193,6 +166,7 @@ class WICoolerBot(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
      * PowerTimeChange >> Yearly Usage Hours - [Pre | Post]
      * */
     override fun usageHoursPre(): Double = 0.0
+
     override fun usageHoursPost(): Double = 0.0
 
     /**
@@ -200,8 +174,6 @@ class WICoolerBot(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
      * I need to insert the heating and cooling hours based on set-point temp, operation hours, and thermostat schedule
      * */
     override fun energyPowerChange(): Double {
-
-
         return 0.0 // TODO: AK2 needs to calculate
     }
 
@@ -223,8 +195,8 @@ class WICoolerBot(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
      * */
     override fun usageHoursSpecific() = false
 
-    override fun efficientLookup()= false
-    override fun queryEfficientFilter()= ""
+    override fun efficientLookup() = false
+    override fun queryEfficientFilter() = ""
 
 
     override fun preAuditFields() = mutableListOf<String>()
@@ -236,8 +208,7 @@ class WICoolerBot(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
 
     override fun computedFields() = mutableListOf<String>()
 
-    private fun getFormMapper() = FormMapper(context, R.raw.walkin_coolbot)
+    private fun getFormMapper() = FormMapper(context, R.raw.walkin_coolbox)
     private fun getModel() = getFormMapper().decodeJSON()
     private fun getGFormElements() = getFormMapper().mapIdToElements(getModel())
-
 }
