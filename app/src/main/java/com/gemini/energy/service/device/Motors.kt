@@ -143,8 +143,12 @@ class Motors(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRate
      * */
     override fun costPreState(elements: List<JsonElement?>): Double {
 
-        val percentageLoad = (srs - mrs) / (srs - nrs)
-        val powerUsed = hp * KW_CONVERSION * percentageLoad / efficiency
+        val percentageLoad =
+                if (srs - nrs == 0) 0
+                else (srs - mrs) / (srs - nrs)
+        val powerUsed =
+                if (efficiency == 0.0) 0.0
+                else hp * KW_CONVERSION * percentageLoad / efficiency
 //        val nemaPremium = extractNemaPremium(elements)
         val nemaPremium = 0.0
 
