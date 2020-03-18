@@ -14,7 +14,6 @@ import com.google.gson.JsonElement
 import io.reactivex.Observable
 import org.json.JSONObject
 import timber.log.Timber
-import java.text.SimpleDateFormat
 import java.util.*
 
 class WIFreezer(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateElectricity: UtilityRate,
@@ -31,15 +30,14 @@ class WIFreezer(computable: Computable<*>, utilityRateGas: UtilityRate, utilityR
     companion object {
 
         /**
-         * Year At - Current minus the Age
-         * */
-        private val dateFormatter = SimpleDateFormat("yyyy", Locale.ENGLISH)
-
-        fun getYear(age: Int): Int {
-            val calendar = Calendar.getInstance()
-            calendar.add(Calendar.YEAR, "-$age".toInt()) //** Subtracting the Age **
-            return dateFormatter.format(calendar.time).toInt()
+         * Getting age of device and how much over life it is
+         */
+        fun getAge(year: Int): Int {
+            val currentYear = Calendar.getInstance().get(Calendar.YEAR)
+            return currentYear - year
         }
+
+        fun overAge(year: Int) = getAge(year) - 15
 
         fun firstNotNull(valueFirst: Double, valueSecond: Double) =
                 if (valueFirst == 0.0) valueSecond else valueFirst
@@ -147,7 +145,7 @@ class WIFreezer(computable: Computable<*>, utilityRateGas: UtilityRate, utilityR
     /**
      * HVAC - Age
      * */
-    var age = 0
+    var year = 0
 
     /**
      * HVAC - British Thermal Unit
@@ -190,7 +188,9 @@ class WIFreezer(computable: Computable<*>, utilityRateGas: UtilityRate, utilityR
         try {
             quantity = featureData["Quantity"]!! as Int
 
-            age = featureData["Age"]!! as Int
+            year = featureData["Year"]!! as Int
+            val age = getAge(year)
+            val overage = overAge(year)
 
             condesorCompressor = (featureData["Condensor Compressor Size (HP)"]!! as String).toDoubleOrNull()
                     ?: 0.0
@@ -219,16 +219,6 @@ class WIFreezer(computable: Computable<*>, utilityRateGas: UtilityRate, utilityR
         }
     }
 
-    /**
-     * Getting year of device and how much over life it is
-     */
-    fun year(): Int {
-        return getYear(age)
-    }
-
-    fun overAge(): Int {
-        return age - 15
-    }
 
     /**
      * Cost - Pre State
@@ -390,7 +380,7 @@ class WIFreezer(computable: Computable<*>, utilityRateGas: UtilityRate, utilityR
 
 
 //    @Anthony: by the above comment do you mean creating functions like
-//      fun costElectricity(power: Double, electricityRate: UtilityRate): Double
+//      fun costElectricity(power: Double, q: UtilityRate): Double
 //      fun costElectricity(power: Double, demandRate: Double)
 
 //      @k2interactive yes but the first one would be
