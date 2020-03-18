@@ -19,18 +19,15 @@ class Refrigerator(computable: Computable<*>, utilityRateGas: UtilityRate, utili
                    usageHours: UsageHours, outgoingRows: OutgoingRows, private val context: Context) :
         EBase(computable, utilityRateGas, utilityRateElectricity, usageHours, outgoingRows), IComputable {
 
-    var age = 0.0
-    var fridgeVolume = 0
-    var doorType = ""
-
     /**
      * Entry Point
      * */
     override fun compute(): Observable<Computable<*>> {
         return super.compute(extra = ({ Timber.d(it) }))
     }
+
     // TODO: @k2interactive Please check my added functions to call information for calculations based on queryReplacement
-    /** companion object {
+    companion object {
         fun extractDeemedfridgeReplacementkwh(element: JsonElement): Double {
             if (element.asJsonObject.has("annual_energy_savings")) {
                 return element.asJsonObject.get("annual_energy_savings").asDouble
@@ -51,16 +48,23 @@ class Refrigerator(computable: Computable<*>, utilityRateGas: UtilityRate, utili
             }
             return 0.0
         }
-    } */
+    }
+
+
+    var age = 0
+    var fridgeVolume = 0.0
+    var doorType = ""
+    var styleType = ""
+    var dailyEnergyUsed = 0.0
+
+
     override fun setup() {
         try {
-            age = (featureData["Age"]!! as Int).toDouble()
-
-            // TODO @k2interactive added two parameters into the input parameters file for calculations
-            //      not sure if fridgeVolume should be Double or String.
-            //      The only purpose for the variable is to be used to filter in a query
+            age = featureData["Age"]!! as Int
             doorType = featureData["Door Type"]!! as String
-            fridgeVolume = featureData["Total Volume (cu.ft.)"]!! as Int
+            fridgeVolume = featureData["Total Volume"]!! as Double
+            styleType = featureData["Style Type"]!! as String
+            dailyEnergyUsed = featureData["Daily Energy Used"]!! as Double
 
         } catch (e: Exception) {
             e.printStackTrace()
@@ -132,15 +136,7 @@ class Refrigerator(computable: Computable<*>, utilityRateGas: UtilityRate, utili
      * PowerTimeChange >> Hourly Energy Use - Pre
      * */
     override fun hourlyEnergyUsagePre(): List<Double> {
-        var hourlyEnergy = 0.0
-
-        try {
-            val dailyEnergyUsed = featureData["Daily Energy Used"]!! as Double
-            hourlyEnergy = dailyEnergyUsed / 24
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-
+        val hourlyEnergy = dailyEnergyUsed / 24
         return listOf(hourlyEnergy)
     }
 
@@ -156,6 +152,7 @@ class Refrigerator(computable: Computable<*>, utilityRateGas: UtilityRate, utili
             hourlyEnergy = postDailyEnergyUsed / 24
         } catch (e: Exception) {
             e.printStackTrace()
+            return listOf(hourlyEnergy)
         }
 
         return listOf(hourlyEnergy)
@@ -191,13 +188,16 @@ class Refrigerator(computable: Computable<*>, utilityRateGas: UtilityRate, utili
      * Energy Efficiency Lookup Query Definition
      * */
     override fun efficientLookup() = true
-//  TODO: @k2interactive FYI I adjusted the names with featureData to match the names of the input parameters.
+
+    //  TODO: @k2interactive FYI I adjusted the names with featureData to match the names of the input parameters.
     override fun queryEfficientFilter() = JSONObject()
-            .put("data.style_type", featureData["Style Type"])
+            .put("data.style_type", styleType)
             .put("data.total_volume", JSONObject()
-                    .put("\$gte", featureData["Total Volume (cu.ft.)"] as Double - 2)
-                    .put("\$lte", featureData["Total Volume (cu.ft.)"] as Double + 2))
+                    .put("\$gte", fridgeVolume - 2)
+                    .put("\$lte", fridgeVolume + 2))
+
             .toString()
+
 // TODO: @k2interactive please adjust the filter below so that it filters out
 //  the volumes that are equalt to or below "low_cu_ft" and higher than "high_cu_ft".
 //  So if the fridgeVolume is 31 then it would only identify rows that has
@@ -211,6 +211,7 @@ class Refrigerator(computable: Computable<*>, utilityRateGas: UtilityRate, utili
                 .put("data.high_cu_ft", "fridgeVolume")
                 .toString()
     } */
+
 // TODO: @k2interactive this query is actually not needed anymore.
 //  So it can be deleted from the refrigerator and freezer and EBase
     override fun queryReplacement(): String {
@@ -241,7 +242,8 @@ class Refrigerator(computable: Computable<*>, utilityRateGas: UtilityRate, utili
             "Total Volume")
 
     override fun preStateFields() = mutableListOf("Daily Energy Used (kWh)")
-// TODO: @k2interactive please add the incremental cost, as well as
+
+    // TODO: @k2interactive please add the incremental cost, as well as
 //  the gross and net kwh and kw to the postStateFields
     override fun postStateFields() = mutableListOf(
             "company",
@@ -254,8 +256,11 @@ class Refrigerator(computable: Computable<*>, utilityRateGas: UtilityRate, utili
             "purchase_price_per_unit",
             "vendor")
 
-    override fun computedFields() = mutableListOf("__daily_operating_hours", "__weekly_operating_hours",
-            "__yearly_operating_hours", "__electric_cost")
+    override fun computedFields() = mutableListOf(
+            "__daily_operating_hours",
+            "__weekly_operating_hours",
+            "__yearly_operating_hours",
+            "__electric_cost")
 
     private fun getFormMapper() = FormMapper(context, R.raw.refrigerator)
     private fun getModel() = getFormMapper().decodeJSON()
