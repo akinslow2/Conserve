@@ -163,10 +163,10 @@ class Gas(private val rateStructure: String = "", private val companyCode: Strin
     override fun getTOU(structure: HashMap<String, List<String>>) = TOU()
 
     override fun getNoneTOU(structure: HashMap<String, List<String>>) = TOUNone(
-            structure[ERateKey.GasSummer.value]!![0].toDouble(),
-            structure[ERateKey.SummerExcess.value]!![0].toDouble(),
-            structure[ERateKey.GasWinter.value]!![0].toDouble(),
-            structure[ERateKey.WinterExcess.value]!![0].toDouble())
+            structure[ERateKey.GasSummer.value]?.first()?.toDouble() ?: 0.0,
+            structure[ERateKey.SummerExcess.value]?.first()?.toDouble() ?: 0.0,
+            structure[ERateKey.GasWinter.value]?.first()?.toDouble() ?: 0.0,
+            structure[ERateKey.WinterExcess.value]?.first()?.toDouble() ?: 0.0)
 
     companion object {
         private val keys = listOf(
