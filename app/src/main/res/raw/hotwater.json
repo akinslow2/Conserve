@@ -45,7 +45,7 @@
           "hint": "(Rq)",
           "dataType": "decimalrow",
           "defaultValues": "",
-          "param": "Capactity (U.S. Gal)",
+          "param": "Capacity (U.S. Gal)",
           "validation": "optional",
           "id": "15"
         },
@@ -117,7 +117,7 @@
           "hint": "",
           "dataType": "introw",
           "defaultValues": "",
-          "param": "Age",
+          "param": "Year",
           "validation": "optional",
           "id": "113"
         },
@@ -175,7 +175,7 @@
           "index": 32,
           "hint": "",
           "dataType": "pickerinputrow",
-          "defaultValues": "1:Yes/No",
+          "defaultValues": "1:Yes,2:No",
           "param": "Freeze Protection",
           "validation": "optional",
           "id": "32"
@@ -184,7 +184,7 @@
           "index": 33,
           "hint": "",
           "dataType": "pickerinputrow",
-          "defaultValues": "1:Yes/No",
+          "defaultValues": "1:Yes,2:No",
           "param": "Insulated hot water piping",
           "validation": "optional",
           "id": "33"

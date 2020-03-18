@@ -201,6 +201,9 @@ abstract class EBase(val computable: Computable<*>,
                 dataExtractRefrigerationControls(queryReachIn()),
                 dataExtractRefrigerationControls(queryReplacement())
         )
+        val extractorWaterHeater = listOf(
+                dataExtractWaterHeaterControls(queryEfficientFilter()))
+
         val extractorNone = listOf(Observable.just(JsonArray()))
 
         // ** Extractor List gets called depending on the Zone Type **
@@ -210,6 +213,7 @@ abstract class EBase(val computable: Computable<*>,
             EZoneType.Thermostat -> extractorThermostat
             EZoneType.Lighting -> extractorLightControls
             EZoneType.Refrigeration -> extractorRefrigeration
+            EZoneType.WaterHeater -> extractorWaterHeater
             else -> extractorNone
         }
 
@@ -307,8 +311,17 @@ abstract class EBase(val computable: Computable<*>,
      * if in-case of a Suggested Alternative being present as Feature Data
      * */
     open fun buildPostState(): Single<JsonObject> {
+        val element = JsonObject()
+        val data = JsonObject()
+
+        element.add("data", data)
+
+        val response = JsonArray()
+        response.add(element)
+
         val wrapper = JsonObject()
-        wrapper.add("results", JsonArray())
+        wrapper.add("results", response)
+
         return Single.just(wrapper)
     }
 
@@ -549,6 +562,16 @@ abstract class EBase(val computable: Computable<*>,
                 .map { it.getAsJsonArray("results") }
                 .toObservable()
     }
+
+    private fun dataExtractWaterHeaterControls(query: String): Observable<JsonArray> {
+        if (query.isEmpty())
+            return Observable.just(JsonArray())
+
+        return parseAPIService.fetchWaterHeater(query)
+                .map { it.getAsJsonArray("results") }
+                .toObservable()
+    }
+
 
     /**
      * UsageHours Hours
