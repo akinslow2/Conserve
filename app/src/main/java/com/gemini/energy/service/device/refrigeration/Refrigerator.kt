@@ -14,6 +14,7 @@ import com.google.gson.JsonElement
 import io.reactivex.Observable
 import org.json.JSONObject
 import timber.log.Timber
+import java.util.*
 
 class Refrigerator(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateElectricity: UtilityRate,
                    usageHours: UsageHours, outgoingRows: OutgoingRows, private val context: Context) :
@@ -26,28 +27,21 @@ class Refrigerator(computable: Computable<*>, utilityRateGas: UtilityRate, utili
         return super.compute(extra = ({ Timber.d(it) }))
     }
 
-    // TODO: @k2interactive Please check my added functions to call information for calculations based on queryReplacement
     companion object {
-        fun extractDeemedfridgeReplacementkwh(element: JsonElement): Double {
-            if (element.asJsonObject.has("annual_energy_savings")) {
-                return element.asJsonObject.get("annual_energy_savings").asDouble
-            }
-            return 0.0
-        }
+        fun extractDeemedfridgeReplacementkwh(element: JsonElement) =
+                if (element.asJsonObject.has("annual_energy_savings"))
+                    element.asJsonObject.get("annual_energy_savings").asDouble
+                else 0.0
 
-        fun extractDeemedfridgeReplacementkw(element: JsonElement): Double {
-            if (element.asJsonObject.has("demand_savings")) {
-                return element.asJsonObject.get("demand_savings").asDouble
-            }
-            return 0.0
-        }
+        fun extractDeemedfridgeReplacementkw(element: JsonElement) =
+                if (element.asJsonObject.has("demand_savings"))
+                    element.asJsonObject.get("demand_savings").asDouble
+                else 0.0
 
-        fun extractDeemedfridgeReplacementcost(element: JsonElement): Double {
-            if (element.asJsonObject.has("incremental_cost")) {
-                return element.asJsonObject.get("incremental_cost").asDouble
-            }
-            return 0.0
-        }
+        fun extractDeemedfridgeReplacementcost(element: JsonElement) =
+                if (element.asJsonObject.has("incremental_cost"))
+                    element.asJsonObject.get("incremental_cost").asDouble
+                else 0.0
     }
 
 
@@ -78,6 +72,7 @@ class Refrigerator(computable: Computable<*>, utilityRateGas: UtilityRate, utili
         val powerUsed = hourlyEnergyUsagePre()[0]
         val costElectricity: Double
         costElectricity = costElectricity(powerUsed, super.usageHoursBusiness, super.electricityRate)
+
         return costElectricity
     }
 
@@ -93,38 +88,54 @@ class Refrigerator(computable: Computable<*>, utilityRateGas: UtilityRate, utili
         return 0.0
     }
 
-     /**
+    /**
      * Cost - Post State
      * */
     var costPostState = 0.0
-    override fun costPostState(element: JsonElement, dataHolder: DataHolder): Double {
-        val powerUsed = hourlyEnergyUsagePost(element)[0]
-        val costElectricity: Double
-        costElectricity = costElectricity(powerUsed, super.usageHoursBusiness, super.electricityRate)
-        costPostState = costElectricity
-        return costElectricity
-    }
 
-// TODO: @k2interactive add the following equations please
-      /**  val grossDeemedReplacementkwh = extractDeemedfridgeReplacementkwh(element)
+    override fun costPostState(element: JsonElement, dataHolder: DataHolder): Double {
+        val grossDeemedReplacementkwh = extractDeemedfridgeReplacementkwh(element)
         val grossDeemedReplacementkw = extractDeemedfridgeReplacementkw(element)
         val replacementIncrementalcost = extractDeemedfridgeReplacementcost(element)
 
         val netDeemedReplacementkWh =
-                (grossDeemedReplacementkwh(element) * (1 + 0.121) * (1 + 1 - 1) * 0.503) +
-                (grossDeemedReplacementkwh(element) * (1 + 0.149) * (1 + 1 - 1) * 0.496)
+                (grossDeemedReplacementkwh * (1 + 0.121) * (1 + 1 - 1) * 0.503) +
+                        (grossDeemedReplacementkwh * (1 + 0.149) * (1 + 1 - 1) * 0.496)
 
         val netDeemedReplacementkW =
-                (grossDeemedReplacementkw(element) * (1 + 0.113) * (1 + 1 - 1) * 0.979) +
-                        (grossDeemedReplacementkw(element) * (1 + 0.112) * (1 + 1 - 1) * 1.186)
-       */
-// TODO: @k2interactive added this here, please correct
-      fun installCost(): Double {
+                (grossDeemedReplacementkw * (1 + 0.113) * (1 + 1 - 1) * 0.979) +
+                        (grossDeemedReplacementkw * (1 + 0.112) * (1 + 1 - 1) * 1.186)
+
+
+        val postRow = mutableMapOf<String, String>()
+        postRow["grossDeemedReplacementkwh"] = grossDeemedReplacementkwh.toString()
+        postRow["grossDeemedReplacementkw"] = grossDeemedReplacementkw.toString()
+        postRow["replacementIncrementalcost"] = replacementIncrementalcost.toString()
+        postRow["netDeemedReplacementkWh"] = netDeemedReplacementkWh.toString()
+        postRow["netDeemedReplacementkW"] = netDeemedReplacementkW.toString()
+
+        dataHolder.header = postStateFields()
+        dataHolder.computable = computable
+        dataHolder.fileName = "${Date().time}_post_state.csv"
+        dataHolder.rows?.add(postRow)
+
+
+        val powerUsed = hourlyEnergyUsagePost(element)[0]
+        val costElectricity: Double
+        costElectricity = costElectricity(powerUsed, super.usageHoursBusiness, super.electricityRate)
+        costPostState = costElectricity
+
+        return costElectricity
+    }
+
+
+    // TODO: @k2interactive added this here, please correct
+    fun installCost(): Double {
 //        val increCost = extractDeemedfridgeReplacementcost(element)
 //        val totalCost = increCost * 4 //@AK2 fill
 //        return totalCost
-          return 0.0
-      }
+        return 0.0
+    }
 
 
     fun grosskwhSavings(): Double {
@@ -146,13 +157,10 @@ class Refrigerator(computable: Computable<*>, utilityRateGas: UtilityRate, utili
     override fun hourlyEnergyUsagePost(element: JsonElement): List<Double> {
         var hourlyEnergy = 0.0
 
-        try {
-            //ToDo: Check how this is being impacted within the current code base !!
+        if (element.asJsonObject.has("daily_energy_use")) {
+//            //ToDo: Check how this is being impacted within the current code base !!
             val postDailyEnergyUsed = element.asJsonObject.get("daily_energy_use").asDouble
             hourlyEnergy = postDailyEnergyUsed / 24
-        } catch (e: Exception) {
-            e.printStackTrace()
-            return listOf(hourlyEnergy)
         }
 
         return listOf(hourlyEnergy)
@@ -163,6 +171,7 @@ class Refrigerator(computable: Computable<*>, utilityRateGas: UtilityRate, utili
      * Pre and Post are the same for Refrigerator - 24 hrs
      * */
     override fun usageHoursPre(): Double = usageHoursBusiness.yearly()
+
     override fun usageHoursPost(): Double = usageHoursBusiness.yearly()
 
     /**
@@ -189,7 +198,7 @@ class Refrigerator(computable: Computable<*>, utilityRateGas: UtilityRate, utili
      * */
     override fun efficientLookup() = true
 
-    //  TODO: @k2interactive FYI I adjusted the names with featureData to match the names of the input parameters.
+    // there is no database entry with style_type or total_volume
     override fun queryEfficientFilter() = JSONObject()
             .put("data.style_type", styleType)
             .put("data.total_volume", JSONObject()
@@ -198,27 +207,29 @@ class Refrigerator(computable: Computable<*>, utilityRateGas: UtilityRate, utili
 
             .toString()
 
-// TODO: @k2interactive please adjust the filter below so that it filters out
-//  the volumes that are equalt to or below "low_cu_ft" and higher than "high_cu_ft".
-//  So if the fridgeVolume is 31 then it would only identify rows that has
-//  low_cu_ft equal to or below 29 AND high_cu_ft equal to or above 29
-   /** override fun queryReachIn(): String {
+    // TODO: @k2interactive please adjust the filter below so that it filters out
+//      the volumes that are equalt to or below "low_cu_ft" and higher than "high_cu_ft".
+//      So if the fridgeVolume is 31 then it would only identify rows that has
+//      low_cu_ft equal to or below 29 AND high_cu_ft equal to or above 29
+    override fun queryReachIn(): String {
         return JSONObject()
                 .put("type", "refrigeration_reachinfreezerrefrigerator")
-                .put("data.reach-in_type", "Refrigerator")
-                .put("data.door_type", "doorType")
-                .put("data.low_cu_ft", "fridgeVolume")
-                .put("data.high_cu_ft", "fridgeVolume")
-                .toString()
-    } */
-
-// TODO: @k2interactive this query is actually not needed anymore.
-//  So it can be deleted from the refrigerator and freezer and EBase
-    override fun queryReplacement(): String {
-        return JSONObject()
-                .put("type", "refrigeration_refrigeratorreplacement")
+                .put("data.reach_in_type", "Refrigerator")
+                .put("data.door_type", doorType)
+                .put("data.low_cu_ft", JSONObject()
+                        .put("\$lte", fridgeVolume - 2))
+                .put("data.high_cu_ft", JSONObject()
+                        .put("\$gte", fridgeVolume - 2))
                 .toString()
     }
+
+    // TODO: @k2interactive this query is actually not needed anymore.
+//  So it can be deleted from the refrigerator and freezer and EBase
+//    override fun queryReplacement(): String {
+//        return JSONObject()
+//                .put("type", "refrigeration_refrigeratorreplacement")
+//                .toString()
+//    }
 
     /**
      * State if the Equipment has a Post UsageHours Hours (Specific) ie. A separate set of
@@ -254,7 +265,12 @@ class Refrigerator(computable: Computable<*>, utilityRateGas: UtilityRate, utili
             "rebate",
             "pgne_measure_code",
             "purchase_price_per_unit",
-            "vendor")
+            "vendor",
+            "grossDeemedReplacementkwh",
+            "grossDeemedReplacementkw",
+            "replacementIncrementalcost",
+            "netDeemedReplacementkWh",
+            "netDeemedReplacementkW")
 
     override fun computedFields() = mutableListOf(
             "__daily_operating_hours",
