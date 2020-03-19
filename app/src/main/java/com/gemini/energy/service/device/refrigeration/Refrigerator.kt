@@ -207,10 +207,6 @@ class Refrigerator(computable: Computable<*>, utilityRateGas: UtilityRate, utili
 
             .toString()
 
-    // TODO: @k2interactive please adjust the filter below so that it filters out
-//      the volumes that are equalt to or below "low_cu_ft" and higher than "high_cu_ft".
-//      So if the fridgeVolume is 31 then it would only identify rows that has
-//      low_cu_ft equal to or below 29 AND high_cu_ft equal to or above 29
     override fun queryReachIn(): String {
         return JSONObject()
                 .put("type", "refrigeration_reachinfreezerrefrigerator")
