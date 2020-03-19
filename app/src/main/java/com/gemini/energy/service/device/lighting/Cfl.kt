@@ -251,11 +251,13 @@ class Cfl(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEle
         postusageHours.postpartPeakHours = postpartPeakHours
         postusageHours.postoffPeakHours = postoffPeakHours
 
-        // TODO: k2interactive figure out way to pass elements to if return
-//        if (postusageHours.yearly() == null) {
-//            return extractControlPercentSaved(elements) }
-//        else { return postusageHours.yearly()}
-        return postusageHours.yearly()
+        if (postusageHours.yearly() > 0.0)
+            return postusageHours.yearly()
+
+        if (usageHoursPre() > 0)
+            return usageHoursPre()
+
+        return usageHoursBusiness.yearly()
     }
 
     /**
