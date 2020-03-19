@@ -92,11 +92,12 @@ class Refrigerator(computable: Computable<*>, utilityRateGas: UtilityRate, utili
      * Cost - Post State
      * */
     var costPostState = 0.0
+    var replacementIncrementalcost = 0.0
 
     override fun costPostState(element: JsonElement, dataHolder: DataHolder): Double {
         val grossDeemedReplacementkwh = extractDeemedfridgeReplacementkwh(element)
         val grossDeemedReplacementkw = extractDeemedfridgeReplacementkw(element)
-        val replacementIncrementalcost = extractDeemedfridgeReplacementcost(element)
+        replacementIncrementalcost = extractDeemedfridgeReplacementcost(element)
 
         val netDeemedReplacementkWh =
                 (grossDeemedReplacementkwh * (1 + 0.121) * (1 + 1 - 1) * 0.503) +
@@ -129,12 +130,10 @@ class Refrigerator(computable: Computable<*>, utilityRateGas: UtilityRate, utili
     }
 
 
-    // TODO: @k2interactive added this here, please correct
     fun installCost(): Double {
-//        val increCost = extractDeemedfridgeReplacementcost(element)
-//        val totalCost = increCost * 4 //@AK2 fill
-//        return totalCost
-        return 0.0
+        val increCost = replacementIncrementalcost
+        val totalCost = increCost * 4 //@AK2 fill
+        return totalCost
     }
 
 
@@ -242,8 +241,6 @@ class Refrigerator(computable: Computable<*>, utilityRateGas: UtilityRate, utili
 
     override fun preStateFields() = mutableListOf("Daily Energy Used (kWh)")
 
-    // TODO: @k2interactive please add the incremental cost, as well as
-//  the gross and net kwh and kw to the postStateFields
     override fun postStateFields() = mutableListOf(
             "company",
             "model_number",
