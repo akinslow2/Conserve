@@ -123,10 +123,10 @@ class Electricity(private val rateStructure: String, private val companyCode: St
     override fun getRowIdentifier() = "^${getRate()}${getSeparator()}.*".toRegex()
 
     override fun getTOU(structure: HashMap<String, List<String>>) = TOU(
-            structure[ERateKey.SummerOn.value]!![0].toDouble(),
-            structure[ERateKey.SummerOff.value]!![0].toDouble(),
-            structure[ERateKey.WinterOn.value]!![0].toDouble(),
-            structure[ERateKey.WinterOff.value]!![0].toDouble())
+            structure[ERateKey.SummerOn.value]?.first()?.toDouble() ?: 0.0,
+            structure[ERateKey.SummerOff.value]?.first()?.toDouble() ?: 0.0,
+            structure[ERateKey.WinterOn.value]?.first()?.toDouble() ?: 0.0,
+            structure[ERateKey.WinterOff.value]?.first()?.toDouble() ?: 0.0)
 
     override fun getNoneTOU(structure: HashMap<String, List<String>>) = TOUNone(
             structure[ERateKey.SummerNone.value]!![0].toDouble(),
@@ -162,10 +162,10 @@ class Gas(private val rateStructure: String = "", private val companyCode: Strin
 
     // TODO: k2interactive figure out why GasWinter is not in structure
     override fun getNoneTOU(structure: HashMap<String, List<String>>) = TOUNone(
-            structure[ERateKey.GasSummer.value]!![0].toDouble(),
-            structure[ERateKey.SummerExcess.value]!![0].toDouble(),
-            structure[ERateKey.GasWinter.value]!![0].toDouble(),
-            structure[ERateKey.WinterExcess.value]!![0].toDouble())
+            structure[ERateKey.GasSummer.value]?.first()?.toDouble() ?: 0.0,
+            structure[ERateKey.SummerExcess.value]?.first()?.toDouble() ?: 0.0,
+            structure[ERateKey.GasWinter.value]?.first()?.toDouble() ?: 0.0,
+            structure[ERateKey.WinterExcess.value]?.first()?.toDouble() ?: 0.0)
 
     companion object {
         private val keys = listOf(
