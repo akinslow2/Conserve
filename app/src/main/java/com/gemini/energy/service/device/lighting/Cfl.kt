@@ -212,7 +212,7 @@ class Cfl(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEle
         postRow["__payback_year"] = paybackyear.toString()
         postRow["__total_savings"] = totalsavings.toString()
         postRow["__lighting_control_prescriptive_cost"] = controlCost.toString()
-        postRow["__lighting_control_measure_code"] = measureCode.toString()
+        postRow["__lighting_control_measure_code"] = measureCode
         postRow["__lighting_control_prescriptive_hours"] = prescriptiveHours.toString()
         postRow["__lighting_control_prescriptive_savings"] = prescriptiveSaved.toString()
         postRow["__lighting_control_prescriptive_percent"] = percentSaved.toString()
@@ -244,9 +244,13 @@ class Cfl(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEle
         postusageHours.postpartPeakHours = postpartPeakHours
         postusageHours.postoffPeakHours = postoffPeakHours
 
-        if (postusageHours.yearly() < 1.0)
-            return 5.0
-        return postusageHours.yearly()
+        if (postusageHours.yearly() > 0.0)
+            return postusageHours.yearly()
+
+        if (usageHoursPre() > 0)
+            return usageHoursPre()
+
+        return usageHoursBusiness.yearly()
     }
 
     /**
