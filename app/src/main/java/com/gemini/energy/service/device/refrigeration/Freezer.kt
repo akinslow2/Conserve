@@ -158,12 +158,6 @@ class Freezer(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRat
                 .toString()
     }
 
-    override fun queryReplacement(): String {
-        return JSONObject()
-                .put("type", "refrigeration_refrigeratorreplacement")
-                .toString()
-    }
-
     /**
      * State if the Equipment has a Post UsageHours Hours (Specific) ie. A separate set of
      * Weekly UsageHours Hours apart from the PreAudit
@@ -197,8 +191,11 @@ class Freezer(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRat
             "purchase_price_per_unit",
             "vendor")
 
-    override fun computedFields() = mutableListOf("__daily_operating_hours", "__weekly_operating_hours",
-            "__yearly_operating_hours", "__electric_cost")
+    override fun computedFields() = mutableListOf(
+            "__daily_operating_hours",
+            "__weekly_operating_hours",
+            "__yearly_operating_hours",
+            "__electric_cost")
 
     private fun getFormMapper() = FormMapper(context, R.raw.freezer)
     private fun getModel() = getFormMapper().decodeJSON()

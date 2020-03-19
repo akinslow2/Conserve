@@ -198,8 +198,7 @@ abstract class EBase(val computable: Computable<*>,
                 dataExtractRefrigerationControls(queryEvaporatorFanMotor()),
                 dataExtractRefrigerationControls(queryCondensingUnit()),
                 dataExtractRefrigerationControls(queryEvaporatorFanMotorControls()),
-                dataExtractRefrigerationControls(queryReachIn()),
-                dataExtractRefrigerationControls(queryReplacement())
+                dataExtractRefrigerationControls(queryReachIn())
         )
         val extractorWaterHeater = listOf(
                 dataExtractWaterHeaterControls(queryEfficientFilter()))
@@ -412,18 +411,14 @@ abstract class EBase(val computable: Computable<*>,
 
     /** hvac queries **/
     open fun queryHVACCoolingHours() = ""
-
     open fun queryHVACEer() = ""
     open fun queryMotorVFDprescriptive() = ""
 
     /** refrigeration queries **/
     open fun queryCondensingUnit() = ""
-
     open fun queryEvaporatorFanMotor() = ""
     open fun queryEvaporatorFanMotorControls() = ""
     open fun queryReachIn() = ""
-    open fun queryReplacement() = ""
-
 
     /**
      * Motors Query - Fetch Efficiency
@@ -440,7 +435,6 @@ abstract class EBase(val computable: Computable<*>,
      * Light Controls
      */
     open fun queryControlPercentSaved() = ""
-
     open fun queryControlPercentSaved2() = ""
     open fun queryAssumedHours() = ""
 

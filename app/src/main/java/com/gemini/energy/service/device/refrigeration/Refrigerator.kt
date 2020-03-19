@@ -223,14 +223,6 @@ class Refrigerator(computable: Computable<*>, utilityRateGas: UtilityRate, utili
                 .toString()
     }
 
-    // TODO: @k2interactive this query is actually not needed anymore.
-//  So it can be deleted from the refrigerator and freezer and EBase
-//    override fun queryReplacement(): String {
-//        return JSONObject()
-//                .put("type", "refrigeration_refrigeratorreplacement")
-//                .toString()
-//    }
-
     /**
      * State if the Equipment has a Post UsageHours Hours (Specific) ie. A separate set of
      * Weekly UsageHours Hours apart from the PreAudit
