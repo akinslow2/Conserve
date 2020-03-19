@@ -7,16 +7,11 @@ import com.gemini.energy.presentation.form.FormMapper
 import com.gemini.energy.service.DataHolder
 import com.gemini.energy.service.IComputable
 import com.gemini.energy.service.OutgoingRows
-import com.gemini.energy.service.device.EBase
 import com.gemini.energy.service.type.UsageHours
 import com.gemini.energy.service.type.UsageSimple
 import com.gemini.energy.service.type.UtilityRate
-import com.google.gson.JsonArray
 import com.google.gson.JsonElement
-import com.google.gson.JsonObject
 import io.reactivex.Observable
-import io.reactivex.Single
-import org.json.JSONObject
 import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.*
@@ -82,7 +77,11 @@ class WaterHeater(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
          * There could be a case where the User will input the value in KW - If that happens we need to convert the KW
          * int BTU / hr :: 1KW equals 3412.142
          * */
-        fun power(gasInput: Int, thermaleff: Int) = (gasInput / (thermaleff/100)) * KW_CONVERSION
+        fun power(gasInput: Int, thermaleff: Int) =
+                if (thermaleff > 0)
+                    (gasInput.toDouble() / (thermaleff.toDouble() / 100.0)) * KW_CONVERSION
+                else 0.0
+
         fun power2(kW: Double, electriceff: Int) = (kW / (electriceff/100))
         /**
          * Year At - Current minus the Age
