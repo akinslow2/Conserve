@@ -369,34 +369,15 @@ class WIFreezer(computable: Computable<*>, utilityRateGas: UtilityRate, utilityR
         return 0.0 // TODO: AK2 needs to calculate
     }
 
-    // TODO: @k2interactive currently the way to get cost from energy is with the function
-    //  costElectricity(eSavings, usageHours, electricityRate)
-    //  this requires power: Double (e.g., eSavings), hours: UsageHours (e.g., usageHours), and electricityRate: UtilityRate.
-    //  I would like two more functions to create cost.
-    //  • first requires energy and electricityRate.
-    //  • second, requires power: Double and demandRate: Double. I believe the variable demandRate will need to be created.
-    //      demandRate would be demand_charge column in the BED_electric.csv
-    //  UtilityRate.kt may be useful in this endeavor. The current costElectricity function is in EBase.kt line 602
 
-
-//    @Anthony: by the above comment do you mean creating functions like
-//      fun costElectricity(power: Double, q: UtilityRate): Double
-//      fun costElectricity(power: Double, demandRate: Double)
-
-//      @k2interactive yes but the first one would be
-//      (energy: Double, electricityRate: UtilityRate): Double
-    //  for context [energy = power * time],
-    //  I need a function that does energy and electricityRate & power and demandRate
-    //  is because sometimes that is cleaner. Especially since
-    //  the electricity rate is $/kwh (energy) & $/kw (demand)
-
-//    @Anthony: it seems that you want those functions added in ebase,
-//    should they be overriden in this file?
-
-    // @k2interactive the reason I thought they should be in Ebase is so that it would not need to be
-    // re-created in every class.I will leave it to you to decide what is more efficient.
-    // But yes it would need to be overridden. To add the correct energy or power.
-
+//    @Anthony: only override if implementation needs to be different that in EBase
+//    override fun costElectricity(energy: Double, electricityRate: UtilityRate): Double {
+//        return 0.0
+//    }
+//
+//    override fun costElectricity(power: Double, demandRate: Double): Double {
+//        return 0.0
+//    }
 
 
     fun totalSavings(): Double {

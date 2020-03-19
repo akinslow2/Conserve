@@ -608,7 +608,8 @@ abstract class EBase(val computable: Computable<*>,
             usage[EDay.values().indexOf(it)]
         })
     }
-// TODO: @k2interactive possible place to add the two additional cost functions - discussed in WIFreezer comment (line 425).
+
+
     /**
      * Computes the Electric Cost
      * */
@@ -618,6 +619,15 @@ abstract class EBase(val computable: Computable<*>,
         costElectric.power = powerUsed
 
         return costElectric.cost()
+    }
+
+    // TODO: @Anthony: how should these functions be calculated?
+    open fun costElectricity(energy: Double, electricityRate: UtilityRate): Double {
+        return 0.0
+    }
+
+    open fun costElectricity(power: Double, demandRate: Double): Double {
+        return 0.0
     }
 
     /**
