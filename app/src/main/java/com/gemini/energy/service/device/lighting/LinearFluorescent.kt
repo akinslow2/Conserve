@@ -101,9 +101,9 @@ class LinearFluorescent(computable: Computable<*>, utilityRateGas: UtilityRate, 
 
             val config = lightingConfig(ELightingType.LinearFluorescent)
             percentPowerReduced = config[ELightingIndex.PercentPowerReduced.value] as Double
-            postpeakHours = (featureData["Suggested Peak Hours"]!! as String).toDoubleOrNull() ?: 0.0
-            postpartPeakHours = (featureData["Suggested Part Peak Hours"]!! as  String).toDoubleOrNull() ?: 0.0
-            postoffPeakHours = (featureData["Suggested Off Peak Hours"]!! as  String).toDoubleOrNull() ?: 0.0
+            postpeakHours = featureData["Suggested Peak Hours"]!! as Double
+            postpartPeakHours = featureData["Suggested Part Peak Hours"]!! as Double
+            postoffPeakHours = featureData["Suggested Off Peak Hours"]!! as Double
 
             controls = featureData["Type of Control"]!! as String
 
