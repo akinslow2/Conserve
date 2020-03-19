@@ -244,11 +244,13 @@ class LPSodium(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRa
         postusageHours.postpartPeakHours = postpartPeakHours
         postusageHours.postoffPeakHours = postoffPeakHours
 
-        if (postusageHours.yearly() > 1.0) {
-            return usageHoursPre()
-        } else {
+        if (postusageHours.yearly() > 0.0)
             return postusageHours.yearly()
-        }
+
+        if (usageHoursPre() > 0)
+            return usageHoursPre()
+
+        return usageHoursBusiness.yearly()
     }
 
     /**
