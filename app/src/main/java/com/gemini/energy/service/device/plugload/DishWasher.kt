@@ -20,7 +20,7 @@ import org.json.JSONObject
 import timber.log.Timber
 
 class DishWasher(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateElectricity: UtilityRate,
-                      usageHours: UsageHours, outgoingRows: OutgoingRows, private val context: Context) :
+                 usageHours: UsageHours, outgoingRows: OutgoingRows, private val context: Context) :
         EBase(computable, utilityRateGas, utilityRateElectricity, usageHours, outgoingRows), IComputable {
 
     /**
@@ -61,13 +61,13 @@ class DishWasher(computable: Computable<*>, utilityRateGas: UtilityRate, utility
             offPeakHours = featureData["Off Peak Hours"]!! as Double
             usageHoursPre = UsageSimple(peakHours, partPeakHours, offPeakHours)
 
-           /** suggestedPeakHours = featureData["Suggested Peak Hours"]!! as Double
+            /** suggestedPeakHours = featureData["Suggested Peak Hours"]!! as Double
             suggestedPartPeakHours = featureData["Suggested Part Peak Hours"]!! as Double
             suggestedOffPeakHours = featureData["Suggested Off Peak Hours"]!! as Double
             usageHoursPost = UsageSimple(suggestedPeakHours, suggestedPartPeakHours, suggestedOffPeakHours)
             Timber.d("## Suggested Time ##")
             Timber.d(usageHoursPost.toString())
-            */
+             */
             waterConsumption = featureData["Water Consumption"]!! as Double
             numberOfRacks = featureData["Number of Racks"]!! as Int
             cyclesPerDay = featureData["Cycles per Day"]!! as Int
@@ -107,6 +107,7 @@ class DishWasher(computable: Computable<*>, utilityRateGas: UtilityRate, utility
      * Cost - Post State
      * */
     var costPostState = 0.0
+
     override fun costPostState(element: JsonElement, dataHolder: DataHolder): Double {
         val powerUsedElectric = hourlyEnergyUsagePost(element)[0]
         val thermsUsedGas = hourlyEnergyUsagePost(element)[1]
@@ -161,8 +162,8 @@ class DishWasher(computable: Computable<*>, utilityRateGas: UtilityRate, utility
         }
         val hoursInyear: Int = 8760
 
-        var hourlyEnergyGas = annualEnergyGas / hoursInyear
-        var hourlyEnergyElectric = annualEnergyElectric / hoursInyear
+        val hourlyEnergyGas = annualEnergyGas / hoursInyear
+        val hourlyEnergyElectric = annualEnergyElectric / hoursInyear
 
         return listOf(hourlyEnergyElectric, hourlyEnergyGas)
     }
@@ -192,9 +193,9 @@ class DishWasher(computable: Computable<*>, utilityRateGas: UtilityRate, utility
         } catch (e: Exception) {
             e.printStackTrace()
         }
-        val hoursInyear: Int = 8760
-        var hourlyEnergyGas = annualEnergyGas / hoursInyear
-        var hourlyEnergyElectric = annualEnergyElectric / hoursInyear
+        val hoursInyear = 8760
+        val hourlyEnergyGas = annualEnergyGas / hoursInyear
+        val hourlyEnergyElectric = annualEnergyElectric / hoursInyear
 
         return listOf(hourlyEnergyElectric, hourlyEnergyGas)
     }
@@ -205,6 +206,7 @@ class DishWasher(computable: Computable<*>, utilityRateGas: UtilityRate, utility
      * Post - Suggested Time
      * */
     override fun usageHoursPre(): Double = usageHoursPre!!.yearly()
+
     override fun usageHoursPost(): Double = usageHoursPre!!.yearly()
 
     /**
@@ -236,12 +238,13 @@ class DishWasher(computable: Computable<*>, utilityRateGas: UtilityRate, utility
      * Energy Efficiency Lookup Query Definition
      * */
     override fun efficientLookup() = true
+
     override fun queryEfficientFilter() = JSONObject()
             .put("data.idle_energy_rate", queryAdjustment(idleEnergyRate))
             .put("data.water_consumption", queryAdjustment(waterConsumption))
             .toString()
 
-    override fun isGas() =  waterHeater == "Gas"
+    override fun isGas() = waterHeater == "Gas"
 
     /**
      * Adjusting the Query Filter Range by 10%
@@ -268,15 +271,28 @@ class DishWasher(computable: Computable<*>, utilityRateGas: UtilityRate, utility
     /**
      * Define all the fields here - These would be used to Generate the Outgoing Rows or perform the Energy Calculation
      * */
-    override fun preAuditFields() = mutableListOf("")
+    override fun preAuditFields() = mutableListOf<String>()
+
     override fun featureDataFields() = getGFormElements().map { it.value.param!! }.toMutableList()
 
-    override fun preStateFields() = mutableListOf("")
-    override fun postStateFields() = mutableListOf("company","model_number","type","sanitation_method",
-            "idle_energy_rate","water_consumption","rebate","pgne_measure_code","utility_company","purchase_price_per_unit")
+    override fun preStateFields() = mutableListOf<String>()
+    override fun postStateFields() = mutableListOf(
+            "company",
+            "model_number",
+            "type",
+            "sanitation_method",
+            "idle_energy_rate",
+            "water_consumption",
+            "rebate",
+            "pgne_measure_code",
+            "utility_company",
+            "purchase_price_per_unit")
 
-    override fun computedFields() = mutableListOf("__daily_operating_hours", "__weekly_operating_hours",
-            "__yearly_operating_hours", "__electric_cost")
+    override fun computedFields() = mutableListOf(
+            "__daily_operating_hours",
+            "__weekly_operating_hours",
+            "__yearly_operating_hours",
+            "__electric_cost")
 
     private fun getFormMapper() = FormMapper(context, R.raw.dishwasher)
     private fun getModel() = getFormMapper().decodeJSON()
