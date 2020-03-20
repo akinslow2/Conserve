@@ -19,7 +19,9 @@ class Freezer(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRat
               usageHours: UsageHours, outgoingRows: OutgoingRows, private val context: Context) :
         EBase(computable, utilityRateGas, utilityRateElectricity, usageHours, outgoingRows), IComputable {
 
-    var age = 0.0
+    var age = 0
+    var dailyEnergyUse = 0.0
+    var totalVolume = 0.0
     /**
      * Entry Point
      * */
@@ -29,7 +31,9 @@ class Freezer(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRat
 
     override fun setup() {
         try {
-            age = (featureData["Age"]!! as Int).toDouble()
+            age = featureData["Age"]!! as Int
+            dailyEnergyUse = featureData["Daily Energy Used"]!! as Double
+            totalVolume = featureData["Total Volume"] as Double
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -73,15 +77,7 @@ class Freezer(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRat
      * PowerTimeChange >> Hourly Energy Use - Pre
      * */
     override fun hourlyEnergyUsagePre(): List<Double> {
-        var hourlyEnergy = 0.0
-
-        try {
-            val dailyEnergyUsed = featureData["Daily Energy Used"]!! as Double
-            hourlyEnergy = dailyEnergyUsed / 24
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-
+        var hourlyEnergy = dailyEnergyUse / 24
         return listOf(hourlyEnergy)
     }
 
@@ -91,12 +87,9 @@ class Freezer(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRat
     override fun hourlyEnergyUsagePost(element: JsonElement): List<Double> {
         var hourlyEnergy = 0.0
 
-        try {
-            //ToDo: Check how this is being impacted within the current code base !!
+        if (element.asJsonObject.has("daily_energy_use")) {
             val postDailyEnergyUsed = element.asJsonObject.get("daily_energy_use").asDouble
             hourlyEnergy = postDailyEnergyUsed / 24
-        } catch (e: Exception) {
-            e.printStackTrace()
         }
 
         return listOf(hourlyEnergy)
@@ -135,8 +128,8 @@ class Freezer(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRat
     override fun queryEfficientFilter() = JSONObject()
             .put("data.style_type", featureData["Product Type"])
             .put("data.total_volume", JSONObject()
-                    .put("\$gte", featureData["Total Volume"] as Double - 2)
-                    .put("\$lte", featureData["Total Volume"] as Double + 2))
+                    .put("\$gte", totalVolume - 2)
+                    .put("\$lte", totalVolume + 2))
             .toString()
 
     /**
@@ -149,15 +142,35 @@ class Freezer(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRat
      * Define all the fields here - These would be used to Generate the Outgoing Rows or perform the Energy Calculation
      * */
     override fun preAuditFields() = mutableListOf("Number of Vacation days")
-    override fun featureDataFields() = mutableListOf("Company", "Model Number", "Fridge Capacity", "Age", "Control",
-            "Daily Energy Used", "Product Type", "Total Volume")
+
+    override fun featureDataFields() = mutableListOf(
+            "Company",
+            "Model Number",
+            "Fridge Capacity",
+            "Age",
+            "Control",
+            "Daily Energy Used",
+            "Product Type",
+            "Total Volume")
 
     override fun preStateFields() = mutableListOf("Daily Energy Used (kWh)")
-    override fun postStateFields() = mutableListOf("company", "model_number", "style_type",
-            "total_volume", "daily_energy_use", "rebate", "pgne_measure_code", "purchase_price_per_unit", "vendor")
 
-    override fun computedFields() = mutableListOf("__daily_operating_hours", "__weekly_operating_hours",
-            "__yearly_operating_hours", "__electric_cost")
+    override fun postStateFields() = mutableListOf(
+            "company",
+            "model_number",
+            "style_type",
+            "total_volume",
+            "daily_energy_use",
+            "rebate",
+            "pgne_measure_code",
+            "purchase_price_per_unit",
+            "vendor")
+
+    override fun computedFields() = mutableListOf(
+            "__daily_operating_hours",
+            "__weekly_operating_hours",
+            "__yearly_operating_hours",
+            "__electric_cost")
 
     private fun getFormMapper() = FormMapper(context, R.raw.freezer)
     private fun getModel() = getFormMapper().decodeJSON()
