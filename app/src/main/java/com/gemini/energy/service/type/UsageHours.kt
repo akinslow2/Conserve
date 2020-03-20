@@ -214,13 +214,11 @@ open class UsageHours {
             private fun getTime(time: String) = dateFormatter.parse(time)
 
             private fun inBetween(now: Date, start: Date, end: Date): Boolean {
-
                 val a = now.time
                 val b = start.time
                 val c = end.time
 
                 return (a >= b) && (a < c)
-
             }
 
             private fun isSummerPeak(now: Date) = inBetween(now, getTime("12:00"), getTime("18:00"))
@@ -232,8 +230,6 @@ open class UsageHours {
 
             private fun isWinterOffPeak(now: Date) = inBetween(now, getTime("10:01"), getTime("00:00")) ||
                     inBetween(now, getTime("00:00"), getTime("06:00"))
-
         }
     }
-
 }

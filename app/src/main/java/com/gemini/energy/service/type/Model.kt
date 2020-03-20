@@ -83,8 +83,12 @@ data class TOUNone(
 
 ) : IUsageType {
 
-    constructor(summerNone: Double, winterNone: Double): this(summerNone, 0.0, winterNone, 0.0, 0.0)
-    constructor(noPeak: Double): this(0.0, 0.0, 0.0, 0.0, noPeak)
+    constructor(summerNone: Double, winterNone: Double) :
+            this(summerNone, 0.0, winterNone, 0.0, 0.0)
+
+    constructor(noPeak: Double) :
+            this(0.0, 0.0, 0.0, 0.0, noPeak)
+
     constructor(summerNone: Double, summerExcess: Double, winterNone: Double, winterExcess: Double):
             this(summerNone, summerExcess, winterNone, winterExcess, 0.0)
 
@@ -111,5 +115,4 @@ data class TOUNone(
                 ">>> Winter Excess : $winterExcess \n" +
                 ">>> No Peak : $noPeak"
     }
-
 }

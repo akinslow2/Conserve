@@ -6,13 +6,9 @@ class UsageMotors : UsageHours() {
     var partPeakHours = 0.0
     var offPeakHours = 0.0
 
-    override fun timeOfUse(): TOU {
-        return TOU(peakHours, offPeakHours)
-    }
+    override fun timeOfUse() = TOU(peakHours, offPeakHours)
 
-    override fun nonTimeOfUse(): TOUNone {
-        return TOUNone(offPeakHours)
-    }
+    override fun nonTimeOfUse() = TOUNone(offPeakHours)
 
     override fun yearly() = peakHours + partPeakHours + offPeakHours
 }
