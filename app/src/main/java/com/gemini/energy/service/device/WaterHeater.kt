@@ -82,7 +82,11 @@ class WaterHeater(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
                     (gasInput.toDouble() / (thermaleff.toDouble() / 100.0)) * KW_CONVERSION
                 else 0.0
 
-        fun power2(kW: Double, electriceff: Int) = (kW / (electriceff/100))
+        fun power2(kW: Double, electriceff: Double) =
+                if (electriceff > 0)
+                    (kW / (electriceff / 100.0))
+                else 0.0
+
         /**
          * Year At - Current minus the Age
          * */
