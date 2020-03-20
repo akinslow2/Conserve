@@ -45,7 +45,7 @@
           "hint": "",
           "dataType": "decimalrow",
           "defaultValues": "",
-          "param": "Capactity (U.S. Gal)",
+          "param": "Capacity (U.S. Gal)",
           "validation": "mandatory",
           "id": "15"
         },
@@ -90,7 +90,7 @@
           "hint": "",
           "dataType": "decimalrow",
           "defaultValues": "",
-          "param": "Heating Electirc Efficiency",
+          "param": "Heating Electric Efficiency",
           "validation": "optional",
           "id": "110"
         },

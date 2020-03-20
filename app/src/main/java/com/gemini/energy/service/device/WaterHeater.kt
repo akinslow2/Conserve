@@ -17,7 +17,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class WaterHeater(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateElectricity: UtilityRate,
-           usageHours: UsageHours, outgoingRows: OutgoingRows, private val context: Context) :
+                  usageHours: UsageHours, outgoingRows: OutgoingRows, private val context: Context) :
         EBase(computable, utilityRateGas, utilityRateElectricity, usageHours, outgoingRows), IComputable {
 
     /**
@@ -46,14 +46,14 @@ class WaterHeater(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
          * Not needed right now
 
         fun extractEER(elements: List<JsonElement?>): Double {
-            elements.forEach {
-                it?.let {
-                    if (it.asJsonObject.has("eer")) {
-                        return it.asJsonObject.get("eer").asDouble
-                    }
-                }
-            }
-            return 0.0
+        elements.forEach {
+        it?.let {
+        if (it.asJsonObject.has("eer")) {
+        return it.asJsonObject.get("eer").asDouble
+        }
+        }
+        }
+        return 0.0
         }
          * */
         /**
@@ -62,14 +62,14 @@ class WaterHeater(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
          * This is used to calculate the Energy but needs to be more robust before using
 
         fun extractHours(elements: List<JsonElement?>): Int {
-            elements.forEach {
-                it?.let {
-                    if (it.asJsonObject.has("hours")) {
-                        return it.asJsonObject.get("hours").asInt
-                    }
-                }
-            }
-            return 0
+        elements.forEach {
+        it?.let {
+        if (it.asJsonObject.has("hours")) {
+        return it.asJsonObject.get("hours").asInt
+        }
+        }
+        }
+        return 0
         }
          * */
         /**
@@ -94,10 +94,10 @@ class WaterHeater(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
             return dateFormatter.format(calendar.time).toInt()
         }
 
-        fun firstNotNull (valueFirst: Double, valueSecond: Double) =
+        fun firstNotNull(valueFirst: Double, valueSecond: Double) =
                 if (valueFirst == 0.0) valueSecond else valueFirst
 
-        fun firstNotNull (valueFirst: Int, valueSecond: Int) =
+        fun firstNotNull(valueFirst: Int, valueSecond: Int) =
                 if (valueFirst == 0) valueSecond else valueFirst
     }
 
@@ -131,7 +131,7 @@ class WaterHeater(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
 
     var quantity = 0
     var thermaleff = 0
-    var electriceff = 0
+    var electriceff = 0.0
     var kW = 0.0
     var fueltype = ""
     var unittype = ""
@@ -143,11 +143,11 @@ class WaterHeater(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
             quantity = featureData["Quantity"]!! as Int
 
             age = featureData["Age"]!! as Int
-            btu = featureData["Cooling Capacity (Btu/hr)"]!! as Int
+
             gasInput = featureData["Heating Input (Btu/hr)"]!! as Int
             gasOutput = featureData["Heating Output (Btu/hr)"]!! as Int
             thermaleff = featureData["Thermal Efficiency"]!! as Int
-            electriceff = featureData["Heating Electirc Efficiency"]!! as Int
+            electriceff = featureData["Heating Electric Efficiency"]!! as Double
             kW = featureData["Heating Power (kW)"]!! as Double
             fueltype = featureData["Fuel Type"]!! as String
             unittype = featureData["Type of Unit"]!! as String
@@ -161,7 +161,8 @@ class WaterHeater(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
             e.printStackTrace()
         }
     }
-     override fun isGas() = fueltype == "Natural Gas"
+
+    override fun isGas() = fueltype == "Natural Gas"
 
     /**
      * Getting year of device and how much over life it is
@@ -200,7 +201,7 @@ class WaterHeater(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
         return if (isGas()) gascost else ecost
     }
 
-     /**
+    /**
      * Cost - Post State
      * */
     override fun costPostState(element: JsonElement, dataHolder: DataHolder): Double {
@@ -209,30 +210,29 @@ class WaterHeater(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
         Timber.d("!!! COST POST STATE - HVAC !!!")
         Timber.d("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
 
-        var postthermeff = 95
-        var posteleceff = 350
-
+        val postthermeff = 95
+        val posteleceff = 350.0
 
         val postUsageHours = computable.udf1 as UsageSimple
 
-            val postpowerUsedGas = power(gasInput, postthermeff) * quantity
-            val postpowerUsedElectricity = power2(kW, posteleceff) * quantity
-            val postGcost: Double
-            val postEcost: Double
-            val powerUsed = if (isGas()) postpowerUsedGas else postpowerUsedElectricity
+        val postpowerUsedGas = power(gasInput, postthermeff) * quantity
+        val postpowerUsedElectricity = power2(kW, posteleceff) * quantity
+        val postGcost: Double
+        val postEcost: Double
+        val powerUsed = if (isGas()) postpowerUsedGas else postpowerUsedElectricity
         Timber.d("HotWater :: Power Used (Electricity) -- [$postpowerUsedElectricity]")
-            Timber.d("HotWater :: Power Used (Gas) -- [$postpowerUsedGas]")
+        Timber.d("HotWater :: Power Used (Gas) -- [$postpowerUsedGas]")
 
 
-            Timber.d("HotWater :: Post Power Used -- [$powerUsed]")
-            postEcost = costElectricity(powerUsed, postUsageHours, electricityRate)
+        Timber.d("HotWater :: Post Power Used -- [$powerUsed]")
+        postEcost = costElectricity(powerUsed, postUsageHours, electricityRate)
 
-            postGcost = costGas(powerUsed)
+        postGcost = costGas(powerUsed)
 
-             return if (isGas()) postGcost else postEcost
+        return if (isGas()) postGcost else postEcost
     }
 
-      /**
+    /**
      * HVAC - INCENTIVES | MATERIAL COST
      * */
     override fun incentives(): Double {
@@ -262,6 +262,7 @@ class WaterHeater(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
      * PowerTimeChange >> Yearly Usage Hours - [Pre | Post]
      * */
     override fun usageHoursPre(): Double = 0.0
+
     override fun usageHoursPost(): Double = 0.0
 
     /**
@@ -274,8 +275,8 @@ class WaterHeater(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
         val powerUsedElectricity = power2(kW, electriceff) * quantity
         val prepowerUsed = if (isGas()) powerUsedGas else powerUsedElectricity
 
-        var postthermeff = 95
-        var posteleceff = 350
+        val postthermeff = 95
+        val posteleceff = 350.0
 
         val postpowerUsedGas = power(gasInput, postthermeff) * quantity
         val postpowerUsedElectricity = power2(kW, posteleceff) * quantity
@@ -288,6 +289,7 @@ class WaterHeater(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
         //ToDo: Multiply by the Number of Equipment
         return delta
     }
+
     //fix this ADK2
     fun totalSavings(): Double {
         return energyPowerChange() * .18
@@ -303,17 +305,25 @@ class WaterHeater(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
      * */
     override fun usageHoursSpecific() = false
 
-    override fun efficientLookup()= false
-    override fun queryEfficientFilter()= ""
-    override fun preAuditFields() = mutableListOf("General Client Info Name", "General Client Info Position", "General Client Info Email")
+    override fun efficientLookup() = false
+    override fun queryEfficientFilter() = ""
+
+    override fun preAuditFields() = mutableListOf(
+            "General Client Info Name",
+            "General Client Info Position",
+            "General Client Info Email")
 
     override fun featureDataFields() = getGFormElements().map { it.value.param!! }.toMutableList()
 
-    override fun preStateFields() = mutableListOf("")
-    override fun postStateFields() = mutableListOf("__life_hours", "__maintenance_savings",
-            "__cooling_savings", "__energy_savings", "__energy_at_post_state")
+    override fun preStateFields() = mutableListOf<String>()
+    override fun postStateFields() = mutableListOf(
+            "__life_hours",
+            "__maintenance_savings",
+            "__cooling_savings",
+            "__energy_savings",
+            "__energy_at_post_state")
 
-    override fun computedFields() = mutableListOf("")
+    override fun computedFields() = mutableListOf<String>()
 
     private fun getFormMapper() = FormMapper(context, R.raw.hotwater)
     private fun getModel() = getFormMapper().decodeJSON()
