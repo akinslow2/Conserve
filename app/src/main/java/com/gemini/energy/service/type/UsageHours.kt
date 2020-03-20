@@ -4,7 +4,6 @@ import com.gemini.energy.presentation.util.EDay
 import com.gemini.energy.presentation.util.ERateKey
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.HashMap
 
 
 open class UsageHours {
@@ -20,6 +19,7 @@ open class UsageHours {
      * Average UsageHours - UtilityRate Methods
      * */
     fun daily() = mapper.dailyHours()
+
     fun weekly() = mapper.weeklyHours()
     open fun yearly() = mapper.yearlyHours()
     open fun postyearly() = mapper.yearlyHours()
@@ -28,6 +28,7 @@ open class UsageHours {
      * Mapped Peak Hour by UtilityRate Rate Structure
      * */
     fun mappedPeakHourDaily() = mapper.mappedHoursDaily()
+
     fun mappedPeakHourWeekly() = mapper.mappedHoursWeekly()
     fun mappedPeakHourYearly() = mapper.mappedHoursYearly()
 
@@ -40,7 +41,7 @@ open class UsageHours {
                 usageByPeak[ERateKey.SummerOn]!! * WEIGHT_SUMMER,
                 usageByPeak[ERateKey.SummerOff]!! * (WEIGHT_Off / 2),
                 usageByPeak[ERateKey.WinterOn]!! * WEIGHT_WINTER,
-                usageByPeak[ERateKey.WinterOff]!! * ( WEIGHT_Off / 2)
+                usageByPeak[ERateKey.WinterOff]!! * (WEIGHT_Off / 2)
         )
     }
 
