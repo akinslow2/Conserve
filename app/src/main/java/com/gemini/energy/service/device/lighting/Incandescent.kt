@@ -27,15 +27,16 @@ class Incandescent(computable: Computable<*>, utilityRateGas: UtilityRate, utili
     override fun compute(): Observable<Computable<*>> {
         return super.compute(extra = ({ Timber.d(it) }))
     }
+
     //create variable here if you want to make it global to the class with private
     private var percentPowerReduced = 0.0
     private var actualWatts = 0.0
     var lampsPerFixtures = 0
     var numberOfFixtures = 0
 
-    private var peakHours = 0.0
-    private var partPeakHours = 0.0
-    var offPeakHours = 0.0
+    private var peakHours = 0
+    private var partPeakHours = 0
+    var offPeakHours = 0
     var postUsageHours = 0
 
     var energyAtPreState = 0.0
@@ -65,7 +66,6 @@ class Incandescent(computable: Computable<*>, utilityRateGas: UtilityRate, utili
     private var alternateLampsPerFixture = 0
 
 
-
     //Where you extract from user inputs and assign to variables
     override fun setup() {
         try {
@@ -76,9 +76,9 @@ class Incandescent(computable: Computable<*>, utilityRateGas: UtilityRate, utili
             val config = lightingConfig(ELightingType.Incandescent)
             percentPowerReduced = config[ELightingIndex.PercentPowerReduced.value] as Double
 
-            peakHours = featureData["Peak Hours"]!! as Double
-            partPeakHours = featureData["Part Peak Hours"]!! as Double
-            offPeakHours = featureData["Off Peak Hours"]!! as Double
+            peakHours = featureData["Peak Hours"]!! as Int
+            partPeakHours = featureData["Part Peak Hours"]!! as Int
+            offPeakHours = featureData["Off Peak Hours"]!! as Int
 
             alternateActualWatts = featureData["Alternate Actual Watts"]!! as Double
             alternateNumberOfFixtures = featureData["Alternate Number of Fixtures"]!! as Int
@@ -89,23 +89,25 @@ class Incandescent(computable: Computable<*>, utilityRateGas: UtilityRate, utili
             postoffPeakHours = featureData["Suggested Off Peak Hours"]!! as Double
 
             controls = featureData["Type of Control"]!! as String
-
         } catch (e: Exception) {
             e.printStackTrace()
         }
     }
+
     /**
      * Time | Energy | Power - Pre State
      * */
     override fun usageHoursPre(): Double {
         val usageHours = UsageLighting()
         val preauditHours = UsageHours()
-        usageHours.peakHours = peakHours
-        usageHours.partPeakHours = partPeakHours
-        usageHours.offPeakHours = offPeakHours
-        if (usageHours.yearly() < 1.0){
-            return  preauditHours.yearly()}
-        else { return usageHours.yearly()}
+        usageHours.peakHours = peakHours.toDouble()
+        usageHours.partPeakHours = partPeakHours.toDouble()
+        usageHours.offPeakHours = offPeakHours.toDouble()
+        if (usageHours.yearly() < 1.0) {
+            return preauditHours.yearly()
+        } else {
+            return usageHours.yearly()
+        }
     }
 
     fun preEnergy(): Double {
@@ -116,16 +118,15 @@ class Incandescent(computable: Computable<*>, utilityRateGas: UtilityRate, utili
     fun prePower(): Double {
         return actualWatts * numberOfFixtures * lampsPerFixtures / 1000
     }
+
     /**
      * Cost - Pre State
      * */
     override fun costPreState(element: List<JsonElement?>): Double {
-
         val usageHours = UsageLighting()
-        usageHours.peakHours = peakHours
-        usageHours.partPeakHours = partPeakHours
-        usageHours.offPeakHours = offPeakHours
-
+        usageHours.peakHours = peakHours.toDouble()
+        usageHours.partPeakHours = partPeakHours.toDouble()
+        usageHours.offPeakHours = offPeakHours.toDouble()
 
         return costElectricity(prePower(), usageHours, electricityRate)
     }
@@ -195,8 +196,6 @@ class Incandescent(computable: Computable<*>, utilityRateGas: UtilityRate, utili
     /**
      * Post Yearly Usage Hours
      * */
-
-
     override fun usageHoursPost(): Double {
         val postusageHours = UsageLighting()
         postusageHours.postpeakHours = postpeakHours
@@ -220,9 +219,9 @@ class Incandescent(computable: Computable<*>, utilityRateGas: UtilityRate, utili
     }
 
     override fun energyTimeChange(): Double {
-        return  actualWatts * numberOfFixtures * lampsPerFixtures / 1000 * usageHoursPost()
-
+        return actualWatts * numberOfFixtures * lampsPerFixtures / 1000 * usageHoursPost()
     }
+
     override fun energyPowerTimeChange(): Double {
         return prePower() * percentPowerReduced * usageHoursPost()
     }
@@ -234,6 +233,7 @@ class Incandescent(computable: Computable<*>, utilityRateGas: UtilityRate, utili
     fun postEnergy(): Double {
         return preEnergy() - energySavings()
     }
+
     fun energySavings(): Double {
         return preEnergy() * percentPowerReduced
     }
@@ -241,6 +241,7 @@ class Incandescent(computable: Computable<*>, utilityRateGas: UtilityRate, utili
     fun selfinstallcost(): Double {
         return ledbulbcost * alternateNumberOfFixtures * alternateLampsPerFixture
     }
+
     fun totalEnergySavings(): Double {
         if (controls != null) {
             val coolingSavings = (preEnergy() - energyPowerChange()) * cooling / seer
@@ -249,31 +250,31 @@ class Incandescent(computable: Computable<*>, utilityRateGas: UtilityRate, utili
             val coolingSavings = (preEnergy() - energyPowerTimeChange()) * cooling / seer
             return (preEnergy() - energyPowerTimeChange()) + coolingSavings
         }
-
     }
 
     fun totalSavings(): Double {
-        if (controls == null && usageHoursPost() != null){
-            val postPower = energyPowerTimeChange()/usageHoursPost()
+        if (controls == null && usageHoursPost() != null) {
+            val postPower = energyPowerTimeChange() / usageHoursPost()
             val postusageHours = UsageLighting()
             postusageHours.postpeakHours = postpeakHours
             postusageHours.postpartPeakHours = postpartPeakHours
             postusageHours.postoffPeakHours = postoffPeakHours
             return costElectricity(postPower, postusageHours, electricityRate)
-        }
-        else {
-            val postPower = energyPowerChange()/usageHoursPre()
+        } else {
+            val postPower = energyPowerChange() / usageHoursPre()
             val usageHours = UsageLighting()
-            usageHours.peakHours = peakHours
-            usageHours.partPeakHours = partPeakHours
-            usageHours.offPeakHours = offPeakHours
+            usageHours.peakHours = peakHours.toDouble()
+            usageHours.partPeakHours = partPeakHours.toDouble()
+            usageHours.offPeakHours = offPeakHours.toDouble()
             return costElectricity(postPower, usageHours, electricityRate)
         }
     }
+
     /**
      * Energy Efficiency Lookup Query Definition
      * */
     override fun efficientLookup() = false
+
     override fun queryEfficientFilter() = ""
 
     /**
@@ -285,18 +286,28 @@ class Incandescent(computable: Computable<*>, utilityRateGas: UtilityRate, utili
     /**
      * Define all the fields here - These would be used to Generate the Outgoing Rows or perform the Energy Calculation
      * */
-    override fun preAuditFields() = mutableListOf("General Client Info Name", "General Client Info Position", "General Client Info Email")
+    override fun preAuditFields() = mutableListOf(
+            "General Client Info Name",
+            "General Client Info Position",
+            "General Client Info Email")
+
     override fun featureDataFields() = getGFormElements().map { it.value.param!! }.toMutableList()
 
-    override fun preStateFields() = mutableListOf("")
-    override fun postStateFields() = mutableListOf("__life_hours", "__maintenance_savings",
-            "__cooling_savings", "__energy_savings", "__energy_at_post_state", "__selfinstall_cost",
-            "__payback_month", "__payback_year", "__total_savings")
+    override fun preStateFields() = mutableListOf<String>()
+    override fun postStateFields() = mutableListOf(
+            "__life_hours",
+            "__maintenance_savings",
+            "__cooling_savings",
+            "__energy_savings",
+            "__energy_at_post_state",
+            "__selfinstall_cost",
+            "__payback_month",
+            "__payback_year",
+            "__total_savings")
 
-    override fun computedFields() = mutableListOf("")
+    override fun computedFields() = mutableListOf<String>()
 
     private fun getFormMapper() = FormMapper(context, R.raw.incandescent)
     private fun getModel() = getFormMapper().decodeJSON()
     private fun getGFormElements() = getFormMapper().mapIdToElements(getModel())
-
 }
