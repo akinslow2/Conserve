@@ -18,6 +18,7 @@ class CostSavings {
          * TOU Validator
          * */
         private val regex = "^.*TOU$".toRegex()
+
         fun isTOU(rate: String) = rate.matches(regex)
         fun isNoTOU(rate: String) = !isTOU(rate)
 
@@ -27,7 +28,7 @@ class CostSavings {
         fun firstNotNull(specific: UsageHours, business: UsageHours) =
                 if (specific.yearly() == 0.0) business else specific
 
-        fun firstNotNull (valueFirst: Double, valueSecond: Double) =
+        fun firstNotNull(valueFirst: Double, valueSecond: Double) =
                 if (valueFirst == 0.0) valueSecond else valueFirst
 
         /**
@@ -44,7 +45,7 @@ class CostSavings {
             if (checker(computable, key)) {
                 try {
                     return getValue(computable, key)
-                } catch(exception: Exception) {
+                } catch (exception: Exception) {
                     Timber.d("Exception @ $key - toDouble")
                 }
             }
@@ -66,7 +67,7 @@ class CostSavings {
          * Compute Cost Gas
          * */
         fun costGas(energyUsed: Double, rate: UtilityRate): Double {
-            val gas= rate.nonTimeOfUse()
+            val gas = rate.nonTimeOfUse()
             val rateFirst = (gas.summerNone() + gas.winterNone()) / 2
             val rateExcess = (gas.summerExcess() + gas.winterExcess()) / 2
             return (energyUsed) * (if (energyUsed > Gas.FIRST_SLAB) rateExcess else rateFirst)
@@ -108,7 +109,7 @@ class CostSavings {
              * Usage Post    - Mapped Peak Hours (Business)
              * */
             val usageHoursPre = firstNotNull(usageHoursSpecific, usageHoursBusiness)
-            val usageHoursPost= usageHoursBusiness
+            val usageHoursPost = usageHoursBusiness
 
             /**
              * Power, Time Change or Both
@@ -135,6 +136,7 @@ class CostSavings {
              * Either resolve the Energy Use or use the PTC value
              * */
             fun energyUse() = resolve(computable, DAILY_ENERGY_USE)
+
             val energyUse = if (energyUse() == 0.0) ptc.energySaving() else energyUse()
             Timber.d("----::::---- Energy Use ($energyUse) ----::::----")
 
@@ -227,6 +229,7 @@ class CostSavings {
                  * Energy Cost Savings - Case 2 : Non TOU Based
                  * */
                 fun costNonTOU() = energyUse * rateElectric.nonTimeOfUse().weightedAverage()
+
                 fun findNonTimeOfUseCostSavings(outgoing: HashMap<String, Double>): HashMap<String, Double> {
                     outgoing["CostSavingNonTimeOfUse"] = costNonTOU()
                     return outgoing
@@ -250,9 +253,15 @@ class CostSavings {
                  * Main Block
                  * */
                 val energyCostSavings: HashMap<String, Double> = hashMapOf()
-                if (isTOU(schedule)) { findTimeOfUseCostSavings(energyCostSavings) }
-                if (isNoTOU(schedule)) { findNonTimeOfUseCostSavings(energyCostSavings) }
-                if (checkForGas) { findGasCostSavings(energyCostSavings) }
+                if (isTOU(schedule)) {
+                    findTimeOfUseCostSavings(energyCostSavings)
+                }
+                if (isNoTOU(schedule)) {
+                    findNonTimeOfUseCostSavings(energyCostSavings)
+                }
+                if (checkForGas) {
+                    findGasCostSavings(energyCostSavings)
+                }
 
                 return energyCostSavings
 
@@ -270,11 +279,11 @@ class CostSavings {
                     val rateWinter: Double
 
                     if (isNoTOU(schedule)) {
-                        rateSummer = structure[ERateKey.SummerNone.value]!![2].toDouble()
-                        rateWinter = structure[ERateKey.WinterNone.value]!![2].toDouble()
+                        rateSummer = structure[ERateKey.SummerNone.value]?.get(2)?.toDouble() ?: 0.0
+                        rateWinter = structure[ERateKey.WinterNone.value]?.get(2)?.toDouble() ?: 0.0
                     } else {
-                        rateSummer = structure[ERateKey.SummerOff.value]!![2].toDouble()
-                        rateWinter = structure[ERateKey.WinterOff.value]!![2].toDouble()
+                        rateSummer = structure[ERateKey.SummerOff.value]?.get(2)?.toDouble() ?: 0.0
+                        rateWinter = structure[ERateKey.WinterOff.value]?.get(2)?.toDouble() ?: 0.0
                     }
 
                     return ((powerValue / 2) * 6 * (rateWinter + rateSummer))
@@ -297,6 +306,7 @@ class CostSavings {
              * Parse API Labor Cost - laborCost
              * */
             fun purchasePricePerUnit() = resolve(computable, PURCHASE_PRICE_PER_UNIT)
+
             val materialCost = firstNotNull(purchasePricePerUnit(), materialCost())
             val laborCost = firstNotNull(computable.laborCost, laborCost())
 
@@ -309,13 +319,14 @@ class CostSavings {
             val maintenanceCostSavings = 0.0
             val otherEquipmentSavings = 0.0
 
-            Timber.d( "----::::---- Maintenance Cost Savings ($maintenanceCostSavings) ----::::----")
-            Timber.d( "----::::---- Other Equipment Savings ($otherEquipmentSavings) ----::::----")
+            Timber.d("----::::---- Maintenance Cost Savings ($maintenanceCostSavings) ----::::----")
+            Timber.d("----::::---- Other Equipment Savings ($otherEquipmentSavings) ----::::----")
 
             /**
              * Parse API Energy Efficient Database - Rebate
              * */
             fun rebate() = resolve(computable, REBATE)
+
             val incentives = firstNotNull(rebate(), incentives())
             Timber.d("----::::---- Incentive ($incentives) ----::::----")
 
@@ -325,6 +336,7 @@ class CostSavings {
             //ToDo - @Verify Johnny : How does Quantity Impact this ??
 
             fun implementationCost() = (materialCost() + laborCost()) - incentives()
+
             /**
              * <<< Total Cost Saved >>>
              * */
@@ -373,13 +385,18 @@ class CostSavings {
             /**
              * Preparing the Data-Holder to Store the Outgoing Data
              * */
-            val energyCostSavingHeader = listOf("__costSavingMultiplePowerCheck",
-
-                    "__costSavingMultipleTimeOrPowerTimeCheck", "__costSavingPowerChangeCheck",
-                    "__costSavingTimeChangeCheck", "__costSavingNonTimeOfUse", "__costSavingGas",
-
-                    "__demand_cost_saving", "__implementation_cost", "__total_cost_saved",
-                    "__payback_period_months", "__payback_period_years")
+            val energyCostSavingHeader = listOf(
+                    "__costSavingMultiplePowerCheck",
+                    "__costSavingMultipleTimeOrPowerTimeCheck",
+                    "__costSavingPowerChangeCheck",
+                    "__costSavingTimeChangeCheck",
+                    "__costSavingNonTimeOfUse",
+                    "__costSavingGas",
+                    "__demand_cost_saving",
+                    "__implementation_cost",
+                    "__total_cost_saved",
+                    "__payback_period_months",
+                    "__payback_period_years")
 
             fun initDataHolder(): DataHolder {
                 val dataHolderPostState = DataHolder()
@@ -412,9 +429,7 @@ class CostSavings {
                     "__payback_period_months" to paybackPeriodMonths().toString(),
                     "__payback_period_years" to paybackPeriodYears().toString()
             ))
-
             return dataHolder
         }
-
     }
 }
