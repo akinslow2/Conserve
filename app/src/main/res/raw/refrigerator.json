@@ -6,10 +6,10 @@
       "elements": [
         {
           "index": 11,
-          "hint": "",
+          "hint": "Rq for deemed replacement",
           "dataType": "pickerinputrow",
-          "defaultValues": "1:Solid Door,2:Glass Door Refrigerator",
-          "param": "Equipment Type",
+          "defaultValues": "1:Solid,2:Glass,3:Solid Chest,4:Glass Chest",
+          "param": "Door Type",
           "validation": "optional",
           "id": "11"
         },
@@ -24,10 +24,10 @@
         },
         {
           "index": 13,
-          "hint": "cu. ft. (Rq)",
+          "hint": "Rq for deemed replacement",
           "dataType": "decimalrow",
           "defaultValues": "",
-          "param": "Total Volume",
+          "param": "Total Volume (cu.ft.)",
           "validation": "optional",
           "id": "13"
         },
@@ -54,7 +54,7 @@
           "hint": "",
           "dataType": "introw",
           "defaultValues": "",
-          "param": "Age",
+          "param": "Year installed",
           "validation": "optional",
           "id": "16"
         },
@@ -69,7 +69,7 @@
         },
         {
           "index": 18,
-          "hint": "",
+          "hint": "Rq for LED replacement",
           "dataType": "introw",
           "defaultValues": "",
           "param": "Quantity",
@@ -90,18 +90,9 @@
           "hint": "",
           "dataType": "pickerinputrow",
           "defaultValues": "1:Yes,2:No",
-          "param": "Does reach-in unit have doors?",
+          "param": "Are there doors?",
           "validation": "optional",
           "id": "110"
-        },
-        {
-          "index": 111,
-          "hint": "(Rq)",
-          "dataType": "pickerinputrow",
-          "defaultValues": "1:Solid,2:Glass,3:Solid Chest,4:Glass Chest",
-          "param": "Door Type",
-          "validation": "optional",
-          "id": "111"
         }
       ],
       "id": "1"
@@ -121,7 +112,7 @@
         },
         {
           "index": 22,
-          "hint": "",
+          "hint": "Rq for LED replacement",
           "dataType": "pickerinputrow",
           "defaultValues": "1:Yes,2:No",
           "param": "LED lighting?",
@@ -130,39 +121,30 @@
         },
         {
           "index": 23,
-          "hint": "",
-          "dataType": "decimalrow",
-          "defaultValues": "",
-          "param": "Temperature Setting",
+          "hint": "Rq for LED replacement",
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:0 to 1,2:700,3:1,4:701 and above",
+          "param": "Light Lumens",
           "validation": "",
           "id": "23"
         },
         {
           "index": 24,
           "hint": "",
-          "dataType": "pickerinputrow",
-          "defaultValues": "1:poor,2:adequate,3:strong",
-          "param": "Quality of Door Seal",
-          "validation": "",
+          "dataType": "decimalrow",
+          "defaultValues": "",
+          "param": "Temperature Setting",
+          "validation": "optional",
           "id": "24"
         },
         {
           "index": 25,
-          "hint": "(Rq)",
+          "hint": "",
           "dataType": "pickerinputrow",
-          "defaultValues": "1:Before 1993,2:Between 1993 and 2001,3:Unknown",
-          "param": "Estimated Age",
+          "defaultValues": "1:poor,2:adequate,3:strong",
+          "param": "Quality of Door Seal",
           "validation": "optional",
           "id": "25"
-        },
-        {
-          "index": 26,
-          "hint": "(Rq)",
-          "dataType": "pickerinputrow",
-          "defaultValues": "1:1,2:2,3:3",
-          "param": "Tier for Replacement",
-          "validation": "optional",
-          "id": "26"
         }
       ],
       "id": "2"

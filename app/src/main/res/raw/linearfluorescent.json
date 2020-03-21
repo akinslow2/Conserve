@@ -24,28 +24,28 @@
         },
         {
           "index": 13,
-          "hint": "",
-          "dataType": "decimalrow",
-          "defaultValues": "",
-          "param": "Area (Sq. Ft.)",
+          "hint": "Rq for LED Replacement",
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:0 to 4,2:500,3:4,4:501 and above",
+          "param": "Lumen Range",
           "validation": "optional",
           "id": "13"
         },
         {
           "index": 14,
           "hint": "",
-          "dataType": "pickerinputrow",
-          "defaultValues": "1:LED,2:Linear Flourescent,3:Halogen,4:High Pressure Sodium,5:Incandescent,6:Metal Halide,7:Mercury Vapor,8:Compact Fluorescent,9:EXIT (Compact Flourescent),10:EXIT (Incandescent),11:EXIT (LED)",
-          "param": "Lamp type",
+          "dataType": "decimalrow",
+          "defaultValues": "",
+          "param": "Area (Sq. Ft.)",
           "validation": "optional",
           "id": "14"
         },
         {
           "index": 15,
-          "hint": "",
-          "dataType": "introw",
-          "defaultValues": "",
-          "param": "Ballasts Per Fixture",
+          "hint": "Rq for LED Replacement",
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:linear,2:troffer",
+          "param": "Measure Type",
           "validation": "optional",
           "id": "15"
         },
@@ -54,7 +54,7 @@
           "hint": "",
           "dataType": "introw",
           "defaultValues": "",
-          "param": "Lamps Per Fixture",
+          "param": "Ballasts Per Fixture",
           "validation": "optional",
           "id": "16"
         },
@@ -63,16 +63,16 @@
           "hint": "",
           "dataType": "introw",
           "defaultValues": "",
-          "param": "Number of Fixtures",
+          "param": "Lamps Per Fixture",
           "validation": "optional",
           "id": "17"
         },
         {
           "index": 18,
           "hint": "",
-          "dataType": "textrow",
+          "dataType": "introw",
           "defaultValues": "",
-          "param": "Make",
+          "param": "Number of Fixtures",
           "validation": "optional",
           "id": "18"
         },
@@ -81,9 +81,18 @@
           "hint": "",
           "dataType": "textrow",
           "defaultValues": "",
-          "param": "Model Number",
+          "param": "Make",
           "validation": "optional",
           "id": "19"
+        },
+        {
+          "index": 110,
+          "hint": "",
+          "dataType": "textrow",
+          "defaultValues": "",
+          "param": "Model Number",
+          "validation": "optional",
+          "id": "110"
         }
       ],
       "id": "1"
@@ -311,7 +320,7 @@
         },
         {
           "index": 610,
-          "hint": "",
+          "hint": "\n",
           "dataType": "pickerinputrow",
           "defaultValues": "1:Wall Switch Occupancy Sensor,2:Fixture-Mounted Occupancy Sensor,3:Remote-Mounted Occupancy Sensor,4:Fixture-Mounted Daylight Sensor,5:Remote-Mounted Daylight Sensor,6:Integrated Occupancy Sensor for LED Interior Fixtures < 10,7:000 Lumens,8:Integrated Occupancy Sensor for LED Interior Fixtures >= 10,9:000 Lumens,10:Integrated Dual Occupancy & Daylight Sensor for LED Interior Fixtures < 10,11:000 Lumens,12:Integrated Dual Occupancy & Daylight Sensor for LED Interior Fixtures >= 10,13:000 Lumens,14:Fixture-Mounted Dual Occupancy & Daylight Sensor for LED Interior Fixtures < 10,15:000 Lumens,16:Fixture-Mounted Dual Occupancy & Daylight Sensor for LED Interior Fixtures >= 10,17:000 Lumens,18:Refrigerator Case Occupancy Sensor,19:Freezer Case Occupancy Sensor,20:Exterior Occupancy Sensor",
           "param": "Suggested Control Type2",

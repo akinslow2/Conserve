@@ -2,95 +2,95 @@
   "geminiForm": [
     {
       "index": 1,
-      "section": "Motors",
+      "section": "Condenser Unit",
       "elements": [
         {
           "index": 11,
-          "hint": "(Rq2)",
-          "dataType": "pickerinputrow",
-          "defaultValues": "1:Boiler Draft Fan,2:Cooling Tower Fan,3:Water Source Heat Pump (WSHP) Circulation Pump,4:Supply Fan,5:Return Fan,6:Cooling Water Pump,7:Heating Hot Water Pump,8:brushless permanent magnet (BLPM) circulator pump",
-          "param": "Purpose",
+          "hint": "",
+          "dataType": "textrow",
+          "defaultValues": "",
+          "param": "Make",
           "validation": "optional",
           "id": "11"
         },
         {
           "index": 12,
-          "hint": "(Rq2)",
+          "hint": "",
           "dataType": "textrow",
           "defaultValues": "",
-          "param": "Make",
+          "param": "Model Number",
           "validation": "optional",
           "id": "12"
         },
         {
           "index": 13,
           "hint": "",
-          "dataType": "textrow",
+          "dataType": "introw",
           "defaultValues": "",
-          "param": "Model Number",
+          "param": "Quantity",
           "validation": "optional",
           "id": "13"
         },
         {
           "index": 14,
-          "hint": "(Rq1) (Rq for BLPM)",
-          "dataType": "decimalrow",
+          "hint": "",
+          "dataType": "introw",
           "defaultValues": "",
-          "param": "Horsepower (HP)",
+          "param": "Capacity (BTU)",
           "validation": "optional",
           "id": "14"
         },
         {
           "index": 15,
-          "hint": "(Rq1)",
-          "dataType": "introw",
+          "hint": "",
+          "dataType": "decimalrow",
           "defaultValues": "",
-          "param": "Quantity",
+          "param": "Condensor Fan (HP)",
           "validation": "optional",
           "id": "15"
         },
         {
           "index": 16,
           "hint": "",
-          "dataType": "introw",
-          "defaultValues": "",
-          "param": "Age (years)",
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:1,2:2,3:3,4:4,5:5",
+          "param": "Condensor Clean?",
           "validation": "optional",
           "id": "16"
         },
         {
           "index": 17,
-          "hint": "1750 (Rq1)",
-          "dataType": "introw",
+          "hint": "",
+          "dataType": "decimalrow",
           "defaultValues": "",
-          "param": "Nameplate Rotational Speed (NRS)",
+          "param": "Heating Power (kW)",
           "validation": "optional",
           "id": "17"
         },
         {
           "index": 18,
-          "hint": "1754 (Rq1)",
-          "dataType": "introw",
+          "hint": "",
+          "dataType": "textrow",
           "defaultValues": "",
-          "param": "Measured Rotational Speed (MRS)",
+          "param": "Refrigerant Type",
           "validation": "optional",
           "id": "18"
         },
         {
           "index": 19,
-          "hint": "1800 (Rq1)",
-          "dataType": "pickerinputrow",
-          "defaultValues": "1:600,2:720,3:900,4:1200,5:1800,6:3600",
-          "param": "Synchronous Rotational Speed (SRS)",
+          "hint": "",
+          "dataType": "introw",
+          "defaultValues": "",
+          "param": "Year",
           "validation": "optional",
           "id": "19"
         },
         {
           "index": 110,
-          "hint": "0.85 (Rq1)",
-          "dataType": "decimalrow",
-          "defaultValues": "",
-          "param": "Efficiency",
+          "hint": "",
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:yes,2:no",
+          "param": "Readable Nameplate?",
           "validation": "optional",
           "id": "110"
         },
@@ -98,62 +98,17 @@
           "index": 111,
           "hint": "",
           "dataType": "pickerinputrow",
-          "defaultValues": "1:Total Enclosed,2:Open Drip",
-          "param": "Enclosure Type",
+          "defaultValues": "1:yes,2:no",
+          "param": "Suction line insulated?",
           "validation": "optional",
           "id": "111"
-        },
-        {
-          "index": 112,
-          "hint": "",
-          "dataType": "introw",
-          "defaultValues": "",
-          "param": "Rated Voltage",
-          "validation": "optional",
-          "id": "112"
-        },
-        {
-          "index": 113,
-          "hint": "",
-          "dataType": "decimalrow",
-          "defaultValues": "",
-          "param": "Full Loaded Amps",
-          "validation": "optional",
-          "id": "113"
-        },
-        {
-          "index": 114,
-          "hint": "",
-          "dataType": "introw",
-          "defaultValues": "",
-          "param": "Phase",
-          "validation": "optional",
-          "id": "114"
-        },
-        {
-          "index": 115,
-          "hint": "",
-          "dataType": "pickerinputrow",
-          "defaultValues": "1:yes,2:no",
-          "param": "Operational Testing Will Be Conducted",
-          "validation": "optional",
-          "id": "115"
-        },
-        {
-          "index": 116,
-          "hint": "Rq for BLPM Circ Pump",
-          "dataType": "pickerinputrow",
-          "defaultValues": "1:yes,2:no",
-          "param": "Controls",
-          "validation": "optional",
-          "id": "116"
         }
       ],
       "id": "1"
     },
     {
       "index": 2,
-      "section": "Time of Use",
+      "section": "Condenser Time of Use",
       "elements": [
         {
           "index": 21,
@@ -178,14 +133,14 @@
     },
     {
       "index": 3,
-      "section": "Suggested Alternative",
+      "section": "Evaporator",
       "elements": [
         {
           "index": 31,
           "hint": "",
           "dataType": "textrow",
           "defaultValues": "",
-          "param": "Alternate Make",
+          "param": "Make",
           "validation": "optional",
           "id": "31"
         },
@@ -194,26 +149,26 @@
           "hint": "",
           "dataType": "textrow",
           "defaultValues": "",
-          "param": "Alternate Model Number",
+          "param": "Model Number",
           "validation": "optional",
           "id": "32"
         },
         {
           "index": 33,
-          "hint": "(Rq1) (Rq for BLPM)",
+          "hint": "",
           "dataType": "decimalrow",
           "defaultValues": "",
-          "param": "Alternate Horsepower (HP)",
+          "param": "Serial Number",
           "validation": "optional",
           "id": "33"
         },
         {
           "index": 34,
           "hint": "",
-          "dataType": "introw",
+          "dataType": "decimalrow",
           "defaultValues": "",
-          "param": "Quantity",
-          "validation": "optional",
+          "param": "Capacity (BTU)",
+          "validation": "",
           "id": "34"
         },
         {
@@ -221,39 +176,73 @@
           "hint": "",
           "dataType": "decimalrow",
           "defaultValues": "",
-          "param": "Alternate Rated Voltage",
+          "param": "Fan (HP)",
           "validation": "optional",
           "id": "35"
         },
         {
           "index": 36,
           "hint": "",
-          "dataType": "decimalrow",
+          "dataType": "textrow",
           "defaultValues": "",
-          "param": "Alternate Full Loaded Amps",
+          "param": "Refrigerant Type",
           "validation": "optional",
           "id": "36"
         },
         {
           "index": 37,
           "hint": "",
-          "dataType": "decimalrow",
-          "defaultValues": "",
-          "param": "Alternate Phase",
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:yes,2:no",
+          "param": "Readable Namplate?",
           "validation": "optional",
           "id": "37"
         },
         {
           "index": 38,
-          "hint": "0.92 (Rq1)",
-          "dataType": "decimalrow",
-          "defaultValues": "",
-          "param": "Alternate Efficiency",
+          "hint": "",
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:yes,2:no",
+          "param": "Coil Clean?",
           "validation": "optional",
           "id": "38"
         }
       ],
       "id": "3"
+    },
+    {
+      "index": 4,
+      "section": "Evaporator Time of Use",
+      "elements": [
+        {
+          "index": 41,
+          "hint": "",
+          "dataType": "decimalrow",
+          "defaultValues": "",
+          "param": "Peak Hours",
+          "validation": "optional",
+          "id": "41"
+        },
+        {
+          "index": 42,
+          "hint": "",
+          "dataType": "decimalrow",
+          "defaultValues": "",
+          "param": "Off Peak Hours",
+          "validation": "optional",
+          "id": "42"
+        },
+        {
+          "index": 43,
+          "hint": "",
+          "dataType": "",
+          "defaultValues": "",
+          "param": "",
+          "validation": "",
+          "id": "43"
+        }
+      ],
+      "id": "4"
     }
   ]
 }
