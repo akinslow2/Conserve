@@ -622,11 +622,14 @@ abstract class EBase(val computable: Computable<*>,
     }
 
     // TODO: @Anthony: how should these functions be calculated?
+    // TODO: @k2interactive Isn't this problematic to have the same function name? I added the equations to each.
     open fun costElectricity(energy: Double, electricityRate: UtilityRate): Double {
+        // energy * electricityRate
         return 0.0
     }
 
     open fun costElectricity(power: Double, demandRate: Double): Double {
+        // power * demandRate
         return 0.0
     }
 

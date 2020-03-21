@@ -54,7 +54,7 @@ class Refrigerator(computable: Computable<*>, utilityRateGas: UtilityRate, utili
 
     override fun setup() {
         try {
-            age = featureData["Age"]!! as Int
+            age = featureData["Year installed"]!! as Int
             doorType = featureData["Door Type"]!! as String
             fridgeVolume = featureData["Total Volume"]!! as Double
             styleType = featureData["Style Type"]!! as String
@@ -117,6 +117,7 @@ class Refrigerator(computable: Computable<*>, utilityRateGas: UtilityRate, utili
 
         dataHolder.header = postStateFields()
         dataHolder.computable = computable
+        // TODO: @k2interactive The file names for all csv's should be the zone_nameitem_objecttype_post_state.csv. for example: office_whitefridge_refrigerator_post_state.csv
         dataHolder.fileName = "${Date().time}_post_state.csv"
         dataHolder.rows?.add(postRow)
 
@@ -136,7 +137,7 @@ class Refrigerator(computable: Computable<*>, utilityRateGas: UtilityRate, utili
         return totalCost
     }
 
-
+    // TODO: @k2interactive I don't think this function necessary
     fun grosskwhSavings(): Double {
 //        sum of the gross energy savings pulled from the PARSE
         return 0.0
@@ -205,7 +206,7 @@ class Refrigerator(computable: Computable<*>, utilityRateGas: UtilityRate, utili
                     .put("\$lte", fridgeVolume + 2))
 
             .toString()
-
+// AK2 check to make sure this is calling right
     override fun queryReachIn(): String {
         return JSONObject()
                 .put("type", "refrigeration_reachinfreezerrefrigerator")

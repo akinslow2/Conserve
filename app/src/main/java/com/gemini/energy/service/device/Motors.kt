@@ -100,6 +100,7 @@ class Motors(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRate
     private var nrs = 0
     private var hp = 0.0
     private var efficiency = 0.0
+    private var quantity = 0
 
     //Vermont Prescriptive Savings Inputs
     private var motortype = ""
@@ -125,6 +126,7 @@ class Motors(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRate
             nrs = featureData["Nameplate Rotational Speed (NRS)"]!! as Int
             hp = featureData["Horsepower (HP)"]!! as Double
             efficiency = featureData["Efficiency"]!! as Double
+            quantity = featureData["Quantity"]!! as Int
 
             OTF = featureData["Operational Testing Will Be Conducted"]!! as String
             controls = featureData["Controls"]!! as String
@@ -182,21 +184,26 @@ class Motors(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRate
         val kwBase = hp * KW_CONVERSION
         val kwEff = alternateHp * KW_CONVERSION
         val hours = 4592 //according to TRM pg. 80
-        var grossBEDkwhsavings = 0.0
+        var grossBLPMkwhsavings = 0.0
         if (controls == "yes") {
-            grossBEDkwhsavings = kwBase - kwEff * (1 - 0.73) * hours // //according to Vermont TRM pg. 80
+            grossBLPMkwhsavings = kwBase - kwEff * (1 - 0.73) * hours // //according to Vermont TRM pg. 80
         } else {
-            grossBEDkwhsavings = kwBase - kwEff * hours ////according to Vermont TRM pg. 80
+            grossBLPMkwhsavings = kwBase - kwEff * hours ////according to Vermont TRM pg. 80
         }
-        //1b. BED Prescriptive Net Energy Savings (kWh) for BLPM circulator pump
+        var grossBLPMkwsavings = (kwBase - kwEff)
+
+        //1b. BED Prescriptive Net Energy Savings (kWh) and Net Demand Savings (kW) for BLPM circulator pump
         val freerider = 0.95
         val spillover = 1.0
-        val winterRPF = 0.99 // RPF = rating period factor
-        val summerRPF = 0.01 //see pg. 80 of Vermont TRM
-        val winterLLF = 1.3 // LLF = line lost factor
-        val summerLLF = 11.2
-        var netBEDkwhsavings = (grossBEDkwhsavings * (1 + winterLLF) * (freerider + spillover - 1) * winterRPF) +
-                (grossBEDkwhsavings * (1 + summerLLF) * (freerider + spillover - 1) * summerRPF)
+        val winterRPF = 0.613 // RPF = rating period factor
+        val summerRPF = 0.387 //see pg. 80 of Vermont TRM
+        val offpeakLLF = .121 // LLF = line lost factor
+        val onpeakLLF = .149
+        var netBLPMkwhsavings = (grossBLPMkwsavings * (1 + offpeakLLF) * (freerider + spillover - 1) * winterRPF) +
+                (grossBLPMkwhsavings * (1 + onpeakLLF) * (freerider + spillover - 1) * summerRPF)
+
+        var netBLPMkwsavings = (grossBLPMkwsavings * (1 + .113) * (freerider + spillover - 1) * .57) +
+                (grossBLPMkwsavings * (1 + .112) * (freerider + spillover - 1) * .003)
 
         //1c. BED Prescriptive Savings for VFD - Based on table on pg. 70 of Vermont TRM
         var VFDeSavings =
@@ -219,7 +226,7 @@ class Motors(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRate
         val netkwSavings = VFDeSavings * (1 + 0.112) * (0.95 + 1 - 1) * summerCF + VFDdSavings * (1 + 0.113) * (0.95 + 1 - 1) * winterCF
 
         //3. Implementation Cost
-        // ToDo - The below cost would be a look up in the future.
+        // ToDo - AK2 The below cost should be a look up based on HP for personal calcs
         val costPremiumMotor = 697
         val costStandardMotor = 555
         val implementationCost = (costPremiumMotor - costStandardMotor)
@@ -230,8 +237,10 @@ class Motors(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRate
         postRow["__energy_savings"] = energySavings.toString()
         postRow["__demand_savings"] = demandSavings.toString()
         postRow["__implementation_cost"] = implementationCost.toString()
-        postRow["__Gross_Savings_BLPM_circulator_pump"] = grossBEDkwhsavings.toString()
-        postRow["__Net_Savings__BLPM_circulator_pump"] = netBEDkwhsavings.toString()
+        postRow["__Gross_Energy_Savings_BLPM_circulator_pump"] = grossBLPMkwhsavings.toString()
+        postRow["__Net_Energy_Savings__BLPM_circulator_pump"] = netBLPMkwhsavings.toString()
+        postRow["__Gross_Demand_Savings_BLPM_circulator_pump"] = grossBLPMkwsavings.toString()
+        postRow["__Net_Demand_Savings__BLPM_circulator_pump"] = netBLPMkwsavings.toString()
         postRow["__VFD_Gross_Prescriptive_Energy"] = VFDeSavings.toString()
         postRow["__VFD_Gross_Prescriptive_Demand"] = VFDdSavings.toString()
         postRow["__VFD_Prescriptive_Install_Cost"] = VFDinstallCost.toString()
@@ -286,7 +295,7 @@ class Motors(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRate
         Timber.d("*** Percentage Load Pre :: ($percentageLoadPre)")
         Timber.d("*** Percentage Load Post :: ($percentageLoadPost)")
 
-        val delta = deltaHorsePower * usageHoursPre()
+        val delta = deltaHorsePower * usageHoursPre() * quantity
         return delta
     }
 
@@ -335,8 +344,10 @@ class Motors(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRate
             "__energy_savings",
             "__demand_savings",
             "__implementation_cost",
-            "__Gross_Savings_BLPM_circulator_pump",
-            "__Net_Savings__BLPM_circulator_pump",
+            "__Gross_Energy_Savings_BLPM_circulator_pump",
+            "__Gross_Demand_Savings__BLPM_circulator_pump",
+            "__Net_Energy_Savings__BLPM_circulator_pump",
+            "__Net_Demand_Savings__BLPM_circulator_pump",
             "__VFD_Gross_Prescriptive_Energy",
             "__VFD_Gross_Prescriptive_Demand",
             "__VFD_Prescriptive_Install_Cost",

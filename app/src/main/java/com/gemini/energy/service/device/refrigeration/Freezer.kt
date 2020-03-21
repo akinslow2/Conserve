@@ -14,12 +14,12 @@ import com.google.gson.JsonElement
 import io.reactivex.Observable
 import org.json.JSONObject
 import timber.log.Timber
+import java.util.*
 
 class Freezer(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateElectricity: UtilityRate,
               usageHours: UsageHours, outgoingRows: OutgoingRows, private val context: Context) :
         EBase(computable, utilityRateGas, utilityRateElectricity, usageHours, outgoingRows), IComputable {
 
-    var age = 0.0
     /**
      * Entry Point
      * */
@@ -27,9 +27,39 @@ class Freezer(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRat
         return super.compute(extra = ({ Timber.d(it) }))
     }
 
+    companion object {
+        fun extractDeemedfridgeReplacementkwh(element: JsonElement) =
+                if (element.asJsonObject.has("annual_energy_savings"))
+                    element.asJsonObject.get("annual_energy_savings").asDouble
+                else 0.0
+
+        fun extractDeemedfridgeReplacementkw(element: JsonElement) =
+                if (element.asJsonObject.has("demand_savings"))
+                    element.asJsonObject.get("demand_savings").asDouble
+                else 0.0
+
+        fun extractDeemedfridgeReplacementcost(element: JsonElement) =
+                if (element.asJsonObject.has("incremental_cost"))
+                    element.asJsonObject.get("incremental_cost").asDouble
+                else 0.0
+    }
+
+
+    var age = 0.0
+    var fridgeVolume = 0.0
+    var doorType = ""
+    var styleType = ""
+    var dailyEnergyUsed = 0.0
+
+
     override fun setup() {
         try {
             age = (featureData["Age"]!! as Int).toDouble()
+            doorType = featureData["Door Type"]!! as String
+            fridgeVolume = featureData["Total Volume"]!! as Double
+            styleType = featureData["Style Type"]!! as String
+            dailyEnergyUsed = featureData["Daily Energy Used"]!! as Double
+
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -61,8 +91,36 @@ class Freezer(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRat
      * Cost - Post State
      * */
     var costPostState = 0.0
+    var replacementIncrementalcost = 0.0
 
     override fun costPostState(element: JsonElement, dataHolder: DataHolder): Double {
+        val grossDeemedReplacementkwh = extractDeemedfridgeReplacementkwh(element)
+        val grossDeemedReplacementkw = extractDeemedfridgeReplacementkw(element)
+        replacementIncrementalcost = extractDeemedfridgeReplacementcost(element)
+
+        val netDeemedReplacementkWh =
+                (grossDeemedReplacementkwh * (1 + 0.121) * (1 + 1 - 1) * 0.503) +
+                        (grossDeemedReplacementkwh * (1 + 0.149) * (1 + 1 - 1) * 0.496)
+
+        val netDeemedReplacementkW =
+                (grossDeemedReplacementkw * (1 + 0.113) * (1 + 1 - 1) * 0.979) +
+                        (grossDeemedReplacementkw * (1 + 0.112) * (1 + 1 - 1) * 1.186)
+
+
+        val postRow = mutableMapOf<String, String>()
+        postRow["grossDeemedReplacementkwh"] = grossDeemedReplacementkwh.toString()
+        postRow["grossDeemedReplacementkw"] = grossDeemedReplacementkw.toString()
+        postRow["replacementIncrementalcost"] = replacementIncrementalcost.toString()
+        postRow["netDeemedReplacementkWh"] = netDeemedReplacementkWh.toString()
+        postRow["netDeemedReplacementkW"] = netDeemedReplacementkW.toString()
+
+        dataHolder.header = postStateFields()
+        dataHolder.computable = computable
+        // TODO: @k2interactive The file names for all csv's should be the zone_nameitem_objecttype_post_state.csv. for example: kitchen_largefreezer_freezer_post_state.csv
+        dataHolder.fileName = "${Date().time}_post_state.csv"
+        dataHolder.rows?.add(postRow)
+
+
         val powerUsed = hourlyEnergyUsagePost(element)[0]
         val costElectricity: Double
         costElectricity = costElectricity(powerUsed, super.usageHoursBusiness, super.electricityRate)
@@ -71,10 +129,12 @@ class Freezer(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRat
     }
 
     fun installCost(): Double {
-//        sum of the costs pulled from the PARSE
-        return 0.0
+        val increCost = replacementIncrementalcost
+        val totalCost = increCost * 4 //@AK2 fill
+        return totalCost
     }
 
+// TODO: @k2interactive I don't think this function necessary
     fun grosskwhSavings(): Double {
 //        sum of the gross energy savings pulled from the PARSE
         return 0.0
@@ -84,17 +144,10 @@ class Freezer(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRat
      * PowerTimeChange >> Hourly Energy Use - Pre
      * */
     override fun hourlyEnergyUsagePre(): List<Double> {
-        var hourlyEnergy = 0.0
-
-        try {
-            val dailyEnergyUsed = featureData["Daily Energy Used"]!! as Double
-            hourlyEnergy = dailyEnergyUsed / 24
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-
+        val hourlyEnergy = dailyEnergyUsed / 24
         return listOf(hourlyEnergy)
     }
+
 
     /**
      * PowerTimeChange >> Hourly Energy Use - Post
@@ -155,6 +208,12 @@ class Freezer(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRat
     override fun queryReachIn(): String {
         return JSONObject()
                 .put("type", "refrigeration_reachinfreezerrefrigerator")
+                .put("data.reach_in_type", "Freezer")
+                .put("data.door_type", doorType)
+                .put("data.low_cu_ft", JSONObject()
+                        .put("\$lte", fridgeVolume - 2))
+                .put("data.high_cu_ft", JSONObject()
+                        .put("\$gte", fridgeVolume - 2))
                 .toString()
     }
 

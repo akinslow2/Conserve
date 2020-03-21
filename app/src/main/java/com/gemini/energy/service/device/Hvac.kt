@@ -216,7 +216,7 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
 
             eer = featureData["EER"]!! as Double
             seer = featureData["SEER"]!! as Double
-            year = featureData["Year"]!! as Int
+            year = featureData["Year installed"]!! as Int
             btu = featureData["Cooling Capacity (Btu/hr)"]!! as Int
             gasInput = featureData["Heating Input (Btu/hr)"]!! as Int
             gasOutput = featureData["Heating Output (Btu/hr)"]!! as Int
