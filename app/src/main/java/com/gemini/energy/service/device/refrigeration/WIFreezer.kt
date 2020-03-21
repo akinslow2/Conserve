@@ -370,7 +370,7 @@ class WIFreezer(computable: Computable<*>, utilityRateGas: UtilityRate, utilityR
     }
 
 // TODO: @k2interactive I will need an explanation of how this works...
-    
+
 //    @Anthony: only override if implementation needs to be different that in EBase
 //    override fun costElectricity(energy: Double, electricityRate: UtilityRate): Double {
 //        return 0.0

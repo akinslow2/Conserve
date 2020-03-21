@@ -60,6 +60,59 @@ class LinearFluorescent(computable: Computable<*>, utilityRateGas: UtilityRate, 
                 return element.asJsonObject.get("hours").asDouble
             return 0.0
         }
+// TODO: @k2interactive please add these calls. They are used in the new equations and outputs
+        /**
+        fun extractDeemedtrofferReplacementkwh(element: JsonElement): Double {
+        if (element.asJsonObject.has("led_energy_savings"))
+        return element.asJsonObject.get("led_energy_savings").asDouble
+        return 0.0
+        }
+
+        fun extractDeemedtrofferReplacementkw(element: JsonElement): Double {
+        if (element.asJsonObject.has("led_demand_savings"))
+        return element.asJsonObject.get("led_demand_savings").asDouble
+        return 0.0
+        }
+
+        fun extractDeemedtrofferReplacementBTU(element: JsonElement): Double {
+        if (element.asJsonObject.has("led_MMBTU_savings"))
+        return element.asJsonObject.get("led_MMBTU_savings").asDouble
+        return 0.0
+        }
+
+        fun extractDeemedtrofferReplacementIncrementalcost(element: JsonElement): Double {
+        if (element.asJsonObject.has("incremental_cost"))
+        return element.asJsonObject.get("incremental_cost").asDouble
+        return 0.0
+        }
+
+        fun extractDeemedtrofferReplacementMaterialcost(element: JsonElement): Double {
+        if (element.asJsonObject.has("material_cost"))
+        return element.asJsonObject.get("material_cost").asDouble
+        return 0.0
+        }
+
+        fun extractDeemedtrofferReplacementmeasure(element: JsonElement): Double {
+        if (element.asJsonObject.has("measure_code"))
+        return element.asJsonObject.get("measure_code").asDouble
+        return 0.0
+        }
+
+        fun extractDeemedtrofferReplacementitemCode(element: JsonElement): Double {
+        if (element.asJsonObject.has("item_code"))
+        return element.asJsonObject.get("item_code").asDouble
+        return 0.0
+        }
+
+        fun extractDeemedtrofferReplacementNotes(element: JsonElement): Double {
+        if (element.asJsonObject.has("note"))
+        return element.asJsonObject.get("note").asDouble
+        return 0.0
+        }
+
+         */
+
+
 
         /**
          * Hypothetical Cost of Replacement for Linear Fluorescent
@@ -110,6 +163,10 @@ class LinearFluorescent(computable: Computable<*>, utilityRateGas: UtilityRate, 
     var postpeakHours = 0.0
     var postpartPeakHours = 0.0
     var postoffPeakHours = 0.0
+    // TODO: @k2interactive these are the two variables used for filtering of queryLightingReplacement.
+    //  I added them to the input parameters of LinearFluorescent already.
+   // var Lumen = ""
+   // var Type = ""
 
     /**
      * Suggested Alternative
@@ -129,6 +186,9 @@ class LinearFluorescent(computable: Computable<*>, utilityRateGas: UtilityRate, 
             lampsPerFixtures = featureData["Lamps Per Fixture"]!! as Int
             ballastsPerFixtures = featureData["Ballasts Per Fixture"]!! as Int
             numberOfFixtures = featureData["Number of Fixtures"]!! as Int
+            // TODO: @k2interactive calling the two variables used for filtering of queryLightingReplacement
+           // Lumen = featureData["Lumen Range"]!! as String
+           // Type = featureData["Measure Type"]!! as String
 
             controls = featureData["Controls"]!! as String
             ControlType1 = featureData["Suggested Control Type1"]!! as String
@@ -189,7 +249,7 @@ class LinearFluorescent(computable: Computable<*>, utilityRateGas: UtilityRate, 
 
         return costElectricity(prePower(), usageHours, electricityRate)
     }
-
+  //  var replacementIncrementalcost = 0.0
     /**
      * Cost - Post State
      * */
@@ -226,6 +286,31 @@ class LinearFluorescent(computable: Computable<*>, utilityRateGas: UtilityRate, 
         val percentSaved = extractControlPercentSaved(element)
         val prescriptiveSaved = preEnergy() * percentSaved
 
+        //Lighting Replacement Deemed Savings based on TRM files sent to Anthony from Gretchen on March 18th
+        // TODO: @k2interactive please add these equations in and make sure they output to the CSV
+        /**
+        val grossDeemedReplacementkwh = extractDeemedtrofferReplacementkwh(element)
+        val grossDeemedReplacementkw = extractDeemedtrofferReplacementkw(element)
+        val grossDeemedReplacementBTU = extractDeemedtrofferReplacementBTU(element)
+        replacementIncrementalcost = extractDeemedtrofferReplacementIncrementalcost(element)
+        replacementMaterialcost = extractDeemedtrofferReplacementMaterialcost(element)
+        val measure = extractDeemedtrofferReplacementmeasure(element)
+        val itemCode = extractDeemedtrofferReplacementitemCode(element)
+        val notes = extractDeemedtrofferReplacementNotes(element)
+
+        val netDeemedReplacementkWh =
+        (grossDeemedReplacementkwh * (1 + 0.121) * (0.95 + 1.05 - 1) * 0.29) +
+        (grossDeemedReplacementkwh * (1 + 0.149) * (0.95 + 1.05 - 1) * 0.71)
+
+        val netDeemedReplacementkW =
+        (grossDeemedReplacementkw * (1 + 0.113) * (0.95 + 1.05 - 1) * 0.469) +
+        (grossDeemedReplacementkw * (1 + 0.112) * (0.95 + 1.05 - 1) * 0.679)
+
+        val netDeemedReplacementBTU =
+        (grossDeemedReplacementBTU * (1 + 0.121) * (0.95 + 1.05 - 1) * 0.36) +
+        (grossDeemedReplacementBTU * (1 + 0.149) * (0.95 + 1.05 - 1) * 1.64)
+         */
+
         val postRow = mutableMapOf<String, String>()
         postRow["__life_hours"] = lifeHours.toString()
         postRow["__maintenance_savings"] = maintenanceSavings.toString()
@@ -241,6 +326,18 @@ class LinearFluorescent(computable: Computable<*>, utilityRateGas: UtilityRate, 
         postRow["__lighting_control_prescriptive_hours"] = prescriptiveHours.toString()
         postRow["__lighting_control_prescriptive_savings"] = prescriptiveSaved.toString()
         postRow["__lighting_control_prescriptive_percent"] = percentSaved.toString()
+        // TODO: @k2interactive please add these
+        //postRow["__fixture_replacement_prescriptive_gross_kWh_savings"] = grossDeemedReplacementkWh.toString()
+        //postRow["__fixture_replacement_prescriptive_gross_kW_savings"] = grossDeemedReplacementkW.toString()
+        //postRow["__fixture_replacement_prescriptive_gross_MMBtu_savings"] = grossDeemedReplacementBTU.toString()
+        //postRow["__fixture_replacement_prescriptive_net_kWh_savings"] = netDeemedReplacementkWh.toString()
+        //postRow["__fixture_replacement_prescriptive_net_kW_savings"] = netDeemedReplacementkW.toString()
+        //postRow["__fixture_replacement_prescriptive_net_MMBtu_savings"] = netDeemedReplacementBTU.toString()
+        //postRow["__fixture_replacement_prescriptive_incremental_cost"] = netDeemedReplacementkW.toString()
+        //postRow["__fixture_replacement_prescriptive_material_cost"] = netDeemedReplacementkW.toString()
+        //postRow["__fixture_replacement_prescriptive_measure_code"] = netDeemedReplacementkW.toString()
+        //postRow["__fixture_replacement_prescriptive_item_code"] = netDeemedReplacementkW.toString()
+        //postRow["__fixture_replacement_prescriptive_notes"] = netDeemedReplacementkW.toString()
 
         dataHolder.header = postStateFields()
         dataHolder.computable = computable
@@ -350,6 +447,18 @@ class LinearFluorescent(computable: Computable<*>, utilityRateGas: UtilityRate, 
             .put("data.location_type", bType)
             .toString()
 
+    // TODO: @k2interactive please add this query to Lighting in EBase as well.
+    //  You will find the new database that it references "lighting_lightingreplacement" in the databases folder on dropbox.
+    /**
+    override fun queryLightingReplacement(): String {
+    return JSONObject()
+    .put("type", "lighting_lightingreplacement")
+    .put("data.type", Type)
+    .put("data.lumens", Lumens)
+    .toString()
+    }
+     */
+
     /**
      * State if the Equipment has a Post UsageHours Hours (Specific) ie. A separate set of
      * Weekly UsageHours Hours apart from the PreAudit
@@ -364,6 +473,7 @@ class LinearFluorescent(computable: Computable<*>, utilityRateGas: UtilityRate, 
     override fun featureDataFields() = getGFormElements().map { it.value.param!! }.toMutableList()
 
     override fun preStateFields() = mutableListOf<String>()
+
     override fun postStateFields() = mutableListOf(
             "__lighting_control_measure_code",
             "__lighting_control_prescriptive_hours",
@@ -379,6 +489,18 @@ class LinearFluorescent(computable: Computable<*>, utilityRateGas: UtilityRate, 
             "__payback_month",
             "__payback_year",
             "__total_savings")
+    // TODO: @k2interactive please the following list to postStateFields
+    // "__fixture_replacement_prescriptive_gross_kWh_savings",
+    // "__fixture_replacement_prescriptive_gross_kW_savings",
+    // "__fixture_replacement_prescriptive_gross_MMBtu_savings",
+    // "__fixture_replacement_prescriptive_net_kWh_savings",
+    // "__fixture_replacement_prescriptive_net_kW_savings",
+    // "__fixture_replacement_prescriptive_net_MMBtu_savings",
+    // "__fixture_replacement_prescriptive_incremental_cost",
+    // "__fixture_replacement_prescriptive_material_cost",
+    // "__fixture_replacement_prescriptive_measure_code",
+    // "__fixture_replacement_prescriptive_item_code",
+    // "__fixture_replacement_prescriptive_notes")
 
     override fun computedFields() = mutableListOf("")
     private fun getFormMapper() = FormMapper(context, R.raw.linearfluorescent)
