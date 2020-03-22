@@ -794,7 +794,7 @@ class SorterForWordDocumentGenerator {
                             "Pre Rinse Spray",
                             single.energyPowerChange(),
                             costElectricity,
-                            single.age,
+                            single.age.toDouble(),
                             materialCost,
                             implementationCost,
                             savings,

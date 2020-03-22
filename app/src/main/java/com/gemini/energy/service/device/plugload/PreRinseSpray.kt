@@ -40,12 +40,11 @@ class PreRinseSpray(computable: Computable<*>, utilityRateGas: UtilityRate, util
     private var waterTemperature = 0
     private var efficiency = 0.0
     private var waterHeater = ""
-    var age = 0.0
+    var age = 0
 
     override fun setup() {
         try {
             peakHours = featureData["Peak Hours"]!! as Double
-            partPeakHours = featureData["Part Peak Hours"]!! as Double
             offPeakHours = featureData["Off Peak Hours"]!! as Double
             usageHours = UsageSimple(peakHours, partPeakHours, offPeakHours)
 
@@ -53,7 +52,7 @@ class PreRinseSpray(computable: Computable<*>, utilityRateGas: UtilityRate, util
             waterTemperature = featureData["Water Temperature (oF)"]!! as Int
             efficiency = featureData["Efficiency"]!! as Double
             waterHeater = featureData["Water Heater"]!! as String
-            age = (featureData["Age"]!! as Int).toDouble()
+            age = featureData["Age"]!! as Int
         } catch (e: Exception) {
             e.printStackTrace()
         }
