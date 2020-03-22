@@ -129,8 +129,8 @@ class Electricity(private val rateStructure: String, private val companyCode: St
             structure[ERateKey.WinterOff.value]!![0].toDouble())
 
     override fun getNoneTOU(structure: HashMap<String, List<String>>) = TOUNone(
-            structure[ERateKey.SummerNone.value]!![0].toDouble(),
-            structure[ERateKey.WinterNone.value]!![0].toDouble())
+            structure[ERateKey.SummerNone.value]?.first()?.toDouble() ?: 0.0,
+            structure[ERateKey.WinterNone.value]?.first()?.toDouble() ?: 0.0)
 }
 
 class Gas(private val rateStructure: String = "", private val companyCode: String = "") : IUtility {
