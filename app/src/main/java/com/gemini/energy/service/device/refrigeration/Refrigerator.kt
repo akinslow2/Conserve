@@ -56,10 +56,9 @@ class Refrigerator(computable: Computable<*>, utilityRateGas: UtilityRate, utili
         try {
             age = featureData["Year installed"]!! as Int
             doorType = featureData["Door Type"]!! as String
-            fridgeVolume = featureData["Total Volume"]!! as Double
+            fridgeVolume = featureData["Total Volume (cu.ft.)"]!! as Double
             styleType = featureData["Style Type"]!! as String
             dailyEnergyUsed = featureData["Daily Energy Used"]!! as Double
-
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -107,7 +106,6 @@ class Refrigerator(computable: Computable<*>, utilityRateGas: UtilityRate, utili
                 (grossDeemedReplacementkw * (1 + 0.113) * (1 + 1 - 1) * 0.979) +
                         (grossDeemedReplacementkw * (1 + 0.112) * (1 + 1 - 1) * 1.186)
 
-
         val postRow = mutableMapOf<String, String>()
         postRow["grossDeemedReplacementkwh"] = grossDeemedReplacementkwh.toString()
         postRow["grossDeemedReplacementkw"] = grossDeemedReplacementkw.toString()
@@ -120,7 +118,6 @@ class Refrigerator(computable: Computable<*>, utilityRateGas: UtilityRate, utili
         // TODO: @k2interactive The file names for all csv's should be the zone_nameitem_objecttype_post_state.csv. for example: office_whitefridge_refrigerator_post_state.csv
         dataHolder.fileName = "${Date().time}_post_state.csv"
         dataHolder.rows?.add(postRow)
-
 
         val powerUsed = hourlyEnergyUsagePost(element)[0]
         val costElectricity: Double
