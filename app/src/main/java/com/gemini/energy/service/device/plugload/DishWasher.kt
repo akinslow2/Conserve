@@ -163,30 +163,31 @@ class DishWasher(computable: Computable<*>, utilityRateGas: UtilityRate, utility
      * PowerTimeChange >> Hourly Energy Use - Post
      * */
     override fun hourlyEnergyUsagePost(element: JsonElement): List<Double> {
-        var annualEnergyGas = 0.0
-        var annualEnergyElectric = 0.0
+        val waterConsumptionPost =
+                if (element.asJsonObject.has("water_consumption"))
+                    element.asJsonObject.get("water_consumption").asDouble
+                else 0.0
 
-        try {
-            val waterConsumptionPost = element.asJsonObject.get("water_consumption").asDouble
-            val numberOfRacksPost = numberOfRacks
-            val cyclesPerDayPost = cyclesPerDay
-            val daysUsedPost = daysUsed
-            val waterTemperaturePost = waterTemperature
-            val efficiencyPost = efficiency
-            val annualHoursPost = usageHoursPre()
-            val idleEnergyRatePost = element.asJsonObject.get("idle_energy_rate").asDouble
+        val idleEnergyRatePost =
+                if (element.asJsonObject.has("idle_energy_rate"))
+                    element.asJsonObject.get("idle_energy_rate").asDouble
+                else 0.0
 
-            val alpha = (waterConsumptionPost * numberOfRacksPost * cyclesPerDayPost * daysUsedPost *
-                    annualHoursPost * 8.34 * waterTemperaturePost)
-            annualEnergyGas = ((alpha / efficiencyPost) + (idleEnergyRatePost * 3412.14 * annualHoursPost)) / 99976.1
-            annualEnergyElectric = (alpha / (efficiencyPost * 3412.14)) + (idleEnergyRatePost * annualHoursPost)
+        val numberOfRacksPost = numberOfRacks
+        val cyclesPerDayPost = cyclesPerDay
+        val daysUsedPost = daysUsed
+        val waterTemperaturePost = waterTemperature
+        val efficiencyPost = efficiency
+        val annualHoursPost = usageHoursPre()
 
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-        val hoursInyear: Int = 8760
-        var hourlyEnergyGas = annualEnergyGas / hoursInyear
-        var hourlyEnergyElectric = annualEnergyElectric / hoursInyear
+        val alpha = (waterConsumptionPost * numberOfRacksPost * cyclesPerDayPost * daysUsedPost *
+                annualHoursPost * 8.34 * waterTemperaturePost)
+        val annualEnergyGas = ((alpha / efficiencyPost) + (idleEnergyRatePost * 3412.14 * annualHoursPost)) / 99976.1
+        val annualEnergyElectric = (alpha / (efficiencyPost * 3412.14)) + (idleEnergyRatePost * annualHoursPost)
+
+        val hoursInYear = 8760
+        val hourlyEnergyGas = annualEnergyGas / hoursInYear
+        val hourlyEnergyElectric = annualEnergyElectric / hoursInYear
 
         return listOf(hourlyEnergyElectric, hourlyEnergyGas)
     }
