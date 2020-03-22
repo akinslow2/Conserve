@@ -231,15 +231,6 @@
           "param": "Off Peak Hours",
           "validation": "optional",
           "id": "42"
-        },
-        {
-          "index": 43,
-          "hint": "",
-          "dataType": "",
-          "defaultValues": "",
-          "param": "",
-          "validation": "",
-          "id": "43"
         }
       ],
       "id": "4"
