@@ -32,87 +32,71 @@ class LinearFluorescent(computable: Computable<*>, utilityRateGas: UtilityRate, 
     companion object {
         private const val LightControls = "lighting_lightingcontrols"
         private const val ControlHours = "lighting_lightingcontrolhours"
+        private const val LightingReplacement = "lighting_lightingreplacement"
 
         /**
          * Fetches the Deemed Criteria at once
          * via the Parse API
          * */
-        fun extractControlPercentSaved(element: JsonElement): Double {
-            if (element.asJsonObject.has("percent_savings"))
-                return element.asJsonObject.get("percent_savings").asDouble
-            return 0.0
-        }
+        fun extractControlPercentSaved(element: JsonElement) =
+                if (element.asJsonObject.has("percent_savings"))
+                    element.asJsonObject.get("percent_savings").asDouble
+                else 0.0
 
-        fun extractEquipmentCost(element: JsonElement): Double {
-            if (element.asJsonObject.has("equipment_cost"))
-                return element.asJsonObject.get("equipment_cost").asDouble
-            return 0.0
-        }
+        fun extractEquipmentCost(element: JsonElement) =
+                if (element.asJsonObject.has("equipment_cost"))
+                    element.asJsonObject.get("equipment_cost").asDouble
+                else 0.0
 
-        fun extractMeasureCode(element: JsonElement): String {
-            if (element.asJsonObject.has("measure_code"))
-                return element.asJsonObject.get("measure_code").asString
-            return ""
-        }
+        fun extractMeasureCode(element: JsonElement): String =
+                if (element.asJsonObject.has("measure_code"))
+                    element.asJsonObject.get("measure_code").asString
+                else ""
 
-        fun extractAssumedHours(element: JsonElement): Double {
-            if (element.asJsonObject.has("hours"))
-                return element.asJsonObject.get("hours").asDouble
-            return 0.0
-        }
-// TODO: @k2interactive please add these calls. They are used in the new equations and outputs
-        /**
-        fun extractDeemedtrofferReplacementkwh(element: JsonElement): Double {
-        if (element.asJsonObject.has("led_energy_savings"))
-        return element.asJsonObject.get("led_energy_savings").asDouble
-        return 0.0
-        }
+        fun extractAssumedHours(element: JsonElement) =
+                if (element.asJsonObject.has("hours"))
+                    element.asJsonObject.get("hours").asDouble
+                else 0.0
 
-        fun extractDeemedtrofferReplacementkw(element: JsonElement): Double {
-        if (element.asJsonObject.has("led_demand_savings"))
-        return element.asJsonObject.get("led_demand_savings").asDouble
-        return 0.0
-        }
+        fun extractDeemedTROfferReplacementkwh(element: JsonElement) =
+                if (element.asJsonObject.has("led_energy_savings"))
+                    element.asJsonObject.get("led_energy_savings").asDouble
+                else 0.0
 
-        fun extractDeemedtrofferReplacementBTU(element: JsonElement): Double {
-        if (element.asJsonObject.has("led_MMBTU_savings"))
-        return element.asJsonObject.get("led_MMBTU_savings").asDouble
-        return 0.0
-        }
+        fun extractDeemedTROfferReplacementkw(element: JsonElement) =
+                if (element.asJsonObject.has("led_demand_savings"))
+                    element.asJsonObject.get("led_demand_savings").asDouble
+                else 0.0
 
-        fun extractDeemedtrofferReplacementIncrementalcost(element: JsonElement): Double {
-        if (element.asJsonObject.has("incremental_cost"))
-        return element.asJsonObject.get("incremental_cost").asDouble
-        return 0.0
-        }
+        fun extractDeemedTROfferReplacementBTU(element: JsonElement) =
+                if (element.asJsonObject.has("led_mmbtu_savings"))
+                    element.asJsonObject.get("led_mmbtu_savings").asDouble
+                else 0.0
 
-        fun extractDeemedtrofferReplacementMaterialcost(element: JsonElement): Double {
-        if (element.asJsonObject.has("material_cost"))
-        return element.asJsonObject.get("material_cost").asDouble
-        return 0.0
-        }
+        fun extractDeemedTROfferReplacementIncrementalCost(element: JsonElement) =
+                if (element.asJsonObject.has("incremental_cost"))
+                    element.asJsonObject.get("incremental_cost").asDouble
+                else 0.0
 
-        fun extractDeemedtrofferReplacementmeasure(element: JsonElement): Double {
-        if (element.asJsonObject.has("measure_code"))
-        return element.asJsonObject.get("measure_code").asDouble
-        return 0.0
-        }
+        fun extractDeemedTROfferReplacementMaterialCost(element: JsonElement) =
+                if (element.asJsonObject.has("material_cost"))
+                    element.asJsonObject.get("material_cost").asDouble
+                else 0.0
 
-        fun extractDeemedtrofferReplacementitemCode(element: JsonElement): Double {
-        if (element.asJsonObject.has("item_code"))
-        return element.asJsonObject.get("item_code").asDouble
-        return 0.0
-        }
+        fun extractDeemedTROfferReplacementMeasure(element: JsonElement): String =
+                if (element.asJsonObject.has("measure_code"))
+                    element.asJsonObject.get("measure_code").asString
+                else ""
 
-        fun extractDeemedtrofferReplacementNotes(element: JsonElement): Double {
-        if (element.asJsonObject.has("note"))
-        return element.asJsonObject.get("note").asDouble
-        return 0.0
-        }
+        fun extractDeemedTROfferReplacementItemCode(element: JsonElement): String =
+                if (element.asJsonObject.has("item_code"))
+                    element.asJsonObject.get("item_code").asString
+                else ""
 
-         */
-
-
+        fun extractDeemedTROfferReplacementNotes(element: JsonElement): String =
+                if (element.asJsonObject.has("note"))
+                    element.asJsonObject.get("note").asString
+                else ""
 
         /**
          * Hypothetical Cost of Replacement for Linear Fluorescent
@@ -142,7 +126,6 @@ class LinearFluorescent(computable: Computable<*>, utilityRateGas: UtilityRate, 
     var ballastsPerFixtures = 0
     var numberOfFixtures = 0
 
-
     var energyAtPreState = 0.0
     var currentPower = 0.0
     var postPower = 0.0
@@ -163,10 +146,9 @@ class LinearFluorescent(computable: Computable<*>, utilityRateGas: UtilityRate, 
     var postpeakHours = 0.0
     var postpartPeakHours = 0.0
     var postoffPeakHours = 0.0
-    // TODO: @k2interactive these are the two variables used for filtering of queryLightingReplacement.
-    //  I added them to the input parameters of LinearFluorescent already.
-   // var Lumen = ""
-   // var Type = ""
+
+    var lumen = "n/a"
+    var type = ""
 
     /**
      * Suggested Alternative
@@ -186,9 +168,9 @@ class LinearFluorescent(computable: Computable<*>, utilityRateGas: UtilityRate, 
             lampsPerFixtures = featureData["Lamps Per Fixture"]!! as Int
             ballastsPerFixtures = featureData["Ballasts Per Fixture"]!! as Int
             numberOfFixtures = featureData["Number of Fixtures"]!! as Int
-            // TODO: @k2interactive calling the two variables used for filtering of queryLightingReplacement
-           // Lumen = featureData["Lumen Range"]!! as String
-           // Type = featureData["Measure Type"]!! as String
+
+            lumen = featureData["Lumen Range"]!! as String
+            type = featureData["Measure Type"]!! as String
 
             controls = featureData["Controls"]!! as String
             ControlType1 = featureData["Suggested Control Type1"]!! as String
@@ -209,7 +191,6 @@ class LinearFluorescent(computable: Computable<*>, utilityRateGas: UtilityRate, 
 
             suggestedControlType1 = featureData["Suggested Control Type1"]!! as String
             suggestedControlType2 = featureData["Suggested Control Type2"]!! as String
-
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -224,11 +205,11 @@ class LinearFluorescent(computable: Computable<*>, utilityRateGas: UtilityRate, 
         usageHours.peakHours = peakHours
         usageHours.partPeakHours = partPeakHours
         usageHours.offPeakHours = offPeakHours
-        if (usageHours.yearly() < 1.0) {
+
+        if (usageHours.yearly() < 1.0)
             return preauditHours.yearly()
-        } else {
-            return usageHours.yearly()
-        }
+
+        return usageHours.yearly()
     }
 
     fun preEnergy(): Double {
@@ -249,7 +230,8 @@ class LinearFluorescent(computable: Computable<*>, utilityRateGas: UtilityRate, 
 
         return costElectricity(prePower(), usageHours, electricityRate)
     }
-  //  var replacementIncrementalcost = 0.0
+
+    var replacementIncrementalCost = 0.0
     /**
      * Cost - Post State
      * */
@@ -267,7 +249,7 @@ class LinearFluorescent(computable: Computable<*>, utilityRateGas: UtilityRate, 
         val expectedLife = LEDlifeHours / usageHoursSpecific.yearly()
         val maintenanceSavings = totalUnits * bulbcost * replacementIndex / expectedLife
 
-        val selfinstallcost = this.selfinstallcost()
+        val selfInstallCost = selfinstallcost()
 
         // Delta is going to be Power Used * Percentage Power Reduced
         // Percentage Power Reduced - we get it from the Base - ELighting
@@ -276,9 +258,9 @@ class LinearFluorescent(computable: Computable<*>, utilityRateGas: UtilityRate, 
         val coolingSavings = energySavings * cooling / seer
 
         val energyAtPostState = preEnergy() - energySavings
-        val paybackmonth = selfinstallcost / energySavings * 12
-        val paybackyear = selfinstallcost / energySavings
-        val totalsavings = energySavings + coolingSavings + maintenanceSavings
+        val paybackMonth = selfInstallCost / energySavings * 12
+        val paybackYear = selfInstallCost / energySavings
+        val totalSavings = energySavings + coolingSavings + maintenanceSavings
 
         val controlCost = extractEquipmentCost(element)
         val measureCode = extractMeasureCode(element)
@@ -287,29 +269,27 @@ class LinearFluorescent(computable: Computable<*>, utilityRateGas: UtilityRate, 
         val prescriptiveSaved = preEnergy() * percentSaved
 
         //Lighting Replacement Deemed Savings based on TRM files sent to Anthony from Gretchen on March 18th
-        // TODO: @k2interactive please add these equations in and make sure they output to the CSV
-        /**
-        val grossDeemedReplacementkwh = extractDeemedtrofferReplacementkwh(element)
-        val grossDeemedReplacementkw = extractDeemedtrofferReplacementkw(element)
-        val grossDeemedReplacementBTU = extractDeemedtrofferReplacementBTU(element)
-        replacementIncrementalcost = extractDeemedtrofferReplacementIncrementalcost(element)
-        replacementMaterialcost = extractDeemedtrofferReplacementMaterialcost(element)
-        val measure = extractDeemedtrofferReplacementmeasure(element)
-        val itemCode = extractDeemedtrofferReplacementitemCode(element)
-        val notes = extractDeemedtrofferReplacementNotes(element)
+        val grossDeemedReplacementkwh = extractDeemedTROfferReplacementkwh(element)
+        val grossDeemedReplacementkw = extractDeemedTROfferReplacementkw(element)
+        val grossDeemedReplacementBTU = extractDeemedTROfferReplacementBTU(element)
+        replacementIncrementalCost = extractDeemedTROfferReplacementIncrementalCost(element)
+        val replacementMaterialCost = extractDeemedTROfferReplacementMaterialCost(element)
+        val measure = extractDeemedTROfferReplacementMeasure(element)
+        val itemCode = extractDeemedTROfferReplacementItemCode(element)
+        val notes = extractDeemedTROfferReplacementNotes(element)
 
         val netDeemedReplacementkWh =
-        (grossDeemedReplacementkwh * (1 + 0.121) * (0.95 + 1.05 - 1) * 0.29) +
-        (grossDeemedReplacementkwh * (1 + 0.149) * (0.95 + 1.05 - 1) * 0.71)
+                (grossDeemedReplacementkwh * (1 + 0.121) * (0.95 + 1.05 - 1) * 0.29) +
+                        (grossDeemedReplacementkwh * (1 + 0.149) * (0.95 + 1.05 - 1) * 0.71)
 
         val netDeemedReplacementkW =
-        (grossDeemedReplacementkw * (1 + 0.113) * (0.95 + 1.05 - 1) * 0.469) +
-        (grossDeemedReplacementkw * (1 + 0.112) * (0.95 + 1.05 - 1) * 0.679)
+                (grossDeemedReplacementkw * (1 + 0.113) * (0.95 + 1.05 - 1) * 0.469) +
+                        (grossDeemedReplacementkw * (1 + 0.112) * (0.95 + 1.05 - 1) * 0.679)
 
         val netDeemedReplacementBTU =
-        (grossDeemedReplacementBTU * (1 + 0.121) * (0.95 + 1.05 - 1) * 0.36) +
-        (grossDeemedReplacementBTU * (1 + 0.149) * (0.95 + 1.05 - 1) * 1.64)
-         */
+                (grossDeemedReplacementBTU * (1 + 0.121) * (0.95 + 1.05 - 1) * 0.36) +
+                        (grossDeemedReplacementBTU * (1 + 0.149) * (0.95 + 1.05 - 1) * 1.64)
+
 
         val postRow = mutableMapOf<String, String>()
         postRow["__life_hours"] = lifeHours.toString()
@@ -317,27 +297,28 @@ class LinearFluorescent(computable: Computable<*>, utilityRateGas: UtilityRate, 
         postRow["__cooling_savings"] = coolingSavings.toString()
         postRow["__energy_savings"] = energySavings.toString()
         postRow["__energy_at_post_state"] = energyAtPostState.toString()
-        postRow["__selfinstall_cost"] = selfinstallcost.toString()
-        postRow["__payback_month"] = paybackmonth.toString()
-        postRow["__payback_year"] = paybackyear.toString()
-        postRow["__total_savings"] = totalsavings.toString()
+        postRow["__selfinstall_cost"] = selfInstallCost.toString()
+        postRow["__payback_month"] = paybackMonth.toString()
+        postRow["__payback_year"] = paybackYear.toString()
+        postRow["__total_savings"] = totalSavings.toString()
+
         postRow["__lighting_control_prescriptive_cost"] = controlCost.toString()
-        postRow["__lighting_control_measure_code"] = measureCode.toString()
+        postRow["__lighting_control_measure_code"] = measureCode
         postRow["__lighting_control_prescriptive_hours"] = prescriptiveHours.toString()
         postRow["__lighting_control_prescriptive_savings"] = prescriptiveSaved.toString()
         postRow["__lighting_control_prescriptive_percent"] = percentSaved.toString()
-        // TODO: @k2interactive please add these
-        //postRow["__fixture_replacement_prescriptive_gross_kWh_savings"] = grossDeemedReplacementkWh.toString()
-        //postRow["__fixture_replacement_prescriptive_gross_kW_savings"] = grossDeemedReplacementkW.toString()
-        //postRow["__fixture_replacement_prescriptive_gross_MMBtu_savings"] = grossDeemedReplacementBTU.toString()
-        //postRow["__fixture_replacement_prescriptive_net_kWh_savings"] = netDeemedReplacementkWh.toString()
-        //postRow["__fixture_replacement_prescriptive_net_kW_savings"] = netDeemedReplacementkW.toString()
-        //postRow["__fixture_replacement_prescriptive_net_MMBtu_savings"] = netDeemedReplacementBTU.toString()
-        //postRow["__fixture_replacement_prescriptive_incremental_cost"] = netDeemedReplacementkW.toString()
-        //postRow["__fixture_replacement_prescriptive_material_cost"] = netDeemedReplacementkW.toString()
-        //postRow["__fixture_replacement_prescriptive_measure_code"] = netDeemedReplacementkW.toString()
-        //postRow["__fixture_replacement_prescriptive_item_code"] = netDeemedReplacementkW.toString()
-        //postRow["__fixture_replacement_prescriptive_notes"] = netDeemedReplacementkW.toString()
+
+        postRow["__fixture_replacement_prescriptive_gross_kWh_savings"] = grossDeemedReplacementkwh.toString()
+        postRow["__fixture_replacement_prescriptive_gross_kW_savings"] = grossDeemedReplacementkw.toString()
+        postRow["__fixture_replacement_prescriptive_gross_MMBtu_savings"] = grossDeemedReplacementBTU.toString()
+        postRow["__fixture_replacement_prescriptive_net_kWh_savings"] = netDeemedReplacementkWh.toString()
+        postRow["__fixture_replacement_prescriptive_net_kW_savings"] = netDeemedReplacementkW.toString()
+        postRow["__fixture_replacement_prescriptive_net_MMBtu_savings"] = netDeemedReplacementBTU.toString()
+        postRow["__fixture_replacement_prescriptive_incremental_cost"] = replacementIncrementalCost.toString()
+        postRow["__fixture_replacement_prescriptive_material_cost"] = replacementMaterialCost.toString()
+        postRow["__fixture_replacement_prescriptive_measure_code"] = measure
+        postRow["__fixture_replacement_prescriptive_item_code"] = itemCode
+        postRow["__fixture_replacement_prescriptive_notes"] = notes
 
         dataHolder.header = postStateFields()
         dataHolder.computable = computable
@@ -361,13 +342,13 @@ class LinearFluorescent(computable: Computable<*>, utilityRateGas: UtilityRate, 
      * Post Yearly Usage Hours
      * */
     override fun usageHoursPost(): Double {
-        val postusageHours = UsageLighting()
-        postusageHours.postpeakHours = postpeakHours
-        postusageHours.postpartPeakHours = postpartPeakHours
-        postusageHours.postoffPeakHours = postoffPeakHours
+        val postUsageHours = UsageLighting()
+        postUsageHours.postpeakHours = postpeakHours
+        postUsageHours.postpartPeakHours = postpartPeakHours
+        postUsageHours.postoffPeakHours = postoffPeakHours
 
-        if (postusageHours.yearly() > 0.0)
-            return postusageHours.yearly()
+        if (postUsageHours.yearly() > 0.0)
+            return postUsageHours.yearly()
 
         if (usageHoursPre() > 0)
             return usageHoursPre()
@@ -430,7 +411,7 @@ class LinearFluorescent(computable: Computable<*>, utilityRateGas: UtilityRate, 
     override fun efficientLookup() = false
 
     override fun queryEfficientFilter() =
-            "{\"\$or\":[" + queryControlPercentSaved() + "," + queryAssumedHours() + "]}"
+            "{\"\$or\":[${queryControlPercentSaved()},${queryAssumedHours()},${queryLightingReplacement()}]}"
 
     override fun queryControlPercentSaved() = JSONObject()
             .put("type", LightControls)
@@ -447,17 +428,13 @@ class LinearFluorescent(computable: Computable<*>, utilityRateGas: UtilityRate, 
             .put("data.location_type", bType)
             .toString()
 
-    // TODO: @k2interactive please add this query to Lighting in EBase as well.
-    //  You will find the new database that it references "lighting_lightingreplacement" in the databases folder on dropbox.
-    /**
     override fun queryLightingReplacement(): String {
-    return JSONObject()
-    .put("type", "lighting_lightingreplacement")
-    .put("data.type", Type)
-    .put("data.lumens", Lumens)
-    .toString()
+        return JSONObject()
+                .put("type", LightingReplacement)
+                .put("data.type", type)
+                .put("data.lumens", lumen)
+                .toString()
     }
-     */
 
     /**
      * State if the Equipment has a Post UsageHours Hours (Specific) ie. A separate set of
@@ -488,23 +465,21 @@ class LinearFluorescent(computable: Computable<*>, utilityRateGas: UtilityRate, 
             "__selfinstall_cost",
             "__payback_month",
             "__payback_year",
-            "__total_savings")
-    // TODO: @k2interactive please the following list to postStateFields
-    // "__fixture_replacement_prescriptive_gross_kWh_savings",
-    // "__fixture_replacement_prescriptive_gross_kW_savings",
-    // "__fixture_replacement_prescriptive_gross_MMBtu_savings",
-    // "__fixture_replacement_prescriptive_net_kWh_savings",
-    // "__fixture_replacement_prescriptive_net_kW_savings",
-    // "__fixture_replacement_prescriptive_net_MMBtu_savings",
-    // "__fixture_replacement_prescriptive_incremental_cost",
-    // "__fixture_replacement_prescriptive_material_cost",
-    // "__fixture_replacement_prescriptive_measure_code",
-    // "__fixture_replacement_prescriptive_item_code",
-    // "__fixture_replacement_prescriptive_notes")
+            "__total_savings",
+            "__fixture_replacement_prescriptive_gross_kWh_savings",
+            "__fixture_replacement_prescriptive_gross_kW_savings",
+            "__fixture_replacement_prescriptive_gross_MMBtu_savings",
+            "__fixture_replacement_prescriptive_net_kWh_savings",
+            "__fixture_replacement_prescriptive_net_kW_savings",
+            "__fixture_replacement_prescriptive_net_MMBtu_savings",
+            "__fixture_replacement_prescriptive_incremental_cost",
+            "__fixture_replacement_prescriptive_material_cost",
+            "__fixture_replacement_prescriptive_measure_code",
+            "__fixture_replacement_prescriptive_item_code",
+            "__fixture_replacement_prescriptive_notes")
 
-    override fun computedFields() = mutableListOf("")
+    override fun computedFields() = mutableListOf<String>()
     private fun getFormMapper() = FormMapper(context, R.raw.linearfluorescent)
     private fun getModel() = getFormMapper().decodeJSON()
     private fun getGFormElements() = getFormMapper().mapIdToElements(getModel())
-
 }
