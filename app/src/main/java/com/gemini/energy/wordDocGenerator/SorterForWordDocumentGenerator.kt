@@ -736,7 +736,7 @@ class SorterForWordDocumentGenerator {
                             "Hot Food Cabinet",
                             single.energyPowerChange(),
                             costElectricity,
-                            single.age,
+                            single.age.toDouble(),
                             materialCost,
                             implementationCost,
                             savings,
