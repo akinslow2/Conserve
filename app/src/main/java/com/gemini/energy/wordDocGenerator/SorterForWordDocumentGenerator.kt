@@ -707,7 +707,7 @@ class SorterForWordDocumentGenerator {
                             "Griddle",
                             single.energyPowerChange(),
                             costElectricity,
-                            single.age,
+                            single.age.toDouble(),
                             materialCost,
                             implementationCost,
                             savings,

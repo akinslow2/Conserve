@@ -44,13 +44,11 @@ class Griddle(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRat
     private var productionCapacity = 0.0
     private var fuelType = ""
 
-    var age = 0.0
+    var age = 0
 
 
     override fun setup() {
         try {
-
-
             peakHours = featureData["Peak Hours"]!! as Double
             partPeakHours = featureData["Part Peak Hours"]!! as Double
             offPeakHours = featureData["Off Peak Hours"]!! as Double
@@ -64,7 +62,7 @@ class Griddle(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRat
             productionCapacity = featureData["Production Capacity"]!! as Double
 
             fuelType = featureData["Fuel Type"]!! as String
-            age = (featureData["Age"]!! as Int).toDouble()
+            age = featureData["Age"]!! as Int
 
             usageHours = UsageSimple(peakHours, partPeakHours, offPeakHours)
         } catch (e: Exception) {
@@ -82,7 +80,7 @@ class Griddle(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRat
 
         cost = if (isElectric())
             costElectricity(powerUsed, usageHours!!, electricityRate) else
-            //ToDo : Covert this power into Therms !!
+        //ToDo : Covert this power into Therms !!
             costGas(powerUsed)
 
         return cost
@@ -105,6 +103,7 @@ class Griddle(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRat
      * Cost - Post State
      * */
     var costPostState = 0.0
+
     override fun costPostState(element: JsonElement, dataHolder: DataHolder): Double {
         val powerUsed = hourlyEnergyUsagePost(element)[0]
         val cost: Double
@@ -166,6 +165,7 @@ class Griddle(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRat
      * */
     //ToDo - @Johnny Verify this
     override fun usageHoursPre(): Double = usageHours!!.yearly()
+
     override fun usageHoursPost(): Double = usageHoursBusiness.yearly()
 
     /**
@@ -191,14 +191,31 @@ class Griddle(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRat
      * Energy Efficiency Lookup Query Definition
      * */
     override fun efficientLookup() = true
+
     override fun queryEfficientFilter() = JSONObject()
             .put("data.single_or_double_sided", numberOfSides)
             .put("data.surface_area", surfaceArea)
             .put("data.nominal_width", nominalWidth)
-            .put("data.preheat_energy_gas", if (isGas()) {preHeatEnergy} else {"-"})
-            .put("data.preheat_energy_electric", if (isElectric()) {preHeatEnergy} else {"-"})
-            .put("data.idle_energy_gas", if (isGas()) {idleEnergy} else {"-"})
-            .put("data.idle_energy_electric", if (isGas()) {idleEnergy} else {"-"})
+            .put("data.preheat_energy_gas", if (isGas()) {
+                preHeatEnergy
+            } else {
+                "-"
+            })
+            .put("data.preheat_energy_electric", if (isElectric()) {
+                preHeatEnergy
+            } else {
+                "-"
+            })
+            .put("data.idle_energy_gas", if (isGas()) {
+                idleEnergy
+            } else {
+                "-"
+            })
+            .put("data.idle_energy_electric", if (isGas()) {
+                idleEnergy
+            } else {
+                "-"
+            })
             .put("data.production_capacity", productionCapacity)
             .toString()
 
@@ -215,14 +232,15 @@ class Griddle(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRat
      * Define all the fields here - These would be used to Generate the Outgoing Rows or perform the Energy Calculation
      * */
     override fun preAuditFields() = mutableListOf("")
+
     override fun featureDataFields() = getGFormElements().map { it.value.param!! }.toMutableList()
 
     override fun preStateFields() = mutableListOf("")
-    override fun postStateFields() = mutableListOf("company","model_number","single_or_double_sided",
-            "fuel_type","nominal_width","surface_area","preheat_energy_gas",
-            "preheat_energy_electric","idle_energy_gas","idle_energy_electric",
-            "energy_efficiency","production_capacity","rebate","pgne_measure_code",
-            "utility_company","purchase_price_per_unit")
+    override fun postStateFields() = mutableListOf("company", "model_number", "single_or_double_sided",
+            "fuel_type", "nominal_width", "surface_area", "preheat_energy_gas",
+            "preheat_energy_electric", "idle_energy_gas", "idle_energy_electric",
+            "energy_efficiency", "production_capacity", "rebate", "pgne_measure_code",
+            "utility_company", "purchase_price_per_unit")
 
     override fun computedFields() = mutableListOf("__daily_operating_hours", "__weekly_operating_hours",
             "__yearly_operating_hours", "__electric_cost")
