@@ -437,7 +437,7 @@ abstract class EBase(val computable: Computable<*>,
     open fun queryControlPercentSaved() = ""
     open fun queryControlPercentSaved2() = ""
     open fun queryAssumedHours() = ""
-
+    open fun queryLightingReplacement() = ""
 
     /**
      * Get the Specific Query Result from the Parse API
