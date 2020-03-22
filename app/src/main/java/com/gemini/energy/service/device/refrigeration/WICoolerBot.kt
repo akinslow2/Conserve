@@ -64,9 +64,11 @@ class WICoolerBot(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
     /**
      * Usage Hours
      * */
-    private var peakHours = 0.0
-    private var partPeakHours = 0.0
-    private var offPeakHours = 0.0
+    private var condensorPeakHours = 0.0
+    private var condensorOffPeakHours = 0.0
+
+    private var evaporatorPeakHours = 0.0
+    private var evaporatorOffPeakHours = 0.0
 
     var quantity = 0
     var kWh = 0.0
@@ -88,10 +90,10 @@ class WICoolerBot(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
             quantity = featureData["Quantity"]!! as Int
             year = featureData["Year"]!! as Int
 
-            kWh = featureData["Daily Energy Used"]!! as Double
-
-            peakHours = featureData["Peak Hours"]!! as Double
-            offPeakHours = featureData["Off Peak Hours"]!! as Double
+            condensorPeakHours = featureData["Condenser Peak Hours"]!! as Double
+            condensorOffPeakHours = featureData["Condenser Off Peak Hours"]!! as Double
+            evaporatorPeakHours = featureData["Evaporator Peak Hours"]!! as Double
+            evaporatorOffPeakHours = featureData["Evaporator Off Peak Hours"]!! as Double
         } catch (e: Exception) {
             e.printStackTrace()
         }
