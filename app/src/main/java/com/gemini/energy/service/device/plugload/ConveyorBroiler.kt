@@ -82,6 +82,7 @@ class ConveyorBroiler(computable: Computable<*>, utilityRateGas: UtilityRate,
      * Cost - Post State
      * */
     var costPostState = 0.0
+
     override fun costPostState(element: JsonElement, dataHolder: DataHolder): Double {
         val powerUsed = hourlyEnergyUsagePost(element)[0]
         val costElectricity: Double
@@ -110,20 +111,20 @@ class ConveyorBroiler(computable: Computable<*>, utilityRateGas: UtilityRate,
      * PowerTimeChange >> Hourly Energy Use - Post
      * */
     override fun hourlyEnergyUsagePost(element: JsonElement): List<Double> {
-        var annualEnergy = 0.0
+        val energyInputRatePost =
+                if (element.asJsonObject.has("energy_input_rate"))
+                    element.asJsonObject.get("energy_input_rate").asDouble
+                else 0.0
 
-        try {
+        val idleEnergyRatePost =
+                if (element.asJsonObject.has("idle_energy_rate"))
+                    element.asJsonObject.get("idle_energy_rate").asDouble
+                else 0.0
 
-            val energyInputRatePost = element.asJsonObject.get("energy_input_rate").asDouble
-            val idleEnergyRatePost = element.asJsonObject.get("idle_energy_rate").asDouble
-            val idleHoursPost = idleHours
+        val idleHoursPost = idleHours
 
-            val postAnnualEnergyUsed = (energyInputRatePost * usageHoursPost()) + (idleEnergyRatePost * idleHoursPost)
-            annualEnergy = postAnnualEnergyUsed
-
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
+        val postAnnualEnergyUsed = (energyInputRatePost * usageHoursPost()) + (idleEnergyRatePost * idleHoursPost)
+        val annualEnergy = postAnnualEnergyUsed
 
         return listOf(annualEnergy)
     }
@@ -134,6 +135,7 @@ class ConveyorBroiler(computable: Computable<*>, utilityRateGas: UtilityRate,
      * */
     //ToDo - @Johnny Verify this
     override fun usageHoursPre(): Double = usageHours!!.yearly()
+
     override fun usageHoursPost(): Double = usageHours!!.yearly()
 
     /**
@@ -144,9 +146,9 @@ class ConveyorBroiler(computable: Computable<*>, utilityRateGas: UtilityRate,
         var postPower = 3.6 // a filler for now. >A2
         var delta = usageHoursPre() * (prePower - postPower)
 
-       // computable.efficientAlternative?.let {
-          //  postPower = hourlyEnergyUsagePost(it)[0]
-       // delta = usageHoursPre() * (prePower - postPower)
+        // computable.efficientAlternative?.let {
+        //  postPower = hourlyEnergyUsagePost(it)[0]
+        // delta = usageHoursPre() * (prePower - postPower)
         //}
 
         return delta
@@ -159,6 +161,7 @@ class ConveyorBroiler(computable: Computable<*>, utilityRateGas: UtilityRate,
      * Energy Efficiency Lookup Query Definition
      * */
     override fun efficientLookup() = true
+
     override fun queryEfficientFilter() = JSONObject()
             .put("data.broiler_type", broilerType)
             .put("data.conveyor_width", conveyorWidth)
@@ -188,12 +191,13 @@ class ConveyorBroiler(computable: Computable<*>, utilityRateGas: UtilityRate,
      * Define all the fields here - These would be used to Generate the Outgoing Rows or perform the Energy Calculation
      * */
     override fun preAuditFields() = mutableListOf("")
+
     override fun featureDataFields() = getGFormElements().map { it.value.param!! }.toMutableList()
 
     override fun preStateFields() = mutableListOf("")
-    override fun postStateFields() = mutableListOf("company","model_number","broiler_type","fuel_type",
-            "conveyor_width","energy_input_rate","idle_energy_rate","rebate","pgne_measure_code",
-            "utility_company","purchase_price_per_unit")
+    override fun postStateFields() = mutableListOf("company", "model_number", "broiler_type", "fuel_type",
+            "conveyor_width", "energy_input_rate", "idle_energy_rate", "rebate", "pgne_measure_code",
+            "utility_company", "purchase_price_per_unit")
 
     override fun computedFields() = mutableListOf("__daily_operating_hours", "__weekly_operating_hours",
             "__yearly_operating_hours", "__electric_cost")
