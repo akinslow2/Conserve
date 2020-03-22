@@ -674,7 +674,7 @@ class SorterForWordDocumentGenerator {
                             "Dishwasher",
                             single.energyPowerChange(),
                             costElectricity,
-                            single.age,
+                            single.age.toDouble(),
                             materialCost,
                             implementationCost,
                             savings,
