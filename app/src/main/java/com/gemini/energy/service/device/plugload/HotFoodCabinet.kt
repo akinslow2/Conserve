@@ -100,20 +100,20 @@ class HotFoodCabinet(computable: Computable<*>, utilityRateGas: UtilityRate, uti
      * PowerTimeChange >> Hourly Energy Use - Post
      * */
     override fun hourlyEnergyUsagePost(element: JsonElement): List<Double> {
-        var annualEnergy = 0.0
+        val cabinetVolumePost =
+                if (element.asJsonObject.has("cabinet_volume"))
+                    element.asJsonObject.get("cabinet_volume").asDouble
+                else 0.0
 
-        try {
+        val idleEnergyRatePost =
+                if (element.asJsonObject.has("idle_energy_rate"))
+                    element.asJsonObject.get("idle_energy_rate").asDouble
+                else 0.0
 
-            val cabinetVolumePost = element.asJsonObject.get("cabinet_volume").asDouble
-            val idleEnergyRatePost = element.asJsonObject.get("idle_energy_rate").asDouble
-            val annualHoursPost = peakHours + partPeakHours + offPeakHours
+        val annualHoursPost = peakHours + partPeakHours + offPeakHours
 
-            val postAnnualEnergyUsed = ((idleEnergyRatePost * cabinetVolumePost) / 100) * annualHoursPost
-            annualEnergy = postAnnualEnergyUsed
-
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
+        val postAnnualEnergyUsed = ((idleEnergyRatePost * cabinetVolumePost) / 100.0) * annualHoursPost
+        val annualEnergy = postAnnualEnergyUsed
 
         return listOf(annualEnergy)
     }
