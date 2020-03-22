@@ -12,6 +12,7 @@ import com.gemini.energy.service.type.UtilityRate
 import com.google.gson.JsonElement
 import io.reactivex.Observable
 import timber.log.Timber
+import java.util.*
 
 class Thermostat(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateElectricity: UtilityRate,
                  usageHours: UsageHours, outgoingRows: OutgoingRows, private val context: Context) :
@@ -57,6 +58,13 @@ class Thermostat(computable: Computable<*>, utilityRateGas: UtilityRate, utility
      * Cost - Post State
      * */
     override fun costPostState(element: JsonElement, dataHolder: DataHolder): Double {
+        val postRow = mutableMapOf<String, String>()
+
+        dataHolder.header = postStateFields()
+        dataHolder.computable = computable
+        dataHolder.fileName = "${computable.zoneName}_${computable.auditScopeName}_Thermostat_post_state_${Date().time}.csv"
+        dataHolder.rows?.add(postRow)
+
         return -99.99
     }
 

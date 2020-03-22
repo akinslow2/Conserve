@@ -11,6 +11,7 @@ import com.google.gson.JsonElement
 import io.reactivex.Observable
 import org.json.JSONObject
 import timber.log.Timber
+import java.util.*
 
 class CombinationOven(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateElectricity: UtilityRate,
                       usageHours: UsageHours, outgoingRows: OutgoingRows) :
@@ -302,6 +303,13 @@ class CombinationOven(computable: Computable<*>, utilityRateGas: UtilityRate, ut
         }
 
         costPostState = cost.calculate()
+
+        val postRow = mutableMapOf<String, String>()
+
+        dataHolder.header = postStateFields()
+        dataHolder.computable = computable
+        dataHolder.fileName = "${computable.zoneName}_${computable.auditScopeName}_CombinationOven_post_state_${Date().time}.csv"
+        dataHolder.rows?.add(postRow)
 
         return costPostState
 

@@ -322,7 +322,7 @@ class LinearFluorescent(computable: Computable<*>, utilityRateGas: UtilityRate, 
 
         dataHolder.header = postStateFields()
         dataHolder.computable = computable
-        dataHolder.fileName = "${Date().time}_post_state.csv"
+        dataHolder.fileName = "${computable.zoneName}_${computable.auditScopeName}_LinearFluorescent_post_state_${Date().time}.csv"
         dataHolder.rows?.add(postRow)
 
         return -99.99

@@ -219,7 +219,7 @@ class Cfl(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEle
 
         dataHolder.header = postStateFields()
         dataHolder.computable = computable
-        dataHolder.fileName = "${Date().time}_post_state.csv"
+        dataHolder.fileName = "${computable.zoneName}_${computable.auditScopeName}_CFL_post_state_${Date().time}.csv"
         dataHolder.rows?.add(postRow)
 
         return -99.99

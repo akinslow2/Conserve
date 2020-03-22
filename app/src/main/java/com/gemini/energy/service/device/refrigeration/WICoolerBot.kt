@@ -116,6 +116,12 @@ class WICoolerBot(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
         Timber.d("!!! COST POST STATE - WALK-IN Refrigerator !!!")
         Timber.d("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
 
+        val postRow = mutableMapOf<String, String>()
+
+        dataHolder.header = postStateFields()
+        dataHolder.computable = computable
+        dataHolder.fileName = "${computable.zoneName}_${computable.auditScopeName}_WalkInCoolerBot_post_state_${Date().time}.csv"
+        dataHolder.rows?.add(postRow)
 
         return 5.0 // TODO: AK2 needs to calculate this
     }
@@ -144,7 +150,6 @@ class WICoolerBot(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
     override fun laborCost(): Double {
         return 0.0
     }
-
 
     /**
      * PowerTimeChange >> Hourly Energy Use - Pre

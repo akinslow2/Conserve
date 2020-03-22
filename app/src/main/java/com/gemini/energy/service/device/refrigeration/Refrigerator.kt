@@ -115,8 +115,8 @@ class Refrigerator(computable: Computable<*>, utilityRateGas: UtilityRate, utili
 
         dataHolder.header = postStateFields()
         dataHolder.computable = computable
-        // TODO: @k2interactive The file names for all csv's should be the zone_nameitem_objecttype_post_state.csv. for example: office_whitefridge_refrigerator_post_state.csv
-        dataHolder.fileName = "${Date().time}_post_state.csv"
+
+        dataHolder.fileName = "${computable.zoneName}_${computable.auditScopeName}_Refrigerator_post_state_${Date().time}.csv"
         dataHolder.rows?.add(postRow)
 
         val powerUsed = hourlyEnergyUsagePost(element)[0]

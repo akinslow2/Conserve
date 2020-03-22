@@ -249,7 +249,7 @@ class Motors(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRate
 
         dataHolder.header = postStateFields()
         dataHolder.computable = computable
-        dataHolder.fileName = "${Date().time}_post_state.csv"
+        dataHolder.fileName = "${computable.zoneName}_${computable.auditScopeName}_Motors_post_state_${Date().time}.csv"
         dataHolder.rows?.add(postRow)
 
         return -99.99

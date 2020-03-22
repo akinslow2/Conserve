@@ -313,7 +313,7 @@ class WIRefrigerator(computable: Computable<*>, utilityRateGas: UtilityRate, uti
 
         dataHolder.header = postStateFields()
         dataHolder.computable = computable
-        dataHolder.fileName = "${Date().time}_post_state.csv"
+        dataHolder.fileName = "${computable.zoneName}_${computable.auditScopeName}_WalkInRefrigerator_post_state_${Date().time}.csv"
         dataHolder.rows?.add(postRow)
 
         return 5.0 // TODO: AK2 needs to calculate this

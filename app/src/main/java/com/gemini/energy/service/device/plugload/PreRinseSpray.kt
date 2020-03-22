@@ -15,6 +15,7 @@ import com.google.gson.JsonElement
 import io.reactivex.Observable
 import org.json.JSONObject
 import timber.log.Timber
+import java.util.*
 
 class PreRinseSpray(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateElectricity: UtilityRate,
                     usageHours: UsageHours, outgoingRows: OutgoingRows, private val context: Context) :
@@ -95,14 +96,19 @@ class PreRinseSpray(computable: Computable<*>, utilityRateGas: UtilityRate, util
         val powerUsedElectric = hourlyEnergyUsagePost(element)[0]
         val thermsUsedGas = hourlyEnergyUsagePost(element)[1]
 
-        val costElectricity: Double
-        costElectricity = costElectricity(powerUsedElectric, usageHours!!, electricityRate)
-
-        val costGas: Double
-        costGas = costGas(thermsUsedGas)
+        val costElectricity = costElectricity(powerUsedElectric, usageHours!!, electricityRate)
+        val costGas = costGas(thermsUsedGas)
 
         val cost = if (isGas()) costGas else costElectricity
         costPostState = cost
+
+        val postRow = mutableMapOf<String, String>()
+
+        dataHolder.header = postStateFields()
+        dataHolder.computable = computable
+        dataHolder.fileName = "${computable.zoneName}_${computable.auditScopeName}_PreRinseSpray_post_state_${Date().time}.csv"
+        dataHolder.rows?.add(postRow)
+
         return cost
     }
 

@@ -219,7 +219,7 @@ class LPSodium(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRa
 
         dataHolder.header = postStateFields()
         dataHolder.computable = computable
-        dataHolder.fileName = "${Date().time}_post_state.csv"
+        dataHolder.fileName = "${computable.zoneName}_${computable.auditScopeName}_LowPressureSodium_post_state_${Date().time}.csv"
         dataHolder.rows?.add(postRow)
 
         return -99.99

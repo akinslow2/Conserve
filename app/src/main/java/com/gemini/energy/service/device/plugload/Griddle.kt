@@ -15,6 +15,7 @@ import com.google.gson.JsonElement
 import io.reactivex.Observable
 import org.json.JSONObject
 import timber.log.Timber
+import java.util.*
 
 class Griddle(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateElectricity: UtilityRate,
               usageHours: UsageHours, outgoingRows: OutgoingRows, private val context: Context) :
@@ -78,10 +79,10 @@ class Griddle(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRat
         val powerUsed = hourlyEnergyUsagePre()[0]
         val cost: Double
 
-        cost = if (isElectric())
-            costElectricity(powerUsed, usageHours!!, electricityRate) else
-        //ToDo : Covert this power into Therms !!
-            costGas(powerUsed)
+        cost =
+                if (isElectric()) costElectricity(powerUsed, usageHours!!, electricityRate)
+                //ToDo : Covert this power into Therms !!
+                else costGas(powerUsed)
 
         return cost
     }
@@ -106,13 +107,19 @@ class Griddle(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRat
 
     override fun costPostState(element: JsonElement, dataHolder: DataHolder): Double {
         val powerUsed = hourlyEnergyUsagePost(element)[0]
-        val cost: Double
-
-        cost = if (isElectric())
-            costElectricity(powerUsed, usageHours!!, electricityRate) else
-            costGas(powerUsed)
+        val cost =
+                if (isElectric()) costElectricity(powerUsed, usageHours!!, electricityRate)
+                else costGas(powerUsed)
 
         costPostState = cost
+
+        val postRow = mutableMapOf<String, String>()
+
+        dataHolder.header = postStateFields()
+        dataHolder.computable = computable
+        dataHolder.fileName = "${computable.zoneName}_${computable.auditScopeName}_Griddle_post_state_${Date().time}.csv"
+        dataHolder.rows?.add(postRow)
+
         return cost
     }
 

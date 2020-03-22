@@ -18,6 +18,7 @@ import io.reactivex.Observable
 import io.reactivex.Single
 import org.json.JSONObject
 import timber.log.Timber
+import java.util.*
 
 class DishWasher(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateElectricity: UtilityRate,
                  usageHours: UsageHours, outgoingRows: OutgoingRows, private val context: Context) :
@@ -110,6 +111,13 @@ class DishWasher(computable: Computable<*>, utilityRateGas: UtilityRate, utility
         costGas = costGas(thermsUsedGas)
 
         costPostState = if (isGas()) costGas else costElectricity
+
+        val postRow = mutableMapOf<String, String>()
+
+        dataHolder.header = postStateFields()
+        dataHolder.computable = computable
+        dataHolder.fileName = "${computable.zoneName}_${computable.auditScopeName}_DishWasher_post_state_${Date().time}.csv"
+        dataHolder.rows?.add(postRow)
 
         return costPostState
     }

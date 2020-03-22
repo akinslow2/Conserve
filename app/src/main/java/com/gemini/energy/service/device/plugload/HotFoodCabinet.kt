@@ -15,6 +15,7 @@ import com.google.gson.JsonElement
 import io.reactivex.Observable
 import org.json.JSONObject
 import timber.log.Timber
+import java.util.*
 
 class HotFoodCabinet(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateElectricity: UtilityRate,
                      usageHours: UsageHours, outgoingRows: OutgoingRows, private val context: Context) :
@@ -77,6 +78,14 @@ class HotFoodCabinet(computable: Computable<*>, utilityRateGas: UtilityRate, uti
         val costElectricity: Double
         costElectricity = costElectricity(powerUsed, usageHours!!, electricityRate)
         costPostState = costElectricity
+
+        val postRow = mutableMapOf<String, String>()
+
+        dataHolder.header = postStateFields()
+        dataHolder.computable = computable
+        dataHolder.fileName = "${computable.zoneName}_${computable.auditScopeName}_HotFoodCabinet_post_state_${Date().time}.csv"
+        dataHolder.rows?.add(postRow)
+
         return costElectricity
     }
 

@@ -113,8 +113,7 @@ class Freezer(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRat
 
         dataHolder.header = postStateFields()
         dataHolder.computable = computable
-        // TODO: @k2interactive The file names for all csv's should be the zone_nameitem_objecttype_post_state.csv. for example: kitchen_largefreezer_freezer_post_state.csv
-        dataHolder.fileName = "${Date().time}_post_state.csv"
+        dataHolder.fileName = "${computable.zoneName}_${computable.auditScopeName}_Freezer_post_state_${Date().time}.csv"
         dataHolder.rows?.add(postRow)
 
         val powerUsed = hourlyEnergyUsagePost(element)[0]

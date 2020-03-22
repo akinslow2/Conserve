@@ -13,6 +13,7 @@ import com.gemini.energy.service.type.UtilityRate
 import com.google.gson.JsonElement
 import io.reactivex.Observable
 import timber.log.Timber
+import java.util.*
 
 class IceMaker(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateElectricity: UtilityRate,
                    usageHours: UsageHours, outgoingRows: OutgoingRows, private val context: Context) :
@@ -63,6 +64,13 @@ class IceMaker(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRa
      * */
     var costPostState = 0.0
     override fun costPostState(element: JsonElement, dataHolder: DataHolder): Double {
+        val postRow = mutableMapOf<String, String>()
+
+        dataHolder.header = postStateFields()
+        dataHolder.computable = computable
+        dataHolder.fileName = "${computable.zoneName}_${computable.auditScopeName}_IceMaker_post_state_${Date().time}.csv"
+        dataHolder.rows?.add(postRow)
+
         return 0.0
     }
 

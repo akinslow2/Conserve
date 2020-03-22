@@ -220,7 +220,7 @@ class Halogen(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRat
 
         dataHolder.header = postStateFields()
         dataHolder.computable = computable
-        dataHolder.fileName = "${Date().time}_post_state.csv"
+        dataHolder.fileName = "${computable.zoneName}_${computable.auditScopeName}_Halogen_post_state_${Date().time}.csv"
         dataHolder.rows?.add(postRow)
 
         return -99.99

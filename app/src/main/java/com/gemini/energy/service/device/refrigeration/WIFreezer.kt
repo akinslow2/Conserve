@@ -187,10 +187,7 @@ class WIFreezer(computable: Computable<*>, utilityRateGas: UtilityRate, utilityR
     override fun setup() {
         try {
             quantity = featureData["Quantity"]!! as Int
-
             year = featureData["Year"]!! as Int
-            val age = getAge(year)
-            val overage = overAge(year)
 
             condesorCompressor = (featureData["Condensor Compressor Size (HP)"]!! as String).toDoubleOrNull()
                     ?: 0.0
@@ -322,7 +319,7 @@ class WIFreezer(computable: Computable<*>, utilityRateGas: UtilityRate, utilityR
 
         dataHolder.header = postStateFields()
         dataHolder.computable = computable
-        dataHolder.fileName = "${Date().time}_post_state.csv"
+        dataHolder.fileName = "${computable.zoneName}_${computable.auditScopeName}_WalkInFreezer_post_state_${Date().time}.csv"
         dataHolder.rows?.add(postRow)
 
         return 5.0 // TODO: AK2 needs to calculate this

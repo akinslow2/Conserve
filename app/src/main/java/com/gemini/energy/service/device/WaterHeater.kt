@@ -223,6 +223,13 @@ class WaterHeater(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
 
         postGcost = costGas(powerUsed)
 
+        val postRow = mutableMapOf<String, String>()
+
+        dataHolder.header = postStateFields()
+        dataHolder.computable = computable
+        dataHolder.fileName = "${computable.zoneName}_${computable.auditScopeName}_WaterHeater_post_state_${Date().time}.csv"
+        dataHolder.rows?.add(postRow)
+
         return if (isGas()) postGcost else postEcost
     }
 
