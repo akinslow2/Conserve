@@ -136,27 +136,38 @@ class Griddle(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRat
      * PowerTimeChange >> Hourly Energy Use - Post
      * */
     override fun hourlyEnergyUsagePost(element: JsonElement): List<Double> {
-        var annualEnergy = 0.0
+        val idleEnergyGas =
+                if (element.asJsonObject.has("idle_energy_gas"))
+                    element.asJsonObject.get("idle_energy_gas").asDouble
+                else 0.0
 
-        try {
+        val idleEnergyElectric =
+                if (element.asJsonObject.has("idle_energy_electric"))
+                    element.asJsonObject.get("idle_energy_electric").asDouble
+                else 0.0
 
-            val idleEnergyGas = element.asJsonObject.get("idle_energy_gas").asDouble
-            val idleEnergyElectric = element.asJsonObject.get("idle_energy_electric").asDouble
+        val preHeatEnergyGas =
+                if (element.asJsonObject.has("preheat_energy_gas"))
+                    element.asJsonObject.get("preheat_energy_gas").asDouble
+                else 0.0
 
-            val preHeatEnergyGas = element.asJsonObject.get("preheat_energy_gas").asDouble
-            val preHeatEnergyElectric = element.asJsonObject.get("preheat_energy_electric").asDouble
+        val preHeatEnergyElectric =
+                if (element.asJsonObject.has("preheat_energy_electric"))
+                    element.asJsonObject.get("preheat_energy_electric").asDouble
+                else 0.0
 
-            val idleEnergyPost= if (isGas()) {idleEnergyGas} else {idleEnergyElectric}
-            val preHeatEnergyPost= if (isGas()) {preHeatEnergyGas} else {preHeatEnergyElectric}
+        val idleEnergyPost =
+                if (isGas()) idleEnergyGas
+                else idleEnergyElectric
 
-            val postAnnualEnergyUsed = (idleEnergyPost + preHeatEnergyPost) / 1000.0
-            annualEnergy = postAnnualEnergyUsed
+        val preHeatEnergyPost =
+                if (isGas()) preHeatEnergyGas
+                else preHeatEnergyElectric
 
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
 
-        return listOf(annualEnergy)
+        val postAnnualEnergyUsed = (idleEnergyPost + preHeatEnergyPost) / 1000.0
+
+        return listOf(postAnnualEnergyUsed)
     }
 
     /**
