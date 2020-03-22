@@ -45,7 +45,7 @@ class Freezer(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRat
     }
 
 
-    var age = 0.0
+    var year = 0
     var fridgeVolume = 0.0
     var doorType = ""
     var styleType = ""
@@ -54,12 +54,10 @@ class Freezer(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRat
 
     override fun setup() {
         try {
-            age = (featureData["Age"]!! as Int).toDouble()
+            year = featureData["Year"]!! as Int
             doorType = featureData["Door Type"]!! as String
-            fridgeVolume = featureData["Total Volume"]!! as Double
-            styleType = featureData["Style Type"]!! as String
+            fridgeVolume = featureData["Total Volume (cu.ft.)"]!! as Double
             dailyEnergyUsed = featureData["Daily Energy Used"]!! as Double
-
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -106,7 +104,6 @@ class Freezer(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRat
                 (grossDeemedReplacementkw * (1 + 0.113) * (1 + 1 - 1) * 0.979) +
                         (grossDeemedReplacementkw * (1 + 0.112) * (1 + 1 - 1) * 1.186)
 
-
         val postRow = mutableMapOf<String, String>()
         postRow["grossDeemedReplacementkwh"] = grossDeemedReplacementkwh.toString()
         postRow["grossDeemedReplacementkw"] = grossDeemedReplacementkw.toString()
@@ -119,7 +116,6 @@ class Freezer(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRat
         // TODO: @k2interactive The file names for all csv's should be the zone_nameitem_objecttype_post_state.csv. for example: kitchen_largefreezer_freezer_post_state.csv
         dataHolder.fileName = "${Date().time}_post_state.csv"
         dataHolder.rows?.add(postRow)
-
 
         val powerUsed = hourlyEnergyUsagePost(element)[0]
         val costElectricity: Double
@@ -134,7 +130,7 @@ class Freezer(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRat
         return totalCost
     }
 
-// TODO: @k2interactive I don't think this function necessary
+    // TODO: @k2interactive I don't think this function necessary
     fun grosskwhSavings(): Double {
 //        sum of the gross energy savings pulled from the PARSE
         return 0.0
