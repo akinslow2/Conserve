@@ -153,15 +153,12 @@ class Freezer(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRat
      * PowerTimeChange >> Hourly Energy Use - Post
      * */
     override fun hourlyEnergyUsagePost(element: JsonElement): List<Double> {
-        var hourlyEnergy = 0.0
+        val postDailyEnergyUsed =
+                if (element.asJsonObject.has("daily_energy_use"))
+                    element.asJsonObject.get("daily_energy_use").asDouble
+                else 0.0
 
-        try {
-            //ToDo: Check how this is being impacted within the current code base !!
-            val postDailyEnergyUsed = element.asJsonObject.get("daily_energy_use").asDouble
-            hourlyEnergy = postDailyEnergyUsed / 24
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
+        val hourlyEnergy = postDailyEnergyUsed / 24
 
         return listOf(hourlyEnergy)
     }
@@ -201,8 +198,8 @@ class Freezer(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRat
     override fun queryEfficientFilter() = JSONObject()
             .put("data.style_type", featureData["Product Type"])
             .put("data.total_volume", JSONObject()
-                    .put("\$gte", featureData["Total Volume"] as Double - 2)
-                    .put("\$lte", featureData["Total Volume"] as Double + 2))
+                    .put("\$gte", fridgeVolume - 2)
+                    .put("\$lte", fridgeVolume + 2))
             .toString()
 
     override fun queryReachIn(): String {
