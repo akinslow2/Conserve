@@ -20,8 +20,7 @@ open class UsageHours {
      * */
     fun daily() = mapper.dailyHours()
     fun weekly() = mapper.weeklyHours()
-    // TODO: @k2interactive
-    //  kotlin.UninitializedPropertyAccessException: lateinit property mapper has not been initialized
+
     open fun yearly() = mapper.yearlyHours()
     open fun postyearly() = mapper.yearlyHours()
 

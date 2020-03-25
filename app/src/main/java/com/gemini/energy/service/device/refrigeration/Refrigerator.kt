@@ -134,9 +134,8 @@ class Refrigerator(computable: Computable<*>, utilityRateGas: UtilityRate, utili
         return totalCost
     }
 
-    // TODO: @k2interactive I don't think this function necessary
     fun grosskwhSavings(): Double {
-//        sum of the gross energy savings pulled from the PARSE
+//        TODO: sum of the gross energy savings pulled from the PARSE
         return 0.0
     }
 

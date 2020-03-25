@@ -16,7 +16,6 @@ open class UtilityRate(private val context: Context) {
      * To be set by the Child Class later on
      * */
     private fun getResourcePath() = utility.getResourcePath()
-
     private fun getSeparator() = utility.getSeparator()
     private fun getRowIdentifier() = utility.getRowIdentifier()
 
