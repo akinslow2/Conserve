@@ -511,7 +511,6 @@ abstract class EBase(val computable: Computable<*>,
                 .toObservable()
     }
 
-
     private fun dataExtractHVAC(query: String): Observable<JsonArray> {
         if (query.isEmpty())
             return Observable.just(JsonArray())
@@ -621,16 +620,13 @@ abstract class EBase(val computable: Computable<*>,
         return costElectric.cost()
     }
 
-    // TODO: @Anthony: how should these functions be calculated?
-    // TODO: @k2interactive Isn't this problematic to have the same function name? I added the equations to each.
     open fun costElectricity(energy: Double, electricityRate: UtilityRate): Double {
-        // energy * electricityRate
-        return 0.0
+        val demandRate = electricityRate.structure.values.first().last().toDouble()
+        return energy * demandRate
     }
 
     open fun costElectricity(power: Double, demandRate: Double): Double {
-        // power * demandRate
-        return 0.0
+        return power * demandRate
     }
 
     /**
