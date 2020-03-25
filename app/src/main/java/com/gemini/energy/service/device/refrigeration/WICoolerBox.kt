@@ -308,7 +308,7 @@ class WICoolerBox(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
 
     override fun computedFields() = mutableListOf<String>()
 
-    private fun getFormMapper() = FormMapper(context, R.raw.walkin_coolbox)
+    private fun getFormMapper() = FormMapper(context, R.raw.walkin_coolbot)
     private fun getModel() = getFormMapper().decodeJSON()
     private fun getGFormElements() = getFormMapper().mapIdToElements(getModel())
 

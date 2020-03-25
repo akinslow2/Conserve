@@ -1,0 +1,239 @@
+{
+  "geminiForm": [
+    {
+      "index": 1,
+      "section": "Condenser Unit",
+      "elements": [
+        {
+          "index": 11,
+          "hint": "",
+          "dataType": "textrow",
+          "defaultValues": "",
+          "param": "Make",
+          "validation": "optional",
+          "id": "11"
+        },
+        {
+          "index": 12,
+          "hint": "",
+          "dataType": "textrow",
+          "defaultValues": "",
+          "param": "Model Number",
+          "validation": "optional",
+          "id": "12"
+        },
+        {
+          "index": 13,
+          "hint": "",
+          "dataType": "introw",
+          "defaultValues": "",
+          "param": "Quantity",
+          "validation": "optional",
+          "id": "13"
+        },
+        {
+          "index": 14,
+          "hint": "",
+          "dataType": "introw",
+          "defaultValues": "",
+          "param": "Capacity (BTU)",
+          "validation": "optional",
+          "id": "14"
+        },
+        {
+          "index": 15,
+          "hint": "",
+          "dataType": "decimalrow",
+          "defaultValues": "",
+          "param": "Condensor Fan (HP)",
+          "validation": "optional",
+          "id": "15"
+        },
+        {
+          "index": 16,
+          "hint": "",
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:1,2:2,3:3,4:4,5:5",
+          "param": "Condensor Clean?",
+          "validation": "optional",
+          "id": "16"
+        },
+        {
+          "index": 17,
+          "hint": "",
+          "dataType": "decimalrow",
+          "defaultValues": "",
+          "param": "Heating Power (kW)",
+          "validation": "optional",
+          "id": "17"
+        },
+        {
+          "index": 18,
+          "hint": "",
+          "dataType": "textrow",
+          "defaultValues": "",
+          "param": "Refrigerant Type",
+          "validation": "optional",
+          "id": "18"
+        },
+        {
+          "index": 19,
+          "hint": "",
+          "dataType": "introw",
+          "defaultValues": "",
+          "param": "Year",
+          "validation": "optional",
+          "id": "19"
+        },
+        {
+          "index": 110,
+          "hint": "",
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:yes,2:no",
+          "param": "Readable Nameplate?",
+          "validation": "optional",
+          "id": "110"
+        },
+        {
+          "index": 111,
+          "hint": "",
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:yes,2:no",
+          "param": "Suction line insulated?",
+          "validation": "optional",
+          "id": "111"
+        }
+      ],
+      "id": "1"
+    },
+    {
+      "index": 2,
+      "section": "Condenser Time of Use",
+      "elements": [
+        {
+          "index": 21,
+          "hint": "",
+          "dataType": "decimalrow",
+          "defaultValues": "",
+          "param": "Peak Hours",
+          "validation": "optional",
+          "id": "21"
+        },
+        {
+          "index": 22,
+          "hint": "",
+          "dataType": "decimalrow",
+          "defaultValues": "",
+          "param": "Off Peak Hours",
+          "validation": "optional",
+          "id": "22"
+        }
+      ],
+      "id": "2"
+    },
+    {
+      "index": 3,
+      "section": "Evaporator",
+      "elements": [
+        {
+          "index": 31,
+          "hint": "",
+          "dataType": "textrow",
+          "defaultValues": "",
+          "param": "Make",
+          "validation": "optional",
+          "id": "31"
+        },
+        {
+          "index": 32,
+          "hint": "",
+          "dataType": "textrow",
+          "defaultValues": "",
+          "param": "Model Number",
+          "validation": "optional",
+          "id": "32"
+        },
+        {
+          "index": 33,
+          "hint": "",
+          "dataType": "decimalrow",
+          "defaultValues": "",
+          "param": "Serial Number",
+          "validation": "optional",
+          "id": "33"
+        },
+        {
+          "index": 34,
+          "hint": "",
+          "dataType": "decimalrow",
+          "defaultValues": "",
+          "param": "Capacity (BTU)",
+          "validation": "",
+          "id": "34"
+        },
+        {
+          "index": 35,
+          "hint": "",
+          "dataType": "decimalrow",
+          "defaultValues": "",
+          "param": "Fan (HP)",
+          "validation": "optional",
+          "id": "35"
+        },
+        {
+          "index": 36,
+          "hint": "",
+          "dataType": "textrow",
+          "defaultValues": "",
+          "param": "Refrigerant Type",
+          "validation": "optional",
+          "id": "36"
+        },
+        {
+          "index": 37,
+          "hint": "",
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:yes,2:no",
+          "param": "Readable Namplate?",
+          "validation": "optional",
+          "id": "37"
+        },
+        {
+          "index": 38,
+          "hint": "",
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:yes,2:no",
+          "param": "Coil Clean?",
+          "validation": "optional",
+          "id": "38"
+        }
+      ],
+      "id": "3"
+    },
+    {
+      "index": 4,
+      "section": "Evaporator Time of Use",
+      "elements": [
+        {
+          "index": 41,
+          "hint": "",
+          "dataType": "decimalrow",
+          "defaultValues": "",
+          "param": "Peak Hours",
+          "validation": "optional",
+          "id": "41"
+        },
+        {
+          "index": 42,
+          "hint": "",
+          "dataType": "decimalrow",
+          "defaultValues": "",
+          "param": "Off Peak Hours",
+          "validation": "optional",
+          "id": "42"
+        }
+      ],
+      "id": "4"
+    }
+  ]
+}
