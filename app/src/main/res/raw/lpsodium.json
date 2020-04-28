@@ -7,7 +7,7 @@
         {
           "index": 11,
           "hint": "",
-          "dataType": "introw",
+          "dataType": "decimalrow",
           "defaultValues": "",
           "param": "Measured Lux",
           "validation": "optional",
@@ -15,46 +15,46 @@
         },
         {
           "index": 12,
-          "hint": "",
-          "dataType": "introw",
-          "defaultValues": "",
-          "param": "Area (Sq. Ft.)",
-          "validation": "",
+          "hint": "(Rq)",
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:underlit,2:adequate,3:overlit",
+          "param": "Light Level",
+          "validation": "optional",
           "id": "12"
         },
         {
           "index": 13,
-          "hint": "mandatory",
-          "dataType": "pickerinputrow",
-          "defaultValues": "1:LED,2:Linear Flourescent,3:Halogen,4:High Pressure Sodium,5:Incandescent,6:Metal Halide,7:Mercury Vapor,8:Compact Fluorescent,9:EXIT (Compact Flourescent),10:EXIT (Incandescent),11:EXIT (LED)",
-          "param": "Lamp type",
-          "validation": "mandatory",
+          "hint": "",
+          "dataType": "decimalrow",
+          "defaultValues": "",
+          "param": "Area (Sq. Ft.)",
+          "validation": "optional",
           "id": "13"
         },
         {
           "index": 14,
-          "hint": "mandatory",
-          "dataType": "introw",
-          "defaultValues": "",
-          "param": "Lamps Per Fixture",
-          "validation": "mandatory",
+          "hint": "",
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:LED,2:Linear Flourescent,3:Halogen,4:High Pressure Sodium,5:Incandescent,6:Low Pressure Sodium,7:Metal Halide,8:Mercury Vapor,9:Compact Fluorescent,10:EXIT (Compact Flourescent),11:EXIT (Incandescent),12:EXIT (LED)",
+          "param": "Lamp type",
+          "validation": "optional",
           "id": "14"
         },
         {
           "index": 15,
-          "hint": "mandatory",
+          "hint": "",
           "dataType": "introw",
           "defaultValues": "",
-          "param": "Number of Fixtures",
-          "validation": "mandatory",
+          "param": "Lamps Per Fixture",
+          "validation": "optional",
           "id": "15"
         },
         {
           "index": 16,
-          "hint": "",
-          "dataType": "textrow",
+          "hint": "(Rq)",
+          "dataType": "introw",
           "defaultValues": "",
-          "param": "Make",
+          "param": "Number of Fixtures",
           "validation": "optional",
           "id": "16"
         },
@@ -63,9 +63,18 @@
           "hint": "",
           "dataType": "textrow",
           "defaultValues": "",
-          "param": "Model Number",
+          "param": "Make",
           "validation": "optional",
           "id": "17"
+        },
+        {
+          "index": 18,
+          "hint": "",
+          "dataType": "textrow",
+          "defaultValues": "",
+          "param": "Model Number",
+          "validation": "optional",
+          "id": "18"
         }
       ],
       "id": "1"
@@ -76,18 +85,18 @@
       "elements": [
         {
           "index": 21,
-          "hint": "mandatory",
+          "hint": "",
           "dataType": "pickerinputrow",
           "defaultValues": "1:Yes,2:No",
           "param": "Controls",
-          "validation": "mandatory",
+          "validation": "optional",
           "id": "21"
         },
         {
           "index": 22,
           "hint": "",
           "dataType": "pickerinputrow",
-          "defaultValues": "1:Occupancy Sensor,2:Motion Sensor,3:Daylight Sensor,4:Timer,5:Dimmer",
+          "defaultValues": "1:Occupancy Sensor,2:Motion Sensor,3:Daylight Sensor,4:Timer,5:Dimmer,6:High Level Trim",
           "param": "Type of Control",
           "validation": "optional",
           "id": "22"
@@ -100,6 +109,15 @@
           "param": "Number of Lamps Controlled",
           "validation": "optional",
           "id": "23"
+        },
+        {
+          "index": 24,
+          "hint": "",
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:Occupancy Sensor,2:Motion Sensor,3:Daylight Sensor,4:Timer,5:Dimmer,6:High Level Trim",
+          "param": "Type of Control2",
+          "validation": "optional",
+          "id": "24"
         }
       ],
       "id": "2"
@@ -110,11 +128,11 @@
       "elements": [
         {
           "index": 31,
-          "hint": "",
+          "hint": "(Rq)",
           "dataType": "decimalrow",
           "defaultValues": "",
           "param": "Actual Watts",
-          "validation": "",
+          "validation": "optional",
           "id": "31"
         }
       ],
@@ -135,21 +153,12 @@
         },
         {
           "index": 42,
-          "hint": "",
-          "dataType": "decimalrow",
-          "defaultValues": "",
-          "param": "Part Peak Hours",
-          "validation": "optional",
-          "id": "42"
-        },
-        {
-          "index": 43,
-          "hint": "",
+          "hint": "(Rq)",
           "dataType": "decimalrow",
           "defaultValues": "",
           "param": "Off Peak Hours",
           "validation": "optional",
-          "id": "43"
+          "id": "42"
         }
       ],
       "id": "4"
@@ -220,43 +229,36 @@
           "param": "Alternate Life Hours",
           "validation": "optional",
           "id": "57"
+        },
+        {
+          "index": 58,
+          "hint": "(Rq for Control Savings)",
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:Wall Switch Occupancy Sensor,2:Fixture-Mounted Occupancy Sensor,3:Remote-Mounted Occupancy Sensor,4:Fixture-Mounted Daylight Sensor,5:Remote-Mounted Daylight Sensor,6:Integrated Occupancy Sensor for LED Interior Fixtures < 10,7:000 Lumens,8:Integrated Occupancy Sensor for LED Interior Fixtures >= 10,9:000 Lumens,10:Integrated Dual Occupancy & Daylight Sensor for LED Interior Fixtures < 10,11:000 Lumens,12:Integrated Dual Occupancy & Daylight Sensor for LED Interior Fixtures >= 10,13:000 Lumens,14:Fixture-Mounted Dual Occupancy & Daylight Sensor for LED Interior Fixtures < 10,15:000 Lumens,16:Fixture-Mounted Dual Occupancy & Daylight Sensor for LED Interior Fixtures >= 10,17:000 Lumens,18:Refrigerator Case Occupancy Sensor,19:Freezer Case Occupancy Sensor,20:Exterior Occupancy Sensor",
+          "param": "Suggested Control Type1",
+          "validation": "optional",
+          "id": "58"
+        },
+        {
+          "index": 59,
+          "hint": "\n",
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:Wall Switch Occupancy Sensor,2:Fixture-Mounted Occupancy Sensor,3:Remote-Mounted Occupancy Sensor,4:Fixture-Mounted Daylight Sensor,5:Remote-Mounted Daylight Sensor,6:Integrated Occupancy Sensor for LED Interior Fixtures < 10,7:000 Lumens,8:Integrated Occupancy Sensor for LED Interior Fixtures >= 10,9:000 Lumens,10:Integrated Dual Occupancy & Daylight Sensor for LED Interior Fixtures < 10,11:000 Lumens,12:Integrated Dual Occupancy & Daylight Sensor for LED Interior Fixtures >= 10,13:000 Lumens,14:Fixture-Mounted Dual Occupancy & Daylight Sensor for LED Interior Fixtures < 10,15:000 Lumens,16:Fixture-Mounted Dual Occupancy & Daylight Sensor for LED Interior Fixtures >= 10,17:000 Lumens,18:Refrigerator Case Occupancy Sensor,19:Freezer Case Occupancy Sensor,20:Exterior Occupancy Sensor",
+          "param": "Suggested Control Type2",
+          "validation": "optional",
+          "id": "59"
+        },
+        {
+          "index": 510,
+          "hint": "",
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:Manufacturing,2:Lodging/Hospitality,3:K-12 Schools,4:Hospital,5:Grocery/Convenience Store,6:Office,7:Public Assembly,8:Public Safety,9:Religious,10:Restaurant,11:Retail,12:Service,13:University/College,14:Warehouse,15:Exterior",
+          "param": "Building Type",
+          "validation": "optional",
+          "id": "510"
         }
       ],
       "id": "5"
-    },
-    {
-      "index": 6,
-      "section": "Suggested Time",
-      "elements": [
-        {
-          "index": 61,
-          "hint": "",
-          "dataType": "decimalrow",
-          "defaultValues": "",
-          "param": "Suggested Peak Hours",
-          "validation": "optional",
-          "id": "61"
-        },
-        {
-          "index": 62,
-          "hint": "",
-          "dataType": "decimalrow",
-          "defaultValues": "",
-          "param": "Suggested Part Peak Hours",
-          "validation": "optional",
-          "id": "62"
-        },
-        {
-          "index": 63,
-          "hint": "",
-          "dataType": "decimalrow",
-          "defaultValues": "",
-          "param": "Suggested Off Peak Hours",
-          "validation": "optional",
-          "id": "63"
-        }
-      ],
-      "id": "6"
     }
   ]
 }

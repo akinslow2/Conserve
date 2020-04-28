@@ -115,7 +115,7 @@
           "hint": "",
           "dataType": "decimalrow",
           "defaultValues": "",
-          "param": "Peak Hours",
+          "param": "Condenser Peak Hours",
           "validation": "optional",
           "id": "21"
         },
@@ -124,7 +124,7 @@
           "hint": "",
           "dataType": "decimalrow",
           "defaultValues": "",
-          "param": "Off Peak Hours",
+          "param": "Condenser Off Peak Hours",
           "validation": "optional",
           "id": "22"
         }
@@ -219,7 +219,7 @@
           "hint": "",
           "dataType": "decimalrow",
           "defaultValues": "",
-          "param": "Peak Hours",
+          "param": "Evaporator Peak Hours",
           "validation": "optional",
           "id": "41"
         },
@@ -228,7 +228,7 @@
           "hint": "",
           "dataType": "decimalrow",
           "defaultValues": "",
-          "param": "Off Peak Hours",
+          "param": "Evaporator Off Peak Hours",
           "validation": "optional",
           "id": "42"
         }

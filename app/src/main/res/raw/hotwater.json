@@ -10,16 +10,16 @@
           "dataType": "pickerinputrow",
           "defaultValues": "1:storage tank,2:tankless/instantaneous,3:heat pump,4:solar powered,5:condensing",
           "param": "Type of Unit",
-          "validation": "mandatory",
+          "validation": "optional",
           "id": "11"
         },
         {
           "index": 12,
-          "hint": "",
+          "hint": "(Rq)",
           "dataType": "pickerinputrow",
-          "defaultValues": "1:Natural Gas,2:Electric",
+          "defaultValues": "1:Electric,2:Fuel Oil,3:Propane,4:Unknown",
           "param": "Fuel Type",
-          "validation": "mandatory",
+          "validation": "optional",
           "id": "12"
         },
         {
@@ -28,7 +28,7 @@
           "dataType": "textrow",
           "defaultValues": "",
           "param": "Make",
-          "validation": "mandatory",
+          "validation": "optional",
           "id": "13"
         },
         {
@@ -37,16 +37,16 @@
           "dataType": "textrow",
           "defaultValues": "",
           "param": "Model Number",
-          "validation": "mandatory",
+          "validation": "optional",
           "id": "14"
         },
         {
           "index": 15,
-          "hint": "",
+          "hint": "(Rq)",
           "dataType": "decimalrow",
           "defaultValues": "",
           "param": "Capacity (U.S. Gal)",
-          "validation": "mandatory",
+          "validation": "optional",
           "id": "15"
         },
         {
@@ -55,7 +55,7 @@
           "dataType": "introw",
           "defaultValues": "",
           "param": "Quantity",
-          "validation": "mandatory",
+          "validation": "optional",
           "id": "16"
         },
         {
@@ -90,7 +90,7 @@
           "hint": "",
           "dataType": "decimalrow",
           "defaultValues": "",
-          "param": "Heating Electric Efficiency",
+          "param": "Heating Electirc Efficiency",
           "validation": "optional",
           "id": "110"
         },
@@ -117,9 +117,18 @@
           "hint": "",
           "dataType": "introw",
           "defaultValues": "",
-          "param": "Age",
-          "validation": "mandatory",
+          "param": "Year",
+          "validation": "optional",
           "id": "113"
+        },
+        {
+          "index": 114,
+          "hint": "(Rq)",
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:1,2:2,3:3",
+          "param": "NEEA Spec Tier",
+          "validation": "optional",
+          "id": "114"
         }
       ],
       "id": "1"
@@ -142,18 +151,9 @@
           "hint": "",
           "dataType": "decimalrow",
           "defaultValues": "",
-          "param": "Part Peak Hours",
+          "param": "Off Peak Hours",
           "validation": "optional",
           "id": "22"
-        },
-        {
-          "index": 23,
-          "hint": "",
-          "dataType": "decimalrow",
-          "defaultValues": "",
-          "param": "Off Peak Hours",
-          "validation": "mandatory",
-          "id": "23"
         }
       ],
       "id": "2"
@@ -175,10 +175,19 @@
           "index": 32,
           "hint": "",
           "dataType": "pickerinputrow",
-          "defaultValues": "1:Yes/No",
+          "defaultValues": "1:Yes,2:No",
           "param": "Freeze Protection",
           "validation": "optional",
           "id": "32"
+        },
+        {
+          "index": 33,
+          "hint": "",
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:Yes,2:No",
+          "param": "Insulated hot water piping",
+          "validation": "optional",
+          "id": "33"
         }
       ],
       "id": "3"
@@ -190,93 +199,77 @@
         {
           "index": 41,
           "hint": "",
-          "dataType": "textrow",
-          "defaultValues": "",
-          "param": "Alternate Make",
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:Natural Gas,2:Electric",
+          "param": "Alternate Fuel Type",
           "validation": "optional",
           "id": "41"
         },
         {
           "index": 42,
           "hint": "",
-          "dataType": "textrow",
-          "defaultValues": "",
-          "param": "Alternate Model Number",
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:storage tank,2:tankless/instantaneous,3:heat pump,4:solar powered,5:condensing",
+          "param": "Type of Unit",
           "validation": "optional",
           "id": "42"
         },
         {
           "index": 43,
           "hint": "",
-          "dataType": "introw",
+          "dataType": "textrow",
           "defaultValues": "",
-          "param": "Quantity",
+          "param": "Alternate Make",
           "validation": "optional",
           "id": "43"
         },
         {
           "index": 44,
           "hint": "",
-          "dataType": "introw",
+          "dataType": "textrow",
           "defaultValues": "",
-          "param": "Alternate Heating Capacity",
+          "param": "Alternate Model Number",
           "validation": "optional",
           "id": "44"
         },
         {
           "index": 45,
           "hint": "",
-          "dataType": "decimalrow",
+          "dataType": "introw",
           "defaultValues": "",
-          "param": "Alternate Gas Efficiency",
+          "param": "Quantity",
           "validation": "optional",
           "id": "45"
         },
         {
           "index": 46,
           "hint": "",
+          "dataType": "introw",
+          "defaultValues": "",
+          "param": "Alternate Heating Capacity",
+          "validation": "optional",
+          "id": "46"
+        },
+        {
+          "index": 47,
+          "hint": "",
+          "dataType": "decimalrow",
+          "defaultValues": "",
+          "param": "Alternate Gas Efficiency",
+          "validation": "optional",
+          "id": "47"
+        },
+        {
+          "index": 48,
+          "hint": "",
           "dataType": "decimalrow",
           "defaultValues": "",
           "param": "Alternate Electric Efficiency",
           "validation": "optional",
-          "id": "46"
+          "id": "48"
         }
       ],
       "id": "4"
-    },
-    {
-      "index": 5,
-      "section": "Suggested Time",
-      "elements": [
-        {
-          "index": 51,
-          "hint": "",
-          "dataType": "decimalrow",
-          "defaultValues": "",
-          "param": "Peak Hours",
-          "validation": "optional",
-          "id": "51"
-        },
-        {
-          "index": 52,
-          "hint": "",
-          "dataType": "decimalrow",
-          "defaultValues": "",
-          "param": "Part Peak Hours",
-          "validation": "optional",
-          "id": "52"
-        },
-        {
-          "index": 53,
-          "hint": "",
-          "dataType": "decimalrow",
-          "defaultValues": "",
-          "param": "Off Peak Hours",
-          "validation": "optional",
-          "id": "53"
-        }
-      ],
-      "id": "5"
     }
   ]
 }

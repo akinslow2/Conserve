@@ -6,29 +6,29 @@
       "elements": [
         {
           "index": 11,
-          "hint": "",
+          "hint": "Rq for deemed replacement",
           "dataType": "pickerinputrow",
-          "defaultValues": "1:Ultra-low Temperature Freezer,2:Solid Door Freezer,3:Solid Door Refrigerator,4:Glass Door Refrigerator",
-          "param": "Equipment Type",
-          "validation": "mandatory",
+          "defaultValues": "1:Solid,2:Glass,3:Solid Chest,4:Glass Chest",
+          "param": "Door Type",
+          "validation": "optional",
           "id": "11"
         },
         {
           "index": 12,
-          "hint": "",
-          "dataType": "pickerinputrow",
-          "defaultValues": "1:Milk or Beverage Cabinet,2:Other,3:Pass-Through,4:Reach-in,5:Undercounter,6:Wedge Case,7:Work-Top Table,8:Roll-in",
-          "param": "Style Type",
+          "hint": "Rq for deemed replacement",
+          "dataType": "decimalrow",
+          "defaultValues": "",
+          "param": "Total Volume (cu.ft.)",
           "validation": "optional",
           "id": "12"
         },
         {
           "index": 13,
-          "hint": "cu. ft.",
-          "dataType": "decimalrow",
+          "hint": "",
+          "dataType": "textrow",
           "defaultValues": "",
-          "param": "Total Volume",
-          "validation": "mandatory",
+          "param": "Model Number",
+          "validation": "optional",
           "id": "13"
         },
         {
@@ -36,112 +36,139 @@
           "hint": "",
           "dataType": "textrow",
           "defaultValues": "",
-          "param": "Model Number",
-          "validation": "mandatory",
+          "param": "Company",
+          "validation": "optional",
           "id": "14"
         },
         {
           "index": 15,
           "hint": "",
-          "dataType": "textrow",
+          "dataType": "introw",
           "defaultValues": "",
-          "param": "Company",
-          "validation": "mandatory",
+          "param": "Year",
+          "validation": "optional",
           "id": "15"
         },
         {
           "index": 16,
           "hint": "",
-          "dataType": "introw",
-          "defaultValues": "",
-          "param": "Age",
-          "validation": "mandatory",
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:Yes,2:No",
+          "param": "Plug Load Control",
+          "validation": "optional",
           "id": "16"
         },
         {
           "index": 17,
-          "hint": "",
-          "dataType": "pickerinputrow",
-          "defaultValues": "1:Yes,2:No",
-          "param": "Control",
-          "validation": "mandatory",
+          "hint": "Rq for LED replacement",
+          "dataType": "introw",
+          "defaultValues": "",
+          "param": "Quantity",
+          "validation": "optional",
           "id": "17"
         },
         {
           "index": 18,
-          "hint": "",
-          "dataType": "introw",
-          "defaultValues": "",
-          "param": "Quantity",
-          "validation": "mandatory",
-          "id": "18"
-        },
-        {
-          "index": 19,
           "hint": "kWh",
           "dataType": "decimalrow",
           "defaultValues": "",
           "param": "Daily Energy Used",
           "validation": "optional",
+          "id": "18"
+        },
+        {
+          "index": 19,
+          "hint": "",
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:Yes,2:No",
+          "param": "Does reach-in unit have doors?",
+          "validation": "optional",
           "id": "19"
+        },
+        {
+          "index": 110,
+          "hint": "",
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:pre1993,2:Between1993and2001",
+          "param": "Estimated Age",
+          "validation": "optional",
+          "id": "110"
         }
       ],
       "id": "1"
     },
     {
       "index": 2,
-      "section": "TOU",
+      "section": "Additional",
       "elements": [
         {
           "index": 21,
           "hint": "",
-          "dataType": "decimalrow",
-          "defaultValues": "",
-          "param": "Peak Hours",
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:Yes,2:No",
+          "param": "Energy Star Rating?",
           "validation": "optional",
           "id": "21"
         },
         {
           "index": 22,
-          "hint": "",
-          "dataType": "decimalrow",
-          "defaultValues": "",
-          "param": "Part Peak Hours",
+          "hint": "Rq for LED replacement",
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:Yes,2:No",
+          "param": "LED lighting?",
           "validation": "optional",
           "id": "22"
         },
         {
           "index": 23,
+          "hint": "Rq for LED replacement",
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:0 to 1,2:700,3:1,4:701 and above",
+          "param": "Light Lumens",
+          "validation": "",
+          "id": "23"
+        },
+        {
+          "index": 24,
           "hint": "",
           "dataType": "decimalrow",
           "defaultValues": "",
-          "param": "Off Peak Hours",
-          "validation": "mandatory",
-          "id": "23"
+          "param": "Temperature Setting",
+          "validation": "",
+          "id": "24"
+        },
+        {
+          "index": 25,
+          "hint": "",
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:poor,2:adequate,3:strong",
+          "param": "Quality of Door Seal",
+          "validation": "",
+          "id": "25"
         }
       ],
       "id": "2"
     },
     {
       "index": 3,
-      "section": "Labor Cost",
+      "section": "Time of Use",
       "elements": [
         {
           "index": 31,
           "hint": "",
-          "dataType": "introw",
+          "dataType": "decimalrow",
           "defaultValues": "",
-          "param": "Zip Code",
-          "validation": "",
+          "param": "Peak Hours",
+          "validation": "optional",
           "id": "31"
         },
         {
           "index": 32,
           "hint": "",
-          "dataType": "textrow",
+          "dataType": "decimalrow",
           "defaultValues": "",
-          "param": "Profession",
-          "validation": "",
+          "param": "Off Peak Hours",
+          "validation": "optional",
           "id": "32"
         }
       ],
@@ -149,34 +176,16 @@
     },
     {
       "index": 4,
-      "section": "Suggested Time",
+      "section": "Labor Cost",
       "elements": [
         {
           "index": 41,
           "hint": "",
-          "dataType": "decimalrow",
+          "dataType": "introw",
           "defaultValues": "",
-          "param": "Suggested Peak Hours",
+          "param": "Zip Code",
           "validation": "optional",
           "id": "41"
-        },
-        {
-          "index": 42,
-          "hint": "",
-          "dataType": "decimalrow",
-          "defaultValues": "",
-          "param": "Suggested Part Peak Hours",
-          "validation": "optional",
-          "id": "42"
-        },
-        {
-          "index": 43,
-          "hint": "",
-          "dataType": "decimalrow",
-          "defaultValues": "",
-          "param": "Suggested Off Peak Hours",
-          "validation": "optional",
-          "id": "43"
         }
       ],
       "id": "4"

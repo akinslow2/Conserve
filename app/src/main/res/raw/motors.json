@@ -6,100 +6,100 @@
       "elements": [
         {
           "index": 11,
-          "hint": "",
-          "dataType": "textrow",
-          "defaultValues": "",
-          "param": "Make",
-          "validation": "mandatory",
+          "hint": "(Rq2)",
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:Boiler Draft Fan,2:Cooling Tower Fan,3:Water Source Heat Pump (WSHP) Circulation Pump,4:Supply Fan,5:Return Fan,6:Cooling Water Pump,7:Heating Hot Water Pump,8:brushless permanent magnet (BLPM) circulator pump",
+          "param": "Purpose",
+          "validation": "optional",
           "id": "11"
         },
         {
           "index": 12,
-          "hint": "",
+          "hint": "(Rq2)",
           "dataType": "textrow",
           "defaultValues": "",
-          "param": "Model Number",
-          "validation": "mandatory",
+          "param": "Make",
+          "validation": "optional",
           "id": "12"
         },
         {
           "index": 13,
           "hint": "",
-          "dataType": "decimalrow",
+          "dataType": "textrow",
           "defaultValues": "",
-          "param": "Horsepower (HP)",
-          "validation": "mandatory",
+          "param": "Model Number",
+          "validation": "optional",
           "id": "13"
         },
         {
           "index": 14,
-          "hint": "",
-          "dataType": "introw",
+          "hint": "(Rq1) (Rq for BLPM)",
+          "dataType": "decimalrow",
           "defaultValues": "",
-          "param": "Quantity",
-          "validation": "mandatory",
+          "param": "Horsepower (HP)",
+          "validation": "optional",
           "id": "14"
         },
         {
           "index": 15,
-          "hint": "1750.0",
+          "hint": "(Rq1)",
           "dataType": "introw",
           "defaultValues": "",
-          "param": "Nameplate Rotational Speed (NRS)",
-          "validation": "mandatory",
+          "param": "Quantity",
+          "validation": "optional",
           "id": "15"
         },
         {
           "index": 16,
-          "hint": "1754.0",
+          "hint": "",
           "dataType": "introw",
           "defaultValues": "",
-          "param": "Measured Rotational Speed (MRS)",
-          "validation": "mandatory",
+          "param": "Age (years)",
+          "validation": "optional",
           "id": "16"
         },
         {
           "index": 17,
-          "hint": "1800.0",
+          "hint": "1750 (Rq1)",
           "dataType": "introw",
           "defaultValues": "",
-          "param": "Synchronous Rotational Speed (SRS)",
-          "validation": "mandatory",
+          "param": "Nameplate Rotational Speed (NRS)",
+          "validation": "optional",
           "id": "17"
         },
         {
           "index": 18,
-          "hint": "0.85",
-          "dataType": "decimalrow",
+          "hint": "1754 (Rq1)",
+          "dataType": "introw",
           "defaultValues": "",
-          "param": "Efficiency",
-          "validation": "mandatory",
+          "param": "Measured Rotational Speed (MRS)",
+          "validation": "optional",
           "id": "18"
         },
         {
           "index": 19,
-          "hint": "",
+          "hint": "1800 (Rq1)",
           "dataType": "pickerinputrow",
-          "defaultValues": "1:Total Enclosed,2:Open Drip",
-          "param": "Enclosure Type",
-          "validation": "mandatory",
+          "defaultValues": "1:600,2:720,3:900,4:1200,5:1800,6:3600",
+          "param": "Synchronous Rotational Speed (SRS)",
+          "validation": "optional",
           "id": "19"
         },
         {
           "index": 110,
-          "hint": "",
-          "dataType": "introw",
+          "hint": "0.85 (Rq1)",
+          "dataType": "decimalrow",
           "defaultValues": "",
-          "param": "Rated Voltage",
+          "param": "Efficiency",
           "validation": "optional",
           "id": "110"
         },
         {
           "index": 111,
           "hint": "",
-          "dataType": "decimalrow",
-          "defaultValues": "",
-          "param": "Full Loaded Amps",
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:Total Enclosed,2:Open Drip",
+          "param": "Enclosure Type",
           "validation": "optional",
           "id": "111"
         },
@@ -108,16 +108,52 @@
           "hint": "",
           "dataType": "introw",
           "defaultValues": "",
-          "param": "Phase",
+          "param": "Rated Voltage",
           "validation": "optional",
           "id": "112"
+        },
+        {
+          "index": 113,
+          "hint": "",
+          "dataType": "decimalrow",
+          "defaultValues": "",
+          "param": "Full Loaded Amps",
+          "validation": "optional",
+          "id": "113"
+        },
+        {
+          "index": 114,
+          "hint": "",
+          "dataType": "introw",
+          "defaultValues": "",
+          "param": "Phase",
+          "validation": "optional",
+          "id": "114"
+        },
+        {
+          "index": 115,
+          "hint": "",
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:yes,2:no",
+          "param": "Operational Testing Will Be Conducted",
+          "validation": "optional",
+          "id": "115"
+        },
+        {
+          "index": 116,
+          "hint": "Rq for BLPM Circ Pump",
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:yes,2:no",
+          "param": "Controls",
+          "validation": "optional",
+          "id": "116"
         }
       ],
       "id": "1"
     },
     {
       "index": 2,
-      "section": "TOU",
+      "section": "Time of Use",
       "elements": [
         {
           "index": 21,
@@ -133,27 +169,9 @@
           "hint": "",
           "dataType": "decimalrow",
           "defaultValues": "",
-          "param": "Part Peak Hours",
+          "param": "Off Peak Hours",
           "validation": "optional",
           "id": "22"
-        },
-        {
-          "index": 23,
-          "hint": "",
-          "dataType": "decimalrow",
-          "defaultValues": "",
-          "param": "Off Peak Hours",
-          "validation": "",
-          "id": "23"
-        },
-        {
-          "index": 24,
-          "hint": "",
-          "dataType": "textrow",
-          "defaultValues": "",
-          "param": "Motor Sensor Serial",
-          "validation": "",
-          "id": "24"
         }
       ],
       "id": "2"
@@ -182,7 +200,7 @@
         },
         {
           "index": 33,
-          "hint": "",
+          "hint": "(Rq1) (Rq for BLPM)",
           "dataType": "decimalrow",
           "defaultValues": "",
           "param": "Alternate Horsepower (HP)",
@@ -227,7 +245,7 @@
         },
         {
           "index": 38,
-          "hint": "0.92",
+          "hint": "0.92 (Rq1)",
           "dataType": "decimalrow",
           "defaultValues": "",
           "param": "Alternate Efficiency",
@@ -236,40 +254,6 @@
         }
       ],
       "id": "3"
-    },
-    {
-      "index": 4,
-      "section": "Suggested Time",
-      "elements": [
-        {
-          "index": 41,
-          "hint": "",
-          "dataType": "decimalrow",
-          "defaultValues": "",
-          "param": "Suggested Peak Hours",
-          "validation": "optional",
-          "id": "41"
-        },
-        {
-          "index": 42,
-          "hint": "",
-          "dataType": "decimalrow",
-          "defaultValues": "",
-          "param": "Suggested Part Peak Hours",
-          "validation": "optional",
-          "id": "42"
-        },
-        {
-          "index": 43,
-          "hint": "",
-          "dataType": "decimalrow",
-          "defaultValues": "",
-          "param": "Suggested Off Peak Hours",
-          "validation": "optional",
-          "id": "43"
-        }
-      ],
-      "id": "4"
     }
   ]
 }

@@ -2,50 +2,50 @@
   "geminiForm": [
     {
       "index": 1,
-      "section": "Hot Food Cabinet",
+      "section": "Electric Oven",
       "elements": [
         {
           "index": 11,
-          "hint": "cu. ft.",
-          "dataType": "decimalrow",
+          "hint": "",
+          "dataType": "textrow",
           "defaultValues": "",
-          "param": "Cabinet Volume",
+          "param": "Model Number",
           "validation": "optional",
           "id": "11"
         },
         {
           "index": 12,
-          "hint": "W/cu.ft.",
-          "dataType": "decimalrow",
+          "hint": "",
+          "dataType": "textrow",
           "defaultValues": "",
-          "param": "Idle Energy Rate",
+          "param": "Serial Number",
           "validation": "optional",
           "id": "12"
         },
         {
           "index": 13,
           "hint": "",
-          "dataType": "pickerinputrow",
-          "defaultValues": "1:Full Size,2:1/2 Size",
-          "param": "Size",
+          "dataType": "textrow",
+          "defaultValues": "",
+          "param": "Company",
           "validation": "optional",
           "id": "13"
         },
         {
           "index": 14,
           "hint": "",
-          "dataType": "textrow",
+          "dataType": "decimalrow",
           "defaultValues": "",
-          "param": "Model Number",
+          "param": "Load Watts",
           "validation": "optional",
           "id": "14"
         },
         {
           "index": 15,
           "hint": "",
-          "dataType": "textrow",
+          "dataType": "decimalrow",
           "defaultValues": "",
-          "param": "Company",
+          "param": "Max Watts",
           "validation": "optional",
           "id": "15"
         },
@@ -63,7 +63,7 @@
           "hint": "",
           "dataType": "introw",
           "defaultValues": "",
-          "param": "Age",
+          "param": "Year Installed",
           "validation": "optional",
           "id": "17"
         },
