@@ -405,15 +405,6 @@
           "param": "Controls Contractor's Name",
           "validation": "optional",
           "id": "76"
-        },
-        {
-          "index": 77,
-          "hint": "",
-          "dataType": "",
-          "defaultValues": "",
-          "param": "",
-          "validation": "",
-          "id": "77"
         }
       ],
       "id": "7"
@@ -520,7 +511,7 @@
           "hint": "",
           "dataType": "pickerinputrow",
           "defaultValues": "1:N,2:NE,3:E,4:SE,5:S,6:SW,7:W,8:NW",
-          "param": "Fa\u00e7ade orientation",
+          "param": "Façade orientation",
           "validation": "optional",
           "id": "111"
         },
