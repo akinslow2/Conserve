@@ -20,15 +20,7 @@ class Motors(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRate
              usageHours: UsageHours, outgoingRows: OutgoingRows, private val context: Context) :
         EBase(computable, utilityRateGas, utilityRateElectricity, usageHours, outgoingRows), IComputable {
 
-    /**
-     * Entry Point
-     * */
-    override fun compute(): Observable<Computable<*>> {
-        return super.compute(extra = ({ Timber.d(it) }))
-    }
-
     companion object {
-
         /**
          * Conversion Factor from Horse Power to Kilo Watts
          * */
@@ -36,6 +28,7 @@ class Motors(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRate
         private const val MOTOR_EFFICIENCY = "motor_efficiency"
         private const val TYPE1 = "BED_VFD_Prescriptive_kWh"
         private const val TYPE2 = "BED_VFD_Prescriptive_kW"
+
         /**
          * Fetches the Motor Efficiency (NEMA-Premium) based on the specific Match Criteria
          * via the Parse API
@@ -89,11 +82,12 @@ class Motors(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRate
     private var partPeakHours = 0.0
     private var offPeakHours = 0.0
 
+
     override fun setup() {
         try {
             electricUtilityCompany = preAudit["Others Electric Utility Company"]!! as String
             gasUtilitycompany = preAudit["Others Gas Utility Company"]!! as String
-            srs = featureData["Synchronous Rotational Speed (SRS)"]!! as Int
+            srs = (featureData["Synchronous Rotational Speed (SRS)"]!! as String).toInt()
             mrs = featureData["Measured Rotational Speed (MRS)"]!! as Int
             nrs = featureData["Nameplate Rotational Speed (NRS)"]!! as Int
             hp = featureData["Horsepower (HP)"]!! as Double
@@ -103,12 +97,17 @@ class Motors(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRate
             alternateEfficiency = featureData["Alternate Efficiency"]!! as Double
 
             peakHours = featureData["Peak Hours"]!! as Double
-            peakHours = featureData["Peak Hours"]!! as Double
-            partPeakHours = featureData["Part Peak Hours"]!! as Double
-            offPeakHours = featureData["Off Peak Hours"]!! as Double
+            partPeakHours = featureData["Off Peak Hours"]!! as Double
         } catch (e: Exception) {
             e.printStackTrace()
         }
+    }
+
+    /**
+     * Entry Point
+     * */
+    override fun compute(): Observable<Computable<*>> {
+        return super.compute(extra = ({ Timber.d(it) }))
     }
 
     /**
