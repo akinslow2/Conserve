@@ -21,13 +21,6 @@ class PreRinseSpray(computable: Computable<*>, utilityRateGas: UtilityRate, util
         EBase(computable, utilityRateGas, utilityRateElectricity, usageHours, outgoingRows), IComputable {
 
     /**
-     * Entry Point
-     * */
-    override fun compute(): Observable<Computable<*>> {
-        return super.compute(extra = ({ Timber.d(it) }))
-    }
-
-    /**
      * Usage Hours
      * */
     private var peakHours = 0.0
@@ -42,10 +35,10 @@ class PreRinseSpray(computable: Computable<*>, utilityRateGas: UtilityRate, util
     private var waterHeater = ""
     var age = 0.0
 
+
     override fun setup() {
         try {
             peakHours = featureData["Peak Hours"]!! as Double
-            partPeakHours = featureData["Part Peak Hours"]!! as Double
             offPeakHours = featureData["Off Peak Hours"]!! as Double
             usageHours = UsageSimple(peakHours, partPeakHours, offPeakHours)
 
@@ -57,6 +50,13 @@ class PreRinseSpray(computable: Computable<*>, utilityRateGas: UtilityRate, util
         } catch (e: Exception) {
             e.printStackTrace()
         }
+    }
+
+    /**
+     * Entry Point
+     * */
+    override fun compute(): Observable<Computable<*>> {
+        return super.compute(extra = ({ Timber.d(it) }))
     }
 
     /**
@@ -132,7 +132,8 @@ class PreRinseSpray(computable: Computable<*>, utilityRateGas: UtilityRate, util
         var annualEnergyUseElectric = 0.0
         var annualEnergyUseGas = 0.0
 
-        val flowRatePost = element.asJsonObject.get("flow_rate").asDouble
+        val flowRatePost = if (element.asJsonObject.has("flow_rate"))
+            element.asJsonObject.get("flow_rate").asDouble else 0.0
         val annualHoursPost = usageHoursPost()
         val waterTemperaturePost = waterTemperature
         val efficiencyPost = efficiency
@@ -195,18 +196,25 @@ class PreRinseSpray(computable: Computable<*>, utilityRateGas: UtilityRate, util
     /**
      * Define all the fields here - These would be used to Generate the Outgoing Rows or perform the Energy Calculation
      * */
-    override fun preAuditFields() = mutableListOf("")
+    override fun preAuditFields() = mutableListOf<String>()
     override fun featureDataFields() = getGFormElements().map { it.value.param!! }.toMutableList()
 
-    override fun preStateFields() = mutableListOf("")
-    override fun postStateFields() = mutableListOf("company_name","model_number","flow_rate","rebate",
-            "pgne_measure_code","utility_company")
+    override fun preStateFields() = mutableListOf<String>()
+    override fun postStateFields() = mutableListOf(
+            "company_name",
+            "model_number",
+            "flow_rate",
+            "rebate",
+            "pgne_measure_code",
+            "utility_company")
 
-    override fun computedFields() = mutableListOf("__daily_operating_hours", "__weekly_operating_hours",
-            "__yearly_operating_hours", "__electric_cost")
+    override fun computedFields() = mutableListOf(
+            "__daily_operating_hours",
+            "__weekly_operating_hours",
+            "__yearly_operating_hours",
+            "__electric_cost")
 
     private fun getFormMapper() = FormMapper(context, R.raw.pre_rinse_spray)
     private fun getModel() = getFormMapper().decodeJSON()
     private fun getGFormElements() = getFormMapper().mapIdToElements(getModel())
-
 }
