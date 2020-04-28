@@ -129,9 +129,10 @@ class WIRefrigerator(computable: Computable<*>, utilityRateGas: UtilityRate, uti
     /**
      * Usage Hours
      * */
-    private var peakHours = 0.0
-    private var partPeakHours = 0.0
-    private var offPeakHours = 0.0
+    private var condenserPeakHours = 0.0
+    private var condenserOffPeakHours = 0.0
+    private var evaporatorPeakHours = 0.0
+    private var evaporatorOffPeakHours = 0.0
 
 
     var quantity = 0
@@ -146,10 +147,10 @@ class WIRefrigerator(computable: Computable<*>, utilityRateGas: UtilityRate, uti
         try {
             quantity = featureData["Quantity"]!! as Int
 
-            age = featureData["Age"]!! as Int
-            peakHours = featureData["Peak Hours"]!! as Double
-            partPeakHours = featureData["Part Peak Hours"]!! as Double
-            offPeakHours = featureData["Off Peak Hours"]!! as Double
+            condenserPeakHours = featureData["Condenser Peak Hours"]!! as Double
+            condenserOffPeakHours = featureData["Condenser Off Peak Hours"]!! as Double
+            evaporatorPeakHours = featureData["Evaporator Peak Hours"]!! as Double
+            evaporatorOffPeakHours = featureData["Evaporator Off Peak Hours"]!! as Double
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -173,7 +174,10 @@ class WIRefrigerator(computable: Computable<*>, utilityRateGas: UtilityRate, uti
      * */
     override fun costPreState(elements: List<JsonElement?>): Double {
 
-        val usageHours = UsageSimple(peakHours, partPeakHours, offPeakHours)
+        val usageHours = UsageSimple(
+                condenserPeakHours + evaporatorPeakHours,
+                0.0,
+                condenserOffPeakHours + evaporatorOffPeakHours)
         computable.udf1 = usageHours
         Timber.d(usageHours.toString())
 
