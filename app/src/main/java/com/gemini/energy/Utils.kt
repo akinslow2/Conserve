@@ -7,3 +7,12 @@ fun Double.format(fracDigits: Int): String {
     df.maximumFractionDigits = fracDigits
     return df.format(this)
 }
+
+/// Determines which filepath to save exported files to
+val branch =  Branches.NES.string
+
+enum class Branches (val string: String) {
+    BED("BED"),
+    NES("NES"),
+    PGE("PGE")
+}
