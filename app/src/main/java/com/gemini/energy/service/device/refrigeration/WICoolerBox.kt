@@ -21,12 +21,6 @@ class WICoolerBox(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
                   usageHours: UsageHours, outgoingRows: OutgoingRows, private val context: Context) :
         EBase(computable, utilityRateGas, utilityRateElectricity, usageHours, outgoingRows), IComputable {
 
-    /**
-     * Entry Point
-     * */
-    override fun compute(): Observable<Computable<*>> {
-        return super.compute(extra = ({ Timber.d(it) }))
-    }
 
     companion object {
 
@@ -104,14 +98,12 @@ class WICoolerBox(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
      * */
     var age = 0
 
-
     /**
      * HVAC - British Thermal Unit
      * */
     var btu = 0
     private var gasInput = 0
     private var gasOutput = 0
-
 
     /**
      * City | State
@@ -122,10 +114,10 @@ class WICoolerBox(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
     /**
      * Usage Hours
      * */
-    private var peakHours = 0.0
-    private var partPeakHours = 0.0
-    private var offPeakHours = 0.0
-
+    private var condenserPeakHours = 0.0
+    private var condenserOffPeakHours = 0.0
+    private var evaporatorPeakHours = 0.0
+    private var evaporatorOffPeakHours = 0.0
 
     var quantity = 0
     var thermaleff = 0
@@ -135,17 +127,26 @@ class WICoolerBox(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
     var unittype = ""
     var capacity = 0.0
 
+
     override fun setup() {
         try {
             quantity = featureData["Quantity"]!! as Int
 
-            age = featureData["Age"]!! as Int
-            peakHours = featureData["Peak Hours"]!! as Double
-            partPeakHours = featureData["Part Peak Hours"]!! as Double
-            offPeakHours = featureData["Off Peak Hours"]!! as Double
+            condenserPeakHours = featureData["Condenser Peak Hours"]!! as Double
+            condenserOffPeakHours = featureData["Condenser Off Peak Hours"]!! as Double
+            evaporatorPeakHours = featureData["Evaporator Peak Hours"]!! as Double
+            evaporatorOffPeakHours = featureData["Evaporator Off Peak Hours"]!! as Double
         } catch (e: Exception) {
             e.printStackTrace()
         }
+    }
+
+
+    /**
+     * Entry Point
+     * */
+    override fun compute(): Observable<Computable<*>> {
+        return super.compute(extra = ({ Timber.d(it) }))
     }
 
     override fun isGas() = fueltype == "Natural Gas"
@@ -166,7 +167,10 @@ class WICoolerBox(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
      * */
     override fun costPreState(elements: List<JsonElement?>): Double {
 
-        val usageHours = UsageSimple(peakHours, partPeakHours, offPeakHours)
+        val usageHours = UsageSimple(
+                condenserPeakHours + evaporatorPeakHours,
+                0.0,
+                condenserOffPeakHours + evaporatorOffPeakHours)
         computable.udf1 = usageHours
         Timber.d(usageHours.toString())
 
@@ -311,5 +315,4 @@ class WICoolerBox(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
     private fun getFormMapper() = FormMapper(context, R.raw.walkin_coolbot)
     private fun getModel() = getFormMapper().decodeJSON()
     private fun getGFormElements() = getFormMapper().mapIdToElements(getModel())
-
 }
