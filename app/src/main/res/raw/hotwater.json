@@ -90,7 +90,7 @@
           "hint": "",
           "dataType": "decimalrow",
           "defaultValues": "",
-          "param": "Heating Electirc Efficiency",
+          "param": "Heating Electric Efficiency",
           "validation": "optional",
           "id": "110"
         },

@@ -28,7 +28,6 @@ class WaterHeater(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
     }
 
     companion object {
-
         /**
          * Conversion Factor from Watts to Kilo Watts
          * */
@@ -110,7 +109,6 @@ class WaterHeater(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
      * */
     var age = 0
 
-
     /**
      * HVAC - British Thermal Unit
      * */
@@ -132,7 +130,6 @@ class WaterHeater(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
     private var partPeakHours = 0.0
     private var offPeakHours = 0.0
 
-
     var quantity = 0
     var thermaleff = 0
     var electriceff = 0.0
@@ -141,12 +138,10 @@ class WaterHeater(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
     var unittype = ""
     var capacity = 0.0
 
+
     override fun setup() {
         try {
-
             quantity = featureData["Quantity"]!! as Int
-
-            age = featureData["Age"]!! as Int
 
             gasInput = featureData["Heating Input (Btu/hr)"]!! as Int
             gasOutput = featureData["Heating Output (Btu/hr)"]!! as Int
@@ -156,11 +151,9 @@ class WaterHeater(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
             fueltype = featureData["Fuel Type"]!! as String
             unittype = featureData["Type of Unit"]!! as String
             capacity = featureData["Capacity (U.S. Gal)"]!! as Double
+
             peakHours = featureData["Peak Hours"]!! as Double
-            partPeakHours = featureData["Part Peak Hours"]!! as Double
             offPeakHours = featureData["Off Peak Hours"]!! as Double
-
-
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -251,7 +244,6 @@ class WaterHeater(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
         return 0.0
     }
 
-
     /**
      * PowerTimeChange >> Hourly Energy Use - Pre
      * */
@@ -302,7 +294,6 @@ class WaterHeater(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
     override fun energyTimeChange(): Double = 0.0
     override fun energyPowerTimeChange(): Double = 0.0
 
-
     /**
      * State if the Equipment has a Post UsageHours Hours (Specific) ie. A separate set of
      * Weekly UsageHours Hours apart from the PreAudit
@@ -332,5 +323,4 @@ class WaterHeater(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
     private fun getFormMapper() = FormMapper(context, R.raw.hotwater)
     private fun getModel() = getFormMapper().decodeJSON()
     private fun getGFormElements() = getFormMapper().mapIdToElements(getModel())
-
 }
