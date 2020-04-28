@@ -20,6 +20,7 @@ class Freezer(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRat
         EBase(computable, utilityRateGas, utilityRateElectricity, usageHours, outgoingRows), IComputable {
 
     var age = 0
+    var estimatedAge = ""
     var dailyEnergyUse = 0.0
     var totalVolume = 0.0
     /**
@@ -31,9 +32,9 @@ class Freezer(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRat
 
     override fun setup() {
         try {
-            age = featureData["Age"]!! as Int
+            estimatedAge = featureData["Estimated Age"]!! as String
             dailyEnergyUse = featureData["Daily Energy Used"]!! as Double
-            totalVolume = featureData["Total Volume"] as Double
+            totalVolume = featureData["Total Volume (cu.ft.)"] as Double
         } catch (e: Exception) {
             e.printStackTrace()
         }
