@@ -57,17 +57,9 @@ class DishWasher(computable: Computable<*>, utilityRateGas: UtilityRate, utility
     override fun setup() {
         try {
             peakHours = featureData["Peak Hours"]!! as Double
-            partPeakHours = featureData["Part Peak Hours"]!! as Double
             offPeakHours = featureData["Off Peak Hours"]!! as Double
             usageHoursPre = UsageSimple(peakHours, partPeakHours, offPeakHours)
 
-            /** suggestedPeakHours = featureData["Suggested Peak Hours"]!! as Double
-            suggestedPartPeakHours = featureData["Suggested Part Peak Hours"]!! as Double
-            suggestedOffPeakHours = featureData["Suggested Off Peak Hours"]!! as Double
-            usageHoursPost = UsageSimple(suggestedPeakHours, suggestedPartPeakHours, suggestedOffPeakHours)
-            Timber.d("## Suggested Time ##")
-            Timber.d(usageHoursPost.toString())
-             */
             waterConsumption = featureData["Water Consumption"]!! as Double
             numberOfRacks = featureData["Number of Racks"]!! as Int
             cyclesPerDay = featureData["Cycles per Day"]!! as Int
@@ -75,7 +67,7 @@ class DishWasher(computable: Computable<*>, utilityRateGas: UtilityRate, utility
             waterTemperature = featureData["Water Temperature (oF)"]!! as Int
             efficiency = featureData["Efficiency"]!! as Double
             idleEnergyRate = featureData["Idle Energy Rate"]!! as Double
-            waterHeater = featureData["Water Heater"]!! as String
+
             age = (featureData["Age"]!! as Int).toDouble()
         } catch (e: Exception) {
             e.printStackTrace()
@@ -101,7 +93,6 @@ class DishWasher(computable: Computable<*>, utilityRateGas: UtilityRate, utility
 
         return if (isGas()) costGas else costElectricity
     }
-
 
     /**
      * Cost - Post State
@@ -297,5 +288,4 @@ class DishWasher(computable: Computable<*>, utilityRateGas: UtilityRate, utility
     private fun getFormMapper() = FormMapper(context, R.raw.dishwasher)
     private fun getModel() = getFormMapper().decodeJSON()
     private fun getGFormElements() = getFormMapper().mapIdToElements(getModel())
-
 }
