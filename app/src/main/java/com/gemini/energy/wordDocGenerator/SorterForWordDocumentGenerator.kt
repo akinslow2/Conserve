@@ -697,7 +697,7 @@ class SorterForWordDocumentGenerator {
                             "Ice Maker",
                             single.energyPowerChange(),
                             costElectricity,
-                            single.age,
+                            single.age.toDouble(),
                             materialCost,
                             implementationCost,
                             savings,

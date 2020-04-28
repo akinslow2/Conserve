@@ -18,33 +18,29 @@ class IceMaker(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRa
                    usageHours: UsageHours, outgoingRows: OutgoingRows, private val context: Context) :
         EBase(computable, utilityRateGas, utilityRateElectricity, usageHours, outgoingRows), IComputable {
 
-    /**
-     * Entry Point
-     * */
-    override fun compute(): Observable<Computable<*>> {
-        return super.compute(extra = ({ Timber.d(it) }))
-    }
-
     private var iceHarvestRate = 0.0
     private var energyUseRate = 0.0
 
     private var alternateIceHarvestRate = 100.0
     private var alternateEnergyUseRate = 6.9
-    var age = 0.0
+    var age = 0
 
 
     override fun setup() {
         try {
             iceHarvestRate = featureData["Ice Harvest Rate"]!! as Double
             energyUseRate = featureData["Energy Use Rate"]!! as Double
-            age = (featureData["Age"]!! as Int).toDouble()
-
-            /** alternateIceHarvestRate = featureData["Alternate Ice Harvest Rate"]!! as Double
-            alternateEnergyUseRate = featureData["Alternate Energy Use Rate"]!! as Double */
-
+            age = featureData["Age"]!! as Int
         } catch (e: Exception) {
             e.printStackTrace()
         }
+    }
+
+    /**
+     * Entry Point
+     * */
+    override fun compute(): Observable<Computable<*>> {
+        return super.compute(extra = ({ Timber.d(it) }))
     }
 
     /**
@@ -127,17 +123,24 @@ class IceMaker(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRa
     /**
      * Define all the fields here - These would be used to Generate the Outgoing Rows or perform the Energy Calculation
      * */
-    override fun preAuditFields() = mutableListOf("")
+    override fun preAuditFields() = mutableListOf<String>()
     override fun featureDataFields() = getGFormElements().map { it.value.param!! }.toMutableList()
 
-    override fun preStateFields() = mutableListOf("")
-    override fun postStateFields() = mutableListOf("company", "model_number", "style_type",
-            "total_volume", "daily_energy_use", "rebate", "pgne_measure_code", "purchase_price_per_unit", "vendor")
+    override fun preStateFields() = mutableListOf<String>()
+    override fun postStateFields() = mutableListOf(
+            "company",
+            "model_number",
+            "style_type",
+            "total_volume",
+            "daily_energy_use",
+            "rebate",
+            "pgne_measure_code",
+            "purchase_price_per_unit",
+            "vendor")
 
-    override fun computedFields() = mutableListOf("")
+    override fun computedFields() = mutableListOf<String>()
 
     private fun getFormMapper() = FormMapper(context, R.raw.icemaker)
     private fun getModel() = getFormMapper().decodeJSON()
     private fun getGFormElements() = getFormMapper().mapIdToElements(getModel())
-
 }
