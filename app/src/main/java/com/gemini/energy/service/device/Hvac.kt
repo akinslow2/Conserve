@@ -33,7 +33,6 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
     }
 
     companion object {
-
         /**
          * Conversion Factor from Watts to Kilo Watts
          * */
@@ -179,23 +178,18 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
 
             eer = featureData["EER"]!! as Double
             seer = featureData["SEER"]!! as Double
-            age = featureData["Age"]!! as Int
             btu = featureData["Cooling Capacity (Btu/hr)"]!! as Int
+
             gasInput = featureData["Heating Input (Btu/hr)"]!! as Int
             gasOutput = featureData["Heating Output (Btu/hr)"]!! as Int
+            
             economizer = featureData["Economizer"]!! as String
-            thermotype = featureData["Thermostat Type"]!! as String
             quantity = featureData["Quantity"]!! as Int
 
-            city = featureData["City"]!! as String
-            state = featureData["State"]!! as String
-
             peakHours = featureData["Peak Hours"]!! as Double
-            partPeakHours = featureData["Part Peak Hours"]!! as Double
             offPeakHours = featureData["Off Peak Hours"]!! as Double
 
             alternateSeer = featureData["Alternate SEER"]!! as Double
-            alternateEer = featureData["Alternate EER"]!! as Double
             alternateBtu = featureData["Alternate Cooling Capacity (Btu/hr)"]!! as Int
         } catch (e: Exception) {
             e.printStackTrace()
