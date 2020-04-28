@@ -41,7 +41,7 @@ class ConveyorBroiler(computable: Computable<*>, utilityRateGas: UtilityRate,
     private var idleHours = 0.0
     private var broilerType = ""
     private var conveyorWidth = 0.0
-    var age = 0.0
+    var age = 0
 
     override fun setup() {
         try {
@@ -56,7 +56,7 @@ class ConveyorBroiler(computable: Computable<*>, utilityRateGas: UtilityRate,
 
             broilerType = featureData["Broiler Type"]!! as String
             conveyorWidth = featureData["Conveyor Width"]!! as Double
-            age = (featureData["Age"]!! as Int).toDouble()
+            age = featureData["Age"]!! as Int
 
             energyInputRate = featureData["Energy Input Rate"]!! as Double
             idleEnergyRate = featureData["Idle Energy Rate"]!! as Double
@@ -187,19 +187,30 @@ class ConveyorBroiler(computable: Computable<*>, utilityRateGas: UtilityRate,
     /**
      * Define all the fields here - These would be used to Generate the Outgoing Rows or perform the Energy Calculation
      * */
-    override fun preAuditFields() = mutableListOf("")
+    override fun preAuditFields() = mutableListOf<String>()
     override fun featureDataFields() = getGFormElements().map { it.value.param!! }.toMutableList()
 
-    override fun preStateFields() = mutableListOf("")
-    override fun postStateFields() = mutableListOf("company","model_number","broiler_type","fuel_type",
-            "conveyor_width","energy_input_rate","idle_energy_rate","rebate","pgne_measure_code",
-            "utility_company","purchase_price_per_unit")
+    override fun preStateFields() = mutableListOf<String>()
+    override fun postStateFields() = mutableListOf(
+            "company",
+            "model_number",
+            "broiler_type",
+            "fuel_type",
+            "conveyor_width",
+            "energy_input_rate",
+            "idle_energy_rate",
+            "rebate",
+            "pgne_measure_code",
+            "utility_company",
+            "purchase_price_per_unit")
 
-    override fun computedFields() = mutableListOf("__daily_operating_hours", "__weekly_operating_hours",
-            "__yearly_operating_hours", "__electric_cost")
+    override fun computedFields() = mutableListOf(
+            "__daily_operating_hours",
+            "__weekly_operating_hours",
+            "__yearly_operating_hours",
+            "__electric_cost")
 
     private fun getFormMapper() = FormMapper(context, R.raw.conveyor_broiler)
     private fun getModel() = getFormMapper().decodeJSON()
     private fun getGFormElements() = getFormMapper().mapIdToElements(getModel())
-
 }

@@ -466,7 +466,7 @@ class WordDocumentGenerator {
             val r1p3 = p3.createRun()
             r1p3.fontFamily = fontAgencyFB
             r1p3.fontSize = 13
-            r1p3.setText("Your ${equip.name} is ${equip.age.format(0)} years old and as a result is annually consuming ${equip.delta.format(0)} kWh more energy than a newer version. We recommend you replace the ${equip.name} with a newer version to save $${equip.costElectricity.format(0)} of dollars per year. The cost for a new ${equip.name} is roughly $${equip.materialCost.format(0)} with an expected payback period for this replacement is ${equip.paybackMonth.format(0)} months.")
+            r1p3.setText("Your ${equip.name} is ${equip.age} years old and as a result is annually consuming ${equip.delta.format(0)} kWh more energy than a newer version. We recommend you replace the ${equip.name} with a newer version to save $${equip.costElectricity.format(0)} of dollars per year. The cost for a new ${equip.name} is roughly $${equip.materialCost.format(0)} with an expected payback period for this replacement is ${equip.paybackMonth.format(0)} months.")
             r1p3.addBreak()
         }
     }

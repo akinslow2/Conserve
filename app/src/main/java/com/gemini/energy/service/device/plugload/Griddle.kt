@@ -44,13 +44,11 @@ class Griddle(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRat
     private var productionCapacity = 0.0
     private var fuelType = ""
 
-    var age = 0.0
+    var age = 0
 
 
     override fun setup() {
         try {
-
-
             peakHours = featureData["Peak Hours"]!! as Double
             partPeakHours = featureData["Part Peak Hours"]!! as Double
             offPeakHours = featureData["Off Peak Hours"]!! as Double
@@ -64,7 +62,7 @@ class Griddle(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRat
             productionCapacity = featureData["Production Capacity"]!! as Double
 
             fuelType = featureData["Fuel Type"]!! as String
-            age = (featureData["Age"]!! as Int).toDouble()
+            age = featureData["Age"]!! as Int
 
             usageHours = UsageSimple(peakHours, partPeakHours, offPeakHours)
         } catch (e: Exception) {

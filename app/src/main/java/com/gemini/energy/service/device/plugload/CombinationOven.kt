@@ -24,7 +24,6 @@ class CombinationOven(computable: Computable<*>, utilityRateGas: UtilityRate, ut
     }
 
     companion object {
-
         /**
          * This changes Kilowatts to BTU
          * */
@@ -58,7 +57,7 @@ class CombinationOven(computable: Computable<*>, utilityRateGas: UtilityRate, ut
     private var preIdleEnergyRateConvection = 0.0
     private var preIdleEnergyRateSteam = 0.0
 
-    var age = 0.0
+    var age = 0
 
     /**
      * The Adjustment Factor is taken care within the setup()
@@ -189,12 +188,10 @@ class CombinationOven(computable: Computable<*>, utilityRateGas: UtilityRate, ut
             waterUseSteam = featureData["Steam Water Usage Rate"]!! as Double
 
             steamPanSize = featureData["Size (Steam Pans)"]!! as Int
-            age = (featureData["Age"]!! as Int).toDouble()
-
+            age = featureData["Age"]!! as Int
         } catch (e: Exception) {
             e.printStackTrace()
         }
-
     }
 
     /**
@@ -232,6 +229,7 @@ class CombinationOven(computable: Computable<*>, utilityRateGas: UtilityRate, ut
         return cost.calculate()
 
     }
+
     override fun incentives(): Double {
         return 0.0
     }
@@ -388,19 +386,44 @@ class CombinationOven(computable: Computable<*>, utilityRateGas: UtilityRate, ut
      * Define all the fields here - These would be used to Generate the Outgoing Rows or perform the Energy Calculation
      * */
     override fun preAuditFields() = mutableListOf("Number of Vacation days")
-    override fun featureDataFields() = mutableListOf("Size (Steam Pans)", "Fuel Type", "Model Number",
-            "Company", "Used During Peak", "Age", "Control", "Preheat Energy",
-            "Convection Idle Energy", "Steam Idle Rate")
+    override fun featureDataFields() = mutableListOf(
+            "Size (Steam Pans)",
+            "Fuel Type",
+            "Model Number",
+            "Company",
+            "Used During Peak",
+            "Age",
+            "Control",
+            "Preheat Energy",
+            "Convection Idle Energy",
+            "Steam Idle Rate")
 
     override fun preStateFields() = mutableListOf<String>()
-    override fun postStateFields() = mutableListOf("company", "model_number", "size",
-            "fuel_type", "preheat_energy", "convection_idle_rate", "convection_energy_efficiency", "convection_production_capacity",
-            "convection_cooking_water_use", "steam_idle_rate", "steam_energy_efficiency", "steam_production_capacity", "steam_cooking_water_use",
-            "rebate", "pgne_measure_code", "purchase_price_per_unit", "vendor")
 
-    override fun computedFields() = mutableListOf("__daily_operating_hours", "__weekly_operating_hours",
-            "__yearly_operating_hours", "__electric_cost")
+    override fun postStateFields() = mutableListOf(
+            "company",
+            "model_number",
+            "size",
+            "fuel_type",
+            "preheat_energy",
+            "convection_idle_rate",
+            "convection_energy_efficiency",
+            "convection_production_capacity",
+            "convection_cooking_water_use",
+            "steam_idle_rate",
+            "steam_energy_efficiency",
+            "steam_production_capacity",
+            "steam_cooking_water_use",
+            "rebate",
+            "pgne_measure_code",
+            "purchase_price_per_unit",
+            "vendor")
 
+    override fun computedFields() = mutableListOf(
+            "__daily_operating_hours",
+            "__weekly_operating_hours",
+            "__yearly_operating_hours",
+            "__electric_cost")
 }
 
 
