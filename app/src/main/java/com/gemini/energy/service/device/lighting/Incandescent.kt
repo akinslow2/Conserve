@@ -21,22 +21,15 @@ class Incandescent(computable: Computable<*>, utilityRateGas: UtilityRate, utili
                    usageHours: UsageHours, outgoingRows: OutgoingRows, private val context: Context) :
         EBase(computable, utilityRateGas, utilityRateElectricity, usageHours, outgoingRows), IComputable {
 
-    /**
-     * Entry Point
-     * */
-    override fun compute(): Observable<Computable<*>> {
-        return super.compute(extra = ({ Timber.d(it) }))
-    }
-
     //create variable here if you want to make it global to the class with private
     private var percentPowerReduced = 0.0
     private var actualWatts = 0.0
     var lampsPerFixtures = 0
     var numberOfFixtures = 0
 
-    private var peakHours = 0
-    private var partPeakHours = 0
-    var offPeakHours = 0
+    private var peakHours = 0.0
+    private var partPeakHours = 0.0
+    var offPeakHours = 0.0
     var postUsageHours = 0
 
     var energyAtPreState = 0.0
@@ -76,22 +69,24 @@ class Incandescent(computable: Computable<*>, utilityRateGas: UtilityRate, utili
             val config = lightingConfig(ELightingType.Incandescent)
             percentPowerReduced = config[ELightingIndex.PercentPowerReduced.value] as Double
 
-            peakHours = featureData["Peak Hours"]!! as Int
-            partPeakHours = featureData["Part Peak Hours"]!! as Int
-            offPeakHours = featureData["Off Peak Hours"]!! as Int
+            peakHours = featureData["Peak Hours"]!! as Double
+            offPeakHours = featureData["Off Peak Hours"]!! as Double
 
             alternateActualWatts = featureData["Alternate Actual Watts"]!! as Double
             alternateNumberOfFixtures = featureData["Alternate Number of Fixtures"]!! as Int
             alternateLampsPerFixture = featureData["Alternate Lamps Per Fixture"]!! as Int
 
-            postpeakHours = featureData["Suggested Peak Hours"]!! as Double
-            postpartPeakHours = featureData["Suggested Part Peak Hours"]!! as Double
-            postoffPeakHours = featureData["Suggested Off Peak Hours"]!! as Double
-
             controls = featureData["Type of Control"]!! as String
         } catch (e: Exception) {
             e.printStackTrace()
         }
+    }
+
+    /**
+     * Entry Point
+     * */
+    override fun compute(): Observable<Computable<*>> {
+        return super.compute(extra = ({ Timber.d(it) }))
     }
 
     /**
