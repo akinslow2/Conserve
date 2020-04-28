@@ -22,21 +22,22 @@ class Refrigerator(computable: Computable<*>, utilityRateGas: UtilityRate, utili
     var age = 0
     var totalVolume = 0.0
     var dailyEnergyUse = 0.0
+
+
+    override fun setup() {
+        try {
+            totalVolume = featureData["Total Volume (cu.ft.)"] as Double
+            dailyEnergyUse = featureData["Daily Energy Used"] as Double
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
     /**
      * Entry Point
      * */
     override fun compute(): Observable<Computable<*>> {
         return super.compute(extra = ({ Timber.d(it) }))
-    }
-
-    override fun setup() {
-        try {
-            age = featureData["Age"]!! as Int
-            totalVolume = featureData["Total Volume"] as Double
-            dailyEnergyUse = featureData["Daily Energy Used"] as Double
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
     }
 
     /**
@@ -65,7 +66,6 @@ class Refrigerator(computable: Computable<*>, utilityRateGas: UtilityRate, utili
      * Cost - Post State
      * */
     var costPostState = 0.0
-
     override fun costPostState(element: JsonElement, dataHolder: DataHolder): Double {
         val powerUsed = hourlyEnergyUsagePost(element)[0]
         val costElectricity: Double
