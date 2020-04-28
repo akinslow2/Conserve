@@ -182,7 +182,7 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
 
             gasInput = featureData["Heating Input (Btu/hr)"]!! as Int
             gasOutput = featureData["Heating Output (Btu/hr)"]!! as Int
-            
+
             economizer = featureData["Economizer"]!! as String
             quantity = featureData["Quantity"]!! as Int
 
