@@ -215,6 +215,15 @@
           "param": "Condenser Off Peak Hours",
           "validation": "optional",
           "id": "32"
+        },
+        {
+          "index": 33,
+          "hint": "",
+          "dataType": "introw",
+          "defaultValues": "",
+          "param": "Sensor Number (first 4 digits)",
+          "validation": "optional",
+          "id": "33"
         }
       ],
       "id": "3"
@@ -400,6 +409,15 @@
           "param": "Evaporator Off Peak Hours",
           "validation": "optional",
           "id": "52"
+        },
+        {
+          "index": 53,
+          "hint": "",
+          "dataType": "introw",
+          "defaultValues": "",
+          "param": "Sensor Number (first 4 digits)",
+          "validation": "optional",
+          "id": "53"
         }
       ],
       "id": "5"

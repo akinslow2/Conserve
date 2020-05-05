@@ -286,7 +286,7 @@
         },
         {
           "index": 52,
-          "hint": "",
+          "hint": "rq for HVAC calcs",
           "dataType": "decimalrow",
           "defaultValues": "",
           "param": "Conditioned (Sq.Ft.)",
@@ -483,10 +483,10 @@
         },
         {
           "index": 102,
-          "hint": "",
+          "hint": "rq for HVAC calc",
           "dataType": "pickerinputrow",
           "defaultValues": "1:yes,2:no",
-          "param": "Poorly insulated",
+          "param": "Insulation added in the last 5 years?",
           "validation": "optional",
           "id": "102"
         },
@@ -495,9 +495,18 @@
           "hint": "",
           "dataType": "pickerinputrow",
           "defaultValues": "1:yes,2:no",
-          "param": "Loose building",
+          "param": "Poorly insulated",
           "validation": "optional",
           "id": "103"
+        },
+        {
+          "index": 104,
+          "hint": "",
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:yes,2:no",
+          "param": "Loose building",
+          "validation": "optional",
+          "id": "104"
         }
       ],
       "id": "10"
@@ -511,7 +520,7 @@
           "hint": "",
           "dataType": "pickerinputrow",
           "defaultValues": "1:N,2:NE,3:E,4:SE,5:S,6:SW,7:W,8:NW",
-          "param": "Façade orientation",
+          "param": "Facade orientation",
           "validation": "optional",
           "id": "111"
         },

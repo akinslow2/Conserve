@@ -70,6 +70,7 @@ class Cfl(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEle
             return 0.0
         }
     }
+
     //create variable here if you want to make it global to the class with private
     private var percentPowerReduced = 0.0
     private var actualWatts = 0.0
@@ -78,7 +79,6 @@ class Cfl(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEle
     private var peakHours = 0.0
     private var partPeakHours = 0.0
     var offPeakHours = 0.0
-
 
     private var ControlType1 = ""
     private var ControlType2 = ""
@@ -106,7 +106,6 @@ class Cfl(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEle
     private var alternateActualWatts = 0.0
     private var alternateNumberOfFixtures = 0
     private var alternateLampsPerFixture = 0
-
 
 
     //Where you extract from user inputs and assign to variables

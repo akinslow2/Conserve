@@ -299,5 +299,4 @@ class HPSodium(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRa
     private fun getFormMapper() = FormMapper(context, R.raw.hpsodium)
     private fun getModel() = getFormMapper().decodeJSON()
     private fun getGFormElements() = getFormMapper().mapIdToElements(getModel())
-
 }

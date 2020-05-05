@@ -113,9 +113,9 @@ class Halogen(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRat
     override fun costPreState(element: List<JsonElement?>): Double {
 
         val usageHours = UsageLighting()
-        usageHours.peakHours = peakHours.toDouble()
-        usageHours.partPeakHours = partPeakHours.toDouble()
-        usageHours.offPeakHours = offPeakHours.toDouble()
+        usageHours.peakHours = peakHours
+        usageHours.partPeakHours = partPeakHours
+        usageHours.offPeakHours = offPeakHours
 
         return costElectricity(prePower(), usageHours, electricityRate)
     }
@@ -252,9 +252,9 @@ class Halogen(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRat
         else {
             val postPower = energyPowerChange()/usageHoursPre()
             val usageHours = UsageLighting()
-            usageHours.peakHours = peakHours.toDouble()
-            usageHours.partPeakHours = partPeakHours.toDouble()
-            usageHours.offPeakHours = offPeakHours.toDouble()
+            usageHours.peakHours = peakHours
+            usageHours.partPeakHours = partPeakHours
+            usageHours.offPeakHours = offPeakHours
             return costElectricity(postPower, usageHours, electricityRate)
         }
     }

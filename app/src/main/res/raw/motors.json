@@ -33,7 +33,7 @@
         },
         {
           "index": 14,
-          "hint": "(Rq1) (Rq for BLPM)",
+          "hint": "(Rq1)",
           "dataType": "decimalrow",
           "defaultValues": "",
           "param": "Horsepower (HP)",
@@ -141,7 +141,7 @@
         },
         {
           "index": 116,
-          "hint": "Rq for BLPM Circ Pump",
+          "hint": "Rq ",
           "dataType": "pickerinputrow",
           "defaultValues": "1:yes,2:no",
           "param": "Controls",
@@ -172,6 +172,15 @@
           "param": "Off Peak Hours",
           "validation": "optional",
           "id": "22"
+        },
+        {
+          "index": 23,
+          "hint": "",
+          "dataType": "introw",
+          "defaultValues": "",
+          "param": "Sensor Number (first 4 digits)",
+          "validation": "optional",
+          "id": "23"
         }
       ],
       "id": "2"
@@ -200,7 +209,7 @@
         },
         {
           "index": 33,
-          "hint": "(Rq1) (Rq for BLPM)",
+          "hint": "(Rq1) ",
           "dataType": "decimalrow",
           "defaultValues": "",
           "param": "Alternate Horsepower (HP)",

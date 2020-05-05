@@ -159,6 +159,15 @@
           "param": "Off Peak Hours",
           "validation": "optional",
           "id": "42"
+        },
+        {
+          "index": 43,
+          "hint": "",
+          "dataType": "introw",
+          "defaultValues": "",
+          "param": "Sensor Number (first 4 digits)",
+          "validation": "optional",
+          "id": "43"
         }
       ],
       "id": "4"
