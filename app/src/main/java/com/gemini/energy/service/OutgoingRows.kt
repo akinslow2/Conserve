@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Environment
 import android.util.Log
 import com.dropbox.core.v2.files.FileMetadata
+import com.gemini.energy.branch
 import com.gemini.energy.domain.entity.Computable
 import com.gemini.energy.presentation.audit.DropBox
 import com.gemini.energy.presentation.audit.UploadFileTask
@@ -12,6 +13,7 @@ import java.io.BufferedOutputStream
 import java.io.ByteArrayInputStream
 import java.io.File
 import java.io.FileOutputStream
+import java.util.*
 
 class DataHolder {
 
@@ -22,13 +24,14 @@ class DataHolder {
     set(value) {
         this.path = StringBuilder()
 
-                .append("${value?.auditName?.toLowerCase()?.replace("\\s+".toRegex(), "_")}/")
-                .append("${value?.zoneName?.toLowerCase()?.replace("\\s+".toRegex(), "_")}/")
-                .append("${value?.auditScopeType?.value?.toLowerCase()}_")
-                .append("${value?.auditScopeSubType?.toString()?.toLowerCase()}_")
-                .append("${value?.auditScopeName?.toLowerCase()?.replace("[^a-zA-Z0-9]".toRegex(), "_")}/")
+                .append("${value?.auditName?.toLowerCase(Locale.ROOT)?.replace("\\s+".toRegex(), "_")}/")
+                .append("${value?.zoneName?.toLowerCase(Locale.ROOT)?.replace("\\s+".toRegex(), "_")}/")
+                .append("${value?.auditScopeType?.value?.toLowerCase(Locale.ROOT)}_")
+                .append("${value?.auditScopeSubType?.toString()?.toLowerCase(Locale.ROOT)}_")
+                .append("${value?.auditScopeName?.toLowerCase(Locale.ROOT)?.replace("[^a-zA-Z0-9]".toRegex(), "_")}/")
 
                 .toString()
+        field = value
     }
 
     /**
@@ -88,7 +91,7 @@ class OutgoingRows(private val context: Context) {
                 outgoing.append(data(header, rows))
                 val file = getFile(eachData.path, eachData.fileName)
                 val data = outgoing.toString()
-                val path = "/Gemini/Energy/${eachData.path}${eachData.fileName}"
+                val path = "/General_Information/Gemini/Energy/$branch/${eachData.path}${eachData.fileName}"
 
                 writeToLocal(data, file)
                 writeToDropBox(data, path)
