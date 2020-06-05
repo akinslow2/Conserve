@@ -18,7 +18,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:textColor="@drawable/button_selector"
-            android:background="?android:attr/selectableItemBackground"
+            android:background="?attr/selectableItemBackground"
             android:textSize="@dimen/elementTextValueSize"
             tools:text="Edit Description"
             android:layout_width="match_parent" />
