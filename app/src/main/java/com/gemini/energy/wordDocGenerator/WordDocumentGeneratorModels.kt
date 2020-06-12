@@ -20,9 +20,7 @@ data class HvacInstances(
         val thermotype: String
 )
 
-data class HvacValues(
-        val instances: List<HvacInstances>,
-
+data class PreAuditValues(
         val businessname: String, //1
         val auditmonth: String, //2
         val audityear: String, // 3
@@ -34,7 +32,11 @@ data class HvacValues(
         val bldgtype: String, // 12
         val electricstructure: String, //10
         val utilitycompany: String, //9
-        val gasstructure: String, // 11
+        val gasstructure: String // 11
+)
+
+data class HvacValues(
+        val instances: List<HvacInstances>,
 
         val costPostState: Double, // 20
         val totalCost: Double,
@@ -127,9 +129,10 @@ data class BuildingValues(
 
 data class PreparedForDocument(
         val auditId: Long,
+        val preAudit: PreAuditValues,
         val zoneNames: MutableList<String>,
         val zoneString: String,
-        val hvac: HvacValues,
+        val hvac: HvacValues?,
         val lighting: LightingValues?,
         val waterHeater: WaterHeaterValues?,
         val refrigeration: RefrigerationValues?,

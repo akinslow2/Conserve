@@ -47,15 +47,17 @@ class SorterForWordDocumentGenerator {
             val equipment = prepareValuesForEquipment(audit.value)
             val refrigeration = prepareValuesFromRefrigeration(audit.value)
             val building = prepareBuildingValuesForEquipment(lighting, equipment, hvac, waterheater, refrigeration)
+            val preaudit = prepareValuesForPreAudit(audit.value)
 
             val zones = aggregateZoneNames(audit.value)
             val zoneString = concatenateZoneString(zones)
 
-            if (hvac == null || hvac.businessname.isBlank()) {
+            if (preaudit == null || preaudit.businessname.isBlank()) {
                 continue
             } else {
                 returnAble.add(PreparedForDocument(
                         audit.key,
+                        preaudit,
                         zones,
                         zoneString,
                         hvac,
@@ -68,6 +70,45 @@ class SorterForWordDocumentGenerator {
         }
 
         return returnAble.toList()
+    }
+
+    private fun prepareValuesForPreAudit(audit: AuditComponents): PreAuditValues? {
+        val allEquipment = audit.flatMap { it.value }
+        val distinctPreAuditValues = allEquipment.distinctBy { it.preAudit }
+
+        val equipment = distinctPreAuditValues.firstOrNull()
+        if (equipment != null
+                && equipment.preAudit.containsKey("General Client Info Business Name")
+                && equipment.preAudit.containsKey("General Client Info Audit Month")
+                && equipment.preAudit.containsKey("General Client Info Audit Year")
+                && equipment.preAudit.containsKey("General Client Info Address")
+                && equipment.preAudit.containsKey("General Client Info Assessment Start Day")
+                && equipment.preAudit.containsKey("General Client Info Assessment End Day")
+                && equipment.preAudit.containsKey("Operation Hours Monday Operating Hours")
+                && equipment.preAudit.containsKey("Area Total (Sq.Ft.)")
+                && equipment.preAudit.containsKey("General Client Info Facility Type")
+                && equipment.preAudit.containsKey("Others Electric Rate Structure")
+                && equipment.preAudit.containsKey("Others Utility Company")
+                && equipment.preAudit.containsKey("Others Gas Rate Structure")) {
+            val preAudit = equipment.preAudit
+            return PreAuditValues(
+                    preAudit["General Client Info Business Name"]!! as String,
+                    preAudit["General Client Info Audit Month"]!! as String,
+                    preAudit["General Client Info Audit Year"]!! as String,
+                    preAudit["General Client Info Address"]!! as String,
+                    preAudit["General Client Info Assessment Start Day"]!! as String,
+                    preAudit["General Client Info Assessment End Day"]!! as String,
+                    preAudit["Operation Hours Monday Operating Hours"]!! as String,
+                    preAudit["Area Total (Sq.Ft.)"]!! as Double,
+                    preAudit["General Client Info Facility Type"]!! as String,
+                    preAudit["Others Electric Rate Structure"]!! as String,
+                    preAudit["Others Utility Company"]!! as String,
+                    preAudit["Others Gas Rate Structure"]!! as String
+            )
+
+        }
+
+        return null
     }
 
     private fun aggregateZoneNames(audit: AuditComponents): MutableList<String> {
@@ -214,23 +255,8 @@ class SorterForWordDocumentGenerator {
             ))
         }
 
-        val hvac = audit[hvac]!!.first() as Hvac
-
         return HvacValues(
                 instances.toList(),
-
-                hvac.businessname,
-                hvac.auditmonth,
-                hvac.audityear,
-                hvac.clientaddress,
-                hvac.startday,
-                hvac.endday,
-                hvac.operationhours,
-                hvac.bldgarea,
-                hvac.bldgtype,
-                hvac.electricstructure,
-                hvac.utilitycompany,
-                hvac.gasstructure,
 
                 costPostState,
                 totalCost,
@@ -564,24 +590,34 @@ class SorterForWordDocumentGenerator {
 
         @Suppress("UNCHECKED_CAST")
         val combinationOven = audit[combinationOven]!! as List<CombinationOven>
+
         @Suppress("UNCHECKED_CAST")
         val convectionOven = audit[convectionOven]!! as List<ConvectionOven>
+
         @Suppress("UNCHECKED_CAST")
         val conveyorOven = audit[conveyorOven]!! as List<ConveyorOven>
+
         @Suppress("UNCHECKED_CAST")
         val fryer = audit[fryer]!! as List<Fryer>
+
         @Suppress("UNCHECKED_CAST")
         val iceMaker = audit[iceMaker]!! as List<IceMaker>
+
         @Suppress("UNCHECKED_CAST")
         val steamCooker = audit[steamCooker]!! as List<SteamCooker>
+
         @Suppress("UNCHECKED_CAST")
         val griddle = audit[griddle]!! as List<Griddle>
+
         @Suppress("UNCHECKED_CAST")
         val hotFoodCabinet = audit[hotFoodCabinet]!! as List<HotFoodCabinet>
+
         @Suppress("UNCHECKED_CAST")
         val conveyorBroiler = audit[conveyorBroiler]!! as List<ConveyorBroiler>
+
         @Suppress("UNCHECKED_CAST")
         val dishwasher = audit[dishWasher]!! as List<DishWasher>
+
         @Suppress("UNCHECKED_CAST")
         val preRinseSpray = audit[preRinseSpray]!! as List<PreRinseSpray>
 
