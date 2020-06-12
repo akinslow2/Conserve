@@ -180,6 +180,8 @@ abstract class EBase(val computable: Computable<*>,
         //TODO: @k2interactive added the queryHVACCDDHours
         //val extractorHVAC = listOf(dataExtractHVAC(queryHVACCoolingHours()),
            //     dataExtractHVAC(queryHVACEer()), dataExtractHVAC(queryHVACCDDHours()))
+        val extractorHVAC = listOf(dataExtractHVAC(queryHVACCoolingHours()),
+             dataExtractHVAC(queryHVACEer()))
 
         val extractorMotor = listOf(dataExtractMotors(queryMotorEfficiency()), dataExtractMotors(queryBEDMotorVFDprescriptivekwh()),
                 dataExtractMotors(queryBEDMotorVFDprescriptivekw()))

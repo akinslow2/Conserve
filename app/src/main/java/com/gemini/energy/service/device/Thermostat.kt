@@ -73,32 +73,32 @@ class Thermostat(computable: Computable<*>, utilityRateGas: UtilityRate, utility
             return 0.0
         }
 
-        /**
-         * Cost - Pre State
-         * */
-        override fun costPreState(elements: List<JsonElement?>): Double = 0.0
-
-        /**
-         * Cost - Post State
-         * */
-        override fun costPostState(element: JsonElement, dataHolder: DataHolder): Double {
-
-            val implementationCost = 44
-
-            val postRow = mutableMapOf<String, String>()
-
-            postRow["__implementation_cost"] = implementationCost.toString()
-
-
-            dataHolder.header = postStateFields()
-            dataHolder.computable = computable
-            dataHolder.fileName = "${Date().time}_post_state.csv"
-            dataHolder.rows?.add(postRow)
-
-            return -99.99
-
-
-        }
+//        /**
+//         * Cost - Pre State
+//         * */
+//        override fun costPreState(elements: List<JsonElement?>): Double = 0.0
+//
+//        /**
+//         * Cost - Post State
+//         * */
+//        override fun costPostState(element: JsonElement, dataHolder: DataHolder): Double {
+//
+//            val implementationCost = 44
+//
+//            val postRow = mutableMapOf<String, String>()
+//
+//            postRow["__implementation_cost"] = implementationCost.toString()
+//
+//
+//            dataHolder.header = postStateFields()
+//            dataHolder.computable = computable
+//            dataHolder.fileName = "${Date().time}_post_state.csv"
+//            dataHolder.rows?.add(postRow)
+//
+//            return -99.99
+//
+//
+//        }
 
         // TODO: Test me
         fun extractThermostatDeemedCost(element: JsonElement): Double {
