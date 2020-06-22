@@ -90,10 +90,6 @@ class LinearFluorescent(computable: Computable<*>, utilityRateGas: UtilityRate, 
             ballastsPerFixtures = featureData["Ballasts Per Fixture"]!! as Int
             numberOfFixtures = featureData["Number of Fixtures"]!! as Int
 
-            peakHours = featureData["Peak Hours"]!! as Double
-            partPeakHours = featureData["Part Peak Hours"]!! as Double
-            offPeakHours = featureData["Off Peak Hours"]!! as Double
-
             alternateActualWatts = featureData["Alternate Actual Watts"]!! as Double
             alternateNumberOfFixtures = featureData["Alternate Number of Fixtures"]!! as Int
             alternateLampsPerFixture = featureData["Alternate Lamps Per Fixture"]!! as Int
@@ -106,6 +102,10 @@ class LinearFluorescent(computable: Computable<*>, utilityRateGas: UtilityRate, 
             postoffPeakHours = featureData["Suggested Off Peak Hours"]!! as Double
 
             controls = featureData["Type of Control"]!! as String
+
+            peakHours = featureData["Peak Hours"]!! as Double
+            partPeakHours = featureData["Part Peak Hours"]!! as Double
+            offPeakHours = featureData["Off Peak Hours"]!! as Double
 
         } catch (e: Exception) {
             e.printStackTrace()
@@ -120,6 +120,8 @@ class LinearFluorescent(computable: Computable<*>, utilityRateGas: UtilityRate, 
         usageHours.peakHours = peakHours
         usageHours.partPeakHours = partPeakHours
         usageHours.offPeakHours = offPeakHours
+        usageHours.build()
+        preauditHours.build()
         if (usageHours.yearly() < 1.0){
             return  preauditHours.yearly()}
         else { return usageHours.yearly()}
@@ -142,10 +144,13 @@ class LinearFluorescent(computable: Computable<*>, utilityRateGas: UtilityRate, 
         usageHours.peakHours = peakHours
         usageHours.partPeakHours = partPeakHours
         usageHours.offPeakHours = offPeakHours
-
+        usageHours.build()
 
         return costElectricity(prePower(), usageHours, electricityRate)
     }
+
+
+
 
     /**
      * Cost - Post State
@@ -173,19 +178,10 @@ class LinearFluorescent(computable: Computable<*>, utilityRateGas: UtilityRate, 
         val energySavings = prePower() * percentPowerReduced
         val coolingSavings = energySavings * cooling / seer
 
-        val usageHours = UsageLighting()
-         usageHours.peakHours = peakHours
-         usageHours.partPeakHours = partPeakHours
-         usageHours.offPeakHours = offPeakHours
-        totalenergySavings = (energysavings + coolingSavings)
-        energycostSavings = costElectricity(totalenergySavings, usageHours, electricityRate)
-
-        //@k2 I added these equations becuase before hand it was adding kWh and $$$ please make sure
-        //that the variable "totalsavings" 4 lines below is being used for the Lighting Table value "Life Cost Savings"
         val energyAtPostState = preEnergy() - energySavings
         val paybackmonth = selfinstallcost / energySavings * 12
         val paybackyear = selfinstallcost / energySavings
-        val totalsavings =  energycostSavings * 8 + maintenanceSavings
+        val totalsavings =  totalSavings()
 
         val postRow = mutableMapOf<String, String>()
         postRow["__life_hours"] = lifeHours.toString()
@@ -227,6 +223,7 @@ class LinearFluorescent(computable: Computable<*>, utilityRateGas: UtilityRate, 
         postusageHours.postpeakHours = postpeakHours
         postusageHours.postpartPeakHours = postpartPeakHours
         postusageHours.postoffPeakHours = postoffPeakHours
+        postusageHours.build()
 
         if (postusageHours.yearly() > 0.0)
             return postusageHours.yearly()
@@ -278,22 +275,22 @@ class LinearFluorescent(computable: Computable<*>, utilityRateGas: UtilityRate, 
     }
 
     fun totalSavings(): Double {
-        if (controls == null && usageHoursPost() != null){
-            val postPower = energyPowerTimeChange()/usageHoursPost()
-            val postusageHours = UsageLighting()
-            postusageHours.postpeakHours = postpeakHours
-            postusageHours.postpartPeakHours = postpartPeakHours
-            postusageHours.postoffPeakHours = postoffPeakHours
-            return costElectricity(postPower, postusageHours, electricityRate)
-        }
-        else {
-            val postPower = energyPowerChange()/usageHoursPre()
-            val usageHours = UsageLighting()
-            usageHours.peakHours = peakHours
-            usageHours.partPeakHours = partPeakHours
-            usageHours.offPeakHours = offPeakHours
-            return costElectricity(postPower, usageHours, electricityRate)
-        }
+        val lifeHours = lightingConfig(ELightingType.LinearFluorescent)[ELightingIndex.LifeHours.value] as Double
+        val totalUnits = lampsPerFixtures * numberOfFixtures
+        val replacementIndex = LEDlifeHours / lifeHours
+        val expectedLife = LEDlifeHours / usageHoursSpecific.yearly()
+        val maintenanceSavings = totalUnits * bulbcost * replacementIndex / expectedLife
+        val energySavings = prePower() * percentPowerReduced
+        val coolingSavings = energySavings * cooling / seer
+
+        val usageHours = UsageLighting()
+        usageHours.peakHours = peakHours
+        usageHours.partPeakHours = partPeakHours
+        usageHours.offPeakHours = offPeakHours
+        usageHours.build()
+        val totalenergySavings = (energySavings + coolingSavings)
+        val energycostSavings = costElectricity(totalenergySavings, usageHours, electricityRate)
+        return energycostSavings * 8 + maintenanceSavings;
     }
 
     /**
