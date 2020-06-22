@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
 
     <!-- Base application theme. -->
@@ -11,8 +12,8 @@
     <!-- Toolbar Setup -->
     <style name="AppTheme.Toolbar">
         <item name="actionMenuTextColor">@android:color/white</item>
-        <item name="android:background">#689f38</item>
-        <item name="android:actionMenuTextAppearance">@style/MyActionBarMenuText</item>
+        <item name="android:background">@color/toolbarBackground</item>
+        <item name="actionMenuTextAppearance">@style/MyActionBarMenuText</item>
     </style>
 
     <!-- Toolbar : Text Setup -->
@@ -21,10 +22,9 @@
     </style>
 
 
-
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
 
     <!-- Tab Bar Setup -->

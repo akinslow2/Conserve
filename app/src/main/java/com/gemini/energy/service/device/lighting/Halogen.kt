@@ -75,17 +75,17 @@ class Halogen(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRat
             val config = lightingConfig(ELightingType.Halogen)
             percentPowerReduced = config[ELightingIndex.PercentPowerReduced.value] as Double
 
-            peakHours = featureData["Peak Hours"]!! as Double
-            partPeakHours = featureData["Part Peak Hours"]!! as Double
-            offPeakHours = featureData["Off Peak Hours"]!! as Double
+            peakHours = (featureData["Peak Hours"]!! as Int).toDouble()
+            partPeakHours = (featureData["Part Peak Hours"]!! as Int).toDouble()
+            offPeakHours = (featureData["Off Peak Hours"]!! as Int).toDouble()
 
             alternateActualWatts = featureData["Alternate Actual Watts"]!! as Double
             alternateNumberOfFixtures = featureData["Alternate Number of Fixtures"]!! as Int
             alternateLampsPerFixture = featureData["Alternate Lamps Per Fixture"]!! as Int
 
-            postpeakHours = featureData["Suggested Peak Hours"]!! as Double
-            postpartPeakHours = featureData["Suggested Part Peak Hours"]!! as Double
-            postoffPeakHours = featureData["Suggested Off Peak Hours"]!! as Double
+            postpeakHours = (featureData["Suggested Peak Hours"]!! as Int).toDouble()
+            postpartPeakHours = (featureData["Suggested Part Peak Hours"]!! as Int).toDouble()
+            postoffPeakHours = (featureData["Suggested Off Peak Hours"]!! as Int).toDouble()
 
             controls = featureData["Type of Control"]!! as String
 

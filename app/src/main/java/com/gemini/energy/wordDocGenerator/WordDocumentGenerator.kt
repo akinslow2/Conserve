@@ -56,7 +56,7 @@ class WordDocumentGenerator {
 
     // generation
     private fun generateDocument(value: PreparedForDocument, document: XWPFDocument): XWPFDocument {
-        generateFirstPage(document, value.hvac)
+        generateFirstPage(document, value.preAudit)
 
         generateEnergySavingPotentialPage(
                 document,
@@ -68,7 +68,9 @@ class WordDocumentGenerator {
             generateLightingSavingsPage(document, value.lighting)
         }
 
-        generateHvacSavingsPage(document, value.hvac, value.building)
+        if (value.hvac != null) {
+            generateHvacSavingsPage(document, value.hvac, value.building)
+        }
 
         if (value.waterHeater != null) {
             generateWaterHeaterSavingsPage(document, value.waterHeater)
@@ -78,7 +80,7 @@ class WordDocumentGenerator {
             generateEquipmentSavingsPage(document, value.equipment)
         }
 
-        generateFacilityInformationPage(document, value, value.hvac)
+        generateFacilityInformationPage(document, value, value.preAudit)
 
         addPageNumbers(document)
 
@@ -88,7 +90,7 @@ class WordDocumentGenerator {
     }
 
     // generate pages
-    private fun generateFirstPage(document: XWPFDocument, hvac: HvacValues) {
+    private fun generateFirstPage(document: XWPFDocument, preAudit: PreAuditValues) {
         val p1 = document.createParagraph()
         p1.alignment = ParagraphAlignment.CENTER
         p1.spacingBetween = 1.5
@@ -99,9 +101,9 @@ class WordDocumentGenerator {
         r1p1.isBold = true
         r1p1.setText("Energy Audit Report")
         r1p1.addBreak()
-        r1p1.setText(hvac.businessname)
+        r1p1.setText(preAudit.businessname)
         r1p1.addBreak()
-        r1p1.setText("${hvac.auditmonth} ${hvac.audityear}")
+        r1p1.setText("${preAudit.auditmonth} ${preAudit.audityear}")
 
         val p2 = document.createParagraph()
         p2.spacingBetween = 1.08
@@ -110,7 +112,7 @@ class WordDocumentGenerator {
         r1p2.fontFamily = fontAgencyFB
         r1p2.fontSize = 12
         r1p2.color = greyColor
-        r1p2.setText("This report presents the results of an energy assessment conducted ${hvac.auditmonth} ${hvac.startday}")
+        r1p2.setText("This report presents the results of an energy assessment conducted ${preAudit.auditmonth} ${preAudit.startday}")
         val r2p2 = p2.createRun()
         r2p2.fontFamily = fontAgencyFB
         r2p2.fontSize = 12
@@ -121,7 +123,7 @@ class WordDocumentGenerator {
         r3p2.fontFamily = fontAgencyFB
         r3p2.fontSize = 12
         r3p2.color = greyColor
-        r3p2.setText(" through ${hvac.auditmonth} ${hvac.endday}")
+        r3p2.setText(" through ${preAudit.auditmonth} ${preAudit.endday}")
         val r4p2 = p2.createRun()
         r4p2.fontFamily = fontAgencyFB
         r4p2.fontSize = 12
@@ -135,9 +137,9 @@ class WordDocumentGenerator {
         r5p2.setText(" and evaluation of potential improvements to reduce energy consumption and related operating cost at ")
         r5p2.addBreak()
         r5p2.addBreak()
-        r5p2.setText(hvac.businessname)
+        r5p2.setText(preAudit.businessname)
         r5p2.addBreak()
-        r5p2.setText(hvac.clientaddress)
+        r5p2.setText(preAudit.clientaddress)
     }
 
     private fun generateEnergySavingPotentialPage(document: XWPFDocument, lightingData: LightingValues, buildingValues: BuildingValues) {
@@ -472,7 +474,7 @@ class WordDocumentGenerator {
         }
     }
 
-    private fun generateFacilityInformationPage(document: XWPFDocument, values: PreparedForDocument, hvac: HvacValues) {
+    private fun generateFacilityInformationPage(document: XWPFDocument, values: PreparedForDocument, preAudit: PreAuditValues) {
         val p1 = document.createParagraph()
         p1.spacingBetween = 1.5
         p1.isPageBreak = true
@@ -488,13 +490,13 @@ class WordDocumentGenerator {
         val r1p2 = p2.createRun()
         r1p2.fontFamily = fontAgencyFB
         r1p2.fontSize = 12
-        r1p2.setText("${hvac.businessname} is ${hvac.bldgarea.format(0)} square feet and includes a ${values.zoneString}. ${hvac.businessname} is open daily from ${hvac.operationhours}. This building is classified as ${hvac.bldgtype}.")
+        r1p2.setText("${preAudit.businessname} is ${preAudit.bldgarea.format(0)} square feet and includes a ${values.zoneString}. ${preAudit.businessname} is open daily from ${preAudit.operationhours}. This building is classified as ${preAudit.bldgtype}.")
         r1p2.addBreak()
         r1p2.addBreak()
-        r1p2.setText("${hvac.businessname} is on the ${hvac.electricstructure} ${hvac.utilitycompany} electric rate schedule. In the one-year period from $manuallyGeneratedValue through $manuallyGeneratedValue, ${hvac.businessname} consumed $manuallyGeneratedValue kWh, resulting in an electrical cost of $$manuallyGeneratedValue.")
+        r1p2.setText("${preAudit.businessname} is on the ${preAudit.electricstructure} ${preAudit.utilitycompany} electric rate schedule. In the one-year period from $manuallyGeneratedValue through $manuallyGeneratedValue, ${preAudit.businessname} consumed $manuallyGeneratedValue kWh, resulting in an electrical cost of $$manuallyGeneratedValue.")
         r1p2.addBreak()
         r1p2.addBreak()
-        r1p2.setText("${hvac.businessname} is on the ${hvac.gasstructure} ${hvac.utilitycompany} gas rate schedule and for above stated time period, ${hvac.businessname} used $manuallyGeneratedValue therms at a cost of $$manuallyGeneratedValue.")
+        r1p2.setText("${preAudit.businessname} is on the ${preAudit.gasstructure} ${preAudit.utilitycompany} gas rate schedule and for above stated time period, ${preAudit.businessname} used $manuallyGeneratedValue therms at a cost of $$manuallyGeneratedValue.")
     }
 
     // generate tables
@@ -1224,7 +1226,7 @@ class WordDocumentGenerator {
     private fun writeDocument(value: PreparedForDocument, document: XWPFDocument) {
         val calendar = Calendar.getInstance()
         val dateTime = "${calendar.get(Calendar.YEAR)}-${calendar.get(Calendar.MONTH) + 1}-${calendar.get(Calendar.DAY_OF_MONTH)}T${calendar.get(Calendar.HOUR_OF_DAY)}:${calendar.get(Calendar.MINUTE)}:${calendar.get(Calendar.SECOND)}.${calendar.get(Calendar.MILLISECOND)}"
-        val docName = "${value.hvac.bldgtype}_${value.hvac.businessname}_$dateTime"
+        val docName = "${value.preAudit.bldgtype}_${value.preAudit.businessname}_$dateTime"
 
         writeDocumentWithName(document, docName)
         val file = File(Environment.getExternalStorageDirectory().absolutePath + "/${docName}.docx")
