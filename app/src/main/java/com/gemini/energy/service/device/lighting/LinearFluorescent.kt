@@ -33,7 +33,7 @@ class LinearFluorescent(computable: Computable<*>, utilityRateGas: UtilityRate, 
          * Hypothetical Cost of Replacement for Linear Fluorescent
          * */
         private const val ledbulbcost = 12.0
-        private const val bulbcost = 3.0
+        private const val bulbcost = 4.0
 
         /**
          * Conversion Factor from Watts to Kilo Watts
@@ -170,14 +170,22 @@ class LinearFluorescent(computable: Computable<*>, utilityRateGas: UtilityRate, 
         // Delta is going to be Power Used * Percentage Power Reduced
         // Percentage Power Reduced - we get it from the Base - ELighting
 
-        val energySavings = preEnergy() * percentPowerReduced
+        val energySavings = prePower() * percentPowerReduced
         val coolingSavings = energySavings * cooling / seer
 
+        val usageHours = UsageLighting()
+         usageHours.peakHours = peakHours
+         usageHours.partPeakHours = partPeakHours
+         usageHours.offPeakHours = offPeakHours
+        totalenergySavings = (energysavings + coolingSavings)
+        energycostSavings = costElectricity(totalenergySavings, usageHours, electricityRate)
 
+        //@k2 I added these equations becuase before hand it was adding kWh and $$$ please make sure
+        //that the variable "totalsavings" 4 lines below is being used for the Lighting Table value "Life Cost Savings"
         val energyAtPostState = preEnergy() - energySavings
         val paybackmonth = selfinstallcost / energySavings * 12
         val paybackyear = selfinstallcost / energySavings
-        val totalsavings = energySavings + coolingSavings + maintenanceSavings
+        val totalsavings =  energycostSavings * 8 + maintenanceSavings
 
         val postRow = mutableMapOf<String, String>()
         postRow["__life_hours"] = lifeHours.toString()
