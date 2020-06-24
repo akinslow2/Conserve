@@ -13,7 +13,7 @@ open class UsageHours {
      * UsageHours Hours - Could either be from the PreAudit i.e. PRE
      * or could be Device Specific i.e. POST
      * */
-    private lateinit var usage: Map<EDay, String?>
+    private var usage: Map<EDay, String?> = mapOf()
     private lateinit var mapper: PeakHourMapper
 
     /**
