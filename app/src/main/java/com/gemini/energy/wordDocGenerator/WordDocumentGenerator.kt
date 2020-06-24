@@ -490,13 +490,13 @@ class WordDocumentGenerator {
         val r1p2 = p2.createRun()
         r1p2.fontFamily = fontAgencyFB
         r1p2.fontSize = 12
-        r1p2.setText("${preAudit.businessname} is ${preAudit.bldgarea.format(0)} square feet and includes a ${values.zoneString}. ${preAudit.businessname} is open daily from ${preAudit.operationhours}. This building is classified as ${preAudit.bldgtype}.")
+        r1p2.setText("${preAudit.businessname}is ${preAudit.bldgarea.format(0)} square feet and includes a ${values.zoneString}. ${preAudit.businessname} is open daily from ${preAudit.operationhours}. This building is classified as ${preAudit.bldgtype}.")
         r1p2.addBreak()
         r1p2.addBreak()
-        r1p2.setText("${preAudit.businessname} is on the ${preAudit.electricstructure} ${preAudit.utilitycompany} electric rate schedule. In the one-year period from $manuallyGeneratedValue through $manuallyGeneratedValue, ${preAudit.businessname} consumed $manuallyGeneratedValue kWh, resulting in an electrical cost of $$manuallyGeneratedValue.")
+        r1p2.setText("${preAudit.businessname}is on the ${preAudit.electricstructure} ${preAudit.utilitycompany} electric rate schedule. In the one-year period from $manuallyGeneratedValue through $manuallyGeneratedValue, ${preAudit.businessname} consumed $manuallyGeneratedValue kWh, resulting in an electrical cost of $$manuallyGeneratedValue.")
         r1p2.addBreak()
         r1p2.addBreak()
-        r1p2.setText("${preAudit.businessname} is on the ${preAudit.gasstructure} ${preAudit.utilitycompany} gas rate schedule and for above stated time period, ${preAudit.businessname} used $manuallyGeneratedValue therms at a cost of $$manuallyGeneratedValue.")
+        r1p2.setText("${preAudit.businessname}is on the ${preAudit.gasstructure} ${preAudit.utilitycompany} gas rate schedule and for above stated time period, ${preAudit.businessname} used $manuallyGeneratedValue therms at a cost of $$manuallyGeneratedValue.")
     }
 
     // generate tables
