@@ -105,9 +105,10 @@ class Incandescent(computable: Computable<*>, utilityRateGas: UtilityRate, utili
         usageHours.offPeakHours = offPeakHours
         preauditHours.build()
         usageHours.build()
-        if (usageHours.yearly() < 1.0){
-            return  preauditHours.yearly()}
-        else { return usageHours.yearly()}
+        if (usageHours.yearly() > 0){
+            return usageHours.yearly()
+        }
+        return usageHoursBusiness.yearly()
     }
 
     fun preEnergy(): Double {

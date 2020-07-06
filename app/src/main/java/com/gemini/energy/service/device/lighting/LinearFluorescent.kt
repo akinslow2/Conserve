@@ -122,9 +122,10 @@ class LinearFluorescent(computable: Computable<*>, utilityRateGas: UtilityRate, 
         usageHours.offPeakHours = offPeakHours
         usageHours.build()
         preauditHours.build()
-        if (usageHours.yearly() < 1.0){
-            return  preauditHours.yearly()}
-        else { return usageHours.yearly()}
+        if (usageHours.yearly() > 0){
+            return usageHours.yearly()
+        }
+        return usageHoursBusiness.yearly()
     }
 
     fun preEnergy(): Double {

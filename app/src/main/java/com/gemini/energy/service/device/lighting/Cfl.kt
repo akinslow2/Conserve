@@ -96,13 +96,13 @@ class Cfl(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEle
      * */
     override fun usageHoursPre(): Double {
         val usageHours = UsageLighting()
-        val preauditHours = UsageHours()
         usageHours.peakHours = peakHours
         usageHours.partPeakHours = partPeakHours
         usageHours.offPeakHours = offPeakHours
-        if (usageHours.yearly() < 1.0){
-            return  preauditHours.yearly()}
-        else { return usageHours.yearly()}
+        if (usageHours.yearly() > 0){
+            return usageHours.yearly()
+        }
+        return usageHoursBusiness.yearly()
     }
 
     fun preEnergy(): Double {

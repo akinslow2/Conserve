@@ -102,9 +102,10 @@ class LPSodium(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRa
         usageHours.peakHours = peakHours
         usageHours.partPeakHours = partPeakHours
         usageHours.offPeakHours = offPeakHours
-        if (usageHours.yearly() < 1.0){
-            return  preauditHours.yearly()}
-        else { return usageHours.yearly()}
+        if (usageHours.yearly() > 0){
+            return usageHours.yearly()
+        }
+        return usageHoursBusiness.yearly()
     }
 
     fun preEnergy(): Double {
