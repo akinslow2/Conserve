@@ -465,12 +465,26 @@ abstract class EBase(val computable: Computable<*>,
     /**
      * Computes the Electric Cost
      * */
+    // @Anthony: here are the costElectricity function that we believe you were mentioning
+    // depending on which variables you have access to, call one of these functions with the appropriate variables.
+    // if you have power, usage hours, and utilityRate, use this overload
     fun costElectricity(powerUsed: Double, usageHours: UsageHours, utilityRate: UtilityRate): Double {
         val costElectric = CostElectric(usageHours, utilityRate, true)
         costElectric.structure = electricRateStructure
         costElectric.power = powerUsed
 
         return costElectric.cost()
+    }
+
+    // if you just have energy and electricity rate, use this overload
+    open fun costElectricity(energy: Double, electricityRate: UtilityRate): Double {
+        val demandRate = electricityRate.structure.values.first().last().toDouble()
+        return energy * demandRate
+    }
+
+    // if you just have power && demand rate, use this overload
+    open fun costElectricity(power: Double, demandRate: Double): Double {
+        return power * demandRate
     }
 
     /**
