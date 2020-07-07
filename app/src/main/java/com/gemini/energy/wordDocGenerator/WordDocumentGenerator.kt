@@ -80,6 +80,10 @@ class WordDocumentGenerator {
             generateEquipmentSavingsPage(document, value.equipment)
         }
 
+        if (value.refrigeration != null) {
+            generateRefrigerationSavingsPage(document, value.refrigeration)
+        }
+
         generateFacilityInformationPage(document, value, value.preAudit)
 
         addPageNumbers(document)
@@ -472,6 +476,38 @@ class WordDocumentGenerator {
             r1p3.setText("Your ${equip.name} is ${equip.age.format(0)} years old and as a result is annually consuming ${equip.delta.format(0)} kWh more energy than a newer version. We recommend you replace the ${equip.name} with a newer version to save $${equip.costElectricity.format(0)} of dollars per year. The cost for a new ${equip.name} is roughly $${equip.materialCost.format(0)} with an expected payback period for this replacement is ${equip.paybackMonth.format(0)} months.")
             r1p3.addBreak()
         }
+    }
+
+    private fun generateRefrigerationSavingsPage(document: XWPFDocument, refrigeration: RefrigerationValues) {
+        val p1 = document.createParagraph()
+        p1.spacingBetween = 1.5
+        p1.isPageBreak = true
+        val r1p1 = p1.createRun()
+        r1p1.fontFamily = fontAgencyFB
+        r1p1.isBold = true
+        r1p1.isItalic = true
+        r1p1.fontSize = 20
+        r1p1.setText("Refrigeration Savings")
+
+        val p2 = document.createParagraph()
+        p2.spacingBetween = 1.5
+        val r1p2 = p2.createRun()
+        r1p2.fontFamily = fontAgencyFB
+        r1p2.fontSize = 18
+        r1p2.setText("Implementing all refrigeration measures will result in a minimum savings of  ")
+        val r2p2 = p2.createRun()
+        r2p2.fontFamily = fontAgencyFB
+        r2p2.isBold = true
+        r2p2.fontSize = 24
+        r2p2.color = greenColor
+        r2p2.setText("$${refrigeration.totalSavings.format(0)}.")
+
+        val p3 = document.createParagraph()
+        p3.spacingBetween = 1.5
+        val r1p3 = p3.createRun()
+        r1p3.fontFamily = fontAgencyFB
+        r1p3.fontSize = 18
+        r1p3.setText("The estimated cost is ${refrigeration.totalCost.format(2)}, resulting in a payback of ${refrigeration.paybackMonth.format(2)} months.")
     }
 
     private fun generateFacilityInformationPage(document: XWPFDocument, values: PreparedForDocument, preAudit: PreAuditValues) {

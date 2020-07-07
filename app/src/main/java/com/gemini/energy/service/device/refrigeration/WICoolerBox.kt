@@ -40,14 +40,14 @@ class WICoolerBox(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
          * Not needed right now
 
         fun extractEER(elements: List<JsonElement?>): Double {
-            elements.forEach {
-                it?.let {
-                    if (it.asJsonObject.has("eer")) {
-                        return it.asJsonObject.get("eer").asDouble
-                    }
-                }
-            }
-            return 0.0
+        elements.forEach {
+        it?.let {
+        if (it.asJsonObject.has("eer")) {
+        return it.asJsonObject.get("eer").asDouble
+        }
+        }
+        }
+        return 0.0
         }
          * */
         /**
@@ -56,14 +56,14 @@ class WICoolerBox(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
          * This is used to calculate the Energy but needs to be more robust before using
 
         fun extractHours(elements: List<JsonElement?>): Int {
-            elements.forEach {
-                it?.let {
-                    if (it.asJsonObject.has("hours")) {
-                        return it.asJsonObject.get("hours").asInt
-                    }
-                }
-            }
-            return 0
+        elements.forEach {
+        it?.let {
+        if (it.asJsonObject.has("hours")) {
+        return it.asJsonObject.get("hours").asInt
+        }
+        }
+        }
+        return 0
         }
          * */
         /**
@@ -71,8 +71,9 @@ class WICoolerBox(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
          * There could be a case where the User will input the value in KW - If that happens we need to convert the KW
          * int BTU / hr :: 1KW equals 3412.142
          * */
-        fun power(gasInput: Int, thermaleff: Int) = (gasInput / (thermaleff/100)) * KW_CONVERSION
-        fun power2(kW: Double, electriceff: Int) = (kW / (electriceff/100))
+        fun power(gasInput: Int, thermaleff: Int) = (gasInput / (thermaleff / 100)) * KW_CONVERSION
+        fun power2(kW: Double, electriceff: Int) = (kW / (electriceff / 100))
+
         /**
          * Year At - Current minus the Age
          * */
@@ -84,10 +85,10 @@ class WICoolerBox(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
             return dateFormatter.format(calendar.time).toInt()
         }
 
-        fun firstNotNull (valueFirst: Double, valueSecond: Double) =
+        fun firstNotNull(valueFirst: Double, valueSecond: Double) =
                 if (valueFirst == 0.0) valueSecond else valueFirst
 
-        fun firstNotNull (valueFirst: Int, valueSecond: Int) =
+        fun firstNotNull(valueFirst: Int, valueSecond: Int) =
                 if (valueFirst == 0) valueSecond else valueFirst
     }
 
@@ -151,7 +152,8 @@ class WICoolerBox(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
             e.printStackTrace()
         }
     }
-     override fun isGas() = fueltype == "Natural Gas"
+
+    override fun isGas() = fueltype == "Natural Gas"
 
     /**
      * Getting year of device and how much over life it is
@@ -190,7 +192,7 @@ class WICoolerBox(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
         return if (isGas()) gascost else ecost
     }
 
-     /**
+    /**
      * Cost - Post State
      * */
     override fun costPostState(element: JsonElement, dataHolder: DataHolder): Double {
@@ -205,24 +207,34 @@ class WICoolerBox(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
 
         val postUsageHours = computable.udf1 as UsageSimple
 
-            val postpowerUsedGas = power(gasInput, postthermeff) * quantity
-            val postpowerUsedElectricity = power2(kW, posteleceff) * quantity
-            val postGcost: Double
-            val postEcost: Double
-            val powerUsed = if (isGas()) postpowerUsedGas else postpowerUsedElectricity
+        val postpowerUsedGas = power(gasInput, postthermeff) * quantity
+        val postpowerUsedElectricity = power2(kW, posteleceff) * quantity
+        val postGcost: Double
+        val postEcost: Double
+        val powerUsed = if (isGas()) postpowerUsedGas else postpowerUsedElectricity
         Timber.d("HotWater :: Power Used (Electricity) -- [$postpowerUsedElectricity]")
-            Timber.d("HotWater :: Power Used (Gas) -- [$postpowerUsedGas]")
+        Timber.d("HotWater :: Power Used (Gas) -- [$postpowerUsedGas]")
 
 
-            Timber.d("HotWater :: Post Power Used -- [$powerUsed]")
-            postEcost = costElectricity(powerUsed, postUsageHours, electricityRate)
+        Timber.d("HotWater :: Post Power Used -- [$powerUsed]")
+        postEcost = costElectricity(powerUsed, postUsageHours, electricityRate)
 
-            postGcost = costGas(powerUsed)
+        postGcost = costGas(powerUsed)
 
-             return if (isGas()) postGcost else postEcost
+        return if (isGas()) postGcost else postEcost
     }
 
-      /**
+    fun installCost(): Double {
+//     TODO:   sum of the costs pulled from the PARSE
+        return 0.0
+    }
+
+    fun grosskwhSavings(): Double {
+//     TODO:   sum of the gross energy savings pulled from the PARSE
+        return 0.0
+    }
+
+    /**
      * HVAC - INCENTIVES | MATERIAL COST
      * */
     override fun incentives(): Double {
@@ -278,6 +290,7 @@ class WICoolerBox(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
         //ToDo: Multiply by the Number of Equipment
         return delta
     }
+
     //fix this ADK2
     fun totalSavings(): Double {
         return energyPowerChange() * .18
@@ -293,8 +306,8 @@ class WICoolerBox(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
      * */
     override fun usageHoursSpecific() = false
 
-    override fun efficientLookup()= false
-    override fun queryEfficientFilter()= ""
+    override fun efficientLookup() = false
+    override fun queryEfficientFilter() = ""
     override fun preAuditFields() = mutableListOf("General Client Info Name", "General Client Info Position", "General Client Info Email")
 
     override fun featureDataFields() = getGFormElements().map { it.value.param!! }.toMutableList()

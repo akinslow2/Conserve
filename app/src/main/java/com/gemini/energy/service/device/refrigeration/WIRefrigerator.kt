@@ -11,18 +11,14 @@ import com.gemini.energy.service.device.EBase
 import com.gemini.energy.service.type.UsageHours
 import com.gemini.energy.service.type.UsageSimple
 import com.gemini.energy.service.type.UtilityRate
-import com.google.gson.JsonArray
 import com.google.gson.JsonElement
-import com.google.gson.JsonObject
 import io.reactivex.Observable
-import io.reactivex.Single
-import org.json.JSONObject
 import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.*
 
 class WIRefrigerator(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateElectricity: UtilityRate,
-           usageHours: UsageHours, outgoingRows: OutgoingRows, private val context: Context) :
+                     usageHours: UsageHours, outgoingRows: OutgoingRows, private val context: Context) :
         EBase(computable, utilityRateGas, utilityRateElectricity, usageHours, outgoingRows), IComputable {
 
     /**
@@ -51,14 +47,14 @@ class WIRefrigerator(computable: Computable<*>, utilityRateGas: UtilityRate, uti
          * Not needed right now
 
         fun extractEER(elements: List<JsonElement?>): Double {
-            elements.forEach {
-                it?.let {
-                    if (it.asJsonObject.has("eer")) {
-                        return it.asJsonObject.get("eer").asDouble
-                    }
-                }
-            }
-            return 0.0
+        elements.forEach {
+        it?.let {
+        if (it.asJsonObject.has("eer")) {
+        return it.asJsonObject.get("eer").asDouble
+        }
+        }
+        }
+        return 0.0
         }
          * */
         /**
@@ -67,14 +63,14 @@ class WIRefrigerator(computable: Computable<*>, utilityRateGas: UtilityRate, uti
          * This is used to calculate the Energy but needs to be more robust before using
 
         fun extractHours(elements: List<JsonElement?>): Int {
-            elements.forEach {
-                it?.let {
-                    if (it.asJsonObject.has("hours")) {
-                        return it.asJsonObject.get("hours").asInt
-                    }
-                }
-            }
-            return 0
+        elements.forEach {
+        it?.let {
+        if (it.asJsonObject.has("hours")) {
+        return it.asJsonObject.get("hours").asInt
+        }
+        }
+        }
+        return 0
         }
          * */
         /**
@@ -82,8 +78,9 @@ class WIRefrigerator(computable: Computable<*>, utilityRateGas: UtilityRate, uti
          * There could be a case where the User will input the value in KW - If that happens we need to convert the KW
          * int BTU / hr :: 1KW equals 3412.142
          * */
-        fun power(gasInput: Int, thermaleff: Int) = (gasInput / (thermaleff/100)) * KW_CONVERSION
-        fun power2(kW: Double, electriceff: Int) = (kW / (electriceff/100))
+        fun power(gasInput: Int, thermaleff: Int) = (gasInput / (thermaleff / 100)) * KW_CONVERSION
+        fun power2(kW: Double, electriceff: Int) = (kW / (electriceff / 100))
+
         /**
          * Year At - Current minus the Age
          * */
@@ -95,11 +92,106 @@ class WIRefrigerator(computable: Computable<*>, utilityRateGas: UtilityRate, uti
             return dateFormatter.format(calendar.time).toInt()
         }
 
-        fun firstNotNull (valueFirst: Double, valueSecond: Double) =
+        fun firstNotNull(valueFirst: Double, valueSecond: Double) =
                 if (valueFirst == 0.0) valueSecond else valueFirst
 
-        fun firstNotNull (valueFirst: Int, valueSecond: Int) =
+        fun firstNotNull(valueFirst: Int, valueSecond: Int) =
                 if (valueFirst == 0) valueSecond else valueFirst
+
+
+        // This relates to queryCondensingUnit
+        fun extractCondensingUnitCompressorkWh(element: JsonElement): Double {
+            if (element.asJsonObject.has("cu_scroll_compressor_kwh")) {
+                return element.asJsonObject.get("cu_scroll_compressor_kwh").asDouble
+            }
+            return 0.0
+        }
+
+        fun extractCondensingUnitCompressorkW(element: JsonElement): Double {
+            if (element.asJsonObject.has("cu_scroll_compressor_kw")) {
+                return element.asJsonObject.get("cu_scroll_compressor_kw").asDouble
+            }
+            return 0.0
+        }
+
+        fun extractCondensingUnitCondensorkWh(element: JsonElement): Double {
+            if (element.asJsonObject.has("cu_condenser_fans_kwh")) {
+                return element.asJsonObject.get("cu_condenser_fans_kwh").asDouble
+            }
+            return 0.0
+        }
+
+        fun extractCondensingUnitCondensorkW(element: JsonElement): Double {
+            if (element.asJsonObject.has("cu_condenser_fans_kw")) {
+                return element.asJsonObject.get("cu_condenser_fans_kw").asDouble
+            }
+            return 0.0
+        }
+
+        fun extractCondensingUnitHeadkWh(element: JsonElement): Double {
+            if (element.asJsonObject.has("cu_floating_head_pressure_controls_kwh")) {
+                return element.asJsonObject.get("cu_floating_head_pressure_controls_kwh").asDouble
+            }
+            return 0.0
+        }
+
+        fun extractCondensingUnitHeadkW(element: JsonElement): Double {
+            if (element.asJsonObject.has("cu_floating_head_pressure_controls_kw")) {
+                return element.asJsonObject.get("cu_floating_head_pressure_controls_kw").asDouble
+            }
+            return 0.0
+        }
+
+        fun extractCondensingUnitIncrementalCost(element: JsonElement): Double {
+            if (element.asJsonObject.has("cu_incremental_cost")) {
+                return element.asJsonObject.get("cu_incremental_cost").asDouble
+            }
+            return 0.0
+        }
+
+        //This relates to queryEvaporatorFanMotor
+        fun extractEvapFanMotorkWh(element: JsonElement): Double {
+            if (element.asJsonObject.has("ev_energy_savings")) {
+                return element.asJsonObject.get("ev_energy_savings").asDouble
+            }
+            return 0.0
+        }
+
+        fun extractEvapFanMotorkW(element: JsonElement): Double {
+            if (element.asJsonObject.has("ev_demand_savings")) {
+                return element.asJsonObject.get("ev_demand_savings").asDouble
+            }
+            return 0.0
+        }
+
+        fun extractEvapFanMotorIncrementalCost(element: JsonElement): Double {
+            if (element.asJsonObject.has("ev_installation_cost")) {
+                return element.asJsonObject.get("ev_installation_cost").asDouble
+            }
+            return 0.0
+        }
+
+        //This relates to queryEvaporatorFanMotorControls
+        fun extractEvapFanMotorControlskWh(element: JsonElement): Double {
+            if (element.asJsonObject.has("evf_energy_savings")) {
+                return element.asJsonObject.get("evf_energy_savings").asDouble
+            }
+            return 0.0
+        }
+
+        fun extractEvapFanMotorControlskW(element: JsonElement): Double {
+            if (element.asJsonObject.has("evf_demand_savings")) {
+                return element.asJsonObject.get("evf_demand_savings").asDouble
+            }
+            return 0.0
+        }
+
+        fun extractEvapFanMotorControlsCost(element: JsonElement): Double {
+            if (element.asJsonObject.has("evf_cost")) {
+                return element.asJsonObject.get("evf_cost").asDouble
+            }
+            return 0.0
+        }
     }
 
     /**
@@ -138,6 +230,8 @@ class WIRefrigerator(computable: Computable<*>, utilityRateGas: UtilityRate, uti
     var unittype = ""
     var capacity = 0.0
 
+    var Nfan = 0
+
     override fun setup() {
         try {
 
@@ -162,7 +256,8 @@ class WIRefrigerator(computable: Computable<*>, utilityRateGas: UtilityRate, uti
             e.printStackTrace()
         }
     }
-     override fun isGas() = fueltype == "Natural Gas"
+
+    override fun isGas() = fueltype == "Natural Gas"
 
     /**
      * Getting year of device and how much over life it is
@@ -201,14 +296,75 @@ class WIRefrigerator(computable: Computable<*>, utilityRateGas: UtilityRate, uti
         return if (isGas()) gascost else ecost
     }
 
-     /**
+    /** values assigned in costPostState **/
+    var installCost = 0.0
+    var grosskwhSavings = 0.0
+
+    /**
      * Cost - Post State
      * */
     override fun costPostState(element: JsonElement, dataHolder: DataHolder): Double {
 
         Timber.d("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
-        Timber.d("!!! COST POST STATE - HVAC !!!")
+        Timber.d("!!! COST POST STATE - WIRefrigerator !!!")
         Timber.d("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
+
+        val cuGrossEnergySavings =
+                extractCondensingUnitCompressorkWh(element) +
+                        extractCondensingUnitCondensorkWh(element) +
+                        extractCondensingUnitHeadkWh(element)
+
+        val cuGrossDemandSavings =
+                extractCondensingUnitCompressorkW(element) +
+                        extractCondensingUnitCondensorkW(element) +
+                        extractCondensingUnitHeadkW(element)
+
+        val cuNetEnergySavings =
+                (extractCondensingUnitCompressorkWh(element) * (1 + 0.121) * (1 + 1 - 1) * 0.5) +
+                        (extractCondensingUnitCompressorkWh(element) * (1 + 0.149) * (1 + 1 - 1) * 0.5) +
+                        (extractCondensingUnitCondensorkWh(element) * (1 + 0.121) * (1 + 1 - 1) * 0.5583) +
+                        (extractCondensingUnitCondensorkWh(element) * (1 + 0.149) * (1 + 1 - 1) * 0.4018) +
+                        (extractCondensingUnitHeadkWh(element) * (1 + 0.121) * (1 + 1 - 1) * 0.539) +
+                        (extractCondensingUnitHeadkWh(element) * (1 + 0.149) * (1 + 1 - 1) * 0.462)
+
+        val cuNetDemandSavings =
+                (extractCondensingUnitCompressorkW(element) * (1 + 0.113) * (1 + 1 - 1) * 0.69) +
+                        (extractCondensingUnitCompressorkW(element) * (1 + 0.112) * (1 + 1 - 1) * 0.772) +
+                        (extractCondensingUnitCondensorkW(element) * (1 + 0.113) * (1 + 1 - 1) * 1) +
+                        (extractCondensingUnitCondensorkW(element) * (1 + 0.112) * (1 + 1 - 1) * 0.0115) +
+                        (extractCondensingUnitHeadkW(element) * (1 + 0.113) * (1 + 1 - 1) * 1) +
+                        (extractCondensingUnitHeadkW(element) * (1 + 0.112) * (1 + 1 - 1) * 0.0)
+
+        // MARK: Evaporator fan coil control measure gross and net savings: energy (kwh) and demand (kw)
+        val efccGrossEnergySavings = extractEvapFanMotorControlskWh(element) * Nfan
+        val efccGrossDemandSavings = extractEvapFanMotorControlskW(element) * Nfan
+
+        val efccNetEnergySavings =
+                (efccGrossEnergySavings * (1 + 0.121) * (0.95 + 1.05 - 1) * 0.59) +
+                        (efccGrossEnergySavings * (1 + 0.149) * (0.95 + 1.05 - 1) * 0.41)
+
+        val efccNetDemandSavings =
+                (efccGrossDemandSavings * (1 + 0.113) * (1 + 1 - 1) * 0.831) +
+                        (efccGrossDemandSavings * (1 + 0.112) * (1 + 1 - 1) * 0.831)
+
+        val efccCost = extractEvapFanMotorControlsCost(element) * Nfan
+
+        // MARK: Evaporator fan motor replacement measure gross and net savings: energy (kwh) and demand (kw)
+        val efmGrossEnergySavings = extractEvapFanMotorkWh(element)
+        val efmGrossDemandSavings = extractEvapFanMotorkW(element)
+        val efmCost = extractEvapFanMotorIncrementalCost(element)
+
+        val efmNetEnergySavings =
+                (efmGrossEnergySavings * (1 + 0.121) * (0.95 + 1.05 - 1) * 0.524) +
+                        (efmGrossDemandSavings * (1 + 0.149) * (0.95 + 1.05 - 1) * 0.476)
+
+        val efNnetDemandSavings =
+                (efmGrossDemandSavings * (1 + 0.113) * (1 + 1 - 1) * 1) +
+                        (efmGrossDemandSavings * (1 + 0.112) * (1 + 1 - 1) * 1)
+
+        installCost = efccCost + efmCost
+        grosskwhSavings = cuGrossEnergySavings + efccGrossEnergySavings + efmGrossEnergySavings
+
 
         var postthermeff = 95
         var posteleceff = 350
@@ -216,24 +372,24 @@ class WIRefrigerator(computable: Computable<*>, utilityRateGas: UtilityRate, uti
 
         val postUsageHours = computable.udf1 as UsageSimple
 
-            val postpowerUsedGas = power(gasInput, postthermeff) * quantity
-            val postpowerUsedElectricity = power2(kW, posteleceff) * quantity
-            val postGcost: Double
-            val postEcost: Double
-            val powerUsed = if (isGas()) postpowerUsedGas else postpowerUsedElectricity
+        val postpowerUsedGas = power(gasInput, postthermeff) * quantity
+        val postpowerUsedElectricity = power2(kW, posteleceff) * quantity
+        val postGcost: Double
+        val postEcost: Double
+        val powerUsed = if (isGas()) postpowerUsedGas else postpowerUsedElectricity
         Timber.d("HotWater :: Power Used (Electricity) -- [$postpowerUsedElectricity]")
-            Timber.d("HotWater :: Power Used (Gas) -- [$postpowerUsedGas]")
+        Timber.d("HotWater :: Power Used (Gas) -- [$postpowerUsedGas]")
 
 
-            Timber.d("HotWater :: Post Power Used -- [$powerUsed]")
-            postEcost = costElectricity(powerUsed, postUsageHours, electricityRate)
+        Timber.d("HotWater :: Post Power Used -- [$powerUsed]")
+        postEcost = costElectricity(powerUsed, postUsageHours, electricityRate)
 
-            postGcost = costGas(powerUsed)
+        postGcost = costGas(powerUsed)
 
-             return if (isGas()) postGcost else postEcost
+        return if (isGas()) postGcost else postEcost
     }
 
-      /**
+    /**
      * HVAC - INCENTIVES | MATERIAL COST
      * */
     override fun incentives(): Double {
@@ -289,6 +445,7 @@ class WIRefrigerator(computable: Computable<*>, utilityRateGas: UtilityRate, uti
         //ToDo: Multiply by the Number of Equipment
         return delta
     }
+
     //fix this ADK2
     fun totalSavings(): Double {
         return energyPowerChange() * .18
@@ -304,8 +461,8 @@ class WIRefrigerator(computable: Computable<*>, utilityRateGas: UtilityRate, uti
      * */
     override fun usageHoursSpecific() = false
 
-    override fun efficientLookup()= false
-    override fun queryEfficientFilter()= ""
+    override fun efficientLookup() = false
+    override fun queryEfficientFilter() = ""
     override fun preAuditFields() = mutableListOf("General Client Info Name", "General Client Info Position", "General Client Info Email")
 
     override fun featureDataFields() = getGFormElements().map { it.value.param!! }.toMutableList()

@@ -61,12 +61,25 @@ class Freezer(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRat
      * Cost - Post State
      * */
     var costPostState = 0.0
+    var replacementIncrementalcost = 0.0
+
     override fun costPostState(element: JsonElement, dataHolder: DataHolder): Double {
         val powerUsed = hourlyEnergyUsagePost(element)[0]
         val costElectricity: Double
         costElectricity = costElectricity(powerUsed, super.usageHoursBusiness, super.electricityRate)
         costPostState = costElectricity
         return costElectricity
+    }
+
+    fun installCost(): Double {
+        val increCost = replacementIncrementalcost
+        val totalCost = increCost * 4 //@AK2 fill
+        return totalCost
+    }
+
+    fun grosskwhSavings(): Double {
+//        TODO: sum of the gross energy savings pulled from the PARSE
+        return 0.0
     }
 
     /**

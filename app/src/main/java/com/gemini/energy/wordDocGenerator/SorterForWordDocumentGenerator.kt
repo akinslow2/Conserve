@@ -44,7 +44,8 @@ class SorterForWordDocumentGenerator {
             val waterheater = prepareValuesFromWaterHeater(audit.value)
             val lighting = prepareValuesFromLighting(audit.value)
             val equipment = prepareValuesForEquipment(audit.value)
-            val building = prepareBuildingValuesForEquipment(lighting, equipment, hvac, waterheater)
+            val refrigeration = prepareValuesFromRefrigeration(audit.value)
+            val building = prepareBuildingValuesForEquipment(lighting, equipment, hvac, waterheater, refrigeration)
             val preaudit = prepareValuesForPreAudit(audit.value)
 
             val zones = aggregateZoneNames(audit.value)
@@ -53,7 +54,17 @@ class SorterForWordDocumentGenerator {
             if (preaudit == null || preaudit.businessname.isBlank()) {
                 continue
             } else {
-                returnAble.add(PreparedForDocument(audit.key, preaudit, zones, zoneString, hvac, lighting, waterheater, equipment, building))
+                returnAble.add(PreparedForDocument(
+                        audit.key,
+                        preaudit,
+                        zones,
+                        zoneString,
+                        hvac,
+                        lighting,
+                        waterheater,
+                        refrigeration,
+                        equipment,
+                        building))
             }
         }
 
@@ -291,6 +302,65 @@ class SorterForWordDocumentGenerator {
                 waterheater.unittype,
                 waterheater.capacity)
     }
+
+    private fun prepareValuesFromRefrigeration(audit: AuditComponents): RefrigerationValues? {
+        if (!audit[refrigeration]!!.any()) {
+            return null
+        }
+
+        val wiRefigerators = mutableListOf<WIRefrigerator>()
+        val wiFreezers = mutableListOf<WIFreezer>()
+        val refrigerators = mutableListOf<Refrigerator>()
+        val freezers = mutableListOf<Freezer>()
+        val wiCoolerBot = mutableListOf<WICoolerBox>()
+
+        for (type in audit[refrigeration]!!) {
+            when (type) {
+                is WIRefrigerator -> wiRefigerators.add(type)
+                is WIFreezer -> wiFreezers.add(type)
+                is Refrigerator -> refrigerators.add(type)
+                is Freezer -> freezers.add(type)
+                is WICoolerBox -> wiCoolerBot.add(type)
+            }
+        }
+
+        var totalCost = 0.0
+        var totalSavings = 0.0
+
+        for (fridge in wiRefigerators) {
+            totalCost += fridge.installCost
+            totalSavings += fridge.grosskwhSavings
+        }
+
+        for (fridge in wiFreezers) {
+            totalCost += fridge.installCost
+            totalSavings += fridge.grosskwhSavings
+        }
+
+        for (fridge in refrigerators) {
+            totalCost += fridge.installCost()
+            totalSavings += fridge.grosskwhSavings()
+        }
+
+        for (fridge in freezers) {
+            totalCost += fridge.installCost()
+            totalSavings += fridge.grosskwhSavings()
+        }
+
+        for (fridge in wiCoolerBot) {
+            totalCost += fridge.installCost()
+            totalSavings += fridge.grosskwhSavings()
+        }
+
+        val paybackMonth = if (totalSavings == 0.0) 0.0 else totalCost / totalSavings * 12
+
+        return RefrigerationValues(
+                totalCost,
+                totalSavings,
+                paybackMonth
+        )
+    }
+
 
     private fun prepareValuesFromLighting(audit: AuditComponents): LightingValues? {
         if (!audit[lighting]!!.any()) {
@@ -786,34 +856,60 @@ class SorterForWordDocumentGenerator {
         )
     }
 
-    private fun prepareBuildingValuesForEquipment(lightings: LightingValues?, equipments: EquipmentValues?, hvacs: HvacValues?, waterHeater: WaterHeaterValues?): BuildingValues {
+    private fun prepareBuildingValuesForEquipment(
+            lightings: LightingValues?,
+            equipments: EquipmentValues?,
+            hvacs: HvacValues?,
+            waterHeater: WaterHeaterValues?,
+            refrigeration: RefrigerationValues?): BuildingValues {
 
-        val buildingTotalSavings = (lightings?.totalcostsavings ?: 0.0) + (equipments?.totalSavings
-                ?: 0.0) + (hvacs?.totalSavings ?: 0.0 + (waterHeater?.totalSavings ?: 0.0))
+        fun calculatePaybackYear(cost: Double?, savings: Double?) =
+                if (cost != null && savings != null && savings > 0.0)
+                    cost / savings
+                else 0.0
 
-        val buildingTotalCost = (lightings?.totalCost ?: 0.0) + (hvacs?.totalCost
-                ?: 0.0) + (equipments?.totalCost ?: 0.0 + (waterHeater?.totalCost ?: 0.0))
+        fun calculatePaybackMonth(cost: Double?, savings: Double?) =
+                if (cost != null && savings != null && savings > 0.0)
+                    cost / savings * 12
+                else 0.0
 
-        val buildingPayback = buildingTotalCost / buildingTotalSavings
+        val buildingTotalSavings = (lightings?.totalcostsavings ?: 0.0) +
+                (equipments?.totalSavings ?: 0.0) +
+                (hvacs?.totalSavings ?: 0.0) +
+                (waterHeater?.totalSavings ?: 0.0) +
+                (refrigeration?.totalSavings ?: 0.0)
 
-        val buildingPaybackMonth = buildingTotalCost / buildingTotalSavings * 12
+        val buildingTotalCost = (lightings?.totalCost ?: 0.0) +
+                (hvacs?.totalCost ?: 0.0) +
+                (equipments?.totalCost ?: 0.0) +
+                (waterHeater?.totalCost ?: 0.0) +
+                (refrigeration?.totalCost ?: 0.0)
 
-        //Waterheater is embedded in the hvac results
+        val buildingPayback =
+                if (buildingTotalSavings == 0.0) 0.0
+                else buildingTotalCost / buildingTotalSavings
+
+        val buildingPaybackMonth =
+                if (buildingTotalSavings == 0.0) 0.0
+                else buildingTotalCost / buildingTotalSavings * 12
+
         return BuildingValues(
                 buildingTotalSavings,
                 buildingPayback,
                 buildingPaybackMonth,
                 buildingTotalCost,
-                (hvacs?.totalCost ?: 0.0),
-                ((hvacs?.totalCost ?: 0.0) + (waterHeater?.totalCost
-                        ?: 0.0)) / ((hvacs?.totalSavings ?: 0.0) + (waterHeater?.totalSavings
-                        ?: 0.0)),
-                ((hvacs?.totalCost ?: 0.0) + (waterHeater?.totalCost
-                        ?: 0.0)) / ((hvacs?.totalSavings ?: 0.0) + (waterHeater?.totalSavings
-                        ?: 0.0)) * 12,
+                hvacs?.totalCost ?: 0.0,
+                calculatePaybackYear(hvacs?.totalCost, hvacs?.totalSavings),
+                calculatePaybackMonth(hvacs?.totalCost, hvacs?.totalSavings),
                 equipments?.totalCost ?: 0.0,
-                (equipments?.totalCost ?: 0.0) / (equipments?.totalSavings ?: 0.0),
-                (equipments?.totalCost ?: 0.0) / (equipments?.totalSavings ?: 0.0) * 12
+                calculatePaybackYear(equipments?.totalCost, equipments?.totalSavings),
+                calculatePaybackMonth(equipments?.totalCost, equipments?.totalSavings),
+                refrigeration?.totalCost ?: 0.0,
+                calculatePaybackYear(refrigeration?.totalCost, refrigeration?.totalSavings),
+                calculatePaybackMonth(refrigeration?.totalCost, refrigeration?.totalSavings),
+                waterHeater?.totalCost ?: 0.0,
+                calculatePaybackYear(waterHeater?.totalCost, waterHeater?.totalSavings),
+                calculatePaybackMonth(waterHeater?.totalCost, waterHeater?.totalSavings)
         )
     }
 }

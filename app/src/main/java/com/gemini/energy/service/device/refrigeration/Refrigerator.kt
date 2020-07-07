@@ -14,13 +14,13 @@ import com.google.gson.JsonElement
 import io.reactivex.Observable
 import org.json.JSONObject
 import timber.log.Timber
-import java.util.*
 
 class Refrigerator(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateElectricity: UtilityRate,
                    usageHours: UsageHours, outgoingRows: OutgoingRows, private val context: Context) :
         EBase(computable, utilityRateGas, utilityRateElectricity, usageHours, outgoingRows), IComputable {
 
     var age = 0.0
+
     /**
      * Entry Point
      * */
@@ -58,16 +58,29 @@ class Refrigerator(computable: Computable<*>, utilityRateGas: UtilityRate, utili
         return 0.0
     }
 
-     /**
+    /**
      * Cost - Post State
      * */
     var costPostState = 0.0
+    var replacementIncrementalcost = 0.0
+
     override fun costPostState(element: JsonElement, dataHolder: DataHolder): Double {
         val powerUsed = hourlyEnergyUsagePost(element)[0]
         val costElectricity: Double
         costElectricity = costElectricity(powerUsed, super.usageHoursBusiness, super.electricityRate)
         costPostState = costElectricity
         return costElectricity
+    }
+
+    fun installCost(): Double {
+        val increCost = replacementIncrementalcost
+        val totalCost = increCost * 4 //@AK2 fill
+        return totalCost
+    }
+
+    fun grosskwhSavings(): Double {
+//        TODO: sum of the gross energy savings pulled from the PARSE
+        return 0.0
     }
 
     /**
