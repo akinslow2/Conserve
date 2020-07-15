@@ -1,6 +1,7 @@
 package com.gemini.energy.presentation.audit
 
 import android.Manifest
+import android.app.AlertDialog
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
@@ -94,6 +95,39 @@ class AuditActivity : BaseActivity(), AuditListFragment.OnAuditSelectedListener 
         R.id.menu_sync -> consume { sync() }
         R.id.menu_preference -> consume {
             startActivity(Intent(this, SettingsActivity::class.java))
+        }
+        R.id.menu_upload_photo -> consume {
+
+            Log.d("-----", "upload photo")
+
+            val projectName = findViewById<TextView>(R.id.txt_header_audit).text.toString()
+            // TODO: ask client what tags (if any) should be added for photos uploaded at this point
+            // TODO: upload photo here
+
+
+            if (projectName.isBlank())
+                AlertDialog.Builder(this)
+                        .setTitle("Error")
+                        .setMessage("Please select a project to upload to.")
+                        .setPositiveButton("Ok") { dialog, _ -> dialog.cancel() }
+                        .create()
+                        .show()
+            else AlertDialog.Builder(this)
+                    .setTitle("Uploading new image(s) to $projectName.")
+                    .setCancelable(true)
+                    .setItems(arrayOf(
+                            "Take New Image",
+                            "Select Single Image From Gallery",
+                            "Upload Multiple From Gallery")) { _, selected ->
+                        when (selected) {
+                            0 -> takePictureAndUploadToCompanyCam(projectName, listOf())//Toast.makeText(this, "take new image", Toast.LENGTH_SHORT).show()
+                            1 -> uploadImageFromGallery(projectName, listOf())//Toast.makeText(this, "select single image", Toast.LENGTH_SHORT).show()
+                            2 -> uploadMultipleFromGallery(projectName, listOf())//Toast.makeText(this, "select multiple image", Toast.LENGTH_SHORT).show()
+                            else -> Log.d("------", "unexpected select response $selected")
+                        }
+                    }
+                    .create()
+                    .show()
         }
         else -> super.onOptionsItemSelected(item)
     }
