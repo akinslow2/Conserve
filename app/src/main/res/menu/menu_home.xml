@@ -17,6 +17,11 @@
         app:showAsAction="always" />
 
     <item
+        android:id="@+id/menu_upload_photo"
+        android:title="Upload Image"
+        app:showAsAction="always" />
+
+    <item
         android:id="@+id/menu_preference"
         android:title="Preference"
         app:showAsAction="never" />
