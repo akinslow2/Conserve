@@ -91,8 +91,6 @@ class TypeActivity : BaseActivity(),
 
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
         R.id.menu_upload_photo -> consume {
-
-            // should exist for the page to successfuly display
             val projectName = auditModel?.name
             if (projectName == null) {
                 AlertDialog.Builder(this)
@@ -104,17 +102,12 @@ class TypeActivity : BaseActivity(),
                 return true
             }
 
-
             val zoneName = zoneModel?.name
-
-            // might exist depending on page
             val equipmentName = typeModel?.name
             val equipmentType = typeModel?.type
             val equipmentSubtype = typeModel?.subType
 
             val tags = arrayOf(zoneName, equipmentName, equipmentType, equipmentSubtype)
-            arrayOf(tags.filterNotNull())
-//            tags.requireNoNulls()
 
             AlertDialog.Builder(this)
                     .setTitle("Select Upload Method")
@@ -124,18 +117,14 @@ class TypeActivity : BaseActivity(),
                             "Select Single Image From Gallery",
                             "Upload Multiple From Gallery")) { _, selected ->
                         when (selected) {
-                            0 -> takePictureAndUploadToCompanyCam(projectName, tags.filterNotNull())//Toast.makeText(this, "take new image", Toast.LENGTH_SHORT).show()
-                            1 -> uploadImageFromGallery(projectName, tags.filterNotNull())//Toast.makeText(this, "select single image", Toast.LENGTH_SHORT).show()
-                            2 -> uploadMultipleFromGallery(projectName, tags.filterNotNull())//Toast.makeText(this, "select multiple image", Toast.LENGTH_SHORT).show()
+                            0 -> takePictureAndUploadToCompanyCam(projectName, tags.filterNotNull())
+                            1 -> uploadImageFromGallery(projectName, tags.filterNotNull())
+                            2 -> uploadMultipleFromGallery(projectName, tags.filterNotNull())
                             else -> Log.d("------", "unexpected select response $selected")
                         }
                     }
                     .create()
                     .show()
-            // TODO: upload photo here
-            Log.d("-----", "upload photo")
-            // TODO: need to get project name
-            // TODO: figure out what tags should be added to upload
         }
         else -> super.onOptionsItemSelected(item)
     }

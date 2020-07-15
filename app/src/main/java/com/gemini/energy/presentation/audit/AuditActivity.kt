@@ -97,13 +97,7 @@ class AuditActivity : BaseActivity(), AuditListFragment.OnAuditSelectedListener 
             startActivity(Intent(this, SettingsActivity::class.java))
         }
         R.id.menu_upload_photo -> consume {
-
-            Log.d("-----", "upload photo")
-
             val projectName = findViewById<TextView>(R.id.txt_header_audit).text.toString()
-            // TODO: ask client what tags (if any) should be added for photos uploaded at this point
-            // TODO: upload photo here
-
 
             if (projectName.isBlank())
                 AlertDialog.Builder(this)
@@ -112,7 +106,8 @@ class AuditActivity : BaseActivity(), AuditListFragment.OnAuditSelectedListener 
                         .setPositiveButton("Ok") { dialog, _ -> dialog.cancel() }
                         .create()
                         .show()
-            else AlertDialog.Builder(this)
+            else
+                AlertDialog.Builder(this)
                     .setTitle("Uploading new image(s) to $projectName.")
                     .setCancelable(true)
                     .setItems(arrayOf(
@@ -120,9 +115,9 @@ class AuditActivity : BaseActivity(), AuditListFragment.OnAuditSelectedListener 
                             "Select Single Image From Gallery",
                             "Upload Multiple From Gallery")) { _, selected ->
                         when (selected) {
-                            0 -> takePictureAndUploadToCompanyCam(projectName, listOf())//Toast.makeText(this, "take new image", Toast.LENGTH_SHORT).show()
-                            1 -> uploadImageFromGallery(projectName, listOf())//Toast.makeText(this, "select single image", Toast.LENGTH_SHORT).show()
-                            2 -> uploadMultipleFromGallery(projectName, listOf())//Toast.makeText(this, "select multiple image", Toast.LENGTH_SHORT).show()
+                            0 -> takePictureAndUploadToCompanyCam(projectName, listOf())
+                            1 -> uploadImageFromGallery(projectName, listOf())
+                            2 -> uploadMultipleFromGallery(projectName, listOf())
                             else -> Log.d("------", "unexpected select response $selected")
                         }
                     }
