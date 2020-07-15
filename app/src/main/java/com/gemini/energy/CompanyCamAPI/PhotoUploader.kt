@@ -1,12 +1,13 @@
 package CompanyCamAPI
 
-//import kotlinx.coroutines.*
+import kotlinx.coroutines.*
 import CompanyCamAPI.Objects.Photo
 import CompanyCamAPI.Objects.Project
 import CompanyCamAPI.Requests.AddCommentRequest
 import CompanyCamAPI.Requests.CreateProjectRequest
 import CompanyCamAPI.Requests.UploadPhotoRequest
 import CompanyCamAPI.Types.Coordinate
+import com.gemini.energy.branch
 import java.util.*
 
 class PhotoUploader {
@@ -20,27 +21,26 @@ class PhotoUploader {
             callback: (success: Boolean, exception: Throwable?) -> Unit) {
 
         //1 Create a Coroutine scope using a job to be able to cancel when needed
-//        val mainActivityJob = Job()
-//
-//        //2 Handle exceptions if any
-//        val errorHandler = CoroutineExceptionHandler { _, exception ->
-//            callback(false, exception)
-//        }
-//
-//        //3 the Coroutine runs using the Main (UI) dispatcher
-//        val coroutineScope = CoroutineScope(mainActivityJob + Dispatchers.Main)
-//        coroutineScope.launch(errorHandler) {
-//
-//            val projectId = getProjectId(projectName)
-//            val photo = uploadPhoto(projectId, photoUri)
-//
-//            for (tag in photoTags) {
-//                addCommentToPhoto(tag, photo.id)
-//            }
-//
-//            callback(true, null)
-//        }
-        callback(false, Throwable("need to get libs imported"))
+        val mainActivityJob = Job()
+
+        //2 Handle exceptions if any
+        val errorHandler = CoroutineExceptionHandler { _, exception ->
+            callback(false, exception)
+        }
+
+        //3 the Coroutine runs using the Main (UI) dispatcher
+        val coroutineScope = CoroutineScope(mainActivityJob + Dispatchers.Main)
+        coroutineScope.launch(errorHandler) {
+
+            val projectId = getProjectId("$branch - $projectName")
+            val photo = uploadPhoto(projectId, photoUri)
+
+            for (tag in photoTags) {
+                addCommentToPhoto(tag, photo.id)
+            }
+
+            callback(true, null)
+        }
     }
 
     private suspend fun addCommentToPhoto(commentText: String, photoId: String) {

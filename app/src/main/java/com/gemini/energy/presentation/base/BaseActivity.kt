@@ -3,6 +3,7 @@ package com.gemini.energy.presentation.base
 import CompanyCamAPI.PhotoUploader
 import android.Manifest
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
@@ -83,29 +84,31 @@ open class BaseActivity : DaggerAppCompatActivity() {
     private val TAKE_IMAGE_PERMISSION_REQUEST_CODE = 101
     private val GALLERY_IMAGE_PERMISSION_REQUEST_CODE = 102
     private val GALLERY_IMAGE_MULTIPLE_PERMISSION_REQUEST_CODE = 103
-    lateinit var currentPhotoPath: String
-    val photoUploader = PhotoUploader()
+    private lateinit var currentPhotoPath: String
+    private val photoUploader = PhotoUploader()
 
-    // TODO: update fileprovider
-    var fileProviderAuthority = "com.gemini.energy.android.fileprovider"
+    private val fileProviderAuthority = "com.gemini.energy.android.fileprovider"
 
-    lateinit var projectName: String
-    lateinit var tags: List<String>
+    private lateinit var projectName: String
+    private lateinit var tags: List<String>
 
     private fun uploadImage(photoPath: String, projectName: String, tags: Array<String>) {
-        // TODO: show loading
         linlaHeaderProgress.visibility = View.VISIBLE
+
         photoUploader.UploadPhoto(photoPath, projectName, tags) { success, error ->
-            // TODO: dismiss loading
             linlaHeaderProgress.visibility = View.GONE
+
             if (success)
                 Toast.makeText(applicationContext, "Upload success", Toast.LENGTH_LONG).show()
-            else
-                Toast.makeText(
-                        applicationContext,
-                        "error uploading image: ${error?.message}",
-                        Toast.LENGTH_LONG
-                ).show()
+            else {
+                AlertDialog.Builder(this)
+                        .setTitle("Error")
+                        .setMessage("error uploading image: ${error?.message}")
+                        .setPositiveButton("Ok") { dialog, _ -> dialog.cancel() }
+                        .create()
+                        .show()
+
+            }
         }
     }
 
@@ -117,7 +120,7 @@ open class BaseActivity : DaggerAppCompatActivity() {
             TAKE_IMAGE -> {
                 if (resultCode == Activity.RESULT_OK && data != null) {
                     Toast.makeText(applicationContext, "PHOTO SUCCESS! uploading image", Toast.LENGTH_SHORT).show()
-                    uploadImage(currentPhotoPath, "test project", arrayOf("new picture"))
+                    uploadImage(currentPhotoPath, projectName, tags.toTypedArray())
                 } else Toast.makeText(applicationContext, "image capture failed", Toast.LENGTH_SHORT).show()
 
             }
@@ -126,28 +129,23 @@ open class BaseActivity : DaggerAppCompatActivity() {
                     Toast.makeText(applicationContext, "SELECT PHOTO SUCCESS! uploading image", Toast.LENGTH_SHORT).show()
                     uploadImage(
                             ImageFilePath.getPath(this, data.data),
-                            "test project",
-                            arrayOf("new picture"))
+                            projectName,
+                            tags.toTypedArray())
                 } else Toast.makeText(applicationContext, "select single image failed", Toast.LENGTH_SHORT).show()
             }
             SELECT_MULTIPLE_FROM_GALLERY -> {
                 if (resultCode == Activity.RESULT_OK && data?.clipData != null) {
-                    // TODO: START LOADING
                     linlaHeaderProgress.visibility = View.VISIBLE
+
                     val clips = data.clipData!!
                     val itemCount = clips.itemCount
 
-                    Log.d("-----", "uploading $itemCount images")
-
-                    for (i in 0..itemCount) {
-                        Log.d("-----", "uploading $i in $itemCount")
+                    for (i in 0 until itemCount) {
                         val photoPath = ImageFilePath.getPath(this, clips.getItemAt(i).uri)
-                        photoUploader.UploadPhoto(photoPath, "Test Project", arrayOf("multiple pictures")) { success, error ->
-                            if (i == itemCount)
-                            // TODO: dismiss loading
-                                linlaHeaderProgress.visibility = View.GONE
-//                                Log.d("-----", "dismiss loading")
+                        photoUploader.UploadPhoto(photoPath, projectName, tags.toTypedArray()) { success, error ->
 
+                            if (i == itemCount - 1)
+                                linlaHeaderProgress.visibility = View.GONE
 
                             if (success) {
                                 Toast.makeText(applicationContext, "${i + 1} in $itemCount Upload success", Toast.LENGTH_SHORT).show()
@@ -258,8 +256,6 @@ open class BaseActivity : DaggerAppCompatActivity() {
         ).apply {
 
             currentPhotoPath = toString()
-//            uri
-
 
             Log.d("-----", "photo path string: ${toString()}")
             Log.d("-----", "photo path: ${path}")
