@@ -28,15 +28,15 @@
         android:theme="@style/AppTheme">
 
         <!--needed for saving images to custom location-->
-        <!--        <provider-->
-        <!--            android:name="androidx.core.content.FileProvider"-->
-        <!--            android:authorities="com.gemini.energy.android.fileprovider"-->
-        <!--            android:exported="false"-->
-        <!--            android:grantUriPermissions="true">-->
-        <!--            <meta-data-->
-        <!--                android:name="android.support.FILE_PROVIDER_PATHS"-->
-        <!--                android:resource="@xml/file_paths"/>-->
-        <!--        </provider>-->
+                <provider
+                    android:name="android.support.v4.content.FileProvider"
+                    android:authorities="com.gemini.energy.android.fileprovider"
+                    android:exported="false"
+                    android:grantUriPermissions="true">
+                    <meta-data
+                        android:name="android.support.FILE_PROVIDER_PATHS"
+                        android:resource="@xml/file_paths"/>
+                </provider>
         <!--END needed for saving images to custom location -->
 
         <activity android:name=".presentation.audit.AuditActivity">
