@@ -84,7 +84,11 @@ open class BaseActivity : DaggerAppCompatActivity() {
     private val TAKE_IMAGE_PERMISSION_REQUEST_CODE = 101
     private val GALLERY_IMAGE_PERMISSION_REQUEST_CODE = 102
     private val GALLERY_IMAGE_MULTIPLE_PERMISSION_REQUEST_CODE = 103
+
+    // path to the last photo taken
     private lateinit var currentPhotoPath: String
+
+    // service for uploading to company cam
     private val photoUploader = PhotoUploader()
 
     private val fileProviderAuthority = "com.gemini.energy.android.fileprovider"
@@ -92,6 +96,7 @@ open class BaseActivity : DaggerAppCompatActivity() {
     private lateinit var projectName: String
     private lateinit var tags: List<String>
 
+    // uploads a single image to company cam
     private fun uploadImage(photoPath: String, projectName: String, tags: Array<String>) {
         linlaHeaderProgress.visibility = View.VISIBLE
 
@@ -185,6 +190,7 @@ open class BaseActivity : DaggerAppCompatActivity() {
     }
 
 
+    // takes a picture and uploads it to company cam
     fun takePictureAndUploadToCompanyCam(projectName: String, tags: List<String>) {
         this.projectName = projectName
         this.tags = tags
@@ -201,6 +207,7 @@ open class BaseActivity : DaggerAppCompatActivity() {
         else requestTakeImagePermission()
     }
 
+    // select 1 image from the gallery to upload to compnay cam
     fun uploadImageFromGallery(projectName: String, tags: List<String>) {
         this.projectName = projectName
         this.tags = tags
@@ -211,6 +218,7 @@ open class BaseActivity : DaggerAppCompatActivity() {
         else requestGalleryPermission(false)
     }
 
+    // select multiple images to upload to company cam
     fun uploadMultipleFromGallery(projectName: String, tags: List<String>) {
         this.projectName = projectName
         this.tags = tags
@@ -277,6 +285,8 @@ open class BaseActivity : DaggerAppCompatActivity() {
         }
     }
 
+    // select multiple images from gallery
+    // photo data is returned in onActivityResult
     private fun selectMultipleFromGallery() {
         val intent = Intent(Intent.ACTION_GET_CONTENT)
         intent.type = "image/*"
