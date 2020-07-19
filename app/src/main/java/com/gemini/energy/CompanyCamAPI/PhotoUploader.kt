@@ -6,6 +6,8 @@ import CompanyCamAPI.Requests.AddCommentRequest
 import CompanyCamAPI.Requests.CreateProjectRequest
 import CompanyCamAPI.Requests.UploadPhotoRequest
 import CompanyCamAPI.Types.Coordinate
+import com.gemini.energy.CompanyCamAPI.Requests.ApplyTagToPhotoRequest
+import com.gemini.energy.CompanyCamAPI.Requests.CreateTagRequest
 import com.gemini.energy.branch
 import com.gemini.energy.service.ParseAPI
 import com.gemini.energy.service.responses.UploadImageResponse
@@ -44,8 +46,7 @@ class PhotoUploader {
             val photo = uploadPhoto(projectId, parsePhoto.url)
 
             for (tag in photoTags) {
-                // TODO: tag photos instead of comments
-                addCommentToPhoto(tag, photo.id)
+                addTagToPhoto(tag, photo.id)
             }
 
             // TODO: delete photo from parse
@@ -62,12 +63,7 @@ class PhotoUploader {
         return ParseAPI.create().uploadImage(imageName, body)
     }
 
-    private suspend fun addCommentToPhoto(commentText: String, photoId: String) {
-        ccService.addComment(
-                AddCommentRequest(commentText),
-                photoId)
-    }
-
+    // returns the uploaded photo object
     private suspend fun uploadPhoto(projectId: String, photoUri: String): Photo {
         val photoRequest = UploadPhotoRequest(
                 Coordinate(0f, 0f),
@@ -77,6 +73,7 @@ class PhotoUploader {
         return ccService.uploadPhoto(projectId, photoRequest)
     }
 
+    // returns the project id that matches the project name
     private suspend fun getProjectId(projectName: String): String {
 
         val projects = ccService.getExistingProjects()
@@ -89,10 +86,15 @@ class PhotoUploader {
         return new.id
     }
 
+    // creates a new project
     private suspend fun createProject(projectName: String): Project {
         val options = CreateProjectRequest(projectName)
         return ccService.createProject(options)
     }
 
-    // TODO: tag photos instead of comments
+    // adds a tag to a photo
+    private suspend fun addTagToPhoto(tagName: String, photoId: String) {
+        ccService.createTag(CreateTagRequest(tagName))
+        ccService.addTagToPhoto(photoId, ApplyTagToPhotoRequest(listOf(tagName)))
+    }
 }
