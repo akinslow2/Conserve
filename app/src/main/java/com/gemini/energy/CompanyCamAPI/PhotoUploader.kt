@@ -47,8 +47,8 @@ class PhotoUploader {
 
             for (tag in photoTags) {
                 addTagToPhoto(tag, photo.id)
-            }
 
+            }
             // TODO: delete photo from parse
             // will need real parse master key to delete
 //            ParseAPI.create().deleteImage(parsePhoto.name)
