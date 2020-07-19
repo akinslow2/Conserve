@@ -46,9 +46,7 @@ class PhotoUploader {
             val photo = uploadPhoto(projectId, parsePhoto.url)
 
             for (tag in photoTags) {
-
                 addTagToPhoto(tag, photo.id)
-
             }
 
             // TODO: delete photo from parse
@@ -94,11 +92,9 @@ class PhotoUploader {
         return ccService.createProject(options)
     }
 
-
     // adds a tag to a photo
     private suspend fun addTagToPhoto(tagName: String, photoId: String) {
         ccService.createTag(CreateTagRequest(tagName))
         ccService.addTagToPhoto(photoId, ApplyTagToPhotoRequest(listOf(tagName)))
     }
-
 }
