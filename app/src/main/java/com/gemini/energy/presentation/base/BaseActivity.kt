@@ -8,6 +8,8 @@ import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
 import android.databinding.DataBindingUtil
+import android.graphics.Bitmap
+import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
@@ -25,6 +27,8 @@ import kotlinx.android.synthetic.main.activity_home_detail.*
 import kotlinx.android.synthetic.main.activity_home_mini_bar.*
 import java.io.File
 import java.io.IOException
+import java.lang.Exception
+import java.net.URI
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
@@ -85,8 +89,8 @@ open class BaseActivity : DaggerAppCompatActivity() {
     private val GALLERY_IMAGE_PERMISSION_REQUEST_CODE = 102
     private val GALLERY_IMAGE_MULTIPLE_PERMISSION_REQUEST_CODE = 103
 
-    // path to the last photo taken
-    private lateinit var currentPhotoPath: String
+    // file of the last photo taken
+    private lateinit var photoFile: File
 
     // service for uploading to company cam
     private val photoUploader = PhotoUploader()
@@ -96,26 +100,6 @@ open class BaseActivity : DaggerAppCompatActivity() {
     private lateinit var projectName: String
     private lateinit var tags: List<String>
 
-    // uploads a single image to company cam
-    private fun uploadImage(photoPath: String, projectName: String, tags: Array<String>) {
-        linlaHeaderProgress.visibility = View.VISIBLE
-
-        photoUploader.UploadPhoto(photoPath, projectName, tags) { success, error ->
-            linlaHeaderProgress.visibility = View.GONE
-
-            if (success)
-                Toast.makeText(applicationContext, "Upload success", Toast.LENGTH_LONG).show()
-            else {
-                AlertDialog.Builder(this)
-                        .setTitle("Error")
-                        .setMessage("error uploading image: ${error?.message}")
-                        .setPositiveButton("Ok") { dialog, _ -> dialog.cancel() }
-                        .create()
-                        .show()
-
-            }
-        }
-    }
 
     // upload photo if get photo was successful
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -125,18 +109,58 @@ open class BaseActivity : DaggerAppCompatActivity() {
             TAKE_IMAGE -> {
                 if (resultCode == Activity.RESULT_OK && data != null) {
                     Toast.makeText(applicationContext, "PHOTO SUCCESS! uploading image", Toast.LENGTH_SHORT).show()
-                    uploadImage(currentPhotoPath, projectName, tags.toTypedArray())
-                } else Toast.makeText(applicationContext, "image capture failed", Toast.LENGTH_SHORT).show()
+
+                    linlaHeaderProgress.visibility = View.VISIBLE
+                    photoUploader.UploadPhoto(photoFile, projectName, tags.toTypedArray())
+                    { success, error ->
+                        linlaHeaderProgress.visibility = View.GONE
+
+                        if (success)
+                            Toast.makeText(applicationContext, "Upload success", Toast.LENGTH_LONG).show()
+                        else {
+                            Log.e(
+                                    "BaseActivity upload taken image to compnay cam",
+                                    "ERROR: ${error?.message} ${error?.stackTrace}")
+
+                            AlertDialog.Builder(this)
+                                    .setTitle("Error")
+                                    .setMessage("error uploading image: ${error?.message}")
+                                    .setPositiveButton("Ok") { dialog, _ -> dialog.cancel() }
+                                    .create()
+                                    .show()
+                        }
+                    }
+                }
+                else Toast.makeText(applicationContext, "image capture failed", Toast.LENGTH_SHORT).show()
 
             }
             SELECT_IMAGE_FROM_GALLERY -> {
                 if (resultCode == Activity.RESULT_OK && data?.data != null) {
                     Toast.makeText(applicationContext, "SELECT PHOTO SUCCESS! uploading image", Toast.LENGTH_SHORT).show()
-                    uploadImage(
-                            ImageFilePath.getPath(this, data.data),
-                            projectName,
-                            tags.toTypedArray())
-                } else Toast.makeText(applicationContext, "select single image failed", Toast.LENGTH_SHORT).show()
+
+                    val file = File(ImageFilePath.getPath(this, data.data))
+                    linlaHeaderProgress.visibility = View.VISIBLE
+                    photoUploader.UploadPhoto(file, projectName, tags.toTypedArray())
+                    { success, error ->
+                        linlaHeaderProgress.visibility = View.GONE
+
+                        if (success)
+                            Toast.makeText(applicationContext, "Upload success", Toast.LENGTH_LONG).show()
+                        else {
+                            Log.e(
+                                    "BaseActivity upload selected image to compnay cam",
+                                    "ERROR: ${error?.message} ${error?.stackTrace}")
+
+                            AlertDialog.Builder(this)
+                                    .setTitle("Error")
+                                    .setMessage("error uploading image: ${error?.message}")
+                                    .setPositiveButton("Ok") { dialog, _ -> dialog.cancel() }
+                                    .create()
+                                    .show()
+                        }
+                    }
+                }
+                else Toast.makeText(applicationContext, "select single image failed", Toast.LENGTH_SHORT).show()
             }
             SELECT_MULTIPLE_FROM_GALLERY -> {
                 if (resultCode == Activity.RESULT_OK && data?.clipData != null) {
@@ -146,8 +170,8 @@ open class BaseActivity : DaggerAppCompatActivity() {
                     val itemCount = clips.itemCount
 
                     for (i in 0 until itemCount) {
-                        val photoPath = ImageFilePath.getPath(this, clips.getItemAt(i).uri)
-                        photoUploader.UploadPhoto(photoPath, projectName, tags.toTypedArray()) { success, error ->
+                        val file = File(ImageFilePath.getPath(this, clips.getItemAt(i).uri))
+                        photoUploader.UploadPhoto(file, projectName, tags.toTypedArray()) { success, error ->
 
                             if (i == itemCount - 1)
                                 linlaHeaderProgress.visibility = View.GONE
@@ -181,10 +205,12 @@ open class BaseActivity : DaggerAppCompatActivity() {
                 && (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)
                 && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
             takePictureAndStore()
-        } else if (requestCode == GALLERY_IMAGE_PERMISSION_REQUEST_CODE
+        }
+        else if (requestCode == GALLERY_IMAGE_PERMISSION_REQUEST_CODE
                 && (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
             selectImageFromGallery()
-        } else {
+        }
+        else {
             Toast.makeText(this, "Permission Denied", Toast.LENGTH_SHORT).show()
         }
     }
@@ -262,16 +288,7 @@ open class BaseActivity : DaggerAppCompatActivity() {
                 ".jpg",
                 storageDirectory
         ).apply {
-
-            currentPhotoPath = toString()
-
-            Log.d("-----", "photo path string: ${toString()}")
-            Log.d("-----", "photo path: ${path}")
-            Log.d("-----", "photo absolutePath: ${absolutePath}")
-            Log.d("-----", "photo canonicalPath: ${canonicalPath}")
-            Log.d("-----", "photo invariantSeparatorsPath: ${invariantSeparatorsPath}")
-            Log.d("-----", "photo packageCodePath: ${packageCodePath}")
-            Log.d("-----", "photo packageResourcePath: $packageResourcePath")
+            photoFile = this
         }
     }
 

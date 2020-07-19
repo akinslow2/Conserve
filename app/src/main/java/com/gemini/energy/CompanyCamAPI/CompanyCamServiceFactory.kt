@@ -13,20 +13,11 @@ object CompanyCamServiceFactory {
     private const val SECRET_KEY = ""
     private const val USER_EMAIL = "akinslow2@geminiesolutions.com"
 
-    // add the logging interceptor
-
-//    https://app.companycam.com/oauth/authorize?client_id=e12b134258ccd3dff694581132e6192f998c54bddc1b5c5ea6f1363bd72c9b68&redirect_uri=https://www.hidevmobile.com/&response_type=code&scope=read+write+destroy
-
 
     fun makeService(): CompanyCamService {
         // log json responses
         val logging = HttpLoggingInterceptor()
         logging.apply { logging.level = HttpLoggingInterceptor.Level.BODY }
-
-//        curl -X GET -H
-//        "Content-type: application/json" -H
-//        "Authorization: Bearer <ACCESS_TOKEN>" -H
-//        "X-CompanyCam-User: shawn@psych.com"
 
         val httpClient = OkHttpClient.Builder().addInterceptor(logging).addInterceptor { chain ->
             val newRequest = chain.request().newBuilder()
