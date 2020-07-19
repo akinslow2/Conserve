@@ -3,11 +3,14 @@ package CompanyCamAPI
 import CompanyCamAPI.Objects.Comment
 import CompanyCamAPI.Objects.Photo
 import CompanyCamAPI.Objects.Project
+import CompanyCamAPI.Objects.Tag
 import CompanyCamAPI.Requests.AddCommentRequest
 import CompanyCamAPI.Requests.Auth2RequestParameters
 import CompanyCamAPI.Requests.CreateProjectRequest
 import CompanyCamAPI.Requests.UploadPhotoRequest
 import CompanyCamAPI.Responses.Auth2Response
+import com.gemini.energy.CompanyCamAPI.Requests.ApplyTagToPhotoRequest
+import com.gemini.energy.CompanyCamAPI.Requests.CreateTagRequest
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -26,34 +29,26 @@ interface CompanyCamService {
     fun getAuthToken(@Body request: Auth2RequestParameters): Call<Auth2Response>
 
     // upload a photo
-    /// POST https://api.companycam.com/v2/projects/:project_id/photos/
     @POST("v2/projects/{project_id}/photos/")
     suspend fun uploadPhoto(
             @Path("project_id") projectId: String,
             @Body uploadPhotoRequest: UploadPhotoRequest): Photo
 
-    // create project
-    // should return a project object, but not sure
-    /// POST https://api.companycam.com/v2/projects
-    /// curl -X POST -H "Content-type: application/json" -H "Authorization: Bearer <ACCESS_TOKEN>"
-    /// https://api.companycam.com/v2/projects/ -d '{"project":{"name":"Psych Office","address":{"street_address_1":"2756 O Hara Lane","city":"Santa Barbara","state":"CA","postal_code":"93101","country":"US"},"coordinates":{"lat":34.398307,"lon":-119.712367}}'}
+    // creates a new project
+    // returns the uploaded project object
     @POST("v2/projects/")
     suspend fun createProject(@Body createProjectRequest: CreateProjectRequest): Project
 
     // list all projects
     // Returns a list of projects you’ve previously created. The projects are returned in sorted order, with the most recent projects appearing first
-    /// GET https://api.companycam.com/v2/projects
     @GET("v2/projects?status=active")
     suspend fun getExistingProjects(): List<Project>
 
-    // get specific project
-    // Retrieves the details of an existing project. You need only supply the unique project identifier that was returned upon project creation
-    /// GET https://api.companycam.com/v2/projects/{project_id}
-    @GET("v2/projects/{project_id}")
-    fun getProject(@Path("project_id") projectId: String): Call<Project>
+    // creates a new tag
+    @POST("v2/tags/")
+    suspend fun createTag(@Body content: CreateTagRequest): Tag
 
-    @POST("v2/photos/{photo_id}/comments/")
-    suspend fun addComment(@Body content: AddCommentRequest, @Path("photo_id") photoId: String): Comment
-
-//    fun addTagToPhoto():
+    // tags a photo with an existing tag
+    @POST("v2/photos/{photo_id}/tags/")
+    suspend fun addTagToPhoto(@Path("photo_id") photoId: String, @Body tags: ApplyTagToPhotoRequest): List<Tag>
 }
