@@ -12,7 +12,6 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <!--    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />-->
 
     <uses-permission
         android:name="android.permission.READ_LOGS"
@@ -29,23 +28,36 @@
         android:usesCleartextTraffic="true">
 
         <!--needed for saving images to custom location-->
-                <provider
-                    android:name="android.support.v4.content.FileProvider"
-                    android:authorities="com.gemini.energy.android.fileprovider"
-                    android:exported="false"
-                    android:grantUriPermissions="true">
-                    <meta-data
-                        android:name="android.support.FILE_PROVIDER_PATHS"
-                        android:resource="@xml/file_paths"/>
-                </provider>
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="com.gemini.energy.android.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths"/>
+        </provider>
         <!--END needed for saving images to custom location -->
 
         <activity android:name=".presentation.audit.AuditActivity">
+            <!--            capture auth info from company cam-->
+            <intent-filter >
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <!-- Accepts URIs that begin with "http://www.geminiesolutions.com/companycamauth" -->
+                <data
+                    android:host="www.geminiesolutions.com"
+                    android:scheme="https"
+                    android:pathPrefix="/companycamauth"
+                    />
+            </intent-filter>
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
         </activity>
 
         <activity android:name=".presentation.type.TypeActivity" />
