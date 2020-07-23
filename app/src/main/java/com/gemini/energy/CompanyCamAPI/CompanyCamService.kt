@@ -20,13 +20,15 @@ import retrofit2.http.Path
 interface CompanyCamService {
     // Authentication: step 1
 //    redirect the user to the CompanyCam authorization URI.
-    /// https://app.companycam.com/oauth/authorize?client_id={client_id}&redirect_uri={authorized_redirect_uri}&response_type=code&scope=read+write+destroy
-
+    /// https://app.companycam.com/oauth/authorize
+    //      ?client_id={client_id}
+    //      &redirect_uri={authorized_redirect_uri}
+    //      &response_type=code
+    //      &scope=read+write+destroy
 
     // Authentication: step 2
-    /// curl -X POST --data "client_id={client_id}&client_secret={client_secret}&code={code_from_uri}&grant_type=authorization_code&redirect_uri={authorized_redirect_uri}" "https://app.companycam.com/oauth/token"
     @POST("oauth/token")
-    fun getAuthToken(@Body request: Auth2RequestParameters): Call<Auth2Response>
+    suspend fun getAuthToken(@Body request: Auth2RequestParameters): Auth2Response
 
     // upload a photo
     @POST("v2/projects/{project_id}/photos/")
