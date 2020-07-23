@@ -1,11 +1,13 @@
 package com.gemini.energy.presentation.audit
 
+import CompanyCamAPI.CompanyCamServiceFactory
 import android.Manifest
 import android.app.AlertDialog
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Bundle
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
@@ -66,6 +68,12 @@ class AuditActivity : BaseActivity(), AuditListFragment.OnAuditSelectedListener 
             val permissions = arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE)
             ActivityCompat.requestPermissions(this, permissions, 101)
         }
+
+        // capture auth code for companycam api
+        val data = intent?.data
+        if (data != null)
+            CompanyCamServiceFactory.setToken(data)
+
     }
 
 
@@ -98,31 +106,7 @@ class AuditActivity : BaseActivity(), AuditListFragment.OnAuditSelectedListener 
         }
         R.id.menu_upload_photo -> consume {
             val projectName = findViewById<TextView>(R.id.txt_header_audit).text.toString()
-
-            if (projectName.isBlank())
-                AlertDialog.Builder(this)
-                        .setTitle("Error")
-                        .setMessage("Please select a project to upload to.")
-                        .setPositiveButton("Ok") { dialog, _ -> dialog.cancel() }
-                        .create()
-                        .show()
-            else
-                AlertDialog.Builder(this)
-                    .setTitle("Uploading new image(s) to $projectName.")
-                    .setCancelable(true)
-                    .setItems(arrayOf(
-                            "Take New Image",
-                            "Select Single Image From Gallery",
-                            "Upload Multiple From Gallery")) { _, selected ->
-                        when (selected) {
-                            0 -> takePictureAndUploadToCompanyCam(projectName, listOf())
-                            1 -> uploadImageFromGallery(projectName, listOf())
-                            2 -> uploadMultipleFromGallery(projectName, listOf())
-                            else -> Log.d("------", "unexpected select response $selected")
-                        }
-                    }
-                    .create()
-                    .show()
+            startPhotoUploadToCompanyCam(projectName, listOf())
         }
         else -> super.onOptionsItemSelected(item)
     }
@@ -175,7 +159,7 @@ class AuditActivity : BaseActivity(), AuditListFragment.OnAuditSelectedListener 
     }
 
     private fun setAuditHeader(audit: AuditModel) {
-        findViewById<TextView>(R.id.txt_header_audit).text = "${audit.name}"
+        findViewById<TextView>(R.id.txt_header_audit).text = audit.name
     }
 
     private fun refreshZoneViewModel(auditModel: AuditModel) {
