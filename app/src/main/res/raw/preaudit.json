@@ -8,7 +8,7 @@
           "index": 11,
           "hint": "",
           "dataType": "pickerinputrow",
-          "defaultValues": "1:Anthony,2:Ron,3:Johnny,4:Eli,5:Javi,6:Nick",
+          "defaultValues": "1:Anthony,2:Tracey,3:Josiah",
           "param": "Name",
           "validation": "mandatory",
           "id": "11"
@@ -390,7 +390,7 @@
           "index": 81,
           "hint": "",
           "dataType": "pickerinputrow",
-          "defaultValues": "1:pge, 2:nes",
+          "defaultValues": "1:nes",
           "param": "Electric Utility Company",
           "validation": "mandatory",
           "id": "81"
@@ -399,7 +399,7 @@
           "index": 82,
           "hint": "",
           "dataType": "pickerinputrow",
-          "defaultValues": "1:pge, 2:piedmontgas, 3:N/A",
+          "defaultValues": "1:piedmontgas, 2:N/A",
           "param": "Gas Utility Company",
           "validation": "mandatory",
           "id": "82"
@@ -407,7 +407,7 @@
           "index": 83,
           "hint": "",
           "dataType": "pickerinputrow",
-          "defaultValues": "1:G-NR1, 2:MTNG-rate35, 3:MTNG-rate41, 4:N/A",
+          "defaultValues": "1:MTNG-rate35, 2:MTNG-rate41, 3:N/A",
           "param": "Gas Rate Structure",
           "validation": "mandatory",
           "id": "83"
@@ -416,7 +416,7 @@
           "index": 84,
           "hint": "",
           "dataType": "pickerinputrow",
-          "defaultValues": "1:A-1,2:A-1 TOU,3:A-6 TOU,4:A-10,5:A-10 TOU,6:E-19 TOU, 7:GSA-1, 8:GSA-2, 9:TGSA-1, 10:TGSA-2",
+          "defaultValues": "1:GSA1,2:TGSA1",
           "param": "Electric Rate Structure",
           "validation": "mandatory",
           "id": "84"

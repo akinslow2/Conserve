@@ -45,6 +45,30 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
 
         private const val HVAC_DB_BTU = "size_btu_hr"
         private const val HVAC_DB_EER = "eer"
+//TODO: @k2interactive pull two variables from database
+/**
+        fun extractCDDhours(elements: List<JsonElement?>): Double {
+            elements.forEach {
+                it?.let {
+                    if (it.asJsonObject.has("cddhours")) {
+                        return it.asJsonObject.get("cddhours").asDouble
+                    }
+                }
+            }
+            return 0.0
+        }
+
+        fun extractHDDhours(elements: List<JsonElement?>): Double {
+            elements.forEach {
+                it?.let {
+                    if (it.asJsonObject.has("hddhours")) {
+                        return it.asJsonObject.get("hddhours").asDouble
+                    }
+                }
+            }
+            return 0.0
+        }
+        **/
 
         /**
          * Fetches the EER based on the specific Match Criteria via the Parse API
@@ -109,7 +133,7 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
      * */
     private var eer = 0.0
     var seer = 11.0
-    private var alternateSeer = 17.0
+    private var alternateSeer = 16.0
     private var alternateEer = 0.0
     private var alternateBtu = 0
 
@@ -159,7 +183,19 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
     var gasstructure = ""
     var economizer = ""
     var thermotype = ""
-
+    //TODO: @k2interactive
+    // var packageType = ""
+    //var conditionArea = 2500
+    //var insulation = ""
+    // var coolsetpoint = 72
+    // var heatsetpoint = 68
+    // var hddtest = 0.0
+    // var cddtest = 0.0
+    // var efficiency = if (gasOutput = 0)
+    //          electricEff
+    //  else (gasOutput / gasInput)
+    // heatingpower  = 0.0
+    // therm = 0.034095
     var quantity = 0
 
     override fun setup() {
@@ -178,7 +214,9 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
             electricstructure = preAudit["Others Electric Rate Structure"]!! as String
             gasstructure = preAudit["Others Gas Rate Structure"]!! as String
             bldgtype = preAudit["General Client Info Facility Type"]!! as String
-
+            //TODO: @k2interactive
+            // insulation = preAudit["Insulation added in the last 5 years?"]!! as String
+            // conditionArea = preAudit["Conditioned (Sq.Ft.)"]!! as Int
 
             eer = featureData["EER"]!! as Double
             seer = featureData["SEER"]!! as Double
@@ -189,7 +227,14 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
             economizer = featureData["Economizer"]!! as String
             thermotype = featureData["Thermostat Type"]!! as String
             quantity = featureData["Quantity"]!! as Int
-
+            //TODO: @k2interactive
+            // packageType = featureData["Type of Package Unit"]!! as String
+            // heatingpower = featureData["Heating Power (kW)"]!! as Double
+            // electricEff = featureData["Heating Electric Efficiency"]!! as Int
+            // coolsetpoint =  featureData["Heat Set Point (oF)"]!! as Int
+            // heatsetpoint = featureData["Cool Set Point (oF)"]!! as Int
+            // hddtest = featureData["Heating Degree Days"]!! as Double
+            // cddtest = featureData["Cooling Degree Days"]!! as Double
             city = featureData["City"]!! as String
             state = featureData["State"]!! as String
 
@@ -277,7 +322,8 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
         val postPowerUsed = power(postSize, postSEER)
 
         val postUsageHours = UsageSimple(peakHours, partPeakHours, offPeakHours)
-
+//TODO: @k2interactive
+        // val energyTherm = (.064 * extractHDDhours() * conditionArea / efficiency * .9 / 3.4121414798969 * KW_CONVERSION) * therm
 
         return costElectricity(postPowerUsed, postUsageHours, electricityRate)
         }
@@ -307,9 +353,7 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
      * HVAC - INCENTIVES | MATERIAL COST
      * */
     override fun incentives(): Double {
-        if (utilitycompany == "pge") {return energyPowerChange() * 0.15 + (energyPowerChange() / usageHoursPre()) * 150 }
-        if (utilitycompany == "nes"){ return 0.0}
-        else {return 0.00}
+        return 0.00
     }
 
     override fun materialCost(): Double {
@@ -340,8 +384,7 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
 
     /**
      * PowerTimeChange >> Energy Efficiency Calculations
-     * I need to insert the heating and cooling hours based on set-point temp, operation hours, and thermostat schedule
-     * */
+      * */
     override fun energyPowerChange(): Double {
 
           // Step 3 : Get the Delta
@@ -367,9 +410,25 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
             return 296.0
     }
 
+// TODO: @k2interactive make this the energyTimeChange
+    /**
+    override fun energyTimeChange(): Double {
+    // val energyPre = 0.0
+    //  val hpUtilizationrate = offPeakHours / (cddtest + hddtest)
+    // val cddUtilizationrate = offPeakHours / cddtest
+    // val hddUtilizationrate offPeakHours / hddtest
+    // val hddEquiv =(hpsf/seer)
+//     val energyPre = (.064 * extractCDDhours() * conditionArea * (8760 * utilizationrate)  / seer / KW_CONVERSION) +
+//    (.064 * extractHDDhours() * conditionArea / efficiency * .8 / KW_CONVERSION)
 
+    if(packageType == "heat pump") {
+    } val energyPre = (btu * KW_CONVERSION / seer * ((extractCDDhours()+ hddEquiv)*hpUtilizationrate) + (btu * KW_CONVERSION / seer * (8760*utilizationrate)
+    else {
+ //   val energyPre2 = (btu * KW_CONVERSION / seer * (8760*cddUtilizationrate) + ((gasOutput / efficiency) * (.064 * extractHDDhours() * conditionArea *.8 / gasOutput))
+    // }
+     // }
+**/
 
-    override fun energyTimeChange(): Double = 0.0
     override fun energyPowerTimeChange(): Double = 0.0
 
     /**
@@ -396,6 +455,17 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
             .put("data.city", city)
             .put("data.state", state)
             .toString()
+
+    //TODO: @k2interactive
+//    override fun queryHVACCDDHours() = JSONObject()
+//            .put("type", HVAC_TN_CDD)
+//            .put("data.setpoint", setpoint)
+//            .toString()
+//    override fun queryHVACHDDHours() = JSONObject()
+//            .put("type", HVAC_TN_HDD)
+//            .put("data.setpoint", setpoint)
+//            .toString()
+
 
     /**
      * State if the Equipment has a Post UsageHours Hours (Specific) ie. A separate set of

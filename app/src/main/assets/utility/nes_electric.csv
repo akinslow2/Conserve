@@ -1,0 +1,8 @@
+rate,season,dc_period,demand_charge,ec_period,energy_charge,average,
+GSA1,summer,,5.05,none,0.10202,0,
+GSA1,winter,,5.05,none,0.097695,0,
+TGSA1,summer,,5.05,on-peak,0.11106,0,
+TGSA1,summer,,5.05,part-peak,0.09781,0,
+TGSA1,summer,,5.05,off-peak,0.09781,0,
+TGSA1,winter,,5.05,part-peak,0.100105,0,
+TGSA1,winter,,5.05,off-peak,0.097085,0

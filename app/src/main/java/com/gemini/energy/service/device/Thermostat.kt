@@ -32,12 +32,11 @@ class Thermostat (computable: Computable<*>, utilityRateGas: UtilityRate, utilit
              * Conversion Factor from Horse Power to Kilo Watts
              * */
             private const val KW_CONVERSION = 0.746
-            private const val ThermostatDeemed = "Thermostat_Deemed"
 
             /**
              * Fetches the Deemed Criteria at once
              * via the Parse API
-             * */
+
             //Need to pull multiple at once if feasible otherwise it is a lot of code
             fun extractThermostatDeemedkWh(elements: List<JsonElement?>): Double {
                 elements.forEach {
@@ -68,7 +67,7 @@ class Thermostat (computable: Computable<*>, utilityRateGas: UtilityRate, utilit
                     }
                 }
                 return 0.0
-            }
+            }* */
         }
         var utilitycompany = ""
         private var heatingFuel = ""
@@ -110,13 +109,10 @@ class Thermostat (computable: Computable<*>, utilityRateGas: UtilityRate, utilit
          * */
         override fun costPostState(element: JsonElement, dataHolder: DataHolder): Double {
 
-            var presciptive_kW_savings = extractThermostatDeemedkW(elements)
-            var presciptive_kWh_savings = extractThermostatDeemedkWh(elements)
-            var implementationCost = extractThermostatDeemedCost(elements)
+            val implementationCost = 44
 
             val postRow = mutableMapOf<String, String>()
-            postRow["__prescriptive_kWh_savings"] = presciptive_kWh_savings.toString()
-            postRow["__prescriptive_kW_savings"] = presciptive_kW_savings.toString()
+
             postRow["__implementation_cost"] = implementationCost.toString()
 
 
@@ -158,11 +154,6 @@ class Thermostat (computable: Computable<*>, utilityRateGas: UtilityRate, utilit
         override fun efficientLookup() = false
         override fun queryEfficientFilter() = ""
 
-        override fun queryThermostatDeemed() = JSONObject()
-                .put("type", ThermostatDeemed)
-                .put("data.Heating_Fuel", heatingFuel)
-                .put("data.Cooling_Fuel", coolingFuel)
-                .toString()
 
         /**
          * State if the Equipment has a Post UsageHours Hours (Specific) ie. A separate set of
