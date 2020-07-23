@@ -10,8 +10,6 @@ import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
 import android.databinding.DataBindingUtil
-import android.graphics.Bitmap
-import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
@@ -20,7 +18,6 @@ import android.support.v4.content.ContextCompat
 import android.support.v4.content.FileProvider
 import android.util.Log
 import android.view.View
-import android.widget.TextView
 import android.widget.Toast
 import com.gemini.energy.ImageFilePath
 import com.gemini.energy.R
@@ -31,8 +28,6 @@ import kotlinx.android.synthetic.main.activity_home_mini_bar.*
 import retrofit2.HttpException
 import java.io.File
 import java.io.IOException
-import java.lang.Exception
-import java.net.URI
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
@@ -86,12 +81,13 @@ open class BaseActivity : DaggerAppCompatActivity() {
 
     /// needed for image upload
 
-    val TAKE_IMAGE = 1
-    val SELECT_IMAGE_FROM_GALLERY = 2
-    val SELECT_MULTIPLE_FROM_GALLERY = 3
-    private val TAKE_IMAGE_PERMISSION_REQUEST_CODE = 101
-    private val GALLERY_IMAGE_PERMISSION_REQUEST_CODE = 102
-    private val GALLERY_IMAGE_MULTIPLE_PERMISSION_REQUEST_CODE = 103
+    // TODO: rewrite as normal
+    private val takeImageRequestCode = 1
+    private val selectImageRequestCode = 2
+    private val selectMultipleImageRequestCode = 3
+    private val takeImagePermissionRequestCode = 101
+    private val galleryImagePermissionRequestCode = 102
+    private val galleryMultipleImagePermissionRequestCode = 103
 
     // file of the last photo taken
     private lateinit var photoFile: File
@@ -110,7 +106,7 @@ open class BaseActivity : DaggerAppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
 
         when (requestCode) {
-            TAKE_IMAGE -> {
+            takeImageRequestCode -> {
                 if (resultCode == Activity.RESULT_OK && data != null) {
                     Toast.makeText(applicationContext, "PHOTO SUCCESS! uploading image", Toast.LENGTH_SHORT).show()
 
@@ -132,7 +128,7 @@ open class BaseActivity : DaggerAppCompatActivity() {
                 else Toast.makeText(applicationContext, "image capture failed", Toast.LENGTH_SHORT).show()
 
             }
-            SELECT_IMAGE_FROM_GALLERY -> {
+            selectImageRequestCode -> {
                 if (resultCode == Activity.RESULT_OK && data?.data != null) {
                     Toast.makeText(applicationContext, "SELECT PHOTO SUCCESS! uploading image", Toast.LENGTH_SHORT).show()
 
@@ -155,7 +151,7 @@ open class BaseActivity : DaggerAppCompatActivity() {
                 }
                 else Toast.makeText(applicationContext, "select single image failed", Toast.LENGTH_SHORT).show()
             }
-            SELECT_MULTIPLE_FROM_GALLERY -> {
+            selectMultipleImageRequestCode -> {
                 if (resultCode == Activity.RESULT_OK && data?.clipData != null) {
                     linlaHeaderProgress.visibility = View.VISIBLE
 
@@ -194,12 +190,12 @@ open class BaseActivity : DaggerAppCompatActivity() {
             permissions: Array<out String>,
             grantResults: IntArray
     ) {
-        if (requestCode == TAKE_IMAGE_PERMISSION_REQUEST_CODE
+        if (requestCode == takeImagePermissionRequestCode
                 && (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)
                 && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
             takePictureAndStore()
         }
-        else if (requestCode == GALLERY_IMAGE_PERMISSION_REQUEST_CODE
+        else if (requestCode == galleryImagePermissionRequestCode
                 && (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
             selectImageFromGallery()
         }
@@ -210,7 +206,7 @@ open class BaseActivity : DaggerAppCompatActivity() {
 
 
     fun startPhotoUploadToCompanyCam(projectName: String?, tags: List<String>) {
-        if (!checkForCompanyCamAuth()) return //true
+        if (!checkForCompanyCamAuth()) return
 
         if (projectName == null || projectName.isBlank()) {
             AlertDialog.Builder(this)
@@ -233,17 +229,15 @@ open class BaseActivity : DaggerAppCompatActivity() {
                         "Select Single Image From Gallery",
                         "Upload Multiple From Gallery")) { _, selected ->
                     when (selected) {
-                        0 -> takePictureAndUploadToCompanyCam(projectName, listOf())
-                        1 -> uploadImageFromGallery(projectName, listOf())
-                        2 -> uploadMultipleFromGallery(projectName, listOf())
+                        0 -> takePictureAndUploadToCompanyCam(projectName, tags)
+                        1 -> uploadImageFromGallery(projectName, tags)
+                        2 -> uploadMultipleFromGallery(projectName, tags)
                         else -> Log.d("------", "unexpected select response $selected")
                     }
                 }
                 .create()
                 .show()
     }
-
-
 
     private fun checkForCompanyCamAuth(): Boolean {
         if (CompanyCamServiceFactory.bearerToken() != null) return true
@@ -301,7 +295,6 @@ open class BaseActivity : DaggerAppCompatActivity() {
                 .show()
     }
 
-
     // takes a picture and uploads it to company cam
     private fun takePictureAndUploadToCompanyCam(projectName: String, tags: List<String>) {
         this.projectName = projectName
@@ -343,7 +336,7 @@ open class BaseActivity : DaggerAppCompatActivity() {
     // takes picture and saves to custom location
     // need to use currentPhotoPath to get image in onActivityResult
     private fun takePictureAndStore() {
-        val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)//.also { takePictureIntent ->
+        val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
         if (takePictureIntent.resolveActivity(packageManager) != null) {
             val photoFile: File? = try {
                 createImageFile()
@@ -358,7 +351,7 @@ open class BaseActivity : DaggerAppCompatActivity() {
                         fileProviderAuthority,
                         it)
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
-                startActivityForResult(takePictureIntent, TAKE_IMAGE)
+                startActivityForResult(takePictureIntent, takeImageRequestCode)
             }
         }
     }
@@ -384,7 +377,7 @@ open class BaseActivity : DaggerAppCompatActivity() {
         val intent = Intent(Intent.ACTION_GET_CONTENT)
         intent.type = "image/*"
         if (intent.resolveActivity(packageManager) != null) {
-            startActivityForResult(intent, SELECT_IMAGE_FROM_GALLERY)
+            startActivityForResult(intent, selectImageRequestCode)
         }
     }
 
@@ -395,7 +388,7 @@ open class BaseActivity : DaggerAppCompatActivity() {
         intent.type = "image/*"
         intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
         if (intent.resolveActivity(packageManager) != null) {
-            startActivityForResult(intent, SELECT_MULTIPLE_FROM_GALLERY)
+            startActivityForResult(intent, selectMultipleImageRequestCode)
         }
     }
 
@@ -427,7 +420,7 @@ open class BaseActivity : DaggerAppCompatActivity() {
         ActivityCompat.requestPermissions(
                 this,
                 arrayOf(Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE),
-                TAKE_IMAGE_PERMISSION_REQUEST_CODE)
+                takeImagePermissionRequestCode)
     }
 
     // request permissions for selecting image from gallery
@@ -439,6 +432,6 @@ open class BaseActivity : DaggerAppCompatActivity() {
         ActivityCompat.requestPermissions(
                 this,
                 arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
-                if (isMultiple) GALLERY_IMAGE_MULTIPLE_PERMISSION_REQUEST_CODE else GALLERY_IMAGE_PERMISSION_REQUEST_CODE)
+                if (isMultiple) galleryMultipleImagePermissionRequestCode else galleryImagePermissionRequestCode)
     }
 }
