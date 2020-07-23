@@ -35,16 +35,29 @@
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_paths" />
-                </provider>
+                android:resource="@xml/file_paths"/>
+        </provider>
         <!--END needed for saving images to custom location -->
 
         <activity android:name=".presentation.audit.AuditActivity">
+            <!--            capture auth info from company cam-->
+            <intent-filter >
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <!-- Accepts URIs that begin with "http://www.geminiesolutions.com/companycamauth" -->
+                <data
+                    android:host="www.geminiesolutions.com"
+                    android:scheme="https"
+                    android:pathPrefix="/companycamauth"
+                    />
+            </intent-filter>
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
         </activity>
 
         <activity android:name=".presentation.type.TypeActivity" />
