@@ -92,39 +92,13 @@ class TypeActivity : BaseActivity(),
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
         R.id.menu_upload_photo -> consume {
             val projectName = auditModel?.name
-            if (projectName == null) {
-                AlertDialog.Builder(this)
-                        .setTitle("Error")
-                        .setMessage("Please select a project to upload to.")
-                        .setPositiveButton("Ok") { dialog, _ -> dialog.cancel() }
-                        .create()
-                        .show()
-                return true
-            }
-
             val zoneName = zoneModel?.name
             val equipmentName = typeModel?.name
             val equipmentType = typeModel?.type
             val equipmentSubtype = typeModel?.subType
 
             val tags = arrayOf(zoneName, equipmentName, equipmentType, equipmentSubtype)
-
-            AlertDialog.Builder(this)
-                    .setTitle("Select Upload Method")
-                    .setCancelable(true)
-                    .setItems(arrayOf(
-                            "Take New Image",
-                            "Select Single Image From Gallery",
-                            "Upload Multiple From Gallery")) { _, selected ->
-                        when (selected) {
-                            0 -> takePictureAndUploadToCompanyCam(projectName, tags.filterNotNull())
-                            1 -> uploadImageFromGallery(projectName, tags.filterNotNull())
-                            2 -> uploadMultipleFromGallery(projectName, tags.filterNotNull())
-                            else -> Log.d("------", "unexpected select response $selected")
-                        }
-                    }
-                    .create()
-                    .show()
+            startPhotoUploadToCompanyCam(projectName, tags.filterNotNull())
         }
         else -> super.onOptionsItemSelected(item)
     }

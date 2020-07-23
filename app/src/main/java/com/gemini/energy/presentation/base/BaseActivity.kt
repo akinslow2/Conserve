@@ -1,5 +1,7 @@
 package com.gemini.energy.presentation.base
 
+import CompanyCamAPI.CompanyCamServiceFactory
+import CompanyCamAPI.Enums.ErrorCodes
 import CompanyCamAPI.PhotoUploader
 import android.Manifest
 import android.app.Activity
@@ -18,6 +20,7 @@ import android.support.v4.content.ContextCompat
 import android.support.v4.content.FileProvider
 import android.util.Log
 import android.view.View
+import android.widget.TextView
 import android.widget.Toast
 import com.gemini.energy.ImageFilePath
 import com.gemini.energy.R
@@ -25,6 +28,7 @@ import com.gemini.energy.databinding.ActivityHomeDetailBinding
 import dagger.android.support.DaggerAppCompatActivity
 import kotlinx.android.synthetic.main.activity_home_detail.*
 import kotlinx.android.synthetic.main.activity_home_mini_bar.*
+import retrofit2.HttpException
 import java.io.File
 import java.io.IOException
 import java.lang.Exception
@@ -121,13 +125,7 @@ open class BaseActivity : DaggerAppCompatActivity() {
                             Log.e(
                                     "BaseActivity upload taken image to compnay cam",
                                     "ERROR: ${error?.message} ${error?.stackTrace}")
-
-                            AlertDialog.Builder(this)
-                                    .setTitle("Error")
-                                    .setMessage("error uploading image: ${error?.message}")
-                                    .setPositiveButton("Ok") { dialog, _ -> dialog.cancel() }
-                                    .create()
-                                    .show()
+                            handleCompanyCamException(error)
                         }
                     }
                 }
@@ -151,12 +149,7 @@ open class BaseActivity : DaggerAppCompatActivity() {
                                     "BaseActivity upload selected image to compnay cam",
                                     "ERROR: ${error?.message} ${error?.stackTrace}")
 
-                            AlertDialog.Builder(this)
-                                    .setTitle("Error")
-                                    .setMessage("error uploading image: ${error?.message}")
-                                    .setPositiveButton("Ok") { dialog, _ -> dialog.cancel() }
-                                    .create()
-                                    .show()
+                            handleCompanyCamException(error)
                         }
                     }
                 }
@@ -216,8 +209,101 @@ open class BaseActivity : DaggerAppCompatActivity() {
     }
 
 
+    fun startPhotoUploadToCompanyCam(projectName: String?, tags: List<String>) {
+        if (!checkForCompanyCamAuth()) return //true
+
+        if (projectName == null || projectName.isBlank()) {
+            AlertDialog.Builder(this)
+                    .setTitle("Error")
+                    .setMessage("Please select a project to upload to.")
+                    .setPositiveButton("Ok") { dialog, _ -> dialog.cancel() }
+                    .create()
+                    .show()
+            return
+        }
+
+        this.projectName = projectName
+        this.tags = tags
+
+        AlertDialog.Builder(this)
+                .setTitle("Uploading new image(s) to $projectName.")
+                .setCancelable(true)
+                .setItems(arrayOf(
+                        "Take New Image",
+                        "Select Single Image From Gallery",
+                        "Upload Multiple From Gallery")) { _, selected ->
+                    when (selected) {
+                        0 -> takePictureAndUploadToCompanyCam(projectName, listOf())
+                        1 -> uploadImageFromGallery(projectName, listOf())
+                        2 -> uploadMultipleFromGallery(projectName, listOf())
+                        else -> Log.d("------", "unexpected select response $selected")
+                    }
+                }
+                .create()
+                .show()
+    }
+
+
+
+    private fun checkForCompanyCamAuth(): Boolean {
+        if (CompanyCamServiceFactory.bearerToken() != null) return true
+
+        // do auth
+        val authIntent = CompanyCamServiceFactory.authorizeIntent()
+        if (authIntent?.resolveActivity(packageManager) != null)
+            startActivity(authIntent)
+
+        return false
+
+    }
+
+    private fun handleCompanyCamException(exception: Throwable?) {
+        if (exception is HttpException) {
+            when (exception.code()) {
+                // TODO: add login button
+                ErrorCodes.Unauthorized.code -> AlertDialog.Builder(this)
+                        .setTitle("Your Company Cam Authorization Expired")
+                        .setMessage("Please log into company cam again.")
+                        .setPositiveButton("Ok") { dialog, _ -> dialog.cancel() }
+                        .create()
+                        .show()
+
+                ErrorCodes.SubscriptionExpired.code ->
+                    AlertDialog.Builder(this)
+                            .setTitle("Company Cam Subscription Expired")
+                            .setMessage("The company cam subscription has expired. Please renew the subscription and try again.")
+                            .setPositiveButton("Ok") { dialog, _ -> dialog.cancel() }
+                            .create()
+                            .show()
+
+                ErrorCodes.ServerError.code -> AlertDialog.Builder(this)
+                        .setTitle("Company Cam Server Error")
+                        .setMessage("Company Cam is having issues with their server. Please try again later.")
+                        .setPositiveButton("Ok") { dialog, _ -> dialog.cancel() }
+                        .create()
+                        .show()
+                else ->
+                    AlertDialog.Builder(this)
+                        .setTitle("Error")
+                        .setMessage("error uploading image: ${exception.message}")
+                        .setPositiveButton("Ok") { dialog, _ -> dialog.cancel() }
+                        .create()
+                        .show()
+            }
+
+        }
+        else
+            AlertDialog.Builder(this)
+                .setTitle("Error")
+                .setMessage("error uploading image: ${exception?.message}")
+                .setPositiveButton("Ok") { dialog, _ -> dialog.cancel() }
+                .create()
+                .show()
+    }
+
+
     // takes a picture and uploads it to company cam
-    fun takePictureAndUploadToCompanyCam(projectName: String, tags: List<String>) {
+    private fun takePictureAndUploadToCompanyCam(projectName: String, tags: List<String>) {
         this.projectName = projectName
         this.tags = tags
         Log.i("-----", "take picture for upload")
@@ -234,7 +320,7 @@ open class BaseActivity : DaggerAppCompatActivity() {
     }
 
     // select 1 image from the gallery to upload to compnay cam
-    fun uploadImageFromGallery(projectName: String, tags: List<String>) {
+    private fun uploadImageFromGallery(projectName: String, tags: List<String>) {
         this.projectName = projectName
         this.tags = tags
         Log.d("-----", "select single for upload")
@@ -245,7 +331,7 @@ open class BaseActivity : DaggerAppCompatActivity() {
     }
 
     // select multiple images to upload to company cam
-    fun uploadMultipleFromGallery(projectName: String, tags: List<String>) {
+    private fun uploadMultipleFromGallery(projectName: String, tags: List<String>) {
         this.projectName = projectName
         this.tags = tags
         Log.d("-----", "select multiple for upload")
