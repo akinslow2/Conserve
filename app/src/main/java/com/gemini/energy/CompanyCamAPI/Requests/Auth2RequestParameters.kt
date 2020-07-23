@@ -11,5 +11,7 @@ data class Auth2RequestParameters(
         val code: String,
 
         // same URI as in Auth step 1
-        val redirect_uri: String
+        val redirect_uri: String,
+
+        val grant_type: String = "authorization_code"
 )
