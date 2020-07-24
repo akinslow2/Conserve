@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.net.Uri
+import android.util.Log
 import com.gemini.energy.App
 import kotlinx.coroutines.*
 import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
@@ -35,7 +36,7 @@ object CompanyCamServiceFactory {
 
         //2 Handle exceptions if any
         val errorHandler = CoroutineExceptionHandler { _, exception ->
-//            callback(false, exception)
+            Log.d("------", "error authorizing with company cam")
         }
 
         //3 the Coroutine runs using the Main (UI) dispatcher
@@ -66,7 +67,7 @@ object CompanyCamServiceFactory {
 
 
     fun authorizeIntent(): Intent? {
-        val authorizeUrl = "https://app.companycam.com/oauth/authorize?".toHttpUrlOrNull()
+        val authorizeUrl = "https://app.companycam.com/oauth/authorize".toHttpUrlOrNull()
                 ?.newBuilder()
                 ?.addQueryParameter("client_id", clientId)
                 ?.addQueryParameter("redirect_uri", redirectUri)
