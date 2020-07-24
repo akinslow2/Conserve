@@ -53,7 +53,6 @@ class SettingsActivity: AppCompatActivity() {
 class SettingsFragment: PreferenceFragment() {
 
     private var dropBox: DropBox? = null
-    private val ccPreference = "companyCamAuth"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -82,18 +81,12 @@ class SettingsFragment: PreferenceFragment() {
                 true
             }
             getString(R.string.companyCamAuthPreferenceKey) -> {
-                Log.d("------", "selected company cam auth")
-                val token = CompanyCamServiceFactory.bearerToken()
-                if (token == null) {
-                    // sign in
+                if (CompanyCamServiceFactory.bearerToken() == null)
                     (activity as SettingsActivity).authorizeCompanyCam()
-                }
                 else {
-                    // sign out
                     CompanyCamServiceFactory.clearAuthToken()
                     updateComapanyCamPreference()
                 }
-
                 return true
             }
             else -> { super.onPreferenceTreeClick(preferenceScreen, preference) }
@@ -127,14 +120,13 @@ class SettingsFragment: PreferenceFragment() {
     }
 
     private fun updateComapanyCamPreference() {
-        val token = CompanyCamServiceFactory.bearerToken()
-        val pref = findPreference(ccPreference)
-        if (token == null) {
+        val pref = findPreference(getString(R.string.companyCamAuthPreferenceKey))
+
+        if (CompanyCamServiceFactory.bearerToken() == null) {
             pref.title = getString(R.string.companyCamAuthPreferenceTitle)
             pref.summary = getString(R.string.companyCamAuthPreferenceSummary)
         }
         else {
-            Log.d("------", "need to pull user info")
             pref.title = "Logout from Company Cam"
             pref.summary = "You will not be able to upload photos until you sign back in."
         }
