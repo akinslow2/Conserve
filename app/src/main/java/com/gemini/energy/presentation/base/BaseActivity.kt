@@ -21,6 +21,7 @@ import android.view.View
 import android.widget.Toast
 import com.gemini.energy.ImageFilePath
 import com.gemini.energy.R
+import com.gemini.energy.data.local.system.AuditDatabase
 import com.gemini.energy.databinding.ActivityHomeDetailBinding
 import dagger.android.support.DaggerAppCompatActivity
 import kotlinx.android.synthetic.main.activity_home_detail.*
@@ -81,7 +82,6 @@ open class BaseActivity : DaggerAppCompatActivity() {
 
     /// needed for image upload
 
-    // TODO: rewrite as normal
     private val takeImageRequestCode = 1
     private val selectImageRequestCode = 2
     private val selectMultipleImageRequestCode = 3
@@ -98,6 +98,7 @@ open class BaseActivity : DaggerAppCompatActivity() {
     private val fileProviderAuthority = "com.gemini.energy.android.fileprovider"
 
     private lateinit var projectName: String
+    private lateinit var projectAddress: String
     private lateinit var tags: List<String>
 
 
@@ -111,7 +112,7 @@ open class BaseActivity : DaggerAppCompatActivity() {
                     Toast.makeText(applicationContext, "PHOTO SUCCESS! uploading image", Toast.LENGTH_SHORT).show()
 
                     linlaHeaderProgress.visibility = View.VISIBLE
-                    photoUploader.UploadPhoto(photoFile, projectName, tags.toTypedArray())
+                    photoUploader.UploadPhoto(photoFile, projectName, projectAddress, tags.toTypedArray())
                     { success, error ->
                         linlaHeaderProgress.visibility = View.GONE
 
@@ -134,7 +135,7 @@ open class BaseActivity : DaggerAppCompatActivity() {
 
                     val file = File(ImageFilePath.getPath(this, data.data))
                     linlaHeaderProgress.visibility = View.VISIBLE
-                    photoUploader.UploadPhoto(file, projectName, tags.toTypedArray())
+                    photoUploader.UploadPhoto(file, projectName, projectAddress, tags.toTypedArray())
                     { success, error ->
                         linlaHeaderProgress.visibility = View.GONE
 
@@ -160,7 +161,7 @@ open class BaseActivity : DaggerAppCompatActivity() {
 
                     for (i in 0 until itemCount) {
                         val file = File(ImageFilePath.getPath(this, clips.getItemAt(i).uri))
-                        photoUploader.UploadPhoto(file, projectName, tags.toTypedArray()) { success, error ->
+                        photoUploader.UploadPhoto(file, projectName, projectAddress, tags.toTypedArray()) { success, error ->
 
                             if (i == itemCount - 1)
                                 linlaHeaderProgress.visibility = View.GONE
@@ -205,7 +206,7 @@ open class BaseActivity : DaggerAppCompatActivity() {
     }
 
 
-    fun startPhotoUploadToCompanyCam(projectName: String?, tags: List<String>) {
+    fun startPhotoUploadToCompanyCam(projectName: String?, address: String, tags: List<String>) {
         if (!checkForCompanyCamAuth()) return
 
         if (projectName == null || projectName.isBlank()) {
@@ -220,6 +221,7 @@ open class BaseActivity : DaggerAppCompatActivity() {
 
         this.projectName = projectName
         this.tags = tags
+        this.projectAddress = address
 
         AlertDialog.Builder(this)
                 .setTitle("Uploading new image(s) to $projectName.")
@@ -239,6 +241,20 @@ open class BaseActivity : DaggerAppCompatActivity() {
                 .show()
     }
 
+    fun getAddressFromAuditId(auditId: Long): String {
+        // create connection to DB to retreive project address
+        val db = AuditDatabase.newInstance(this)
+        // get feature info for the selected audit
+        val features = db.featureDao().getAllByAudit(auditId).blockingGet()
+
+        // get the address from the list of features
+        val addressFeature = features.find { f -> f.key == "General Client Info Address" }
+
+        // finally get the project address
+        return addressFeature?.valueString ?: ""
+    }
+
+    // returns true if an auth token is saved
     private fun checkForCompanyCamAuth(): Boolean {
         if (CompanyCamServiceFactory.bearerToken() != null) return true
 
@@ -262,6 +278,7 @@ open class BaseActivity : DaggerAppCompatActivity() {
 
     }
 
+    // displays appropriate error message to the user
     private fun handleCompanyCamException(exception: Throwable?) {
         if (exception is HttpException) {
             when (exception.code()) {

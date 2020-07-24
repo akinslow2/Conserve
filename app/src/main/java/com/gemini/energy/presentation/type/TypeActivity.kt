@@ -91,14 +91,19 @@ class TypeActivity : BaseActivity(),
 
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
         R.id.menu_upload_photo -> consume {
+
             val projectName = auditModel?.name
             val zoneName = zoneModel?.name
             val equipmentName = typeModel?.name
             val equipmentType = typeModel?.type
             val equipmentSubtype = typeModel?.subType
 
+            val auditId = auditModel?.id
+            val address = if (auditId != null) getAddressFromAuditId(auditId) else ""
+
+
             val tags = arrayOf(zoneName, equipmentName, equipmentType, equipmentSubtype)
-            startPhotoUploadToCompanyCam(projectName, tags.filterNotNull())
+            startPhotoUploadToCompanyCam(projectName, address, tags.filterNotNull())
         }
         else -> super.onOptionsItemSelected(item)
     }

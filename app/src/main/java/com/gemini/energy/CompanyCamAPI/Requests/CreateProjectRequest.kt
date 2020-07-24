@@ -15,4 +15,10 @@ data class CreateProjectRequest(
             Address("", "", "", "", "", ""),
             Coordinate(0f, 0f),
             arrayOf())
+
+    constructor(name: String, address: String): this (
+            name,
+            Address(address, "", "", "", "", ""),
+            Coordinate(0f, 0f),
+            arrayOf())
 }
