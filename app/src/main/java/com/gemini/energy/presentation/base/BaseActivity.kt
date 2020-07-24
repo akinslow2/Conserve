@@ -242,10 +242,21 @@ open class BaseActivity : DaggerAppCompatActivity() {
     private fun checkForCompanyCamAuth(): Boolean {
         if (CompanyCamServiceFactory.bearerToken() != null) return true
 
-        // do auth
-        val authIntent = CompanyCamServiceFactory.authorizeIntent()
-        if (authIntent?.resolveActivity(packageManager) != null)
-            startActivity(authIntent)
+        AlertDialog.Builder(this)
+                .setTitle("Login Needed")
+                .setMessage("Please log into company cam to upload images.")
+                .setNeutralButton("Cancel") { dialog, _ -> dialog.cancel() }
+                .setPositiveButton("Ok") {
+                    dialog, _ -> dialog.cancel()
+                    // do auth
+                    val authIntent = CompanyCamServiceFactory.authorizeIntent()
+                    if (authIntent?.resolveActivity(packageManager) != null)
+                        startActivity(authIntent)
+                }
+                .create()
+                .show()
+
+
 
         return false
 
