@@ -7,6 +7,10 @@
             android:key="@string/drop_box_auth"
             android:summary="Access your DropBox Account via OAuth." />
 
+        <Preference android:title="@string/companyCamAuthPreferenceTitle"
+            android:key="@string/companyCamAuthPreferenceKey"
+            android:summary="@string/companyCamAuthPreferenceSummary" />
+
     </PreferenceCategory>
 
 </PreferenceScreen>

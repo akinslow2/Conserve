@@ -34,5 +34,8 @@
     <string name="app_key">o1peu8t9r6jrl12</string>
 
     <string name="navigation_drawer_header_title">Gemini Energy</string>
+    <string name="companyCamAuthPreferenceTitle">Login to Company Cam</string>
+    <string name="companyCamAuthPreferenceKey">companyCamAuth</string>
+    <string name="companyCamAuthPreferenceSummary">Upload to your Company Cam Account via OAuth.</string>
 
 </resources>
