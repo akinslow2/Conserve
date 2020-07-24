@@ -18,6 +18,7 @@ import android.view.View
 import android.widget.TextView
 import android.widget.Toast
 import com.gemini.energy.R
+import com.gemini.energy.data.local.system.AuditDatabase
 import com.gemini.energy.databinding.ActivityHomeDetailBinding
 import com.gemini.energy.presentation.audit.detail.adapter.DetailPagerAdapter
 import com.gemini.energy.presentation.audit.detail.preaudit.PreAuditFragment
@@ -105,8 +106,23 @@ class AuditActivity : BaseActivity(), AuditListFragment.OnAuditSelectedListener 
             startActivity(Intent(this, SettingsActivity::class.java))
         }
         R.id.menu_upload_photo -> consume {
+            // these all return null :-(
+            val audit = sharedViewModel.getAudit().value
+            val zone = sharedViewModel.getZone().value
+            val type = sharedViewModel.getType().value
+            val subtype = sharedViewModel.getSubType().value
+
+            // this gets the tag for the preaudit fragment
+            val tag = "${ANDROID_SWITCHER}:${view_pager.id}:${PREAUDIT_FRAGMENT_INDEX}"
+            // this gets the preaudit fragment
+            val fragment = supportFragmentManager.findFragmentByTag(tag) as PreAuditFragment?
+            // this gets the selected audit id from the preaudit fragment
+            val auditId = fragment?.getAuditId()
+
+            val address = if (auditId != null) getAddressFromAuditId(auditId) else ""
+
             val projectName = findViewById<TextView>(R.id.txt_header_audit).text.toString()
-            startPhotoUploadToCompanyCam(projectName, listOf())
+            startPhotoUploadToCompanyCam(projectName, address, listOf())
         }
         else -> super.onOptionsItemSelected(item)
     }
