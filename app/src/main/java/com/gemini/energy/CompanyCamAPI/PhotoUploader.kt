@@ -25,6 +25,7 @@ class PhotoUploader {
     fun UploadPhoto(
             photoFile: File,
             projectName: String,
+            projectAddress: String,
             photoTags: Array<String>,
             callback: (success: Boolean, exception: Throwable?) -> Unit) {
         //1 Create a Coroutine scope using a job to be able to cancel when needed
@@ -42,7 +43,7 @@ class PhotoUploader {
             // have to upload photo to parse server before uploading to company cam
             val parsePhoto = uploadImageToParseServer(photoFile, "$projectName.jpg")
 
-            val projectId = getProjectId("$branch - $projectName")
+            val projectId = getProjectId("$branch - $projectName", projectAddress)
             val photo = uploadPhoto(projectId, parsePhoto.url)
 
             for (tag in photoTags) {
@@ -74,21 +75,23 @@ class PhotoUploader {
     }
 
     // returns the project id that matches the project name
-    private suspend fun getProjectId(projectName: String): String {
+    private suspend fun getProjectId(projectName: String, projectAddress: String): String {
 
         val projects = ccService.getExistingProjects()
         val existing = projects.find { p -> p.name == projectName }
 
-        if (existing != null)
+        // TODO: update project address if changed
+        if (existing != null) {
             return existing.id
+        }
 
-        val new = createProject(projectName)
+        val new = createProject(projectName, projectAddress)
         return new.id
     }
 
     // creates a new project
-    private suspend fun createProject(projectName: String): Project {
-        val options = CreateProjectRequest(projectName)
+    private suspend fun createProject(projectName: String, projectAddress: String): Project {
+        val options = CreateProjectRequest(projectName, projectAddress)
         return ccService.createProject(options)
     }
 
