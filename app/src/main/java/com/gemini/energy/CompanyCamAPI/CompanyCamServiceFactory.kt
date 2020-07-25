@@ -8,7 +8,6 @@ import android.net.Uri
 import android.util.Log
 import com.gemini.energy.App
 import kotlinx.coroutines.*
-import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -67,20 +66,10 @@ object CompanyCamServiceFactory {
 
 
     fun authorizeIntent(): Intent? {
-        val authorizeUrl = "https://app.companycam.com/oauth/authorize".toHttpUrlOrNull()
-                ?.newBuilder()
-                ?.addQueryParameter("client_id", clientId)
-                ?.addQueryParameter("redirect_uri", redirectUri)
-                ?.addQueryParameter("response_type", "code")
-                // TODO: get correct scope for read/write token
-//                ?.addQueryParameter("scope", "read+write+destroy")
-                ?.build()
-                ?: return null
+        val intent = Intent(Intent.ACTION_VIEW)
+        intent.data = Uri.parse("https://app.companycam.com/oauth/authorize?client_id=8418eeee9e98af39e69160ba9e4127d55dcbd0e3f88a381e060c0ed571ca3e73&redirect_uri=https%3A%2F%2Fwww.geminiesolutions.com%2Fcompanycamauth&response_type=code&scope=read+write+destroy")
 
-        val i = Intent(Intent.ACTION_VIEW)
-        i.data = Uri.parse(authorizeUrl.toUrl().toString())
-
-        return i
+        return intent
     }
 
 
@@ -92,12 +81,14 @@ object CompanyCamServiceFactory {
         val httpClient = OkHttpClient.Builder().addInterceptor(logging).addInterceptor { chain ->
             val newRequest = chain.request().newBuilder()
                     .addHeader("Content-type", "application/json")
+                    .addHeader("X-CompanyCam-Secret", secretKey)
 
             val token = bearerToken()
             if (token != null) {
                 newRequest.addHeader("Authorization", "Bearer $token")
                         // TODO: when multiple users, query and save user's email
-                    .addHeader("X-CompanyCam-User", rootUserEmail)
+                        .addHeader("X-CompanyCam-User", rootUserEmail)
+                        .addHeader("Connection", "keep-alive")
             }
 
             chain.proceed(newRequest.build())
