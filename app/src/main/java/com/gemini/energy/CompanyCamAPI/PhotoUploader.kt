@@ -2,10 +2,12 @@ package CompanyCamAPI
 
 import CompanyCamAPI.Objects.Photo
 import CompanyCamAPI.Objects.Project
-import CompanyCamAPI.Requests.AddCommentRequest
 import CompanyCamAPI.Requests.CreateProjectRequest
+import CompanyCamAPI.Requests.PhotoRequest
 import CompanyCamAPI.Requests.UploadPhotoRequest
+import CompanyCamAPI.Types.Address
 import CompanyCamAPI.Types.Coordinate
+import android.util.Log
 import com.gemini.energy.CompanyCamAPI.Requests.ApplyTagToPhotoRequest
 import com.gemini.energy.CompanyCamAPI.Requests.CreateTagRequest
 import com.gemini.energy.branch
@@ -15,7 +17,6 @@ import kotlinx.coroutines.*
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.asRequestBody
 import java.io.File
-import java.net.URI
 import java.util.*
 
 class PhotoUploader {
@@ -43,6 +44,8 @@ class PhotoUploader {
             // have to upload photo to parse server before uploading to company cam
             val parsePhoto = uploadImageToParseServer(photoFile, "$projectName.jpg")
 
+            Log.d("------", "parse photo address: ${parsePhoto.url}")
+
             val projectId = getProjectId("$branch - $projectName", projectAddress)
             val photo = uploadPhoto(projectId, parsePhoto.url)
 
@@ -67,9 +70,10 @@ class PhotoUploader {
     // returns the uploaded photo object
     private suspend fun uploadPhoto(projectId: String, photoUri: String): Photo {
         val photoRequest = UploadPhotoRequest(
-                Coordinate(0f, 0f),
-                photoUri,
-                (Date().time / 1000).toInt()
+                PhotoRequest(
+                        Coordinate(0f, 0f),
+                        photoUri,
+                        (Date().time / 1000).toInt())
         )
         return ccService.uploadPhoto(projectId, photoRequest)
     }
