@@ -10,6 +10,7 @@ import CompanyCamAPI.Types.Coordinate
 import android.util.Log
 import com.gemini.energy.CompanyCamAPI.Requests.ApplyTagToPhotoRequest
 import com.gemini.energy.CompanyCamAPI.Requests.CreateTagRequest
+import com.gemini.energy.CompanyCamAPI.Requests.UpdateProjectAddressRequest
 import com.gemini.energy.branch
 import com.gemini.energy.service.ParseAPI
 import com.gemini.energy.service.responses.UploadImageResponse
@@ -43,12 +44,14 @@ class PhotoUploader {
 
             // have to upload photo to parse server before uploading to company cam
             val parsePhoto = uploadImageToParseServer(photoFile, "$projectName.jpg")
-
             Log.d("------", "parse photo address: ${parsePhoto.url}")
 
-            val projectId = getProjectId("$branch - $projectName", projectAddress)
-            val photo = uploadPhoto(projectId, parsePhoto.url)
-//            val photo = uploadPhoto(projectId, "https://zjf683hopnivfq5d12xaooxr-wpengine.netdna-ssl.com/wp-content/uploads/2020/02/GettyImages-1199242002-1-1480x833.jpg")
+            val project = getProject("$branch - $projectName", projectAddress)
+            if (project.address != projectAddress)
+                ccService.updateProjectAddress(project.id, UpdateProjectAddressRequest(projectAddress))
+
+            val photo = uploadPhoto(project.id, parsePhoto.url)
+//            val photo = uploadPhoto(project.id, "https://zjf683hopnivfq5d12xaooxr-wpengine.netdna-ssl.com/wp-content/uploads/2020/02/GettyImages-1199242002-1-1480x833.jpg")
 
             for (tag in photoTags) {
                 addTagToPhoto(tag, photo.id)
@@ -62,11 +65,13 @@ class PhotoUploader {
         }
     }
 
+
     // returns the URI to the image on parse server
     private suspend fun uploadImageToParseServer(photo: File, imageName: String): UploadImageResponse {
         val body = photo.asRequestBody("image/*".toMediaTypeOrNull())
         return ParseAPI.create().uploadImage(imageName, body)
     }
+
 
     // returns the uploaded photo object
     private suspend fun uploadPhoto(projectId: String, photoUri: String): Photo {
@@ -79,26 +84,25 @@ class PhotoUploader {
         return ccService.uploadPhoto(projectId, photoRequest)
     }
 
-    // returns the project id that matches the project name
-    private suspend fun getProjectId(projectName: String, projectAddress: Address): String {
 
+    // returns the project id that matches the project name
+    private suspend fun getProject(projectName: String, projectAddress: Address): Project {
         val projects = ccService.getExistingProjects()
         val existing = projects.find { p -> p.name == projectName }
 
-        // TODO: update project address if changed
-        if (existing != null) {
-            return existing.id
-        }
+        if (existing != null)
+            return existing
 
-        val new = createProject(projectName, projectAddress)
-        return new.id
+        return createProject(projectName, projectAddress)
     }
+
 
     // creates a new project
     private suspend fun createProject(projectName: String, projectAddress: Address): Project {
         val options = CreateProjectRequest(projectName, projectAddress)
         return ccService.createProject(options)
     }
+
 
     // adds a tag to a photo
     private suspend fun addTagToPhoto(tagName: String, photoId: String) {
