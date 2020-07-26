@@ -2,12 +2,10 @@ package com.gemini.energy.presentation.audit
 
 import CompanyCamAPI.CompanyCamServiceFactory
 import android.Manifest
-import android.app.AlertDialog
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.net.Uri
 import android.os.Bundle
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
@@ -18,7 +16,6 @@ import android.view.View
 import android.widget.TextView
 import android.widget.Toast
 import com.gemini.energy.R
-import com.gemini.energy.data.local.system.AuditDatabase
 import com.gemini.energy.databinding.ActivityHomeDetailBinding
 import com.gemini.energy.presentation.audit.detail.adapter.DetailPagerAdapter
 import com.gemini.energy.presentation.audit.detail.preaudit.PreAuditFragment
@@ -106,23 +103,13 @@ class AuditActivity : BaseActivity(), AuditListFragment.OnAuditSelectedListener 
             startActivity(Intent(this, SettingsActivity::class.java))
         }
         R.id.menu_upload_photo -> consume {
-            // these all return null :-(
-            val audit = sharedViewModel.getAudit().value
-            val zone = sharedViewModel.getZone().value
-            val type = sharedViewModel.getType().value
-            val subtype = sharedViewModel.getSubType().value
-
+            val projectName = findViewById<TextView>(R.id.txt_header_audit).text.toString()
             // this gets the tag for the preaudit fragment
             val tag = "${ANDROID_SWITCHER}:${view_pager.id}:${PREAUDIT_FRAGMENT_INDEX}"
             // this gets the preaudit fragment
             val fragment = supportFragmentManager.findFragmentByTag(tag) as PreAuditFragment?
-            // this gets the selected audit id from the preaudit fragment
-            val auditId = fragment?.getAuditId()
 
-            val address = if (auditId != null) getAddressFromAuditId(auditId) else ""
-
-            val projectName = findViewById<TextView>(R.id.txt_header_audit).text.toString()
-            startPhotoUploadToCompanyCam(projectName, address, listOf())
+            startPhotoUploadToCompanyCam(projectName, getAddressFromAuditId(fragment?.getAuditId()), listOf())
         }
         else -> super.onOptionsItemSelected(item)
     }

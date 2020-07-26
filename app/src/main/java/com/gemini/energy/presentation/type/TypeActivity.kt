@@ -1,8 +1,6 @@
 package com.gemini.energy.presentation.type
 
-import android.app.AlertDialog
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.TextView
@@ -98,12 +96,9 @@ class TypeActivity : BaseActivity(),
             val equipmentType = typeModel?.type
             val equipmentSubtype = typeModel?.subType
 
-            val auditId = auditModel?.id
-            val address = if (auditId != null) getAddressFromAuditId(auditId) else ""
-
-
             val tags = arrayOf(zoneName, equipmentName, equipmentType, equipmentSubtype)
-            startPhotoUploadToCompanyCam(projectName, address, tags.filterNotNull())
+
+            startPhotoUploadToCompanyCam(projectName, getAddressFromAuditId(auditModel?.id), tags.filterNotNull())
         }
         else -> super.onOptionsItemSelected(item)
     }
