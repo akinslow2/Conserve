@@ -10,15 +10,10 @@ data class CreateProjectRequest(
         val geofence: Array<Coordinate>
 ) {
 
-    constructor(name: String) : this(
+    constructor(name: String, address: Address) : this(
             name,
-            Address("", "", "", "", "", ""),
+            address,
             Coordinate(0f, 0f),
-            arrayOf())
-
-    constructor(name: String, address: String): this (
-            name,
-            Address(address, "", "", "", "", ""),
-            Coordinate(0f, 0f),
-            arrayOf())
+            arrayOf()
+    )
 }
