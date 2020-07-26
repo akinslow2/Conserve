@@ -269,12 +269,9 @@ open class BaseActivity : DaggerAppCompatActivity() {
                 .setTitle("Login Needed")
                 .setMessage("Please log into company cam to upload images.")
                 .setNeutralButton("Cancel") { dialog, _ -> dialog.cancel() }
-                .setPositiveButton("Ok") {
-                    dialog, _ -> dialog.cancel()
-                    // do auth
-                    val authIntent = CompanyCamServiceFactory.authorizeIntent()
-                    if (authIntent?.resolveActivity(packageManager) != null)
-                        startActivity(authIntent)
+                .setPositiveButton("Ok") { dialog, _ ->
+                    dialog.cancel()
+                    startAuthInent()
                 }
                 .create()
                 .show()
@@ -283,17 +280,27 @@ open class BaseActivity : DaggerAppCompatActivity() {
 
     }
 
+    private fun startAuthInent() {
+        val authIntent = CompanyCamServiceFactory.authorizeIntent()
+        if (authIntent?.resolveActivity(packageManager) != null)
+            startActivity(authIntent)
+    }
+
     // displays appropriate error message to the user
     private fun handleCompanyCamException(exception: Throwable?) {
         if (exception is HttpException) {
             when (exception.code()) {
-                // TODO: add login button
-                ErrorCodes.Unauthorized.code -> AlertDialog.Builder(this)
-                        .setTitle("Your Company Cam Authorization Expired")
-                        .setMessage("Please log into company cam again.")
-                        .setPositiveButton("Ok") { dialog, _ -> dialog.cancel() }
-                        .create()
-                        .show()
+                ErrorCodes.Unauthorized.code -> {
+                    CompanyCamServiceFactory.clearAuthToken()
+
+                    AlertDialog.Builder(this)
+                            .setTitle("Company Cam Authorization Expired")
+                            .setMessage("Please log into company cam again.")
+                            .setPositiveButton("Login") { _, _ -> startAuthInent() }
+                            .setNeutralButton("Cancel") { dialog, _ -> dialog.cancel() }
+                            .create()
+                            .show()
+                }
 
                 ErrorCodes.SubscriptionExpired.code ->
                     AlertDialog.Builder(this)
