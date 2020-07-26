@@ -26,7 +26,7 @@ class PhotoUploader {
     fun UploadPhoto(
             photoFile: File,
             projectName: String,
-            projectAddress: String,
+            projectAddress: Address,
             photoTags: Array<String>,
             callback: (success: Boolean, exception: Throwable?) -> Unit) {
         //1 Create a Coroutine scope using a job to be able to cancel when needed
@@ -48,6 +48,7 @@ class PhotoUploader {
 
             val projectId = getProjectId("$branch - $projectName", projectAddress)
             val photo = uploadPhoto(projectId, parsePhoto.url)
+//            val photo = uploadPhoto(projectId, "https://zjf683hopnivfq5d12xaooxr-wpengine.netdna-ssl.com/wp-content/uploads/2020/02/GettyImages-1199242002-1-1480x833.jpg")
 
             for (tag in photoTags) {
                 addTagToPhoto(tag, photo.id)
@@ -79,7 +80,7 @@ class PhotoUploader {
     }
 
     // returns the project id that matches the project name
-    private suspend fun getProjectId(projectName: String, projectAddress: String): String {
+    private suspend fun getProjectId(projectName: String, projectAddress: Address): String {
 
         val projects = ccService.getExistingProjects()
         val existing = projects.find { p -> p.name == projectName }
@@ -94,7 +95,7 @@ class PhotoUploader {
     }
 
     // creates a new project
-    private suspend fun createProject(projectName: String, projectAddress: String): Project {
+    private suspend fun createProject(projectName: String, projectAddress: Address): Project {
         val options = CreateProjectRequest(projectName, projectAddress)
         return ccService.createProject(options)
     }

@@ -3,6 +3,7 @@ package com.gemini.energy.presentation.base
 import CompanyCamAPI.CompanyCamServiceFactory
 import CompanyCamAPI.Enums.ErrorCodes
 import CompanyCamAPI.PhotoUploader
+import CompanyCamAPI.Types.Address
 import android.Manifest
 import android.app.Activity
 import android.app.AlertDialog
@@ -98,7 +99,7 @@ open class BaseActivity : DaggerAppCompatActivity() {
     private val fileProviderAuthority = "com.gemini.energy.android.fileprovider"
 
     private lateinit var projectName: String
-    private lateinit var projectAddress: String
+    private lateinit var projectAddress: Address
     private lateinit var tags: List<String>
 
 
@@ -206,7 +207,7 @@ open class BaseActivity : DaggerAppCompatActivity() {
     }
 
 
-    fun startPhotoUploadToCompanyCam(projectName: String?, address: String, tags: List<String>) {
+    fun startPhotoUploadToCompanyCam(projectName: String?, address: Address, tags: List<String>) {
         if (!checkForCompanyCamAuth()) return
 
         if (projectName == null || projectName.isBlank()) {
@@ -241,7 +242,8 @@ open class BaseActivity : DaggerAppCompatActivity() {
                 .show()
     }
 
-    fun getAddressFromAuditId(auditId: Long): String {
+    fun getAddressFromAuditId(auditId: Long?): Address {
+        if (auditId == null) return Address("", "", "", "", "", "")
         // create connection to DB to retreive project address
         val db = AuditDatabase.newInstance(this)
         // get feature info for the selected audit
@@ -250,8 +252,13 @@ open class BaseActivity : DaggerAppCompatActivity() {
         // get the address from the list of features
         val addressFeature = features.find { f -> f.key == "General Client Info Address" }
 
-        // finally get the project address
-        return addressFeature?.valueString ?: ""
+        return Address(
+                addressFeature?.valueString ?: "",
+                "",
+                "",
+                "",
+                ""
+        )
     }
 
     // returns true if an auth token is saved
@@ -271,8 +278,6 @@ open class BaseActivity : DaggerAppCompatActivity() {
                 }
                 .create()
                 .show()
-
-
 
         return false
 

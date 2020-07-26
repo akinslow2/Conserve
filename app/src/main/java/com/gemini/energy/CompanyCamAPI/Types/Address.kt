@@ -7,5 +7,5 @@ data class Address(
         val state: String,
         val postal_code: String,
         // short country identifier
-        val country: String
+        val country: String = "US"
 )
