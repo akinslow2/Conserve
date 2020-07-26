@@ -1,7 +1,6 @@
 package com.gemini.energy.wordDocGenerator
 
 import com.gemini.energy.presentation.util.EApplianceType
-import com.gemini.energy.presentation.util.ERefrigerationType
 import com.gemini.energy.service.DataHolder
 import com.gemini.energy.service.device.EBase
 import com.gemini.energy.service.device.Hvac
@@ -219,7 +218,7 @@ class SorterForWordDocumentGenerator {
                 hvac.bldgarea,
                 hvac.bldgtype,
                 hvac.electricstructure,
-                hvac.utilitycompany,
+                hvac.gasUtilitycompany,
                 hvac.gasstructure,
 
                 costPostState,
@@ -251,8 +250,8 @@ class SorterForWordDocumentGenerator {
         }
 
         val waterheater = audit[waterheater]!!.first() as WaterHeater
-        val paybackMonth = (totalCost/ totalSavings * 12) + 4
-        val paybackYear: Double = (totalCost / totalSavings) + (4/12)
+        val paybackMonth = (totalCost / totalSavings * 12) + 4
+        val paybackYear: Double = (totalCost / totalSavings) + (4 / 12)
 
         return WaterHeaterValues(
                 totalSavings,
@@ -302,7 +301,9 @@ class SorterForWordDocumentGenerator {
             totalCostSavings += light.totalSavings()
             selfinstallcost += light.selfinstallcost()
             electricianCost += light.electricianCost
-            if (electricianCost < 100.0) {electricianCost = 100.0}
+            if (electricianCost < 100.0) {
+                electricianCost = 100.0
+            }
             totalEnergySavings += light.totalEnergySavings()
         }
 
@@ -310,7 +311,9 @@ class SorterForWordDocumentGenerator {
             totalCostSavings += light.totalSavings()
             selfinstallcost += light.selfinstallcost()
             electricianCost += light.electricianCost
-            if (electricianCost < 100.0) {electricianCost = 100.0}
+            if (electricianCost < 100.0) {
+                electricianCost = 100.0
+            }
             totalEnergySavings += light.totalEnergySavings()
         }
 
@@ -318,7 +321,9 @@ class SorterForWordDocumentGenerator {
             totalCostSavings += light.totalSavings()
             selfinstallcost += light.selfinstallcost()
             electricianCost += light.electricianCost
-            if (electricianCost < 100.0) {electricianCost = 100.0}
+            if (electricianCost < 100.0) {
+                electricianCost = 100.0
+            }
             totalEnergySavings += light.totalEnergySavings()
         }
 
@@ -326,7 +331,9 @@ class SorterForWordDocumentGenerator {
             totalCostSavings += light.totalSavings()
             selfinstallcost += light.selfinstallcost()
             electricianCost += light.electricianCost
-            if (electricianCost < 100.0) {electricianCost = 100.0}
+            if (electricianCost < 100.0) {
+                electricianCost = 100.0
+            }
             totalEnergySavings += light.totalEnergySavings()
         }
 
@@ -334,7 +341,9 @@ class SorterForWordDocumentGenerator {
             totalCostSavings += light.totalSavings()
             selfinstallcost += light.selfinstallcost()
             electricianCost += light.electricianCost
-            if (electricianCost < 100.0) {electricianCost = 100.0}
+            if (electricianCost < 100.0) {
+                electricianCost = 100.0
+            }
             totalEnergySavings += light.totalEnergySavings()
         }
 
@@ -342,7 +351,9 @@ class SorterForWordDocumentGenerator {
             totalCostSavings += light.totalSavings()
             selfinstallcost += light.selfinstallcost()
             electricianCost += light.electricianCost
-            if (electricianCost < 100.0) {electricianCost = 100.0}
+            if (electricianCost < 100.0) {
+                electricianCost = 100.0
+            }
             totalEnergySavings += light.totalEnergySavings()
         }
 
@@ -392,7 +403,7 @@ class SorterForWordDocumentGenerator {
                             light.computable.auditScopeName,
                             light.lampsPerFixtures.toDouble() * light.numberOfFixtures.toDouble(),
                             light.preEnergy(),
-                            light.offPeakHours,
+                            light.offPeakHours.toDouble(),
                             light.postEnergy(),
                             light.usageHoursPost().toDouble(),
                             light.energySavings(),
@@ -426,12 +437,12 @@ class SorterForWordDocumentGenerator {
                             light.computable.auditScopeName,
                             light.lampsPerFixtures.toDouble() * light.numberOfFixtures.toDouble(),
                             light.preEnergy(),
-                            light.offPeakHours,
+                            light.offPeakHours.toDouble(),
                             light.postEnergy(),
-                            light.usageHoursPost().toDouble(),
+                            light.usageHoursPost(),
                             light.energySavings(),
                             light.totalSavings(),
-                            light.selfinstallcost().toDouble(),
+                            light.selfinstallcost(),
                             light.selfinstallcost() / light.totalSavings() * 12,
                             light.selfinstallcost() / light.totalSavings()
                     ))
@@ -595,7 +606,7 @@ class SorterForWordDocumentGenerator {
                             "Dishwasher",
                             single.energyPowerChange(),
                             costElectricity,
-                            single.age,
+                            single.age.toInt(),
                             materialCost,
                             implementationCost,
                             savings,
@@ -715,7 +726,7 @@ class SorterForWordDocumentGenerator {
                             "Pre Rinse Spray",
                             single.energyPowerChange(),
                             costElectricity,
-                            single.age,
+                            single.age.toInt(),
                             materialCost,
                             implementationCost,
                             savings,
@@ -759,8 +770,12 @@ class SorterForWordDocumentGenerator {
                 buildingPaybackMonth,
                 buildingTotalCost,
                 (hvacs?.totalCost ?: 0.0),
-                ((hvacs?.totalCost ?: 0.0) + (waterHeater?.totalCost ?: 0.0)) / ((hvacs?.totalSavings ?: 0.0) + (waterHeater?.totalSavings ?: 0.0)),
-                ((hvacs?.totalCost ?: 0.0) + (waterHeater?.totalCost ?: 0.0))/ ((hvacs?.totalSavings ?: 0.0) + (waterHeater?.totalSavings ?: 0.0)) * 12,
+                ((hvacs?.totalCost ?: 0.0) + (waterHeater?.totalCost
+                        ?: 0.0)) / ((hvacs?.totalSavings ?: 0.0) + (waterHeater?.totalSavings
+                        ?: 0.0)),
+                ((hvacs?.totalCost ?: 0.0) + (waterHeater?.totalCost
+                        ?: 0.0)) / ((hvacs?.totalSavings ?: 0.0) + (waterHeater?.totalSavings
+                        ?: 0.0)) * 12,
                 equipments?.totalCost ?: 0.0,
                 (equipments?.totalCost ?: 0.0) / (equipments?.totalSavings ?: 0.0),
                 (equipments?.totalCost ?: 0.0) / (equipments?.totalSavings ?: 0.0) * 12

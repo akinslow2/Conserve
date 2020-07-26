@@ -63,8 +63,7 @@ class HPSodium(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRa
     private var alternateNumberOfFixtures = 0
     private var alternateLampsPerFixture = 0
 
-
-
+    
     //Where you extract from user inputs and assign to variables
     override fun setup() {
         try {
@@ -76,19 +75,13 @@ class HPSodium(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRa
             percentPowerReduced = config[ELightingIndex.PercentPowerReduced.value] as Double
 
             peakHours = featureData["Peak Hours"]!! as Double
-            partPeakHours = featureData["Part Peak Hours"]!! as Double
             offPeakHours = featureData["Off Peak Hours"]!! as Double
 
             alternateActualWatts = featureData["Alternate Actual Watts"]!! as Double
             alternateNumberOfFixtures = featureData["Alternate Number of Fixtures"]!! as Int
             alternateLampsPerFixture = featureData["Alternate Lamps Per Fixture"]!! as Int
 
-            postpeakHours = featureData["Suggested Peak Hours"]!! as Double
-            postpartPeakHours = featureData["Suggested Part Peak Hours"]!! as Double
-            postoffPeakHours = featureData["Suggested Off Peak Hours"]!! as Double
-
             controls = featureData["Type of Control"]!! as String
-
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -125,7 +118,6 @@ class HPSodium(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRa
         usageHours.partPeakHours = partPeakHours
         usageHours.offPeakHours = offPeakHours
 
-
         return costElectricity(prePower(), usageHours, electricityRate)
     }
 
@@ -154,7 +146,6 @@ class HPSodium(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRa
 
         val energySavings = preEnergy() * percentPowerReduced
         val coolingSavings = energySavings * cooling / seer
-
 
         val energyAtPostState = preEnergy() - energySavings
         val paybackmonth = selfinstallcost / energySavings * 12
@@ -194,17 +185,19 @@ class HPSodium(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRa
     /**
      * Post Yearly Usage Hours
      * */
-
-
     override fun usageHoursPost(): Double {
         val postusageHours = UsageLighting()
         postusageHours.postpeakHours = postpeakHours
         postusageHours.postpartPeakHours = postpartPeakHours
         postusageHours.postoffPeakHours = postoffPeakHours
 
-        if (postusageHours.yearly() == null){
-            return  usageHoursPre()}
-        else { return postusageHours.yearly()}
+        if (postusageHours.yearly() > 0.0)
+            return postusageHours.yearly()
+
+        if (usageHoursPre() > 0)
+            return usageHoursPre()
+
+        return usageHoursBusiness.yearly()
     }
 
     /**
@@ -216,8 +209,8 @@ class HPSodium(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRa
 
     override fun energyTimeChange(): Double {
         return  actualWatts * numberOfFixtures * lampsPerFixtures / 1000 * usageHoursPost()
-
     }
+
     override fun energyPowerTimeChange(): Double {
         return prePower() * percentPowerReduced * usageHoursPost()
     }
@@ -229,6 +222,7 @@ class HPSodium(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRa
     fun postEnergy(): Double {
         return preEnergy() - energySavings()
     }
+
     fun energySavings(): Double {
         return preEnergy() * percentPowerReduced
     }
@@ -236,6 +230,7 @@ class HPSodium(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRa
     fun selfinstallcost(): Double {
         return ledbulbcost * alternateNumberOfFixtures * alternateLampsPerFixture
     }
+
     fun totalEnergySavings(): Double {
         if (controls != null) {
             val coolingSavings = (preEnergy() - energyPowerChange()) * cooling / seer
@@ -281,18 +276,27 @@ class HPSodium(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRa
     /**
      * Define all the fields here - These would be used to Generate the Outgoing Rows or perform the Energy Calculation
      * */
-    override fun preAuditFields() = mutableListOf("General Client Info Name", "General Client Info Position", "General Client Info Email")
+    override fun preAuditFields() = mutableListOf(
+            "General Client Info Name",
+            "General Client Info Position",
+            "General Client Info Email")
+
     override fun featureDataFields() = getGFormElements().map { it.value.param!! }.toMutableList()
+    override fun preStateFields() = mutableListOf<String>()
+    override fun postStateFields() = mutableListOf(
+            "__life_hours",
+            "__maintenance_savings",
+            "__cooling_savings",
+            "__energy_savings",
+            "__energy_at_post_state",
+            "__selfinstall_cost",
+            "__payback_month",
+            "__payback_year",
+            "__total_savings")
 
-    override fun preStateFields() = mutableListOf("")
-    override fun postStateFields() = mutableListOf("__life_hours", "__maintenance_savings",
-            "__cooling_savings", "__energy_savings", "__energy_at_post_state", "__selfinstall_cost",
-            "__payback_month", "__payback_year", "__total_savings")
-
-    override fun computedFields() = mutableListOf("")
+    override fun computedFields() = mutableListOf<String>()
 
     private fun getFormMapper() = FormMapper(context, R.raw.hpsodium)
     private fun getModel() = getFormMapper().decodeJSON()
     private fun getGFormElements() = getFormMapper().mapIdToElements(getModel())
-
 }

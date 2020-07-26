@@ -2,7 +2,6 @@ package com.gemini.energy.service.type
 
 import android.content.Context
 import com.gemini.energy.presentation.util.ERateKey
-import timber.log.Timber
 
 open class UtilityRate(private val context: Context) {
 
@@ -40,7 +39,10 @@ open class UtilityRate(private val context: Context) {
                     val result = parseLine(it, getSeparator())
                     utility.getKey(result)
                             .forEachIndexed { index, key ->
-                                outgoing[key] = utility.getValue(result, header)[index]
+                                val value = utility.getValue(result, header)
+                                if (index < value.count()) {
+                                    outgoing[key] = utility.getValue(result, header)[index]
+                                }
                             }
                 }
             }
@@ -84,12 +86,9 @@ open class UtilityRate(private val context: Context) {
                     else -> builder.append(ch)
                 }
             }
-
             return result
         }
-
     }
-
 }
 
 interface IUtility {
@@ -114,20 +113,22 @@ class Electricity(private val rateStructure: String, private val companyCode: St
     override fun getValue(columns: List<String>, header: String) = listOf(listOf(columns[EValue.EnergyCharge.index],
             columns[EValue.Average.index], columns[EValue.Demand.index]))
 
-    override fun getResourcePath() = "utility/${companyCode}_electric.csv"
+    // HACK: use pge electric until we have other company electric rates
+//    override fun getResourcePath() = "utility/${companyCode}_electric.csv"
+    override fun getResourcePath() = "utility/pge_electric.csv"
     override fun getSeparator(): Char = ','
     override fun getRate() = rateStructure
     override fun getRowIdentifier() = "^${getRate()}${getSeparator()}.*".toRegex()
 
     override fun getTOU(structure: HashMap<String, List<String>>) = TOU(
-            structure[ERateKey.SummerOn.value]!![0].toDouble(),
-            structure[ERateKey.SummerOff.value]!![0].toDouble(),
-            structure[ERateKey.WinterOn.value]!![0].toDouble(),
-            structure[ERateKey.WinterOff.value]!![0].toDouble())
+            structure[ERateKey.SummerOn.value]?.first()?.toDouble() ?: 0.0,
+            structure[ERateKey.SummerOff.value]?.first()?.toDouble() ?: 0.0,
+            structure[ERateKey.WinterOn.value]?.first()?.toDouble() ?: 0.0,
+            structure[ERateKey.WinterOff.value]?.first()?.toDouble() ?: 0.0)
 
     override fun getNoneTOU(structure: HashMap<String, List<String>>) = TOUNone(
-            structure[ERateKey.SummerNone.value]!![0].toDouble(),
-            structure[ERateKey.WinterNone.value]!![0].toDouble())
+            structure[ERateKey.SummerNone.value]?.first()?.toDouble() ?: 0.0,
+            structure[ERateKey.WinterNone.value]?.first()?.toDouble() ?: 0.0)
 }
 
 class Gas(private val rateStructure: String = "", private val companyCode: String = "") : IUtility {
@@ -137,13 +138,18 @@ class Gas(private val rateStructure: String = "", private val companyCode: Strin
         val outgoing: MutableList<List<String>> = mutableListOf()
         val lookup = header.split(getSeparator())
         keys.forEach {
-            outgoing.add(listOf(columns[lookup.indexOf(it)]))
+            val index = lookup.indexOf(it)
+            if (index > 0 && index < columns.count()) {
+                outgoing.add(listOf(columns[index]))
+            }
         }
 
         return outgoing
     }
 
-    override fun getResourcePath() = "utility/${companyCode}_gas.csv"
+    // HACK: use pge electric until we have other company electric rates
+//    override fun getResourcePath() = "utility/${companyCode}_gas.csv"
+    override fun getResourcePath() = "utility/pge_gas.csv"
     override fun getSeparator() = ','
     override fun getRowIdentifier(): Regex {
         return ".*".toRegex()
@@ -154,10 +160,10 @@ class Gas(private val rateStructure: String = "", private val companyCode: Strin
     override fun getTOU(structure: HashMap<String, List<String>>) = TOU()
 
     override fun getNoneTOU(structure: HashMap<String, List<String>>) = TOUNone(
-            structure[ERateKey.GasSummer.value]!![0].toDouble(),
-            structure[ERateKey.SummerExcess.value]!![0].toDouble(),
-            structure[ERateKey.GasWinter.value]!![0].toDouble(),
-            structure[ERateKey.WinterExcess.value]!![0].toDouble())
+            structure[ERateKey.GasSummer.value]?.first()?.toDouble() ?: 0.0,
+            structure[ERateKey.SummerExcess.value]?.first()?.toDouble() ?: 0.0,
+            structure[ERateKey.GasWinter.value]?.first()?.toDouble() ?: 0.0,
+            structure[ERateKey.WinterExcess.value]?.first()?.toDouble() ?: 0.0)
 
     companion object {
     private val keys = listOf(
@@ -166,8 +172,8 @@ class Gas(private val rateStructure: String = "", private val companyCode: Strin
     ERateKey.SummerTransport.value, ERateKey.WinterTransport.value,
     ERateKey.SummerExcess.value, ERateKey.WinterExcess.value)
 
-    const val FIRST_SLAB = 4000.0
+
+        const val FIRST_SLAB = 4000.0
 
     }
-
 }

@@ -5,6 +5,7 @@ import com.dropbox.core.DbxException
 import com.dropbox.core.v2.DbxClientV2
 import com.dropbox.core.v2.files.UploadErrorException
 import com.dropbox.core.v2.files.WriteMode
+import com.gemini.energy.branch
 import com.gemini.energy.format
 import com.gemini.energy.presentation.audit.DropBox
 import com.gemini.energy.service.device.EBase
@@ -466,7 +467,7 @@ class WordDocumentGenerator {
             val r1p3 = p3.createRun()
             r1p3.fontFamily = fontAgencyFB
             r1p3.fontSize = 13
-            r1p3.setText("Your ${equip.name} is ${equip.age.format(0)} years old and as a result is annually consuming ${equip.delta.format(0)} kWh more energy than a newer version. We recommend you replace the ${equip.name} with a newer version to save $${equip.costElectricity.format(0)} of dollars per year. The cost for a new ${equip.name} is roughly $${equip.materialCost.format(0)} with an expected payback period for this replacement is ${equip.paybackMonth.format(0)} months.")
+            r1p3.setText("Your ${equip.name} is ${equip.age} years old and as a result is annually consuming ${equip.delta.format(0)} kWh more energy than a newer version. We recommend you replace the ${equip.name} with a newer version to save $${equip.costElectricity.format(0)} of dollars per year. The cost for a new ${equip.name} is roughly $${equip.materialCost.format(0)} with an expected payback period for this replacement is ${equip.paybackMonth.format(0)} months.")
             r1p3.addBreak()
         }
     }
@@ -1227,7 +1228,7 @@ class WordDocumentGenerator {
 
         writeDocumentWithName(document, docName)
         val file = File(Environment.getExternalStorageDirectory().absolutePath + "/${docName}.docx")
-        uploadFile(DropBox.getClient(), file, "/Gemini/Energy/Reports/$docName.docx")
+        uploadFile(DropBox.getClient(), file, "/General_Information/Gemini/Energy/$branch/Reports/$docName.docx")
     }
 
     /** writes docuemnt to local **/

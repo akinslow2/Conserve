@@ -2,23 +2,23 @@
   "geminiForm": [
     {
       "index": 1,
-      "section": "Hot Food Cabinet",
+      "section": "Kitchen Hood",
       "elements": [
         {
           "index": 11,
-          "hint": "cu. ft.",
-          "dataType": "decimalrow",
-          "defaultValues": "",
-          "param": "Cabinet Volume",
+          "hint": "",
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:manual,2:automatic",
+          "param": "Controls",
           "validation": "optional",
           "id": "11"
         },
         {
           "index": 12,
-          "hint": "W/cu.ft.",
-          "dataType": "decimalrow",
-          "defaultValues": "",
-          "param": "Idle Energy Rate",
+          "hint": "",
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:manual,2:automatic",
+          "param": "temperature interlocked controls",
           "validation": "optional",
           "id": "12"
         },
@@ -26,83 +26,81 @@
           "index": 13,
           "hint": "",
           "dataType": "pickerinputrow",
-          "defaultValues": "1:Full Size,2:1/2 Size",
-          "param": "Size",
+          "defaultValues": "1:manual,2:automatic",
+          "param": "smoke sensor controls",
           "validation": "optional",
           "id": "13"
         },
         {
           "index": 14,
           "hint": "",
-          "dataType": "textrow",
-          "defaultValues": "",
-          "param": "Model Number",
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:yes,2:no",
+          "param": "Does kitchen hood completely cover kitchen area?",
           "validation": "optional",
           "id": "14"
         },
         {
           "index": 15,
           "hint": "",
-          "dataType": "textrow",
+          "dataType": "introw",
           "defaultValues": "",
-          "param": "Company",
+          "param": "Year installed",
           "validation": "optional",
           "id": "15"
-        },
-        {
-          "index": 16,
-          "hint": "",
-          "dataType": "introw",
-          "defaultValues": "",
-          "param": "Quantity",
-          "validation": "optional",
-          "id": "16"
-        },
-        {
-          "index": 17,
-          "hint": "",
-          "dataType": "introw",
-          "defaultValues": "",
-          "param": "Age",
-          "validation": "optional",
-          "id": "17"
-        },
-        {
-          "index": 18,
-          "hint": "",
-          "dataType": "pickerinputrow",
-          "defaultValues": "1:Yes,2:No",
-          "param": "Control",
-          "validation": "optional",
-          "id": "18"
         }
       ],
       "id": "1"
     },
     {
       "index": 2,
-      "section": "Time of Use",
+      "section": "MakeUp Air",
       "elements": [
         {
           "index": 21,
+          "hint": "",
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:yes,2:no",
+          "param": "tempered makeup air?",
+          "validation": "optional",
+          "id": "21"
+        }
+      ],
+      "id": "2"
+    },
+    {
+      "index": 3,
+      "section": "Time of Use",
+      "elements": [
+        {
+          "index": 31,
           "hint": "",
           "dataType": "decimalrow",
           "defaultValues": "",
           "param": "Peak Hours",
           "validation": "optional",
-          "id": "21"
+          "id": "31"
         },
         {
-          "index": 22,
+          "index": 32,
           "hint": "",
           "dataType": "decimalrow",
           "defaultValues": "",
           "param": "Off Peak Hours",
           "validation": "optional",
-          "id": "22"
+          "id": "32"
+        },
+        {
+          "index": 33,
+          "hint": "",
+          "dataType": "introw",
+          "defaultValues": "",
+          "param": "Sensor Number (first 4 digits)",
+          "validation": "optional",
+          "id": "33"
         }
       ],
-      "id": "2"
+      "id": "3"
     }
   ]
 }

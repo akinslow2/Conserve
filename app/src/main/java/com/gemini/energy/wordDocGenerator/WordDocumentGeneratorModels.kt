@@ -85,7 +85,7 @@ data class EquipmentInstances(
         val name: String, // 27
         val delta: Double, // 26
         val costElectricity: Double, // 28
-        val age: Double, // 29
+        val age: Int, // 29
         val materialCost: Double, // 32
         val implementationCost: Double,
         val totalsavings: Double,

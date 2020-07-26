@@ -11,12 +11,8 @@ import com.gemini.energy.service.device.EBase
 import com.gemini.energy.service.type.UsageHours
 import com.gemini.energy.service.type.UsageSimple
 import com.gemini.energy.service.type.UtilityRate
-import com.google.gson.JsonArray
 import com.google.gson.JsonElement
-import com.google.gson.JsonObject
 import io.reactivex.Observable
-import io.reactivex.Single
-import org.json.JSONObject
 import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.*
@@ -25,12 +21,6 @@ class WICoolerBox(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
                   usageHours: UsageHours, outgoingRows: OutgoingRows, private val context: Context) :
         EBase(computable, utilityRateGas, utilityRateElectricity, usageHours, outgoingRows), IComputable {
 
-    /**
-     * Entry Point
-     * */
-    override fun compute(): Observable<Computable<*>> {
-        return super.compute(extra = ({ Timber.d(it) }))
-    }
 
     companion object {
 
@@ -44,14 +34,14 @@ class WICoolerBox(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
          * Not needed right now
 
         fun extractEER(elements: List<JsonElement?>): Double {
-            elements.forEach {
-                it?.let {
-                    if (it.asJsonObject.has("eer")) {
-                        return it.asJsonObject.get("eer").asDouble
-                    }
-                }
-            }
-            return 0.0
+        elements.forEach {
+        it?.let {
+        if (it.asJsonObject.has("eer")) {
+        return it.asJsonObject.get("eer").asDouble
+        }
+        }
+        }
+        return 0.0
         }
          * */
         /**
@@ -60,14 +50,14 @@ class WICoolerBox(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
          * This is used to calculate the Energy but needs to be more robust before using
 
         fun extractHours(elements: List<JsonElement?>): Int {
-            elements.forEach {
-                it?.let {
-                    if (it.asJsonObject.has("hours")) {
-                        return it.asJsonObject.get("hours").asInt
-                    }
-                }
-            }
-            return 0
+        elements.forEach {
+        it?.let {
+        if (it.asJsonObject.has("hours")) {
+        return it.asJsonObject.get("hours").asInt
+        }
+        }
+        }
+        return 0
         }
          * */
         /**
@@ -75,8 +65,16 @@ class WICoolerBox(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
          * There could be a case where the User will input the value in KW - If that happens we need to convert the KW
          * int BTU / hr :: 1KW equals 3412.142
          * */
-        fun power(gasInput: Int, thermaleff: Int) = (gasInput / (thermaleff/100)) * KW_CONVERSION
-        fun power2(kW: Double, electriceff: Int) = (kW / (electriceff/100))
+        fun power(gasInput: Int, thermaleff: Int) =
+                if (thermaleff > 0)
+                    (gasInput.toDouble() / (thermaleff.toDouble() / 100.0)) * KW_CONVERSION
+                else 0.0
+
+        fun power2(kW: Double, electriceff: Int) =
+                if (electriceff > 0)
+                    (kW / (electriceff.toDouble() / 100))
+                else 0.0
+
         /**
          * Year At - Current minus the Age
          * */
@@ -88,10 +86,10 @@ class WICoolerBox(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
             return dateFormatter.format(calendar.time).toInt()
         }
 
-        fun firstNotNull (valueFirst: Double, valueSecond: Double) =
+        fun firstNotNull(valueFirst: Double, valueSecond: Double) =
                 if (valueFirst == 0.0) valueSecond else valueFirst
 
-        fun firstNotNull (valueFirst: Int, valueSecond: Int) =
+        fun firstNotNull(valueFirst: Int, valueSecond: Int) =
                 if (valueFirst == 0) valueSecond else valueFirst
     }
 
@@ -100,14 +98,12 @@ class WICoolerBox(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
      * */
     var age = 0
 
-
     /**
      * HVAC - British Thermal Unit
      * */
     var btu = 0
     private var gasInput = 0
     private var gasOutput = 0
-
 
     /**
      * City | State
@@ -118,10 +114,10 @@ class WICoolerBox(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
     /**
      * Usage Hours
      * */
-    private var peakHours = 0.0
-    private var partPeakHours = 0.0
-    private var offPeakHours = 0.0
-
+    private var condenserPeakHours = 0.0
+    private var condenserOffPeakHours = 0.0
+    private var evaporatorPeakHours = 0.0
+    private var evaporatorOffPeakHours = 0.0
 
     var quantity = 0
     var thermaleff = 0
@@ -131,31 +127,29 @@ class WICoolerBox(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
     var unittype = ""
     var capacity = 0.0
 
+
     override fun setup() {
         try {
-
             quantity = featureData["Quantity"]!! as Int
 
-            age = featureData["Age"]!! as Int
-            btu = featureData["Cooling Capacity (Btu/hr)"]!! as Int
-            gasInput = featureData["Heating Input (Btu/hr)"]!! as Int
-            gasOutput = featureData["Heating Output (Btu/hr)"]!! as Int
-            thermaleff = featureData["Thermal Efficiency"]!! as Int
-            electriceff = featureData["Heating Electirc Efficiency"]!! as Int
-            kW = featureData["Heating Power (kW)"]!! as Double
-            fueltype = featureData["Fuel Type"]!! as String
-            unittype = featureData["Type of Unit"]!! as String
-            capacity = featureData["Capacity (U.S. Gal)"]!! as Double
-            peakHours = featureData["Peak Hours"]!! as Double
-            partPeakHours = featureData["Part Peak Hours"]!! as Double
-            offPeakHours = featureData["Off Peak Hours"]!! as Double
-
-
+            condenserPeakHours = featureData["Condenser Peak Hours"]!! as Double
+            condenserOffPeakHours = featureData["Condenser Off Peak Hours"]!! as Double
+            evaporatorPeakHours = featureData["Evaporator Peak Hours"]!! as Double
+            evaporatorOffPeakHours = featureData["Evaporator Off Peak Hours"]!! as Double
         } catch (e: Exception) {
             e.printStackTrace()
         }
     }
-     override fun isGas() = fueltype == "Natural Gas"
+
+
+    /**
+     * Entry Point
+     * */
+    override fun compute(): Observable<Computable<*>> {
+        return super.compute(extra = ({ Timber.d(it) }))
+    }
+
+    override fun isGas() = fueltype == "Natural Gas"
 
     /**
      * Getting year of device and how much over life it is
@@ -173,7 +167,10 @@ class WICoolerBox(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
      * */
     override fun costPreState(elements: List<JsonElement?>): Double {
 
-        val usageHours = UsageSimple(peakHours, partPeakHours, offPeakHours)
+        val usageHours = UsageSimple(
+                condenserPeakHours + evaporatorPeakHours,
+                0.0,
+                condenserOffPeakHours + evaporatorOffPeakHours)
         computable.udf1 = usageHours
         Timber.d(usageHours.toString())
 
@@ -185,7 +182,6 @@ class WICoolerBox(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
         Timber.d("HotWater :: Power Used (Electricity) -- [$powerUsedElectricity]")
         Timber.d("HotWater :: Power Used (Gas) -- [$powerUsedGas]")
 
-
         Timber.d("HVAC :: Pre Power Used -- [$powerUsed]")
         ecost = costElectricity(powerUsed, usageHours, electricityRate)
 
@@ -194,7 +190,7 @@ class WICoolerBox(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
         return if (isGas()) gascost else ecost
     }
 
-     /**
+    /**
      * Cost - Post State
      * */
     override fun costPostState(element: JsonElement, dataHolder: DataHolder): Double {
@@ -203,30 +199,28 @@ class WICoolerBox(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
         Timber.d("!!! COST POST STATE - HVAC !!!")
         Timber.d("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
 
-        var postthermeff = 95
-        var posteleceff = 350
-
+        val postthermeff = 95
+        val posteleceff = 350
 
         val postUsageHours = computable.udf1 as UsageSimple
 
-            val postpowerUsedGas = power(gasInput, postthermeff) * quantity
-            val postpowerUsedElectricity = power2(kW, posteleceff) * quantity
-            val postGcost: Double
-            val postEcost: Double
-            val powerUsed = if (isGas()) postpowerUsedGas else postpowerUsedElectricity
+        val postpowerUsedGas = power(gasInput, postthermeff) * quantity
+        val postpowerUsedElectricity = power2(kW, posteleceff) * quantity
+        val postGcost: Double
+        val postEcost: Double
+        val powerUsed = if (isGas()) postpowerUsedGas else postpowerUsedElectricity
         Timber.d("HotWater :: Power Used (Electricity) -- [$postpowerUsedElectricity]")
-            Timber.d("HotWater :: Power Used (Gas) -- [$postpowerUsedGas]")
+        Timber.d("HotWater :: Power Used (Gas) -- [$postpowerUsedGas]")
 
+        Timber.d("HotWater :: Post Power Used -- [$powerUsed]")
+        postEcost = costElectricity(powerUsed, postUsageHours, electricityRate)
 
-            Timber.d("HotWater :: Post Power Used -- [$powerUsed]")
-            postEcost = costElectricity(powerUsed, postUsageHours, electricityRate)
+        postGcost = costGas(powerUsed)
 
-            postGcost = costGas(powerUsed)
-
-             return if (isGas()) postGcost else postEcost
+        return if (isGas()) postGcost else postEcost
     }
 
-      /**
+    /**
      * HVAC - INCENTIVES | MATERIAL COST
      * */
     override fun incentives(): Double {
@@ -256,6 +250,7 @@ class WICoolerBox(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
      * PowerTimeChange >> Yearly Usage Hours - [Pre | Post]
      * */
     override fun usageHoursPre(): Double = 0.0
+
     override fun usageHoursPost(): Double = 0.0
 
     /**
@@ -268,8 +263,8 @@ class WICoolerBox(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
         val powerUsedElectricity = power2(kW, electriceff) * quantity
         val prepowerUsed = if (isGas()) powerUsedGas else powerUsedElectricity
 
-        var postthermeff = 95
-        var posteleceff = 350
+        val postthermeff = 95
+        val posteleceff = 350
 
         val postpowerUsedGas = power(gasInput, postthermeff) * quantity
         val postpowerUsedElectricity = power2(kW, posteleceff) * quantity
@@ -282,6 +277,7 @@ class WICoolerBox(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
         //ToDo: Multiply by the Number of Equipment
         return delta
     }
+
     //fix this ADK2
     fun totalSavings(): Double {
         return energyPowerChange() * .18
@@ -297,20 +293,26 @@ class WICoolerBox(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
      * */
     override fun usageHoursSpecific() = false
 
-    override fun efficientLookup()= false
-    override fun queryEfficientFilter()= ""
-    override fun preAuditFields() = mutableListOf("General Client Info Name", "General Client Info Position", "General Client Info Email")
+    override fun efficientLookup() = false
+    override fun queryEfficientFilter() = ""
+    override fun preAuditFields() = mutableListOf(
+            "General Client Info Name",
+            "General Client Info Position",
+            "General Client Info Email")
 
     override fun featureDataFields() = getGFormElements().map { it.value.param!! }.toMutableList()
 
-    override fun preStateFields() = mutableListOf("")
-    override fun postStateFields() = mutableListOf("__life_hours", "__maintenance_savings",
-            "__cooling_savings", "__energy_savings", "__energy_at_post_state")
+    override fun preStateFields() = mutableListOf<String>()
+    override fun postStateFields() = mutableListOf(
+            "__life_hours",
+            "__maintenance_savings",
+            "__cooling_savings",
+            "__energy_savings",
+            "__energy_at_post_state")
 
-    override fun computedFields() = mutableListOf("")
+    override fun computedFields() = mutableListOf<String>()
 
-    private fun getFormMapper() = FormMapper(context, R.raw.walkin_coolbox)
+    private fun getFormMapper() = FormMapper(context, R.raw.walkin_coolbot)
     private fun getModel() = getFormMapper().decodeJSON()
     private fun getGFormElements() = getFormMapper().mapIdToElements(getModel())
-
 }

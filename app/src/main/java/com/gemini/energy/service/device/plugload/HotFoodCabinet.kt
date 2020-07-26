@@ -38,21 +38,19 @@ class HotFoodCabinet(computable: Computable<*>, utilityRateGas: UtilityRate, uti
     private var cabinetVolume = 0.0
     private var idleEnergyRate = 0.0
     private var size = ""
-    var age = 0.0
+    var age = 0
 
 
     override fun setup() {
         try {
             peakHours = featureData["Peak Hours"]!! as Double
-            partPeakHours = featureData["Part Peak Hours"]!! as Double
             offPeakHours = featureData["Off Peak Hours"]!! as Double
             usageHours = UsageSimple(peakHours, partPeakHours, offPeakHours)
 
             cabinetVolume = featureData["Cabinet Volume"]!! as Double
             idleEnergyRate = featureData["Idle Energy Rate"]!! as Double
             size = featureData["Size"]!! as String
-            age = (featureData["Age"]!! as Int).toDouble()
-
+            age = featureData["Age"]!! as Int
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -178,15 +176,25 @@ class HotFoodCabinet(computable: Computable<*>, utilityRateGas: UtilityRate, uti
     /**
      * Define all the fields here - These would be used to Generate the Outgoing Rows or perform the Energy Calculation
      * */
-    override fun preAuditFields() = mutableListOf("")
+    override fun preAuditFields() = mutableListOf<String>()
     override fun featureDataFields() = getGFormElements().map { it.value.param!! }.toMutableList()
 
-    override fun preStateFields() = mutableListOf("")
-    override fun postStateFields() = mutableListOf("company","model_number","size","cabinet_volume","idle_energy_rate",
-            "rebate","pgne_measure_code","utility_company")
+    override fun preStateFields() = mutableListOf<String>()
+    override fun postStateFields() = mutableListOf(
+            "company",
+            "model_number",
+            "size",
+            "cabinet_volume",
+            "idle_energy_rate",
+            "rebate",
+            "pgne_measure_code",
+            "utility_company")
 
-    override fun computedFields() = mutableListOf("__daily_operating_hours", "__weekly_operating_hours",
-            "__yearly_operating_hours", "__electric_cost")
+    override fun computedFields() = mutableListOf(
+            "__daily_operating_hours",
+            "__weekly_operating_hours",
+            "__yearly_operating_hours",
+            "__electric_cost")
 
     private fun getFormMapper() = FormMapper(context, R.raw.hot_food_cabinet)
     private fun getModel() = getFormMapper().decodeJSON()

@@ -4,7 +4,6 @@ import com.gemini.energy.presentation.util.EDay
 import com.gemini.energy.presentation.util.ERateKey
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.HashMap
 
 
 open class UsageHours {
@@ -20,6 +19,7 @@ open class UsageHours {
      * Average UsageHours - UtilityRate Methods
      * */
     fun daily() = mapper.dailyHours()
+
     fun weekly() = mapper.weeklyHours()
     open fun yearly() = mapper.yearlyHours()
     open fun postyearly() = mapper.yearlyHours()
@@ -28,6 +28,7 @@ open class UsageHours {
      * Mapped Peak Hour by UtilityRate Rate Structure
      * */
     fun mappedPeakHourDaily() = mapper.mappedHoursDaily()
+
     fun mappedPeakHourWeekly() = mapper.mappedHoursWeekly()
     fun mappedPeakHourYearly() = mapper.mappedHoursYearly()
 
@@ -40,7 +41,7 @@ open class UsageHours {
                 usageByPeak[ERateKey.SummerOn]!! * WEIGHT_SUMMER,
                 usageByPeak[ERateKey.SummerOff]!! * (WEIGHT_Off / 2),
                 usageByPeak[ERateKey.WinterOn]!! * WEIGHT_WINTER,
-                usageByPeak[ERateKey.WinterOff]!! * ( WEIGHT_Off / 2)
+                usageByPeak[ERateKey.WinterOff]!! * (WEIGHT_Off / 2)
         )
     }
 
@@ -213,13 +214,11 @@ open class UsageHours {
             private fun getTime(time: String) = dateFormatter.parse(time)
 
             private fun inBetween(now: Date, start: Date, end: Date): Boolean {
-
                 val a = now.time
                 val b = start.time
                 val c = end.time
 
                 return (a >= b) && (a < c)
-
             }
 
             private fun isSummerPeak(now: Date) = inBetween(now, getTime("13:00"), getTime("19:00"))
@@ -229,10 +228,10 @@ open class UsageHours {
 
             private fun isWinterPeak(now: Date) = inBetween(now, getTime("04:00"), getTime("10:00"))
 
-            private fun isWinterOffPeak(now: Date) = inBetween(now, getTime("10:00"), getTime("00:00")) ||
-                    inBetween(now, getTime("00:00"), getTime("04:00"))
+
+            private fun isWinterOffPeak(now: Date) = inBetween(now, getTime("10:01"), getTime("00:00")) ||
+                    inBetween(now, getTime("00:00"), getTime("06:00"))
 
         }
     }
-
 }

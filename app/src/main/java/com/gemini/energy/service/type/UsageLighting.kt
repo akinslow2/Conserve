@@ -10,14 +10,13 @@ class UsageLighting : UsageHours() {
     var postoffPeakHours = 0.0
 
     override fun timeOfUse(): TOU {
-        return TOU(peakHours, partPeakHours, offPeakHours)
+        return TOU(peakHours, offPeakHours)
     }
 
     override fun nonTimeOfUse(): TOUNone {
         return TOUNone(offPeakHours)
     }
 
-    //@Anthony - Verify if the Yearly hours is the sum as belows - regardless of TOU on No TOU
     override fun yearly() = peakHours + partPeakHours + offPeakHours
     override fun postyearly() = postpeakHours + postpartPeakHours + postoffPeakHours
 }

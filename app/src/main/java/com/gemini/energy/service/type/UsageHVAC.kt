@@ -11,8 +11,9 @@ class UsageHVAC(usageHours: UsageHours, isTOU: Boolean,
     /**
      * Mapped Hours differs with the TOU | No TOU
      * */
-    private val mappedHours = if (isTOU) usageHours.timeOfUse() else
-        usageHours.nonTimeOfUse()
+    private val mappedHours =
+            if (isTOU) usageHours.timeOfUse()
+            else usageHours.nonTimeOfUse()
 
     /**
      * Ratio for each of the Peaks | Part Peak | No Peak
@@ -33,13 +34,9 @@ class UsageHVAC(usageHours: UsageHours, isTOU: Boolean,
         offPeakHours = hoursExtract * getOffPeakRatio()
     }
 
-    override fun timeOfUse(): TOU {
-        return TOU(peakHours, offPeakHours)
-    }
+    override fun timeOfUse() = TOU(peakHours, offPeakHours)
 
-    override fun nonTimeOfUse(): TOUNone {
-        return TOUNone(offPeakHours)
-    }
+    override fun nonTimeOfUse() = TOUNone(offPeakHours)
 
     override fun yearly() = peakHours + offPeakHours
 
