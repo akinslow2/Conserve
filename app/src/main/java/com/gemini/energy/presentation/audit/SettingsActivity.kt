@@ -6,7 +6,6 @@ import android.preference.Preference
 import android.preference.PreferenceFragment
 import android.preference.PreferenceScreen
 import android.support.v7.app.AppCompatActivity
-import android.util.Log
 import com.dropbox.core.android.Auth
 import com.dropbox.core.v2.users.FullAccount
 import com.gemini.energy.App
@@ -84,7 +83,7 @@ class SettingsFragment: PreferenceFragment() {
                 if (CompanyCamServiceFactory.bearerToken() == null)
                     (activity as SettingsActivity).authorizeCompanyCam()
                 else {
-                    CompanyCamServiceFactory.clearAuthToken()
+                    CompanyCamServiceFactory.logout()
                     updateComapanyCamPreference()
                 }
                 return true
