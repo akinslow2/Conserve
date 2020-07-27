@@ -1,24 +1,25 @@
 package CompanyCamAPI
 
 import CompanyCamAPI.Requests.Auth2RequestParameters
+import CompanyCamAPI.Responses.Auth2Response
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.net.Uri
 import android.util.Log
 import com.gemini.energy.App
+import com.gemini.energy.CompanyCamAPI.Requests.RefreshTokenRequest
 import kotlinx.coroutines.*
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.util.*
 
 
 object CompanyCamServiceFactory {
 
     private const val apiBaseUrl = "https://app.companycam.com/"
-    // TODO:? get rid of me when possible
-    private const val accessToken = "e12b134258ccd3dff694581132e6192f998c54bddc1b5c5ea6f1363bd72c9b68"
     private const val rootUserEmail = "akinslow2@geminiesolutions.com"
 
     private const val clientId = "8418eeee9e98af39e69160ba9e4127d55dcbd0e3f88a381e060c0ed571ca3e73"
@@ -26,6 +27,26 @@ object CompanyCamServiceFactory {
     private const val redirectUri = "https://www.geminiesolutions.com/companycamauth"
 
     private const val tokenPreferenceName = "companycamBearerToken"
+    private const val bearerTokenKey = "bearer-token"
+    private const val refreshTokenKey = "refresh_token"
+    private const val accessExpiresAtKey = "access_expires_at"
+
+    // returns succsess
+    fun attemptTokenRefresh() {
+        val errorHandler = CoroutineExceptionHandler { _, exception ->
+            Log.d("------", "error refreshing access token with company cam")
+//            return false
+        }
+
+        val mainActivity = Job()
+        val scope = CoroutineScope((mainActivity + Dispatchers.Main))
+                .launch(errorHandler) {
+                    val newToken = makeService().refreshAccessToken(RefreshTokenRequest(clientId, secretKey, "refresh token", redirectUri))
+                    setToken(newToken)
+//                    return true
+                }
+    }
+
 
     fun setToken(data: Uri) {
         val code = data.getQueryParameter("code") ?: return
@@ -43,25 +64,53 @@ object CompanyCamServiceFactory {
         coroutineScope.launch(errorHandler) {
 
             val token = makeService().getAuthToken(Auth2RequestParameters(clientId, secretKey, code, redirectUri))
-            setToken(token.access_token)
+            Log.d("------", "token $token")
+            setToken(token)
         }
     }
 
-    fun setToken(authToken: String) {
-        val prefs: SharedPreferences = App.instance.getSharedPreferences(tokenPreferenceName, Context.MODE_PRIVATE)
-        prefs.edit().putString("bearer-token", authToken).apply()
+    private fun setToken(token: Auth2Response) {
+        val access = token.access_token
+        val refresh = token.refresh_token
+        val expiresAt = token.created_at + token.expires_in
+        val expireDate = Date(expiresAt.toLong() * 1000)
+
+        App.instance.getSharedPreferences(tokenPreferenceName, Context.MODE_PRIVATE)
+                .edit()
+                .putString(bearerTokenKey, token.access_token)
+                .putString(refreshTokenKey, token.refresh_token)
+                .putInt(accessExpiresAtKey, expiresAt)
+                .apply()
+    }
+
+    fun tokenExpiration(): Date? {
+        val prefs = App.instance.getSharedPreferences(tokenPreferenceName, Context.MODE_PRIVATE)
+        val timestamp = prefs.getInt(accessExpiresAtKey, 0)
+        val refreshToken = prefs.getString(refreshTokenKey, "")
+        val bearer = prefs.getString(bearerTokenKey, "")
+        if (timestamp == 0) return null
+        return Date(timestamp.toLong() * 1000)
     }
 
     fun bearerToken(): String? {
         val prefs: SharedPreferences = App.instance.getSharedPreferences(tokenPreferenceName, Context.MODE_PRIVATE)
-        return prefs.getString("bearer-token", null)
+        return prefs.getString(bearerTokenKey, null)
     }
 
-    fun clearAuthToken() {
-        val prefs: SharedPreferences = App.instance.getSharedPreferences(tokenPreferenceName, Context.MODE_PRIVATE)
-        val editor: SharedPreferences.Editor = prefs.edit()
-        editor.remove("bearer-token")
-        editor.apply()
+//    fun clearAuthToken() {
+//        val prefs: SharedPreferences = App.instance.getSharedPreferences(tokenPreferenceName, Context.MODE_PRIVATE)
+//        val editor: SharedPreferences.Editor = prefs.edit()
+//        editor.remove(bearerTokenKey)
+//        editor.apply()
+//    }
+
+    fun logout() {
+        App.instance.getSharedPreferences(tokenPreferenceName, Context.MODE_PRIVATE)
+                .edit()
+                .remove(bearerTokenKey)
+                .remove(refreshTokenKey)
+                .remove(accessExpiresAtKey)
+                .apply()
     }
 
 
