@@ -105,7 +105,7 @@ class ParseAPI {
             val retrofit = Retrofit.Builder()
                     .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                     .addConverterFactory(GsonConverterFactory.create())
-                    .baseUrl("http://ec2-18-220-200-115.us-east-2.compute.amazonaws.com:80/parse/")
+                    .baseUrl("http://ec2-18-189-11-148.us-east-2.compute.amazonaws.com:80/parse/")
                     .client(okHttpClient.build())
                     .build()
 
