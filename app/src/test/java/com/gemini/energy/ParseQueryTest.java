@@ -9,7 +9,7 @@ import okhttp3.Response;
 
 public class ParseQueryTest {
 
-    String parseApiRoot = "http://ec2-18-220-200-115.us-east-2.compute.amazonaws.com:80/parse/";
+    String parseApiRoot = "http://ec2-18-189-11-148.us-east-2.compute.amazonaws.com:80/parse/";
     String applicationId = "47f916f7005d19ddd78a6be6b4bdba3ca49615a0";
     String masterKey = "NLI214vDqkoFTJSTtIE2xLqMme6Evd0kA1BbJ20S";
     String classPath = "classes/";

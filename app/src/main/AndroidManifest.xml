@@ -24,17 +24,18 @@
         android:label="{ges}  "
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        android:usesCleartextTraffic="true">
 
         <!--needed for saving images to custom location-->
-                <provider
-                    android:name="android.support.v4.content.FileProvider"
-                    android:authorities="com.gemini.energy.android.fileprovider"
-                    android:exported="false"
-                    android:grantUriPermissions="true">
-                    <meta-data
-                        android:name="android.support.FILE_PROVIDER_PATHS"
-                        android:resource="@xml/file_paths"/>
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="com.gemini.energy.android.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
                 </provider>
         <!--END needed for saving images to custom location -->
 
