@@ -90,7 +90,7 @@ open class BaseActivity : DaggerAppCompatActivity() {
     private val galleryImagePermissionRequestCode = 102
     private val galleryMultipleImagePermissionRequestCode = 103
 
-    // file of the last photo taken
+    /* file of the last photo taken */
     private lateinit var photoFile: File
 
     // service for uploading to company cam
@@ -208,7 +208,20 @@ open class BaseActivity : DaggerAppCompatActivity() {
 
 
     fun startPhotoUploadToCompanyCam(projectName: String?, address: Address, tags: List<String>) {
-        if (!checkForCompanyCamAuth()) return
+        if (CompanyCamServiceFactory.bearerToken() == null) {
+            AlertDialog.Builder(this)
+                    .setTitle("Login Needed")
+                    .setMessage("Please log into company cam to upload images.")
+                    .setNeutralButton("Cancel") { dialog, _ -> dialog.cancel() }
+                    .setPositiveButton("Ok") { dialog, _ ->
+                        dialog.cancel()
+                        startAuthInent()
+                    }
+                    .create()
+                    .show()
+
+            return
+        }
 
         if (projectName == null || projectName.isBlank()) {
             AlertDialog.Builder(this)
@@ -261,24 +274,6 @@ open class BaseActivity : DaggerAppCompatActivity() {
         )
     }
 
-    // returns true if an auth token is saved
-    private fun checkForCompanyCamAuth(): Boolean {
-        if (CompanyCamServiceFactory.bearerToken() != null) return true
-
-        AlertDialog.Builder(this)
-                .setTitle("Login Needed")
-                .setMessage("Please log into company cam to upload images.")
-                .setNeutralButton("Cancel") { dialog, _ -> dialog.cancel() }
-                .setPositiveButton("Ok") { dialog, _ ->
-                    dialog.cancel()
-                    startAuthInent()
-                }
-                .create()
-                .show()
-
-        return false
-
-    }
 
     private fun startAuthInent() {
         val authIntent = CompanyCamServiceFactory.authorizeIntent()
@@ -291,8 +286,11 @@ open class BaseActivity : DaggerAppCompatActivity() {
         if (exception is HttpException) {
             when (exception.code()) {
                 ErrorCodes.Unauthorized.code -> {
-                    CompanyCamServiceFactory.clearAuthToken()
+                    // TODO: attempt refresh token
+                    // if refresh succeeds try to upload image again
+//                    CompanyCamServiceFactory.clearAuthToken()
 
+                    // display this alert if refresh failed
                     AlertDialog.Builder(this)
                             .setTitle("Company Cam Authorization Expired")
                             .setMessage("Please log into company cam again.")
