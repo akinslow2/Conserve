@@ -10,6 +10,7 @@ import CompanyCamAPI.Types.Coordinate
 import android.util.Log
 import com.gemini.energy.CompanyCamAPI.Requests.ApplyTagToPhotoRequest
 import com.gemini.energy.CompanyCamAPI.Requests.CreateTagRequest
+import com.gemini.energy.CompanyCamAPI.Requests.RefreshTokenRequest
 import com.gemini.energy.CompanyCamAPI.Requests.UpdateProjectAddressRequest
 import com.gemini.energy.branch
 import com.gemini.energy.service.ParseAPI
@@ -41,6 +42,16 @@ class PhotoUploader {
         //3 the Coroutine runs using the Main (UI) dispatcher
         val coroutineScope = CoroutineScope(mainActivityJob + Dispatchers.Main)
         coroutineScope.launch(errorHandler) {
+
+            // check if should refresh token
+            if (!CompanyCamServiceFactory.hasNonExpiredToken()) {
+                val newToken = CompanyCamServiceFactory.makeService().refreshAccessToken(RefreshTokenRequest(
+                        CompanyCamServiceFactory.clientId,
+                        CompanyCamServiceFactory.secretKey,
+                        CompanyCamServiceFactory.refreshToken(),
+                        CompanyCamServiceFactory.redirectUri))
+                CompanyCamServiceFactory.setToken(newToken)
+            }
 
             // have to upload photo to parse server before uploading to company cam
             val parsePhoto = uploadImageToParseServer(photoFile, "$projectName.jpg")

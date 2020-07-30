@@ -15,6 +15,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.*
+import java.util.concurrent.TimeUnit
 
 
 object CompanyCamServiceFactory {
@@ -22,29 +23,19 @@ object CompanyCamServiceFactory {
     private const val apiBaseUrl = "https://app.companycam.com/"
     private const val rootUserEmail = "akinslow2@geminiesolutions.com"
 
-    private const val clientId = "8418eeee9e98af39e69160ba9e4127d55dcbd0e3f88a381e060c0ed571ca3e73"
-    private const val secretKey = "c1a14dd4c9099eed46c03f2b0394519412677a42a940d00605a1b65ceffe5722"
-    private const val redirectUri = "https://www.geminiesolutions.com/companycamauth"
+    const val clientId = "8418eeee9e98af39e69160ba9e4127d55dcbd0e3f88a381e060c0ed571ca3e73"
+    const val secretKey = "c1a14dd4c9099eed46c03f2b0394519412677a42a940d00605a1b65ceffe5722"
+    const val redirectUri = "https://www.geminiesolutions.com/companycamauth"
 
     private const val tokenPreferenceName = "companycamBearerToken"
     private const val bearerTokenKey = "bearer-token"
     private const val refreshTokenKey = "refresh_token"
     private const val accessExpiresAtKey = "access_expires_at"
 
-    // returns succsess
-    fun attemptTokenRefresh() {
-        val errorHandler = CoroutineExceptionHandler { _, exception ->
-            Log.d("------", "error refreshing access token with company cam")
-//            return false
-        }
 
-        val mainActivity = Job()
-        val scope = CoroutineScope((mainActivity + Dispatchers.Main))
-                .launch(errorHandler) {
-                    val newToken = makeService().refreshAccessToken(RefreshTokenRequest(clientId, secretKey, "refresh token", redirectUri))
-                    setToken(newToken)
-//                    return true
-                }
+    fun refreshToken(): String {
+        val prefs: SharedPreferences = App.instance.getSharedPreferences(tokenPreferenceName, Context.MODE_PRIVATE)
+        return prefs.getString(refreshTokenKey, null) ?: ""
     }
 
 
@@ -69,11 +60,8 @@ object CompanyCamServiceFactory {
         }
     }
 
-    private fun setToken(token: Auth2Response) {
-        val access = token.access_token
-        val refresh = token.refresh_token
+    fun setToken(token: Auth2Response) {
         val expiresAt = token.created_at + token.expires_in
-        val expireDate = Date(expiresAt.toLong() * 1000)
 
         App.instance.getSharedPreferences(tokenPreferenceName, Context.MODE_PRIVATE)
                 .edit()
@@ -83,27 +71,25 @@ object CompanyCamServiceFactory {
                 .apply()
     }
 
+
+    // returns when auth token will expire
+    // returns null if expiration does not exist
     fun tokenExpiration(): Date? {
         val prefs = App.instance.getSharedPreferences(tokenPreferenceName, Context.MODE_PRIVATE)
         val timestamp = prefs.getInt(accessExpiresAtKey, 0)
-        val refreshToken = prefs.getString(refreshTokenKey, "")
-        val bearer = prefs.getString(bearerTokenKey, "")
         if (timestamp == 0) return null
         return Date(timestamp.toLong() * 1000)
     }
 
+
+    // returns the stored access token
     fun bearerToken(): String? {
         val prefs: SharedPreferences = App.instance.getSharedPreferences(tokenPreferenceName, Context.MODE_PRIVATE)
         return prefs.getString(bearerTokenKey, null)
     }
 
-//    fun clearAuthToken() {
-//        val prefs: SharedPreferences = App.instance.getSharedPreferences(tokenPreferenceName, Context.MODE_PRIVATE)
-//        val editor: SharedPreferences.Editor = prefs.edit()
-//        editor.remove(bearerTokenKey)
-//        editor.apply()
-//    }
 
+    // remove auth info from prefrences
     fun logout() {
         App.instance.getSharedPreferences(tokenPreferenceName, Context.MODE_PRIVATE)
                 .edit()
@@ -114,6 +100,32 @@ object CompanyCamServiceFactory {
     }
 
 
+    fun hasNonExpiredToken(): Boolean {
+        val tokenExpiration = tokenExpiration()
+        val today = Date(System.currentTimeMillis())
+
+        // if token expiration does not exist, no auth exists
+        if (tokenExpiration == null) return false
+
+        // check for when token will expire
+        val diffInMill = tokenExpiration.time - today.time
+        val diffInMin = TimeUnit.MILLISECONDS.toMinutes(diffInMill)
+
+        // token will expire in more than 5 min from now, no need to refresh token
+        if (diffInMin > 5) {
+            // check to make sure token exists
+            if (bearerToken() != null) return true
+            return false
+        }
+        else {
+            // token has expired or will expire within 5 min
+            // assume token will refresh, check for expiration at beginning of upload
+            return false
+        }
+    }
+
+
+    // returns intent that starts authorization flow
     fun authorizeIntent(): Intent? {
         val intent = Intent(Intent.ACTION_VIEW)
         intent.data = Uri.parse("https://app.companycam.com/oauth/authorize?client_id=8418eeee9e98af39e69160ba9e4127d55dcbd0e3f88a381e060c0ed571ca3e73&redirect_uri=https%3A%2F%2Fwww.geminiesolutions.com%2Fcompanycamauth&response_type=code&scope=read+write+destroy")
@@ -129,15 +141,18 @@ object CompanyCamServiceFactory {
 
         val httpClient = OkHttpClient.Builder().addInterceptor(logging).addInterceptor { chain ->
             val newRequest = chain.request().newBuilder()
-                    .addHeader("Content-type", "application/json")
+                    .addHeader("Content-Type", "application/json")
                     .addHeader("X-CompanyCam-Secret", secretKey)
 
             val token = bearerToken()
-            if (token != null) {
-                newRequest.addHeader("Authorization", "Bearer $token")
+            if (hasNonExpiredToken()) {
+                newRequest
+                        .addHeader("Authorization", "Bearer $token")
                         // TODO: when multiple users, query and save user's email
                         .addHeader("X-CompanyCam-User", rootUserEmail)
-                        .addHeader("Connection", "keep-alive")
+                Log.d("------", "adding bearer token $token")
+            } else {
+                Log.d("-----", "no bearer token to add")
             }
 
             chain.proceed(newRequest.build())
