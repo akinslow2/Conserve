@@ -9,6 +9,7 @@ import CompanyCamAPI.Requests.UploadPhotoRequest
 import CompanyCamAPI.Responses.Auth2Response
 import com.gemini.energy.CompanyCamAPI.Requests.ApplyTagToPhotoRequest
 import com.gemini.energy.CompanyCamAPI.Requests.CreateTagRequest
+import com.gemini.energy.CompanyCamAPI.Requests.RefreshTokenRequest
 import com.gemini.energy.CompanyCamAPI.Requests.UpdateProjectAddressRequest
 import retrofit2.http.*
 
@@ -25,6 +26,9 @@ interface CompanyCamService {
     @POST("oauth/token")
     suspend fun getAuthToken(@Body request: Auth2RequestParameters): Auth2Response
 
+    // refreshes the access token if expired
+    @POST("oauth/token")
+    suspend fun refreshAccessToken(@Body request: RefreshTokenRequest): Auth2Response
 
     // upload a photo
     @POST("v2/projects/{project_id}/photos/")
