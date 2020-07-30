@@ -166,12 +166,14 @@ class Gas(private val rateStructure: String = "", private val companyCode: Strin
             structure[ERateKey.WinterExcess.value]?.first()?.toDouble() ?: 0.0)
 
     companion object {
-        private val keys = listOf(
-                ERateKey.Slab1.value, ERateKey.Slab2.value, ERateKey.Slab3.value,
-                ERateKey.Slab4.value, ERateKey.Slab5.value, ERateKey.Surcharge.value,
-                ERateKey.SummerTransport.value, ERateKey.WinterTransport.value,
-                ERateKey.SummerExcess.value, ERateKey.WinterExcess.value)
+    private val keys = listOf(
+    ERateKey.Slab1.value, ERateKey.Slab2.value, ERateKey.Slab3.value,
+    ERateKey.Slab4.value, ERateKey.Surcharge.value,
+    ERateKey.SummerTransport.value, ERateKey.WinterTransport.value,
+    ERateKey.SummerExcess.value, ERateKey.WinterExcess.value)
+
 
         const val FIRST_SLAB = 4000.0
+
     }
 }

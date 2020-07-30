@@ -26,6 +26,7 @@ class Thermostat(computable: Computable<*>, utilityRateGas: UtilityRate, utility
         private const val KW_CONVERSION = 0.746
         private const val ThermostatDeemed = "Thermostat_Deemed"
 
+
         /**
          * Fetches the Deemed Criteria at once
          * via the Parse API
@@ -36,6 +37,7 @@ class Thermostat(computable: Computable<*>, utilityRateGas: UtilityRate, utility
                 it?.let {
                     if (it.asJsonObject.has("Total_kWh")) {
                         return it.asJsonObject.get("Total_kWh").asDouble
+
                     }
                 }
             }
@@ -57,8 +59,10 @@ class Thermostat(computable: Computable<*>, utilityRateGas: UtilityRate, utility
                         return it.asJsonObject.get("kW").asDouble
                     }
                 }
+
             }
             return 0.0
+
         }
 
         // TODO: Test me
@@ -69,15 +73,31 @@ class Thermostat(computable: Computable<*>, utilityRateGas: UtilityRate, utility
             return 0.0
         }
 
-        fun extractThermostatDeemedCost(elements: List<JsonElement?>): Double {
-            elements.forEach {
-                it?.let {
-                    if (it.asJsonObject.has("Total_Cost")) {
-                        return it.asJsonObject.get("Total_Cost").asDouble
-                    }
-                }
-            }
-            return 0.0
+        /**
+         * Cost - Pre State
+         * */
+        override fun costPreState(elements: List<JsonElement?>): Double = 0.0
+
+        /**
+         * Cost - Post State
+         * */
+        override fun costPostState(element: JsonElement, dataHolder: DataHolder): Double {
+
+            val implementationCost = 44
+
+            val postRow = mutableMapOf<String, String>()
+
+            postRow["__implementation_cost"] = implementationCost.toString()
+
+
+            dataHolder.header = postStateFields()
+            dataHolder.computable = computable
+            dataHolder.fileName = "${Date().time}_post_state.csv"
+            dataHolder.rows?.add(postRow)
+
+            return -99.99
+
+
         }
 
         // TODO: Test me
@@ -112,12 +132,14 @@ class Thermostat(computable: Computable<*>, utilityRateGas: UtilityRate, utility
         }
     }
 
+
     /**
      * Entry Point
      * */
     override fun compute(): Observable<Computable<*>> {
         return super.compute(extra = ({ Timber.d(it) }))
     }
+
 
     /**
      * Cost - Pre State

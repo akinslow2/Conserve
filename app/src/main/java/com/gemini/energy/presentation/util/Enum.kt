@@ -170,11 +170,10 @@ enum class ERateKey(val value: String) {
 
     AverageElectric("average"),
 
-    Slab1("0_5.0"),
-    Slab2("5.1_16.0"),
-    Slab3("16.1_41.0"),
-    Slab4("41.1_123.0"),
-    Slab5("123.1_n_up"),
+    Slab1("0_15000.0"),
+    Slab2("15001_40000.0"),
+    Slab3("40001_90000.0"),
+    Slab4("90001.0_n_up"),
     SummerTransport("summer_first_4000_therms"),
     SummerExcess("summer_excess"),
     WinterTransport("winter_first_4000_therms"),
@@ -183,7 +182,6 @@ enum class ERateKey(val value: String) {
 
     GasWinter("winter_first_4000_therms"),
     GasSummer("summer_first_4000_therms"),
-    GasFirstSlab("4000"),
 
     None("none");
 

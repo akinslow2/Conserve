@@ -45,7 +45,6 @@ class UtilityRateTest {
         assertEquals(listOf("0.52106"), structure[ERateKey.Slab2.value])
         assertEquals(listOf("0.95482"), structure[ERateKey.Slab3.value])
         assertEquals(listOf("1.66489"), structure[ERateKey.Slab4.value])
-        assertEquals(listOf("2.14936"), structure[ERateKey.Slab5.value])
         assertEquals(listOf("0.91132"), structure[ERateKey.SummerTransport.value])
         assertEquals(listOf("1.0215"), structure[ERateKey.WinterTransport.value])
         assertEquals(listOf("0.04672"), structure[ERateKey.Surcharge.value])

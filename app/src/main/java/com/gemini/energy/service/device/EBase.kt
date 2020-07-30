@@ -177,8 +177,9 @@ abstract class EBase(val computable: Computable<*>,
         energyPreState.computable = computable
 
         // ** Prepare a list of Observable - Extractor that is required by each of the Zone Type **
-        val extractorHVAC = listOf(dataExtractHVAC(queryHVACCoolingHours()),
-                dataExtractHVAC(queryHVACEer()))
+        //TODO: @k2interactive added the queryHVACCDDHours
+        //val extractorHVAC = listOf(dataExtractHVAC(queryHVACCoolingHours()),
+           //     dataExtractHVAC(queryHVACEer()), dataExtractHVAC(queryHVACCDDHours()))
 
         val extractorMotor = listOf(dataExtractMotors(queryMotorEfficiency()), dataExtractMotors(queryBEDMotorVFDprescriptivekwh()),
                 dataExtractMotors(queryBEDMotorVFDprescriptivekw()))
@@ -395,6 +396,8 @@ abstract class EBase(val computable: Computable<*>,
     open fun queryHVACCoolingHours() = ""
 
     open fun queryHVACEer() = ""
+    //TODO: @k2interactive new function
+    // open fun queryHVACCDDHours = ""
 
     /**
      * Motors Query - Fetch Efficiency
