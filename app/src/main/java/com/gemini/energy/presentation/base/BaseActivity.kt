@@ -86,7 +86,7 @@ open class BaseActivity : DaggerAppCompatActivity() {
     private val takeImageRequestCode = 1
     private val selectImageRequestCode = 2
     private val selectMultipleImageRequestCode = 3
-    private val takeImagePermissionRequestCode = 101
+    private val takeImagePermissionRequestCode = 104
     private val galleryImagePermissionRequestCode = 102
     private val galleryMultipleImagePermissionRequestCode = 103
 
@@ -263,14 +263,18 @@ open class BaseActivity : DaggerAppCompatActivity() {
         val features = db.featureDao().getAllByAudit(auditId).blockingGet()
 
         // get the address from the list of features
-        val addressFeature = features.find { f -> f.key == "General Client Info Address" }
+        val streetAddress1 = features.find { f -> f.key == "General Client Info Address Line 1" }
+        val streetAddress2 = features.find { f -> f.key == "General Client Info Address Line 2" }
+        val city = features.find { f -> f.key == "General Client Info City" }
+        val state = features.find { f -> f.key == "General Client Info State" }
+        val zipCode = features.find { f -> f.key == "General Client Info Zip Code" }
 
         return Address(
-                addressFeature?.valueString ?: "",
-                "",
-                "",
-                "",
-                ""
+                streetAddress1?.valueString ?: "",
+                streetAddress2?.valueString ?: "",
+                city?.valueString ?: "",
+                state?.valueString ?: "",
+                zipCode?.valueString ?: ""
         )
     }
 

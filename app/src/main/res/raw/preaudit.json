@@ -79,52 +79,52 @@
           "hint": "",
           "dataType": "textarearow",
           "defaultValues": "",
-          "param": "Address",
+          "param": "Address Line 1",
           "validation": "mandatory",
           "id": "25"
         },
         {
           "index": 26,
           "hint": "",
-          "dataType": "textrow",
+          "dataType": "textarearow",
           "defaultValues": "",
-          "param": "Business Name",
-          "validation": "mandatory",
+          "param": "Address Line 2",
+          "validation": "optional",
           "id": "26"
         },
         {
           "index": 27,
           "hint": "",
-          "dataType": "pickerinputrow",
-          "defaultValues": "1:Convenience store,2:Convenience store with gas station,3:Education - College or university,4:Education - Elementary or middle school,5:Education - High school,6:Education - Preschool or daycare,7:Education - Uncategorized,8:Food Service - Bakery,9:Food Service - Fast food,10:Food Service - Other,11:Food Service - Restaurant or cafeteria,12:Grocery store or food market,13:Health Care - Outpatient Clinic,14:Health Care - Outpatient Diagnostic,15:Health Care - Uncategorized,16:Lodging - Hotel,17:Laboratory,18:Lodging - Motel or inn,19:Lodging - Other,20:Nursing Home,21:Office - Administrative or Professional,22:Office - Bank or other financial,23:Office - Government,24:Office - Medical non diagnostic,25:Office - Mixed use,26:Office - Other,27:Office - Uncategorized,28:Parking Garage,29:Public Assembly - Arena,30:Public Assembly - Drama theater,31:Public Assembly - Entertainment/culture,32:Public Assembly - Funeral home,33:Public Assembly - Large Hall,34:Public Assembly - Library,35:Public Assembly - Movie Theater,36:Public Assembly - Other,37:Public Assembly - Pool,38:Public Assembly - Recreation,39:Public Assembly - Social/meeting,40:Public Assembly - Uncategorized,41:Public Safety - Courthouse,42:Public Safety - Fire or police station,43:Public Safety - Jailhouse,44:Public Safety - Uncategorized,45:Religious worship - Church,46:Religious worship - Mosque,47:Religious worship - Synagogue,48:Religious worship - Other,49:Retail - Enclosed mall,50:Retail - Other than mall,51:Retail - Small Box (< 50K sf),52:Retail - Strip shopping mall,53:Retail - Uncategorized,54:Retail - Vehicle dealership/showroom,55:Service - Art/Video/Photography Studio,56:Service - Dry-cleaning or Laundry,57:Service - Industrial shop,58:Service - Other service,59:Service - Post office or postal center,60:Service - Repair shop,61:Service - Uncategorized,62:Service - Vehicle service/repair shop,63:Service - Vehicle storage,64:Transportation Terminal,65:Vacant,66:Warehouse - Distribution or Shipping center,67:Warehouse - Non-refrigerated,68:Warehouse - Refrigerated,69:Warehouse - Self-storage,70:Warehouse - Uncategorized",
-          "param": "Facility Type",
+          "dataType": "textarearow",
+          "defaultValues": "",
+          "param": "City",
           "validation": "mandatory",
           "id": "27"
         },
         {
           "index": 28,
           "hint": "",
-          "dataType": "textrow",
+          "dataType": "textarearow",
           "defaultValues": "",
-          "param": "Facility Type (Others)",
-          "validation": "optional",
+          "param": "State",
+          "validation": "mandatory",
           "id": "28"
         },
         {
           "index": 29,
           "hint": "",
-          "dataType": "pickerinputrow",
-          "defaultValues": "1:January,2:February,3:March,4:April,5:May,6:June,7:July,8:August,9:September,10:October,11:November,12:December",
-          "param": "Audit Month",
+          "dataType": "textarearow",
+          "defaultValues": "",
+          "param": "Zip Code",
           "validation": "mandatory",
           "id": "29"
         },
         {
           "index": 210,
           "hint": "",
-          "dataType": "pickerinputrow",
-          "defaultValues": "1:2019,2:2020",
-          "param": "Audit Year",
+          "dataType": "textrow",
+          "defaultValues": "",
+          "param": "Business Name",
           "validation": "mandatory",
           "id": "210"
         },
@@ -132,19 +132,55 @@
           "index": 211,
           "hint": "",
           "dataType": "pickerinputrow",
-          "defaultValues": "1:1,2:2,3:3,4:4,5:5,6:6,7:7,8:8,9:9,10:10,11:11,12:12,13:13,14:14,15:15,16:16,17:17,18:18,19:19,20:20,21:21,22:22,23:23,24:24,25:25,26:26,27:27,28:28,29:29,30:30,31:31",
-          "param": "Assessment Start Day",
+          "defaultValues": "1:Convenience store,2:Convenience store with gas station,3:Education - College or university,4:Education - Elementary or middle school,5:Education - High school,6:Education - Preschool or daycare,7:Education - Uncategorized,8:Food Service - Bakery,9:Food Service - Fast food,10:Food Service - Other,11:Food Service - Restaurant or cafeteria,12:Grocery store or food market,13:Health Care - Outpatient Clinic,14:Health Care - Outpatient Diagnostic,15:Health Care - Uncategorized,16:Lodging - Hotel,17:Laboratory,18:Lodging - Motel or inn,19:Lodging - Other,20:Nursing Home,21:Office - Administrative or Professional,22:Office - Bank or other financial,23:Office - Government,24:Office - Medical non diagnostic,25:Office - Mixed use,26:Office - Other,27:Office - Uncategorized,28:Parking Garage,29:Public Assembly - Arena,30:Public Assembly - Drama theater,31:Public Assembly - Entertainment/culture,32:Public Assembly - Funeral home,33:Public Assembly - Large Hall,34:Public Assembly - Library,35:Public Assembly - Movie Theater,36:Public Assembly - Other,37:Public Assembly - Pool,38:Public Assembly - Recreation,39:Public Assembly - Social/meeting,40:Public Assembly - Uncategorized,41:Public Safety - Courthouse,42:Public Safety - Fire or police station,43:Public Safety - Jailhouse,44:Public Safety - Uncategorized,45:Religious worship - Church,46:Religious worship - Mosque,47:Religious worship - Synagogue,48:Religious worship - Other,49:Retail - Enclosed mall,50:Retail - Other than mall,51:Retail - Small Box (< 50K sf),52:Retail - Strip shopping mall,53:Retail - Uncategorized,54:Retail - Vehicle dealership/showroom,55:Service - Art/Video/Photography Studio,56:Service - Dry-cleaning or Laundry,57:Service - Industrial shop,58:Service - Other service,59:Service - Post office or postal center,60:Service - Repair shop,61:Service - Uncategorized,62:Service - Vehicle service/repair shop,63:Service - Vehicle storage,64:Transportation Terminal,65:Vacant,66:Warehouse - Distribution or Shipping center,67:Warehouse - Non-refrigerated,68:Warehouse - Refrigerated,69:Warehouse - Self-storage,70:Warehouse - Uncategorized",
+          "param": "Facility Type",
           "validation": "mandatory",
           "id": "211"
         },
         {
           "index": 212,
           "hint": "",
+          "dataType": "textrow",
+          "defaultValues": "",
+          "param": "Facility Type (Others)",
+          "validation": "optional",
+          "id": "212"
+        },
+        {
+          "index": 213,
+          "hint": "",
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:January,2:February,3:March,4:April,5:May,6:June,7:July,8:August,9:September,10:October,11:November,12:December",
+          "param": "Audit Month",
+          "validation": "mandatory",
+          "id": "213"
+        },
+        {
+          "index": 214,
+          "hint": "",
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:2019,2:2020",
+          "param": "Audit Year",
+          "validation": "mandatory",
+          "id": "214"
+        },
+        {
+          "index": 215,
+          "hint": "",
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:1,2:2,3:3,4:4,5:5,6:6,7:7,8:8,9:9,10:10,11:11,12:12,13:13,14:14,15:15,16:16,17:17,18:18,19:19,20:20,21:21,22:22,23:23,24:24,25:25,26:26,27:27,28:28,29:29,30:30,31:31",
+          "param": "Assessment Start Day",
+          "validation": "mandatory",
+          "id": "215"
+        },
+        {
+          "index": 216,
+          "hint": "",
           "dataType": "pickerinputrow",
           "defaultValues": "1:1,2:2,3:3,4:4,5:5,6:6,7:7,8:8,9:9,10:10,11:11,12:12,13:13,14:14,15:15,16:16,17:17,18:18,19:19,20:20,21:21,22:22,23:23,24:24,25:25,26:26,27:27,28:28,29:29,30:30,31:31",
           "param": "Assessment End Day",
           "validation": "mandatory",
-          "id": "212"
+          "id": "216"
         }
       ],
       "id": "2"

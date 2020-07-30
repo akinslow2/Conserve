@@ -80,7 +80,11 @@ class SorterForWordDocumentGenerator {
                 && equipment.preAudit.containsKey("General Client Info Business Name")
                 && equipment.preAudit.containsKey("General Client Info Audit Month")
                 && equipment.preAudit.containsKey("General Client Info Audit Year")
-                && equipment.preAudit.containsKey("General Client Info Address")
+                && equipment.preAudit.containsKey("General Client Info Address Line 1")
+                && equipment.preAudit.containsKey("General Client Info Address Line 2")
+                && equipment.preAudit.containsKey("General Client Info City")
+                && equipment.preAudit.containsKey("General Client Info State")
+                && equipment.preAudit.containsKey("General Client Info Zip Code")
                 && equipment.preAudit.containsKey("General Client Info Assessment Start Day")
                 && equipment.preAudit.containsKey("General Client Info Assessment End Day")
                 && equipment.preAudit.containsKey("Operation Hours Monday Operating Hours")
@@ -90,11 +94,14 @@ class SorterForWordDocumentGenerator {
                 && equipment.preAudit.containsKey("Others Utility Company")
                 && equipment.preAudit.containsKey("Others Gas Rate Structure")) {
             val preAudit = equipment.preAudit
+            val address = "${preAudit["General Client Info Address Line 1"]} ${preAudit["General Client Info Address Line 2"]} ${preAudit["General Client Info City"]}, ${preAudit["General Client Info State"]} ${preAudit["General Client Info Zip Code"]}"
+
+
             return PreAuditValues(
                     preAudit["General Client Info Business Name"]!! as String,
                     preAudit["General Client Info Audit Month"]!! as String,
                     preAudit["General Client Info Audit Year"]!! as String,
-                    preAudit["General Client Info Address"]!! as String,
+                    address,
                     preAudit["General Client Info Assessment Start Day"]!! as String,
                     preAudit["General Client Info Assessment End Day"]!! as String,
                     preAudit["Operation Hours Monday Operating Hours"]!! as String,
