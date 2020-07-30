@@ -1,5 +1,4 @@
 package CompanyCamAPI
-
 import CompanyCamAPI.Objects.Photo
 import CompanyCamAPI.Objects.Project
 import CompanyCamAPI.Requests.CreateProjectRequest
@@ -7,23 +6,27 @@ import CompanyCamAPI.Requests.PhotoRequest
 import CompanyCamAPI.Requests.UploadPhotoRequest
 import CompanyCamAPI.Types.Address
 import CompanyCamAPI.Types.Coordinate
-import android.util.Log
-import com.gemini.energy.CompanyCamAPI.Requests.ApplyTagToPhotoRequest
-import com.gemini.energy.CompanyCamAPI.Requests.CreateTagRequest
-import com.gemini.energy.CompanyCamAPI.Requests.RefreshTokenRequest
-import com.gemini.energy.CompanyCamAPI.Requests.UpdateProjectAddressRequest
+import android.os.AsyncTask
+import com.amazonaws.auth.BasicAWSCredentials
+import com.amazonaws.services.s3.AmazonS3Client
+import com.amazonaws.services.s3.model.CannedAccessControlList
+import com.amazonaws.services.s3.model.PutObjectResult
+import com.gemini.energy.CompanyCamAPI.Requests.*
 import com.gemini.energy.branch
-import com.gemini.energy.service.ParseAPI
-import com.gemini.energy.service.responses.UploadImageResponse
 import kotlinx.coroutines.*
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
-import okhttp3.RequestBody.Companion.asRequestBody
 import java.io.File
 import java.util.*
 
+const val s3BucketName = "gemini-image-storage"
+
 class PhotoUploader {
 
-    val ccService: CompanyCamService = CompanyCamServiceFactory.makeService()
+    private val ccService: CompanyCamService = CompanyCamServiceFactory.makeService()
+    private var awsCreds = BasicAWSCredentials(
+            "AKIAYZ65NR2N7AMJTIW2",
+            "OTKGyHWjRrmeu8BtpQOMprKcMsi7PVayWf/hiogZ")
+    private val s3Client = AmazonS3Client(awsCreds)
+
 
     fun UploadPhoto(
             photoFile: File,
@@ -53,34 +56,60 @@ class PhotoUploader {
                 CompanyCamServiceFactory.setToken(newToken)
             }
 
-            // have to upload photo to parse server before uploading to company cam
-            val parsePhoto = uploadImageToParseServer(photoFile, "$projectName.jpg")
-            Log.d("------", "parse photo address: ${parsePhoto.url}")
+            // have to upload photo to aws s3 before uploading to company cam
+            val photoName = photoFile.name
+
+            UploadImageToS3()
+                    .execute(UploadImageS3Params(s3Client, photoFile, photoName))
+                    .get()
 
             val project = getProject("$branch - $projectName", projectAddress)
             if (project.address != projectAddress)
                 ccService.updateProjectAddress(project.id, UpdateProjectAddressRequest(projectAddress))
 
-            val photo = uploadPhoto(project.id, parsePhoto.url)
-//            val photo = uploadPhoto(project.id, "https://zjf683hopnivfq5d12xaooxr-wpengine.netdna-ssl.com/wp-content/uploads/2020/02/GettyImages-1199242002-1-1480x833.jpg")
+            val photoUrl = "https://gemini-image-storage.s3.us-east-2.amazonaws.com/$photoName"
+
+            val photo = uploadPhoto(project.id, photoUrl)
 
             for (tag in photoTags) {
                 addTagToPhoto(tag, photo.id)
             }
 
-            // TODO: delete photo from parse
-            // will need real parse master key to delete
-//            ParseAPI.create().deleteImage(parsePhoto.name)
+            DeleteImageFromS3()
+                    .execute(DeleteImageS3Params(s3Client, photoName))
+                    .get()
 
             callback(true, null)
         }
     }
 
 
-    // returns the URI to the image on parse server
-    private suspend fun uploadImageToParseServer(photo: File, imageName: String): UploadImageResponse {
-        val body = photo.asRequestBody("image/*".toMediaTypeOrNull())
-        return ParseAPI.create().uploadImage(imageName, body)
+    // uploads the image to aws s3 && gives image public access
+    internal class UploadImageToS3 : AsyncTask<UploadImageS3Params, Void, PutObjectResult?>() {
+
+        override fun doInBackground(vararg p0: UploadImageS3Params?): PutObjectResult? {
+            try {
+                val obj = p0[0] as UploadImageS3Params
+                val result = obj.client.putObject(s3BucketName, obj.name, obj.photoFile)
+
+                obj.client.setObjectAcl(s3BucketName, obj.name, CannedAccessControlList.PublicRead)
+
+                return result
+            } catch (e: Exception) {
+                //handle exception
+                return null
+            }
+        }
+    }
+
+
+    // delets the image from aws s3
+    internal class DeleteImageFromS3 : AsyncTask<DeleteImageS3Params, Void, Void>() {
+        override fun doInBackground(vararg p0: DeleteImageS3Params?): Void? {
+            val obj = p0[0] as DeleteImageS3Params
+            obj.client.deleteObject(s3BucketName, obj.name)
+            return null
+        }
     }
 
 
