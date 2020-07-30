@@ -201,7 +201,7 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
             businessname = preAudit["General Client Info Business Name"]!! as String
             auditmonth = preAudit["General Client Info Audit Month"]!! as String
             audityear = preAudit["General Client Info Audit Year"]!! as String
-            clientaddress = preAudit["General Client Info Address"]!! as String
+            clientaddress  = "${preAudit["General Client Info Address Line 1"]} ${preAudit["General Client Info Address Line 2"]} ${preAudit["General Client Info Address City"]}, ${preAudit["General Client Info Address State"]} ${preAudit["General Client Info Address Zip Code"]}"
             startday = preAudit["General Client Info Assessment Start Day"]!! as String
             endday = preAudit["General Client Info Assessment End Day"]!! as String
             operationhours = preAudit["Operation Hours Monday Operating Hours"]!! as String
@@ -234,8 +234,8 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
             // heatsetpoint = featureData["Cool Set Point (oF)"]!! as Int
             // hddtest = featureData["Heating Degree Days"]!! as Double
             // cddtest = featureData["Cooling Degree Days"]!! as Double
-            city = featureData["City"]!! as String
-            state = featureData["State"]!! as String
+//            city = featureData["City"]!! as String
+//            state = featureData["State"]!! as String
 
 
             peakHours = featureData["Peak Hours"]!! as Double
