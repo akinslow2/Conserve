@@ -398,6 +398,7 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
         return delta
     }
 
+
     fun totalSavings(): Double {
         val powerPre = btu / seer / 1000
         val powerPost = btu / alternateSeer / 1000
@@ -412,6 +413,7 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
 
 
 // TODO: @k2interactive make this the energyTimeChange
+override fun energyTimeChange(): Double = 0.0
     /**
     override fun energyTimeChange(): Double {
     // val energyPre = 0.0
