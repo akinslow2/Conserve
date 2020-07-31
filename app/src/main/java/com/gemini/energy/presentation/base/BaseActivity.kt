@@ -49,6 +49,8 @@ open class BaseActivity : DaggerAppCompatActivity() {
 
         setupToolbar()
         setupCrossfader()
+
+        photoUploader = PhotoUploader(getString(R.string.aswS3SecretKey), getString(R.string.awsS3AccessKey))
     }
 
     open fun setupToolbar() {
@@ -94,7 +96,7 @@ open class BaseActivity : DaggerAppCompatActivity() {
     private lateinit var photoFile: File
 
     // service for uploading to company cam
-    private val photoUploader = PhotoUploader()
+    private lateinit var photoUploader: PhotoUploader
 
     private val fileProviderAuthority = "com.gemini.energy.android.fileprovider"
 

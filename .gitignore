@@ -76,3 +76,6 @@ fastlane/readme.md
 
 # Fabric
 app/fabric.properties
+
+# secrets
+**/*/res/values/secrets.xml
