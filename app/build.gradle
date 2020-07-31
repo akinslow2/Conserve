@@ -6,7 +6,12 @@ apply plugin: 'kotlin-kapt'
 apply plugin: 'realm-android'
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion 26
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_1_8.toString()
@@ -14,8 +19,8 @@ android {
 
     defaultConfig {
         applicationId "com.gemini.energy"
-        minSdkVersion 26
-        targetSdkVersion 28
+        minSdkVersion 19
+        targetSdkVersion 26
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
