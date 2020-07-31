@@ -19,14 +19,15 @@ import java.util.*
 
 const val s3BucketName = "gemini-image-storage"
 
-class PhotoUploader {
+class PhotoUploader(awsSecretKey: String, awsAccessKey: String) {
 
     private val ccService: CompanyCamService = CompanyCamServiceFactory.makeService()
-    private var awsCreds = BasicAWSCredentials(
-            "AKIAYZ65NR2N7AMJTIW2",
-            "OTKGyHWjRrmeu8BtpQOMprKcMsi7PVayWf/hiogZ")
-    private val s3Client = AmazonS3Client(awsCreds)
+    private val awsCreds: BasicAWSCredentials = BasicAWSCredentials(awsAccessKey, awsSecretKey)
+    private val s3Client: AmazonS3Client
 
+    init {
+        s3Client = AmazonS3Client(awsCreds)
+    }
 
     fun UploadPhoto(
             photoFile: File,
