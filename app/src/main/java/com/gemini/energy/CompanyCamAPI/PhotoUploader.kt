@@ -72,13 +72,13 @@ class PhotoUploader(awsSecretKey: String, awsAccessKey: String) {
 
             val photo = uploadPhoto(project.id, photoUrl)
 
-            for (tag in photoTags) {
-                addTagToPhoto(tag, photo.id)
-            }
-
             DeleteImageFromS3()
                     .execute(DeleteImageS3Params(s3Client, photoName))
                     .get()
+
+            for (tag in photoTags) {
+                addTagToPhoto(tag, photo.id)
+            }
 
             callback(true, null)
         }
