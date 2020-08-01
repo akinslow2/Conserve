@@ -292,11 +292,6 @@ open class BaseActivity : DaggerAppCompatActivity() {
         if (exception is HttpException) {
             when (exception.code()) {
                 ErrorCodes.Unauthorized.code -> {
-                    // TODO: attempt refresh token
-                    // if refresh succeeds try to upload image again
-//                    CompanyCamServiceFactory.clearAuthToken()
-
-                    // display this alert if refresh failed
                     AlertDialog.Builder(this)
                             .setTitle("Company Cam Authorization Expired")
                             .setMessage("Please log into company cam again.")
