@@ -12,7 +12,6 @@ import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
 import android.databinding.DataBindingUtil
 import android.os.Bundle
-import android.os.Environment
 import android.provider.MediaStore
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
@@ -119,12 +118,13 @@ open class BaseActivity : DaggerAppCompatActivity() {
                     { success, error ->
                         linlaHeaderProgress.visibility = View.GONE
 
-                        if (success)
+                        if (success) {
+                            photoFile.delete()
                             Toast.makeText(applicationContext, "Upload success", Toast.LENGTH_LONG).show()
-                        else {
+                        } else {
                             Log.e(
-                                    "BaseActivity upload taken image to compnay cam",
-                                    "ERROR: ${error?.message} ${error?.stackTrace}")
+                                    "BaseActivity",
+                                    "upload taken image to compnay cam ERROR: ${error?.message} ${error?.stackTrace}")
                             handleCompanyCamException(error)
                         }
                     }
@@ -405,11 +405,11 @@ open class BaseActivity : DaggerAppCompatActivity() {
     @Throws(IOException::class)
     private fun createImageFile(): File {
         val timestamp: String = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
-        val storageDirectory = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+
         return File.createTempFile(
                 "JPEG_${timestamp}_",
                 ".jpg",
-                storageDirectory
+                cacheDir
         ).apply {
             photoFile = this
         }
