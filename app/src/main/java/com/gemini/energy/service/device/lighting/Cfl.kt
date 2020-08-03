@@ -200,9 +200,13 @@ class Cfl(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEle
         postusageHours.postpartPeakHours = postpartPeakHours
         postusageHours.postoffPeakHours = postoffPeakHours
 
-        if (postusageHours.yearly() == null){
-            return  usageHoursPre()}
-        else { return postusageHours.yearly()}
+        if (postusageHours.yearly() > 0.0)
+            return postusageHours.yearly()
+
+        if (usageHoursPre() > 0)
+            return usageHoursPre()
+
+        return usageHoursBusiness.yearly()
     }
 
     /**
