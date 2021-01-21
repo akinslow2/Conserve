@@ -82,6 +82,7 @@ data class LightingDataRow(
         val implementationCost: Double,
         val paybackPeriodMonths: Double,
         val paybackPeriodYears: Double
+//        val OBFenergySavings: Double
 )
 
 data class RefrigerationValues(
@@ -103,7 +104,6 @@ data class EquipmentInstances(
 
 data class EquipmentValues(
         val instances: List<EquipmentInstances>,
-
         val totalSavings: Double, // 31
         val totalCost: Double
 )
