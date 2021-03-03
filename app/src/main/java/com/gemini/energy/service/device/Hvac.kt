@@ -183,9 +183,9 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
             eer = featureData["EER"]!! as Double
             seer = featureData["SEER"]!! as Double
             age = featureData["Age"]!! as Int
-            btu = featureData["Cooling Capacity (Btu/hr)"]!! as Int
-            gasInput = featureData["Heating Input (Btu/hr)"]!! as Int
-            gasOutput = featureData["Heating Output (Btu/hr)"]!! as Int
+            btu = featureData["Cooling Capacity (kBtu/hr)"]!! as Int
+            gasInput = featureData["Heating Input (kBtu/hr)"]!! as Int
+            gasOutput = featureData["Heating Output (kBtu/hr)"]!! as Int
             economizer = featureData["Economizer"]!! as String
             thermotype = featureData["Thermostat Type"]!! as String
             quantity = featureData["Quantity"]!! as Int

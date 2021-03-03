@@ -69,10 +69,10 @@
         },
         {
           "index": 18,
-          "hint": "",
+          "hint": "36",
           "dataType": "introw",
           "defaultValues": "",
-          "param": "Cooling Capacity (Btu/hr)",
+          "param": "Cooling Capacity (kBtu/hr)",
           "validation": "optional",
           "id": "18"
         },
@@ -90,7 +90,7 @@
           "hint": "",
           "dataType": "introw",
           "defaultValues": "",
-          "param": "Heating Output (Btu/hr)",
+          "param": "Heating Output (kBtu/hr)",
           "validation": "optional",
           "id": "110"
         },
@@ -99,7 +99,7 @@
           "hint": "",
           "dataType": "introw",
           "defaultValues": "",
-          "param": "Heating Input (Btu/hr)",
+          "param": "Heating Input (kBtu/hr)",
           "validation": "optional",
           "id": "111"
         },
