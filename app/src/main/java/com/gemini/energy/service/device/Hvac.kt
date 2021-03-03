@@ -79,9 +79,9 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
         /**
          * HVAC - Power Consumed
          * There could be a case where the User will input the value in KW - If that happens we need to convert the KW
-         * int BTU / hr :: 1KW equals 3412.142
+         * int kbtu / hr :: 1KW equals 3412.142
          * */
-        fun power(btu: Int, seer: Double) = (btu / seer)
+        fun power(kbtu: Int, seer: Double) = (kbtu / seer)
 
         /**
          * Year At - Current minus the Age
@@ -105,7 +105,7 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
      * HVAC - Energy Efficiency Ratio
      * If not available - Build a match criteria at queryHVACEer()
      * 1. Primary Match - [year equals (Current Year minus 20)]
-     * 2. Secondary Match - [size_btu_per_hr_min > BTU < size_btu_per_hr_max]
+     * 2. Secondary Match - [size_btu_per_hr_min > kbtu < size_btu_per_hr_max]
      * */
     private var eer = 0.0
     var seer = 11.0
@@ -122,7 +122,7 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
     /**
      * HVAC - British Thermal Unit
      * */
-    var btu = 0
+    var kbtu = 0
     private var gasInput = 0
     private var gasOutput = 0
 
@@ -183,7 +183,7 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
             eer = featureData["EER"]!! as Double
             seer = featureData["SEER"]!! as Double
             age = featureData["Age"]!! as Int
-            btu = featureData["Cooling Capacity (kBtu/hr)"]!! as Int
+            kbtu = featureData["Cooling Capacity (kBtu/hr)"]!! as Int
             gasInput = featureData["Heating Input (kBtu/hr)"]!! as Int
             gasOutput = featureData["Heating Output (kBtu/hr)"]!! as Int
             economizer = featureData["Economizer"]!! as String
@@ -199,7 +199,7 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
 
             alternateSeer = featureData["Alternate SEER"]!! as Double
             alternateEer = featureData["Alternate EER"]!! as Double
-            alternateBtu = featureData["Alternate Cooling Capacity (Btu/hr)"]!! as Int
+            alternateBtu = featureData["Alternate Cooling Capacity (kbtu/hr)"]!! as Int
 
         } catch (e: Exception) {
             e.printStackTrace()
@@ -231,7 +231,7 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
         Timber.d("::: PARAM - HVAC :::")
         Timber.d("EER -- $eer")
         Timber.d("AGE -- $age")
-        Timber.d("BTU -- $btu")
+        Timber.d("kbtu -- $kbtu")
         Timber.d("YEAR -- ${getYear(age)}")
 
         Timber.d("::: DATA EXTRACTOR - HVAC :::")
@@ -241,8 +241,8 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
         computable.udf1 = usageHours
         Timber.d(usageHours.toString())
 
-        val powerUsedCurrent = power(btu, seer)
-        val powerUsedStandard = power(btu, eer)
+        val powerUsedCurrent = power(kbtu, seer)
+        val powerUsedStandard = power(kbtu, eer)
 
         val powerUsed = if (seer == null) powerUsedStandard else powerUsedCurrent
         Timber.d("HVAC :: Power Used (Current) -- [$powerUsedCurrent]")
@@ -264,7 +264,7 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
         Timber.d("!!! COST POST STATE - HVAC !!!")
         Timber.d("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
 
-        var postSize = btu
+        var postSize = kbtu
         var postSEER = 17.0
 
        // try {
@@ -310,9 +310,9 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
         if (utilitycompany == "pge") {return energyPowerChange() * 0.15 + (energyPowerChange() / usageHoursPre()) * 150 }
         else { return 0.0}
     }
-
+//@K2 does kbtu have to be a double to be in the equation below? Right now it is an INT
     override fun materialCost(): Double {
-        return 7000.0
+        return 4000.0 * kbtu / 12000.0
     }
 
     override fun laborCost(): Double {
@@ -344,8 +344,8 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
     override fun energyPowerChange(): Double {
 
           // Step 3 : Get the Delta
-        val powerPre = btu / seer / 1000
-        val powerPost = btu / alternateSeer / 1000
+        val powerPre = kbtu / seer
+        val powerPost = kbtu / alternateSeer
         val eSavings = (powerPre - powerPost)
 
         val delta = eSavings * usageHoursPre()
@@ -355,15 +355,15 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
     }
 
     fun totalSavings(): Double {
-        val powerPre = btu / seer / 1000
-        val powerPost = btu / alternateSeer / 1000
+        val powerPre = kbtu / seer
+        val powerPost = kbtu / alternateSeer
         val eSavings = (powerPre - powerPost)
             val usageHours = UsageLighting()
             usageHours.peakHours = peakHours
             usageHours.partPeakHours = partPeakHours
             usageHours.offPeakHours = offPeakHours
             //return costElectricity(eSavings, usageHours, electricityRate)
-            return 296.0
+            return 0.0
     }
 
 
@@ -377,7 +377,7 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
     override fun efficientLookup() = (firstNotNull(alternateSeer, alternateEer) == 0.0 || alternateBtu == 0)
     override fun queryEfficientFilter() = JSONObject()
             .put("type", HVAC_EFFICIENCY)
-            .put("data.size_btu_hr", btu)
+            .put("data.size_btu_hr", kbtu)
             .toString()
 
     /**
@@ -386,8 +386,8 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
     override fun queryHVACEer() = JSONObject()
             .put("type", HVAC_EER)
             .put("data.year", getYear(age))
-            .put("data.size_btu_per_hr_min", JSONObject().put("\$lte", btu))
-            .put("data.size_btu_per_hr_max", JSONObject().put("\$gte", btu))
+            .put("data.size_btu_per_hr_min", JSONObject().put("\$lte", kbtu))
+            .put("data.size_btu_per_hr_max", JSONObject().put("\$gte", kbtu))
             .toString()
 
     override fun queryHVACCoolingHours() = JSONObject()

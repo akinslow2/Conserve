@@ -902,9 +902,9 @@ class WordDocumentGenerator {
             val pcell4 = cell4.paragraphs[0]
             pcell4.alignment = ParagraphAlignment.CENTER
             val rcell4 = pcell4.createRun()
-            rcell4.setText((if (isFirst) "Current Energy (kWh)" else rowItem.currentPowerkW.format(3)))
+            rcell4.setText((if (isFirst) "Current Power (kW)" else rowItem.currentPowerkW.format(2)))
 
-            val cell5 = row.getCell(5)
+                        val cell5 = row.getCell(5)
             cell5.verticalAlignment = XWPFTableCell.XWPFVertAlign.CENTER
             val pcell5 = cell5.paragraphs[0]
             pcell5.alignment = ParagraphAlignment.CENTER
@@ -916,7 +916,7 @@ class WordDocumentGenerator {
             val pcell6 = cell6.paragraphs[0]
             pcell6.alignment = ParagraphAlignment.CENTER
             val rcell6 = pcell6.createRun()
-            rcell6.setText(if (isFirst) "Post Energy (kWh)" else rowItem.postPowerkW.format(3))
+            rcell6.setText(if (isFirst) "Post Power (kW)" else rowItem.postPowerkW.format(2))
 
             val cell7 = row.getCell(7)
             cell7.verticalAlignment = XWPFTableCell.XWPFVertAlign.CENTER
@@ -958,7 +958,7 @@ class WordDocumentGenerator {
             val pcell12 = cell12.paragraphs[0]
             pcell12.alignment = ParagraphAlignment.CENTER
             val rcell12 = pcell12.createRun()
-            rcell12.setText(if (isFirst) "Payback Period (years)" else rowItem.paybackPeriodYears.format(2))
+            rcell12.setText(if (isFirst) "Payback Period (years)" else rowItem.paybackPeriodYears.format(1))
         }
 
         centerTable(table)
