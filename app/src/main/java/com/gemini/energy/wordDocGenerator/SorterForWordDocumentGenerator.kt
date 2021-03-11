@@ -238,6 +238,7 @@ class SorterForWordDocumentGenerator {
         var costPostState = 0.0
         var totalCost = 0.0
         var totalSavings = 0.0
+        var presentvaluefactor = 12.462
         val instances = mutableListOf<HvacInstances>()
 
         for (hvac in hvacs) {
@@ -260,13 +261,18 @@ class SorterForWordDocumentGenerator {
                     hvac.thermotype
             ))
         }
+        val paybackMonth = (totalCost / totalSavings * 12) + 4
+        val paybackYear: Double = (totalCost / totalSavings) + (4 / 12)
+        val netPresentValue: Double = (totalSavings * presentvaluefactor) -  totalCost
 
         return HvacValues(
                 instances.toList(),
 
                 costPostState,
                 totalCost,
-                totalSavings
+                totalSavings,
+                paybackYear,
+                netPresentValue
         )
     }
 
@@ -281,6 +287,7 @@ class SorterForWordDocumentGenerator {
         var costPostState = 0.0
         var totalCost = 0.0
         var totalSavings = 0.0
+        var presentvaluefactor = 10.38
 
         for (waterheater in waterheaters) {
             val postState = waterheater.buildPostState().blockingGet()
@@ -290,17 +297,19 @@ class SorterForWordDocumentGenerator {
 
             totalSavings += waterheater.totalSavings()
             totalCost += waterheater.implementationCost()
-        }
+         }
 
         val waterheater = audit[waterheater]!!.first() as WaterHeater
         val paybackMonth = (totalCost / totalSavings * 12) + 4
         val paybackYear: Double = (totalCost / totalSavings) + (4 / 12)
+        val netPresentValue: Double = (totalSavings * presentvaluefactor) -  totalCost
 
         return WaterHeaterValues(
                 totalSavings,
                 totalCost,
                 paybackMonth,
                 paybackYear,
+                netPresentValue,
                 waterheater.quantity,
                 waterheater.year(),
                 waterheater.age,
@@ -320,6 +329,7 @@ class SorterForWordDocumentGenerator {
         val refrigerators = mutableListOf<Refrigerator>()
         val freezers = mutableListOf<Freezer>()
         val wiCoolerBot = mutableListOf<WICoolerBox>()
+        val presentvaluefactor = 10.380
 
         for (type in audit[refrigeration]!!) {
             when (type) {
@@ -360,11 +370,12 @@ class SorterForWordDocumentGenerator {
         }
 
         val paybackMonth = if (totalSavings == 0.0) 0.0 else totalCost / totalSavings * 12
-
+        val netPresentValue: Double = (totalSavings * presentvaluefactor) -  totalCost
         return RefrigerationValues(
                 totalCost,
                 totalSavings,
-                paybackMonth
+                paybackMonth,
+                netPresentValue
         )
     }
 
@@ -397,6 +408,7 @@ class SorterForWordDocumentGenerator {
         var selfinstallcost = 0.0
         var electricianCost = 0.0
         var totalEnergySavings = 0.0
+        var presentvaluefactor = 7.722 //Assume 10 years
         val lightingRows = prepareLightingTableRows(audit[lighting]!!)
 
         for (light in cfls) {
@@ -407,6 +419,7 @@ class SorterForWordDocumentGenerator {
                 electricianCost = 100.0
             }
             totalEnergySavings += light.totalEnergySavings()
+            presentvaluefactor = light.presentvaluefactor
         }
 
         for (light in halogens) {
@@ -417,6 +430,7 @@ class SorterForWordDocumentGenerator {
                 electricianCost = 100.0
             }
             totalEnergySavings += light.totalEnergySavings()
+            presentvaluefactor = light.presentvaluefactor
         }
 
         for (light in highPressureSodiums) {
@@ -427,6 +441,7 @@ class SorterForWordDocumentGenerator {
                 electricianCost = 100.0
             }
             totalEnergySavings += light.totalEnergySavings()
+            presentvaluefactor = light.presentvaluefactor
         }
 
         for (light in incandescents) {
@@ -437,6 +452,7 @@ class SorterForWordDocumentGenerator {
                 electricianCost = 100.0
             }
             totalEnergySavings += light.totalEnergySavings()
+            presentvaluefactor = light.presentvaluefactor
         }
 
         for (light in linearFluorescents) {
@@ -447,6 +463,7 @@ class SorterForWordDocumentGenerator {
                 electricianCost = 100.0
             }
             totalEnergySavings += light.totalEnergySavings()
+            presentvaluefactor = light.presentvaluefactor
         }
 
         for (light in lowPressureSodium) {
@@ -457,12 +474,14 @@ class SorterForWordDocumentGenerator {
                 electricianCost = 100.0
             }
             totalEnergySavings += light.totalEnergySavings()
+            presentvaluefactor = light.presentvaluefactor
         }
 
         val installCost = electricianCost + selfinstallcost
         val paybackMonth = selfinstallcost / totalCostSavings * 12
         val geminiPayback = paybackMonth + 4
         val paybackYear: Double = selfinstallcost / totalCostSavings
+        val netPresentValue: Double = (totalCostSavings * presentvaluefactor) -  installCost
 
         return LightingValues(
                 totalCostSavings,
@@ -472,6 +491,7 @@ class SorterForWordDocumentGenerator {
                 paybackMonth,
                 geminiPayback,
                 paybackYear,
+                netPresentValue,
                 lightingRows)
     }
 
@@ -497,7 +517,8 @@ class SorterForWordDocumentGenerator {
                             light.totalSavings(),
                             light.selfinstallcost(),
                             light.selfinstallcost() / light.totalSavings() * 12,
-                            light.selfinstallcost() / light.totalSavings()
+                            light.selfinstallcost() / light.totalSavings(),
+                            light.netPresentValue()
                     ))
                 }
                 is Halogen -> {
@@ -512,11 +533,12 @@ class SorterForWordDocumentGenerator {
                             light.postPower(),
                             light.usageHoursPost(),
                             light.postEnergy(),
+                            light.totalEnergySavings(),
                             light.totalSavings(),
-                            light.selfinstallcost().toDouble(),
+                            light.selfinstallcost(),
                             light.selfinstallcost() / light.totalSavings() * 12,
                             light.selfinstallcost() / light.totalSavings(),
-                            light.selfinstallcost() / light.totalSavings()
+                            light.netPresentValue()
                     ))
                 }
                 is HPSodium -> {
@@ -531,11 +553,12 @@ class SorterForWordDocumentGenerator {
                             light.postPower(),
                             light.usageHoursPost(),
                             light.postEnergy(),
+                            light.totalEnergySavings(),
                             light.totalSavings(),
-                            light.selfinstallcost().toDouble(),
+                            light.selfinstallcost(),
                             light.selfinstallcost() / light.totalSavings() * 12,
                             light.selfinstallcost() / light.totalSavings(),
-                            light.selfinstallcost() / light.totalSavings()
+                            light.netPresentValue()
                     ))
                 }
                 is Incandescent -> {
@@ -550,11 +573,12 @@ class SorterForWordDocumentGenerator {
                             light.postPower(),
                             light.usageHoursPost(),
                             light.postEnergy(),
+                            light.totalEnergySavings(),
                             light.totalSavings(),
-                            light.selfinstallcost().toDouble(),
+                            light.selfinstallcost(),
                             light.selfinstallcost() / light.totalSavings() * 12,
                             light.selfinstallcost() / light.totalSavings(),
-                            light.selfinstallcost() / light.totalSavings()
+                            light.netPresentValue()
                     ))
                 }
                 is LinearFluorescent -> {
@@ -569,11 +593,12 @@ class SorterForWordDocumentGenerator {
                             light.postPower(),
                             light.usageHoursPost(),
                             light.postEnergy(),
+                            light.totalEnergySavings(),
                             light.totalSavings(),
                             light.selfinstallcost(),
                             light.selfinstallcost() / light.totalSavings() * 12,
                             light.selfinstallcost() / light.totalSavings(),
-                            light.selfinstallcost() / light.totalSavings()
+                            light.netPresentValue()
                     ))
                 }
                 is LPSodium -> {
@@ -588,11 +613,12 @@ class SorterForWordDocumentGenerator {
                             light.postPower(),
                             light.usageHoursPost(),
                             light.postEnergy(),
+                            light.totalEnergySavings(),
                             light.totalSavings(),
-                            light.selfinstallcost().toDouble(),
+                            light.selfinstallcost(),
                             light.selfinstallcost() / light.totalSavings() * 12,
                             light.selfinstallcost() / light.totalSavings(),
-                            light.selfinstallcost() / light.totalSavings()
+                            light.netPresentValue()
                     ))
                 }
             }
@@ -606,6 +632,7 @@ class SorterForWordDocumentGenerator {
     private fun prepareValuesForEquipment(audit: AuditComponents): EquipmentValues? {
         var totalSavings = 0.0
         var totalCost = 0.0
+        var netPresentValue = 0.0
         val instances = mutableListOf<EquipmentInstances>()
 
         @Suppress("UNCHECKED_CAST")
@@ -871,7 +898,8 @@ class SorterForWordDocumentGenerator {
         return EquipmentValues(
                 instances.toList(),
                 totalSavings,
-                totalCost
+                totalCost,
+                netPresentValue
         )
     }
 
@@ -912,7 +940,14 @@ class SorterForWordDocumentGenerator {
                 if (buildingTotalSavings == 0.0) 0.0
                 else buildingTotalCost / buildingTotalSavings * 12
 
+        val buildingNetPresentValue =(lightings?.netPresentValue ?: 0.0) +
+                        (hvacs?.netPresentValue ?: 0.0) +
+                        (equipments?.netPresentValue ?: 0.0) +
+                        (waterHeater?.netPresentValue ?: 0.0) +
+                        (refrigeration?.netPresentValue ?: 0.0)
+
         return BuildingValues(
+                buildingNetPresentValue,
                 buildingTotalSavings,
                 buildingPayback,
                 buildingPaybackMonth,

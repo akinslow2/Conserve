@@ -46,6 +46,7 @@ class WaterHeater(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
         private const val HVAC_DB_BTU = "size_btu_hr"
         private const val HVAC_DB_EER = "eer"
 
+
         /**
          * Fetches the EER based on the specific Match Criteria via the Parse API
          * Not needed right now

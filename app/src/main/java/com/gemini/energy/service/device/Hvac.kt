@@ -114,6 +114,11 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
     private var alternateBtu = 0
 
     /**
+     * Financial Calc Variables
+     * */
+    private var presentvaluefactor = 12.462
+
+    /**
      * HVAC - Age
      * */
     var age = 0
@@ -319,6 +324,8 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
         return 0.0
     }
 
+
+
     /**
      * PowerTimeChange >> Hourly Energy Use - Pre
      * */
@@ -370,6 +377,7 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
 
     override fun energyTimeChange(): Double = 0.0
     override fun energyPowerTimeChange(): Double = 0.0
+
 
     /**
      * Energy Efficiency Lookup Query Definition

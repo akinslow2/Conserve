@@ -61,7 +61,7 @@ class WordDocumentGenerator {
         generateEnergySavingPotentialPage(
                 document,
                 value.lighting
-                        ?: LightingValues(0.0, 0.0, 0, 0.0, 0.0, 0.0, 0.0, listOf()),
+                        ?: LightingValues(0.0, 0.0, 0, 0.0, 0.0, 0.0, 0.0, 0.0, listOf()),
                 value.building)
 
         if (value.lighting != null) {
@@ -174,7 +174,7 @@ class WordDocumentGenerator {
         val r3p2 = p2.createRun()
         r3p2.fontFamily = fontAgencyFB
         r3p2.fontSize = 20
-        r3p2.setText("and a payback period within ${buildingValues.buildingPaybackMonth.format(0)} months.")
+        r3p2.setText("with a Net Present Value (NPV) of ${buildingValues.buildingNetPresentValue.format(0)}")
         r3p2.addBreak()
 
         val p3 = document.createParagraph()
@@ -195,7 +195,7 @@ class WordDocumentGenerator {
             qualifyR.fontFamily = fontAgencyFB
             qualifyR.fontSize = 12
             qualifyR.color = greyColor
-            qualifyR.setText("The implementation costs of all the measures qualify you for a low-financing loan. By implementing these energy efficiency measures, you will join the courageous few energy heroes who are making the effort to make your community cleaner.")
+            qualifyR.setText("The implementation costs of all the measures qualify you for a 0% interest loan. By implementing these energy efficiency measures, you will join the courageous few energy heroes who are making the effort to make your community cleaner.")
         }
 
         createEnergySavingsTable(document, lightingData, buildingValues)
@@ -241,7 +241,10 @@ class WordDocumentGenerator {
                 val hvacR1P1 = hvacP1.createRun()
                 hvacR1P1.fontFamily = fontAgencyFB
                 hvacR1P1.fontSize = 12
-                hvacR1P1.setText("Your ${instance.quantity} ${instance.btu}-BTU HVAC package unit(s) are from ${instance.year} with a SEER value of ${instance.seer.format(0)}. They are ${instance.overage} years past their expected end of life use and are at immediate risk of failure. We strongly recommend replacing your package unit(s) as soon as possible.")
+                hvacR1P1.setText("Your ${instance.quantity} ${instance.btu}-BTU HVAC package unit(s) are from ${instance.year} with a SEER value of ${instance.seer.format(0)}. " +
+                        "They are ${instance.overage} years past their expected end of life use and are at immediate risk of failure. " +
+                        "We strongly recommend replacing your package unit(s) as soon as possible. " +
+                        "This investment will result in a NPV of \$${hvac.netPresentValue.format(0)}.")
 
                 val hvacP2 = document.createParagraph()
                 hvacP2.spacingBetween = 1.5
@@ -373,7 +376,10 @@ class WordDocumentGenerator {
         val r1p4 = p4.createRun()
         r1p4.fontFamily = fontAgencyFB
         r1p4.fontSize = 12
-        r1p4.setText("Replacing your water heater(s) will result in a total cost of $${waterheater.totalCost.format(0)} but will result in a minimum of $${waterheater.totalSavings.format(0)} in annual savings. This equates to a payback period of approximately ${waterheater.paybackMonth.format(0)} months. These values assume the support of Gemini. Enlisting Gemini's services will ensure you get all the available rebates/incentives while freeing your time and energy to run your business.")
+        r1p4.setText("Replacing your water heater(s) will result in a total cost of $${waterheater.totalCost.format(0)} but will result in a minimum of $${waterheater.totalSavings.format(0)} in annual savings. " +
+                "This equates to a payback period of approximately ${waterheater.paybackMonth.format(0)} months. " +
+                "This investment will result in a NPV of $${waterheater.netPresentValue.format(0)}. " +
+                "These values assume the support of Gemini to identify potential vendors, obtain 0% interest financing, and free up your time and energy to focus on your business.")
         r1p4.addBreak()
 
         createWaterHeaterTable(document, waterheater)
@@ -421,7 +427,12 @@ class WordDocumentGenerator {
         val r1p4 = p4.createRun()
         r1p4.fontFamily = fontAgencyFB
         r1p4.fontSize = 12
-        r1p4.setText("Replacing all of your non-LED bulbs and adding controls will cost approximately $${lights.totalCost.format(0)} but will result in a minimum of $${lights.totalcostsavings.format(0)} in annual savings. This equates to a payback period of approximately ${lights.paybackMonth.format(0)} months. The cost can be reduced to $${lights.selfinstallcost} if you self-install the occupancy sensors. Alternatively, to replace all non-LED bulbs will result in a minimum of $${lights.totalcostsavings.format(0)} in annual savings and cost approximately $${lights.totalCost.format(0)}. This equates to a payback period of approximately ${lights.paybackMonth.format(0)} months. These values include the cost of enlisting the support of Gemini to identify the LED replacement options. Enlisting Gemini's services will ensure you get all the available rebates/incentives while freeing your time and energy to run your business. We strongly recommend you replace all non-LED bulbs and ensure the bathroom lights are off at the end of the day.")
+        r1p4.setText("Replacing all of your non-LED bulbs and adding controls will cost approximately $${lights.totalCost.format(0)} but will result in a minimum of $${lights.totalcostsavings.format(0)} in annual savings. " +
+                "This equates to a payback period of approximately ${lights.paybackMonth.format(0)} months. The cost can be reduced to $${lights.selfinstallcost} if you self-install the occupancy sensors. " +
+                "Alternatively, to replace all non-LED bulbs will result in a minimum of $${lights.totalcostsavings.format(0)} in annual savings and cost approximately $${lights.totalCost.format(0)}. " +
+                "This equates to a payback period of approximately ${lights.paybackMonth.format(0)} months. " +
+                "These values include the cost of enlisting the support of Gemini to identify the LED replacement options, eligible contractors, obtain 0% interest financing, and free up your time and energy to focus on your business. " +
+                "Overall, implementing the LED retrofit translates to a minimum NPV of $${lights.netPresentValue.format(0)}. We strongly recommend you replace all non-LED bulbs and ensure the bathroom lights are off at the end of the day.")
         r1p4.addBreak()
 
         val p5 = document.createParagraph()
@@ -444,7 +455,7 @@ class WordDocumentGenerator {
         createLightingTable3(document, lights)
     }
 
-    private fun generateEquipmentSavingsPage(document: XWPFDocument, equipmnent: EquipmentValues) {
+    private fun generateEquipmentSavingsPage(document: XWPFDocument, equipment: EquipmentValues) {
         val p1 = document.createParagraph()
         p1.spacingBetween = 1.5
         p1.isPageBreak = true
@@ -466,14 +477,17 @@ class WordDocumentGenerator {
         r2p2.isBold = true
         r2p2.fontSize = 24
         r2p2.color = greenColor
-        r2p2.setText("$${equipmnent.totalSavings.format(0)}/year")
+        r2p2.setText("$${equipment.totalSavings.format(0)}/year")
 
-        for (equip in equipmnent.instances) {
+        for (equip in equipment.instances) {
             val p3 = document.createParagraph()
             val r1p3 = p3.createRun()
             r1p3.fontFamily = fontAgencyFB
             r1p3.fontSize = 13
-            r1p3.setText("Your ${equip.name} is ${equip.age.format(0)} years old and as a result is annually consuming ${equip.delta.format(0)} kWh more energy than a newer version. We recommend you replace the ${equip.name} with a newer version to save $${equip.costElectricity.format(0)} of dollars per year. The cost for a new ${equip.name} is roughly $${equip.materialCost.format(0)} with an expected payback period for this replacement is ${equip.paybackMonth.format(0)} months.")
+            r1p3.setText("Your ${equip.name} is ${equip.age.format(0)} years old and as a result is annually consuming ${equip.delta.format(0)} kWh more energy than a newer version. " +
+                    "We recommend you replace the ${equip.name} with a newer version to save $${equip.costElectricity.format(0)} of dollars per year. " +
+                    "The cost for a new ${equip.name} is roughly $${equip.materialCost.format(0)} with an expected payback period for this replacement is ${equip.paybackMonth.format(0)} months." +
+                    "This investment will result in a NPV of \$${equipment.netPresentValue.format(0)}")
             r1p3.addBreak()
         }
     }
@@ -507,7 +521,8 @@ class WordDocumentGenerator {
         val r1p3 = p3.createRun()
         r1p3.fontFamily = fontAgencyFB
         r1p3.fontSize = 18
-        r1p3.setText("The estimated cost is ${refrigeration.totalCost.format(2)}, resulting in a payback of ${refrigeration.paybackMonth.format(2)} months.")
+        r1p3.setText("The estimated cost is ${refrigeration.totalCost.format(2)}, resulting in a payback of ${refrigeration.paybackMonth.format(2)} months. " +
+                "This investment will result in a NPV of $${refrigeration.netPresentValue.format(0)}")
     }
 
     private fun generateFacilityInformationPage(document: XWPFDocument, values: PreparedForDocument, preAudit: PreAuditValues) {

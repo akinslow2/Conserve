@@ -272,6 +272,17 @@ class Halogen(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRat
     }
 
     /**
+    //NPV for Lighting - assume 10 years life cycle
+     **/
+    var presentvaluefactor = 7.722
+
+    fun elecinstallcost(): Double {
+        return ledbulbcost * alternateNumberOfFixtures * alternateLampsPerFixture + electricianCost
+    }
+    fun netPresentValue(): Double {
+        return totalSavings() * presentvaluefactor - elecinstallcost()
+    }
+    /**
      * Energy Efficiency Lookup Query Definition
      * */
     override fun efficientLookup() = false

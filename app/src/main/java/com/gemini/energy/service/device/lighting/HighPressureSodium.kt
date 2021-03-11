@@ -55,6 +55,7 @@ class HPSodium(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRa
 
     var electricianCost = timeperfixture * numberOfFixtures * electricanHourlyRate
 
+
     private var controls = ""
     var postpeakHours = 0.0
     var postpartPeakHours = 0.0
@@ -270,7 +271,17 @@ class HPSodium(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRa
             return costElectricity(postPower, usageHours, electricityRate)
         }
     }
+    /**
+    //NPV for Lighting - assume 10 years life cycle
+     **/
+    var presentvaluefactor = 7.722
 
+    fun elecinstallcost(): Double {
+        return ledbulbcost * alternateNumberOfFixtures * alternateLampsPerFixture + electricianCost
+    }
+    fun netPresentValue(): Double {
+        return totalSavings() * presentvaluefactor - elecinstallcost()
+    }
     /**
      * Energy Efficiency Lookup Query Definition
      * */

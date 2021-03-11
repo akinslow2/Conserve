@@ -371,6 +371,12 @@ class CostSavings {
             fun paybackPeriodYears() = (implementationCost() / totalCostSaved())
 
             /**
+             * <<< Net Present Value - S >>>
+             * */
+            fun netPresentValue() = (totalCostSaved() - implementationCost())
+
+
+            /**
              * Preparing the Data-Holder to Store the Outgoing Data
              * */
             val energyCostSavingHeader = listOf("__costSavingMultiplePowerCheck",

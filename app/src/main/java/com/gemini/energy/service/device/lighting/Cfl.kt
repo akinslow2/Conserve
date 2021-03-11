@@ -37,7 +37,6 @@ class Cfl(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEle
     private var partPeakHours = 0.0
     var offPeakHours = 0.0
 
-
     var postPower = 0.0
     var postUsageHours = 0
 
@@ -238,6 +237,7 @@ class Cfl(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEle
     fun selfinstallcost(): Double {
         return ledbulbcost * alternateNumberOfFixtures * alternateLampsPerFixture
     }
+
     fun totalEnergySavings(): Double {
         if (controls != null) {
             val coolingSavings = (preEnergy() - energyPowerChange()) * cooling / seer
@@ -278,6 +278,19 @@ class Cfl(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEle
      * Weekly UsageHours Hours apart from the PreAudit
      * */
     override fun usageHoursSpecific() = false
+
+    /**
+    //NPV for Lighting- assume 10 years life cycle
+    **/
+    var presentvaluefactor = 7.722
+
+    fun elecinstallcost(): Double {
+        return ledbulbcost * alternateNumberOfFixtures * alternateLampsPerFixture + electricianCost
+    }
+    fun netPresentValue(): Double {
+        return totalSavings() * presentvaluefactor - elecinstallcost()
+    }
+
 
     /**
      * Define all the fields here - These would be used to Generate the Outgoing Rows or perform the Energy Calculation

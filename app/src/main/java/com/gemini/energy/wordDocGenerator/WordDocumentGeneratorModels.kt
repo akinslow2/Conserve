@@ -40,7 +40,9 @@ data class HvacValues(
 
         val costPostState: Double, // 20
         val totalCost: Double,
-        val totalSavings: Double
+        val totalSavings: Double,
+        val paybackYear: Double,
+        val netPresentValue: Double
 )
 
 data class WaterHeaterValues(
@@ -48,6 +50,7 @@ data class WaterHeaterValues(
         val totalCost: Double,
         val paybackMonth: Double,
         val paybackYear: Double,
+        val netPresentValue: Double,
         val quantity: Int,
         val year: Int,
         val age: Int,
@@ -55,6 +58,7 @@ data class WaterHeaterValues(
         val fueltype: String,
         val unittype: String,
         val capacity: Double
+
 )
 
 data class LightingValues(
@@ -65,6 +69,7 @@ data class LightingValues(
         val paybackMonth: Double, // 16
         val geminiPayback: Double, // 17
         val paybackYear: Double, // 18
+        val netPresentValue: Double,
         val lightingRows: List<LightingDataRow>
 )
 
@@ -83,14 +88,17 @@ data class LightingDataRow(
         val costSavings: Double,
         val implementationCost: Double,
         val paybackPeriodMonths: Double,
-        val paybackPeriodYears: Double
+        val paybackPeriodYears: Double,
+        val netPresentValue: Double
 //        val OBFenergySavings: Double
 )
 
 data class RefrigerationValues(
         val totalCost: Double,
         val totalSavings: Double,
-        val paybackMonth: Double
+        val paybackMonth: Double,
+        val netPresentValue: Double
+
 )
 
 data class EquipmentInstances(
@@ -107,10 +115,12 @@ data class EquipmentInstances(
 data class EquipmentValues(
         val instances: List<EquipmentInstances>,
         val totalSavings: Double, // 31
-        val totalCost: Double
+        val totalCost: Double,
+        val netPresentValue: Double
 )
 
 data class BuildingValues(
+        val buildingNetPresentValue: Double,
         val buildingTotalSavings: Double, // 19
         val buildingPayback: Double, // 33
         val buildingPaybackMonth: Double, // 41
