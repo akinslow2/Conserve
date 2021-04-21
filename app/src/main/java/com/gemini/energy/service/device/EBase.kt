@@ -268,7 +268,6 @@ abstract class EBase(val computable: Computable<*>,
     abstract fun queryEfficientFilter(): String
     abstract fun efficientLookup(): Boolean
 
-    //ToDo - Where is this used ?? Cleanup
     abstract fun usageHoursSpecific(): Boolean
 
     /**
@@ -284,11 +283,9 @@ abstract class EBase(val computable: Computable<*>,
     abstract fun preAuditFields(): MutableList<String>
     abstract fun featureDataFields(): MutableList<String>
 
-    //ToDo - Where is this used ?? Cleanup
     abstract fun preStateFields(): MutableList<String>
     abstract fun postStateFields(): MutableList<String>
 
-    //ToDo - Where is this used ?? Cleanup
     abstract fun computedFields(): MutableList<String>
 
     /**

@@ -46,11 +46,11 @@ data class HvacValues(
 )
 
 data class WaterHeaterValues(
-        val totalSavings: Double,
-        val totalCost: Double,
-        val paybackMonth: Double,
-        val paybackYear: Double,
-        val netPresentValue: Double,
+        val totalSavings: Double, //1
+        val totalCost: Double, //2
+        val paybackMonth: Double, //3
+        val paybackYear: Double, //4
+        val netPresentValue: Double, //5
         val quantity: Int,
         val year: Int,
         val age: Int,
