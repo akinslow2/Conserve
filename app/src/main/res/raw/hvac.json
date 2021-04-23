@@ -6,7 +6,7 @@
       "elements": [
         {
           "index": 11,
-          "hint": "",
+          "hint": "rq",
           "dataType": "pickerinputrow",
           "defaultValues": "1:gas pack,2:heat pump,3:heat pump with gas",
           "param": "Type of Package Unit",
@@ -15,7 +15,7 @@
         },
         {
           "index": 12,
-          "hint": "",
+          "hint": "rq",
           "dataType": "textrow",
           "defaultValues": "",
           "param": "Make",
@@ -24,16 +24,16 @@
         },
         {
           "index": 13,
-          "hint": "",
+          "hint": "rq",
           "dataType": "textrow",
           "defaultValues": "",
           "param": "Model Number",
-          "validation": "mandatory",
+          "validation": "optional",
           "id": "13"
         },
         {
           "index": 14,
-          "hint": "",
+          "hint": "rq",
           "dataType": "introw",
           "defaultValues": "",
           "param": "Quantity",
@@ -78,7 +78,7 @@
         },
         {
           "index": 19,
-          "hint": "",
+          "hint": "3",
           "dataType": "introw",
           "defaultValues": "",
           "param": "Cooling Capacity (Tons)",
@@ -96,7 +96,7 @@
         },
         {
           "index": 111,
-          "hint": "",
+          "hint": "32",
           "dataType": "introw",
           "defaultValues": "",
           "param": "Heating Input (kBtu/hr)",
@@ -114,7 +114,7 @@
         },
         {
           "index": 113,
-          "hint": "",
+          "hint": "10",
           "dataType": "decimalrow",
           "defaultValues": "",
           "param": "Heating Power (kW)",
@@ -141,30 +141,12 @@
         },
         {
           "index": 116,
-          "hint": "",
+          "hint": "16",
           "dataType": "introw",
           "defaultValues": "",
           "param": "Age",
           "validation": "mandatory",
           "id": "116"
-        },
-        {
-          "index": 117,
-          "hint": "",
-          "dataType": "textrow",
-          "defaultValues": "",
-          "param": "City",
-          "validation": "optional",
-          "id": "117"
-        },
-        {
-          "index": 118,
-          "hint": "",
-          "dataType": "textrow",
-          "defaultValues": "",
-          "param": "State",
-          "validation": "optional",
-          "id": "118"
         }
       ],
       "id": "1"
@@ -266,23 +248,23 @@
     },
     {
       "index": 4,
-      "section": "Suggested Alternative",
+      "section": "Energy Usage Parameters",
       "elements": [
         {
           "index": 41,
           "hint": "",
           "dataType": "textrow",
           "defaultValues": "",
-          "param": "Alternate Make",
+          "param": "Temp Sensor Serial Number",
           "validation": "optional",
           "id": "41"
         },
         {
           "index": 42,
           "hint": "",
-          "dataType": "textrow",
+          "dataType": "introw",
           "defaultValues": "",
-          "param": "Alternate Model Number",
+          "param": "AC Temperature Threshold",
           "validation": "optional",
           "id": "42"
         },
@@ -291,7 +273,7 @@
           "hint": "",
           "dataType": "introw",
           "defaultValues": "",
-          "param": "Alternate Cooling Capacity (Btu/hr)",
+          "param": "Heat Temperature Threshold",
           "validation": "optional",
           "id": "43"
         },
@@ -300,7 +282,7 @@
           "hint": "",
           "dataType": "introw",
           "defaultValues": "",
-          "param": "Quantity",
+          "param": "Cooling Degree Days",
           "validation": "optional",
           "id": "44"
         },
@@ -309,16 +291,16 @@
           "hint": "",
           "dataType": "introw",
           "defaultValues": "",
-          "param": "Alternate Cooling Capacity (Tons)",
+          "param": "Heating Degree Days",
           "validation": "optional",
           "id": "45"
         },
         {
           "index": 46,
           "hint": "",
-          "dataType": "introw",
-          "defaultValues": "",
-          "param": "Alternate Heating Capacity",
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:Yes,2:No",
+          "param": "Insulation",
           "validation": "optional",
           "id": "46"
         },
@@ -326,8 +308,8 @@
           "index": 47,
           "hint": "",
           "dataType": "decimalrow",
-          "defaultValues": "",
-          "param": "Alternate SEER",
+          "defaultValues": "1:Yes,2:No",
+          "param": "Length of Served Area",
           "validation": "optional",
           "id": "47"
         },
@@ -335,65 +317,153 @@
           "index": 48,
           "hint": "",
           "dataType": "decimalrow",
-          "defaultValues": "",
-          "param": "Alternate EER",
+          "defaultValues": "1:Yes,2:No",
+          "param": "Width of Served Area",
           "validation": "optional",
           "id": "48"
+        },
+        {
+          "index": 49,
+          "hint": "",
+          "dataType": "decimalrow",
+          "defaultValues": "1:Yes,2:No",
+          "param": "Height of Served Area",
+          "validation": "optional",
+          "id": "49"
         }
       ],
       "id": "4"
     },
     {
       "index": 5,
-      "section": "Suggested Time",
+      "section": "Suggested Alternative",
       "elements": [
         {
           "index": 51,
           "hint": "",
-          "dataType": "decimalrow",
+          "dataType": "textrow",
           "defaultValues": "",
-          "param": "Suggested Peak Hours",
+          "param": "Alternate Make",
           "validation": "optional",
           "id": "51"
         },
         {
           "index": 52,
           "hint": "",
-          "dataType": "decimalrow",
+          "dataType": "textrow",
           "defaultValues": "",
-          "param": "Suggested Part Peak Hours",
+          "param": "Alternate Model Number",
           "validation": "optional",
           "id": "52"
         },
         {
           "index": 53,
           "hint": "",
-          "dataType": "decimalrow",
+          "dataType": "introw",
           "defaultValues": "",
-          "param": "Suggested Off Peak Hours",
+          "param": "Alternate Cooling Capacity (Btu/hr)",
           "validation": "optional",
           "id": "53"
         },
         {
           "index": 54,
           "hint": "",
-          "dataType": "textrow",
+          "dataType": "introw",
           "defaultValues": "",
-          "param": "Motor Sensor Serial",
+          "param": "Quantity",
           "validation": "optional",
           "id": "54"
         },
         {
           "index": 55,
           "hint": "",
+          "dataType": "introw",
+          "defaultValues": "",
+          "param": "Alternate Cooling Capacity (Tons)",
+          "validation": "optional",
+          "id": "55"
+        },
+        {
+          "index": 56,
+          "hint": "",
+          "dataType": "introw",
+          "defaultValues": "",
+          "param": "Alternate Heating Capacity",
+          "validation": "optional",
+          "id": "56"
+        },
+        {
+          "index": 57,
+          "hint": "",
+          "dataType": "decimalrow",
+          "defaultValues": "",
+          "param": "Alternate SEER",
+          "validation": "optional",
+          "id": "57"
+        },
+        {
+          "index": 58,
+          "hint": "",
+          "dataType": "decimalrow",
+          "defaultValues": "",
+          "param": "Alternate EER",
+          "validation": "optional",
+          "id": "58"
+        }
+      ],
+      "id": "5"
+    },
+    {
+      "index": 6,
+      "section": "Suggested Time",
+      "elements": [
+        {
+          "index": 61,
+          "hint": "",
+          "dataType": "decimalrow",
+          "defaultValues": "",
+          "param": "Suggested Peak Hours",
+          "validation": "optional",
+          "id": "61"
+        },
+        {
+          "index": 62,
+          "hint": "",
+          "dataType": "decimalrow",
+          "defaultValues": "",
+          "param": "Suggested Part Peak Hours",
+          "validation": "optional",
+          "id": "62"
+        },
+        {
+          "index": 63,
+          "hint": "",
+          "dataType": "decimalrow",
+          "defaultValues": "",
+          "param": "Suggested Off Peak Hours",
+          "validation": "optional",
+          "id": "63"
+        },
+        {
+          "index": 64,
+          "hint": "",
+          "dataType": "textrow",
+          "defaultValues": "",
+          "param": "Motor Sensor Serial",
+          "validation": "optional",
+          "id": "64"
+        },
+        {
+          "index": 65,
+          "hint": "",
           "dataType": "textrow",
           "defaultValues": "",
           "param": "Temperature Sensor Serial",
           "validation": "optional",
-          "id": "55"
+          "id": "65"
         }
       ],
-      "id": "5"
+      "id": "6"
     }
   ]
 }

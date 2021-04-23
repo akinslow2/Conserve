@@ -17,7 +17,8 @@ data class HvacInstances(
         val seer: Double, // 24
         val overage: Int, //25
         val economizer: String,
-        val thermotype: String
+        val thermotype: String,
+        val npvalue: Double
 )
 
 data class PreAuditValues(

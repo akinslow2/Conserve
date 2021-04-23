@@ -164,8 +164,18 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
     var gasstructure = ""
     var economizer = ""
     var thermotype = ""
-
+    var uvalue = 0.15 //for details see document "U Value Calculations" in the Building Calculations Folder
+    var cddThreshold = 67 //assumes five degrees from 72 desired temp
+    var hddThreshold = 63 //assumes five degree from 68 desired temp
+    var cdd = 0
+    var hdd = 0
     var quantity = 0
+    var insulation = ""
+    var areaHeight = 0.0
+    var areaWidth = 0.0
+    var areaLength = 0.0
+    var heatEfficiency = .9
+    var hspf = 8
 
     override fun setup() {
         try {
@@ -183,7 +193,8 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
             electricstructure = preAudit["Others Electric Rate Structure"]!! as String
             gasstructure = preAudit["Others Gas Rate Structure"]!! as String
             bldgtype = preAudit["General Client Info Facility Type"]!! as String
-
+            city = featureData["General Client Info City"]!! as String
+            state = featureData["General Client Info State"]!! as String
 
             eer = featureData["EER"]!! as Double
             seer = featureData["SEER"]!! as Double
@@ -195,8 +206,14 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
             thermotype = featureData["Thermostat Type"]!! as String
             quantity = featureData["Quantity"]!! as Int
 
-            city = featureData["City"]!! as String
-            state = featureData["State"]!! as String
+            cddThreshold = featureData["AC Temperature Threshold"]!! as Int
+            hddThreshold = featureData["Heat Temperature Threshold"]!! as Int
+            cdd = featureData["Cooling Degree Days"]!! as Int
+            hdd = featureData["Heating Degree Days"]!! as Int
+            insulation = featureData["Heating Degree Days"]!! as String
+            areaLength = featureData["Length of Served Area"]!! as Double
+            areaWidth = featureData["Width of Served Area"]!! as Double
+            areaHeight = featureData["Height of Served Area"]!! as Double
 
             peakHours = featureData["Peak Hours"]!! as Double
             partPeakHours = featureData["Part Peak Hours"]!! as Double
@@ -211,6 +228,7 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
         }
     }
 
+
     /**
      * Getting year of device and how much over life it is
      */
@@ -222,16 +240,27 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
         return age - 15
     }
 
+    /*
+    ** Calculation for annual BTU demand in the area that the HVAC system serves
+     */
+    var coolingkbtu = 24 * uvalue * cdd * (2 * (areaLength*areaWidth + areaLength * areaHeight + areaWidth * areaHeight)) / 1000
+    var heatingkbtu = 24 * uvalue * hdd * (2 * (areaLength*areaWidth + areaLength * areaHeight + areaWidth * areaHeight)) / 1000
+
+
+    private val energyPre = heatingkbtu / heatEfficiency + coolingkbtu / seer
+
+    private val energyPost = heatingkbtu / hspf + coolingkbtu / alternateSeer
+
     /**
      * Cost - Pre State
      * */
     override fun costPreState(elements: List<JsonElement?>): Double {
-
-        // Extracting the EER from the Database - Standard EER
-        // If no value has been inputted by the user
-       // if (eer == 0.0) {
-        //    eer = extractEER(elements)
-       // }
+/*
+        Extracting the EER from the Database - Standard EER
+        If no value has been inputted by the user
+       if (eer == 0.0) {
+        eer = extractEER(elements)
+       }
 
         Timber.d("::: PARAM - HVAC :::")
         Timber.d("EER -- $eer")
@@ -254,9 +283,8 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
         Timber.d("HVAC :: Power Used (Standard) -- [$powerUsedStandard]")
 
         Timber.d("HVAC :: Pre Power Used -- [$powerUsed]")
-
-
-        return costElectricity(powerUsed, usageHours, electricityRate)
+  */
+        return costElectricity(energyPre, electricityRate)
     }
 
 
@@ -270,7 +298,7 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
         Timber.d("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
 
         var postSize = kbtu
-        var postSEER = 17.0
+        var postSEER = 16.0
 
        // try {
        //     postSize = element.asJsonObject.get(HVAC_DB_BTU).asInt
@@ -283,8 +311,7 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
 
         val postUsageHours = UsageSimple(peakHours, partPeakHours, offPeakHours)
 
-
-        return costElectricity(postPowerUsed, postUsageHours, electricityRate)
+        return costElectricity(energyPost, electricityRate)
         }
 
     /**
@@ -323,8 +350,10 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
     override fun laborCost(): Double {
         return 0.0
     }
-
-
+/*
+    Net Present Value
+ */
+    val netPresentValue = (presentvaluefactor * (energyPre - energyPost)) - materialCost()
 
     /**
      * PowerTimeChange >> Hourly Energy Use - Pre
@@ -353,24 +382,23 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
           // Step 3 : Get the Delta
         val powerPre = kbtu / seer
         val powerPost = kbtu / alternateSeer
-        val eSavings = (powerPre - powerPost)
+        val pSavings = (powerPre - powerPost)
 
-        val delta = eSavings * usageHoursPre()
+        val delta = pSavings * usageHoursPre()
+
+        val eSavings = (energyPre - energyPost)
+
         Timber.d("HVAC :: Delta -- $delta")
+        Timber.d("HVAC :: Delta -- $eSavings")
 
-        return delta
+        return eSavings
     }
 
     fun totalSavings(): Double {
-        val powerPre = kbtu / seer
-        val powerPost = kbtu / alternateSeer
-        val eSavings = (powerPre - powerPost)
-            val usageHours = UsageLighting()
-            usageHours.peakHours = peakHours
-            usageHours.partPeakHours = partPeakHours
-            usageHours.offPeakHours = offPeakHours
-            //return costElectricity(eSavings, usageHours, electricityRate)
-            return 0.0
+
+        val eSavings = (energyPre - energyPost)
+
+        return costElectricity(eSavings, electricityRate)
     }
 
 

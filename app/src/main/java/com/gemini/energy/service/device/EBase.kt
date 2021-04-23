@@ -226,8 +226,7 @@ abstract class EBase(val computable: Computable<*>,
         val mapper = CostSavings.Mapper()
         mapper.computable = computable
 
-        //ToDo : @Johnny - Verify this - What should be the new Usage Hours be ??
-        mapper.usageHoursSpecific = usageHoursSpecific
+            mapper.usageHoursSpecific = usageHoursSpecific
         mapper.usageHoursBusiness = usageHoursBusiness
 
         mapper.schedule = electricRateStructure

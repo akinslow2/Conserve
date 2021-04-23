@@ -258,10 +258,11 @@ class SorterForWordDocumentGenerator {
                     hvac.seer,
                     hvac.overAge(),
                     hvac.economizer,
-                    hvac.thermotype
+                    hvac.thermotype,
+                    hvac.netPresentValue
             ))
         }
-        val paybackMonth = (totalCost / totalSavings * 12) + 4
+        // val paybackMonth = (totalCost / totalSavings * 12) + 4
         val paybackYear: Double = (totalCost / totalSavings) + (4 / 12)
         val netPresentValue: Double = (totalSavings * presentvaluefactor) -  totalCost
 
