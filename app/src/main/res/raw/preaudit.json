@@ -426,25 +426,25 @@
           "index": 81,
           "hint": "rq",
           "dataType": "pickerinputrow",
-          "defaultValues": "1:pge",
+          "defaultValues": "1:rec",
           "param": "Utility Company",
           "validation": "mandatory",
           "id": "81"
         },
         {
           "index": 82,
-          "hint": "rq",
+          "hint": "",
           "dataType": "pickerinputrow",
           "defaultValues": "1:G-NR1",
           "param": "Gas Rate Structure",
-          "validation": "mandatory",
+          "validation": "optional",
           "id": "82"
         },
         {
           "index": 83,
           "hint": "rq",
           "dataType": "pickerinputrow",
-          "defaultValues": "1:A-1,2:A-1 TOU,3:A-6 TOU,4:A-10,5:A-10 TOU,6:E-19 TOU",
+          "defaultValues": "1:F,2:F TOD,3:H",
           "param": "Electric Rate Structure",
           "validation": "mandatory",
           "id": "83"
