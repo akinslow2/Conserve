@@ -57,6 +57,8 @@ class LPSodium(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRa
 
 
     private var controls = ""
+    private var hasControls = ""
+
     var postpeakHours = 0.0
     var postpartPeakHours = 0.0
     var postoffPeakHours = 0.0
@@ -89,6 +91,7 @@ class LPSodium(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRa
             postoffPeakHours = featureData["Suggested Off Peak Hours"]!! as Double
 
             controls = featureData["Type of Control"]!! as String
+            hasControls = featureData["Controls"]!! as String
 
         } catch (e: Exception) {
             e.printStackTrace()
@@ -100,6 +103,9 @@ class LPSodium(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRa
     override fun usageHoursPre(): Double {
         val usageHours = UsageLighting()
         val preauditHours = UsageHours()
+
+
+
         usageHours.peakHours = peakHours
         usageHours.partPeakHours = partPeakHours
         usageHours.offPeakHours = offPeakHours
