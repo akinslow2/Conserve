@@ -1281,7 +1281,12 @@ class WordDocumentGenerator {
 
         writeDocumentWithName(document, docName)
         val file = File(Environment.getExternalStorageDirectory().absolutePath + "/${docName}.docx")
-        uploadFile(DropBox.getClient(), file, "/Gemini/Energy/$branch/Reports/$docName.docx")
+
+        try {
+            uploadFile(DropBox.getClient(), file, "/Gemini/Energy/$branch/Reports/$docName.docx")
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 
     /** writes docuemnt to local **/
