@@ -3,6 +3,7 @@ package com.gemini.energy.service.type
 import android.content.Context
 import com.gemini.energy.presentation.util.ERateKey
 import timber.log.Timber
+import kotlin.reflect.typeOf
 
 open class UtilityRate(private val context: Context) {
 
@@ -27,6 +28,10 @@ open class UtilityRate(private val context: Context) {
     }
 
     fun build(): UtilityRate {
+        val path = getResourcePath()
+
+        println("building utitily rate of type ${this::class} for resource path $path")
+
         val inputStream = context.resources.assets.open(getResourcePath())
         val text = inputStream.bufferedReader().use { it.readText() }
         val collection = text.lines()
@@ -127,8 +132,8 @@ class Electricity(private val rateStructure: String, private val companyCode: St
             structure[ERateKey.WinterOff.value]!![0].toDouble())
 
     override fun getNoneTOU(structure: HashMap<String, List<String>>) = TOUNone(
-            structure[ERateKey.SummerNone.value]!![0].toDouble(),
-            structure[ERateKey.WinterNone.value]!![0].toDouble())
+            structure[ERateKey.SummerNone.value]?.get(0)?.toDouble() ?: 0.0,
+            structure[ERateKey.WinterNone.value]?.get(0)?.toDouble() ?: 0.0)
 }
 
 class Gas(private val rateStructure: String = "") : IUtility {
