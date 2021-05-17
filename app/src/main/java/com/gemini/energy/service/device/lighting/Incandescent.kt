@@ -102,17 +102,21 @@ class Incandescent(computable: Computable<*>, utilityRateGas: UtilityRate, utili
      * Time | Energy | Power - Pre State
      * */
     override fun usageHoursPre(): Double {
-        val usageHours = UsageLighting()
-        val preauditHours = UsageHours()
-        usageHours.peakHours = peakHours
-        usageHours.partPeakHours = partPeakHours
-        usageHours.offPeakHours = offPeakHours
-        preauditHours.build()
-        usageHours.build()
-        if (usageHours.yearly() > 0){
+        if (hasControls == "Yes" && controls == "Daylight Sensor") {
+            val usageHours = UsageLighting()
+            usageHours.peakHours = 4336.0
             return usageHours.yearly()
         }
-        return usageHoursBusiness.yearly()
+        else {
+            val usageHours = UsageLighting()
+            usageHours.peakHours = peakHours
+            usageHours.partPeakHours = partPeakHours
+            usageHours.offPeakHours = offPeakHours
+            if (usageHours.yearly() > 0){
+                return usageHours.yearly()
+            }
+            return usageHoursBusiness.yearly()
+        }
     }
 
     fun preEnergy(): Double {
