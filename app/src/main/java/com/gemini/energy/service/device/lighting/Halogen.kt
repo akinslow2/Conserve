@@ -56,6 +56,8 @@ class Halogen(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRat
     var electricianCost = timeperfixture * numberOfFixtures * electricanHourlyRate
 
     private var controls = ""
+    private var hasControls = ""
+
     var postpeakHours = 0.0
     var postpartPeakHours = 0.0
     var postoffPeakHours = 0.0
@@ -88,6 +90,7 @@ class Halogen(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRat
             postoffPeakHours = (featureData["Suggested Off Peak Hours"]!! as Int).toDouble()
 
             controls = featureData["Type of Control"]!! as String
+            hasControls = featureData["Controls"]!! as String
 
         } catch (e: Exception) {
             e.printStackTrace()
