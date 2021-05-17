@@ -58,6 +58,8 @@ class Incandescent(computable: Computable<*>, utilityRateGas: UtilityRate, utili
 
 
     private var controls = ""
+    private var hasControls = ""
+
     var postpeakHours = 0.0
     var postpartPeakHours = 0.0
     var postoffPeakHours = 0.0
@@ -82,6 +84,7 @@ class Incandescent(computable: Computable<*>, utilityRateGas: UtilityRate, utili
             alternateLampsPerFixture = featureData["Alternate Lamps Per Fixture"]!! as Int
 
             controls = featureData["Type of Control"]!! as String
+            hasControls = featureData["Controls"]!! as String
 
             peakHours = (featureData["Peak Hours"]!! as Int).toDouble()
             partPeakHours = (featureData["Part Peak Hours"]!! as Int).toDouble()
