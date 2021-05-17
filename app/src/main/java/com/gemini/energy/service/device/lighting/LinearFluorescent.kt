@@ -72,6 +72,8 @@ class LinearFluorescent(computable: Computable<*>, utilityRateGas: UtilityRate, 
 
 
     private var controls = ""
+    private var hasControls = ""
+
     var postpeakHours = 0.0
     var postpartPeakHours = 0.0
     var postoffPeakHours = 0.0
@@ -103,6 +105,7 @@ class LinearFluorescent(computable: Computable<*>, utilityRateGas: UtilityRate, 
             postoffPeakHours = featureData["Suggested Off Peak Hours"]!! as Double
 
             controls = featureData["Type of Control"]!! as String
+            hasControls = featureData["Controls"]!! as String
 
             peakHours = featureData["Peak Hours"]!! as Double
             partPeakHours = featureData["Part Peak Hours"]!! as Double
