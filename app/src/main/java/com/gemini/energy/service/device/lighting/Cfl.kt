@@ -53,6 +53,8 @@ class Cfl(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEle
     var electricianCost = timeperfixture * numberOfFixtures * electricanHourlyRate
 
     private var controls = ""
+    private var hasControls = ""
+
     var postpeakHours = 0.0
     var postpartPeakHours = 0.0
     var postoffPeakHours = 0.0
@@ -85,6 +87,7 @@ class Cfl(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEle
             postoffPeakHours = featureData["Suggested Off Peak Hours"]!! as Double
 
             controls = featureData["Type of Control"]!! as String
+            hasControls = featureData["Controls"]!! as String
 
         } catch (e: Exception) {
             e.printStackTrace()
