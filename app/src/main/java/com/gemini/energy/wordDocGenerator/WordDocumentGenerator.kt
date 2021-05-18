@@ -174,7 +174,7 @@ class WordDocumentGenerator {
         val r3p2 = p2.createRun()
         r3p2.fontFamily = fontAgencyFB
         r3p2.fontSize = 20
-        r3p2.setText("with a Net Present Value (NPV) of ${buildingValues.buildingNetPresentValue.format(0)}")
+        r3p2.setText("with a co-payment of $0")
         r3p2.addBreak()
 
         val p3 = document.createParagraph()
@@ -183,11 +183,15 @@ class WordDocumentGenerator {
         r1p3.fontFamily = fontAgencyFB
         r1p3.fontSize = 12
         r1p3.color = greyColor
-        r1p3.setText("The analysis shows a high potential for energy savings which will:")
+        r1p3.setText("The Pay as You Save program means you will receive all of the recommended upgrades at no cost AND see your monthly energy bill reduce at least 20% ($manuallyGeneratedValue)." +
+                " The utility will recover the costs by adding a charge to your bill that equates to 80% of the estimated monthly energy savings. This charge will last for 12 years." +
+                " This is not a loan, the charge is only tied to the meter, and will stay on the meter even if you relocate." +
+                " In addition, we expect business cost savings due to these upgrades to total ($manuallyGeneratedValue)." +
+                " Overall, you can expect:")
 
-        val bullets1 = arrayOf("reduce your energy costs,", "increase the thermal comfort in your building, and", "give you more control of how energy is consumed.")
+        val bullets1 = arrayOf("reduced energy costs,", "improved profit margins,", "increased thermal comfort in your building, and", "more control over how energy is consumed.")
         createBullets(document, bullets1, 12, greyColor, false, false)
-
+/*
         if (buildingValues.buildingTotalCost > 5000) {
             val qualifyP = document.createParagraph()
             qualifyP.spacingBetween = 1.5
@@ -196,8 +200,9 @@ class WordDocumentGenerator {
             qualifyR.fontSize = 12
             qualifyR.color = greyColor
             qualifyR.setText("The implementation costs of all the measures qualify you for a 0% interest loan. By implementing these energy efficiency measures, you will join the courageous few energy heroes who are making the effort to make your community cleaner.")
-        }
 
+        }
+*/
         createEnergySavingsTable(document, lightingData, buildingValues)
     }
 
@@ -268,7 +273,8 @@ class WordDocumentGenerator {
                 val hvacR1P1 = hvacP1.createRun()
                 hvacR1P1.fontFamily = fontAgencyFB
                 hvacR1P1.fontSize = 12
-                hvacR1P1.setText("Your ${instance.quantity} ${instance.btu}-BTU HVAC package units are from ${instance.year} with a SEER value of ${instance.seer.format(0)}, current federal minimum is 13. To ensure your HVAC system is working optimally make sure you are having your package units are being checked by a HVAC technician quarterly. Check you HVAC technician's maintenance scope of work it should include:")
+                hvacR1P1.setText("Your ${instance.quantity} ${instance.btu}-BTU HVAC package units are from ${instance.year} with a SEER value of ${instance.seer.format(0)}, current federal minimum is 13." +
+                        " Make sure you are having your package units checked by a HVAC technician quarterly. Review you HVAC technician's maintenance scope of work it should include:")
 
                 val hvacBullets = arrayOf(
                         "Cleaning the condenser",
@@ -292,7 +298,8 @@ class WordDocumentGenerator {
                 val hvacR1P1 = hvacP1.createRun()
                 hvacR1P1.fontFamily = fontAgencyFB
                 hvacR1P1.fontSize = 12
-                hvacR1P1.setText("Your ${instance.quantity} ${instance.btu}-BTU HVAC package unit is from ${instance.year} with a SEER value of ${instance.seer.format(0)}, current federal minimum is 13. To ensure your HVAC system is working optimally make sure you are having the package unit checked by a HVAC technician quarterly. Check your HVAC technician's maintenance scope of work it should include:")
+                hvacR1P1.setText("Your ${instance.quantity} ${instance.btu}-BTU HVAC package unit is from ${instance.year} with a SEER value of ${instance.seer.format(0)}, current federal minimum is 13." +
+                        " Make sure you are having the package unit checked by a HVAC technician quarterly. Review your HVAC technician's maintenance scope of work it should include:")
 
                 val hvacBullets = arrayOf(
                         "Cleaning the condenser",
@@ -316,21 +323,26 @@ class WordDocumentGenerator {
                 val hvacR1P3 = hvacP3.createRun()
                 hvacR1P3.fontFamily = fontAgencyFB
                 hvacR1P3.fontSize = 12
-                hvacR1P3.setText("We strongly recommend installing a programmable thermostat with a remote control app. Installation of a programmable thermostat with remote programming will cost roughly $600 but will save you thousands of dollars over its life. Having a remote control app is important because the vast majority of people have their programmable thermostat programmed incorrectly. With a remote programmable thermostats you have the ability to easily see what your temperature set-points are and simply adjust them at need from your phone. Imagine having your space comfortable when you enter without having to have the HVAC running the entire time you are away.")
+                hvacR1P3.setText("We strongly recommend installing a programmable thermostat with a remote control app." +
+                        " Installation of a programmable thermostat with remote programming will save you thousands of dollars over its life." +
+                        " Having a remote control app is important because the vast majority of people have their programmable thermostat programmed incorrectly." +
+                        " With a remote programmable thermostats you have the ability to easily see what your temperature set-points are and simply adjust them at need from your phone." +
+                        "Imagine having your space comfortable when you enter without having to have the HVAC running the entire time you are away.")
             }
         }
 
-        if (hvac.instances.any { i -> i.age < 11 }) {
+        if (hvac.instances.any { i -> i.age < 15 }) {
             val hvacP3 = document.createParagraph()
             hvacP3.spacingBetween = 1.5
             val hvacR1P3 = hvacP3.createRun()
             hvacR1P3.fontFamily = fontAgencyFB
             hvacR1P3.fontSize = 12
-            hvacR1P3.setText("You HVAC system could see additional energy savings and an extended life expectancy by adding controls. Benefits of HVAC controls include:")
+            hvacR1P3.setText("Your HVAC system could see additional energy savings and an extended life expectancy by adding controls. Benefits of HVAC controls include:")
 
             val hvacBullets = arrayOf(
                     "Better HVAC performance",
                     "Reduced energy consumption",
+                    "Reduced maintenance costs",
                     "More control over temperature settings",
                     "Better for the environment")
             createBullets(document, hvacBullets, 12, blackColor, false, false)
@@ -378,8 +390,7 @@ class WordDocumentGenerator {
         r1p4.fontSize = 12
         r1p4.setText("Replacing your water heater(s) will result in a total cost of $${waterheater.totalCost.format(0)} but will result in a minimum of $${waterheater.totalSavings.format(0)} in annual savings. " +
                 "This equates to a payback period of approximately ${waterheater.paybackMonth.format(0)} months. " +
-                "This investment will result in a NPV of $${waterheater.netPresentValue.format(0)}. " +
-                "These values assume the support of Gemini to identify potential vendors, obtain 0% interest financing, and free up your time and energy to focus on your business.")
+                "This investment will result in a NPV of $${waterheater.netPresentValue.format(0)}. ")
         r1p4.addBreak()
 
         createWaterHeaterTable(document, waterheater)
@@ -431,7 +442,6 @@ class WordDocumentGenerator {
                 "This equates to a payback period of approximately ${lights.paybackMonth.format(0)} months. The cost can be reduced to $${lights.selfinstallcost} if you self-install the occupancy sensors. " +
                 "Alternatively, to replace all non-LED bulbs will result in a minimum of $${lights.totalcostsavings.format(0)} in annual savings and cost approximately $${lights.totalCost.format(0)}. " +
                 "This equates to a payback period of approximately ${lights.paybackMonth.format(0)} months. " +
-                "These values include the cost of enlisting the support of Gemini to identify the LED replacement options, eligible contractors, obtain 0% interest financing, and free up your time and energy to focus on your business. " +
                 "Overall, implementing the LED retrofit translates to a minimum NPV of $${lights.netPresentValue.format(0)}. We strongly recommend you replace all non-LED bulbs and ensure the bathroom lights are off at the end of the day.")
         r1p4.addBreak()
 
@@ -440,7 +450,7 @@ class WordDocumentGenerator {
         val r1p5 = p5.createRun()
         r1p5.fontFamily = fontAgencyFB
         r1p5.fontSize = 12
-        r1p5.setText("Please see the next page for specifics of each measure. Each time, after the first time, you go through the rebate/incentive process it requires an on-site review that takes a minimum of 2 weeks; therefore, to save time and energy we strongly recommend implementing all measures at once.")
+        r1p5.setText("Please see the next page for specifics of each lighting measure.")
 
         createLightingTable1(document, lights)
 
@@ -548,7 +558,35 @@ class WordDocumentGenerator {
         r1p2.addBreak()
         r1p2.addBreak()
         r1p2.setText("${preAudit.businessname}is on the ${preAudit.gasstructure} ${preAudit.utilitycompany} gas rate schedule and for above stated time period, ${preAudit.businessname} used $manuallyGeneratedValue therms at a cost of $$manuallyGeneratedValue.")
+        r1p2.addBreak()
+        r1p2.addBreak()
+        r1p2.addBreak()
+        r1p2.addBreak()
+
+        val p3 = document.createParagraph()
+        p3.spacingBetween = 1.5
+        val r1p3 = p3.createRun()
+        r1p3.fontFamily = fontAgencyFB
+        r1p3.isBold
+        r1p3.fontSize = 12
+        r1p3.setText("Energy Savings Disclaimer")
+
+        val p4 = document.createParagraph()
+        p4.spacingBetween = 1.5
+        val r1p4 = p4.createRun()
+        r1p4.fontFamily = fontAgencyFB
+        r1p4.fontSize = 12
+        r1p4.setText("While electric companies and affiliates offering this program rely on industry best-practices, on-site data loggers, and energy savings modeling software to make energy savings predictions as accurate as possible," +
+                " it is important to understand that the Easy Plan report is intended to inform participants of the ESTIMATED energy cost savings they should expect to realize - assuming all recommended work is done." +
+                " The estimated savings reflected in the Easy Plan therefore are in no way a guarantee of the actual savings.")
+        r1p4.addBreak()
+        r1p4.addBreak()
+        r1p4.setText("The estimated annual energy saving numbers reflected in the Easy Plan are based on the last 12 months weather and energy costs, as well as the behavior patterns during the time that " +
+                "the on-site data loggers were active. Since future weather, behavior, and energy costs cannot be accurately predicted, there will be a variable difference between estimated and actual savings.")
+
     }
+
+
 
     // generate tables
     private fun createEnergySavingsTable(document: XWPFDocument, lights: LightingValues, building: BuildingValues) {
