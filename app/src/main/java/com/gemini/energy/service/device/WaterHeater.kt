@@ -83,8 +83,12 @@ class WaterHeater(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
          * There could be a case where the User will input the value in KW - If that happens we need to convert the KW
          * int BTU / hr :: 1KW equals 3412.142
          * */
-        fun power(gasInput: Int, thermaleff: Int) = (gasInput / (thermaleff/100)) * KW_CONVERSION
-        fun power2(kW: Double, electriceff: Int) = (kW / (electriceff/100))
+        fun power(gasInput: Int, thermaleff: Int): Double  {
+            if (thermaleff == 0) return 0.0
+            return (gasInput / (thermaleff / 100.0)) * KW_CONVERSION
+        }
+
+        fun power2(kW: Double, electriceff: Double) = (kW / (electriceff/100.0))
         /**
          * Year At - Current minus the Age
          * */
@@ -133,7 +137,7 @@ class WaterHeater(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
 
     var quantity = 0
     var thermaleff = 0
-    var electriceff = 0
+    var electriceff = 0.0
     var kW = 0.0
     var fueltype = ""
     var unittype = ""
@@ -145,11 +149,11 @@ class WaterHeater(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
             quantity = featureData["Quantity"]!! as Int
 
             age = featureData["Age"]!! as Int
-            btu = featureData["Cooling Capacity (Btu/hr)"]!! as Int
+//            btu = featureData["Cooling Capacity (Btu/hr)"]!! as Int
             gasInput = featureData["Heating Input (Btu/hr)"]!! as Int
             gasOutput = featureData["Heating Output (Btu/hr)"]!! as Int
             thermaleff = featureData["Thermal Efficiency"]!! as Int
-            electriceff = featureData["Heating Electirc Efficiency"]!! as Int
+            electriceff = featureData["Heating Electirc Efficiency"]!! as Double
             kW = featureData["Heating Power (kW)"]!! as Double
             fueltype = featureData["Fuel Type"]!! as String
             unittype = featureData["Type of Unit"]!! as String
@@ -187,6 +191,7 @@ class WaterHeater(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
 
         val powerUsedGas = power(gasInput, thermaleff) * quantity
         val powerUsedElectricity = power2(kW, electriceff) * quantity
+        preElectricPower = powerUsedElectricity
         val gascost: Double
         val ecost: Double
         val powerUsed = if (isGas()) powerUsedGas else powerUsedElectricity
@@ -194,13 +199,16 @@ class WaterHeater(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
         Timber.d("HotWater :: Power Used (Gas) -- [$powerUsedGas]")
 
 
-        Timber.d("HVAC :: Pre Power Used -- [$powerUsed]")
+        Timber.d("HotWater :: Pre Power Used -- [$powerUsed]")
         ecost = costElectricity(powerUsed, usageHours, electricityRate)
 
         gascost = costGas(powerUsed)
 
         return if (isGas()) gascost else ecost
     }
+
+    var preElectricPower = 0.0
+    var postElectricPower = 0.0
 
      /**
      * Cost - Post State
@@ -212,13 +220,14 @@ class WaterHeater(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
         Timber.d("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
 
         var postthermeff = 95
-        var posteleceff = 350
+        var posteleceff = 350.0
 
 
         val postUsageHours = computable.udf1 as UsageSimple
 
             val postpowerUsedGas = power(gasInput, postthermeff) * quantity
             val postpowerUsedElectricity = power2(kW, posteleceff) * quantity
+         postElectricPower = postpowerUsedElectricity
             val postGcost: Double
             val postEcost: Double
             val powerUsed = if (isGas()) postpowerUsedGas else postpowerUsedElectricity
@@ -277,7 +286,7 @@ class WaterHeater(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
         val prepowerUsed = if (isGas()) powerUsedGas else powerUsedElectricity
 
         var postthermeff = 95
-        var posteleceff = 350
+        var posteleceff = 350.0
 
         val postpowerUsedGas = power(gasInput, postthermeff) * quantity
         val postpowerUsedElectricity = power2(kW, posteleceff) * quantity
