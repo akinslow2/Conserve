@@ -71,8 +71,7 @@ ext {
 
             'com.android.support:multidex:1.0.3',
             'com.takisoft.fix:preference-v7:25.3.0.0',
-            'com.dropbox.core:dropbox-core-sdk:3.0.10'
-
+            'com.dropbox.core:dropbox-core-sdk:4.0.0'
     ]
 
     presentationTestDependencies = [
