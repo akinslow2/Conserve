@@ -45,7 +45,7 @@
           "hint": "",
           "dataType": "decimalrow",
           "defaultValues": "",
-          "param": "Capactity (U.S. Gal)",
+          "param": "Capacity (U.S. Gal)",
           "validation": "mandatory",
           "id": "15"
         },
@@ -210,7 +210,7 @@
           "hint": "",
           "dataType": "introw",
           "defaultValues": "",
-          "param": "Quantity",
+          "param": "Alternate Quantity",
           "validation": "optional",
           "id": "43"
         },
@@ -253,7 +253,7 @@
           "hint": "",
           "dataType": "decimalrow",
           "defaultValues": "",
-          "param": "Peak Hours",
+          "param": "Suggested Peak Hours",
           "validation": "optional",
           "id": "51"
         },
@@ -262,7 +262,7 @@
           "hint": "",
           "dataType": "decimalrow",
           "defaultValues": "",
-          "param": "Part Peak Hours",
+          "param": "Suggested Part Peak Hours",
           "validation": "optional",
           "id": "52"
         },
@@ -271,7 +271,7 @@
           "hint": "",
           "dataType": "decimalrow",
           "defaultValues": "",
-          "param": "Off Peak Hours",
+          "param": "Suggested Off Peak Hours",
           "validation": "optional",
           "id": "53"
         }
