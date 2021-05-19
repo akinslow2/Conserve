@@ -193,8 +193,8 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
             electricstructure = preAudit["Others Electric Rate Structure"]!! as String
             gasstructure = preAudit["Others Gas Rate Structure"]!! as String
             bldgtype = preAudit["General Client Info Facility Type"]!! as String
-            city = featureData["General Client Info City"]!! as String
-            state = featureData["General Client Info State"]!! as String
+            city = preAudit["General Client Info City"]!! as String
+            state = preAudit["General Client Info State"]!! as String
 
             eer = featureData["EER"]!! as Double
             seer = featureData["SEER"]!! as Double
@@ -210,7 +210,7 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
             hddThreshold = featureData["Heat Temperature Threshold"]!! as Int
             cdd = featureData["Cooling Degree Days"]!! as Int
             hdd = featureData["Heating Degree Days"]!! as Int
-            insulation = featureData["Heating Degree Days"]!! as String
+            insulation = (featureData["Heating Degree Days"]!! as Int).toString()
             areaLength = featureData["Length of Served Area"]!! as Double
             areaWidth = featureData["Width of Served Area"]!! as Double
             areaHeight = featureData["Height of Served Area"]!! as Double
@@ -221,7 +221,7 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
 
             alternateSeer = featureData["Alternate SEER"]!! as Double
             alternateEer = featureData["Alternate EER"]!! as Double
-            alternateBtu = featureData["Alternate Cooling Capacity (kbtu/hr)"]!! as Int
+            alternateBtu = featureData["Alternate Cooling Capacity (Btu/hr)"]!! as Int
 
         } catch (e: Exception) {
             e.printStackTrace()
@@ -343,6 +343,8 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
         else { return 0.0}
     }
 //@K2 does kbtu have to be a double to be in the equation below? Right now it is an INT
+//    @anthony it will need to be a double
+    // anytime you are returning a double, all values in the equation must be doubles
     override fun materialCost(): Double {
         return 4000.0 * kbtu / 12000.0
     }
