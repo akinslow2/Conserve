@@ -175,7 +175,7 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
     var areaWidth = 0.0
     var areaLength = 0.0
     var heatEfficiency = .9
-    var hspf = 8
+    var hspf = 8.0
 
     override fun setup() {
         try {
@@ -247,9 +247,16 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
     var heatingkbtu = 24 * uvalue * hdd * (2 * (areaLength*areaWidth + areaLength * areaHeight + areaWidth * areaHeight)) / 1000
 
 
-    private val energyPre = heatingkbtu / heatEfficiency + coolingkbtu / seer
+    fun energyPre(): Double {
+        if (heatEfficiency == 0.0 || seer == 0.0) return 0.0
+        return heatingkbtu / heatEfficiency + coolingkbtu / seer
+    }
 
-    private val energyPost = heatingkbtu / hspf + coolingkbtu / alternateSeer
+    fun energyPost(): Double {
+        if (hspf == 0.0 || alternateSeer == 0.0) return 0.0
+        return heatingkbtu / hspf + coolingkbtu / alternateSeer
+    }
+
 
     /**
      * Cost - Pre State
@@ -284,7 +291,7 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
 
         Timber.d("HVAC :: Pre Power Used -- [$powerUsed]")
   */
-        return costElectricity(energyPre, electricityRate)
+        return costElectricity(energyPre(), electricityRate)
     }
 
 
@@ -311,7 +318,7 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
 
         val postUsageHours = UsageSimple(peakHours, partPeakHours, offPeakHours)
 
-        return costElectricity(energyPost, electricityRate)
+        return costElectricity(energyPost(), electricityRate)
         }
 
     /**
@@ -355,7 +362,7 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
 /*
     Net Present Value
  */
-    val netPresentValue = (presentvaluefactor * (energyPre - energyPost)) - materialCost()
+    val netPresentValue = (presentvaluefactor * (energyPre() - energyPost())) - materialCost()
 
     /**
      * PowerTimeChange >> Hourly Energy Use - Pre
@@ -388,7 +395,7 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
 
         val delta = pSavings * usageHoursPre()
 
-        val eSavings = (energyPre - energyPost)
+        val eSavings = (energyPre() - energyPost())
 
         Timber.d("HVAC :: Delta -- $delta")
         Timber.d("HVAC :: Delta -- $eSavings")
@@ -398,7 +405,7 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
 
     fun totalSavings(): Double {
 
-        val eSavings = (energyPre - energyPost)
+        val eSavings = (energyPre() - energyPost())
 
         return costElectricity(eSavings, electricityRate)
     }
