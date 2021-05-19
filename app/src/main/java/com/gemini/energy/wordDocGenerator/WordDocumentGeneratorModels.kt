@@ -9,18 +9,6 @@ typealias SortedAudits =
 typealias AuditComponents = MutableMap<String, MutableList<EBase>>
 //the commented numbers represent the mastersheet id values
 
-data class HvacInstances(
-        val quantity: Int, // 21
-        val year: Int, // 22
-        val age: Int, // 29
-        val btu: Int, //23
-        val seer: Double, // 24
-        val overage: Int, //25
-        val economizer: String,
-        val thermotype: String,
-        val npvalue: Double
-)
-
 data class PreAuditValues(
         val businessname: String, //1
         val auditmonth: String, //2
@@ -36,6 +24,18 @@ data class PreAuditValues(
         val gasstructure: String // 11
 )
 
+data class HvacInstances(
+        val quantity: Int, // 21
+        val year: Int, // 22
+        val age: Int, // 29
+        val btu: Int, //23
+        val seer: Double, // 24
+        val overage: Int, //25
+        val economizer: String,
+        val thermotype: String,
+        val npvalue: Double
+)
+
 data class HvacValues(
         val instances: List<HvacInstances>,
 
@@ -43,7 +43,11 @@ data class HvacValues(
         val totalCost: Double,
         val totalSavings: Double,
         val paybackYear: Double,
-        val netPresentValue: Double
+        val netPresentValue: Double,
+        val currentTotalkW: Double,
+        val currentTotalkWh: Double,
+        val postTotalkW: Double,
+        val postTotalkWh: Double
 )
 
 data class WaterHeaterValues(
@@ -58,8 +62,11 @@ data class WaterHeaterValues(
         val thermaleff: Int,
         val fueltype: String,
         val unittype: String,
-        val capacity: Double
-
+        val capacity: Double,
+        val currentTotalkW: Double,
+        val currentTotalkWh: Double,
+        val postTotalkW: Double,
+        val postTotalkWh: Double
 )
 
 data class LightingValues(
@@ -71,7 +78,11 @@ data class LightingValues(
         val geminiPayback: Double, // 17
         val paybackYear: Double, // 18
         val netPresentValue: Double,
-        val lightingRows: List<LightingDataRow>
+        val lightingRows: List<LightingDataRow>,
+        val currentTotalkW: Double,
+        val currentTotalkWh: Double,
+        val postTotalkW: Double,
+        val postTotalkWh: Double
 )
 
 data class LightingDataRow(
@@ -91,15 +102,17 @@ data class LightingDataRow(
         val paybackPeriodMonths: Double,
         val paybackPeriodYears: Double,
         val netPresentValue: Double
-//        val OBFenergySavings: Double
 )
 
 data class RefrigerationValues(
         val totalCost: Double,
         val totalSavings: Double,
         val paybackMonth: Double,
-        val netPresentValue: Double
-
+        val netPresentValue: Double,
+        val currentTotalkW: Double,
+        val currentTotalkWh: Double,
+        val postTotalkW: Double,
+        val postTotalkWh: Double
 )
 
 data class EquipmentInstances(
@@ -117,7 +130,11 @@ data class EquipmentValues(
         val instances: List<EquipmentInstances>,
         val totalSavings: Double, // 31
         val totalCost: Double,
-        val netPresentValue: Double
+        val netPresentValue: Double,
+        val currentTotalkW: Double,
+        val currentTotalkWh: Double,
+        val postTotalkW: Double,
+        val postTotalkWh: Double
 )
 
 data class BuildingValues(
@@ -137,7 +154,11 @@ data class BuildingValues(
         val refrigerationPaybackMonth: Double,
         val waterHeaterTotalCost: Double,
         val waterHeaterPaybackYear: Double,
-        val waterHeaterPaybackMonth: Double
+        val waterHeaterPaybackMonth: Double,
+        val currentTotalkW: Double,
+        val currentTotalkWh: Double,
+        val postTotalkW: Double,
+        val postTotalkWh: Double
 )
 
 data class PreparedForDocument(
