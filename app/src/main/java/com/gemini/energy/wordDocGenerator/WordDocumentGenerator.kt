@@ -61,7 +61,19 @@ class WordDocumentGenerator {
         generateEnergySavingPotentialPage(
                 document,
                 value.lighting
-                        ?: LightingValues(0.0, 0.0, 0, 0.0, 0.0, 0.0, 0.0, 0.0, listOf()),
+                        ?: LightingValues(
+                                0.0,
+                                0.0,
+                                0,
+                                0.0,
+                                0.0,
+                                0.0,
+                                0.0,
+                                0.0, listOf(),
+                                0.0,
+                                0.0,
+                                0.0,
+                                0.0),
                 value.building)
 
         if (value.lighting != null) {
