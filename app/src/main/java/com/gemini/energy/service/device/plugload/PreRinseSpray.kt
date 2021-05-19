@@ -107,6 +107,9 @@ class PreRinseSpray(computable: Computable<*>, utilityRateGas: UtilityRate, util
         return cost
     }
 
+    var preElectricPower = 0.0
+    var postElectricPower = 0.0
+
     /**
      * PowerTimeChange >> Hourly Energy Use - Pre
      * */
@@ -117,6 +120,7 @@ class PreRinseSpray(computable: Computable<*>, utilityRateGas: UtilityRate, util
         try {
             val alpha = (flowRate * 60 * annualHours * 8.34 * waterTemperature)
             annualEnergyUseElectric = alpha / (3412.14 * efficiency)
+            preElectricPower = annualEnergyUseElectric
             annualEnergyUseGas = alpha / (99976.1 * efficiency)
         } catch (e: Exception) {
             e.printStackTrace()
@@ -140,6 +144,7 @@ class PreRinseSpray(computable: Computable<*>, utilityRateGas: UtilityRate, util
         try {
             val alpha = flowRatePost * 60 * annualHoursPost * 8.34 * waterTemperaturePost
             annualEnergyUseElectric = alpha / (3412.14 * efficiencyPost)
+            postElectricPower = annualEnergyUseElectric
             annualEnergyUseGas = alpha / (99976.1 * efficiencyPost)
 
         } catch (e: Exception) {
