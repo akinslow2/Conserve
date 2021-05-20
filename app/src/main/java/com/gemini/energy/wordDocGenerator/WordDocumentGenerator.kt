@@ -58,6 +58,8 @@ class WordDocumentGenerator {
     private fun generateDocument(value: PreparedForDocument, document: XWPFDocument): XWPFDocument {
         generateFirstPage(document, value.preAudit)
 
+        generateElectrictyCalculationPage(document, value)
+
         generateEnergySavingPotentialPage(
                 document,
                 value.lighting
@@ -560,6 +562,43 @@ class WordDocumentGenerator {
         r1p2.addBreak()
         r1p2.addBreak()
         r1p2.setText("${preAudit.businessname}is on the ${preAudit.gasstructure} ${preAudit.utilitycompany} gas rate schedule and for above stated time period, ${preAudit.businessname} used $manuallyGeneratedValue therms at a cost of $$manuallyGeneratedValue.")
+    }
+
+    // @Anthony this function generates a page in the word doc that displays the latest calculations you requested
+    private fun generateElectrictyCalculationPage(document: XWPFDocument, values: PreparedForDocument) {
+        val p1 = document.createParagraph()
+        p1.spacingBetween = 1.5
+        p1.isPageBreak = true
+        val r1p1 = p1.createRun()
+        r1p1.fontFamily = fontAgencyFB
+        r1p1.isBold = true
+        r1p1.fontSize = 16
+        r1p1.setText("Electricity Calculations")
+        r1p1.addBreak()
+
+        val p2 = document.createParagraph()
+        p2.spacingBetween = 1.5
+        val r1p2 = p2.createRun()
+        r1p2.fontFamily = fontAgencyFB
+        r1p2.setText("Rates from https://www.roanokeelectric.com/about-us/resources/rates/")
+        r1p2.addCarriageReturn()
+        val r2p2 = p2.createRun()
+        r2p2.fontFamily = fontAgencyFB
+        r2p2.setText("Building is using schedule ${values.preAudit.electricstructure}")
+
+        generateElectrictyCalculationTable(document, values)
+
+        val p3 = document.createParagraph()
+        p3.spacingBetween = 1.5
+        val r1p3 = p3.createRun()
+        r1p3.fontFamily = fontAgencyFB
+        r1p3.setText("Given current building aggregation, current total charge is $${electrictyCharge(values.preAudit.electricstructure, values.building.currentTotalkW, values.building.currentTotalkWh).format(2)}")
+
+        val p4 = document.createParagraph()
+        p4.spacingBetween = 1.5
+        val r1p4 = p4.createRun()
+        r1p4.fontFamily = fontAgencyFB
+        r1p4.setText("Given current building aggregation, current total charge is $${electrictyCharge(values.preAudit.electricstructure, values.building.postTotalkW, values.building.postTotalkW).format(2)}")
     }
 
     // generate tables
@@ -1188,6 +1227,200 @@ class WordDocumentGenerator {
         centerTable(table)
         fitTable(table, 4000)
     }
+
+    private fun generateElectrictyCalculationTable(document: XWPFDocument, values: PreparedForDocument) {
+        val table = document.createTable(7,5)
+
+        // header row
+        val row0 = table.getRow(0)
+        val c0r0 = row0.getCell(0)
+
+        val c1r0 = row0.getCell(1)
+        val pc1r0 = c1r0.paragraphs[0]
+        var rc1r0 = pc1r0.createRun()
+        rc1r0.setText("Current Total kW")
+
+        val c2r0 = row0.getCell(2)
+        val pc2r0 = c2r0.paragraphs[0]
+        var rc2r0 = pc2r0.createRun()
+        rc2r0.setText("Current Total kWh")
+
+        val c3r0 = row0.getCell(3)
+        val pc3r0 = c3r0.paragraphs[0]
+        var rc3r0 = pc3r0.createRun()
+        rc3r0.setText("Post Total kW")
+
+        val c4r0 = row0.getCell(4)
+        val pc4r0 = c4r0.paragraphs[0]
+        var rc4r0 = pc4r0.createRun()
+        rc4r0.setText("Post Total kWh")
+
+        // hvac row
+        val row1 = table.getRow(1)
+        val c0r1 = row1.getCell(0)
+        val pc0r1 = c0r1.paragraphs[0]
+        val rc0r1 = pc0r1.createRun()
+        rc0r1.setText("HVAC")
+
+        val c1r1 = row1.getCell(1)
+        val pc1r1 = c1r1.paragraphs[0]
+        var rc1r1 = pc1r1.createRun()
+        rc1r1.setText("${values.hvac?.currentTotalkW?.format(2) ?: "0.00"}")
+
+        val c2r1 = row1.getCell(2)
+        val pc2r1 = c2r1.paragraphs[0]
+        var rc2r1 = pc2r1.createRun()
+        rc2r1.setText("${values.hvac?.currentTotalkWh?.format(2) ?: "0.00"}")
+
+        val c3r1 = row1.getCell(3)
+        val pc3r1 = c3r1.paragraphs[0]
+        var rc3r1 = pc3r1.createRun()
+        rc3r1.setText("${values.hvac?.postTotalkW?.format(2) ?: "0.00"}")
+
+        val c4r1 = row1.getCell(4)
+        val pc4r1 = c4r1.paragraphs[0]
+        var rc4r1 = pc4r1.createRun()
+        rc4r1.setText("${values.hvac?.postTotalkWh?.format(2) ?: "0.00"}")
+
+        // lighting row
+        val row2 = table.getRow(2)
+        val c0r2 = row2.getCell(0)
+        val pc0r2 = c0r2.paragraphs[0]
+        val rc0r2 = pc0r2.createRun()
+        rc0r2.setText("Lighting")
+
+        val c1r2 = row2.getCell(1)
+        val pc1r2 = c1r2.paragraphs[0]
+        var rc1r2 = pc1r2.createRun()
+        rc1r2.setText("${values.lighting?.currentTotalkW?.format(2) ?: "0.00"}")
+
+        val c2r2 = row2.getCell(2)
+        val pc2r2 = c2r2.paragraphs[0]
+        var rc2r2 = pc2r2.createRun()
+        rc2r2.setText("${values.lighting?.currentTotalkWh?.format(2) ?: "0.00"}")
+
+        val c3r2 = row2.getCell(3)
+        val pc3r2 = c3r2.paragraphs[0]
+        var rc3r2 = pc3r2.createRun()
+        rc3r2.setText("${values.lighting?.postTotalkW?.format(2) ?: "0.00"}")
+
+        val c4r2 = row2.getCell(4)
+        val pc4r2 = c4r2.paragraphs[0]
+        var rc4r2 = pc4r2.createRun()
+        rc4r2.setText("${values.lighting?.postTotalkWh?.format(2) ?: "0.00"}")
+
+        // refirgeration row
+        val row3 = table.getRow(3)
+        val c0r3 = row3.getCell(0)
+        val pc0r3 = c0r3.paragraphs[0]
+        val rc0r3 = pc0r3.createRun()
+        rc0r3.setText("Refrigeration")
+
+        val c1r3 = row3.getCell(1)
+        val pc1r3 = c1r3.paragraphs[0]
+        var rc1r3 = pc1r3.createRun()
+        rc1r3.setText("${values.refrigeration?.currentTotalkW?.format(2) ?: "0.00"}")
+
+        val c2r3 = row3.getCell(2)
+        val pc2r3 = c2r3.paragraphs[0]
+        var rc2r3 = pc2r3.createRun()
+        rc2r3.setText("${values.refrigeration?.currentTotalkWh?.format(2) ?: "0.00"}")
+
+        val c3r3 = row3.getCell(3)
+        val pc3r3 = c3r3.paragraphs[0]
+        var rc3r3 = pc3r3.createRun()
+        rc3r3.setText("${values.refrigeration?.postTotalkW?.format(2) ?: "0.00"}")
+
+        val c4r3 = row3.getCell(4)
+        val pc4r3 = c4r3.paragraphs[0]
+        var rc4r3 = pc4r3.createRun()
+        rc4r3.setText("${values.refrigeration?.postTotalkWh?.format(2) ?: "0.00"}")
+
+        // water heater row
+        val row4 = table.getRow(4)
+        val c0r4 = row4.getCell(0)
+        val pc0r4 = c0r4.paragraphs[0]
+        val rc0r4 = pc0r4.createRun()
+        rc0r4.setText("Water Heater")
+
+        val c1r4 = row4.getCell(1)
+        val pc1r4 = c1r4.paragraphs[0]
+        var rc1r4 = pc1r4.createRun()
+        rc1r4.setText("${values.waterHeater?.currentTotalkW?.format(2) ?: "0.00"}")
+
+        val c2r4 = row4.getCell(2)
+        val pc2r4 = c2r4.paragraphs[0]
+        var rc2r4 = pc2r4.createRun()
+        rc2r4.setText("${values.waterHeater?.currentTotalkWh?.format(2) ?: "0.00"}")
+
+        val c3r4 = row4.getCell(3)
+        val pc3r4 = c3r4.paragraphs[0]
+        var rc3r4 = pc3r4.createRun()
+        rc3r4.setText("${values.waterHeater?.postTotalkW?.format(2) ?: "0.00"}")
+
+        val c4r4 = row4.getCell(4)
+        val pc4r4 = c4r4.paragraphs[0]
+        var rc4r4 = pc4r4.createRun()
+        rc4r4.setText("${values.waterHeater?.postTotalkWh?.format(2) ?: "0.00"}")
+
+        // equipment row
+        val row5 = table.getRow(5)
+        val c0r5 = row5.getCell(0)
+        val pc0r5 = c0r5.paragraphs[0]
+        val rc0r5 = pc0r5.createRun()
+        rc0r5.setText("Other Equipment")
+
+        val c1r5 = row5.getCell(1)
+        val pc1r5 = c1r5.paragraphs[0]
+        var rc1r5 = pc1r5.createRun()
+        rc1r5.setText("${values.equipment?.currentTotalkW?.format(2) ?: "0.00"}")
+
+        val c2r5 = row5.getCell(2)
+        val pc2r5 = c2r5.paragraphs[0]
+        var rc2r5 = pc2r5.createRun()
+        rc2r5.setText("${values.equipment?.currentTotalkWh?.format(2) ?: "0.00"}")
+
+        val c3r5 = row5.getCell(3)
+        val pc3r5 = c3r5.paragraphs[0]
+        var rc3r5 = pc3r5.createRun()
+        rc3r5.setText("${values.equipment?.postTotalkW?.format(2) ?: "0.00"}")
+
+        val c4r5 = row5.getCell(4)
+        val pc4r5 = c4r5.paragraphs[0]
+        var rc4r5 = pc4r5.createRun()
+        rc4r5.setText("${values.equipment?.postTotalkWh?.format(2) ?: "0.00"}")
+
+        // building row
+        val row6 = table.getRow(6)
+        val c0r6 = row6.getCell(0)
+        val pc0r6 = c0r6.paragraphs[0]
+        val rc0r6 = pc0r6.createRun()
+        rc0r6.setText("Building")
+
+        val c1r6 = row6.getCell(1)
+        val pc1r6 = c1r6.paragraphs[0]
+        var rc1r6 = pc1r6.createRun()
+        rc1r6.setText("${values.building?.currentTotalkW?.format(2) ?: "0.00"}")
+
+        val c2r6 = row6.getCell(2)
+        val pc2r6 = c2r6.paragraphs[0]
+        var rc2r6 = pc2r6.createRun()
+        rc2r6.setText("${values.building?.currentTotalkWh?.format(2) ?: "0.00"}")
+
+        val c3r6 = row6.getCell(3)
+        val pc3r6 = c3r6.paragraphs[0]
+        var rc3r6 = pc3r6.createRun()
+        rc3r6.setText("${values.building?.postTotalkW?.format(2) ?: "0.00"}")
+
+        val c4r6 = row6.getCell(4)
+        val pc4r6 = c4r6.paragraphs[0]
+        var rc4r6 = pc4r6.createRun()
+        rc4r6.setText("${values.building?.postTotalkWh?.format(2) ?: "0.00"}")
+
+        centerTable(table)
+    }
+
+
     // table utils
     private fun createBullets(document: XWPFDocument, items: Array<String>, size: Int, color: String, isBold: Boolean, isItalic: Boolean) {
         val cTAbstractNum = CTAbstractNum.Factory.newInstance()
@@ -1275,6 +1508,90 @@ class WordDocumentGenerator {
         tblW.w = BigInteger.valueOf(width)
         properties.tblW = tblW
         ctTbl.tblPr = properties
+    }
+
+
+    // electricty rate calculations
+    fun electrictyCharge(structure: String, kW: Double, kWh: Double): Double {
+//        val electrictySchedule = preaudit.electricstructure
+        if (structure == "F") {
+            println("calculate schedule F")
+            return calculateScheduleF(kW, kWh)
+        }
+        else if (structure == "F TOD") {
+            println("calculate schedule F TOD")
+            return calculateScheduleFTOD(kW, kWh)
+        }
+        else if (structure == "H") {
+            println("calculate schedule H")
+            return calculateScheduleH(kW, kWh)
+        }
+        return 0.0
+    }
+
+    fun calculateScheduleF(kW: Double, kWh: Double): Double {
+        var totalDemand = 0.0
+        for (i in 1..kW.toInt()) {
+            if (i <= 15) {
+                totalDemand += 0.0
+            }
+            else {
+                totalDemand += 9.50
+            }
+        }
+        println("total demand is ${totalDemand}")
+
+        var totalEnergy = 0.0
+        for (i in 1..kWh.toInt()) {
+            if (i <= 2500) {
+                totalEnergy += 0.1288
+            }
+            else if (i <= 1000) {
+                totalEnergy += 0.0918
+            }
+            else if (i <= 50000) {
+                totalEnergy += 0.077
+            }
+            else {
+                totalEnergy += 0.066
+            }
+        }
+        println("total energy is ${totalEnergy}")
+
+        var totalCost = totalDemand + totalEnergy
+        println("cost 1 is ${totalCost}")
+
+        if (kW >= 100) {
+            var otherPotentialCost = kWh * 0.1697
+            println("cost 2 is ${otherPotentialCost}")
+            if (totalCost > otherPotentialCost) {
+                //        totalCost = otherPotentialCost
+                return otherPotentialCost
+            }
+        }
+        return totalCost
+    }
+
+    fun calculateScheduleFTOD(kW: Double, kWh: Double): Double {
+        // calculating based on assumption that all hours are off peak
+        val totalDemand = kW * 4.95
+        println("totalDemand $totalDemand")
+        val totalEnergy = kWh * 0.05
+        println("totalEnergy $totalEnergy")
+        val totalCost = totalDemand + totalEnergy
+        println("totalCost $totalCost")
+        return totalCost
+    }
+
+    fun calculateScheduleH(kW: Double, kWh: Double): Double {
+        // calculating based on assumption that all hours are off peak
+        val totalDemand = kW * 5.20
+        println("totalDemand $totalDemand")
+        val totalEnergy = kWh * 0.0449
+        println("totalEnergy $totalEnergy")
+        val totalCost = totalDemand + totalEnergy
+        println("totalCost $totalCost")
+        return totalCost
     }
 
     // ApachePOI setup

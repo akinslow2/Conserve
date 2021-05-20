@@ -52,7 +52,7 @@ class SorterForWordDocumentGenerator {
 
             val zones = aggregateZoneNames(audit.value)
             val zoneString = concatenateZoneString(zones)
-            
+
             if (preaudit == null || preaudit.businessname.isBlank()) {
                 continue
             } else {
