@@ -85,10 +85,13 @@ class WaterHeater(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
          * */
         fun power(gasInput: Int, thermaleff: Int): Double  {
             if (thermaleff == 0) return 0.0
-            return (gasInput / (thermaleff / 100.0)) * KW_CONVERSION
+            return (gasInput / (thermaleff.toDouble() / 100.0)) * KW_CONVERSION
         }
 
-        fun power2(kW: Double, electriceff: Double) = (kW / (electriceff/100.0))
+        fun power2(kW: Double, electriceff: Double): Double {
+            if (electriceff == 0.0) return 0.0
+            return (kW / (electriceff/100.0))
+        }
         /**
          * Year At - Current minus the Age
          * */
