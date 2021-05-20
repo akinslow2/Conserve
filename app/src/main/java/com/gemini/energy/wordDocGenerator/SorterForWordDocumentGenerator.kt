@@ -8,7 +8,9 @@ import com.gemini.energy.service.device.WaterHeater
 import com.gemini.energy.service.device.lighting.*
 import com.gemini.energy.service.device.plugload.*
 import com.gemini.energy.service.device.refrigeration.*
+import com.google.gson.JsonElement
 import com.google.gson.JsonNull
+import com.google.gson.JsonObject
 
 class SorterForWordDocumentGenerator {
     // use these values for sorting types of equipment that need to be aggregated for the report
@@ -50,7 +52,7 @@ class SorterForWordDocumentGenerator {
 
             val zones = aggregateZoneNames(audit.value)
             val zoneString = concatenateZoneString(zones)
-
+            
             if (preaudit == null || preaudit.businessname.isBlank()) {
                 continue
             } else {
@@ -238,8 +240,13 @@ class SorterForWordDocumentGenerator {
         var costPostState = 0.0
         var totalCost = 0.0
         var totalSavings = 0.0
-        var presentvaluefactor = 12.462
+        val presentvaluefactor = 12.462
         val instances = mutableListOf<HvacInstances>()
+
+        var currentTotalkW = 0.0
+        var currentTotalkWh = 0.0
+        var postTotalkW = 0.0
+        var postTotalkWh = 0.0
 
         for (hvac in hvacs) {
             val postState = hvac.buildPostState().blockingGet()
@@ -249,6 +256,12 @@ class SorterForWordDocumentGenerator {
 
             totalSavings += hvac.totalSavings()
             totalCost = hvac.implementationCost()
+
+            // @anthony, please verify that these are the correct values
+            currentTotalkW = hvac.energyPre()
+            currentTotalkWh = hvac.energyPre() * hvac.usageHoursPre()
+            postTotalkW = hvac.energyPost()
+            postTotalkWh = hvac.energyPost() * hvac.usageHoursPost()
 
             instances.add(HvacInstances(
                     hvac.quantity,
@@ -273,7 +286,11 @@ class SorterForWordDocumentGenerator {
                 totalCost,
                 totalSavings,
                 paybackYear,
-                netPresentValue
+                netPresentValue,
+                currentTotalkW,
+                currentTotalkWh,
+                postTotalkW,
+                postTotalkWh
         )
     }
 
@@ -288,16 +305,31 @@ class SorterForWordDocumentGenerator {
         var costPostState = 0.0
         var totalCost = 0.0
         var totalSavings = 0.0
-        var presentvaluefactor = 10.38
+        val presentvaluefactor = 10.38
+
+        var currentTotalkW = 0.0
+        var currentTotalkWh = 0.0
+        var postTotalkW = 0.0
+        var postTotalkWh = 0.0
 
         for (waterheater in waterheaters) {
             val postState = waterheater.buildPostState().blockingGet()
-            val element = postState.getAsJsonArray("results")[0].asJsonObject.get("data")
+            var element: JsonElement = JsonObject()
+            if (postState.getAsJsonArray("results").size() > 0)
+                element = postState.getAsJsonArray("results")[0].asJsonObject.get("data")
 
             costPostState += waterheater.costPostState(element, DataHolder())
 
             totalSavings += waterheater.totalSavings()
             totalCost += waterheater.implementationCost()
+
+            // @anthony, please verify that these are the correct values
+            if (!waterheater.isGas()) {
+                currentTotalkW += waterheater.preElectricPower
+                currentTotalkWh += waterheater.preElectricPower * waterheater.usageHoursPre()
+                postTotalkW += waterheater.postElectricPower
+                postTotalkWh += waterheater.postElectricPower * waterheater.usageHoursPost()
+            }
          }
 
         val waterheater = audit[waterheater]!!.first() as WaterHeater
@@ -317,7 +349,11 @@ class SorterForWordDocumentGenerator {
                 waterheater.thermaleff,
                 waterheater.fueltype,
                 waterheater.unittype,
-                waterheater.capacity)
+                waterheater.capacity,
+                currentTotalkW,
+                currentTotalkWh,
+                postTotalkW,
+                postTotalkWh)
     }
 
     private fun prepareValuesFromRefrigeration(audit: AuditComponents): RefrigerationValues? {
@@ -331,6 +367,11 @@ class SorterForWordDocumentGenerator {
         val freezers = mutableListOf<Freezer>()
         val wiCoolerBot = mutableListOf<WICoolerBox>()
         val presentvaluefactor = 10.380
+
+        var currentTotalkW = 0.0
+        var currentTotalkWh = 0.0
+        var postTotalkW = 0.0
+        var postTotalkWh = 0.0
 
         for (type in audit[refrigeration]!!) {
             when (type) {
@@ -348,26 +389,68 @@ class SorterForWordDocumentGenerator {
         for (fridge in wiRefigerators) {
             totalCost += fridge.installCost
             totalSavings += fridge.grosskwhSavings
+
+            // @anthony, please verify that these are the correct values
+            if (!fridge.isGas()) {
+                currentTotalkW += fridge.kW
+                currentTotalkWh += fridge.kW * fridge.usageHoursPre()
+                postTotalkW += fridge.kW
+                postTotalkWh += fridge.kW * fridge.usageHoursPost()
+            }
         }
 
         for (fridge in wiFreezers) {
             totalCost += fridge.installCost
             totalSavings += fridge.grosskwhSavings
+
+            // @anthony, please verify that these are the correct values
+            if (!fridge.isGas()) {
+                currentTotalkW += fridge.kW
+                currentTotalkWh += fridge.kW * fridge.usageHoursPre()
+                postTotalkW += fridge.kW
+                postTotalkWh += fridge.kW * fridge.usageHoursPost()
+            }
         }
 
         for (fridge in refrigerators) {
             totalCost += fridge.installCost()
             totalSavings += fridge.grosskwhSavings()
+
+            // @anthony, please verify that these are the correct values
+            if (!fridge.isGas()) {
+                // TODO: add kw to refrigerator
+//                currentTotalkW += fridge.kW
+//                currentTotalkWh += fridge.kW * fridge.usageHoursPre()
+//                postTotalkW += fridge.kW
+//                postTotalkWh += fridge.kW * fridge.usageHoursPost()
+            }
         }
 
         for (fridge in freezers) {
             totalCost += fridge.installCost()
             totalSavings += fridge.grosskwhSavings()
+
+            // @anthony, please verify that these are the correct values
+            if (!fridge.isGas()) {
+                // TODO: add kw to freezer
+//                currentTotalkW += fridge.kW
+//                currentTotalkWh += fridge.kW * fridge.usageHoursPre()
+//                postTotalkW += fridge.kW
+//                postTotalkWh += fridge.kW * fridge.usageHoursPost()
+            }
         }
 
         for (fridge in wiCoolerBot) {
             totalCost += fridge.installCost()
             totalSavings += fridge.grosskwhSavings()
+
+            // @anthony, please verify that these are the correct values
+            if (!fridge.isGas()) {
+                currentTotalkW += fridge.kW
+                currentTotalkWh += fridge.kW * fridge.usageHoursPre()
+                postTotalkW += fridge.kW
+                postTotalkWh += fridge.kW * fridge.usageHoursPost()
+            }
         }
 
         val paybackMonth = if (totalSavings == 0.0) 0.0 else totalCost / totalSavings * 12
@@ -376,10 +459,13 @@ class SorterForWordDocumentGenerator {
                 totalCost,
                 totalSavings,
                 paybackMonth,
-                netPresentValue
+                netPresentValue,
+                currentTotalkW,
+                currentTotalkWh,
+                postTotalkW,
+                postTotalkWh
         )
     }
-
 
     private fun prepareValuesFromLighting(audit: AuditComponents): LightingValues? {
         if (!audit[lighting]!!.any()) {
@@ -391,7 +477,7 @@ class SorterForWordDocumentGenerator {
         val highPressureSodiums = mutableListOf<HPSodium>()
         val incandescents = mutableListOf<Incandescent>()
         val linearFluorescents = mutableListOf<LinearFluorescent>()
-        val lowPressureSodium = mutableListOf<LPSodium>()
+        val lowPressureSodiums = mutableListOf<LPSodium>()
 
         for (type in audit[lighting]!!) {
             type.costPreState(listOf(JsonNull.INSTANCE))
@@ -401,7 +487,7 @@ class SorterForWordDocumentGenerator {
                 is HPSodium -> highPressureSodiums.add(type)
                 is Incandescent -> incandescents.add(type)
                 is LinearFluorescent -> linearFluorescents.add(type)
-                is LPSodium -> lowPressureSodium.add(type)
+                is LPSodium -> lowPressureSodiums.add(type)
             }
         }
 
@@ -412,6 +498,11 @@ class SorterForWordDocumentGenerator {
         var presentvaluefactor = 7.722 //Assume 10 years
         val lightingRows = prepareLightingTableRows(audit[lighting]!!)
 
+        var currentTotalkW = 0.0
+        var currentTotalkWh = 0.0
+        var postTotalkW = 0.0
+        var postTotalkWh = 0.0
+
         for (light in cfls) {
             totalCostSavings += light.totalSavings()
             selfinstallcost += light.selfinstallcost()
@@ -421,6 +512,12 @@ class SorterForWordDocumentGenerator {
             }
             totalEnergySavings += light.totalEnergySavings()
             presentvaluefactor = light.presentvaluefactor
+
+            // @anthony, please verify that these are the correct values
+            currentTotalkW += light.prePower()
+            currentTotalkWh += light.preEnergy()
+            postTotalkW += light.postPower()
+            postTotalkWh += light.postEnergy()
         }
 
         for (light in halogens) {
@@ -432,6 +529,12 @@ class SorterForWordDocumentGenerator {
             }
             totalEnergySavings += light.totalEnergySavings()
             presentvaluefactor = light.presentvaluefactor
+
+            // @anthony, please verify that these are the correct values
+            currentTotalkW += light.prePower()
+            currentTotalkWh += light.preEnergy()
+            postTotalkW += light.postPower()
+            postTotalkWh += light.postEnergy()
         }
 
         for (light in highPressureSodiums) {
@@ -443,6 +546,12 @@ class SorterForWordDocumentGenerator {
             }
             totalEnergySavings += light.totalEnergySavings()
             presentvaluefactor = light.presentvaluefactor
+
+            // @anthony, please verify that these are the correct values
+            currentTotalkW += light.prePower()
+            currentTotalkWh += light.preEnergy()
+            postTotalkW += light.postPower()
+            postTotalkWh += light.postEnergy()
         }
 
         for (light in incandescents) {
@@ -454,6 +563,12 @@ class SorterForWordDocumentGenerator {
             }
             totalEnergySavings += light.totalEnergySavings()
             presentvaluefactor = light.presentvaluefactor
+
+            // @anthony, please verify that these are the correct values
+            currentTotalkW += light.prePower()
+            currentTotalkWh += light.preEnergy()
+            postTotalkW += light.postPower()
+            postTotalkWh += light.postEnergy()
         }
 
         for (light in linearFluorescents) {
@@ -465,9 +580,15 @@ class SorterForWordDocumentGenerator {
             }
             totalEnergySavings += light.totalEnergySavings()
             presentvaluefactor = light.presentvaluefactor
+
+            // @anthony, please verify that these are the correct values
+            currentTotalkW += light.prePower()
+            currentTotalkWh += light.preEnergy()
+            postTotalkW += light.postPower()
+            postTotalkWh += light.postEnergy()
         }
 
-        for (light in lowPressureSodium) {
+        for (light in lowPressureSodiums) {
             totalCostSavings += light.totalSavings()
             selfinstallcost += light.selfinstallcost()
             electricianCost += light.electricianCost
@@ -476,6 +597,12 @@ class SorterForWordDocumentGenerator {
             }
             totalEnergySavings += light.totalEnergySavings()
             presentvaluefactor = light.presentvaluefactor
+
+            // @anthony, please verify that these are the correct values
+            currentTotalkW += light.prePower()
+            currentTotalkWh += light.preEnergy()
+            postTotalkW += light.postPower()
+            postTotalkWh += light.postEnergy()
         }
 
         val installCost = electricianCost + selfinstallcost
@@ -493,7 +620,11 @@ class SorterForWordDocumentGenerator {
                 geminiPayback,
                 paybackYear,
                 netPresentValue,
-                lightingRows)
+                lightingRows,
+                currentTotalkW,
+                currentTotalkWh,
+                postTotalkW,
+                postTotalkWh)
     }
 
     private fun prepareLightingTableRows(lights: List<EBase>): List<LightingDataRow> {
@@ -633,8 +764,13 @@ class SorterForWordDocumentGenerator {
     private fun prepareValuesForEquipment(audit: AuditComponents): EquipmentValues? {
         var totalSavings = 0.0
         var totalCost = 0.0
-        var netPresentValue = 0.0
+        val netPresentValue = 0.0
         val instances = mutableListOf<EquipmentInstances>()
+
+        var currentTotalkW = 0.0
+        var currentTotalkWh = 0.0
+        var postTotalkW = 0.0
+        var postTotalkWh = 0.0
 
         @Suppress("UNCHECKED_CAST")
         val combinationOven = audit[combinationOven]!! as List<CombinationOven>
@@ -682,6 +818,14 @@ class SorterForWordDocumentGenerator {
                 materialCost += item.materialCost()
                 implementationCost += item.implementationCost()
                 savings += item.costPreState(listOf()) - item.costPostState
+
+                // @anthony, please verify that these are the correct values
+                if (!item.isGas()) {
+//                    currentTotalkW +=
+//                    currentTotalkWh +=
+//                    postTotalkW +=
+//                    postTotalkWh +=
+                }
             }
 
             instances.add(
@@ -715,6 +859,14 @@ class SorterForWordDocumentGenerator {
                 materialCost += broiler.materialCost()
                 implementationCost += broiler.implementationCost()
                 savings += broiler.costPreState(listOf()) - broiler.costPostState
+
+                // @anthony, please verify that these are the correct values
+                if (!broiler.isGas()) {
+//                    currentTotalkW +=
+//                    currentTotalkWh +=
+//                    postTotalkW +=
+//                    postTotalkWh +=
+                }
             }
 
             instances.add(
@@ -751,6 +903,14 @@ class SorterForWordDocumentGenerator {
                 materialCost += washer.materialCost()
                 implementationCost += washer.implementationCost()
                 savings += washer.costPreState(listOf(null)) - washer.costPostState
+
+                // @anthony, please verify that these are the correct values
+                if (!washer.isGas()) {
+//                    currentTotalkW +=
+//                    currentTotalkWh +=
+//                    postTotalkW +=
+//                    postTotalkWh +=
+                }
             }
 
             instances.add(
@@ -784,6 +944,14 @@ class SorterForWordDocumentGenerator {
                 materialCost += item.materialCost()
                 implementationCost += item.implementationCost()
                 savings += item.costPreState(listOf(null)) - item.costPostState
+
+                // @anthony, please verify that these are the correct values
+                if (!item.isGas()) {
+//                    currentTotalkW +=
+//                    currentTotalkWh +=
+//                    postTotalkW +=
+//                    postTotalkWh +=
+                }
             }
 
             instances.add(
@@ -813,6 +981,12 @@ class SorterForWordDocumentGenerator {
                 materialCost += cabinet.materialCost()
                 implementationCost += cabinet.implementationCost()
                 savings += cabinet.costPreState(listOf(null)) - cabinet.costPostState
+
+                // @anthony, please verify that these are the correct values
+//                        currentTotalkW +=
+//                        currentTotalkWh +=
+//                        postTotalkW +=
+//                        postTotalkWh +=
             }
 
             instances.add(
@@ -842,6 +1016,14 @@ class SorterForWordDocumentGenerator {
                 materialCost += item.materialCost()
                 implementationCost += item.implementationCost()
                 savings += item.costPreState(listOf()) - item.costPostState
+
+                // @anthony, please verify that these are the correct values
+                if (!item.isGas()) {
+//                    currentTotalkW +=
+//                    currentTotalkWh +=
+//                    postTotalkW +=
+//                    postTotalkWh +=
+                }
             }
 
             instances.add(
@@ -871,6 +1053,14 @@ class SorterForWordDocumentGenerator {
                 materialCost += spray.materialCost()
                 implementationCost += spray.implementationCost()
                 savings += spray.costPreState(listOf(null)) - spray.costPostState
+
+                // @anthony, please verify that these are the correct values
+                if (!spray.isGas()) {
+                    currentTotalkW += spray.preElectricPower
+                    currentTotalkWh += spray.preElectricPower * spray.usageHoursPre()
+                    postTotalkW += spray.postElectricPower
+                    postTotalkWh += spray.postElectricPower * spray.usageHoursPost()
+                }
             }
 
             instances.add(
@@ -900,7 +1090,11 @@ class SorterForWordDocumentGenerator {
                 instances.toList(),
                 totalSavings,
                 totalCost,
-                netPresentValue
+                netPresentValue,
+                currentTotalkW,
+                currentTotalkWh,
+                postTotalkW,
+                postTotalkWh
         )
     }
 
@@ -947,6 +1141,30 @@ class SorterForWordDocumentGenerator {
                         (waterHeater?.netPresentValue ?: 0.0) +
                         (refrigeration?.netPresentValue ?: 0.0)
 
+        val currentTotalkW = (lightings?.currentTotalkW ?: 0.0) +
+                (hvacs?.currentTotalkW ?: 0.0) +
+                (equipments?.currentTotalkW ?: 0.0) +
+                (waterHeater?.currentTotalkW ?: 0.0) +
+                (refrigeration?.currentTotalkW ?: 0.0)
+
+        val currentTotalkWh = (lightings?.currentTotalkWh ?: 0.0) +
+                (hvacs?.currentTotalkWh ?: 0.0) +
+                (equipments?.currentTotalkWh ?: 0.0) +
+                (waterHeater?.currentTotalkWh ?: 0.0) +
+                (refrigeration?.currentTotalkWh ?: 0.0)
+
+        val postTotalkW = (lightings?.postTotalkW ?: 0.0) +
+                (hvacs?.postTotalkW ?: 0.0) +
+                (equipments?.postTotalkW ?: 0.0) +
+                (waterHeater?.postTotalkW ?: 0.0) +
+                (refrigeration?.postTotalkW ?: 0.0)
+
+        val postTotalkWh = (lightings?.postTotalkWh ?: 0.0) +
+                (hvacs?.postTotalkWh ?: 0.0) +
+                (equipments?.postTotalkWh ?: 0.0) +
+                (waterHeater?.postTotalkWh ?: 0.0) +
+                (refrigeration?.postTotalkWh ?: 0.0)
+
         return BuildingValues(
                 buildingNetPresentValue,
                 buildingTotalSavings,
@@ -964,7 +1182,11 @@ class SorterForWordDocumentGenerator {
                 calculatePaybackMonth(refrigeration?.totalCost, refrigeration?.totalSavings),
                 waterHeater?.totalCost ?: 0.0,
                 calculatePaybackYear(waterHeater?.totalCost, waterHeater?.totalSavings),
-                calculatePaybackMonth(waterHeater?.totalCost, waterHeater?.totalSavings)
+                calculatePaybackMonth(waterHeater?.totalCost, waterHeater?.totalSavings),
+                currentTotalkW,
+                currentTotalkWh,
+                postTotalkW,
+                postTotalkWh
         )
     }
 }
