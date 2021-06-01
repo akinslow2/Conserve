@@ -145,6 +145,8 @@ class WaterHeater(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
     var fueltype = ""
     var unittype = ""
     var capacity = 0.0
+    var postthermeff = 95
+    var posteleceff = 350.0
 
     override fun setup() {
         try {
@@ -187,8 +189,8 @@ class WaterHeater(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
      * Cost - Pre State
      * */
     override fun costPreState(elements: List<JsonElement?>): Double {
-
-        val usageHours = UsageSimple(peakHours, partPeakHours, offPeakHours)
+//NoteChange
+        val usageHours = (3 * 365) as UsageSimple//https://energyusecalculator.com/electricity_waterheater.htm - but need to explore actual times
         computable.udf1 = usageHours
         Timber.d(usageHours.toString())
 
@@ -210,10 +212,11 @@ class WaterHeater(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
         return if (isGas()) gascost else ecost
     }
 
-    var preElectricPower = 0.0
-    var postElectricPower = 0.0
+    var preElectricPower = power2(kW, electriceff) * quantity
+    var postElectricPower = power2(kW, posteleceff) * quantity
+    var ElectricPowerSavings = preElectricPower -postElectricPower
 
-     /**
+            /**
      * Cost - Post State
      * */
     override fun costPostState(element: JsonElement, dataHolder: DataHolder): Double {
@@ -222,11 +225,9 @@ class WaterHeater(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
         Timber.d("!!! COST POST STATE - HVAC !!!")
         Timber.d("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
 
-        var postthermeff = 95
-        var posteleceff = 350.0
-
-
-        val postUsageHours = computable.udf1 as UsageSimple
+//Note Change - Newer units run's 50% less often
+         val postUsageHours = (1.5 * 365) as UsageSimple
+         //val postUsageHours = computable.udf1 as UsageSimple
 
             val postpowerUsedGas = power(gasInput, postthermeff) * quantity
             val postpowerUsedElectricity = power2(kW, posteleceff) * quantity
@@ -250,7 +251,7 @@ class WaterHeater(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
      * HVAC - INCENTIVES | MATERIAL COST
      * */
     override fun incentives(): Double {
-        return energyPowerChange() * 0.15 + (energyPowerChange() / usageHoursBusiness.yearly()) * 150
+        return 0.0
     }
 
     override fun materialCost(): Double {
@@ -258,7 +259,7 @@ class WaterHeater(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
     }
 
     override fun laborCost(): Double {
-        return 0.0
+        return 700.0
     }
 
 
@@ -275,8 +276,8 @@ class WaterHeater(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
     /**
      * PowerTimeChange >> Yearly Usage Hours - [Pre | Post]
      * */
-    override fun usageHoursPre(): Double = 0.0
-    override fun usageHoursPost(): Double = 0.0
+    override fun usageHoursPre(): Double = 3.0 * 365
+    override fun usageHoursPost(): Double = 1.5 * 365
 
     /**
      * PowerTimeChange >> Energy Efficiency Calculations
@@ -296,7 +297,7 @@ class WaterHeater(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
         val postpowerUsed = if (isGas()) postpowerUsedGas else postpowerUsedElectricity
 
         // Step 1 : Get the Delta
-        val delta = (prepowerUsed - postpowerUsed) * 1100
+        val delta = (prepowerUsed - postpowerUsed) * (1.5 * 365)
 
         Timber.d("HVAC :: Delta -- $delta")
         //ToDo: Multiply by the Number of Equipment
@@ -304,7 +305,7 @@ class WaterHeater(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
     }
     //fix this ADK2
     fun totalSavings(): Double {
-        return energyPowerChange() * .18
+        return costElectricity(energyPowerChange(),electricityRate) // + costElectricity(ElectricPowerSavings,demandRate)
     }
 
     override fun energyTimeChange(): Double = 0.0
