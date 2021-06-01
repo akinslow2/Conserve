@@ -473,6 +473,24 @@
           "param": "Are you able to provide access to all areas including the roof?",
           "validation": "mandatory",
           "id": "92"
+        },
+        {
+          "index": 93,
+          "hint": "rq",
+          "dataType": "textrow",
+          "defaultValues": "",
+          "param": "What company or person do you call for HVAC maintenance?",
+          "validation": "mandatory",
+          "id": "93"
+        },
+        {
+          "index": 94,
+          "hint": "helpful but not rq",
+          "dataType": "phonerow",
+          "defaultValues": "",
+          "param": "Phone Number of HVAC maintenance person",
+           "validation": "optional",
+          "id": "94"
         }
       ],
       "id": "9"
