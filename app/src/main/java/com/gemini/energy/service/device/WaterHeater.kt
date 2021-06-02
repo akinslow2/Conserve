@@ -190,7 +190,9 @@ class WaterHeater(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
      * */
     override fun costPreState(elements: List<JsonElement?>): Double {
 //NoteChange
-        val usageHours = (3 * 365) as UsageSimple//https://energyusecalculator.com/electricity_waterheater.htm - but need to explore actual times
+//        UsageSimple()
+//        val usageHours = (3 * 365) as UsageSimple//https://energyusecalculator.com/electricity_waterheater.htm - but need to explore actual times
+        val usageHours = UsageSimple(0.0, 0.0, 3.0 * 365)
         computable.udf1 = usageHours
         Timber.d(usageHours.toString())
 
@@ -226,7 +228,7 @@ class WaterHeater(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
         Timber.d("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
 
 //Note Change - Newer units run's 50% less often
-         val postUsageHours = (1.5 * 365) as UsageSimple
+                val postUsageHours = UsageSimple(0.0, 0.0, 1.5 * 365.0)
          //val postUsageHours = computable.udf1 as UsageSimple
 
             val postpowerUsedGas = power(gasInput, postthermeff) * quantity
