@@ -474,7 +474,7 @@ abstract class EBase(val computable: Computable<*>,
 
     // if you just have energy and electricity rate, use this overload
     open fun costElectricity(energy: Double, electricityRate: UtilityRate): Double {
-        val demandRate = electricityRate.structure.values.first().last().toDouble()
+        val demandRate = electricityRate.getDemandRate()
         return energy * demandRate
     }
 

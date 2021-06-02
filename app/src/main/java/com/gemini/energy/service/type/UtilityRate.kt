@@ -66,6 +66,10 @@ open class UtilityRate(private val context: Context) {
      * */
     fun nonTimeOfUse() = utility.getNoneTOU(structure)
 
+    fun getDemandRate(): Double {
+        return structure.values.first().last().toDouble();
+    }
+
     companion object {
 
         private fun parseLine(line: String, separator: Char): List<String> {
@@ -175,5 +179,4 @@ class Gas(private val rateStructure: String = "") : IUtility {
         const val FIRST_SLAB = 4000.0
 
     }
-
 }
