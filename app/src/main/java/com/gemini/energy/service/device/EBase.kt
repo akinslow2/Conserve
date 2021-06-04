@@ -468,7 +468,6 @@ abstract class EBase(val computable: Computable<*>,
         val costElectric = CostElectric(usageHours, utilityRate, true)
         costElectric.structure = electricRateStructure
         costElectric.power = powerUsed
-
         return costElectric.cost()
     }
 
@@ -478,9 +477,10 @@ abstract class EBase(val computable: Computable<*>,
         return energy * demandRate
     }
 
-    // if you just have power && demand rate, use this overload
-    open fun costElectricity(power: Double, demandRate: Double): Double {
-        return power * demandRate
+    // if you just have power && electicity rate, use this overload
+    open fun costElectricityFromPowerAndDemand(power: Double, electricityRate: UtilityRate): Double {
+        val energy = electricityRate.getEnergyCharge()
+        return power * energy
     }
 
     /**
