@@ -307,7 +307,8 @@ class WaterHeater(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
     }
     //fix this ADK2
     fun totalSavings(): Double {
-        return costElectricity(energyPowerChange(),electricityRate) // + costElectricity(ElectricPowerSavings,demandRate)
+//        return costElectricity(energyPowerChange(),electricityRate) // + costElectricity(ElectricPowerSavings,demandRate)
+        return costElectricityFromPowerAndDemand(energyPowerChange(), electricityRate)
     }
 
     override fun energyTimeChange(): Double = 0.0
