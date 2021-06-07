@@ -70,7 +70,7 @@
         {
           "index": 18,
           "hint": "36",
-          "dataType": "introw",
+          "dataType": "decimalrow",
           "defaultValues": "",
           "param": "Cooling Capacity (kBtu/hr)",
           "validation": "optional",

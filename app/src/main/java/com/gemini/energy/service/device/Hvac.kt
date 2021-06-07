@@ -81,7 +81,7 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
          * There could be a case where the User will input the value in KW - If that happens we need to convert the KW
          * int kbtu / hr :: 1KW equals 3412.142
          * */
-        fun power(kbtu: Int, seer: Double) = (kbtu / seer)
+        fun power(kbtu: Double, seer: Double) = (kbtu / seer)
 
         /**
          * Year At - Current minus the Age
@@ -109,7 +109,7 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
      * */
     private var eer = 0.0
     var seer = 11.0
-    private var alternateSeer = 17.0
+    private var alternateSeer = 16.0
     private var alternateEer = 0.0
     private var alternateBtu = 0
 
@@ -127,7 +127,7 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
     /**
      * HVAC - British Thermal Unit
      * */
-    var kbtu = 0
+    var kbtu = 0.0
     private var gasInput = 0
     private var gasOutput = 0
 
@@ -167,8 +167,8 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
     var uvalue = 0.15 //for details see document "U Value Calculations" in the Building Calculations Folder
     var cddThreshold = 67 //assumes five degrees from 72 desired temp
     var hddThreshold = 63 //assumes five degree from 68 desired temp
-    var cdd = 0
-    var hdd = 0
+    var cdd = 1495 // Using weather station at Suffolk, Suffolk Municipal Airport, VA with 67 degree base temp - lowest of June 2018 to June 2021(degreedays.net)
+    var hdd = 2696 // Using weather station at Suffolk, Suffolk Municipal Airport, VA with 62 degree base temp - lowest of June 2018 to June 2021 (degreedays.net)
     var quantity = 0
     var insulation = ""
     var areaHeight = 0.0
@@ -199,7 +199,7 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
             eer = featureData["EER"]!! as Double
             seer = featureData["SEER"]!! as Double
             age = featureData["Age"]!! as Int
-            kbtu = featureData["Cooling Capacity (kBtu/hr)"]!! as Int
+            kbtu = featureData["Cooling Capacity (kBtu/hr)"]!! as Double
             gasInput = featureData["Heating Input (kBtu/hr)"]!! as Int
             gasOutput = featureData["Heating Output (kBtu/hr)"]!! as Int
             economizer = featureData["Economizer"]!! as String
@@ -210,7 +210,7 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
             hddThreshold = featureData["Heat Temperature Threshold"]!! as Int
             cdd = featureData["Cooling Degree Days"]!! as Int
             hdd = featureData["Heating Degree Days"]!! as Int
-            insulation = (featureData["Heating Degree Days"]!! as Int).toString()
+            insulation = featureData["Insulation"]!! as String
             areaLength = featureData["Length of Served Area"]!! as Double
             areaWidth = featureData["Width of Served Area"]!! as Double
             areaHeight = featureData["Height of Served Area"]!! as Double
@@ -256,6 +256,8 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
         if (hspf == 0.0 || alternateSeer == 0.0) return 0.0
         return heatingkbtu / hspf + coolingkbtu / alternateSeer
     }
+
+
 
 
     /**
@@ -305,7 +307,7 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
         Timber.d("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
 
         var postSize = kbtu
-        var postSEER = 16.0
+        var postSEER = alternateSeer
 
        // try {
        //     postSize = element.asJsonObject.get(HVAC_DB_BTU).asInt
@@ -385,6 +387,7 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
     /**
      * PowerTimeChange >> Energy Efficiency Calculations
      * I need to insert the heating and cooling hours based on set-point temp, operation hours, and thermostat schedule
+     * If the sensors don't pick up anything that changes the default then that is okay
      * */
     override fun energyPowerChange(): Double {
 
@@ -405,9 +408,7 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
 
     fun totalSavings(): Double {
 
-        val eSavings = (energyPre() - energyPost())
-
-        return costElectricity(eSavings, electricityRate)
+        return costElectricity(energyPowerChange(), electricityRate) + costElectricityFromPowerAndDemand(energyPowerChange(), electricityRate)
     }
 
 
