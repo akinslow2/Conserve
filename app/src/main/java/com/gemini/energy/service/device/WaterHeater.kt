@@ -184,6 +184,14 @@ class WaterHeater(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
     fun overAge(): Int {
         return age - 15
     }
+    val prepowerUsedGas = power(gasInput, thermaleff) * quantity
+    val prepowerUsedElectricity = power2(kW, electriceff) * quantity
+    val prepowerUsed = if (isGas()) prepowerUsedGas else prepowerUsedElectricity
+
+    val postpowerUsedGas = power(gasInput, postthermeff) * quantity
+    val postpowerUsedElectricity = power2(kW, posteleceff) * quantity
+    val postpowerUsed = if (isGas()) postpowerUsedGas else postpowerUsedElectricity
+    var ElectricPowerSavings = prepowerUsedElectricity - postpowerUsedElectricity
 
     /**
      * Cost - Pre State
@@ -196,14 +204,11 @@ class WaterHeater(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
         computable.udf1 = usageHours
         Timber.d(usageHours.toString())
 
-        val powerUsedGas = power(gasInput, thermaleff) * quantity
-        val powerUsedElectricity = power2(kW, electriceff) * quantity
-        preElectricPower = powerUsedElectricity
         val gascost: Double
         val ecost: Double
-        val powerUsed = if (isGas()) powerUsedGas else powerUsedElectricity
-        Timber.d("HotWater :: Power Used (Electricity) -- [$powerUsedElectricity]")
-        Timber.d("HotWater :: Power Used (Gas) -- [$powerUsedGas]")
+        val powerUsed = if (isGas()) prepowerUsedGas else prepowerUsedElectricity
+        Timber.d("HotWater :: Power Used (Electricity) -- [$prepowerUsedElectricity]")
+        Timber.d("HotWater :: Power Used (Gas) -- [$prepowerUsedGas]")
 
 
         Timber.d("HotWater :: Pre Power Used -- [$powerUsed]")
@@ -214,9 +219,7 @@ class WaterHeater(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
         return if (isGas()) gascost else ecost
     }
 
-    var preElectricPower = power2(kW, electriceff) * quantity
-    var postElectricPower = power2(kW, posteleceff) * quantity
-    var ElectricPowerSavings = preElectricPower -postElectricPower
+
 
             /**
      * Cost - Post State
@@ -231,9 +234,6 @@ class WaterHeater(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
                 val postUsageHours = UsageSimple(0.0, 0.0, 1.5 * 365.0)
          //val postUsageHours = computable.udf1 as UsageSimple
 
-            val postpowerUsedGas = power(gasInput, postthermeff) * quantity
-            val postpowerUsedElectricity = power2(kW, posteleceff) * quantity
-         postElectricPower = postpowerUsedElectricity
             val postGcost: Double
             val postEcost: Double
             val powerUsed = if (isGas()) postpowerUsedGas else postpowerUsedElectricity
@@ -281,34 +281,23 @@ class WaterHeater(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
     override fun usageHoursPre(): Double = 3.0 * 365
     override fun usageHoursPost(): Double = 1.5 * 365
 
+
+
     /**
      * PowerTimeChange >> Energy Efficiency Calculations
      * I need to insert the heating and cooling hours based on set-point temp, operation hours, and thermostat schedule
      * */
     override fun energyPowerChange(): Double {
 
-        val powerUsedGas = power(gasInput, thermaleff) * quantity
-        val powerUsedElectricity = power2(kW, electriceff) * quantity
-        val prepowerUsed = if (isGas()) powerUsedGas else powerUsedElectricity
-
-        var postthermeff = 95
-        var posteleceff = 350.0
-
-        val postpowerUsedGas = power(gasInput, postthermeff) * quantity
-        val postpowerUsedElectricity = power2(kW, posteleceff) * quantity
-        val postpowerUsed = if (isGas()) postpowerUsedGas else postpowerUsedElectricity
-
-        // Step 1 : Get the Delta
-        val delta = (prepowerUsed - postpowerUsed) * (1.5 * 365)
+        val delta = ElectricPowerSavings * (1.5 * 365)
 
         Timber.d("HVAC :: Delta -- $delta")
-        //ToDo: Multiply by the Number of Equipment
+
         return delta
     }
-    //fix this ADK2
+
     fun totalSavings(): Double {
-//        return costElectricity(energyPowerChange(),electricityRate) // + costElectricity(ElectricPowerSavings,demandRate)
-        return costElectricityFromPowerAndDemand(energyPowerChange(), electricityRate)
+        return costElectricity(energyPowerChange(),electricityRate) + costElectricityFromPowerAndDemand(ElectricPowerSavings, electricityRate)
     }
 
     override fun energyTimeChange(): Double = 0.0
