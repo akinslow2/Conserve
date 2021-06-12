@@ -267,7 +267,7 @@ class SorterForWordDocumentGenerator {
                     hvac.quantity,
                     hvac.year(),
                     hvac.age,
-                    hvac.kbtu,
+                    hvac.kbtu.toInt(),
                     hvac.seer,
                     hvac.overAge(),
                     hvac.economizer,
@@ -325,10 +325,10 @@ class SorterForWordDocumentGenerator {
 
             // @anthony, please verify that these are the correct values
             if (!waterheater.isGas()) {
-                currentTotalkW += waterheater.preElectricPower
-                currentTotalkWh += waterheater.preElectricPower * waterheater.usageHoursPre()
-                postTotalkW += waterheater.postElectricPower
-                postTotalkWh += waterheater.postElectricPower * waterheater.usageHoursPost()
+                currentTotalkW += waterheater.prepowerUsedElectricity
+                currentTotalkWh += waterheater.prepowerUsedElectricity * waterheater.usageHoursPre()
+                postTotalkW += waterheater.postpowerUsedElectricity
+                postTotalkWh += waterheater.postpowerUsed * waterheater.usageHoursPost()
             }
          }
 
