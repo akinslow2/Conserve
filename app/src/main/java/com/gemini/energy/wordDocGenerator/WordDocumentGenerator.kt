@@ -1551,16 +1551,16 @@ class WordDocumentGenerator {
     // electricty rate calculations
     fun electrictyCharge(structure: String, kW: Double, kWh: Double): Double {
 //        val electrictySchedule = preaudit.electricstructure
-        if (structure == "F") {
-            println("calculate schedule F")
+        if (structure == "G") {
+            println("calculate schedule G")
             return calculateScheduleF(kW, kWh)
         }
-        else if (structure == "F TOD") {
-            println("calculate schedule F TOD")
+        else if (structure == "GS") {
+            println("calculate schedule GS")
             return calculateScheduleFTOD(kW, kWh)
         }
-        else if (structure == "H") {
-            println("calculate schedule H")
+        else if (structure == "GL") {
+            println("calculate schedule GL")
             return calculateScheduleH(kW, kWh)
         }
         return 0.0

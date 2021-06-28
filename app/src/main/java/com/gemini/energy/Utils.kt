@@ -9,11 +9,12 @@ fun Double.format(fracDigits: Int): String {
 }
 
 /// Determines which filepath to save exported files to
-val branch = Branches.REC.string
+val branch = Branches.BGE.string
 
 enum class Branches(val string: String) {
     BED("BED"),
     NES("NES"),
     PGE("PGE"),
+    BGE("BGE"),
     REC("REC")
 }

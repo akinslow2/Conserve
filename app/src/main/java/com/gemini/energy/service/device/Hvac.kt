@@ -145,6 +145,8 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
     private var partPeakHours = 0.0
     private var offPeakHours = 0.0
 
+
+
     /**
      * Pre Audit Variables
      */
@@ -161,14 +163,15 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
     var bldgtype = ""
     var utilitycompany = ""
     var electricstructure = ""
+    var hvacSystem = ""
     var gasstructure = ""
     var economizer = ""
     var thermotype = ""
     var uvalue = 0.15 //for details see document "U Value Calculations" in the Building Calculations Folder
     var cddThreshold = 67 //assumes five degrees from 72 desired temp
     var hddThreshold = 63 //assumes five degree from 68 desired temp
-    var cdd = 1495 // Using weather station at Suffolk, Suffolk Municipal Airport, VA with 67 degree base temp - lowest of June 2018 to June 2021(degreedays.net)
-    var hdd = 2696 // Using weather station at Suffolk, Suffolk Municipal Airport, VA with 63 degree base temp - lowest of June 2018 to June 2021 (degreedays.net)
+    var cdd = 1495 // Using weather station at Suffolk, Suffolk Municipal Airport, VA with 67 degree base temp - lowest of June 2018 to June 2021(degreedays.net) 2200
+    var hdd = 2696 // Using weather station at Suffolk, Suffolk Municipal Airport, VA with 63 degree base temp - lowest of June 2018 to June 2021 (degreedays.net) 1100
     var quantity = 0
     var insulation = ""
     var areaHeight = 0.0
@@ -176,6 +179,7 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
     var areaLength = 0.0
     var heatEfficiency = .9
     var hspf = 8.0
+
 
     override fun setup() {
         try {
@@ -196,6 +200,7 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
             city = preAudit["General Client Info City"]!! as String
             state = preAudit["General Client Info State"]!! as String
 
+            hvacSystem = featureData["Type of Package Unit"]!! as String
             eer = featureData["EER"]!! as Double
             seer = featureData["SEER"]!! as Double
             age = featureData["Age"]!! as Int

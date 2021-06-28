@@ -257,8 +257,8 @@ abstract class EBase(val computable: Computable<*>,
     }
 
     companion object {
-        private const val RATE = "F-TOD"
-        private const val COMPANY_CODE = "rec"
+        private const val RATE = "GS"
+        private const val COMPANY_CODE = "BGE"
         private val regex = "^.*TOD$".toRegex()
     }
 

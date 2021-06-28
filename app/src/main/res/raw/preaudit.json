@@ -8,7 +8,7 @@
           "index": 11,
           "hint": "rq",
           "dataType": "pickerinputrow",
-          "defaultValues": "1:Anthony Kinslow,2:Chris Hull,3:Johnny,4:Eli,5:Javi,6:Nick",
+          "defaultValues": "1:Anthony Kinslow,2:Dean Baynes",
           "param": "Name",
           "validation": "mandatory",
           "id": "11"
@@ -17,7 +17,7 @@
           "index": 12,
           "hint": "rq",
           "dataType": "pickerinputrow",
-          "defaultValues": "1:akinslow2@geminiesolutions.com,2:chull@geminiesolutions.com",
+          "defaultValues": "1:akinslow2@geminiesolutions.com,2:baynes9547@gmail.com ",
           "param": "Email",
           "validation": "mandatory",
           "id": "12"
@@ -426,7 +426,7 @@
           "index": 81,
           "hint": "rq",
           "dataType": "pickerinputrow",
-          "defaultValues": "1:rec",
+          "defaultValues": "1:BGE",
           "param": "Utility Company",
           "validation": "mandatory",
           "id": "81"
@@ -444,7 +444,7 @@
           "index": 83,
           "hint": "rq",
           "dataType": "pickerinputrow",
-          "defaultValues": "1:F,2:F TOD,3:H",
+          "defaultValues": "1:G,2:GS,3:GL",
           "param": "Electric Rate Structure",
           "validation": "mandatory",
           "id": "83"
