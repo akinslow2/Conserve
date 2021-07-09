@@ -501,6 +501,15 @@
           "param": "Is Operation still limited due to COVID?",
           "validation": "optional",
           "id": "95"
+        },
+        {
+          "index": 96,
+          "hint": "insert concerns/observations here",
+          "dataType": "textrow",
+          "defaultValues": "",
+          "param": "Site Observations or Notes",
+          "validation": "optional",
+          "id": "96"
         }
       ],
       "id": "9"
