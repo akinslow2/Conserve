@@ -108,7 +108,7 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
      * 2. Secondary Match - [size_btu_per_hr_min > kbtu < size_btu_per_hr_max]
      * */
     private var eer = 0.0
-    var seer = 11.0
+    var seer = 9.0
     private var alternateSeer = 16.0
     private var alternateEer = 0.0
     private var alternateBtu = 0

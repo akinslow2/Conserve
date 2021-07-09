@@ -104,7 +104,7 @@
       "elements": [
          {
           "index": 31,
-          "hint": "",
+          "hint": "insert if you can",
           "dataType": "decimalrow",
           "defaultValues": "",
           "param": "Actual Watts",
@@ -115,148 +115,56 @@
       "id": "3"
     },
     {
-      "index": 5,
-      "section": "TOU",
+      "index": 4,
+      "section": "Time of Use",
       "elements": [
         {
-          "index": 51,
-          "dataType": "introw",
+          "index": 41,
+          "hint": "analyst will input",
+          "dataType": "decimalrow",
           "defaultValues": "",
           "param": "Peak Hours",
-          "validation": "",
-          "id": "51"
+          "validation": "optional",
+          "id": "41"
         },
         {
-          "index": 52,
-          "dataType": "introw",
+          "index": 42,
+          "hint": "analyst will input",
+          "dataType": "decimalrow",
           "defaultValues": "",
           "param": "Part Peak Hours",
-          "validation": "",
-          "id": "52"
+          "validation": "optional",
+          "id": "42"
         },
         {
-          "index": 53,
-          "dataType": "introw",
+          "index": 43,
+          "hint": "analyst will input",
+          "dataType": "decimalrow",
           "defaultValues": "",
           "param": "Off Peak Hours",
-          "validation": "",
-          "id": "53"
+          "validation": "optional",
+          "id": "43"
         },
         {
-          "index": 54,
+          "index": 44,
           "hint": "",
           "dataType": "textrow",
           "defaultValues": "",
           "param": "Light Sensor Serial",
           "validation": "",
-          "id": "54"
-        }
-      ],
-      "id": "5"
-    },
-    {
-      "index": 6,
-      "section": "Suggested Alternative",
-      "elements": [
+          "id": "44"
+        },
         {
-          "index": 61,
-          "hint": "",
+          "index": 45,
+          "hint": "issues or observations here",
           "dataType": "textrow",
           "defaultValues": "",
-          "param": "Alternate Lamp Type",
+          "param": "Notes from Space or Equipment",
           "validation": "optional",
-          "id": "61"
-        },
-        {
-          "index": 62,
-          "hint": "",
-          "dataType": "introw",
-          "defaultValues": "",
-          "param": "Alternate Lamps Per Fixture",
-          "validation": "optional",
-          "id": "62"
-        },
-        {
-          "index": 64,
-          "hint": "",
-          "dataType": "introw",
-          "defaultValues": "",
-          "param": "Alternate Number of Fixtures",
-          "validation": "optional",
-          "id": "64"
-        },
-        {
-          "index": 65,
-          "hint": "",
-          "dataType": "textrow",
-          "defaultValues": "",
-          "param": "Alternate Make",
-          "validation": "optional",
-          "id": "65"
-        },
-        {
-          "index": 66,
-          "hint": "",
-          "dataType": "textrow",
-          "defaultValues": "",
-          "param": "Alternate Model Number",
-          "validation": "optional",
-          "id": "66"
-        },
-        {
-          "index": 67,
-          "hint": "",
-          "dataType": "decimalrow",
-          "defaultValues": "",
-          "param": "Alternate Actual Watts",
-          "validation": "optional",
-          "id": "67"
-        },
-        {
-          "index": 68,
-          "hint": "",
-          "dataType": "introw",
-          "defaultValues": "",
-          "param": "Alternate Life Hours",
-          "validation": "optional",
-          "id": "68"
+          "id": "45"
         }
       ],
-      "id": "6"
-    },
-    {
-      "index": 7,
-      "section": "Suggested Time",
-      "elements": [
-        {
-          "index": 71,
-          "hint": "",
-          "dataType": "introw",
-          "defaultValues": "",
-          "param": "Suggested Peak Hours",
-          "validation": "optional",
-          "id": "71"
-        },
-        {
-          "index": 72,
-          "hint": "",
-          "dataType": "introw",
-          "defaultValues": "",
-          "param": "Suggested Part Peak Hours",
-          "validation": "optional",
-          "id": "72"
-        },
-        {
-          "index": 73,
-          "hint": "",
-          "dataType": "introw",
-          "defaultValues": "",
-          "param": "Suggested Off Peak Hours",
-          "validation": "optional",
-          "id": "73"
-        }
-      ],
-      "id": "7"
+      "id": "4"
     }
   ]
 }
