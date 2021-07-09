@@ -492,6 +492,16 @@
            "validation": "optional",
           "id": "94"
         }
+      ,
+        {
+          "index": 95,
+          "hint": "helpful but not rq",
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:yes,2:no",
+          "param": "Is Operation still limited due to COVID?",
+          "validation": "optional",
+          "id": "95"
+        }
       ],
       "id": "9"
     }

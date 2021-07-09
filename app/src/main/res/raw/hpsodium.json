@@ -110,7 +110,7 @@
       "elements": [
         {
           "index": 31,
-          "hint": "",
+          "hint": "insert if you can",
           "dataType": "decimalrow",
           "defaultValues": "",
           "param": "Actual Watts",
@@ -126,7 +126,7 @@
       "elements": [
         {
           "index": 41,
-          "hint": "",
+          "hint": "analyst will input",
           "dataType": "decimalrow",
           "defaultValues": "",
           "param": "Peak Hours",
@@ -135,7 +135,7 @@
         },
         {
           "index": 42,
-          "hint": "",
+          "hint": "analyst will input",
           "dataType": "decimalrow",
           "defaultValues": "",
           "param": "Part Peak Hours",
@@ -144,7 +144,7 @@
         },
         {
           "index": 43,
-          "hint": "",
+          "hint": "analyst will input",
           "dataType": "decimalrow",
           "defaultValues": "",
           "param": "Off Peak Hours",
@@ -159,113 +159,18 @@
           "param": "Light Sensor Serial",
           "validation": "",
           "id": "44"
+        },
+        {
+          "index": 45,
+          "hint": "issues or observations here",
+          "dataType": "textrow",
+          "defaultValues": "",
+          "param": "Notes from Space or Equipment",
+          "validation": "optional",
+          "id": "45"
         }
       ],
       "id": "4"
-    },
-    {
-      "index": 5,
-      "section": "Suggested Alternative",
-      "elements": [
-        {
-          "index": 51,
-          "hint": "",
-          "dataType": "pickerinputrow",
-          "defaultValues": "1:LED,2:Linear Flourescent,3:Halogen,4:High Pressure Sodium,5:Incandescent,6:Low Pressure Sodium,7:Metal Halide,8:Mercury Vapor,9:Compact Fluorescent,10:EXIT (Compact Flourescent),11:EXIT (Incandescent),12:EXIT (LED)",
-          "param": "Alternate Lamp Type",
-          "validation": "optional",
-          "id": "51"
-        },
-        {
-          "index": 52,
-          "hint": "",
-          "dataType": "introw",
-          "defaultValues": "",
-          "param": "Alternate Lamps Per Fixture",
-          "validation": "optional",
-          "id": "52"
-        },
-        {
-          "index": 53,
-          "hint": "",
-          "dataType": "introw",
-          "defaultValues": "",
-          "param": "Alternate Number of Fixtures",
-          "validation": "optional",
-          "id": "53"
-        },
-        {
-          "index": 54,
-          "hint": "",
-          "dataType": "textrow",
-          "defaultValues": "",
-          "param": "Alternate Make",
-          "validation": "optional",
-          "id": "54"
-        },
-        {
-          "index": 55,
-          "hint": "",
-          "dataType": "textrow",
-          "defaultValues": "",
-          "param": "Alternate Model Number",
-          "validation": "optional",
-          "id": "55"
-        },
-        {
-          "index": 56,
-          "hint": "",
-          "dataType": "decimalrow",
-          "defaultValues": "",
-          "param": "Alternate Actual Watts",
-          "validation": "optional",
-          "id": "56"
-        },
-        {
-          "index": 57,
-          "hint": "",
-          "dataType": "introw",
-          "defaultValues": "",
-          "param": "Alternate Life Hours",
-          "validation": "optional",
-          "id": "57"
-        }
-      ],
-      "id": "5"
-    },
-    {
-      "index": 6,
-      "section": "Suggested Time",
-      "elements": [
-        {
-          "index": 61,
-          "hint": "",
-          "dataType": "decimalrow",
-          "defaultValues": "",
-          "param": "Suggested Peak Hours",
-          "validation": "optional",
-          "id": "61"
-        },
-        {
-          "index": 62,
-          "hint": "",
-          "dataType": "decimalrow",
-          "defaultValues": "",
-          "param": "Suggested Part Peak Hours",
-          "validation": "optional",
-          "id": "62"
-        },
-        {
-          "index": 63,
-          "hint": "",
-          "dataType": "decimalrow",
-          "defaultValues": "",
-          "param": "Suggested Off Peak Hours",
-          "validation": "optional",
-          "id": "63"
-        }
-      ],
-      "id": "6"
     }
   ]
 }
