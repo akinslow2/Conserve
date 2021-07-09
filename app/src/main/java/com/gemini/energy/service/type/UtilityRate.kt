@@ -127,7 +127,10 @@ class Electricity(private val rateStructure: String, private val companyCode: St
     override fun getValue(columns: List<String>, header: String) = listOf(listOf(columns[EValue.EnergyCharge.index],
             columns[EValue.Average.index], columns[EValue.Demand.index]))
 
-    override fun getResourcePath() = "utility/${companyCode}_electric.csv"
+//    override fun getResourcePath() = "utility/${companyCode}_electric.csv"
+//    @anthony: assuming the elecritc csv file has the correct data
+    // when testing companyCode was BGE so the file could not be found
+    override fun getResourcePath() = "utility/rec_electric.csv"
     override fun getSeparator(): Char = ','
     override fun getRate() = rateStructure
     override fun getRowIdentifier() = "^${getRate()}${getSeparator()}.*".toRegex()
