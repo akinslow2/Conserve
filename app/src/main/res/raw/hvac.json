@@ -151,319 +151,231 @@
       ],
       "id": "1"
     },
+{
+  "index": 2,
+  "section": "TOU",
+  "elements": [
     {
-      "index": 2,
-      "section": "TOU",
-      "elements": [
-        {
-          "index": 21,
-          "hint": "",
-          "dataType": "decimalrow",
-          "defaultValues": "",
-          "param": "Peak Hours",
-          "validation": "optional",
-          "id": "21"
-        },
-        {
-          "index": 22,
-          "hint": "",
-          "dataType": "decimalrow",
-          "defaultValues": "",
-          "param": "Part Peak Hours",
-          "validation": "optional",
-          "id": "22"
-        },
-        {
-          "index": 23,
-          "hint": "",
-          "dataType": "decimalrow",
-          "defaultValues": "",
-          "param": "Off Peak Hours",
-          "validation": "mandatory",
-          "id": "23"
-        }
-      ],
-      "id": "2"
+      "index": 21,
+      "hint": "analyst will input",
+      "dataType": "decimalrow",
+      "defaultValues": "",
+      "param": "Peak Hours",
+      "validation": "optional",
+      "id": "21"
     },
     {
-      "index": 3,
-      "section": "HVAC - Other",
-      "elements": [
-        {
-          "index": 31,
-          "hint": "",
-          "dataType": "pickerinputrow",
-          "defaultValues": "1:Programmable,2:Analog",
-          "param": "Thermostat Type",
-          "validation": "optional",
-          "id": "31"
-        },
-        {
-          "index": 32,
-          "hint": "",
-          "dataType": "decimalrow",
-          "defaultValues": "",
-          "param": "Temperature Set Point - Heat (F)",
-          "validation": "optional",
-          "id": "32"
-        },
-        {
-          "index": 33,
-          "hint": "",
-          "dataType": "decimalrow",
-          "defaultValues": "",
-          "param": "Temperature Set Point - A/C (F)",
-          "validation": "optional",
-          "id": "33"
-        },
-        {
-          "index": 34,
-          "hint": "",
-          "dataType": "pickerinputrow",
-          "defaultValues": "1:Yes,2:No",
-          "param": "Thermostat Easily Accessible?",
-          "validation": "optional",
-          "id": "34"
-        },
-        {
-          "index": 35,
-          "hint": "",
-          "dataType": "decimalrow",
-          "defaultValues": "",
-          "param": "Room Temperature (oF)",
-          "validation": "optional",
-          "id": "35"
-        },
-        {
-          "index": 36,
-          "hint": "",
-          "dataType": "textrow",
-          "defaultValues": "",
-          "param": "Thermostat Company/Brand",
-          "validation": "optional",
-          "id": "36"
-        }
-      ],
-      "id": "3"
+      "index": 22,
+      "hint": "analyst will input",
+      "dataType": "decimalrow",
+      "defaultValues": "",
+      "param": "Part Peak Hours",
+      "validation": "optional",
+      "id": "22"
     },
     {
-      "index": 4,
-      "section": "Energy Usage Parameters",
-      "elements": [
-        {
-          "index": 41,
-          "hint": "",
-          "dataType": "textrow",
-          "defaultValues": "",
-          "param": "Temp Sensor Serial Number",
-          "validation": "optional",
-          "id": "41"
-        },
-        {
-          "index": 42,
-          "hint": "",
-          "dataType": "introw",
-          "defaultValues": "",
-          "param": "AC Temperature Threshold",
-          "validation": "optional",
-          "id": "42"
-        },
-        {
-          "index": 43,
-          "hint": "",
-          "dataType": "introw",
-          "defaultValues": "",
-          "param": "Heat Temperature Threshold",
-          "validation": "optional",
-          "id": "43"
-        },
-        {
-          "index": 44,
-          "hint": "",
-          "dataType": "introw",
-          "defaultValues": "",
-          "param": "Cooling Degree Days",
-          "validation": "optional",
-          "id": "44"
-        },
-        {
-          "index": 45,
-          "hint": "",
-          "dataType": "introw",
-          "defaultValues": "",
-          "param": "Heating Degree Days",
-          "validation": "optional",
-          "id": "45"
-        },
-        {
-          "index": 46,
-          "hint": "",
-          "dataType": "pickerinputrow",
-          "defaultValues": "1:Yes,2:No",
-          "param": "Insulation",
-          "validation": "optional",
-          "id": "46"
-        },
-        {
-          "index": 47,
-          "hint": "",
-          "dataType": "decimalrow",
-          "defaultValues": "1:Yes,2:No",
-          "param": "Length of Served Area",
-          "validation": "optional",
-          "id": "47"
-        },
-        {
-          "index": 48,
-          "hint": "",
-          "dataType": "decimalrow",
-          "defaultValues": "1:Yes,2:No",
-          "param": "Width of Served Area",
-          "validation": "optional",
-          "id": "48"
-        },
-        {
-          "index": 49,
-          "hint": "",
-          "dataType": "decimalrow",
-          "defaultValues": "1:Yes,2:No",
-          "param": "Height of Served Area",
-          "validation": "optional",
-          "id": "49"
-        }
-      ],
-      "id": "4"
-    },
-    {
-      "index": 5,
-      "section": "Suggested Alternative",
-      "elements": [
-        {
-          "index": 51,
-          "hint": "",
-          "dataType": "textrow",
-          "defaultValues": "",
-          "param": "Alternate Make",
-          "validation": "optional",
-          "id": "51"
-        },
-        {
-          "index": 52,
-          "hint": "",
-          "dataType": "textrow",
-          "defaultValues": "",
-          "param": "Alternate Model Number",
-          "validation": "optional",
-          "id": "52"
-        },
-        {
-          "index": 53,
-          "hint": "",
-          "dataType": "introw",
-          "defaultValues": "",
-          "param": "Alternate Cooling Capacity (Btu/hr)",
-          "validation": "optional",
-          "id": "53"
-        },
-        {
-          "index": 54,
-          "hint": "",
-          "dataType": "introw",
-          "defaultValues": "",
-          "param": "Quantity",
-          "validation": "optional",
-          "id": "54"
-        },
-        {
-          "index": 55,
-          "hint": "",
-          "dataType": "introw",
-          "defaultValues": "",
-          "param": "Alternate Cooling Capacity (Tons)",
-          "validation": "optional",
-          "id": "55"
-        },
-        {
-          "index": 56,
-          "hint": "",
-          "dataType": "introw",
-          "defaultValues": "",
-          "param": "Alternate Heating Capacity",
-          "validation": "optional",
-          "id": "56"
-        },
-        {
-          "index": 57,
-          "hint": "",
-          "dataType": "decimalrow",
-          "defaultValues": "",
-          "param": "Alternate SEER",
-          "validation": "optional",
-          "id": "57"
-        },
-        {
-          "index": 58,
-          "hint": "",
-          "dataType": "decimalrow",
-          "defaultValues": "",
-          "param": "Alternate EER",
-          "validation": "optional",
-          "id": "58"
-        }
-      ],
-      "id": "5"
-    },
-    {
-      "index": 6,
-      "section": "Suggested Time",
-      "elements": [
-        {
-          "index": 61,
-          "hint": "",
-          "dataType": "decimalrow",
-          "defaultValues": "",
-          "param": "Suggested Peak Hours",
-          "validation": "optional",
-          "id": "61"
-        },
-        {
-          "index": 62,
-          "hint": "",
-          "dataType": "decimalrow",
-          "defaultValues": "",
-          "param": "Suggested Part Peak Hours",
-          "validation": "optional",
-          "id": "62"
-        },
-        {
-          "index": 63,
-          "hint": "",
-          "dataType": "decimalrow",
-          "defaultValues": "",
-          "param": "Suggested Off Peak Hours",
-          "validation": "optional",
-          "id": "63"
-        },
-        {
-          "index": 64,
-          "hint": "",
-          "dataType": "textrow",
-          "defaultValues": "",
-          "param": "Motor Sensor Serial",
-          "validation": "optional",
-          "id": "64"
-        },
-        {
-          "index": 65,
-          "hint": "",
-          "dataType": "textrow",
-          "defaultValues": "",
-          "param": "Temperature Sensor Serial",
-          "validation": "optional",
-          "id": "65"
-        }
-      ],
-      "id": "6"
+      "index": 23,
+      "hint": "analyst will input",
+      "dataType": "decimalrow",
+      "defaultValues": "",
+      "param": "Off Peak Hours",
+      "validation": "optional",
+      "id": "23"
     }
-  ]
+  ],
+  "id": "2"
+},
+{
+  "index": 3,
+  "section": "HVAC - Other",
+  "elements": [
+    {
+      "index": 31,
+      "hint": "",
+      "dataType": "pickerinputrow",
+      "defaultValues": "1:Programmable,2:Analog",
+      "param": "Thermostat Type",
+      "validation": "optional",
+      "id": "31"
+    },
+    {
+      "index": 32,
+      "hint": "",
+      "dataType": "decimalrow",
+      "defaultValues": "",
+      "param": "Temperature Set Point - Heat (F)",
+      "validation": "optional",
+      "id": "32"
+    },
+    {
+      "index": 33,
+      "hint": "",
+      "dataType": "decimalrow",
+      "defaultValues": "",
+      "param": "Temperature Set Point - A/C (F)",
+      "validation": "optional",
+      "id": "33"
+    },
+    {
+      "index": 34,
+      "hint": "",
+      "dataType": "pickerinputrow",
+      "defaultValues": "1:Yes,2:No",
+      "param": "Thermostat Easily Accessible?",
+      "validation": "optional",
+      "id": "34"
+    },
+    {
+      "index": 35,
+      "hint": "",
+      "dataType": "decimalrow",
+      "defaultValues": "",
+      "param": "Room Temperature (oF)",
+      "validation": "optional",
+      "id": "35"
+    },
+    {
+      "index": 36,
+      "hint": "",
+      "dataType": "textrow",
+      "defaultValues": "",
+      "param": "Thermostat Company/Brand",
+      "validation": "optional",
+      "id": "36"
+    }
+  ],
+  "id": "3"
+},
+{
+  "index": 4,
+  "section": "Sensor Parameters",
+  "elements": [
+    {
+      "index": 41,
+      "hint": "",
+      "dataType": "textrow",
+      "defaultValues": "",
+      "param": "Temp Sensor Serial Number",
+      "validation": "optional",
+      "id": "41"
+    },
+    {
+      "index": 42,
+      "hint": "to be completed by analyst",
+      "dataType": "introw",
+      "defaultValues": "",
+      "param": "AC Temperature Threshold",
+      "validation": "optional",
+      "id": "42"
+    },
+    {
+      "index": 43,
+      "hint": "analyst will input",
+      "dataType": "introw",
+      "defaultValues": "",
+      "param": "Heat Temperature Threshold",
+      "validation": "optional",
+      "id": "43"
+    },
+    {
+      "index": 44,
+      "hint": "analyst will input",
+      "dataType": "introw",
+      "defaultValues": "",
+      "param": "Cooling Degree Days",
+      "validation": "optional",
+      "id": "44"
+    },
+    {
+      "index": 45,
+      "hint": "analyst will input",
+      "dataType": "introw",
+      "defaultValues": "",
+      "param": "Heating Degree Days",
+      "validation": "optional",
+      "id": "45"
+    },
+    {
+      "index": 46,
+      "hint": "",
+      "dataType": "pickerinputrow",
+      "defaultValues": "1:Yes,2:No",
+      "param": "Is there Insulation in the building?",
+      "validation": "optional",
+      "id": "46"
+    },
+    {
+      "index": 47,
+      "hint": "",
+      "dataType": "decimalrow",
+      "defaultValues": "1:Yes,2:No",
+      "param": "Length of Served Area",
+      "validation": "optional",
+      "id": "47"
+    },
+    {
+      "index": 48,
+      "hint": "",
+      "dataType": "decimalrow",
+      "defaultValues": "1:Yes,2:No",
+      "param": "Width of Served Area",
+      "validation": "optional",
+      "id": "48"
+    },
+    {
+      "index": 49,
+      "hint": "",
+      "dataType": "decimalrow",
+      "defaultValues": "1:Yes,2:No",
+      "param": "Height of Served Area",
+      "validation": "optional",
+      "id": "49"
+    }
+  ],
+  "id": "4"
+},
+{
+  "index": 5,
+  "section": "Sensors",
+  "elements": [
+    {
+      "index": 51,
+      "hint": "insert last 3 digits",
+      "dataType": "textrow",
+      "defaultValues": "",
+      "param": "Motor Sensor Serial",
+      "validation": "optional",
+      "id": "51"
+    },
+    {
+      "index": 52,
+      "hint": "insert last 3 digits",
+      "dataType": "textrow",
+      "defaultValues": "",
+      "param": "Interior Temperature Sensor Serial",
+      "validation": "optional",
+      "id": "52"
+    },
+    {
+      "index": 53,
+      "hint": "insert last 3 digits",
+      "dataType": "textrow",
+      "defaultValues": "",
+      "param": "Exterior Temperature Sensor Serial",
+      "validation": "optional",
+      "id": "53"
+    },
+    {
+      "index": 54,
+      "hint": "issues or observations here",
+      "dataType": "textrow",
+      "defaultValues": "",
+      "param": "Notes from Space or Equipment",
+      "validation": "optional",
+      "id": "54"
+    }
+  ],
+  "id": "5"
+}
+]
 }

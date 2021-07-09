@@ -130,7 +130,7 @@
       "elements": [
         {
           "index": 31,
-          "hint": "",
+          "hint": "insert if you can",
           "dataType": "decimalrow",
           "defaultValues": "",
           "param": "Actual Watts",
@@ -141,44 +141,56 @@
       "id": "3"
     },
     {
-      "index": 5,
-      "section": "TOU",
+      "index": 4,
+      "section": "Time of Use",
       "elements": [
         {
-          "index": 51,
-          "dataType": "introw",
+          "index": 41,
+          "hint": "analyst will input",
+          "dataType": "decimalrow",
           "defaultValues": "",
           "param": "Peak Hours",
-          "validation": "",
-          "id": "51"
+          "validation": "optional",
+          "id": "41"
         },
         {
-          "index": 52,
-          "dataType": "introw",
+          "index": 42,
+          "hint": "analyst will input",
+          "dataType": "decimalrow",
           "defaultValues": "",
           "param": "Part Peak Hours",
-          "validation": "",
-          "id": "52"
+          "validation": "optional",
+          "id": "42"
         },
         {
-          "index": 53,
-          "dataType": "introw",
+          "index": 43,
+          "hint": "analyst will input",
+          "dataType": "decimalrow",
           "defaultValues": "",
           "param": "Off Peak Hours",
-          "validation": "",
-          "id": "53"
+          "validation": "optional",
+          "id": "43"
         },
         {
-          "index": 54,
+          "index": 44,
           "hint": "",
           "dataType": "textrow",
           "defaultValues": "",
           "param": "Light Sensor Serial",
           "validation": "",
-          "id": "54"
+          "id": "44"
+        },
+        {
+          "index": 45,
+          "hint": "issues or observations here",
+          "dataType": "textrow",
+          "defaultValues": "",
+          "param": "Notes from Space or Equipment",
+          "validation": "optional",
+          "id": "45"
         }
       ],
-      "id": "5"
+      "id": "4"
     }
   ]
 }
