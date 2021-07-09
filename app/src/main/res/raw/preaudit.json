@@ -8,7 +8,7 @@
           "index": 11,
           "hint": "rq",
           "dataType": "pickerinputrow",
-          "defaultValues": "1:Anthony Kinslow,2:Chris Hull,3:Johnny,4:Eli,5:Javi,6:Nick",
+          "defaultValues": "1:Anthony Kinslow,2:Dorian Britt",
           "param": "Name",
           "validation": "mandatory",
           "id": "11"
@@ -17,7 +17,7 @@
           "index": 12,
           "hint": "rq",
           "dataType": "pickerinputrow",
-          "defaultValues": "1:akinslow2@geminiesolutions.com,2:chull@geminiesolutions.com",
+          "defaultValues": "1:akinslow2@geminiesolutions.com,2:dbritt@geminiesolutions.com",
           "param": "Email",
           "validation": "mandatory",
           "id": "12"
@@ -491,8 +491,7 @@
           "param": "Phone Number of HVAC maintenance person",
            "validation": "optional",
           "id": "94"
-        }
-      ,
+        },
         {
           "index": 95,
           "hint": "helpful but not rq",
@@ -501,6 +500,15 @@
           "param": "Is Operation still limited due to COVID?",
           "validation": "optional",
           "id": "95"
+        },
+        {
+          "index": 96,
+          "hint": "insert concerns/observations here",
+          "dataType": "textrow",
+          "defaultValues": "",
+          "param": "Site Observations or Notes",
+          "validation": "optional",
+          "id": "96"
         }
       ],
       "id": "9"
