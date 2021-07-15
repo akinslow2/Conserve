@@ -620,7 +620,7 @@ class WordDocumentGenerator {
         r1p2.addCarriageReturn()
         val r2p2 = p2.createRun()
         r2p2.fontFamily = fontAgencyFB
-        r2p2.setText("Building is using schedule ${values.preAudit.electricstructure}")
+        r2p2.setText("Building is using schedule ${values.preAudit.electricstructure}.")
 
         generateElectrictyCalculationTable(document, values)
 
@@ -628,13 +628,13 @@ class WordDocumentGenerator {
         p3.spacingBetween = 1.5
         val r1p3 = p3.createRun()
         r1p3.fontFamily = fontAgencyFB
-        r1p3.setText("Given current building aggregation, current total charge is $${electrictyCharge(values.preAudit.electricstructure, values.building.currentTotalkW, values.building.currentTotalkWh).format(2)}")
+        r1p3.setText("Given current building aggregation, current total charge is $${electrictyCharge(values.preAudit.electricstructure, values.building.currentTotalkW, values.building.currentTotalkWh).format(2)}.")
 
         val p4 = document.createParagraph()
         p4.spacingBetween = 1.5
         val r1p4 = p4.createRun()
         r1p4.fontFamily = fontAgencyFB
-        r1p4.setText("Given current building aggregation, current total charge is $${electrictyCharge(values.preAudit.electricstructure, values.building.postTotalkW, values.building.postTotalkW).format(2)}")
+        r1p4.setText("Given current building aggregation, current total charge is $${electrictyCharge(values.preAudit.electricstructure, values.building.postTotalkW, values.building.postTotalkW).format(2)}.")
     }
 
 
