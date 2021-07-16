@@ -154,11 +154,10 @@ class WaterHeater(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
             quantity = featureData["Quantity"]!! as Int
 
             age = featureData["Age"]!! as Int
-//            btu = featureData["Cooling Capacity (Btu/hr)"]!! as Int
             gasInput = featureData["Heating Input (Btu/hr)"]!! as Int
             gasOutput = featureData["Heating Output (Btu/hr)"]!! as Int
             thermaleff = featureData["Thermal Efficiency"]!! as Int
-            electriceff = featureData["Heating Electirc Efficiency"]!! as Double
+            electriceff = featureData["Heating Electric Efficiency"]!! as Double
             kW = featureData["Heating Power (kW)"]!! as Double
             fueltype = featureData["Fuel Type"]!! as String
             unittype = featureData["Type of Unit"]!! as String
@@ -252,16 +251,20 @@ class WaterHeater(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
       /**
      * HVAC - INCENTIVES | MATERIAL COST
      * */
+  //This will vary based on utility and can change at anytime
+      //https://bgesmartenergy.com/residential/rebates-and-discounts/heat-pump-water-heater
     override fun incentives(): Double {
-        return 0.0
+        return 500.0
     }
-
+//The material cost is an average, based on this link -https://carbonswitch.co/heat-pump-water-heater-buyers-guide -
+// however this needs to be adjusted once we have a go to seller
     override fun materialCost(): Double {
-        return 1000.0
+        return 2500.0
     }
-
+    //The labor cost is an average, based on this link -https://carbonswitch.co/heat-pump-water-heater-buyers-guide -
+// however this needs to be adjusted once we have a go to installer
     override fun laborCost(): Double {
-        return 700.0
+        return 500.0
     }
 
 

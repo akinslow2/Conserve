@@ -323,16 +323,22 @@ class SorterForWordDocumentGenerator {
             totalSavings += waterheater.totalSavings()
             totalCost += waterheater.implementationCost()
 
-            // @anthony, please verify that these are the correct values
+            // @anthony, please verify that these are the correct values -
+            // @k2, confirmed but we don't take into account changing from gas to electric water heating, which will increase the kW load.
+            // I added an else statement to handle that.
             if (!waterheater.isGas()) {
                 currentTotalkW += waterheater.prepowerUsedElectricity
                 currentTotalkWh += waterheater.prepowerUsedElectricity * waterheater.usageHoursPre()
                 postTotalkW += waterheater.postpowerUsedElectricity
                 postTotalkWh += waterheater.postpowerUsedElectricity * waterheater.usageHoursPost()
+            } else {
+                postTotalkW += waterheater.prepowerUsedGas * 3412.00 //The 3,412 converts BTU/h to kW.
+                postTotalkWh += waterheater.prepowerUsedGas * waterheater.usageHoursPost() * 3412.00 //The 3,412 converts BTU to kWh.
             }
          }
 
         val waterheater = audit[waterheater]!!.first() as WaterHeater
+
         val paybackMonth = (totalCost / totalSavings * 12) + 4
         val paybackYear: Double = (totalCost / totalSavings) + (4 / 12)
         val netPresentValue: Double = (totalSavings * presentvaluefactor) -  totalCost

@@ -25,8 +25,8 @@
         {
           "index": 13,
           "hint": "",
-          "dataType": "textrow",
-          "defaultValues": "",
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:AO Smith,2:Rheem,3:Kenmore,4:Whirlpool,5:American Standard,6:American Water Heaters,7:Bosch,8:EcoSmart,9:Navien,10:Noritz,11:Reliance,12:Rinnai,13:Bradford White,14:Takagi,15:Stiebel Eltron",
           "param": "Make",
           "validation": "mandatory",
           "id": "13"
@@ -42,7 +42,7 @@
         },
         {
           "index": 15,
-          "hint": "",
+          "hint": "66.0",
           "dataType": "decimalrow",
           "defaultValues": "",
           "param": "Capacity (U.S. Gal)",
@@ -60,7 +60,7 @@
         },
         {
           "index": 17,
-          "hint": "",
+          "hint": "100000",
           "dataType": "introw",
           "defaultValues": "",
           "param": "Heating Output (Btu/hr)",
@@ -69,7 +69,7 @@
         },
         {
           "index": 18,
-          "hint": "",
+          "hint": "130000",
           "dataType": "introw",
           "defaultValues": "",
           "param": "Heating Input (Btu/hr)",
@@ -78,7 +78,7 @@
         },
         {
           "index": 19,
-          "hint": "",
+          "hint": "80",
           "dataType": "introw",
           "defaultValues": "",
           "param": "Thermal Efficiency",
@@ -87,10 +87,10 @@
         },
         {
           "index": 110,
-          "hint": "",
+          "hint": "99",
           "dataType": "decimalrow",
           "defaultValues": "",
-          "param": "Heating Electirc Efficiency",
+          "param": "Heating Electric Efficiency",
           "validation": "optional",
           "id": "110"
         },
