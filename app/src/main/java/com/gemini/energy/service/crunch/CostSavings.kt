@@ -67,8 +67,8 @@ class CostSavings {
          * */
         fun costGas(energyUsed: Double, rate: UtilityRate): Double {
             val gas= rate.nonTimeOfUse()
-            val rateFirst = (gas.summerNone() + gas.winterNone()) / 2
-            val rateExcess = (gas.summerExcess() + gas.winterExcess()) / 2
+            val rateFirst = (gas.summerNone() + gas.winterNone())
+            val rateExcess = (gas.summerExcess() + gas.winterExcess())
             return (energyUsed) * (if (energyUsed > Gas.FIRST_SLAB) rateExcess else rateFirst)
         }
 

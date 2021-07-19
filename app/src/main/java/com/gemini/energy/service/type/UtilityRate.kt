@@ -160,7 +160,7 @@ class Gas(private val rateStructure: String = "") : IUtility {
         return outgoing
     }
 
-    override fun getResourcePath() = "utility/pge_gas.csv"
+    override fun getResourcePath() = "utility/bge_gas.csv"
     override fun getSeparator() = ','
     override fun getRowIdentifier(): Regex {
         return ".*".toRegex()
@@ -178,12 +178,9 @@ class Gas(private val rateStructure: String = "") : IUtility {
 
     companion object {
         private val keys = listOf(
-                ERateKey.Slab1.value, ERateKey.Slab2.value, ERateKey.Slab3.value,
-                ERateKey.Slab4.value, ERateKey.Slab5.value, ERateKey.Surcharge.value,
-                ERateKey.SummerTransport.value, ERateKey.WinterTransport.value,
-                ERateKey.SummerExcess.value, ERateKey.WinterExcess.value)
+                ERateKey.Slab1.value)
 
-        const val FIRST_SLAB = 4000.0
+        const val FIRST_SLAB = 10000.0
 
     }
 }

@@ -510,6 +510,15 @@
           "param": "Site Observations or Notes",
           "validation": "optional",
           "id": "96"
+        },
+        {
+          "index": 97,
+          "hint": "impacts saving estimates",
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:yes,2:no",
+          "param": "Will all gas be removed with retrofit?",
+          "validation": "optional",
+          "id": "97"
         }
       ],
       "id": "9"

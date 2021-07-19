@@ -489,8 +489,8 @@ abstract class EBase(val computable: Computable<*>,
      * */
     fun costGas(energyUsed: Double): Double {
         val gas= gasRate.nonTimeOfUse()
-        val rateFirst = (gas.summerNone() + gas.winterNone()) / 2
-        val rateExcess = (gas.summerExcess() + gas.winterExcess()) / 2
+        val rateFirst = (gas.summerNone() + gas.winterNone())
+        val rateExcess = (gas.summerExcess() + gas.winterExcess())
 
         Timber.d("RATE FIRST :: $rateFirst")
         Timber.d("RATE SECOND :: $rateExcess")
