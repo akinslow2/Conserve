@@ -264,7 +264,9 @@ class CostSavings {
             fun demandCostSaving(): Double {
 
                 fun demandCostSavingsYearCalc(power: Double): Double {
-
+// @k2: This function seems to be taking the wrong values for rateSummer and rateWinter
+                    // They should be taking the demand charge which is the fourth row
+                    // For example: GL_BGE_T2 demand charge value is 7.55 for winter
                     val structure = rateElectric.structure
                     val rateSummer: Double
                     val rateWinter: Double
@@ -322,7 +324,6 @@ class CostSavings {
             /**
              * <<< Implementation Cost >>>
              * */
-            //ToDo - @Verify Johnny : How does Quantity Impact this ??
 
             fun implementationCost() = (materialCost() + laborCost()) - incentives()
             /**

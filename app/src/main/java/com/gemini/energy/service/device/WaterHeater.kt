@@ -254,19 +254,19 @@ class WaterHeater(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
   //This will vary based on utility and can change at anytime
       //https://bgesmartenergy.com/residential/rebates-and-discounts/heat-pump-water-heater
     override fun incentives(): Double {
-        return 500.0
+        return 500.0 * quantity
     }
 //The material cost is an average, based on this link -https://carbonswitch.co/heat-pump-water-heater-buyers-guide -
 // however this needs to be adjusted once we have a go to seller
     override fun materialCost(): Double {
-        return 2500.0
+        return 2500.0 * quantity
     }
     //The labor cost is an average, based on this link -https://carbonswitch.co/heat-pump-water-heater-buyers-guide -
 // however this needs to be adjusted once we have a go to installer
     override fun laborCost(): Double {
-        return 500.0
+        return 500.0 * quantity
     }
-
+// @k2: I added quantity in the equations above, but it is an integer. I just want to flag this in case it will cause problems...
 
     /**
      * PowerTimeChange >> Hourly Energy Use - Pre

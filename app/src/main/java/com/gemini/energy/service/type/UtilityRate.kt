@@ -2,8 +2,6 @@ package com.gemini.energy.service.type
 
 import android.content.Context
 import com.gemini.energy.presentation.util.ERateKey
-import timber.log.Timber
-import kotlin.reflect.typeOf
 
 open class UtilityRate(private val context: Context) {
 
@@ -127,18 +125,20 @@ class Electricity(private val rateStructure: String, private val companyCode: St
     override fun getValue(columns: List<String>, header: String) = listOf(listOf(columns[EValue.EnergyCharge.index],
             columns[EValue.Average.index], columns[EValue.Demand.index]))
 
-//    override fun getResourcePath() = "utility/${companyCode}_electric.csv"
+    override fun getResourcePath() = "utility/${companyCode}_electric.csv"
 //    @anthony: assuming the elecritc csv file has the correct data
-    // when testing companyCode was BGE so the file could not be found
-    override fun getResourcePath() = "utility/rec_electric.csv"
+    //@k2: does capitalization matter? if not, then it should work now that I changed the filename
+ //   override fun getResourcePath() = "utility/bge_electric.csv"
     override fun getSeparator(): Char = ','
     override fun getRate() = rateStructure
     override fun getRowIdentifier() = "^${getRate()}${getSeparator()}.*".toRegex()
 
+    // @k2: I assume
     override fun getTOU(structure: HashMap<String, List<String>>) = TOU(
             structure[ERateKey.SummerOn.value]!![0].toDouble(),
             structure[ERateKey.SummerPart.value]!![0].toDouble(),
             structure[ERateKey.SummerOff.value]!![0].toDouble(),
+            structure[ERateKey.WinterOn.value]!![0].toDouble(),
             structure[ERateKey.WinterPart.value]!![0].toDouble(),
             structure[ERateKey.WinterOff.value]!![0].toDouble())
 

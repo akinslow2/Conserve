@@ -162,6 +162,7 @@ enum class ERateKey(val value: String) {
     SummerOff("summer-off-peak"),
     SummerPart("summer-part-peak"),
     SummerOn("summer-on-peak"),
+    WinterOn("winter-on-peak"),
     WinterOff("winter-off-peak"),
     WinterPart("winter-part-peak"),
 

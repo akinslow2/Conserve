@@ -7,6 +7,7 @@ interface IUsageType {
     fun summerOn(): Double
     fun summerPart(): Double
     fun summerOff(): Double
+    fun winterOn(): Double
     fun winterPart(): Double
     fun winterOff(): Double
 
@@ -30,6 +31,7 @@ data class TOU(
         private var summerOn: Double,
         private var summerPart: Double,
         private var summerOff: Double,
+        private var winterOn: Double,
         private var winterPart: Double,
         private var winterOff: Double,
 
@@ -41,15 +43,16 @@ data class TOU(
 
     constructor(): this(0.0, 0.0, 0.0)
 
-    constructor(summerOn: Double, summerPart: Double, summerOff: Double, winterPart: Double, winterOff: Double):
-            this(summerOn, summerPart, summerOff, winterPart, winterOff, 0.0, 0.0, 0.0)
+    constructor(summerOn: Double, summerPart: Double, summerOff: Double, winterOn: Double, winterPart: Double, winterOff: Double):
+            this(summerOn, summerPart, summerOff, winterOn, winterPart, winterOff, 0.0, 0.0, 0.0)
 
     constructor(peak: Double, partPeak: Double, noPeak: Double): this(0.0, 0.0,
-            0.0, 0.0, 0.0, peak, partPeak, noPeak)
+            0.0, 0.0, 0.0, 0.0, peak, partPeak, noPeak)
 
     override fun summerOn() = summerOn
     override fun summerPart() = summerPart
     override fun summerOff() = summerOff
+    override fun winterOn() = winterOn
     override fun winterPart() = winterPart
     override fun winterOff() = winterOff
 
@@ -63,13 +66,14 @@ data class TOU(
     override fun partPeak() = partPeak
     override fun noPeak() = noPeak
 
-    override fun weightedAverage() = (((summerOn() + summerPart() + summerOff()) / 3) * 0.504) +
-            (((winterPart() + winterOff()) / 2) * 0.496)
+    override fun weightedAverage() = (((summerOn() + summerPart() + summerOff()) / 3) * 0.3333) +
+            (((winterOn() + winterPart() + winterOff()) / 3) * 0.6666)
 
     override fun toString(): String {
         return ">>> Summer On : $summerOn \n" +
                 ">>> Summer Part : $summerPart \n" +
                 ">>> Summer Off : $summerOff \n" +
+                ">>> Winter On : $winterOn \n" +
                 ">>> Winter Part : $winterPart \n" +
                 ">>> Winter Off : $winterOff \n" +
 
@@ -98,6 +102,7 @@ data class TOUNone(
     override fun summerOn() = 0.0
     override fun summerPart() = 0.0
     override fun summerOff() = 0.0
+    override fun winterOn() = 0.0
     override fun winterPart() = 0.0
     override fun winterOff() = 0.0
 
@@ -111,7 +116,7 @@ data class TOUNone(
     override fun partPeak() = 0.0
     override fun noPeak() = noPeak
 
-    override fun weightedAverage() = (summerNone() * 0.504 + winterNone() * 0.496)
+    override fun weightedAverage() = (summerNone() * 0.3333 + winterNone() * 0.6666)
 
     override fun toString(): String {
         return ">>> Summer None : $summerNone \n" +
