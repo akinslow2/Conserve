@@ -460,7 +460,21 @@ abstract class EBase(val computable: Computable<*>,
 
     /**
      * Computes the Electric Cost
+    @k2:
+    power is in the units kW / energy is in the units kWh / power * time = energy
+    var powerUsed = power / var energy = energy / var UsageHours = time
+    var demandRate = $/kW / var energyRate = $/kWh
+
+    In the _electricity.csv:
+    the demandRate is the "demand_charge"
+    the energyRate is the "energy_charge"
+
+    Based on these please redo the naming conventions to match. At the moment it is very confusing.
+    For example energy * demandRate makes no sense. That is essential saying kWh * $/kW = $/h ---
+     When it should be power * demandRate which would be kW * $/kW = $
+
      * */
+
     // @Anthony: here are the costElectricity function that we believe you were mentioning
     // depending on which variables you have access to, call one of these functions with the appropriate variables.
     // if you have power, usage hours, and utilityRate, use this overload
@@ -477,7 +491,7 @@ abstract class EBase(val computable: Computable<*>,
         return energy * demandRate
     }
 
-    // if you just have power && electicity rate, use this overload
+    // if you just have power && demand rate (kW), use this overload
     open fun costElectricityFromPowerAndDemand(power: Double, electricityRate: UtilityRate): Double {
         val energy = electricityRate.getEnergyCharge()
         return power * energy
@@ -485,7 +499,7 @@ abstract class EBase(val computable: Computable<*>,
 
     /**
      * Computes the Gas Cost
-     * ToDo: The Gas Rate should be an Average calculated from all the Rates for that Year.
+     *
      * */
     fun costGas(energyUsed: Double): Double {
         val gas= gasRate.nonTimeOfUse()

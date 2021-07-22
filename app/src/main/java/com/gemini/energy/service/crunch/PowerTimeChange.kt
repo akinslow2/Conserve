@@ -33,7 +33,7 @@ class PowerTimeChange {
 
     /**
      * Returns which ever is true first
-     * @Johnny - What about during cases when all three cases are true ??
+     *
      * */
     fun energySaving() = when {
         checkPowerChange            -> energyPowerChange()

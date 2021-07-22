@@ -65,10 +65,10 @@ class LinearFluorescent(computable: Computable<*>, utilityRateGas: UtilityRate, 
     private var seer = 10
     private var cooling = 3.142
 
-    private var timeperfixture = 0.33
-    private var electricanHourlyRate = 25
+    private var timeperfixture = 1.0
+    private var electricianHourlyRate = 75
 
-    var electricianCost = timeperfixture * numberOfFixtures * electricanHourlyRate
+    var electricianCost = timeperfixture * numberOfFixtures * electricianHourlyRate
 
 
     private var controls = ""
@@ -80,7 +80,7 @@ class LinearFluorescent(computable: Computable<*>, utilityRateGas: UtilityRate, 
 
     /**
      * Suggested Alternative
-     * */
+     *  */
     private var alternateActualWatts = 0.0
     private var alternateNumberOfFixtures = 0
     private var alternateLampsPerFixture = 0

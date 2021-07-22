@@ -48,9 +48,9 @@ class Cfl(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEle
     private var cooling = 3.142
 
     private var timeperfixture = 0.33
-    private var electricanHourlyRate = 25
+    private var electricianHourlyRate = 25
 
-    var electricianCost = timeperfixture * numberOfFixtures * electricanHourlyRate
+    var electricianCost = timeperfixture * numberOfFixtures * electricianHourlyRate
 
     private var controls = ""
     private var hasControls = ""
