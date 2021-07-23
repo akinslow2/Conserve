@@ -56,18 +56,8 @@ class Incandescent(computable: Computable<*>, utilityRateGas: UtilityRate, utili
 
     var electricianCost = timeperfixture * numberOfFixtures * electricianHourlyRate
 
-
     private var controls = ""
     private var hasControls = ""
-
-    var postpeakHours = 0.0
-    var postpartPeakHours = 0.0
-    var postoffPeakHours = 0.0
-
-    // TODO: remove alternate
-    private var alternateActualWatts = 0.0
-    private var alternateNumberOfFixtures = 0
-    private var alternateLampsPerFixture = 0
 
     var ceilingType = ""
     var replacementType = ""
@@ -160,9 +150,6 @@ class Incandescent(computable: Computable<*>, utilityRateGas: UtilityRate, utili
         val expectedLife = LEDlifeHours / usageHoursSpecific.yearly()
         val maintenanceSavings = totalUnits * bulbcost * replacementIndex / expectedLife
 
-        // Adding new variables for the report
-        val selfinstallcost = this.selfinstallcost()
-
         // Delta is going to be Power Used * Percentage Power Reduced
         // Percentage Power Reduced - we get it from the Base - ELighting
 
@@ -170,8 +157,9 @@ class Incandescent(computable: Computable<*>, utilityRateGas: UtilityRate, utili
         val coolingSavings = energySavings * cooling / seer
 
         val energyAtPostState = preEnergy() - energySavings
-        val paybackmonth = selfinstallcost / energySavings * 12
-        val paybackyear = selfinstallcost / energySavings
+
+        val paybackmonth = installCost() / energySavings * 12
+        val paybackyear = installCost() / energySavings
         val totalsavings =  totalSavings()
 
         val postRow = mutableMapOf<String, String>()
@@ -180,7 +168,6 @@ class Incandescent(computable: Computable<*>, utilityRateGas: UtilityRate, utili
         postRow["__cooling_savings"] = coolingSavings.toString()
         postRow["__energy_savings"] = energySavings.toString()
         postRow["__energy_at_post_state"] = energyAtPostState.toString()
-        postRow["__selfinstall_cost"] = selfinstallcost.toString()
         postRow["__payback_month"] = paybackmonth.toString()
         postRow["__payback_year"] = paybackyear.toString()
         postRow["__total_savings"] = totalsavings.toString()
@@ -208,18 +195,7 @@ class Incandescent(computable: Computable<*>, utilityRateGas: UtilityRate, utili
      * Post Yearly Usage Hours
      * */
 
-
     override fun usageHoursPost(): Double {
-        val postusageHours = UsageLighting()
-        postusageHours.postpeakHours = postpeakHours
-        postusageHours.postpartPeakHours = postpartPeakHours
-        postusageHours.postoffPeakHours = postoffPeakHours
-
-        postusageHours.build()
-
-        if (postusageHours.yearly() > 0.0)
-            return postusageHours.yearly()
-
         if (usageHoursPre() > 0)
             return usageHoursPre()
 
@@ -252,9 +228,6 @@ class Incandescent(computable: Computable<*>, utilityRateGas: UtilityRate, utili
         return preEnergy() * percentPowerReduced
     }
 
-    fun selfinstallcost(): Double {
-        return ledbulbcost * alternateNumberOfFixtures * alternateLampsPerFixture
-    }
     fun totalEnergySavings(): Double {
         if (controls != null) {
             val coolingSavings = (preEnergy() - energyPowerChange()) * cooling / seer
@@ -294,12 +267,15 @@ class Incandescent(computable: Computable<*>, utilityRateGas: UtilityRate, utili
      **/
     var presentvaluefactor = 7.722
 
-    fun elecinstallcost(): Double {
-        return ledbulbcost * alternateNumberOfFixtures * alternateLampsPerFixture + electricianCost
+    fun installCost(): Double {
+        // TODO: implement me!
+        return 2.0
     }
+
     fun netPresentValue(): Double {
-        return totalSavings() * presentvaluefactor - elecinstallcost()
+        return totalSavings() * presentvaluefactor - installCost()
     }
+
     /**
      * Energy Efficiency Lookup Query Definition
      * */
@@ -328,5 +304,4 @@ class Incandescent(computable: Computable<*>, utilityRateGas: UtilityRate, utili
     private fun getFormMapper() = FormMapper(context, R.raw.incandescent)
     private fun getModel() = getFormMapper().decodeJSON()
     private fun getGFormElements() = getFormMapper().mapIdToElements(getModel())
-
 }
