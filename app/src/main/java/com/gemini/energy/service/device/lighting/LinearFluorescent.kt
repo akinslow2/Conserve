@@ -78,6 +78,11 @@ class LinearFluorescent(computable: Computable<*>, utilityRateGas: UtilityRate, 
     var postpartPeakHours = 0.0
     var postoffPeakHours = 0.0
 
+    var ceilingType = ""
+    var replacementType = ""
+    var isCeilingOver10Feet = ""
+
+    // TODO: remove alternate
     /**
      * Suggested Alternative
      *  */
@@ -93,16 +98,12 @@ class LinearFluorescent(computable: Computable<*>, utilityRateGas: UtilityRate, 
             ballastsPerFixtures = featureData["Ballasts Per Fixture"]!! as Int
             numberOfFixtures = featureData["Number of Fixtures"]!! as Int
 
-            alternateActualWatts = featureData["Alternate Actual Watts"]!! as Double
-            alternateNumberOfFixtures = featureData["Alternate Number of Fixtures"]!! as Int
-            alternateLampsPerFixture = featureData["Alternate Lamps Per Fixture"]!! as Int
-            alternateLifeHours = featureData["Alternate Life Hours"]!! as Int
-
             val config = lightingConfig(ELightingType.LinearFluorescent)
             percentPowerReduced = config[ELightingIndex.PercentPowerReduced.value] as Double
-            postpeakHours = featureData["Suggested Peak Hours"]!! as Double
-            postpartPeakHours = featureData["Suggested Part Peak Hours"]!! as Double
-            postoffPeakHours = featureData["Suggested Off Peak Hours"]!! as Double
+
+            ceilingType = featureData["Ceiling Type"]!! as String
+            replacementType = featureData["Replacement Type"]!! as String
+            isCeilingOver10Feet = featureData["Ceiling greater than 10 feet?"]!! as String
 
             controls = featureData["Type of Control"]!! as String
             hasControls = featureData["Controls"]!! as String
