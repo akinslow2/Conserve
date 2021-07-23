@@ -81,6 +81,7 @@ class LinearFluorescent(computable: Computable<*>, utilityRateGas: UtilityRate, 
     var ceilingType = ""
     var replacementType = ""
     var isCeilingOver10Feet = ""
+    var fixtureType = ""
 
     // TODO: remove alternate
     /**
@@ -104,6 +105,7 @@ class LinearFluorescent(computable: Computable<*>, utilityRateGas: UtilityRate, 
             ceilingType = featureData["Ceiling Type"]!! as String
             replacementType = featureData["Replacement Type"]!! as String
             isCeilingOver10Feet = featureData["Ceiling greater than 10 feet?"]!! as String
+            fixtureType = featureData["Fixture Type"]!! as String
 
             controls = featureData["Type of Control"]!! as String
             hasControls = featureData["Controls"]!! as String
