@@ -62,10 +62,15 @@ class HPSodium(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRa
     var postpeakHours = 0.0
     var postpartPeakHours = 0.0
     var postoffPeakHours = 0.0
+
+    // TODO: remove alternate
     private var alternateActualWatts = 0.0
     private var alternateNumberOfFixtures = 0
     private var alternateLampsPerFixture = 0
 
+    var ceilingType = ""
+    var replacementType = ""
+    var isCeilingOver10Feet = ""
 
 
     //Where you extract from user inputs and assign to variables
@@ -78,20 +83,16 @@ class HPSodium(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRa
             val config = lightingConfig(ELightingType.HPSodium)
             percentPowerReduced = config[ELightingIndex.PercentPowerReduced.value] as Double
 
+            controls = featureData["Type of Control"]!! as String
+            hasControls = featureData["Controls"]!! as String
+
+            ceilingType = featureData["Ceiling Type"]!! as String
+            replacementType = featureData["Replacement Type"]!! as String
+            isCeilingOver10Feet = featureData["Ceiling greater than 10 feet?"]!! as String
+
             peakHours = featureData["Peak Hours"]!! as Double
             partPeakHours = featureData["Part Peak Hours"]!! as Double
             offPeakHours = featureData["Off Peak Hours"]!! as Double
-
-            alternateActualWatts = featureData["Alternate Actual Watts"]!! as Double
-            alternateNumberOfFixtures = featureData["Alternate Number of Fixtures"]!! as Int
-            alternateLampsPerFixture = featureData["Alternate Lamps Per Fixture"]!! as Int
-
-            postpeakHours = featureData["Suggested Peak Hours"]!! as Double
-            postpartPeakHours = featureData["Suggested Part Peak Hours"]!! as Double
-            postoffPeakHours = featureData["Suggested Off Peak Hours"]!! as Double
-
-            controls = featureData["Type of Control"]!! as String
-            hasControls = featureData["Controls"]!! as String
 
         } catch (e: Exception) {
             e.printStackTrace()
