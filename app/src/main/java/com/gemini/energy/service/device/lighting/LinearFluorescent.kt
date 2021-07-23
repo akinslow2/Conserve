@@ -70,27 +70,14 @@ class LinearFluorescent(computable: Computable<*>, utilityRateGas: UtilityRate, 
 
     var electricianCost = timeperfixture * numberOfFixtures * electricianHourlyRate
 
-
     private var controls = ""
     private var hasControls = ""
-
-    var postpeakHours = 0.0
-    var postpartPeakHours = 0.0
-    var postoffPeakHours = 0.0
 
     var ceilingType = ""
     var replacementType = ""
     var isCeilingOver10Feet = ""
     var fixtureType = ""
 
-    // TODO: remove alternate
-    /**
-     * Suggested Alternative
-     *  */
-    private var alternateActualWatts = 0.0
-    private var alternateNumberOfFixtures = 0
-    private var alternateLampsPerFixture = 0
-    private var alternateLifeHours = 0
 
     override fun setup() {
         try {
@@ -147,6 +134,7 @@ class LinearFluorescent(computable: Computable<*>, utilityRateGas: UtilityRate, 
     fun prePower(): Double {
         return actualWatts * numberOfFixtures * lampsPerFixtures / 1000
     }
+
     /**
      * Cost - Pre State
      * */
@@ -160,9 +148,6 @@ class LinearFluorescent(computable: Computable<*>, utilityRateGas: UtilityRate, 
 
         return costElectricity(prePower(), usageHours, electricityRate)
     }
-
-
-
 
     /**
      * Cost - Post State
@@ -181,9 +166,6 @@ class LinearFluorescent(computable: Computable<*>, utilityRateGas: UtilityRate, 
         val expectedLife = LEDlifeHours / usageHoursSpecific.yearly()
         val maintenanceSavings = totalUnits * bulbcost * replacementIndex / expectedLife
 
-        // Adding new variables for the report
-        val selfinstallcost = this.selfinstallcost()
-
         // Delta is going to be Power Used * Percentage Power Reduced
         // Percentage Power Reduced - we get it from the Base - ELighting
 
@@ -191,8 +173,8 @@ class LinearFluorescent(computable: Computable<*>, utilityRateGas: UtilityRate, 
         val coolingSavings = energySavings * cooling / seer
 
         val energyAtPostState = preEnergy() - energySavings
-        val paybackmonth = selfinstallcost / energySavings * 12
-        val paybackyear = selfinstallcost / energySavings
+        val paybackmonth = installCost() / energySavings * 12
+        val paybackyear = installCost() / energySavings
         val totalsavings =  totalSavings()
 
         val postRow = mutableMapOf<String, String>()
@@ -201,7 +183,6 @@ class LinearFluorescent(computable: Computable<*>, utilityRateGas: UtilityRate, 
         postRow["__cooling_savings"] = coolingSavings.toString()
         postRow["__energy_savings"] = energySavings.toString()
         postRow["__energy_at_post_state"] = energyAtPostState.toString()
-        postRow["__selfinstall_cost"] = selfinstallcost.toString()
         postRow["__payback_month"] = paybackmonth.toString()
         postRow["__payback_year"] = paybackyear.toString()
         postRow["__total_savings"] = totalsavings.toString()
@@ -228,18 +209,7 @@ class LinearFluorescent(computable: Computable<*>, utilityRateGas: UtilityRate, 
     /**
      * Post Yearly Usage Hours
      * */
-
-
     override fun usageHoursPost(): Double {
-        val postusageHours = UsageLighting()
-        postusageHours.postpeakHours = postpeakHours
-        postusageHours.postpartPeakHours = postpartPeakHours
-        postusageHours.postoffPeakHours = postoffPeakHours
-        postusageHours.build()
-
-        if (postusageHours.yearly() > 0.0)
-            return postusageHours.yearly()
-
         if (usageHoursPre() > 0)
             return usageHoursPre()
 
@@ -272,9 +242,6 @@ class LinearFluorescent(computable: Computable<*>, utilityRateGas: UtilityRate, 
         return preEnergy() * percentPowerReduced
     }
 
-    fun selfinstallcost(): Double {
-        return ledbulbcost * alternateNumberOfFixtures * alternateLampsPerFixture
-    }
     fun totalEnergySavings(): Double {
         if (controls != null) {
             val coolingSavings = (preEnergy() - energyPowerChange()) * cooling / seer
@@ -283,7 +250,6 @@ class LinearFluorescent(computable: Computable<*>, utilityRateGas: UtilityRate, 
             val coolingSavings = (preEnergy() - energyPowerTimeChange()) * cooling / seer
             return (preEnergy() - energyPowerTimeChange()) + coolingSavings
         }
-
     }
 
     fun totalSavings(): Double {
@@ -310,11 +276,13 @@ class LinearFluorescent(computable: Computable<*>, utilityRateGas: UtilityRate, 
      **/
     var presentvaluefactor = 7.722
 
-    fun elecinstallcost(): Double {
-        return ledbulbcost * alternateNumberOfFixtures * alternateLampsPerFixture + electricianCost
+    fun installCost(): Double {
+        // TODO: implement me!
+        return 2.0
     }
+
     fun netPresentValue(): Double {
-        return totalSavings() * presentvaluefactor - elecinstallcost()
+        return totalSavings() * presentvaluefactor - installCost()
     }
 
     /**
@@ -345,5 +313,4 @@ class LinearFluorescent(computable: Computable<*>, utilityRateGas: UtilityRate, 
     private fun getFormMapper() = FormMapper(context, R.raw.linearfluorescent)
     private fun getModel() = getFormMapper().decodeJSON()
     private fun getGFormElements() = getFormMapper().mapIdToElements(getModel())
-
 }
