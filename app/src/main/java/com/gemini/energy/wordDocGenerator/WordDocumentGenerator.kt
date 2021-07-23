@@ -84,6 +84,10 @@ class WordDocumentGenerator {
 
         generateFacilityInformationPage(document, value, value.preAudit)
 
+        if (value.lighting != null) {
+            generateLightingContractorPage(document, value.lighting)
+        }
+
         addPageNumbers(document)
 
         writeDocument(value, document)
@@ -618,6 +622,20 @@ class WordDocumentGenerator {
         r1p4.setText("Given current building aggregation, current total charge is $${electrictyCharge(values.preAudit.electricstructure, values.building.postTotalkW, values.building.postTotalkW).format(2)}")
     }
 
+    private fun generateLightingContractorPage(document: XWPFDocument, lights: LightingValues) {
+        val p1 = document.createParagraph()
+        p1.spacingBetween = 1.5
+        p1.isPageBreak = true
+        val r1p1 = p1.createRun()
+        r1p1.fontFamily = fontAgencyFB
+        r1p1.isBold = true
+        r1p1.isItalic = true
+        r1p1.fontSize = 20
+        r1p1.setText("Specifics for Lighting Contractor")
+
+        generateLightContractorTable(document, lights)
+    }
+
     // TODO: Electrification Savings page
 
     // generate tables
@@ -987,6 +1005,7 @@ class WordDocumentGenerator {
             val pcell0 = cell0.paragraphs[0]
             pcell0.alignment = ParagraphAlignment.CENTER
             val rcell0 = pcell0.createRun()
+            rcell0.isBold = isFirst
             rcell0.setText(if (isFirst) "Measure" else rowItem.measure)
 
             val cell1 = row.getCell(1)
@@ -994,6 +1013,7 @@ class WordDocumentGenerator {
             val pcell1 = cell1.paragraphs[0]
             pcell1.alignment = ParagraphAlignment.CENTER
             val rcell1 = pcell1.createRun()
+            rcell1.isBold = isFirst
             rcell1.setText(if (isFirst) "Location" else rowItem.location)
 
             val cell2 = row.getCell(2)
@@ -1001,6 +1021,7 @@ class WordDocumentGenerator {
             val pcell2 = cell2.paragraphs[0]
             pcell2.alignment = ParagraphAlignment.CENTER
             val rcell2 = pcell2.createRun()
+            rcell2.isBold = isFirst
             rcell2.setText(if (isFirst) "Measure Description" else rowItem.measureDescription)
 
             val cell3 = row.getCell(3)
@@ -1008,6 +1029,7 @@ class WordDocumentGenerator {
             val pcell3 = cell3.paragraphs[0]
             pcell3.alignment = ParagraphAlignment.CENTER
             val rcell3 = pcell3.createRun()
+            rcell3.isBold = isFirst
             rcell3.setText(if (isFirst) "Quantity" else rowItem.quantity.format(0))
 
             val cell4 = row.getCell(4)
@@ -1015,13 +1037,15 @@ class WordDocumentGenerator {
             val pcell4 = cell4.paragraphs[0]
             pcell4.alignment = ParagraphAlignment.CENTER
             val rcell4 = pcell4.createRun()
+            rcell4.isBold = isFirst
             rcell4.setText((if (isFirst) "Current Power (kW)" else rowItem.currentPowerkW.format(2)))
 
-                        val cell5 = row.getCell(5)
+            val cell5 = row.getCell(5)
             cell5.verticalAlignment = XWPFTableCell.XWPFVertAlign.CENTER
             val pcell5 = cell5.paragraphs[0]
             pcell5.alignment = ParagraphAlignment.CENTER
             val rcell5 = pcell5.createRun()
+            rcell5.isBold = isFirst
             rcell5.setText(if (isFirst) "Usage (hrs)" else rowItem.usageHours.format(0))
 
             val cell6 = row.getCell(6)
@@ -1029,6 +1053,7 @@ class WordDocumentGenerator {
             val pcell6 = cell6.paragraphs[0]
             pcell6.alignment = ParagraphAlignment.CENTER
             val rcell6 = pcell6.createRun()
+            rcell6.isBold = isFirst
             rcell6.setText(if (isFirst) "Post Power (kW)" else rowItem.postPowerkW.format(2))
 
             val cell7 = row.getCell(7)
@@ -1036,6 +1061,7 @@ class WordDocumentGenerator {
             val pcell7 = cell7.paragraphs[0]
             pcell7.alignment = ParagraphAlignment.CENTER
             val rcell7 = pcell7.createRun()
+            rcell7.isBold = isFirst
             rcell7.setText(if (isFirst) "Post Usage (hrs)" else rowItem.postUsageHours.format(0))
 
             val cell8 = row.getCell(8)
@@ -1043,6 +1069,7 @@ class WordDocumentGenerator {
             val pcell8 = cell8.paragraphs[0]
             pcell8.alignment = ParagraphAlignment.CENTER
             val rcell8 = pcell8.createRun()
+            rcell8.isBold = isFirst
             rcell8.setText(if (isFirst) "Energy Savings (kWh)" else rowItem.energySavingskWh.format(0))
 
             val cell9 = row.getCell(9)
@@ -1050,6 +1077,7 @@ class WordDocumentGenerator {
             val pcell9 = cell9.paragraphs[0]
             pcell9.alignment = ParagraphAlignment.CENTER
             val rcell9 = pcell9.createRun()
+            rcell9.isBold = isFirst
             rcell9.setText(if (isFirst) "Life Cost Savings" else "$${rowItem.costSavings.format(0)}")
 
             val cell10 = row.getCell(10)
@@ -1057,6 +1085,7 @@ class WordDocumentGenerator {
             val pcell10 = cell10.paragraphs[0]
             pcell10.alignment = ParagraphAlignment.CENTER
             val rcell10 = pcell10.createRun()
+            rcell10.isBold = isFirst
             rcell10.setText(if (isFirst) "Implementation Cost" else "$${rowItem.implementationCost.format(0)}")
 
             val cell11 = row.getCell(11)
@@ -1064,6 +1093,7 @@ class WordDocumentGenerator {
             val pcell11 = cell11.paragraphs[0]
             pcell11.alignment = ParagraphAlignment.CENTER
             val rcell11 = pcell11.createRun()
+            rcell11.isBold = isFirst
             rcell11.setText(if (isFirst) "Payback Period (months)" else rowItem.paybackPeriodMonths.format(0))
 
             val cell12 = row.getCell(12)
@@ -1071,10 +1101,86 @@ class WordDocumentGenerator {
             val pcell12 = cell12.paragraphs[0]
             pcell12.alignment = ParagraphAlignment.CENTER
             val rcell12 = pcell12.createRun()
+            rcell12.isBold = isFirst
             rcell12.setText(if (isFirst) "Payback Period (years)" else rowItem.paybackPeriodYears.format(1))
         }
 
         centerTable(table)
+        fitTable(table, 4000)
+    }
+
+    private fun generateLightContractorTable(document: XWPFDocument, lights: LightingValues) {
+        val rows = lights.lightingRows;
+        val table = document.createTable(rows.size + 1, 7)
+
+        for (i in 0..rows.size) {
+            // safety check if no rows exist
+            if (rows.isEmpty()) {
+                return
+            }
+            val row = table.getRow(i)
+            val isFirst = i == 0
+            val rowIndex = if (isFirst) 0 else i - 1
+            val rowItem = rows[rowIndex]
+
+            val cell0 = row.getCell(0)
+            cell0.verticalAlignment = XWPFTableCell.XWPFVertAlign.CENTER
+            val pcell0 = cell0.paragraphs[0]
+            pcell0.alignment = ParagraphAlignment.CENTER
+            val rcell0 = pcell0.createRun()
+            rcell0.isBold = isFirst
+            rcell0.setText(if (isFirst) "Zone" else rowItem.location)
+
+            val cell1 = row.getCell(1)
+            cell1.verticalAlignment = XWPFTableCell.XWPFVertAlign.CENTER
+            val pcell1 = cell1.paragraphs[0]
+            pcell1.alignment = ParagraphAlignment.CENTER
+            val rcell1 = pcell1.createRun()
+            rcell1.isBold = isFirst
+            rcell1.setText(if (isFirst) "Name" else rowItem.measureDescription)
+
+            val cell2 = row.getCell(2)
+            cell2.verticalAlignment = XWPFTableCell.XWPFVertAlign.CENTER
+            val pcell2 = cell2.paragraphs[0]
+            pcell2.alignment = ParagraphAlignment.CENTER
+            val rcell2 = pcell2.createRun()
+            rcell2.setText(if (isFirst) "Bulbs" else "TODO: bulb count")
+
+            val cell3 = row.getCell(3)
+            cell3.verticalAlignment = XWPFTableCell.XWPFVertAlign.CENTER
+            val pcell3 = cell3.paragraphs[0]
+            pcell3.alignment = ParagraphAlignment.CENTER
+            val rcell3 = pcell3.createRun()
+            rcell3.isBold = isFirst
+            rcell3.setText(if (isFirst) "Fixtures" else "TODO: fixture count")
+
+            val cell4 = row.getCell(4)
+            cell4.verticalAlignment = XWPFTableCell.XWPFVertAlign.CENTER
+            val pcell4 = cell4.paragraphs[0]
+            pcell4.alignment = ParagraphAlignment.CENTER
+            val rcell4 = pcell4.createRun()
+            rcell4.isBold = isFirst
+            rcell4.setText(if (isFirst) "Ceiling Type" else "TODO: ceiling type")
+
+            val cell5 = row.getCell(5)
+            cell5.verticalAlignment = XWPFTableCell.XWPFVertAlign.CENTER
+            val pcell5 = cell5.paragraphs[0]
+            pcell5.alignment = ParagraphAlignment.CENTER
+            val rcell5 = pcell5.createRun()
+            rcell5.isBold = isFirst
+            rcell5.setText(if (isFirst) "Replacement Type" else "TODO: replacement type")
+
+            val cell6 = row.getCell(6)
+            cell6.verticalAlignment = XWPFTableCell.XWPFVertAlign.CENTER
+            val pcell6 = cell6.paragraphs[0]
+            pcell6.alignment = ParagraphAlignment.CENTER
+            val rcell6 = pcell6.createRun()
+            rcell6.isBold = isFirst
+            rcell6.setText(if (isFirst) "Ceiling Above 10ft." else "TODO: ceiling height")
+        }
+
+        centerTable(table)
+        fitTable(table, 4500)
     }
 
     private fun createHvacTable(document: XWPFDocument, hvac: HvacValues, building: BuildingValues) {
