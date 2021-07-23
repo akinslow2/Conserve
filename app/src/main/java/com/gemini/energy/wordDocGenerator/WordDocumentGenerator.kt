@@ -387,6 +387,9 @@ class WordDocumentGenerator {
         createWaterHeaterTable(document, waterheater)
     }
 
+    // TODO: create table Specifics for Lighting Contractor
+    // TODO: Ensure the installed cost calculations from all the zones are added up to equal the total lighting costs – variable “totalCost” in the worddocumentgeneratormodels.kt.
+    // TODO: For lighting the variable “implementationCost” should have the same value as the variable “totalCost”. Although, I don’t seem to see the variable “implementationCost” in the lighting documents.
     private fun generateLightingSavingsPage(document: XWPFDocument, lights: LightingValues) {
         val p1 = document.createParagraph()
         p1.spacingBetween = 1.5
@@ -430,7 +433,7 @@ class WordDocumentGenerator {
         r1p4.fontFamily = fontAgencyFB
         r1p4.fontSize = 12
         r1p4.setText("Replacing all of your non-LED bulbs and adding controls will cost approximately $${lights.totalCost.format(0)} but will result in a minimum of $${lights.totalcostsavings.format(0)} in annual savings. " +
-                "This equates to a payback period of approximately ${lights.paybackMonth.format(0)} months. The cost can be reduced to $${lights.selfinstallcost} if you self-install the occupancy sensors. " +
+                "This equates to a payback period of approximately ${lights.paybackMonth.format(0)} months." +
                 "Alternatively, to replace all non-LED bulbs will result in a minimum of $${lights.totalcostsavings.format(0)} in annual savings and cost approximately $${lights.totalCost.format(0)}. " +
                 "This equates to a payback period of approximately ${lights.paybackMonth.format(0)} months. " +
                 "Overall, implementing the LED retrofit translates to a minimum NPV of $${lights.netPresentValue.format(0)}. We strongly recommend you replace all non-LED bulbs and ensure the bathroom lights are off at the end of the day.")

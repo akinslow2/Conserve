@@ -72,7 +72,6 @@ data class WaterHeaterValues(
 data class LightingValues(
         val totalcostsavings: Double, // 13
         val totalenergysavings: Double,
-        val selfinstallcost: Int, // 14
         val totalCost: Double, // 15
         val paybackMonth: Double, // 16
         val geminiPayback: Double, // 17

@@ -498,7 +498,6 @@ class SorterForWordDocumentGenerator {
         }
 
         var totalCostSavings = 0.0
-        var selfinstallcost = 0.0
         var electricianCost = 0.0
         var totalEnergySavings = 0.0
         var presentvaluefactor = 7.722 //Assume 10 years
@@ -511,7 +510,6 @@ class SorterForWordDocumentGenerator {
 
         for (light in cfls) {
             totalCostSavings += light.totalSavings()
-            selfinstallcost += light.selfinstallcost()
             electricianCost += light.electricianCost
             if (electricianCost < 100.0) {
                 electricianCost = 100.0
@@ -528,7 +526,6 @@ class SorterForWordDocumentGenerator {
 
         for (light in halogens) {
             totalCostSavings += light.totalSavings()
-            selfinstallcost += light.selfinstallcost()
             electricianCost += light.electricianCost
             if (electricianCost < 100.0) {
                 electricianCost = 100.0
@@ -545,7 +542,6 @@ class SorterForWordDocumentGenerator {
 
         for (light in highPressureSodiums) {
             totalCostSavings += light.totalSavings()
-            selfinstallcost += light.selfinstallcost()
             electricianCost += light.electricianCost
             if (electricianCost < 100.0) {
                 electricianCost = 100.0
@@ -562,7 +558,6 @@ class SorterForWordDocumentGenerator {
 
         for (light in incandescents) {
             totalCostSavings += light.totalSavings()
-            selfinstallcost += light.selfinstallcost()
             electricianCost += light.electricianCost
             if (electricianCost < 100.0) {
                 electricianCost = 100.0
@@ -579,7 +574,6 @@ class SorterForWordDocumentGenerator {
 
         for (light in linearFluorescents) {
             totalCostSavings += light.totalSavings()
-            selfinstallcost += light.selfinstallcost()
             electricianCost += light.electricianCost
             if (electricianCost < 100.0) {
                 electricianCost = 100.0
@@ -596,7 +590,6 @@ class SorterForWordDocumentGenerator {
 
         for (light in lowPressureSodiums) {
             totalCostSavings += light.totalSavings()
-            selfinstallcost += light.selfinstallcost()
             electricianCost += light.electricianCost
             if (electricianCost < 100.0) {
                 electricianCost = 100.0
@@ -611,16 +604,16 @@ class SorterForWordDocumentGenerator {
             postTotalkWh += light.postEnergy()
         }
 
-        val installCost = electricianCost + selfinstallcost
-        val paybackMonth = selfinstallcost / totalCostSavings * 12
+        // TODO: this install cost will change based off of latest calculations
+        val installCost = electricianCost
+        val paybackMonth = totalCostSavings * 12
         val geminiPayback = paybackMonth + 4
-        val paybackYear: Double = selfinstallcost / totalCostSavings
+        val paybackYear: Double = totalCostSavings
         val netPresentValue: Double = (totalCostSavings * presentvaluefactor) -  installCost
 
         return LightingValues(
                 totalCostSavings,
                 totalEnergySavings,
-                selfinstallcost.toInt(),
                 installCost,
                 paybackMonth,
                 geminiPayback,
@@ -633,6 +626,7 @@ class SorterForWordDocumentGenerator {
                 postTotalkWh)
     }
 
+    // TODO: update implementationCost (light.selfInstallCost()) to light.installCost() (needs to be created for each lighting!)
     private fun prepareLightingTableRows(lights: List<EBase>): List<LightingDataRow> {
         val rows = mutableListOf<LightingDataRow>()
 
@@ -653,7 +647,7 @@ class SorterForWordDocumentGenerator {
                             light.postEnergy(),
                             light.totalEnergySavings(),
                             light.totalSavings(),
-                            light.selfinstallcost(),
+                            0.0,
                             light.selfinstallcost() / light.totalSavings() * 12,
                             light.selfinstallcost() / light.totalSavings(),
                             light.netPresentValue()
@@ -673,7 +667,7 @@ class SorterForWordDocumentGenerator {
                             light.postEnergy(),
                             light.totalEnergySavings(),
                             light.totalSavings(),
-                            light.selfinstallcost(),
+                            0.0,
                             light.selfinstallcost() / light.totalSavings() * 12,
                             light.selfinstallcost() / light.totalSavings(),
                             light.netPresentValue()
@@ -693,7 +687,7 @@ class SorterForWordDocumentGenerator {
                             light.postEnergy(),
                             light.totalEnergySavings(),
                             light.totalSavings(),
-                            light.selfinstallcost(),
+                            0.0,
                             light.selfinstallcost() / light.totalSavings() * 12,
                             light.selfinstallcost() / light.totalSavings(),
                             light.netPresentValue()
@@ -713,7 +707,7 @@ class SorterForWordDocumentGenerator {
                             light.postEnergy(),
                             light.totalEnergySavings(),
                             light.totalSavings(),
-                            light.selfinstallcost(),
+                            0.0,
                             light.selfinstallcost() / light.totalSavings() * 12,
                             light.selfinstallcost() / light.totalSavings(),
                             light.netPresentValue()
@@ -733,7 +727,7 @@ class SorterForWordDocumentGenerator {
                             light.postEnergy(),
                             light.totalEnergySavings(),
                             light.totalSavings(),
-                            light.selfinstallcost(),
+                            0.0,
                             light.selfinstallcost() / light.totalSavings() * 12,
                             light.selfinstallcost() / light.totalSavings(),
                             light.netPresentValue()
@@ -753,7 +747,7 @@ class SorterForWordDocumentGenerator {
                             light.postEnergy(),
                             light.totalEnergySavings(),
                             light.totalSavings(),
-                            light.selfinstallcost(),
+                            0.0,
                             light.selfinstallcost() / light.totalSavings() * 12,
                             light.selfinstallcost() / light.totalSavings(),
                             light.netPresentValue()
