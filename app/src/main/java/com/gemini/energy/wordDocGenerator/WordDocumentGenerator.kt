@@ -145,7 +145,6 @@ class WordDocumentGenerator {
     }
 
     // TODO: make sure NAN is not possible
-    // TODO: change font size
     // TODO: first $INSERTME Should be the annual energy savings during the payback period (cell E7) divided by 12
     // TODO: second $INSERTME We need to calculate the difference between just the energy savings and the maintenance savings. As of now, they are not well incorporated into the code. I am working on that
     private fun generateEnergySavingPotentialPage(document: XWPFDocument, values: PreparedForDocument) {
@@ -183,7 +182,7 @@ class WordDocumentGenerator {
         p3.spacingBetween = 1.5
         val r1p3 = p3.createRun()
         r1p3.fontFamily = fontAgencyFB
-        r1p3.fontSize = 12
+        r1p3.fontSize = 14
         r1p3.color = greyColor
         r1p3.setText("The Pay as You Save program means you will receive all of the recommended upgrades at no cost AND see your monthly energy bill reduce at least 20% ($manuallyGeneratedValue)." +
                 " The utility will recover the costs by adding a charge to your bill that equates to 80% of the estimated monthly energy savings. This charge will last for 12 years." +
