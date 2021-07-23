@@ -61,9 +61,15 @@ class Halogen(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRat
     var postpeakHours = 0.0
     var postpartPeakHours = 0.0
     var postoffPeakHours = 0.0
+
+    // TODO: remove alternate
     private var alternateActualWatts = 0.0
     private var alternateNumberOfFixtures = 0
     private var alternateLampsPerFixture = 0
+
+    var ceilingType = ""
+    var replacementType = ""
+    var isCeilingOver10Feet = ""
 
 
 
@@ -77,20 +83,16 @@ class Halogen(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRat
             val config = lightingConfig(ELightingType.Halogen)
             percentPowerReduced = config[ELightingIndex.PercentPowerReduced.value] as Double
 
-            peakHours = (featureData["Peak Hours"]!! as Int).toDouble()
-            partPeakHours = (featureData["Part Peak Hours"]!! as Int).toDouble()
-            offPeakHours = (featureData["Off Peak Hours"]!! as Int).toDouble()
-
-            alternateActualWatts = featureData["Alternate Actual Watts"]!! as Double
-            alternateNumberOfFixtures = featureData["Alternate Number of Fixtures"]!! as Int
-            alternateLampsPerFixture = featureData["Alternate Lamps Per Fixture"]!! as Int
-
-            postpeakHours = (featureData["Suggested Peak Hours"]!! as Int).toDouble()
-            postpartPeakHours = (featureData["Suggested Part Peak Hours"]!! as Int).toDouble()
-            postoffPeakHours = (featureData["Suggested Off Peak Hours"]!! as Int).toDouble()
+            ceilingType = featureData["Ceiling Type"]!! as String
+            replacementType = featureData["Replacement Type"]!! as String
+            isCeilingOver10Feet = featureData["Ceiling greater than 10 feet?"]!! as String
 
             controls = featureData["Type of Control"]!! as String
             hasControls = featureData["Controls"]!! as String
+
+            peakHours = featureData["Peak Hours"]!! as Double
+            partPeakHours = featureData["Part Peak Hours"]!! as Double
+            offPeakHours = featureData["Off Peak Hours"]!! as Double
 
         } catch (e: Exception) {
             e.printStackTrace()
