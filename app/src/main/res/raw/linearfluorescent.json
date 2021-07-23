@@ -102,6 +102,15 @@
           "param": "Ceiling greater than 10 feet?",
           "validation": "mandatory",
           "id": "102"
+        },
+        {
+          "index": 103,
+          "hint": "mandatory",
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:2X2,2:2X4",
+          "param": "Fixture Type",
+          "validation": "mandatory",
+          "id": "103"
         }
       ],
       "id": "1"
