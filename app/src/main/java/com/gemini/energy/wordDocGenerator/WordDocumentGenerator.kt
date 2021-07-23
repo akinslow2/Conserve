@@ -60,23 +60,7 @@ class WordDocumentGenerator {
 
         generateElectrictyCalculationPage(document, value)
 
-        generateEnergySavingPotentialPage(
-                document,
-                value.lighting
-                        ?: LightingValues(
-                                0.0,
-                                0.0,
-                                0,
-                                0.0,
-                                0.0,
-                                0.0,
-                                0.0,
-                                0.0, listOf(),
-                                0.0,
-                                0.0,
-                                0.0,
-                                0.0),
-                value.building)
+        generateEnergySavingPotentialPage(document, value)
 
         if (value.lighting != null) {
             generateLightingSavingsPage(document, value.lighting)
@@ -160,7 +144,11 @@ class WordDocumentGenerator {
         r5p2.setText(preAudit.clientaddress)
     }
 
-    private fun generateEnergySavingPotentialPage(document: XWPFDocument, lightingData: LightingValues, buildingValues: BuildingValues) {
+    // TODO: make sure NAN is not possible
+    // TODO: change font size
+    // TODO: first $INSERTME Should be the annual energy savings during the payback period (cell E7) divided by 12
+    // TODO: second $INSERTME We need to calculate the difference between just the energy savings and the maintenance savings. As of now, they are not well incorporated into the code. I am working on that
+    private fun generateEnergySavingPotentialPage(document: XWPFDocument, values: PreparedForDocument) {
         val p1 = document.createParagraph()
         p1.spacingBetween = 1.5
         p1.isPageBreak = true
@@ -183,7 +171,7 @@ class WordDocumentGenerator {
         r2p2.isBold = true
         r2p2.fontSize = 24
         r2p2.color = greenColor
-        r2p2.setText("$${buildingValues.buildingTotalSavings.format(0)}")
+        r2p2.setText("$${values.building.buildingTotalSavings.format(0)}")
         r2p2.addBreak()
         val r3p2 = p2.createRun()
         r3p2.fontFamily = fontAgencyFB
@@ -205,19 +193,8 @@ class WordDocumentGenerator {
 
         val bullets1 = arrayOf("reduced energy costs,", "improved profit margins,", "increased thermal comfort in your building, and", "more control over how energy is consumed.")
         createBullets(document, bullets1, 12, greyColor, false, false)
-/*
-        if (buildingValues.buildingTotalCost > 5000) {
-            val qualifyP = document.createParagraph()
-            qualifyP.spacingBetween = 1.5
-            val qualifyR = qualifyP.createRun()
-            qualifyR.fontFamily = fontAgencyFB
-            qualifyR.fontSize = 12
-            qualifyR.color = greyColor
-            qualifyR.setText("The implementation costs of all the measures qualify you for a 0% interest loan. By implementing these energy efficiency measures, you will join the courageous few energy heroes who are making the effort to make your community cleaner.")
 
-        }
-*/
-        createEnergySavingsTable(document, lightingData, buildingValues)
+        createEnergySavingsTable(document, values)
     }
 
     private fun generateHvacSavingsPage(document: XWPFDocument, hvac: HvacValues, building: BuildingValues) {
@@ -365,6 +342,7 @@ class WordDocumentGenerator {
         createHvacTable(document, hvac, building)
     }
 
+    // TODO: hvac page changes
     private fun generateWaterHeaterSavingsPage(document: XWPFDocument, waterheater: WaterHeaterValues) {
         val p1 = document.createParagraph()
         p1.isPageBreak = true
@@ -601,6 +579,7 @@ class WordDocumentGenerator {
     }
 
     // @Anthony this function generates a page in the word doc that displays the latest calculations you requested
+    // TODO FIXME: see excel document: “ElectricityCalculationValidation” for calculations
     private fun generateElectrictyCalculationPage(document: XWPFDocument, values: PreparedForDocument) {
         val p1 = document.createParagraph()
         p1.spacingBetween = 1.5
@@ -637,11 +616,16 @@ class WordDocumentGenerator {
         r1p4.setText("Given current building aggregation, current total charge is $${electrictyCharge(values.preAudit.electricstructure, values.building.postTotalkW, values.building.postTotalkW).format(2)}")
     }
 
+    // TODO: Electrification Savings page
 
     // generate tables
-    private fun createEnergySavingsTable(document: XWPFDocument, lights: LightingValues, building: BuildingValues) {
-        val table = document.createTable(11, 3)
 
+    // TODO: NPV for hvac, motors, other
+    // TODO: Electrification Savings row for table
+    private fun createEnergySavingsTable(document: XWPFDocument, values: PreparedForDocument) {
+        val table = document.createTable(15, 2)
+
+        // Header
         val row0 = table.getRow(0)
         val c0r0 = row0.getCell(0)
         c0r0.color = tableGreenColor
@@ -653,7 +637,6 @@ class WordDocumentGenerator {
         rc0r0.color = whiteColor
         rc0r0.setText("Financial Components")
 
-        mergeCellHorizontally(table, 0, 1, 2)
         val c1r0 = row0.getCell(1)
         c1r0.color = tableGreenColor
         val pc1r0 = c1r0.paragraphs[0]
@@ -664,6 +647,7 @@ class WordDocumentGenerator {
         rc1r0.color = whiteColor
         rc1r0.setText("Financial Overview")
 
+        // electric cost savings total
         val row1 = table.getRow(1)
         val c0r1 = row1.getCell(0)
         val pc0r1 = c0r1.paragraphs[0]
@@ -672,14 +656,14 @@ class WordDocumentGenerator {
         rc0r1.isBold = true
         rc0r1.setText("Electric Cost Savings (\$/yr)")
 
-        mergeCellHorizontally(table, 1, 1, 2)
         val c1r1 = row1.getCell(1)
         val pc1r1 = c1r1.paragraphs[0]
         pc1r1.alignment = ParagraphAlignment.CENTER
         val rc1r1 = pc1r1.createRun()
         rc1r1.fontFamily = fontAgencyFB
-        rc1r1.setText("\$${building.buildingTotalSavings.format(0)}")
+        rc1r1.setText("\$${values.building.buildingTotalSavings.format(0)}")
 
+        // implementation cost
         val row2 = table.getRow(2)
         val c0r2 = row2.getCell(0)
         val pc0r2 = c0r2.paragraphs[0]
@@ -688,14 +672,14 @@ class WordDocumentGenerator {
         rc0r2.isBold = true
         rc0r2.setText("Implementation Cost (\$)")
 
-        mergeCellHorizontally(table, 2, 1, 2)
         val c1r2 = row2.getCell(1)
         val pc1r2 = c1r2.paragraphs[0]
         pc1r2.alignment = ParagraphAlignment.CENTER
         val rc1r2 = pc1r2.createRun()
         rc1r2.fontFamily = fontAgencyFB
-        rc1r2.setText("\$${building.buildingTotalCost.format(0)}")
+        rc1r2.setText("\$${values.building.buildingTotalCost.format(0)}")
 
+        // Lighting implementation cost
         val row3 = table.getRow(3)
         val c0r3 = row3.getCell(0)
         val pc0r3 = c0r3.paragraphs[0]
@@ -704,14 +688,14 @@ class WordDocumentGenerator {
         rc0r3.isBold = true
         rc0r3.setText("    Lighting (\$)")
 
-        mergeCellHorizontally(table, 3, 1, 2)
         val c1r3 = row3.getCell(1)
         val pc1r3 = c1r3.paragraphs[0]
         pc1r3.alignment = ParagraphAlignment.CENTER
         val rc1r3 = pc1r3.createRun()
         rc1r3.fontFamily = fontAgencyFB
-        rc1r3.setText("\$${lights.totalCost.format(0)}")
+        rc1r3.setText("\$${values.lighting?.totalCost?.format(0) ?: "N/A"}")
 
+        // HVAC implementation cost
         val row4 = table.getRow(4)
         val c0r4 = row4.getCell(0)
         val pc0r4 = c0r4.paragraphs[0]
@@ -720,14 +704,14 @@ class WordDocumentGenerator {
         rc0r4.isBold = true
         rc0r4.setText("    HVAC (\$)")
 
-        mergeCellHorizontally(table, 4, 1, 2)
         val c1r4 = row4.getCell(1)
         val pc1r4 = c1r4.paragraphs[0]
         pc1r4.alignment = ParagraphAlignment.CENTER
         val rc1r4 = pc1r4.createRun()
         rc1r4.fontFamily = fontAgencyFB
-        rc1r4.setText("\$${building.hvacTotalCost.format(0)}")
+        rc1r4.setText("\$${values.building.hvacTotalCost.format(0)}")
 
+        // Plugload implementation cost
         val row5 = table.getRow(5)
         val c0r5 = row5.getCell(0)
         val pc0r5 = c0r5.paragraphs[0]
@@ -736,124 +720,148 @@ class WordDocumentGenerator {
         rc0r5.isBold = true
         rc0r5.setText("    Plug Load (\$)")
 
-        mergeCellHorizontally(table, 5, 1, 2)
         val c1r5 = row5.getCell(1)
         val pc1r5 = c1r5.paragraphs[0]
         pc1r5.alignment = ParagraphAlignment.CENTER
         val rc1r5 = pc1r5.createRun()
         rc1r5.fontFamily = fontAgencyFB
-        rc1r5.setText("\$${building.equipmentTotalCost.format(0)}")
+        rc1r5.setText("\$${values.building.equipmentTotalCost.format(0)}")
 
-        // MARK: payback period
-
+        // seperator
         val row6 = table.getRow(6)
         val c0r6 = row6.getCell(0)
         c0r6.color = tableGreyColor
 
         val c1r6 = row6.getCell(1)
-        val pc1r6 = c1r6.paragraphs[0]
-        pc1r6.alignment = ParagraphAlignment.CENTER
-        val rc1r6 = pc1r6.createRun()
-        rc1r6.fontFamily = fontAgencyFB
-        rc1r6.isBold = true
-        rc1r6.setText("Year")
+        c1r6.color = tableGreyColor
 
-        val c2r6 = row6.getCell(2)
-        val pc2r6 = c2r6.paragraphs[0]
-        pc2r6.alignment = ParagraphAlignment.CENTER
-        val rc2r6 = pc2r6.createRun()
-        rc2r6.fontFamily = fontAgencyFB
-        rc2r6.isBold = true
-        rc2r6.setText("Month")
-
+        // NVP total
         val row7 = table.getRow(7)
         val c0r7 = row7.getCell(0)
         val pc0r7 = c0r7.paragraphs[0]
         val rc0r7 = pc0r7.createRun()
         rc0r7.fontFamily = fontAgencyFB
         rc0r7.isBold = true
-        rc0r7.setText("Payback Period")
+        rc0r7.setText("Net Present Value (NVP)")
 
         val c1r7 = row7.getCell(1)
         val pc1r7 = c1r7.paragraphs[0]
         pc1r7.alignment = ParagraphAlignment.CENTER
         val rc1r7 = pc1r7.createRun()
         rc1r7.fontFamily = fontAgencyFB
-        rc1r7.setText(building.buildingPayback.format(2))
+        rc1r7.setText(values.building.buildingNetPresentValue.format(0))
 
-        val c2r7 = row7.getCell(2)
-        val pc2r7 = c2r7.paragraphs[0]
-        pc2r7.alignment = ParagraphAlignment.CENTER
-        val rc2r7 = pc2r7.createRun()
-        rc2r7.fontFamily = fontAgencyFB
-        rc2r7.setText(building.buildingPaybackMonth.format(0))
-
+        // lighting NVP
         val row8 = table.getRow(8)
         val c0r8 = row8.getCell(0)
         val pc0r8 = c0r8.paragraphs[0]
         val rc0r8 = pc0r8.createRun()
         rc0r8.fontFamily = fontAgencyFB
         rc0r8.isBold = true
-        rc0r8.setText("    Lighting Payback Period")
+        rc0r8.setText("    Lighting (NVP)")
 
         val c1r8 = row8.getCell(1)
         val pc1r8 = c1r8.paragraphs[0]
         pc1r8.alignment = ParagraphAlignment.CENTER
         val rc1r8 = pc1r8.createRun()
         rc1r8.fontFamily = fontAgencyFB
-        rc1r8.setText(lights.paybackYear.format(2))
+        rc1r8.setText(values.lighting?.netPresentValue?.format(0) ?: "N/A")
 
-        val c2r8 = row8.getCell(2)
-        val pc2r8 = c2r8.paragraphs[0]
-        pc2r8.alignment = ParagraphAlignment.CENTER
-        val rc2r8 = pc2r8.createRun()
-        rc2r8.fontFamily = fontAgencyFB
-        rc2r8.setText(lights.paybackMonth.format(0))
-
+        // HVAC NVP
         val row9 = table.getRow(9)
         val c0r9 = row9.getCell(0)
         val pc0r9 = c0r9.paragraphs[0]
         val rc0r9 = pc0r9.createRun()
         rc0r9.fontFamily = fontAgencyFB
         rc0r9.isBold = true
-        rc0r9.setText("    HVAC Payback Period")
+        rc0r9.setText("    HVAC (NPV)")
 
         val c1r9 = row9.getCell(1)
         val pc1r9 = c1r9.paragraphs[0]
         pc1r9.alignment = ParagraphAlignment.CENTER
         val rc1r9 = pc1r9.createRun()
         rc1r9.fontFamily = fontAgencyFB
-        rc1r9.setText(building.hvacPaybackYear.format(2))
+        rc1r9.setText(values.hvac?.netPresentValue?.format(0) ?: "N/A")
 
-        val c2r9 = row9.getCell(2)
-        val pc2r9 = c2r9.paragraphs[0]
-        pc2r9.alignment = ParagraphAlignment.CENTER
-        val rc2r9 = pc2r9.createRun()
-        rc2r9.fontFamily = fontAgencyFB
-        rc2r9.setText(building.hvacPaybackMonth.format(0))
-
+        // plugload NVP
         val row10 = table.getRow(10)
         val c0r10 = row10.getCell(0)
         val pc0r10 = c0r10.paragraphs[0]
         val rc0r10 = pc0r10.createRun()
         rc0r10.fontFamily = fontAgencyFB
         rc0r10.isBold = true
-        rc0r10.setText("    Plug Load Payback Period")
+        rc0r10.setText("    Plug Load (NPV)")
 
         val c1r10 = row10.getCell(1)
         val pc1r10 = c1r10.paragraphs[0]
         pc1r10.alignment = ParagraphAlignment.CENTER
         val rc1r10 = pc1r10.createRun()
         rc1r10.fontFamily = fontAgencyFB
-        rc1r10.setText(building.equipmentPaybackYear.format(2))
+        rc1r10.setText("TODO: PLUGLOAD NPV")
 
-        val c2r10 = row10.getCell(2)
-        val pc2r10 = c2r10.paragraphs[0]
-        pc2r10.alignment = ParagraphAlignment.CENTER
-        val rc2r10 = pc2r10.createRun()
-        rc2r10.fontFamily = fontAgencyFB
-        rc2r10.setText(building.equipmentPaybackMonth.format(0))
+        // water heater  NVP
+        val row11 = table.getRow(11)
+        val c0r11 = row11.getCell(0)
+        val pc0r11 = c0r11.paragraphs[0]
+        val rc0r11 = pc0r11.createRun()
+        rc0r11.fontFamily = fontAgencyFB
+        rc0r11.isBold = true
+        rc0r11.setText("    Water Heater (NPV)")
 
+        val c1r11 = row11.getCell(1)
+        val pcr1r11 = c1r11.paragraphs[0]
+        pcr1r11.alignment = ParagraphAlignment.CENTER
+        val rc1r11 = pcr1r11.createRun()
+        rc1r11.fontFamily = fontAgencyFB
+        rc1r11.setText(values.waterHeater?.netPresentValue?.format(0) ?:"N/A")
+
+        // refrigeration NVP
+        val row12 = table.getRow(12)
+        val c0r12 = row12.getCell(0)
+        val pc0r12 = c0r12.paragraphs[0]
+        val rc0r12 = pc0r12.createRun()
+        rc0r12.fontFamily = fontAgencyFB
+        rc0r12.isBold = true
+        rc0r12.setText("    Refrigeration (NVP)")
+
+        val c1r12 = row12.getCell(1)
+        val pcr1r12 = c1r12.paragraphs[0]
+        pcr1r12.alignment = ParagraphAlignment.CENTER
+        val rc1r12 = pcr1r12.createRun()
+        rc1r12.fontFamily = fontAgencyFB
+        rc1r12.setText(values.refrigeration?.netPresentValue?.format(0) ?: "N/A")
+
+        // motors NVP
+        val row13 = table.getRow(13)
+        val c0r13 = row13.getCell(0)
+        val pc0r13 = c0r13.paragraphs[0]
+        val rc0r13 = pc0r13.createRun()
+        rc0r13.fontFamily = fontAgencyFB
+        rc0r13.isBold = true
+        rc0r13.setText("    Motors (NVP)")
+
+        val c1r13 = row13.getCell(1)
+        val pcr1r13 = c1r13.paragraphs[0]
+        pcr1r13.alignment = ParagraphAlignment.CENTER
+        val rc1r13 = pcr1r13.createRun()
+        rc1r13.fontFamily = fontAgencyFB
+        rc1r13.setText("TODO: MOTORS AS PAYBACK YEAR")
+
+        // others NVP
+        val row14 = table.getRow(14)
+        val c0r14 = row14.getCell(0)
+        val pc0r14 = c0r14.paragraphs[0]
+        val rc0r14 = pc0r14.createRun()
+        rc0r14.fontFamily = fontAgencyFB
+        rc0r14.isBold = true
+        rc0r14.setText("    Others (NVP)")
+
+        val c1r14 = row14.getCell(1)
+        val pcr1r14 = c1r14.paragraphs[0]
+        pcr1r14.alignment = ParagraphAlignment.CENTER
+        val rc1r14 = pcr1r14.createRun()
+        rc1r14.fontFamily = fontAgencyFB
+        rc1r14.setText("TODO: OTHERS AS PAYBACK YEAR")
 
         fitTable(table, 4500)
         centerTable(table)
@@ -1265,6 +1273,7 @@ class WordDocumentGenerator {
         fitTable(table, 4000)
     }
 
+    // TODO FIXME: see excel document: “ElectricityCalculationValidation” for calculations
     private fun generateElectrictyCalculationTable(document: XWPFDocument, values: PreparedForDocument) {
         val table = document.createTable(7,5)
 
