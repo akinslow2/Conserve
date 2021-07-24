@@ -391,7 +391,6 @@ class WordDocumentGenerator {
         createWaterHeaterTable(document, waterheater)
     }
 
-    // TODO: create table Specifics for Lighting Contractor
     // TODO: Ensure the installed cost calculations from all the zones are added up to equal the total lighting costs – variable “totalCost” in the worddocumentgeneratormodels.kt.
     // TODO: For lighting the variable “implementationCost” should have the same value as the variable “totalCost”. Although, I don’t seem to see the variable “implementationCost” in the lighting documents.
     private fun generateLightingSavingsPage(document: XWPFDocument, lights: LightingValues) {
@@ -1109,8 +1108,9 @@ class WordDocumentGenerator {
         fitTable(table, 4000)
     }
 
+    // TODO: bulb, fixture, ceiling type/height, replacement type
     private fun generateLightContractorTable(document: XWPFDocument, lights: LightingValues) {
-        val rows = lights.lightingRows;
+        val rows = lights.lightingRows
         val table = document.createTable(rows.size + 1, 7)
 
         for (i in 0..rows.size) {
@@ -1144,7 +1144,8 @@ class WordDocumentGenerator {
             val pcell2 = cell2.paragraphs[0]
             pcell2.alignment = ParagraphAlignment.CENTER
             val rcell2 = pcell2.createRun()
-            rcell2.setText(if (isFirst) "Bulbs" else "TODO: bulb count")
+            rcell2.isBold = isFirst
+            rcell2.setText(if (isFirst) "Bulbs" else rowItem.lampsPerFixture.toString())
 
             val cell3 = row.getCell(3)
             cell3.verticalAlignment = XWPFTableCell.XWPFVertAlign.CENTER
@@ -1152,7 +1153,7 @@ class WordDocumentGenerator {
             pcell3.alignment = ParagraphAlignment.CENTER
             val rcell3 = pcell3.createRun()
             rcell3.isBold = isFirst
-            rcell3.setText(if (isFirst) "Fixtures" else "TODO: fixture count")
+            rcell3.setText(if (isFirst) "Fixtures" else rowItem.numberOfFixtures.toString())
 
             val cell4 = row.getCell(4)
             cell4.verticalAlignment = XWPFTableCell.XWPFVertAlign.CENTER
@@ -1160,7 +1161,7 @@ class WordDocumentGenerator {
             pcell4.alignment = ParagraphAlignment.CENTER
             val rcell4 = pcell4.createRun()
             rcell4.isBold = isFirst
-            rcell4.setText(if (isFirst) "Ceiling Type" else "TODO: ceiling type")
+            rcell4.setText(if (isFirst) "Ceiling Type" else rowItem.ceilingType)
 
             val cell5 = row.getCell(5)
             cell5.verticalAlignment = XWPFTableCell.XWPFVertAlign.CENTER
@@ -1168,7 +1169,7 @@ class WordDocumentGenerator {
             pcell5.alignment = ParagraphAlignment.CENTER
             val rcell5 = pcell5.createRun()
             rcell5.isBold = isFirst
-            rcell5.setText(if (isFirst) "Replacement Type" else "TODO: replacement type")
+            rcell5.setText(if (isFirst) "Replacement Type" else rowItem.replacementType)
 
             val cell6 = row.getCell(6)
             cell6.verticalAlignment = XWPFTableCell.XWPFVertAlign.CENTER
@@ -1176,7 +1177,7 @@ class WordDocumentGenerator {
             pcell6.alignment = ParagraphAlignment.CENTER
             val rcell6 = pcell6.createRun()
             rcell6.isBold = isFirst
-            rcell6.setText(if (isFirst) "Ceiling Above 10ft." else "TODO: ceiling height")
+            rcell6.setText(if (isFirst) "Ceiling Above 10ft." else rowItem.isCeilingOver10Feet)
         }
 
         centerTable(table)
