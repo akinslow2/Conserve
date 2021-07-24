@@ -498,7 +498,7 @@ class SorterForWordDocumentGenerator {
         }
 
         var totalCostSavings = 0.0
-        var electricianCost = 0.0
+        var totalInstallCost = 0.0
         var totalEnergySavings = 0.0
         var presentvaluefactor = 7.722 //Assume 10 years
         val lightingRows = prepareLightingTableRows(audit[lighting]!!)
@@ -510,12 +510,10 @@ class SorterForWordDocumentGenerator {
 
         for (light in cfls) {
             totalCostSavings += light.totalSavings()
-            electricianCost += light.electricianCost
-            if (electricianCost < 100.0) {
-                electricianCost = 100.0
-            }
+            totalInstallCost += light.installCost()
+
             totalEnergySavings += light.totalEnergySavings()
-            presentvaluefactor = light.presentvaluefactor
+            presentvaluefactor += light.presentvaluefactor
 
             // @anthony, please verify that these are the correct values
             currentTotalkW += light.prePower()
@@ -526,12 +524,10 @@ class SorterForWordDocumentGenerator {
 
         for (light in halogens) {
             totalCostSavings += light.totalSavings()
-            electricianCost += light.electricianCost
-            if (electricianCost < 100.0) {
-                electricianCost = 100.0
-            }
+            totalInstallCost += light.installCost()
+
             totalEnergySavings += light.totalEnergySavings()
-            presentvaluefactor = light.presentvaluefactor
+            presentvaluefactor += light.presentvaluefactor
 
             // @anthony, please verify that these are the correct values
             currentTotalkW += light.prePower()
@@ -542,12 +538,10 @@ class SorterForWordDocumentGenerator {
 
         for (light in highPressureSodiums) {
             totalCostSavings += light.totalSavings()
-            electricianCost += light.electricianCost
-            if (electricianCost < 100.0) {
-                electricianCost = 100.0
-            }
+            totalInstallCost += light.installCost()
+
             totalEnergySavings += light.totalEnergySavings()
-            presentvaluefactor = light.presentvaluefactor
+            presentvaluefactor += light.presentvaluefactor
 
             // @anthony, please verify that these are the correct values
             currentTotalkW += light.prePower()
@@ -558,12 +552,10 @@ class SorterForWordDocumentGenerator {
 
         for (light in incandescents) {
             totalCostSavings += light.totalSavings()
-            electricianCost += light.electricianCost
-            if (electricianCost < 100.0) {
-                electricianCost = 100.0
-            }
+            totalInstallCost += light.installCost()
+
             totalEnergySavings += light.totalEnergySavings()
-            presentvaluefactor = light.presentvaluefactor
+            presentvaluefactor += light.presentvaluefactor
 
             // @anthony, please verify that these are the correct values
             currentTotalkW += light.prePower()
@@ -574,12 +566,10 @@ class SorterForWordDocumentGenerator {
 
         for (light in linearFluorescents) {
             totalCostSavings += light.totalSavings()
-            electricianCost += light.electricianCost
-            if (electricianCost < 100.0) {
-                electricianCost = 100.0
-            }
+            totalInstallCost += light.installCost()
+
             totalEnergySavings += light.totalEnergySavings()
-            presentvaluefactor = light.presentvaluefactor
+            presentvaluefactor += light.presentvaluefactor
 
             // @anthony, please verify that these are the correct values
             currentTotalkW += light.prePower()
@@ -590,12 +580,10 @@ class SorterForWordDocumentGenerator {
 
         for (light in lowPressureSodiums) {
             totalCostSavings += light.totalSavings()
-            electricianCost += light.electricianCost
-            if (electricianCost < 100.0) {
-                electricianCost = 100.0
-            }
+            totalInstallCost += light.installCost()
+
             totalEnergySavings += light.totalEnergySavings()
-            presentvaluefactor = light.presentvaluefactor
+            presentvaluefactor += light.presentvaluefactor
 
             // @anthony, please verify that these are the correct values
             currentTotalkW += light.prePower()
@@ -604,17 +592,16 @@ class SorterForWordDocumentGenerator {
             postTotalkWh += light.postEnergy()
         }
 
-        // TODO: this install cost will change based off of latest calculations
-        val installCost = electricianCost
+        // TODO: check if total install cost should changed based off of ceiling
         val paybackMonth = totalCostSavings * 12
         val geminiPayback = paybackMonth + 4
         val paybackYear: Double = totalCostSavings
-        val netPresentValue: Double = (totalCostSavings * presentvaluefactor) -  installCost
+        val netPresentValue: Double = (totalCostSavings * presentvaluefactor) -  totalInstallCost
 
         return LightingValues(
                 totalCostSavings,
                 totalEnergySavings,
-                installCost,
+                totalInstallCost,
                 paybackMonth,
                 geminiPayback,
                 paybackYear,
@@ -627,6 +614,7 @@ class SorterForWordDocumentGenerator {
     }
 
     // TODO: update implementationCost (light.selfInstallCost()) to light.installCost() (needs to be created for each lighting!)
+    // TODO: update payback period with totalCost() as 0.0
     private fun prepareLightingTableRows(lights: List<EBase>): List<LightingDataRow> {
         val rows = mutableListOf<LightingDataRow>()
 
@@ -638,7 +626,12 @@ class SorterForWordDocumentGenerator {
                             "$measure",
                             light.computable.zoneName,
                             light.computable.auditScopeName,
+                            light.lampsPerFixtures,
+                            light.numberOfFixtures,
                             light.lampsPerFixtures.toDouble() * light.numberOfFixtures.toDouble(),
+                            light.ceilingType,
+                            light.replacementType,
+                            light.isCeilingOver10Feet,
                             light.prePower(),
                             light.usageHoursPre(),
                             light.preEnergy(),
@@ -647,9 +640,9 @@ class SorterForWordDocumentGenerator {
                             light.postEnergy(),
                             light.totalEnergySavings(),
                             light.totalSavings(),
-                            0.0,
-                            light.selfinstallcost() / light.totalSavings() * 12,
-                            light.selfinstallcost() / light.totalSavings(),
+                            light.installCost(),
+                            light.installCost()/ light.totalSavings() * 12,
+                            light.installCost() / light.totalSavings(),
                             light.netPresentValue()
                     ))
                 }
@@ -658,7 +651,12 @@ class SorterForWordDocumentGenerator {
                             "$measure",
                             light.computable.zoneName,
                             light.computable.auditScopeName,
+                             light.lampsPerFixtures,
+                            light.numberOfFixtures,
                             light.lampsPerFixtures.toDouble() * light.numberOfFixtures.toDouble(),
+                            light.ceilingType,
+                            light.replacementType,
+                            light.isCeilingOver10Feet,
                             light.prePower(),
                             light.usageHoursPre(),
                             light.preEnergy(),
@@ -667,9 +665,9 @@ class SorterForWordDocumentGenerator {
                             light.postEnergy(),
                             light.totalEnergySavings(),
                             light.totalSavings(),
-                            0.0,
-                            light.selfinstallcost() / light.totalSavings() * 12,
-                            light.selfinstallcost() / light.totalSavings(),
+                            light.installCost(),
+                            light.installCost() / light.totalSavings() * 12,
+                            light.installCost() / light.totalSavings(),
                             light.netPresentValue()
                     ))
                 }
@@ -678,7 +676,12 @@ class SorterForWordDocumentGenerator {
                             "$measure",
                             light.computable.zoneName,
                             light.computable.auditScopeName,
+                             light.lampsPerFixtures,
+                            light.numberOfFixtures,
                             light.lampsPerFixtures.toDouble() * light.numberOfFixtures.toDouble(),
+                            light.ceilingType,
+                            light.replacementType,
+                            light.isCeilingOver10Feet,
                             light.prePower(),
                             light.usageHoursPre(),
                             light.preEnergy(),
@@ -687,9 +690,9 @@ class SorterForWordDocumentGenerator {
                             light.postEnergy(),
                             light.totalEnergySavings(),
                             light.totalSavings(),
-                            0.0,
-                            light.selfinstallcost() / light.totalSavings() * 12,
-                            light.selfinstallcost() / light.totalSavings(),
+                            light.installCost(),
+                            light.installCost() / light.totalSavings() * 12,
+                            light.installCost() / light.totalSavings(),
                             light.netPresentValue()
                     ))
                 }
@@ -698,7 +701,12 @@ class SorterForWordDocumentGenerator {
                             "$measure",
                             light.computable.zoneName,
                             light.computable.auditScopeName,
+                             light.lampsPerFixtures,
+                            light.numberOfFixtures,
                             light.lampsPerFixtures.toDouble() * light.numberOfFixtures.toDouble(),
+                            light.ceilingType,
+                            light.replacementType,
+                            light.isCeilingOver10Feet,
                             light.prePower(),
                             light.usageHoursPre(),
                             light.preEnergy(),
@@ -707,9 +715,9 @@ class SorterForWordDocumentGenerator {
                             light.postEnergy(),
                             light.totalEnergySavings(),
                             light.totalSavings(),
-                            0.0,
-                            light.selfinstallcost() / light.totalSavings() * 12,
-                            light.selfinstallcost() / light.totalSavings(),
+                            light.installCost(),
+                            light.installCost() / light.totalSavings() * 12,
+                            light.installCost() / light.totalSavings(),
                             light.netPresentValue()
                     ))
                 }
@@ -718,7 +726,12 @@ class SorterForWordDocumentGenerator {
                             "$measure",
                             light.computable.zoneName,
                             light.computable.auditScopeName,
+                            light.lampsPerFixtures,
+                            light.numberOfFixtures,
                             light.lampsPerFixtures.toDouble() * light.numberOfFixtures.toDouble(),
+                            light.ceilingType,
+                            light.replacementType,
+                            light.isCeilingOver10Feet,
                             light.prePower(),
                             light.usageHoursPre(),
                             light.preEnergy(),
@@ -727,9 +740,9 @@ class SorterForWordDocumentGenerator {
                             light.postEnergy(),
                             light.totalEnergySavings(),
                             light.totalSavings(),
-                            0.0,
-                            light.selfinstallcost() / light.totalSavings() * 12,
-                            light.selfinstallcost() / light.totalSavings(),
+                            light.installCost(),
+                            light.installCost() / light.totalSavings() * 12,
+                            light.installCost() / light.totalSavings(),
                             light.netPresentValue()
                     ))
                 }
@@ -738,7 +751,12 @@ class SorterForWordDocumentGenerator {
                             "$measure",
                             light.computable.zoneName,
                             light.computable.auditScopeName,
+                             light.lampsPerFixtures,
+                            light.numberOfFixtures,
                             light.lampsPerFixtures.toDouble() * light.numberOfFixtures.toDouble(),
+                            light.ceilingType,
+                            light.replacementType,
+                            light.isCeilingOver10Feet,
                             light.prePower(),
                             light.usageHoursPre(),
                             light.preEnergy(),
@@ -747,9 +765,9 @@ class SorterForWordDocumentGenerator {
                             light.postEnergy(),
                             light.totalEnergySavings(),
                             light.totalSavings(),
-                            0.0,
-                            light.selfinstallcost() / light.totalSavings() * 12,
-                            light.selfinstallcost() / light.totalSavings(),
+                            light.installCost(),
+                            light.installCost() / light.totalSavings() * 12,
+                            light.installCost() / light.totalSavings(),
                             light.netPresentValue()
                     ))
                 }
