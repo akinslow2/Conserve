@@ -755,14 +755,14 @@ class WordDocumentGenerator {
         val c1r6 = row6.getCell(1)
         c1r6.color = tableGreyColor
 
-        // NVP total
+        // NPV total
         val row7 = table.getRow(7)
         val c0r7 = row7.getCell(0)
         val pc0r7 = c0r7.paragraphs[0]
         val rc0r7 = pc0r7.createRun()
         rc0r7.fontFamily = fontAgencyFB
         rc0r7.isBold = true
-        rc0r7.setText("Net Present Value (NVP)")
+        rc0r7.setText("Net Present Value (NPV)")
 
         val c1r7 = row7.getCell(1)
         val pc1r7 = c1r7.paragraphs[0]
@@ -771,7 +771,7 @@ class WordDocumentGenerator {
         rc1r7.fontFamily = fontAgencyFB
         rc1r7.setText(values.building.buildingNetPresentValue.format(0))
 
-        // lighting NVP
+        // lighting NPV
         val row8 = table.getRow(8)
         val c0r8 = row8.getCell(0)
         val pc0r8 = c0r8.paragraphs[0]
@@ -787,7 +787,7 @@ class WordDocumentGenerator {
         rc1r8.fontFamily = fontAgencyFB
         rc1r8.setText(values.lighting?.netPresentValue?.format(0) ?: "N/A")
 
-        // HVAC NVP
+        // HVAC NPV
         val row9 = table.getRow(9)
         val c0r9 = row9.getCell(0)
         val pc0r9 = c0r9.paragraphs[0]
@@ -803,7 +803,7 @@ class WordDocumentGenerator {
         rc1r9.fontFamily = fontAgencyFB
         rc1r9.setText(values.hvac?.netPresentValue?.format(0) ?: "N/A")
 
-        // plugload NVP
+        // plugload NPV
         val row10 = table.getRow(10)
         val c0r10 = row10.getCell(0)
         val pc0r10 = c0r10.paragraphs[0]
@@ -819,7 +819,7 @@ class WordDocumentGenerator {
         rc1r10.fontFamily = fontAgencyFB
         rc1r10.setText("TODO: PLUGLOAD NPV")
 
-        // water heater  NVP
+        // water heater NPV
         val row11 = table.getRow(11)
         val c0r11 = row11.getCell(0)
         val pc0r11 = c0r11.paragraphs[0]
@@ -835,14 +835,14 @@ class WordDocumentGenerator {
         rc1r11.fontFamily = fontAgencyFB
         rc1r11.setText(values.waterHeater?.netPresentValue?.format(0) ?:"N/A")
 
-        // refrigeration NVP
+        // refrigeration NPV
         val row12 = table.getRow(12)
         val c0r12 = row12.getCell(0)
         val pc0r12 = c0r12.paragraphs[0]
         val rc0r12 = pc0r12.createRun()
         rc0r12.fontFamily = fontAgencyFB
         rc0r12.isBold = true
-        rc0r12.setText("    Refrigeration (NVP)")
+        rc0r12.setText("    Refrigeration (NPV)")
 
         val c1r12 = row12.getCell(1)
         val pcr1r12 = c1r12.paragraphs[0]
@@ -851,37 +851,37 @@ class WordDocumentGenerator {
         rc1r12.fontFamily = fontAgencyFB
         rc1r12.setText(values.refrigeration?.netPresentValue?.format(0) ?: "N/A")
 
-        // motors NVP
+        // motors NPV
         val row13 = table.getRow(13)
         val c0r13 = row13.getCell(0)
         val pc0r13 = c0r13.paragraphs[0]
         val rc0r13 = pc0r13.createRun()
         rc0r13.fontFamily = fontAgencyFB
         rc0r13.isBold = true
-        rc0r13.setText("    Motors (NVP)")
+        rc0r13.setText("    Motors (NPV)")
 
         val c1r13 = row13.getCell(1)
         val pcr1r13 = c1r13.paragraphs[0]
         pcr1r13.alignment = ParagraphAlignment.CENTER
         val rc1r13 = pcr1r13.createRun()
         rc1r13.fontFamily = fontAgencyFB
-        rc1r13.setText("TODO: MOTORS AS PAYBACK YEAR")
+        rc1r13.setText("TODO: MOTORS AS NPV")
 
-        // others NVP
+        // others NPV
         val row14 = table.getRow(14)
         val c0r14 = row14.getCell(0)
         val pc0r14 = c0r14.paragraphs[0]
         val rc0r14 = pc0r14.createRun()
         rc0r14.fontFamily = fontAgencyFB
         rc0r14.isBold = true
-        rc0r14.setText("    Others (NVP)")
+        rc0r14.setText("    Others (NPV)")
 
         val c1r14 = row14.getCell(1)
         val pcr1r14 = c1r14.paragraphs[0]
         pcr1r14.alignment = ParagraphAlignment.CENTER
         val rc1r14 = pcr1r14.createRun()
         rc1r14.fontFamily = fontAgencyFB
-        rc1r14.setText("TODO: OTHERS AS PAYBACK YEAR")
+        rc1r14.setText("TODO: OTHERS AS PAYBACK NPV")
 
         fitTable(table, 4500)
         centerTable(table)
