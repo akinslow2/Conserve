@@ -479,7 +479,7 @@ abstract class EBase(val computable: Computable<*>,
     // depending on which variables you have access to, call one of these functions with the appropriate variables.
     // if you have power, usage hours, and utilityRate, use this overload
     fun costElectricity(powerUsed: Double, usageHours: UsageHours, utilityRate: UtilityRate): Double {
-        val costElectric = CostElectric(usageHours, utilityRate, true)
+        val costElectric = CostElectric(usageHours, utilityRate, false)
         costElectric.structure = electricRateStructure
         costElectric.power = powerUsed
         return costElectric.cost()
