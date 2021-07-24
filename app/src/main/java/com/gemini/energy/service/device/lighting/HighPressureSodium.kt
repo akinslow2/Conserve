@@ -50,10 +50,6 @@ class HPSodium(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRa
     private var cooling = 3.142
 
     private val LEDlifeHours = 30000
-    private var timeperfixture = 0.33
-    private var electricianHourlyRate = 75
-
-    var electricianCost = timeperfixture * numberOfFixtures * electricianHourlyRate
 
     private var controls = ""
     private var hasControls = ""
@@ -277,7 +273,8 @@ class HPSodium(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRa
     var presentvaluefactor = 7.722
     fun installCost(): Double {
         // TODO: implement me!
-        return 2.0
+        val timePerFixture = Utils.timePerFixture(replacementType, ceilingType)
+        return (ledbulbcost * lampsPerFixtures * numberOfFixtures) + Utils.electricianCost(timePerFixture, numberOfFixtures)
     }
 
     fun netPresentValue(): Double {

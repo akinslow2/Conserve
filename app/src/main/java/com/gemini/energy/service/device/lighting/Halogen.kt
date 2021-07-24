@@ -49,10 +49,6 @@ class Halogen(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRat
     private var cooling = 3.142
 
     private val LEDlifeHours = 30000
-    private var timeperfixture = 0.33
-    private var electricianHourlyRate = 75
-
-    var electricianCost = timeperfixture * numberOfFixtures * electricianHourlyRate
 
     private var controls = ""
     private var hasControls = ""
@@ -256,10 +252,6 @@ class Halogen(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRat
     fun totalSavings(): Double {
         if (controls == null && usageHoursPost() != null){
             val postPower = energyPowerTimeChange()/usageHoursPost()
-//            val postusageHours = UsageLighting()
-//            postusageHours.postpeakHours = postpeakHours
-//            postusageHours.postpartPeakHours = postpartPeakHours
-//            postusageHours.postoffPeakHours = postoffPeakHours
             return costElectricity(postPower, usageLightingPre(), electricityRate)
         }
         else {
@@ -279,7 +271,8 @@ class Halogen(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRat
 
     fun installCost(): Double {
         // TODO: implement me!
-        return 2.0
+        val timePerFixture = Utils.timePerFixture(replacementType, ceilingType)
+        return (ledbulbcost * lampsPerFixtures * numberOfFixtures) + Utils.electricianCost(timePerFixture, numberOfFixtures)
     }
 
     fun netPresentValue(): Double {
