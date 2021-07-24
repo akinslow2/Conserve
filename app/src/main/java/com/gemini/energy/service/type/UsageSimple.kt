@@ -6,6 +6,8 @@ class UsageSimple(private val peakHours: Double,
     private var summerOn = 0.0
     private var summerPart = 0.0
     private var summerOff = 0.0
+
+    private var winterOn = 0.0
     private var winterPart = 0.0
     private var winterOff = 0.0
 
@@ -17,6 +19,8 @@ class UsageSimple(private val peakHours: Double,
         summerOn = peakHours.toDouble() / 2
         summerPart = partPeakHours.toDouble() / 2
         summerOff = offPeakHours.toDouble() / 2
+
+        winterOn = peakHours.toDouble() /2
         winterPart = (partPeakHours.toDouble() / 2) + (peakHours.toDouble() / 2)
         winterOff = offPeakHours.toDouble() / 2
 
@@ -25,7 +29,7 @@ class UsageSimple(private val peakHours: Double,
 
     }
 
-    override fun timeOfUse() = TOU(summerOn, summerPart, summerOff, winterPart, winterOff)
+    override fun timeOfUse() = TOU(summerOn, summerPart, summerOff, winterOn, winterPart, winterOff)
     override fun nonTimeOfUse() = TOUNone(summerNone, winterNone)
     override fun yearly(): Double = peakHours.toDouble() + partPeakHours.toDouble() + offPeakHours.toDouble()
 
