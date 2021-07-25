@@ -148,7 +148,6 @@ class WordDocumentGenerator {
         r5p2.setText(preAudit.clientaddress)
     }
 
-    // TODO: make sure NAN is not possible
     // TODO: first $INSERTME Should be the annual energy savings during the payback period (cell E7) divided by 12
     // TODO: second $INSERTME We need to calculate the difference between just the energy savings and the maintenance savings. As of now, they are not well incorporated into the code. I am working on that
     private fun generateEnergySavingPotentialPage(document: XWPFDocument, values: PreparedForDocument) {
@@ -365,7 +364,6 @@ class WordDocumentGenerator {
         createHvacTable(document, hvac, building)
     }
 
-    // TODO: hvac page changes
     private fun generateWaterHeaterSavingsPage(document: XWPFDocument, waterheater: WaterHeaterValues) {
         val p1 = document.createParagraph()
         p1.isPageBreak = true
@@ -382,13 +380,20 @@ class WordDocumentGenerator {
         val r1p2 = p2.createRun()
         r1p2.fontFamily = fontAgencyFB
         r1p2.fontSize = 18
-        r1p2.setText("Implementation of recommended water heater measures will result in minimum annual savings of ")
-        val r2p2 = p2.createRun()
-        r2p2.fontFamily = fontAgencyFB
-        r2p2.isBold = true
-        r2p2.fontSize = 24
-        r2p2.color = greenColor
-        r2p2.setText("$${waterheater.totalSavings.format(0)}")
+
+        if (waterheater.netPresentValue > 1.0) {
+            r1p2.setText("Implementation of recommended water heater measures will result in minimum annual savings of ")
+            val r2p2 = p2.createRun()
+            r2p2.fontFamily = fontAgencyFB
+            r2p2.isBold = true
+            r2p2.fontSize = 24
+            r2p2.color = greenColor
+            r2p2.setText("$${waterheater.totalSavings.format(0)}")
+        } else {
+            r1p2.setText("At this time there are no recommended measures.")
+        }
+
+
 
         val p3 = document.createParagraph()
         val r1p3 = p3.createRun()
