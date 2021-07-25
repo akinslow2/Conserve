@@ -69,6 +69,8 @@ data class WaterHeaterValues(
         val postTotalkWh: Double
 )
 
+data class MotorValues(val netPresentValue: Double)
+
 data class LightingValues(
         val totalcostsavings: Double, // 13
         val totalenergysavings: Double,
@@ -171,6 +173,7 @@ data class PreparedForDocument(
         val zoneNames: MutableList<String>,
         val zoneString: String,
         val hvac: HvacValues?,
+        val motor: MotorValues?,
         val lighting: LightingValues?,
         val waterHeater: WaterHeaterValues?,
         val refrigeration: RefrigerationValues?,
