@@ -78,8 +78,15 @@ class WIFreezer(computable: Computable<*>, utilityRateGas: UtilityRate, utilityR
          * There could be a case where the User will input the value in KW - If that happens we need to convert the KW
          * int BTU / hr :: 1KW equals 3412.142
          * */
-        fun power(gasInput: Double, thermaleff: Double) = (gasInput / (thermaleff / 100.0)) * KW_CONVERSION
-        fun power2(kW: Double, electriceff: Double) = (kW / (electriceff / 100.0))
+        fun power(gasInput: Int, thermaleff: Int): Double {
+            if (thermaleff == 0) return 0.0
+            return (gasInput.toDouble() / (thermaleff.toDouble() / 100)) * KW_CONVERSION
+        }
+
+        fun power2(kW: Double, electriceff: Int): Double {
+            if (kW == 0.0 || electriceff == 0) return 0.0
+            return (kW / (electriceff.toDouble() / 100.0))
+        }
 
         /**
          * Year At - Current minus the Age
@@ -266,8 +273,8 @@ class WIFreezer(computable: Computable<*>, utilityRateGas: UtilityRate, utilityR
         computable.udf1 = usageHours
         Timber.d(usageHours.toString())
 
-        val powerUsedGas = power(gasInput.toDouble(), thermaleff.toDouble()) * quantity
-        val powerUsedElectricity = power2(kW, electriceff.toDouble()) * quantity
+        val powerUsedGas = power(gasInput, thermaleff) * quantity
+        val powerUsedElectricity = power2(kW, electriceff) * quantity
         val gascost: Double
         val ecost: Double
         val powerUsed = if (isGas()) powerUsedGas else powerUsedElectricity
@@ -356,8 +363,8 @@ class WIFreezer(computable: Computable<*>, utilityRateGas: UtilityRate, utilityR
 
         val postUsageHours = computable.udf1 as UsageSimple
 
-        val postpowerUsedGas = power(gasInput.toDouble(), postthermeff.toDouble()) * quantity
-        val postpowerUsedElectricity = power2(kW, posteleceff.toDouble()) * quantity
+        val postpowerUsedGas = power(gasInput, postthermeff) * quantity
+        val postpowerUsedElectricity = power2(kW, posteleceff) * quantity
         val postGcost: Double
         val postEcost: Double
         val powerUsed = if (isGas()) postpowerUsedGas else postpowerUsedElectricity
@@ -377,7 +384,11 @@ class WIFreezer(computable: Computable<*>, utilityRateGas: UtilityRate, utilityR
      * HVAC - INCENTIVES | MATERIAL COST
      * */
     override fun incentives(): Double {
-        return energyPowerChange() * 0.15 + (energyPowerChange() / usageHoursBusiness.yearly()) * 150
+        val powerChangePerYear =
+                if (usageHoursBusiness.yearly() == 0.0) 0.0
+                else (energyPowerChange() / usageHoursBusiness.yearly())
+
+        return energyPowerChange() * 0.15 + powerChangePerYear * 150
     }
 
     override fun materialCost(): Double {
@@ -411,15 +422,15 @@ class WIFreezer(computable: Computable<*>, utilityRateGas: UtilityRate, utilityR
      * */
     override fun energyPowerChange(): Double {
 
-        val powerUsedGas = power(gasInput.toDouble(), thermaleff.toDouble()) * quantity
-        val powerUsedElectricity = power2(kW, electriceff.toDouble()) * quantity
+        val powerUsedGas = power(gasInput, thermaleff) * quantity
+        val powerUsedElectricity = power2(kW, electriceff) * quantity
         val prepowerUsed = if (isGas()) powerUsedGas else powerUsedElectricity
 
         var postthermeff = 95
         var posteleceff = 350
 
-        val postpowerUsedGas = power(gasInput.toDouble(), postthermeff.toDouble()) * quantity
-        val postpowerUsedElectricity = power2(kW, posteleceff.toDouble()) * quantity
+        val postpowerUsedGas = power(gasInput, postthermeff) * quantity
+        val postpowerUsedElectricity = power2(kW, posteleceff) * quantity
         val postpowerUsed = if (isGas()) postpowerUsedGas else postpowerUsedElectricity
 
         // Step 1 : Get the Delta

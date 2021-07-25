@@ -78,8 +78,15 @@ class WIRefrigerator(computable: Computable<*>, utilityRateGas: UtilityRate, uti
          * There could be a case where the User will input the value in KW - If that happens we need to convert the KW
          * int BTU / hr :: 1KW equals 3412.142
          * */
-        fun power(gasInput: Int, thermaleff: Int) = (gasInput / (thermaleff / 100)) * KW_CONVERSION
-        fun power2(kW: Double, electriceff: Int) = (kW / (electriceff / 100))
+        fun power(gasInput: Int, thermaleff: Int): Double {
+            if (thermaleff == 0) return 0.0
+            return (gasInput.toDouble() / (thermaleff.toDouble() / 100)) * KW_CONVERSION
+        }
+
+        fun power2(kW: Double, electriceff: Int): Double {
+            if (kW == 0.0 || electriceff == 0) return 0.0
+            return (kW / (electriceff.toDouble() / 100.0))
+        }
 
         /**
          * Year At - Current minus the Age
@@ -381,7 +388,11 @@ class WIRefrigerator(computable: Computable<*>, utilityRateGas: UtilityRate, uti
      * HVAC - INCENTIVES | MATERIAL COST
      * */
     override fun incentives(): Double {
-        return energyPowerChange() * 0.15 + (energyPowerChange() / usageHoursBusiness.yearly()) * 150
+        val powerChangePerYear =
+                if (usageHoursBusiness.yearly() == 0.0) 0.0
+                else (energyPowerChange() / usageHoursBusiness.yearly())
+
+        return energyPowerChange() * 0.15 + powerChangePerYear * 150
     }
 
     override fun materialCost(): Double {
