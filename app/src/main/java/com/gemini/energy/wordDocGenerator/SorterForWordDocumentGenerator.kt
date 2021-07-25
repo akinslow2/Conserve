@@ -4,13 +4,16 @@ import com.gemini.energy.presentation.util.EApplianceType
 import com.gemini.energy.service.DataHolder
 import com.gemini.energy.service.device.EBase
 import com.gemini.energy.service.device.Hvac
+import com.gemini.energy.service.device.Motors
 import com.gemini.energy.service.device.WaterHeater
 import com.gemini.energy.service.device.lighting.*
 import com.gemini.energy.service.device.plugload.*
 import com.gemini.energy.service.device.refrigeration.*
+import com.google.gson.JsonArray
 import com.google.gson.JsonElement
 import com.google.gson.JsonNull
 import com.google.gson.JsonObject
+import org.json.JSONArray
 
 class SorterForWordDocumentGenerator {
     // use these values for sorting types of equipment that need to be aggregated for the report
@@ -19,6 +22,7 @@ class SorterForWordDocumentGenerator {
         private const val lighting = "lighting"
         private const val waterheater = "waterheater"
         private const val refrigeration = "refrigeration"
+        private const val motors = "motors"
 
         private val combinationOven = EApplianceType.CombinationOven.value
         private val convectionOven = EApplianceType.ConvectionOven.value
@@ -44,6 +48,7 @@ class SorterForWordDocumentGenerator {
         for (audit in sortedAudits) {
             val hvac = prepareValuesFromHvac(audit.value)
             val waterheater = prepareValuesFromWaterHeater(audit.value)
+            val motor = prepareValuesForMotors(audit.value)
             val lighting = prepareValuesFromLighting(audit.value)
             val equipment = prepareValuesForEquipment(audit.value)
             val refrigeration = prepareValuesFromRefrigeration(audit.value)
@@ -62,6 +67,7 @@ class SorterForWordDocumentGenerator {
                         zones,
                         zoneString,
                         hvac,
+                        motor,
                         lighting,
                         waterheater,
                         refrigeration,
@@ -167,6 +173,8 @@ class SorterForWordDocumentGenerator {
                         lighting to mutableListOf(),
                         refrigeration to mutableListOf(),
 
+                        motors to mutableListOf(),
+
                         combinationOven to mutableListOf(),
                         convectionOven to mutableListOf(),
                         conveyorBroiler to mutableListOf(),
@@ -189,6 +197,9 @@ class SorterForWordDocumentGenerator {
 
                 // Water Heater
                 is WaterHeater -> sorted[value.computable.auditId]!![waterheater]!!.add(value)
+
+                // Motors
+                is Motors -> sorted[value.computable.auditId]!![motors]!!.add(value)
 
                 // Lighting
                 is Cfl -> sorted[value.computable.auditId]!![lighting]!!.add(value)
@@ -360,6 +371,30 @@ class SorterForWordDocumentGenerator {
                 currentTotalkWh,
                 postTotalkW,
                 postTotalkWh)
+    }
+
+    private fun prepareValuesForMotors(audit: AuditComponents): MotorValues? {
+        if (!audit[motors]!!.any()) {
+            return null
+        }
+
+        @Suppress("UNCHECKED_CAST")
+        val motors = audit[motors]!! as MutableList<Motors>
+
+        // @anthony, please provide what this value should be
+        val presentValueFactor = 1.0
+
+        var totalSavings = 0.0
+        var totalCost = 0.0
+
+        for (motor in motors) {
+            totalSavings += motor.costPreState(listOf()) - motor.costPostState(JsonArray(), DataHolder())
+            totalCost += motor.implementationCost
+        }
+
+        val netPresentValue = (totalSavings * presentValueFactor) - totalCost
+
+        return MotorValues(netPresentValue)
     }
 
     private fun prepareValuesFromRefrigeration(audit: AuditComponents): RefrigerationValues? {
@@ -613,8 +648,6 @@ class SorterForWordDocumentGenerator {
                 postTotalkWh)
     }
 
-    // TODO: update implementationCost (light.selfInstallCost()) to light.installCost() (needs to be created for each lighting!)
-    // TODO: update payback period with totalCost() as 0.0
     private fun prepareLightingTableRows(lights: List<EBase>): List<LightingDataRow> {
         val rows = mutableListOf<LightingDataRow>()
 
