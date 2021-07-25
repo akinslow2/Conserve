@@ -827,22 +827,6 @@ class WordDocumentGenerator {
         rc1r9.fontFamily = fontAgencyFB
         rc1r9.setText(values.hvac?.netPresentValue?.format(0) ?: "N/A")
 
-        // plugload NPV
-        val row10 = table.getRow(10)
-        val c0r10 = row10.getCell(0)
-        val pc0r10 = c0r10.paragraphs[0]
-        val rc0r10 = pc0r10.createRun()
-        rc0r10.fontFamily = fontAgencyFB
-        rc0r10.isBold = true
-        rc0r10.setText("    Plug Load (NPV)")
-
-        val c1r10 = row10.getCell(1)
-        val pc1r10 = c1r10.paragraphs[0]
-        pc1r10.alignment = ParagraphAlignment.CENTER
-        val rc1r10 = pc1r10.createRun()
-        rc1r10.fontFamily = fontAgencyFB
-        rc1r10.setText("TODO: PLUGLOAD NPV")
-
         // water heater NPV
         val row11 = table.getRow(11)
         val c0r11 = row11.getCell(0)
@@ -889,7 +873,7 @@ class WordDocumentGenerator {
         pcr1r13.alignment = ParagraphAlignment.CENTER
         val rc1r13 = pcr1r13.createRun()
         rc1r13.fontFamily = fontAgencyFB
-        rc1r13.setText("TODO: MOTORS AS NPV")
+        rc1r13.setText(values.motor?.netPresentValue?.format(0) ?: "N/A")
 
         // others NPV
         val row14 = table.getRow(14)
@@ -898,14 +882,14 @@ class WordDocumentGenerator {
         val rc0r14 = pc0r14.createRun()
         rc0r14.fontFamily = fontAgencyFB
         rc0r14.isBold = true
-        rc0r14.setText("    Others (NPV)")
+        rc0r14.setText("    Other Equipment (NPV)")
 
         val c1r14 = row14.getCell(1)
         val pcr1r14 = c1r14.paragraphs[0]
         pcr1r14.alignment = ParagraphAlignment.CENTER
         val rc1r14 = pcr1r14.createRun()
         rc1r14.fontFamily = fontAgencyFB
-        rc1r14.setText("TODO: OTHERS AS PAYBACK NPV")
+        rc1r14.setText(values.equipment?.netPresentValue?.format(0) ?: "N/A")
 
         fitTable(table, 4500)
         centerTable(table)
