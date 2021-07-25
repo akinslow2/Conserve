@@ -67,7 +67,7 @@ class PreRinseSpray(computable: Computable<*>, utilityRateGas: UtilityRate, util
         val thermsUsedGas = hourlyEnergyUsagePre()[1]
 
         val costElectricity: Double
-        costElectricity = costElectricity(powerUsedElectric, usageHours!!, electricityRate)
+        costElectricity = costElectricity(powerUsedElectric, usageHours ?: usageHoursBusiness, electricityRate)
 
         val costGas: Double
         costGas = costGas(thermsUsedGas)
@@ -159,8 +159,8 @@ class PreRinseSpray(computable: Computable<*>, utilityRateGas: UtilityRate, util
      * Pre and Post are the same for Refrigerator - 24 hrs
      * */
     //ToDo - @Johnny Verify this
-    override fun usageHoursPre(): Double = usageHours!!.yearly()
-    override fun usageHoursPost(): Double = usageHours!!.yearly()
+    override fun usageHoursPre(): Double = usageHours?.yearly() ?: 0.0
+    override fun usageHoursPost(): Double = usageHours?.yearly() ?: 0.0
 
     /**
      * PowerTimeChange >> Energy Efficiency Calculations

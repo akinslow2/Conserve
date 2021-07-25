@@ -91,7 +91,7 @@ class DishWasher(computable: Computable<*>, utilityRateGas: UtilityRate, utility
         val thermsUsedGas = hourlyEnergyUsagePre()[1]
 
         val costElectricity: Double
-        costElectricity = costElectricity(powerUsedElectric, usageHoursPre!!, electricityRate)
+        costElectricity = costElectricity(powerUsedElectric, usageHoursPre ?: usageHoursBusiness, electricityRate)
 
         val costGas: Double
         costGas = costGas(thermsUsedGas)
@@ -112,7 +112,7 @@ class DishWasher(computable: Computable<*>, utilityRateGas: UtilityRate, utility
         val thermsUsedGas = hourlyEnergyUsagePost(element)[1]
 
         val costElectricity: Double
-        costElectricity = costElectricity(powerUsedElectric, usageHoursPre!!, electricityRate)
+        costElectricity = costElectricity(powerUsedElectric, usageHoursPre ?: usageHoursBusiness, electricityRate)
 
         val costGas: Double
         costGas = costGas(thermsUsedGas)
@@ -159,10 +159,10 @@ class DishWasher(computable: Computable<*>, utilityRateGas: UtilityRate, utility
         } catch (e: Exception) {
             e.printStackTrace()
         }
-        val hoursInyear: Int = 8760
+        val hoursInyear = 8760.0
 
-        var hourlyEnergyGas = annualEnergyGas / hoursInyear
-        var hourlyEnergyElectric = annualEnergyElectric / hoursInyear
+        val hourlyEnergyGas = annualEnergyGas / hoursInyear
+        val hourlyEnergyElectric = annualEnergyElectric / hoursInyear
 
         return listOf(hourlyEnergyElectric, hourlyEnergyGas)
     }
@@ -192,9 +192,9 @@ class DishWasher(computable: Computable<*>, utilityRateGas: UtilityRate, utility
         } catch (e: Exception) {
             e.printStackTrace()
         }
-        val hoursInyear: Int = 8760
-        var hourlyEnergyGas = annualEnergyGas / hoursInyear
-        var hourlyEnergyElectric = annualEnergyElectric / hoursInyear
+        val hoursInyear = 8760.0
+        val hourlyEnergyGas = annualEnergyGas / hoursInyear
+        val hourlyEnergyElectric = annualEnergyElectric / hoursInyear
 
         return listOf(hourlyEnergyElectric, hourlyEnergyGas)
     }
@@ -204,8 +204,8 @@ class DishWasher(computable: Computable<*>, utilityRateGas: UtilityRate, utility
      * Pre - TOU Section
      * Post - Suggested Time
      * */
-    override fun usageHoursPre(): Double = usageHoursPre!!.yearly()
-    override fun usageHoursPost(): Double = usageHoursPre!!.yearly()
+    override fun usageHoursPre(): Double = usageHoursPre?.yearly() ?: 0.0
+    override fun usageHoursPost(): Double = usageHoursPre?.yearly() ?: 0.0
 
     /**
      * PowerTimeChange >> Energy Efficiency Calculations
