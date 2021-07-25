@@ -52,6 +52,10 @@ class Motors(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRate
 
     }
 
+    private val costPremiumMotor = 697
+    private val costStandardMotor = 555
+    val implementationCost = (costPremiumMotor - costStandardMotor)
+
     private var srs = 0
     private var mrs = 0
     private var nrs = 0
@@ -129,9 +133,6 @@ class Motors(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRate
 
         //3. Implementation Cost
         // ToDo - The below cost would be a look up in the future.
-        val costPremiumMotor = 697
-        val costStandardMotor = 555
-        val implementationCost = (costPremiumMotor - costStandardMotor)
 
         val postRow = mutableMapOf<String, String>()
         postRow["__energy_savings"] = energySavings.toString()
@@ -146,6 +147,8 @@ class Motors(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRate
         return -99.99
 
     }
+
+
 
     /**
      * PowerTimeChange >> Hourly Energy Use - Pre
