@@ -88,7 +88,8 @@ class HotFoodCabinet(computable: Computable<*>, utilityRateGas: UtilityRate, uti
         var annualEnergy = 0.0
 
         try {
-            val annualEnergyUsed = ((idleEnergyRate * cabinetVolume) / 100) * usageHoursPre()
+            val energyPerHour = if (idleEnergyRate == 0.0 || cabinetVolume == 0.0) 0.0 else ((idleEnergyRate * cabinetVolume) / 100.0)
+            val annualEnergyUsed = energyPerHour * usageHoursPre()
             annualEnergy = annualEnergyUsed
         } catch (e: Exception) {
             e.printStackTrace()
@@ -109,7 +110,8 @@ class HotFoodCabinet(computable: Computable<*>, utilityRateGas: UtilityRate, uti
             val idleEnergyRatePost = element.asJsonObject.get("idle_energy_rate").asDouble
             val annualHoursPost = peakHours + partPeakHours + offPeakHours
 
-            val postAnnualEnergyUsed = ((idleEnergyRatePost * cabinetVolumePost) / 100) * annualHoursPost
+            val energyPerHour = if (idleEnergyRatePost == 0.0 || cabinetVolumePost == 0.0) 0.0 else ((idleEnergyRate * cabinetVolume) / 100.0)
+            val postAnnualEnergyUsed = energyPerHour * annualHoursPost
             annualEnergy = postAnnualEnergyUsed
 
         } catch (e: Exception) {
