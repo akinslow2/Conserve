@@ -232,6 +232,26 @@ class WordDocumentGenerator {
         r1p3.fontSize = 16
         r1p3.setText("Package Unit")
 
+        val p4 = document.createParagraph()
+        val r1p4 = p4.createRun()
+        r1p4.fontFamily = fontAgencyFB
+        r1p4.fontSize = 12
+        r1p4.setText("Make sure you are having the package unit checked by a HVAC technician quarterly. Review your HVAC technician's maintenance scope of work it should include:")
+
+        val haasMaintenanceBullets = arrayOf(
+                    "Cleaning the condenser",
+                    "Checking the economizer (if applicable)",
+                    "Checking and replacing filters",
+                    "Charging the refrigerant",
+                    "Tightening belts (if applicable)")
+        createBullets(document, haasMaintenanceBullets, 12, blackColor, false, false)
+
+        val p5 = document.createParagraph()
+        val r1p5 = p5.createRun()
+        r1p5.fontFamily = fontAgencyFB
+        r1p5.fontSize = 12
+        r1p5.setText("If your HVAC technician is not checking all of these components or you do not have an HVAC technician maintaining your unit, this will result in increased energy bills and reduce the overall life of your equipment.")
+
         for (instance in hvac.instances) {
 
             if (instance.age > 15) {
