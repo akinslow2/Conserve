@@ -100,23 +100,26 @@ class SorterForWordDocumentGenerator {
                 && equipment.preAudit.containsKey("Others Electric Rate Structure")
                 && equipment.preAudit.containsKey("Others Utility Company")
                 && equipment.preAudit.containsKey("Others Gas Rate Structure")) {
+
             val preAudit = equipment.preAudit
             val address = "${preAudit["General Client Info Address Line 1"]} ${preAudit["General Client Info Address Line 2"]} ${preAudit["General Client Info City"]}, ${preAudit["General Client Info State"]} ${preAudit["General Client Info Zip Code"]}"
-
+            val electricityRetroFit = preAudit["Additions Will all gas be removed with retrofit?"] == "yes"
+            val electrificationSavings = if (electricityRetroFit) 38.0 * 12.0 else 0.0
 
             return PreAuditValues(
-                    preAudit["General Client Info Business Name"]!! as String,
-                    preAudit["General Client Info Audit Month"]!! as String,
-                    preAudit["General Client Info Audit Year"]!! as String,
+                    preAudit["General Client Info Business Name"] as String ?: "",
+                    preAudit["General Client Info Audit Month"] as String ?: "",
+                    preAudit["General Client Info Audit Year"] as String ?: "",
                     address,
-                    preAudit["General Client Info Assessment Start Day"]!! as String,
-                    preAudit["General Client Info Assessment End Day"]!! as String,
-                    preAudit["Operation Hours Monday Operating Hours"]!! as String,
-                    preAudit["Area Total (Sq.Ft.)"]!! as Double,
-                    preAudit["General Client Info Facility Type"]!! as String,
-                    preAudit["Others Electric Rate Structure"]!! as String,
-                    preAudit["Others Utility Company"]!! as String,
-                    preAudit["Others Gas Rate Structure"]!! as String
+                    preAudit["General Client Info Assessment Start Day"] as String ?: "",
+                    preAudit["General Client Info Assessment End Day"] as String ?: "",
+                    preAudit["Operation Hours Monday Operating Hours"] as String ?: "",
+                    preAudit["Area Total (Sq.Ft.)"] as Double ?: 0.0,
+                    preAudit["General Client Info Facility Type"] as String ?: "",
+                    preAudit["Others Electric Rate Structure"] as String ?: "",
+                    preAudit["Others Utility Company"] as String ?: "",
+                    preAudit["Others Gas Rate Structure"] as String ?: "",
+                    electrificationSavings
             )
 
         }
