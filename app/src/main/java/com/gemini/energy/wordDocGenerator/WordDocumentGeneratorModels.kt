@@ -21,7 +21,8 @@ data class PreAuditValues(
         val bldgtype: String, // 12
         val electricstructure: String, //10
         val utilitycompany: String, //9
-        val gasstructure: String // 11
+        val gasstructure: String, // 11
+        val electrificationSavings: Double
 )
 
 data class HvacInstances(
