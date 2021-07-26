@@ -129,6 +129,7 @@ data class EquipmentInstances(
         val materialCost: Double, // 32
         val implementationCost: Double,
         val totalsavings: Double,
+        val netPresentValue: Double,
         val paybackMonth: Double
 )
 
