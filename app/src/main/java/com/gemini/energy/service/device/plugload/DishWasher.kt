@@ -30,6 +30,8 @@ class DishWasher(computable: Computable<*>, utilityRateGas: UtilityRate, utility
         return super.compute(extra = ({ Timber.d(it) }))
     }
 
+    val presentValueFactor = 1.0
+
     /**
      * Usage Hours
      * */
@@ -287,5 +289,4 @@ class DishWasher(computable: Computable<*>, utilityRateGas: UtilityRate, utility
     private fun getFormMapper() = FormMapper(context, R.raw.dishwasher)
     private fun getModel() = getFormMapper().decodeJSON()
     private fun getGFormElements() = getFormMapper().mapIdToElements(getModel())
-
 }

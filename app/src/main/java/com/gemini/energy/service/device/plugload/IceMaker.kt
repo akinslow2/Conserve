@@ -25,6 +25,8 @@ class IceMaker(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRa
         return super.compute(extra = ({ Timber.d(it) }))
     }
 
+    val presentValueFactor = 1.0
+
     private var iceHarvestRate = 0.0
     private var energyUseRate = 0.0
 
@@ -139,5 +141,4 @@ class IceMaker(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRa
     private fun getFormMapper() = FormMapper(context, R.raw.icemaker)
     private fun getModel() = getFormMapper().decodeJSON()
     private fun getGFormElements() = getFormMapper().mapIdToElements(getModel())
-
 }

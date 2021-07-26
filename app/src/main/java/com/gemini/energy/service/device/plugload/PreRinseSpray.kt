@@ -27,6 +27,8 @@ class PreRinseSpray(computable: Computable<*>, utilityRateGas: UtilityRate, util
         return super.compute(extra = ({ Timber.d(it) }))
     }
 
+    val presentValueFactor = 1.0
+
     /**
      * Usage Hours
      * */
@@ -216,5 +218,4 @@ class PreRinseSpray(computable: Computable<*>, utilityRateGas: UtilityRate, util
     private fun getFormMapper() = FormMapper(context, R.raw.pre_rinse_spray)
     private fun getModel() = getFormMapper().decodeJSON()
     private fun getGFormElements() = getFormMapper().mapIdToElements(getModel())
-
 }

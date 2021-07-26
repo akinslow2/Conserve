@@ -27,6 +27,8 @@ class Griddle(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRat
         return super.compute(extra = ({ Timber.d(it) }))
     }
 
+    val presentValueFactor = 1.0
+
     /**
      * Usage Hours
      * */
@@ -230,5 +232,4 @@ class Griddle(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRat
     private fun getFormMapper() = FormMapper(context, R.raw.griddle)
     private fun getModel() = getFormMapper().decodeJSON()
     private fun getGFormElements() = getFormMapper().mapIdToElements(getModel())
-
 }

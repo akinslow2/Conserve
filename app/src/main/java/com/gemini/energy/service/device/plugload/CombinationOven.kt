@@ -48,6 +48,8 @@ class CombinationOven(computable: Computable<*>, utilityRateGas: UtilityRate, ut
     private fun isElectric() = fuelType == "Electric"
     override fun isGas() = fuelType == "Gas"
 
+    val presentValueFactor = 1.0
+
     /**
      * This is going to be the Business Hours (Pre Audit Operation Hours)
      * - the number of hours the client is open for business over a year
@@ -232,6 +234,7 @@ class CombinationOven(computable: Computable<*>, utilityRateGas: UtilityRate, ut
         return cost.calculate()
 
     }
+
     override fun incentives(): Double {
         return 0.0
     }
@@ -400,7 +403,6 @@ class CombinationOven(computable: Computable<*>, utilityRateGas: UtilityRate, ut
 
     override fun computedFields() = mutableListOf("__daily_operating_hours", "__weekly_operating_hours",
             "__yearly_operating_hours", "__electric_cost")
-
 }
 
 

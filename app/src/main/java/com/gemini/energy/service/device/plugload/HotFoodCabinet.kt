@@ -27,6 +27,8 @@ class HotFoodCabinet(computable: Computable<*>, utilityRateGas: UtilityRate, uti
         return super.compute(extra = ({ Timber.d(it) }))
     }
 
+    val presentValueFactor = 1.0
+
     /**
      * Usage Hours
      * */
