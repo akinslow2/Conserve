@@ -230,7 +230,7 @@ class WaterHeater(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
         Timber.d("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
 
 //Note Change - Newer units run's 50% less often
-                val postUsageHours = UsageSimple(0.0, 0.0, 1.5 * 365.0)
+            val postUsageHours = UsageSimple(0.0, 0.0, 1.5 * 365.0)
          //val postUsageHours = computable.udf1 as UsageSimple
 
             val postGcost: Double
@@ -254,19 +254,20 @@ class WaterHeater(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
   //This will vary based on utility and can change at anytime
       //https://bgesmartenergy.com/residential/rebates-and-discounts/heat-pump-water-heater
     override fun incentives(): Double {
-        return 500.0 * quantity
+        return 500.0 * quantity.toDouble()
     }
 //The material cost is an average, based on this link -https://carbonswitch.co/heat-pump-water-heater-buyers-guide -
 // however this needs to be adjusted once we have a go to seller
     override fun materialCost(): Double {
-        return 2500.0 * quantity
+        return 2500.0 * quantity.toDouble()
     }
     //The labor cost is an average, based on this link -https://carbonswitch.co/heat-pump-water-heater-buyers-guide -
 // however this needs to be adjusted once we have a go to installer
     override fun laborCost(): Double {
-        return 500.0 * quantity
+        return 500.0 * quantity.toDouble()
     }
 // @k2: I added quantity in the equations above, but it is an integer. I just want to flag this in case it will cause problems...
+    // @anthony: might cause issues, casting to double to be safe
 
     /**
      * PowerTimeChange >> Hourly Energy Use - Pre
