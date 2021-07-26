@@ -669,7 +669,7 @@ class WordDocumentGenerator {
 
     // TODO: Electrification Savings row for table
     private fun createEnergySavingsTable(document: XWPFDocument, values: PreparedForDocument) {
-        val table = document.createTable(14, 2)
+        val table = document.createTable(15, 2)
 
         var currentRow = 0
 
@@ -723,6 +723,12 @@ class WordDocumentGenerator {
         generateInfoRow(
                 "Financial Overview",
                 "\$${values.building.buildingTotalSavings.format(0)}")
+
+        if (values.preAudit.electrificationSavings > 0.0) {
+            generateInfoRow(
+                "Electrification Savings ($/yr)",
+                "\$${values.preAudit.electrificationSavings.format(0)}")
+        }
 
         generateInfoRow(
                 "Implementation Cost (\$)",
