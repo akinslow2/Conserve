@@ -3,9 +3,20 @@ package com.gemini.energy.service.device.lighting
 class Utils {
     companion object Utils {
 
-        val electricianHourlyRate = 75.0
+        private const val electricianHourlyRate = 75.0
 
-
+        /**
+         * gets fixture cost for linear fluorescent
+         *
+         * @param fixtureType
+         *
+         * @return fixture cost based on fixture type
+         */
+        fun fixtureCost(fixtureType: String): Double {
+            if (fixtureType == LfFixtureType.twoXfour.type)
+                return 120.0
+            return 60.0
+        }
 
         /**
          * get time to replace a fixture
@@ -21,8 +32,8 @@ class Utils {
                 return 0.0
             }
 
-            if (replacementType == ReplacementType.Retrofit.type) {
-                if (ceilingType == CeilingType.DryWall.type) { return 1.0 }
+            if (replacementType == ReplacementType.DirectReplacementFixture.type) {
+                if (ceilingType == CeilingType.DropCeiling.type) { return 1.0 }
                 return 0.0
             }
 
@@ -56,7 +67,13 @@ class Utils {
          *
          * @return installation cost
          */
-        fun installCost(replacementType: String, ledBulbCost: Double, lampsPerFixture: Int, numberOfFixtures: Int, electricianCost: Double): Double {
+        fun installCost(
+                replacementType: String,
+                ledBulbCost: Double,
+                lampsPerFixture: Int,
+                numberOfFixtures: Int,
+                electricianCost: Double): Double
+        {
             if (replacementType == ReplacementType.Retrofit.type)
                 return retrofitInstall(ledBulbCost, lampsPerFixture, numberOfFixtures, electricianCost)
 
@@ -67,9 +84,18 @@ class Utils {
             return replacementInstall(ledBulbCost, lampsPerFixture, numberOfFixtures, electricianCost)
         }
 
-        // TODO: implement for linear fluorescent, waiting on answer from client
-        fun installCostLF(): Double {
-            return 0.0
+
+        /**
+         * get the installation cost for direct replacement on a linear fluorescent instance
+         *
+         * @param fixtureCost use [fixtureCost] to get the value for this parameter
+         * @param numberOfFixtures number of fixtures to replace
+         * @param electricianCost use [electricianCost] to get the value for this parameter
+         *
+         * @return installation cost for direct replacement of linear fluorescent
+         */
+        fun directReplacementInstallCostLinearFluorescent(fixtureCost: Double, numberOfFixtures: Int, electricianCost: Double): Double {
+            return (fixtureCost * numberOfFixtures) + electricianCost
         }
 
 
