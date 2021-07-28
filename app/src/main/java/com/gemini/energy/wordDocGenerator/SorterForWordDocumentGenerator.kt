@@ -13,6 +13,7 @@ import com.google.gson.JsonArray
 import com.google.gson.JsonElement
 import com.google.gson.JsonNull
 import com.google.gson.JsonObject
+import java.util.*
 
 class SorterForWordDocumentGenerator {
     // use these values for sorting types of equipment that need to be aggregated for the report
@@ -629,7 +630,10 @@ class SorterForWordDocumentGenerator {
             postTotalkWh += light.postEnergy()
         }
 
-        // TODO: check if total install cost should changed based off of ceiling
+        if (lightingRows.any { it.isCeilingOver10Feet.toLowerCase(Locale.ROOT) == "yes" }) {
+            totalInstallCost += 500
+        }
+
         val paybackMonth = totalCostSavings * 12
         val geminiPayback = paybackMonth + 4
         val paybackYear: Double = totalCostSavings
