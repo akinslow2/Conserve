@@ -477,15 +477,24 @@ class WordDocumentGenerator {
         r1p5.fontSize = 12
         r1p5.setText("Please see the next page for specifics of each lighting measure.")
 
+        if (lights.lightingRows.any{it.isCeilingOver10Feet.toLowerCase() == "yes"}) {
+            var p6 = document.createParagraph()
+            val r1p6 = p6.createRun()
+            r1p6.fontFamily = fontAgencyFB
+            r1p6.fontSize = 12
+            r1p6.setText("There is an additional $500 fee to replace lighting with a ceiling over 10 feet to rent the lift needed.")
+        }
+
+
         createLightingTable1(document, lights)
 
-        val p6 = document.createParagraph()
-        p6.spacingBetween = 1.5
-        p6.isPageBreak = true
-        val r1p6 = p6.createRun()
-        r1p6.fontFamily = fontAgencyFB
-        r1p6.fontSize = 12
-        r1p6.setText("The savings represented in the table below reflect the maintenance and cooling costs abated because LED bulbs have a longer life and produce considerably less heat.")
+        val p7 = document.createParagraph()
+        p7.spacingBetween = 1.5
+        p7.isPageBreak = true
+        val r1p7 = p7.createRun()
+        r1p7.fontFamily = fontAgencyFB
+        r1p7.fontSize = 12
+        r1p7.setText("The savings represented in the table below reflect the maintenance and cooling costs abated because LED bulbs have a longer life and produce considerably less heat.")
 
         createLightingTable3(document, lights)
     }
