@@ -203,7 +203,11 @@ class WordDocumentGenerator {
         r1p3.color = greyColor
         r1p3.setText("The analysis shows a high potential for energy savings which will:")
 
-        val bullets1 = arrayOf("reduce your energy costs,", "increase the thermal comfort in your building, and", "give you more control of how energy is consumed.")
+        val bullets1 = arrayOf(
+                "reduced energy costs,",
+                "improved profit margins,",
+                "increased thermal comfort in your building, and",
+                "more control over how energy is consumed.")
         createBullets(document, bullets1, 12, greyColor, false, false)
 
         if (buildingValues.buildingTotalCost > 5000) {
