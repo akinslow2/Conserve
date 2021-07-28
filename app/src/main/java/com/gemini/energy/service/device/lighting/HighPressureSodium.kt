@@ -270,10 +270,11 @@ class HPSodium(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRa
     /**
     //NPV for Lighting - assume 10 years life cycle
      **/
-    var presentvaluefactor = 7.722
+    val presentvaluefactor = 7.722
     fun installCost(): Double {
         val timePerFixture = Utils.timePerFixture(replacementType, ceilingType)
-        return Utils.installCost(replacementType, ledbulbcost, lampsPerFixtures, numberOfFixtures, timePerFixture)
+        val electricianCost = Utils.electricianCost(timePerFixture, numberOfFixtures)
+        return Utils.installCost(replacementType, ledbulbcost, lampsPerFixtures, numberOfFixtures, electricianCost)
     }
 
     fun netPresentValue(): Double {

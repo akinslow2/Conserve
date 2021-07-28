@@ -16,6 +16,7 @@ import com.google.gson.JsonElement
 import io.reactivex.Observable
 import timber.log.Timber
 import java.util.*
+import kotlin.math.ceil
 
 class Cfl(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateElectricity: UtilityRate,
           usageHours: UsageHours, outgoingRows: OutgoingRows, private val context: Context) :
@@ -274,11 +275,12 @@ class Cfl(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEle
     /**
     //NPV for Lighting- assume 10 years life cycle
     **/
-    var presentvaluefactor = 7.722
+    val presentvaluefactor = 7.722
 
     fun installCost(): Double {
         val timePerFixture = Utils.timePerFixture(replacementType, ceilingType)
-        return Utils.installCost(replacementType, ledbulbcost, lampsPerFixtures, numberOfFixtures, timePerFixture)
+        val electricianCost = Utils.electricianCost(timePerFixture, numberOfFixtures)
+        return Utils.installCost(replacementType, ledbulbcost, lampsPerFixtures, numberOfFixtures, electricianCost)
     }
 
     fun netPresentValue(): Double {
