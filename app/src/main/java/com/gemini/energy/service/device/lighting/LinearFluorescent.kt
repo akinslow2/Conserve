@@ -270,12 +270,18 @@ class LinearFluorescent(computable: Computable<*>, utilityRateGas: UtilityRate, 
     /**
     //NPV for Lighting - - assume 10 years life cycle
      **/
-    var presentvaluefactor = 7.722
+    val presentvaluefactor = 7.722
 
     fun installCost(): Double {
-        // TODO: implement me!
         val timePerFixture = Utils.timePerFixture(replacementType, ceilingType)
-        return (ledbulbcost * lampsPerFixtures * numberOfFixtures) + Utils.electricianCost(timePerFixture, numberOfFixtures)
+        val electricianCost = Utils.electricianCost(timePerFixture, numberOfFixtures)
+
+        if (replacementType == ReplacementType.DirectReplacementFixture.type) {
+            val fixtureCost = Utils.fixtureCost(fixtureType)
+            return Utils.directReplacementInstallCostLinearFluorescent(fixtureCost, numberOfFixtures, electricianCost)
+        }
+
+        return (ledbulbcost * lampsPerFixtures * numberOfFixtures) + electricianCost
     }
 
     fun netPresentValue(): Double {
