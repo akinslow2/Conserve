@@ -2,6 +2,8 @@ package com.gemini.energy.service.type
 
 import android.content.Context
 import com.gemini.energy.presentation.util.ERateKey
+import java.util.*
+import kotlin.collections.HashMap
 
 open class UtilityRate(private val context: Context) {
 
@@ -125,15 +127,17 @@ class Electricity(private val rateStructure: String, private val companyCode: St
     override fun getValue(columns: List<String>, header: String) = listOf(listOf(columns[EValue.EnergyCharge.index],
             columns[EValue.Average.index], columns[EValue.Demand.index]))
 
-    override fun getResourcePath() = "utility/${companyCode}_electric.csv"
-//    @anthony: assuming the elecritc csv file has the correct data
+    override fun getResourcePath() = "utility/${companyCode.toLowerCase(Locale.ROOT)}_electric.csv"
     //@k2: does capitalization matter? if not, then it should work now that I changed the filename
+    // @anthony: capitalization does matter, perfromed lowercase function to make work
  //   override fun getResourcePath() = "utility/bge_electric.csv"
+
     override fun getSeparator(): Char = ','
     override fun getRate() = rateStructure
     override fun getRowIdentifier() = "^${getRate()}${getSeparator()}.*".toRegex()
 
     // @k2: I assume
+    // @anthony: looks like it should be fine
     override fun getTOU(structure: HashMap<String, List<String>>) = TOU(
             structure[ERateKey.SummerOn.value]!![0].toDouble(),
             structure[ERateKey.SummerPart.value]!![0].toDouble(),
@@ -170,11 +174,13 @@ class Gas(private val rateStructure: String = "") : IUtility {
 
     override fun getTOU(structure: HashMap<String, List<String>>) = TOU()
 
-    override fun getNoneTOU(structure: HashMap<String, List<String>>) = TOUNone(
-            structure[ERateKey.GasSummer.value]!![0].toDouble(),
-            structure[ERateKey.SummerExcess.value]!![0].toDouble(),
-            structure[ERateKey.GasWinter.value]!![0].toDouble(),
-            structure[ERateKey.WinterExcess.value]!![0].toDouble())
+    override fun getNoneTOU(structure: HashMap<String, List<String>>): TOUNone {
+        return TOUNone(
+            structure[ERateKey.GasSummer.value]?.firstOrNull()?.toDouble() ?: 0.0,
+            structure[ERateKey.SummerExcess.value]?.firstOrNull()?.toDouble() ?: 0.0,
+            structure[ERateKey.GasWinter.value]?.firstOrNull()?.toDouble() ?: 0.0,
+            structure[ERateKey.WinterExcess.value]?.firstOrNull()?.toDouble() ?: 0.0)
+    }
 
     companion object {
         private val keys = listOf(
