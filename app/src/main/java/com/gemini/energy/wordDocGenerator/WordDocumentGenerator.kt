@@ -100,6 +100,10 @@ class WordDocumentGenerator {
 
         generateFacilityInformationPage(document, value, value.preAudit)
 
+        if (value.lighting != null) {
+            generateLightingContractorPage(document, value.lighting)
+        }
+
         addPageNumbers(document)
 
         writeDocument(value, document)
@@ -599,6 +603,20 @@ class WordDocumentGenerator {
         val r1p4 = p4.createRun()
         r1p4.fontFamily = fontAgencyFB
         r1p4.setText("Given current building aggregation, current total charge is $${electrictyCharge(values.preAudit.electricstructure, values.building.postTotalkW, values.building.postTotalkW).format(2)}")
+    }
+
+    private fun generateLightingContractorPage(document: XWPFDocument, lights: LightingValues) {
+        val p1 = document.createParagraph()
+        p1.spacingBetween = 1.5
+        p1.isPageBreak = true
+        val r1p1 = p1.createRun()
+        r1p1.fontFamily = fontAgencyFB
+        r1p1.isBold = true
+        r1p1.isItalic = true
+        r1p1.fontSize = 20
+        r1p1.setText("Specifics for Lighting Contractor")
+
+        generateLightContractorTable(document, lights)
     }
 
     // generate tables
@@ -1420,6 +1438,42 @@ class WordDocumentGenerator {
         centerTable(table)
     }
 
+    private fun generateLightContractorTable(document: XWPFDocument, lights: LightingValues) {
+        val rows = lights.lightingRows
+        val table = document.createTable(rows.size + 1, 7)
+
+        for (i in 0..rows.size) {
+            // safety check if no rows exist
+            if (rows.isEmpty()) {
+                return
+            }
+            val row = table.getRow(i)
+            val isFirst = i == 0
+            val rowIndex = if (isFirst) 0 else i - 1
+            val rowItem = rows[rowIndex]
+
+            fun generateCell(pos: Int, text: String) {
+                val cell = row.getCell(pos)
+                cell.verticalAlignment = XWPFTableCell.XWPFVertAlign.CENTER
+                val paragraph = cell.paragraphs[0]
+                paragraph.alignment = ParagraphAlignment.CENTER
+                val run = paragraph.createRun()
+                run.isBold = isFirst
+                run.setText(text)
+            }
+
+            generateCell(0, if (isFirst) "Zone" else rowItem.location)
+            generateCell(1, if (isFirst) "Name" else rowItem.measureDescription)
+            generateCell(2, if (isFirst) "Bulbs" else rowItem.lampsPerFixture.toString())
+            generateCell(3, if (isFirst) "Fixtures" else rowItem.numberOfFixtures.toString())
+            generateCell(4, if (isFirst) "Ceiling Type" else rowItem.ceilingType)
+            generateCell(5, if (isFirst) "Replacement Type" else rowItem.replacementType)
+            generateCell(6, if (isFirst) "Ceiling Above 10ft." else rowItem.isCeilingOver10Feet)
+        }
+
+        centerTable(table)
+        fitTable(table, 4500)
+    }
 
     // table utils
     private fun createBullets(document: XWPFDocument, items: Array<String>, size: Int, color: String, isBold: Boolean, isItalic: Boolean) {
