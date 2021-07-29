@@ -142,6 +142,12 @@ data class EquipmentValues(
         val postTotalkWh: Double
 )
 
+data class MotorValues(
+        val totalCost: Double,
+        val totalSavings: Double,
+        val netPresentValue: Double
+)
+
 data class BuildingValues(
         val buildingNetPresentValue: Double,
         val buildingTotalSavings: Double, // 19
@@ -176,5 +182,6 @@ data class PreparedForDocument(
         val waterHeater: WaterHeaterValues?,
         val refrigeration: RefrigerationValues?,
         val equipment: EquipmentValues?,
+        val motor: MotorValues?,
         val building: BuildingValues
 )
