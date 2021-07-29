@@ -429,6 +429,12 @@ class WordDocumentGenerator {
                 + "all non-LED bulbs and ensure the bathroom lights are off at the end of the day.",
                 true)
 
+        if (lights.lightingRows.any{it.isCeilingOver10Feet.toLowerCase() == "yes"}) {
+            document.createNormalParagraph(
+                    "There is an additional $500 fee to replace lighting with a ceiling over 10 feet to rent the lift needed.",
+                    true)
+        }
+
         document.createNormalParagraph("Please see the next page for specifics of each measure. "
                 + "Each time, after the first time, you go through the rebate/incentive process it "
                 + "requires an on-site review that takes a minimum of 2 weeks; therefore, to save time "
