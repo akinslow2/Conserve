@@ -1372,6 +1372,23 @@ class WordDocumentGenerator {
         fitTable(table, 4500)
     }
 
+    // doc utils
+
+    /**
+     * creates a paragraph in the given document [this]
+     * with normal formatting
+     *
+     * @param text paragraph text
+     */
+    fun XWPFDocument.createNormalParagraph(text: String) {
+        val paragraph = this.createParagraph()
+        paragraph.spacingBetween = 1.5
+        val run = paragraph.createRun()
+        run.fontFamily = fontAgencyFB
+        run.fontSize = 12
+        run.setText(text)
+    }
+
     // table utils
     private fun createBullets(document: XWPFDocument, items: Array<String>, size: Int, color: String, isBold: Boolean, isItalic: Boolean) {
         val cTAbstractNum = CTAbstractNum.Factory.newInstance()
