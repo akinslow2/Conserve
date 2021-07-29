@@ -13,6 +13,7 @@ import com.google.gson.JsonArray
 import com.google.gson.JsonElement
 import com.google.gson.JsonNull
 import com.google.gson.JsonObject
+import java.util.*
 
 class SorterForWordDocumentGenerator {
     // use these values for sorting types of equipment that need to be aggregated for the report
@@ -510,11 +511,10 @@ class SorterForWordDocumentGenerator {
             }
         }
 
-        var totalCostSavings = 0.0
-        var selfinstallcost = 0.0
-        var electricianCost = 0.0
+        var totalSavings = 0.0
+        var totalInstallCost = 0.0
         var totalEnergySavings = 0.0
-        var presentvaluefactor = 7.722 //Assume 10 years
+        val presentvaluefactor = 7.722 //Assume 10 years
         val lightingRows = prepareLightingTableRows(audit[lighting]!!)
 
         var currentTotalkW = 0.0
@@ -523,14 +523,9 @@ class SorterForWordDocumentGenerator {
         var postTotalkWh = 0.0
 
         for (light in cfls) {
-            totalCostSavings += light.totalSavings()
-            selfinstallcost += light.installCost()
-            electricianCost += light.electricianCost
-            if (electricianCost < 100.0) {
-                electricianCost = 100.0
-            }
+            totalSavings += light.totalSavings()
+            totalInstallCost += light.installCost()
             totalEnergySavings += light.totalEnergySavings()
-            presentvaluefactor = light.presentvaluefactor
 
             // @anthony, please verify that these are the correct values
             currentTotalkW += light.prePower()
@@ -540,14 +535,9 @@ class SorterForWordDocumentGenerator {
         }
 
         for (light in halogens) {
-            totalCostSavings += light.totalSavings()
-            selfinstallcost += light.installCost()
-            electricianCost += light.electricianCost
-            if (electricianCost < 100.0) {
-                electricianCost = 100.0
-            }
+            totalSavings += light.totalSavings()
+            totalInstallCost += light.installCost()
             totalEnergySavings += light.totalEnergySavings()
-            presentvaluefactor = light.presentvaluefactor
 
             // @anthony, please verify that these are the correct values
             currentTotalkW += light.prePower()
@@ -557,14 +547,9 @@ class SorterForWordDocumentGenerator {
         }
 
         for (light in highPressureSodiums) {
-            totalCostSavings += light.totalSavings()
-            selfinstallcost += light.installCost()
-            electricianCost += light.electricianCost
-            if (electricianCost < 100.0) {
-                electricianCost = 100.0
-            }
+            totalSavings += light.totalSavings()
+            totalInstallCost += light.installCost()
             totalEnergySavings += light.totalEnergySavings()
-            presentvaluefactor = light.presentvaluefactor
 
             // @anthony, please verify that these are the correct values
             currentTotalkW += light.prePower()
@@ -574,14 +559,9 @@ class SorterForWordDocumentGenerator {
         }
 
         for (light in incandescents) {
-            totalCostSavings += light.totalSavings()
-            selfinstallcost += light.installCost()
-            electricianCost += light.electricianCost
-            if (electricianCost < 100.0) {
-                electricianCost = 100.0
-            }
+            totalSavings += light.totalSavings()
+            totalInstallCost += light.installCost()
             totalEnergySavings += light.totalEnergySavings()
-            presentvaluefactor = light.presentvaluefactor
 
             // @anthony, please verify that these are the correct values
             currentTotalkW += light.prePower()
@@ -591,14 +571,9 @@ class SorterForWordDocumentGenerator {
         }
 
         for (light in linearFluorescents) {
-            totalCostSavings += light.totalSavings()
-            selfinstallcost += light.installCost()
-            electricianCost += light.electricianCost
-            if (electricianCost < 100.0) {
-                electricianCost = 100.0
-            }
+            totalSavings += light.totalSavings()
+            totalInstallCost += light.installCost()
             totalEnergySavings += light.totalEnergySavings()
-            presentvaluefactor = light.presentvaluefactor
 
             // @anthony, please verify that these are the correct values
             currentTotalkW += light.prePower()
@@ -608,14 +583,9 @@ class SorterForWordDocumentGenerator {
         }
 
         for (light in lowPressureSodiums) {
-            totalCostSavings += light.totalSavings()
-            selfinstallcost += light.installCost()
-            electricianCost += light.electricianCost
-            if (electricianCost < 100.0) {
-                electricianCost = 100.0
-            }
+            totalSavings += light.totalSavings()
+            totalInstallCost += light.installCost()
             totalEnergySavings += light.totalEnergySavings()
-            presentvaluefactor = light.presentvaluefactor
 
             // @anthony, please verify that these are the correct values
             currentTotalkW += light.prePower()
@@ -624,20 +594,22 @@ class SorterForWordDocumentGenerator {
             postTotalkWh += light.postEnergy()
         }
 
-        val installCost = electricianCost + selfinstallcost
+        if (lightingRows.any { it.isCeilingOver10Feet.toLowerCase(Locale.ROOT) == "yes" }) {
+            totalInstallCost += 500
+        }
+
         val paybackYear: Double =
-                if (totalCostSavings == 0.0) 0.0
-                else selfinstallcost / totalCostSavings
+                if (totalSavings == 0.0) 0.0
+                else totalInstallCost / totalSavings
         val paybackMonth = paybackYear * 12
         val geminiPayback = paybackMonth + 4
 
-        val netPresentValue: Double = (totalCostSavings * presentvaluefactor) -  installCost
+        val netPresentValue: Double = (totalSavings * presentvaluefactor) -  totalInstallCost
 
         return LightingValues(
-                totalCostSavings,
+                totalSavings,
                 totalEnergySavings,
-                selfinstallcost.toInt(),
-                installCost,
+                totalInstallCost,
                 paybackMonth,
                 geminiPayback,
                 paybackYear,
