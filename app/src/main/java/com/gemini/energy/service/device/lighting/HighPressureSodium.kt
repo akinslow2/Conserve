@@ -46,7 +46,7 @@ class HPSodium(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRa
     private var bulbcost = 20.0
     private val ledbulbcost = 75.0
 
-    private var seer = 10
+    private var seer = 10.0
     private var cooling = 3.142
 
     private val LEDlifeHours = 30000
@@ -132,7 +132,7 @@ class HPSodium(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRa
     }
 
     fun prePower(): Double {
-        return actualWatts * numberOfFixtures * lampsPerFixtures / 1000
+        return actualWatts * numberOfFixtures * lampsPerFixtures / 1000.0
     }
 
 
@@ -161,19 +161,19 @@ class HPSodium(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRa
 
         val totalUnits = lampsPerFixtures * numberOfFixtures
 
-        val replacementIndex = LEDlifeHours / lifeHours
-        val expectedLife = LEDlifeHours / usageHoursSpecific.yearly()
+        val replacementIndex = if (lifeHours == 0.0) 0.0 else LEDlifeHours / lifeHours
+        val expectedLife = if (usageHoursSpecific.yearly() == 0.0) 0.0 else LEDlifeHours / usageHoursSpecific.yearly()
         val maintenanceSavings = totalUnits * bulbcost * replacementIndex / expectedLife
 
         // Delta is going to be Power Used * Percentage Power Reduced
         // Percentage Power Reduced - we get it from the Base - ELighting
 
         val energySavings = preEnergy() * percentPowerReduced
-        val coolingSavings = energySavings * cooling / seer
+        val coolingSavings = if (seer == 0.0) 0.0 else energySavings * cooling / seer
 
         val energyAtPostState = preEnergy() - energySavings
-        val paybackmonth = installCost() / energySavings * 12
-        val paybackyear = installCost() / energySavings
+        val paybackmonth = if (energySavings == 0.0) 0.0 else installCost() / energySavings * 12
+        val paybackyear = if (energySavings == 0.0) 0.0 else installCost() / energySavings
         val totalsavings = energySavings + coolingSavings + maintenanceSavings
 
         val postRow = mutableMapOf<String, String>()
@@ -226,7 +226,7 @@ class HPSodium(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRa
     }
 
     override fun energyTimeChange(): Double {
-        return  actualWatts * numberOfFixtures * lampsPerFixtures / 1000 * usageHoursPost()
+        return  actualWatts * numberOfFixtures * lampsPerFixtures / 1000.0 * usageHoursPost()
     }
 
     override fun energyPowerTimeChange(): Double {
@@ -247,10 +247,10 @@ class HPSodium(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRa
 
     fun totalEnergySavings(): Double {
         if (controls != null) {
-            val coolingSavings = (preEnergy() - energyPowerChange()) * cooling / seer
+            val coolingSavings = if (seer == 0.0) 0.0 else (preEnergy() - energyPowerChange()) * cooling / seer
             return (preEnergy() - energyPowerChange()) + coolingSavings
         } else {
-            val coolingSavings = (preEnergy() - energyPowerTimeChange()) * cooling / seer
+            val coolingSavings = if (seer == 0.0) 0.0 else (preEnergy() - energyPowerTimeChange()) * cooling / seer
             return (preEnergy() - energyPowerTimeChange()) + coolingSavings
         }
     }
