@@ -358,18 +358,29 @@ class WordDocumentGenerator {
         r1p1.fontSize = 20
         r1p1.setText("Water Heating Savings")
 
-        val p2 = document.createParagraph()
-        p2.spacingBetween = 1.5
-        val r1p2 = p2.createRun()
-        r1p2.fontFamily = fontAgencyFB
-        r1p2.fontSize = 18
-        r1p2.setText("Implementation of recommended water heater measures will result in minimum annual savings of ")
-        val r2p2 = p2.createRun()
-        r2p2.fontFamily = fontAgencyFB
-        r2p2.isBold = true
-        r2p2.fontSize = 24
-        r2p2.color = greenColor
-        r2p2.setText("$${waterheater.totalSavings.format(0)}")
+        if (waterheater.netPresentValue > 1.0) {
+             val p2 = document.createParagraph()
+            p2.spacingBetween = 1.5
+            val r1p2 = p2.createRun()
+            r1p2.fontFamily = fontAgencyFB
+            r1p2.fontSize = 18
+            r1p2.setText("Implementation of recommended water heater measures will result in minimum annual savings of ")
+            val r2p2 = p2.createRun()
+            r2p2.fontFamily = fontAgencyFB
+            r2p2.isBold = true
+            r2p2.fontSize = 24
+            r2p2.color = greenColor
+            r2p2.setText("$${waterheater.totalSavings.format(0)}")
+        }
+        else {
+            val p2 = document.createParagraph()
+            p2.spacingBetween = 1.5
+            val r1p2 = p2.createRun()
+            r1p2.fontFamily = fontAgencyFB
+            r1p2.fontSize = 18
+            r1p2.setText("At this time there are no recommended measures.")
+        }
+
 
         val p3 = document.createParagraph()
         val r1p3 = p3.createRun()
