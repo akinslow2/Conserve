@@ -112,7 +112,7 @@ class CombinationOven(computable: Computable<*>, utilityRateGas: UtilityRate, ut
         fun calculate(): Double {
 
             val adjustment = if (isGas) ADJUSTMENT_GAS else 1
-            val averageIdleRate = (idlePowerRateConvection + idlePowerRateSteam) / 2
+            val averageIdleRate = (idlePowerRateConvection + idlePowerRateSteam) / 2.0
 
             val yearlyIdleEnergy = averageIdleRate * usageHoursPre()
             val yearlyPreHeatEnergy = preHeatEnergy * daysInOperation // Adjusted preheat energy is per day over here
@@ -148,7 +148,7 @@ class CombinationOven(computable: Computable<*>, utilityRateGas: UtilityRate, ut
             }
 
             // >>> 3. Cost Water
-            val averageWaterUsed = (waterUseConvection + waterUseSteam) / 2
+            val averageWaterUsed = (waterUseConvection + waterUseSteam) / 2.0
             costWater = usageHoursPre() * WATER_CHARGE * averageWaterUsed
 
             Timber.d("Electricity Cost :: $costElectric")
@@ -174,7 +174,7 @@ class CombinationOven(computable: Computable<*>, utilityRateGas: UtilityRate, ut
             //ToDo: DaysInOperation
             //This does not work. See bottom of yesterdays detailed email for clarification.
             //Also Days in operation does not change between pre and post so you can just call the variable DaysInOperation...
-            daysInOperation = usageHoursPre() / 24
+            daysInOperation = usageHoursPre() / 24.0
 
             preIdleEnergyRateConvection = featureData["Convection Idle Rate"]!! as Double
             preIdleEnergyRateSteam = featureData["Steam Idle Rate"]!! as Double
@@ -349,8 +349,8 @@ class CombinationOven(computable: Computable<*>, utilityRateGas: UtilityRate, ut
         val deltaPreHeatEnergy = preHeatEnergy - adjustPreHeat(rawPreHeatEnergyPS)
         val deltaFanEnergyRate = preFanEnergyRatePS - postFanEnergyRatePS
 
-        val preIdlePowerRate = (preIdleEnergyRateConvection + preIdleEnergyRateSteam) / 2
-        val postIdlePowerRate = (idlePowerRateConvectionPS + idlePowerRateSteamPS) / 2
+        val preIdlePowerRate = (preIdleEnergyRateConvection + preIdleEnergyRateSteam) / 2.0
+        val postIdlePowerRate = (idlePowerRateConvectionPS + idlePowerRateSteamPS) / 2.0
         val deltaIdlePowerRate = preIdlePowerRate - postIdlePowerRate
 
         val deltaYearlyPreHeatEnergy = deltaPreHeatEnergy * daysInOperation
