@@ -9,6 +9,7 @@ import com.gemini.energy.service.device.WaterHeater
 import com.gemini.energy.service.device.lighting.*
 import com.gemini.energy.service.device.plugload.*
 import com.gemini.energy.service.device.refrigeration.*
+import com.gemini.energy.wordDocGenerator.models.PreAuditValues
 import com.google.gson.JsonArray
 import com.google.gson.JsonElement
 import com.google.gson.JsonNull
@@ -53,7 +54,7 @@ class SorterForWordDocumentGenerator {
             val refrigeration = prepareValuesFromRefrigeration(audit.value)
             val motor = prepareMotorValues(audit.value)
             val building = prepareBuildingValuesForEquipment(lighting, equipment, hvac, waterheater, refrigeration, motor)
-            val preaudit = prepareValuesForPreAudit(audit.value)
+            val preaudit = PreAuditValues.tryCreate(audit.value)
 
             val zones = aggregateZoneNames(audit.value)
             val zoneString = concatenateZoneString(zones)
@@ -79,52 +80,6 @@ class SorterForWordDocumentGenerator {
         return returnAble.toList()
     }
 
-    // TODO: calculate electricity savings
-    private fun prepareValuesForPreAudit(audit: AuditComponents): PreAuditValues? {
-        val allEquipment = audit.flatMap { it.value }
-        val distinctPreAuditValues = allEquipment.distinctBy { it.preAudit }
-
-        val equipment = distinctPreAuditValues.firstOrNull()
-        if (equipment != null
-                && equipment.preAudit.containsKey("General Client Info Business Name")
-                && equipment.preAudit.containsKey("General Client Info Audit Month")
-                && equipment.preAudit.containsKey("General Client Info Audit Year")
-                && equipment.preAudit.containsKey("General Client Info Address Line 1")
-                && equipment.preAudit.containsKey("General Client Info Address Line 2")
-                && equipment.preAudit.containsKey("General Client Info City")
-                && equipment.preAudit.containsKey("General Client Info State")
-                && equipment.preAudit.containsKey("General Client Info Zip Code")
-                && equipment.preAudit.containsKey("General Client Info Assessment Start Day")
-                && equipment.preAudit.containsKey("General Client Info Assessment End Day")
-                && equipment.preAudit.containsKey("Operation Hours Monday Operating Hours")
-                && equipment.preAudit.containsKey("Area Total (Sq.Ft.)")
-                && equipment.preAudit.containsKey("General Client Info Facility Type")
-                && equipment.preAudit.containsKey("Others Electric Rate Structure")
-                && equipment.preAudit.containsKey("Others Utility Company")
-                && equipment.preAudit.containsKey("Others Gas Rate Structure")) {
-            val preAudit = equipment.preAudit
-            val address = "${preAudit["General Client Info Address Line 1"]} ${preAudit["General Client Info Address Line 2"]} ${preAudit["General Client Info City"]}, ${preAudit["General Client Info State"]} ${preAudit["General Client Info Zip Code"]}"
-
-
-            return PreAuditValues(
-                    preAudit["General Client Info Business Name"]!! as String,
-                    preAudit["General Client Info Audit Month"]!! as String,
-                    preAudit["General Client Info Audit Year"]!! as String,
-                    address,
-                    preAudit["General Client Info Assessment Start Day"]!! as String,
-                    preAudit["General Client Info Assessment End Day"]!! as String,
-                    preAudit["Operation Hours Monday Operating Hours"]!! as String,
-                    preAudit["Area Total (Sq.Ft.)"]!! as Double,
-                    preAudit["General Client Info Facility Type"]!! as String,
-                    preAudit["Others Electric Rate Structure"]!! as String,
-                    preAudit["Others Utility Company"]!! as String,
-                    preAudit["Others Gas Rate Structure"]!! as String
-            )
-
-        }
-
-        return null
-    }
 
     private fun aggregateZoneNames(audit: AuditComponents): MutableList<String> {
         val zones = mutableListOf<String>()

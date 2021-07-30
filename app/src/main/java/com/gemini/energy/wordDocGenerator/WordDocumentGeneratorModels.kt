@@ -1,6 +1,7 @@
 package com.gemini.energy.wordDocGenerator
 
 import com.gemini.energy.service.device.EBase
+import com.gemini.energy.wordDocGenerator.models.PreAuditValues
 
 //Map<AuditId: Map<EquipmentType: Equipment>>
 typealias SortedAudits =
@@ -8,21 +9,6 @@ typealias SortedAudits =
 
 typealias AuditComponents = MutableMap<String, MutableList<EBase>>
 //the commented numbers represent the mastersheet id values
-
-data class PreAuditValues(
-        val businessname: String, //1
-        val auditmonth: String, //2
-        val audityear: String, // 3
-        val clientaddress: String, // 4
-        val startday: String, // 5
-        val endday: String, //6
-        val operationhours: String, //8
-        val bldgarea: Double, // 7
-        val bldgtype: String, // 12
-        val electricstructure: String, //10
-        val utilitycompany: String, //9
-        val gasstructure: String // 11
-)
 
 data class HvacInstances(
         val quantity: Int, // 21
