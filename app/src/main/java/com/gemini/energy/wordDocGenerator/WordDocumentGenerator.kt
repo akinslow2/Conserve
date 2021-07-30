@@ -1359,6 +1359,7 @@ class WordDocumentGenerator {
      * with normal formatting
      *
      * @param text paragraph text
+     * @param addBreak if a line break should be added after paragraph text, defaults to false
      */
     fun XWPFDocument.createNormalParagraph(text: String, addBreak: Boolean = false) {
         val paragraph = this.createParagraph()
@@ -1464,7 +1465,6 @@ class WordDocumentGenerator {
 
     // electricty rate calculations
     fun electrictyCharge(structure: String, kW: Double, kWh: Double): Double {
-//        val electrictySchedule = preaudit.electricstructure
         if (structure == "F") {
             println("calculate schedule F")
             return calculateScheduleF(kW, kWh)
