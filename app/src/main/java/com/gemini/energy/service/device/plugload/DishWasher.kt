@@ -70,7 +70,7 @@ class DishWasher(computable: Computable<*>, utilityRateGas: UtilityRate, utility
             */
             waterConsumption = featureData["Water Consumption"]!! as Double
             numberOfRacks = featureData["Number of Racks"]!! as Int
-            cyclesPerDay = featureData["Cycles per Day"]!! as Int
+            cyclesPerDay = featureData["Cycles per Day"] as Int
             daysUsed = featureData["Days Used"]!! as Int
             waterTemperature = featureData["Water Temperature (oF)"]!! as Int
             efficiency = featureData["Efficiency"]!! as Double
