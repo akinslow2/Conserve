@@ -74,8 +74,20 @@ open class UtilityRate(private val context: Context) {
         return structure.values.first().last().toDouble()
     }
 
-    companion object {
 
+    /**
+     * get slab rate from gas utility to calculate customer charge
+     *
+     * @param slab slab rate name
+     *
+     * @return rate for given [slab] or 0.0
+     */
+    fun getSlab(slab: String): Double {
+        return structure[slab]?.first()?.toDouble() ?: 0.0
+    }
+
+
+    companion object {
         private fun parseLine(line: String, separator: Char): List<String> {
             val result = mutableListOf<String>()
             val builder = StringBuilder()
@@ -124,7 +136,8 @@ class Electricity(private val rateStructure: String, private val companyCode: St
     enum class EValue(val index: Int) { EnergyCharge(5), Average(6), Demand(3) }
 
     override fun getKey(columns: List<String>) = listOf(columns[EKey.Season.index] + "-" + columns[EKey.Peak.index])
-    override fun getValue(columns: List<String>, header: String) = listOf(listOf(columns[EValue.EnergyCharge.index],
+    override fun getValue(columns: List<String>, header: String) =
+            listOf(listOf(columns[EValue.EnergyCharge.index],
             columns[EValue.Average.index], columns[EValue.Demand.index]))
 
     override fun getResourcePath() = "utility/${companyCode}_electric.csv"
