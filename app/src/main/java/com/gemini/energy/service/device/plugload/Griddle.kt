@@ -27,6 +27,9 @@ class Griddle(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRat
         return super.compute(extra = ({ Timber.d(it) }))
     }
 
+    // TODO: correct value
+    val presentValueFactor = 1.0
+
     /**
      * Usage Hours
      * */
