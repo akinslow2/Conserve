@@ -1,6 +1,7 @@
 package com.gemini.energy.wordDocGenerator
 
 import com.gemini.energy.service.device.EBase
+import com.gemini.energy.wordDocGenerator.models.HvacValues
 import com.gemini.energy.wordDocGenerator.models.PreAuditValues
 
 //Map<AuditId: Map<EquipmentType: Equipment>>
@@ -9,6 +10,9 @@ typealias SortedAudits =
 
 typealias AuditComponents = MutableMap<String, MutableList<EBase>>
 //the commented numbers represent the mastersheet id values
+
+
+// TODO: finish refactor of moving models & initialization to separate files
 
 data class HvacInstances(
         val quantity: Int, // 21
@@ -20,20 +24,6 @@ data class HvacInstances(
         val economizer: String,
         val thermotype: String,
         val npvalue: Double
-)
-
-data class HvacValues(
-        val instances: List<HvacInstances>,
-
-        val costPostState: Double, // 20
-        val totalCost: Double,
-        val totalSavings: Double,
-        val paybackYear: Double,
-        val netPresentValue: Double,
-        val currentTotalkW: Double,
-        val currentTotalkWh: Double,
-        val postTotalkW: Double,
-        val postTotalkWh: Double
 )
 
 data class WaterHeaterValues(
@@ -58,7 +48,6 @@ data class WaterHeaterValues(
 data class LightingValues(
         val totalcostsavings: Double, // 13
         val totalenergysavings: Double,
-        val selfinstallcost: Int, // 14
         val totalCost: Double, // 15
         val paybackMonth: Double, // 16
         val geminiPayback: Double, // 17

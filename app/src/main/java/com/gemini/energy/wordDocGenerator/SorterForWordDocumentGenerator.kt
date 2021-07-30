@@ -9,6 +9,7 @@ import com.gemini.energy.service.device.WaterHeater
 import com.gemini.energy.service.device.lighting.*
 import com.gemini.energy.service.device.plugload.*
 import com.gemini.energy.service.device.refrigeration.*
+import com.gemini.energy.wordDocGenerator.models.HvacValues
 import com.gemini.energy.wordDocGenerator.models.PreAuditValues
 import com.google.gson.JsonArray
 import com.google.gson.JsonElement
@@ -19,7 +20,7 @@ import java.util.*
 class SorterForWordDocumentGenerator {
     // use these values for sorting types of equipment that need to be aggregated for the report
     companion object {
-        private const val hvac = "hvac"
+        const val hvac = "hvac"
         private const val lighting = "lighting"
         private const val waterheater = "waterheater"
         private const val refrigeration = "refrigeration"
@@ -47,7 +48,7 @@ class SorterForWordDocumentGenerator {
         val returnAble = mutableListOf<PreparedForDocument>()
 
         for (audit in sortedAudits) {
-            val hvac = prepareValuesFromHvac(audit.value)
+            val hvac = HvacValues.tryCreate(audit.value)
             val waterheater = prepareValuesFromWaterHeater(audit.value)
             val lighting = prepareValuesFromLighting(audit.value)
             val equipment = prepareValuesForEquipment(audit.value)
@@ -193,74 +194,6 @@ class SorterForWordDocumentGenerator {
         }
 
         return sorted
-    }
-
-    private fun prepareValuesFromHvac(audit: AuditComponents): HvacValues? {
-        if (!audit[hvac]!!.any()) {
-            return null
-        }
-
-        @Suppress("UNCHECKED_CAST")
-        val hvacs = audit[hvac]!! as MutableList<Hvac>
-
-        var costPostState = 0.0
-        var totalCost = 0.0
-        var totalSavings = 0.0
-        val presentvaluefactor = 12.462
-        val instances = mutableListOf<HvacInstances>()
-
-        var currentTotalkW = 0.0
-        var currentTotalkWh = 0.0
-        var postTotalkW = 0.0
-        var postTotalkWh = 0.0
-
-        for (hvac in hvacs) {
-            val postState = hvac.buildPostState().blockingGet()
-            val element = postState.getAsJsonArray("results")[0].asJsonObject.get("data")
-
-            costPostState += hvac.costPostState(element, DataHolder())
-
-            totalSavings += hvac.totalSavings()
-            totalCost = hvac.implementationCost()
-
-            // @anthony, please verify that these are the correct values
-            currentTotalkW = hvac.energyPre()
-            currentTotalkWh = hvac.energyPre() * hvac.usageHoursPre()
-            postTotalkW = hvac.energyPost()
-            postTotalkWh = hvac.energyPost() * hvac.usageHoursPost()
-
-            instances.add(HvacInstances(
-                    hvac.quantity,
-                    hvac.year(),
-                    hvac.age,
-                    hvac.kbtu.toInt(),
-                    hvac.seer,
-                    hvac.overAge(),
-                    hvac.economizer,
-                    hvac.thermotype,
-                    hvac.netPresentValue
-            ))
-        }
-        val costToSavings =
-                if (totalSavings == 0.0) 0.0
-                else totalCost / totalSavings
-        // val paybackMonth = (totalCost / totalSavings * 12) + 4
-        val paybackYear: Double = costToSavings + (4 / 12)
-        val netPresentValue: Double = (totalSavings * presentvaluefactor) -  totalCost
-
-        return HvacValues(
-                instances.toList(),
-
-                costPostState,
-                totalCost,
-                totalSavings,
-                paybackYear,
-                netPresentValue,
-                currentTotalkW,
-                currentTotalkWh,
-                postTotalkW,
-                postTotalkWh
-        )
     }
 
     private fun prepareValuesFromWaterHeater(audit: AuditComponents): WaterHeaterValues? {
