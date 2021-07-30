@@ -128,14 +128,15 @@ data class EquipmentInstances(
         val materialCost: Double, // 32
         val implementationCost: Double,
         val totalsavings: Double,
-        val paybackMonth: Double
+        val paybackMonth: Double,
+        val netPresentValue: Double
 )
 
 data class EquipmentValues(
         val instances: List<EquipmentInstances>,
         val totalSavings: Double, // 31
         val totalCost: Double,
-        val netPresentValue: Double,
+        val totalNetPresentValue: Double,
         val currentTotalkW: Double,
         val currentTotalkWh: Double,
         val postTotalkW: Double,

@@ -812,7 +812,7 @@ class SorterForWordDocumentGenerator {
     private fun prepareValuesForEquipment(audit: AuditComponents): EquipmentValues? {
         var totalSavings = 0.0
         var totalCost = 0.0
-        val netPresentValue = 0.0
+        var totalNetPresentValue = 0.0
         val instances = mutableListOf<EquipmentInstances>()
 
         var currentTotalkW = 0.0
@@ -858,14 +858,18 @@ class SorterForWordDocumentGenerator {
             var materialCost = 0.0
             var implementationCost = 0.0
             var savings = 0.0
+            var netPresentValue = 0.0
 
             val single = combinationOven.first()
+            val presentValueFactor = single.presentValueFactor
 
             for (item in combinationOven) {
                 costElectricity += item.costPostState
                 materialCost += item.materialCost()
                 implementationCost += item.implementationCost()
                 savings += item.costPreState(listOf()) - item.costPostState
+
+                netPresentValue += (savings * presentValueFactor) - implementationCost
 
                 // @anthony, please verify that these are the correct values
                 if (!item.isGas()) {
@@ -889,28 +893,32 @@ class SorterForWordDocumentGenerator {
                             materialCost,
                             implementationCost,
                             savings,
-                            costToSavings * 12
+                            costToSavings * 12,
+                            netPresentValue
                     )
             )
         }
 
         // TODO: add convection oven when implemented
-        if (convectionOven.any()) {
-        }
+        if (convectionOven.any()) { }
 
         if (conveyorBroiler.any()) {
             var costElectricity = 0.0
             var materialCost = 0.0
             var implementationCost = 0.0
             var savings = 0.0
+            var netPresentValue = 0.0
 
             val single = conveyorBroiler.first()
+            val presentValueFactor = single.presentValueFactor
 
             for (broiler in conveyorBroiler) {
                 costElectricity += broiler.costPostState
                 materialCost += broiler.materialCost()
                 implementationCost += broiler.implementationCost()
                 savings += broiler.costPreState(listOf()) - broiler.costPostState
+
+                netPresentValue += (savings * presentValueFactor) - implementationCost
 
                 // @anthony, please verify that these are the correct values
                 if (!broiler.isGas()) {
@@ -934,14 +942,14 @@ class SorterForWordDocumentGenerator {
                             materialCost,
                             implementationCost,
                             savings,
-                            costToSavings * 12
+                            costToSavings * 12,
+                            netPresentValue
                     )
             )
         }
 
         // TODO: add conveyor oven when implemented
-        if (conveyorOven.any()) {
-        }
+        if (conveyorOven.any()) { }
 
         if (dishwasher.any()) {
             var costElectricity = 0.0
@@ -949,7 +957,10 @@ class SorterForWordDocumentGenerator {
             var implementationCost = 0.0
             var savings = 0.0
 
+            var netPresentValue = 0.0
+
             val single = dishwasher.first()
+            val presentValueFactor = single.presentValueFactor
 
             for (washer in dishwasher) {
                 val postState = washer.buildPostState().blockingGet()
@@ -959,6 +970,7 @@ class SorterForWordDocumentGenerator {
                 materialCost += washer.materialCost()
                 implementationCost += washer.implementationCost()
                 savings += washer.costPreState(listOf(null)) - washer.costPostState
+                netPresentValue += (savings * presentValueFactor) - implementationCost
 
                 // @anthony, please verify that these are the correct values
                 if (!washer.isGas()) {
@@ -982,28 +994,31 @@ class SorterForWordDocumentGenerator {
                             materialCost,
                             implementationCost,
                             savings,
-                            costToSavings * 12
+                            costToSavings * 12,
+                            netPresentValue
                     )
             )
         }
 
         // TODO: add fryer when implemented
-        if (fryer.any()) {
-        }
+        if (fryer.any()) { }
 
         if (griddle.any()) {
             var costElectricity = 0.0
             var materialCost = 0.0
             var implementationCost = 0.0
             var savings = 0.0
+            var netPresentValue = 0.0
 
             val single = griddle.first()
+            val presentValueFactor = single.presentValueFactor
 
             for (item in griddle) {
                 costElectricity += item.costPostState
                 materialCost += item.materialCost()
                 implementationCost += item.implementationCost()
                 savings += item.costPreState(listOf(null)) - item.costPostState
+                netPresentValue += (savings * presentValueFactor) - implementationCost
 
                 // @anthony, please verify that these are the correct values
                 if (!item.isGas()) {
@@ -1027,7 +1042,8 @@ class SorterForWordDocumentGenerator {
                             materialCost,
                             implementationCost,
                             savings,
-                            costToSavings * 12
+                            costToSavings * 12,
+                            netPresentValue
                     )
             )
         }
@@ -1037,14 +1053,17 @@ class SorterForWordDocumentGenerator {
             var materialCost = 0.0
             var implementationCost = 0.0
             var savings = 0.0
+            var netPresentValue = 0.0
 
             val single = hotFoodCabinet.first()
+            val presentValueFactor = single.presentValueFactor
 
             for (cabinet in hotFoodCabinet) {
                 costElectricity += cabinet.costPostState
                 materialCost += cabinet.materialCost()
                 implementationCost += cabinet.implementationCost()
                 savings += cabinet.costPreState(listOf(null)) - cabinet.costPostState
+                netPresentValue += (savings * presentValueFactor) - implementationCost
 
                 // @anthony, please verify that these are the correct values
 //                        currentTotalkW +=
@@ -1066,7 +1085,8 @@ class SorterForWordDocumentGenerator {
                             materialCost,
                             implementationCost,
                             savings,
-                            costToSavings * 12
+                            costToSavings * 12,
+                            netPresentValue
                     )
             )
         }
@@ -1076,14 +1096,17 @@ class SorterForWordDocumentGenerator {
             var materialCost = 0.0
             var implementationCost = 0.0
             var savings = 0.0
+            var netPresentValue = 0.0
 
             val single = iceMaker.first()
+            val presentValueFactor = single.presentValueFactor
 
             for (item in iceMaker) {
                 costElectricity += item.costPostState
                 materialCost += item.materialCost()
                 implementationCost += item.implementationCost()
                 savings += item.costPreState(listOf()) - item.costPostState
+                netPresentValue += (savings * presentValueFactor) - implementationCost
 
                 // @anthony, please verify that these are the correct values
                 if (!item.isGas()) {
@@ -1107,7 +1130,8 @@ class SorterForWordDocumentGenerator {
                             materialCost,
                             implementationCost,
                             savings,
-                            costToSavings * 12
+                            costToSavings * 12,
+                            netPresentValue
                     )
             )
         }
@@ -1117,14 +1141,17 @@ class SorterForWordDocumentGenerator {
             var materialCost = 0.0
             var implementationCost = 0.0
             var savings = 0.0
+            var netPresentValue = 0.0
 
             val single = preRinseSpray.first()
+            val presentValueFactor = single.presentValueFactor
 
             for (spray in preRinseSpray) {
                 costElectricity += spray.costPostState
                 materialCost += spray.materialCost()
                 implementationCost += spray.implementationCost()
                 savings += spray.costPreState(listOf(null)) - spray.costPostState
+                netPresentValue += (savings * presentValueFactor) - implementationCost
 
                 // @anthony, please verify that these are the correct values
                 if (!spray.isGas()) {
@@ -1148,25 +1175,26 @@ class SorterForWordDocumentGenerator {
                             materialCost,
                             implementationCost,
                             savings,
-                            costToSavings * 12
+                            costToSavings * 12,
+                            netPresentValue
                     )
             )
         }
 
         // TODO add SteamCooker when implemented
-        if (steamCooker.any()) {
-        }
+        if (steamCooker.any()) { }
 
         for (instance in instances) {
             totalSavings += instance.costElectricity
             totalCost += instance.implementationCost
+            totalNetPresentValue += instance.netPresentValue
         }
 
         return EquipmentValues(
                 instances.toList(),
                 totalSavings,
                 totalCost,
-                netPresentValue,
+                totalNetPresentValue,
                 currentTotalkW,
                 currentTotalkWh,
                 postTotalkW,
@@ -1215,7 +1243,7 @@ class SorterForWordDocumentGenerator {
 
         val buildingNetPresentValue =(lightings?.netPresentValue ?: 0.0) +
                         (hvacs?.netPresentValue ?: 0.0) +
-                        (equipments?.netPresentValue ?: 0.0) +
+                        (equipments?.totalNetPresentValue ?: 0.0) +
                         (waterHeater?.netPresentValue ?: 0.0) +
                         (refrigeration?.netPresentValue ?: 0.0) +
                         (motors?.netPresentValue ?: 0.0)
