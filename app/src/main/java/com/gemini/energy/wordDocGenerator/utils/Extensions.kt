@@ -1,5 +1,6 @@
 package com.gemini.energy.wordDocGenerator.utils
 
+import com.gemini.energy.format
 import com.gemini.energy.wordDocGenerator.WordDocumentGenerator
 import org.apache.poi.wp.usermodel.HeaderFooterType
 import org.apache.poi.xwpf.usermodel.ParagraphAlignment
@@ -61,23 +62,26 @@ fun XWPFDocument.createHeader(
  * @param text paragraph text
  * @param fontSize size of text, defaults to 12
  * @param fontColor color of text, defaults to black
- * @param addBreak if a line break should be added after paragraph text, defaults to false
+ * @param isStartOfNewPage if this paragraph should be the start of a new page
+ * @param addBreakAfter if a line break should be added after paragraph text, defaults to false
  */
 fun XWPFDocument.createNormalParagraph(
         text: String,
         fontSize: Int = 12,
         fontColor: String = WordDocumentGenerator.blackColor,
-        addBreak: Boolean = false) {
+        isStartOfNewPage: Boolean = false,
+        addBreakAfter: Boolean = false) {
 
     val paragraph = this.createParagraph()
     paragraph.spacingBetween = 1.5
+    paragraph.isPageBreak = isStartOfNewPage
     val run = paragraph.createRun()
     run.fontFamily = WordDocumentGenerator.fontAgencyFB
     run.fontSize = fontSize
     run.color = fontColor
     run.setText(text)
 
-    if (addBreak)
+    if (addBreakAfter)
         run.addBreak()
 }
 
