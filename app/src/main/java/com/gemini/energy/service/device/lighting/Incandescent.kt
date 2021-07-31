@@ -244,7 +244,6 @@ class Incandescent(computable: Computable<*>, utilityRateGas: UtilityRate, utili
     }
 
     fun totalSavings(): Double {
-
         val lifeHours = lightingConfig(ELightingType.Incandescent)[ELightingIndex.LifeHours.value] as Double
 
         val totalUnits = lampsPerFixtures * numberOfFixtures
@@ -273,9 +272,10 @@ class Incandescent(computable: Computable<*>, utilityRateGas: UtilityRate, utili
      **/
     var presentvaluefactor = 7.722
 
-    // TODO: implement me!
     fun installCost(): Double {
-        return 0.0
+        val timePerFixture = Utils.timePerFixture(replacementType, ceilingType)
+        val electricianCost = Utils.electricianCost(timePerFixture, numberOfFixtures)
+        return Utils.installCost(replacementType, ledbulbcost, lampsPerFixtures, numberOfFixtures, electricianCost)
     }
 
     fun netPresentValue(): Double {

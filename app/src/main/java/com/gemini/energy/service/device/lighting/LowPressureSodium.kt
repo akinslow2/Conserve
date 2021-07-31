@@ -276,9 +276,10 @@ class LPSodium(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRa
      **/
     var presentvaluefactor = 7.722
 
-    // TODO: implement me!
     fun installCost(): Double {
-        return 0.0
+        val timePerFixture = Utils.timePerFixture(replacementType, ceilingType)
+        val electricianCost = Utils.electricianCost(timePerFixture, numberOfFixtures)
+        return Utils.installCost(replacementType, ledbulbcost, lampsPerFixtures, numberOfFixtures, electricianCost)
     }
 
     fun netPresentValue(): Double {
