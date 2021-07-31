@@ -601,7 +601,6 @@ class WordDocumentGenerator {
 
     }
 
-    // @Anthony this function generates a page in the word doc that displays the latest calculations you requested
     private fun generateElectrictyCalculationPage(document: XWPFDocument, values: PreparedForDocument) {
         val p1 = document.createParagraph()
         p1.spacingBetween = 1.5
@@ -625,17 +624,27 @@ class WordDocumentGenerator {
 
         generateElectrictyCalculationTable(document, values)
 
-        val p3 = document.createParagraph()
-        p3.spacingBetween = 1.5
-        val r1p3 = p3.createRun()
-        r1p3.fontFamily = fontAgencyFB
-        r1p3.setText("Given current building aggregation, current total charge is $${electrictyCharge(values.preAudit.electricstructure, values.building.currentTotalkW, values.building.currentTotalkWh).format(2)}")
+        val currentElectricityCharge = electrictyCharge(
+                values.preAudit.electricstructure,
+                values.building.currentTotalkW,
+                values.building.currentTotalkWh).format(2)
+        document.createNormalParagraph(
+                "Given current building aggregation, current total charge is $${currentElectricityCharge}")
 
-        val p4 = document.createParagraph()
-        p4.spacingBetween = 1.5
-        val r1p4 = p4.createRun()
-        r1p4.fontFamily = fontAgencyFB
-        r1p4.setText("Given current building aggregation, current total charge is $${electrictyCharge(values.preAudit.electricstructure, values.building.postTotalkW, values.building.postTotalkW).format(2)}")
+        val postElectricityCharge = electrictyCharge(
+                values.preAudit.electricstructure,
+                values.building.postTotalkW,
+                values.building.postTotalkWh).format(2)
+        document.createNormalParagraph(
+                "Given current building aggregation, post total charge is $${postElectricityCharge}")
+
+        // TODO: calculate this!
+        val customerAnnualSavingsDuringPaybackPeriod = "TODO"
+        document.createNormalParagraph(
+                "By allowing Roanoke Electric to implement these proposed changes you will see an "
+                        + "estimated electricity bill savings of $$customerAnnualSavingsDuringPaybackPeriod "
+                        + "a year. If there is a question or concern about your bill, please email us at "
+                        + "roanoke@geminiEsolutions.com or call us at (252) 209-2236 or (800) 433-2236.")
     }
 
 
