@@ -177,7 +177,7 @@ class WordDocumentGenerator {
         val r1p2 = p2.createRun()
         r1p2.fontFamily = fontAgencyFB
         r1p2.fontSize = 20
-        r1p2.setText("Implementation of all recommended measures will provide annual savings of")
+        r1p2.setText("Implementation of all recommended measures will provide an estimated annual savings of")
         r1p2.addBreak()
         val r2p2 = p2.createRun()
         r2p2.fontFamily = fontAgencyFB
@@ -192,19 +192,25 @@ class WordDocumentGenerator {
         r3p2.setText("with a co-payment of $0")
         r3p2.addBreak()
 
-        val p3 = document.createParagraph()
-        p3.spacingBetween = 1.5
-        val r1p3 = p3.createRun()
-        r1p3.fontFamily = fontAgencyFB
-        r1p3.fontSize = 12
-        r1p3.color = greyColor
-        r1p3.setText("The Pay as You Save program means you will receive all of the recommended upgrades at no cost AND see your monthly energy bill reduce at least 20% ($manuallyGeneratedValue)." +
-                " The utility will recover the costs by adding a charge to your bill that equates to 80% of the estimated monthly energy savings. This charge will last for 12 years." +
-                " This is not a loan, the charge is only tied to the meter, and will stay on the meter even if you relocate." +
-                " In addition, we expect business cost savings due to these upgrades to total ($manuallyGeneratedValue)." +
-                " Overall, you can expect:")
+        // TODO: calculate this!
+        val differenceBetweenEnergySavingsAndMaintenanceSavings = "TODO"
+        document.createNormalParagraph(
+                "The Pay as You Save program means you will receive all the recommended upgrades at "
+                        + "no cost AND see your monthly energy bill greatly reduced from pre-Covid levels."
+                        + "The utility will recover the costs by adding a charge to your bill that equates "
+                        + "to the project cost paid out monthly over 12 years. This charge will last for 12 years. "
+                        + "This is not a loan, the charge is only tied to the meter, and will stay on "
+                        + "the meter even if you relocate. In addition, we expect business cost savings due "
+                        + "to these upgrades to total $$differenceBetweenEnergySavingsAndMaintenanceSavings. "
+                        + "Overall, you can expect:",
+                fontSize = 14,
+                fontColor = greyColor)
 
-        val bullets1 = arrayOf("reduced energy costs,", "improved profit margins,", "increased thermal comfort in your building, and", "more control over how energy is consumed.")
+        val bullets1 = arrayOf(
+                "reduced energy costs,",
+                "improved profit margins,",
+                "increased thermal comfort in your building, and",
+                "more control over how energy is consumed.")
         document.createBullets(bullets1, greyColor)
 /*
         if (buildingValues.buildingTotalCost > 5000) {
