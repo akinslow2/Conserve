@@ -16,42 +16,70 @@ import java.math.BigInteger
 
 
 /**
- * creates page header
+ * creates page header with savings displayed
  *
  * @param headerText initial header text
  * @param implementationText implementation text
  * @param savingsValue savings value for this section
  */
-fun XWPFDocument.createHeader(
+fun XWPFDocument.createHeaderWithSavings(
         headerText: String,
         implementationText: String,
         savingsValue: Double) {
 
-     val p1 = this.createParagraph()
-        p1.spacingBetween = 1.5
-        p1.isPageBreak = true
-        val r1p1 = p1.createRun()
-        r1p1.fontFamily = WordDocumentGenerator.fontAgencyFB
-        r1p1.isBold = true
-        r1p1.isItalic = true
-        r1p1.fontSize = 16
-        r1p1.setText(headerText)
-        r1p1.addBreak()
+    val p1 = this.createParagraph()
+    p1.spacingBetween = 1.5
+    p1.isPageBreak = true
+    val r1p1 = p1.createRun()
+    r1p1.fontFamily = WordDocumentGenerator.fontAgencyFB
+    r1p1.isBold = true
+    r1p1.isItalic = true
+    r1p1.fontSize = 16
+    r1p1.setText(headerText)
+    r1p1.addBreak()
 
-        val p2 = this.createParagraph()
-        p2.spacingBetween = 1.5
-        val r1p2 = p2.createRun()
-        r1p2.fontFamily = WordDocumentGenerator.fontAgencyFB
-        r1p2.fontSize = 18
-        r1p2.setText(implementationText)
-        r1p2.addBreak()
-        val r2p2 = p2.createRun()
-        r2p2.fontFamily = WordDocumentGenerator.fontAgencyFB
-        r2p2.isBold = true
-        r2p2.fontSize = 24
-        r2p2.color = WordDocumentGenerator.greenColor
-        r2p2.setText("$${savingsValue.format(0)}")
-        r2p2.addBreak()
+    val p2 = this.createParagraph()
+    p2.spacingBetween = 1.5
+    val r1p2 = p2.createRun()
+    r1p2.fontFamily = WordDocumentGenerator.fontAgencyFB
+    r1p2.fontSize = 18
+    r1p2.setText(implementationText)
+    r1p2.addBreak()
+    val r2p2 = p2.createRun()
+    r2p2.fontFamily = WordDocumentGenerator.fontAgencyFB
+    r2p2.isBold = true
+    r2p2.fontSize = 24
+    r2p2.color = WordDocumentGenerator.greenColor
+    r2p2.setText("$${savingsValue.format(0)}")
+    r2p2.addBreak()
+}
+
+
+/**
+ * creates a header stating
+ *  At this time there are no recommended measures
+ *
+ *  @param headerText intial header text
+ */
+fun XWPFDocument.createHeaderWithNoRecommendedMeasures(headerText: String) {
+    val p1 = this.createParagraph()
+    p1.spacingBetween = 1.5
+    p1.isPageBreak = true
+    val r1p1 = p1.createRun()
+    r1p1.fontFamily = WordDocumentGenerator.fontAgencyFB
+    r1p1.isBold = true
+    r1p1.isItalic = true
+    r1p1.fontSize = 16
+    r1p1.setText(headerText)
+    r1p1.addBreak()
+
+    val p2 = this.createParagraph()
+    p2.spacingBetween = 1.5
+    val r1p2 = p2.createRun()
+    r1p2.fontFamily = WordDocumentGenerator.fontAgencyFB
+    r1p2.fontSize = 18
+    r1p2.setText("At this time there are no recommended measures")
+    r1p2.addBreak()
 }
 
 
