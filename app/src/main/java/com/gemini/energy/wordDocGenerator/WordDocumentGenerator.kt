@@ -26,13 +26,13 @@ class WordDocumentGenerator {
         //Hex #'s used for the colors
         private const val greyColor = "595959"
         private const val tableGreyColor = "D9D9D9"
-        private const val greenColor = "70ad47"
+        const val greenColor = "70ad47"
         private const val tableGreenColor = "469B43"
         const val blackColor = "000000"
         private const val whiteColor = "ffffff"
 
         const val fontAgencyFB = "Agency FB"
-        const val fontUnivers = "Univers LT Std 39 Thin UltraCn"
+        private const val fontUnivers = "Univers LT Std 39 Thin UltraCn"
 
         private const val manuallyGeneratedValue = "INSERTME"
     }
@@ -403,70 +403,36 @@ class WordDocumentGenerator {
     }
 
     private fun generateLightingSavingsPage(document: XWPFDocument, lights: LightingValues) {
-        val p1 = document.createParagraph()
-        p1.spacingBetween = 1.5
-        p1.isPageBreak = true
-        val r1p1 = p1.createRun()
-        r1p1.fontFamily = fontAgencyFB
-        r1p1.isBold = true
-        r1p1.isItalic = true
-        r1p1.fontSize = 16
-        r1p1.setText("Lighting Savings")
-        r1p1.addBreak()
+        document.createHeader(
+                "Lighting Savings",
+                "Implementation of recommended lighting measures will result in an estimated annual savings of",
+                lights.totalcostsavings)
 
-        val p2 = document.createParagraph()
-        p2.spacingBetween = 1.5
-        val r1p2 = p2.createRun()
-        r1p2.fontFamily = fontAgencyFB
-        r1p2.fontSize = 18
-        r1p2.setText("Implementation of recommended lighting measures will result in annual savings of")
-        r1p2.addBreak()
-        val r2p2 = p2.createRun()
-        r2p2.fontFamily = fontAgencyFB
-        r2p2.isBold = true
-        r2p2.fontSize = 24
-        r2p2.color = greenColor
-        r2p2.setText("$${lights.totalcostsavings.format(0)}")
-        r2p2.addBreak()
-
-        val p3 = document.createParagraph()
-        p3.spacingBetween = 1.5
-        val r1p3 = p3.createRun()
-        r1p3.fontFamily = fontAgencyFB
-        r1p3.fontSize = 12
-        r1p3.setText("Benefits of LED bulbs include:")
+        document.createNormalParagraph("Benefits of LED bulbs include:")
 
         val bullets = arrayOf("Lower maintenance costs", "Less air-conditioning required", "Happier customers")
         document.createBullets(bullets)
 
-        val p4 = document.createParagraph()
-        p4.spacingBetween = 1.5
-        val r1p4 = p4.createRun()
-        r1p4.fontFamily = fontAgencyFB
-        r1p4.fontSize = 12
-        r1p4.setText("Replacing all of your non-LED bulbs and adding controls will cost approximately $${lights.totalCost.format(0)} but will result in a minimum of $${lights.totalcostsavings.format(0)} in annual savings. " +
-                "This equates to a payback period of approximately ${lights.paybackMonth.format(0)} months. The cost can be reduced to $${lights.selfinstallcost} if you self-install the occupancy sensors. " +
-                "Alternatively, to replace all non-LED bulbs will result in a minimum of $${lights.totalcostsavings.format(0)} in annual savings and cost approximately $${lights.totalCost.format(0)}. " +
-                "This equates to a payback period of approximately ${lights.paybackMonth.format(0)} months. " +
-                "Overall, implementing the LED retrofit translates to a minimum NPV of $${lights.netPresentValue.format(0)}. We strongly recommend you replace all non-LED bulbs and ensure the bathroom lights are off at the end of the day.")
-        r1p4.addBreak()
+        document.createNormalParagraph(
+                "Replacing all of your non-LED bulbs and adding controls will cost approximately "
+                        + "$${lights.totalCost.format(0)} but will result in an estimated "
+                        + "minimum of $${lights.totalcostsavings.format(0)} in annual savings. "
+                        + "This equates to a payback period of approximately ${lights.paybackMonth.format(0)} "
+                        + "months. Alternatively, to replace all non-LED bulbs will result in a minimum of "
+                        + "$${lights.totalcostsavings.format(0)} in annual savings and cost approximately $${lights.totalCost.format(0)}. "
+                        + "This equates to a payback period of approximately ${lights.paybackMonth.format(0)} months. "
+                        + "Overall, implementing the LED retrofit translates to a minimum NPV of $${lights.netPresentValue.format(0)}. "
+                        + "We strongly recommend you replace all non-LED bulbs and ensure the bathroom lights are off at the end of the day.",
+                addBreakAfter = true)
 
-        val p5 = document.createParagraph()
-        p5.spacingBetween = 1.5
-        val r1p5 = p5.createRun()
-        r1p5.fontFamily = fontAgencyFB
-        r1p5.fontSize = 12
-        r1p5.setText("Please see the next page for specifics of each lighting measure.")
+        document.createNormalParagraph("Please see the next page for specifics of each lighting measure.")
 
         createLightingTable1(document, lights)
 
-        val p6 = document.createParagraph()
-        p6.spacingBetween = 1.5
-        p6.isPageBreak = true
-        val r1p6 = p6.createRun()
-        r1p6.fontFamily = fontAgencyFB
-        r1p6.fontSize = 12
-        r1p6.setText("The savings represented in the table below reflect the maintenance and cooling costs abated because LED bulbs have a longer life and produce considerably less heat.")
+        document.createNormalParagraph(
+                "The savings represented in the table below reflect the maintenance and cooling costs abated "
+                        + "because LED bulbs have a longer life and produce considerably less heat.",
+                isStartOfNewPage = true)
 
         createLightingTable3(document, lights)
     }
