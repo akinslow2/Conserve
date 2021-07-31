@@ -14,6 +14,26 @@ import java.math.BigInteger
  */
 
 
+ /**
+     * creates a paragraph in the given document [this]
+     * with normal formatting
+     *
+     * @param text paragraph text
+     * @param addBreak if a line break should be added after paragraph text, defaults to false
+     */
+    fun XWPFDocument.createNormalParagraph(text: String, addBreak: Boolean = false) {
+        val paragraph = this.createParagraph()
+        paragraph.spacingBetween = 1.5
+        val run = paragraph.createRun()
+        run.fontFamily = WordDocumentGenerator.fontAgencyFB
+        run.fontSize = 12
+        run.setText(text)
+
+        if (addBreak)
+            run.addBreak()
+    }
+
+
 /**
  * create bulleted list
  *
