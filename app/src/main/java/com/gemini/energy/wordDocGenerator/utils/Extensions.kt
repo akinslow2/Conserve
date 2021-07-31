@@ -14,24 +14,32 @@ import java.math.BigInteger
  */
 
 
- /**
-     * creates a paragraph in the given document [this]
-     * with normal formatting
-     *
-     * @param text paragraph text
-     * @param addBreak if a line break should be added after paragraph text, defaults to false
-     */
-    fun XWPFDocument.createNormalParagraph(text: String, addBreak: Boolean = false) {
-        val paragraph = this.createParagraph()
-        paragraph.spacingBetween = 1.5
-        val run = paragraph.createRun()
-        run.fontFamily = WordDocumentGenerator.fontAgencyFB
-        run.fontSize = 12
-        run.setText(text)
+/**
+ * creates a paragraph in the given document [this]
+ * with normal formatting
+ *
+ * @param text paragraph text
+ * @param fontSize size of text, defaults to 12
+ * @param fontColor color of text, defaults to black
+ * @param addBreak if a line break should be added after paragraph text, defaults to false
+ */
+fun XWPFDocument.createNormalParagraph(
+        text: String,
+        fontSize: Int = 12,
+        fontColor: String = WordDocumentGenerator.blackColor,
+        addBreak: Boolean = false) {
 
-        if (addBreak)
-            run.addBreak()
-    }
+    val paragraph = this.createParagraph()
+    paragraph.spacingBetween = 1.5
+    val run = paragraph.createRun()
+    run.fontFamily = WordDocumentGenerator.fontAgencyFB
+    run.fontSize = fontSize
+    run.color = fontColor
+    run.setText(text)
+
+    if (addBreak)
+        run.addBreak()
+}
 
 
 /**
