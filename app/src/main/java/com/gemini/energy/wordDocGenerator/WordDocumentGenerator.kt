@@ -213,7 +213,7 @@ class WordDocumentGenerator {
     }
 
     private fun generateHvacSavingsPage(document: XWPFDocument, hvac: HvacValues, building: BuildingValues) {
-        document.createHeader(
+        document.createHeaderWithSavings(
                 "Heating, Ventilation, and Air-Conditioning Savings",
                 "Implementation of recommended HVAC measures will result in minimum annual savings of ",
                 hvac.totalSavings)
@@ -309,28 +309,15 @@ class WordDocumentGenerator {
     }
 
     private fun generateWaterHeaterSavingsPage(document: XWPFDocument, waterheater: WaterHeaterValues) {
-        val p1 = document.createParagraph()
-        p1.isPageBreak = true
-        p1.spacingBetween = 1.5
-        val r1p1 = p1.createRun()
-        r1p1.fontFamily = fontAgencyFB
-        r1p1.isBold = true
-        r1p1.isItalic = true
-        r1p1.fontSize = 20
-        r1p1.setText("Water Heating Savings")
-
-        val p2 = document.createParagraph()
-        p2.spacingBetween = 1.5
-        val r1p2 = p2.createRun()
-        r1p2.fontFamily = fontAgencyFB
-        r1p2.fontSize = 18
-        r1p2.setText("Implementation of recommended water heater measures will result in minimum annual savings of ")
-        val r2p2 = p2.createRun()
-        r2p2.fontFamily = fontAgencyFB
-        r2p2.isBold = true
-        r2p2.fontSize = 24
-        r2p2.color = greenColor
-        r2p2.setText("$${waterheater.totalSavings.format(0)}")
+        if (waterheater.netPresentValue > 1) {
+            document.createHeaderWithSavings(
+                    "Water Heating Savings",
+                    "Implementation of recommended water heater measures will result in minimum annual savings of ",
+                    waterheater.totalSavings)
+        }
+        else {
+            document.createHeaderWithNoRecommendedMeasures("Water Heating Savings")
+        }
 
         val p3 = document.createParagraph()
         val r1p3 = p3.createRun()
@@ -338,23 +325,19 @@ class WordDocumentGenerator {
         r1p3.isBold = true
         r1p3.isItalic = true
         r1p3.fontSize = 16
-        r1p3.setText("${waterheater.unittype}")
+        r1p3.setText(waterheater.unittype)
 
-        val p4 = document.createParagraph()
-        p4.spacingBetween = 1.5
-        val r1p4 = p4.createRun()
-        r1p4.fontFamily = fontAgencyFB
-        r1p4.fontSize = 12
-        r1p4.setText("Replacing your water heater(s) will result in a total cost of $${waterheater.totalCost.format(0)} but will result in a minimum of $${waterheater.totalSavings.format(0)} in annual savings. " +
+        document.createNormalParagraph(
+                "Replacing your water heater(s) will result in a total cost of $${waterheater.totalCost.format(0)} but will result in a minimum of $${waterheater.totalSavings.format(0)} in annual savings. " +
                 "This equates to a payback period of approximately ${waterheater.paybackMonth.format(0)} months. " +
-                "This investment will result in a NPV of $${waterheater.netPresentValue.format(0)}. ")
-        r1p4.addBreak()
+                "This investment will result in a NPV of $${waterheater.netPresentValue.format(0)}. ",
+                addBreakAfter = true)
 
         createWaterHeaterTable(document, waterheater)
     }
 
     private fun generateLightingSavingsPage(document: XWPFDocument, lights: LightingValues) {
-        document.createHeader(
+        document.createHeaderWithSavings(
                 "Lighting Savings",
                 "Implementation of recommended lighting measures will result in an estimated annual savings of",
                 lights.totalcostsavings)
