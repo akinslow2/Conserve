@@ -25,24 +25,6 @@ data class PreAuditValues(
         val gasstructure: String // 11
 )
 
-data class WaterHeaterValues(
-        val totalSavings: Double, //1
-        val totalCost: Double, //2
-        val paybackMonth: Double, //3
-        val paybackYear: Double, //4
-        val netPresentValue: Double, //5
-        val quantity: Int,
-        val year: Int,
-        val age: Int,
-        val thermaleff: Int,
-        val fueltype: String,
-        val unittype: String,
-        val capacity: Double,
-        val currentTotalkW: Double,
-        val currentTotalkWh: Double,
-        val postTotalkW: Double,
-        val postTotalkWh: Double
-)
 
 data class RefrigerationValues(
         val totalCost: Double,
