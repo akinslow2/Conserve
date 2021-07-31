@@ -25,18 +25,6 @@ data class PreAuditValues(
         val gasstructure: String // 11
 )
 
-
-data class RefrigerationValues(
-        val totalCost: Double,
-        val totalSavings: Double,
-        val paybackMonth: Double,
-        val netPresentValue: Double,
-        val currentTotalkW: Double,
-        val currentTotalkWh: Double,
-        val postTotalkW: Double,
-        val postTotalkWh: Double
-)
-
 data class EquipmentInstances(
         val name: String, // 27
         val delta: Double, // 26
