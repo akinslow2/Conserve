@@ -25,32 +25,6 @@ data class PreAuditValues(
         val gasstructure: String // 11
 )
 
-data class HvacInstances(
-        val quantity: Int, // 21
-        val year: Int, // 22
-        val age: Int, // 29
-        val btu: Int, //23
-        val seer: Double, // 24
-        val overage: Int, //25
-        val economizer: String,
-        val thermotype: String,
-        val npvalue: Double
-)
-
-data class HvacValues(
-        val instances: List<HvacInstances>,
-
-        val costPostState: Double, // 20
-        val totalCost: Double,
-        val totalSavings: Double,
-        val paybackYear: Double,
-        val netPresentValue: Double,
-        val currentTotalkW: Double,
-        val currentTotalkWh: Double,
-        val postTotalkW: Double,
-        val postTotalkWh: Double
-)
-
 data class WaterHeaterValues(
         val totalSavings: Double, //1
         val totalCost: Double, //2
