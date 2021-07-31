@@ -37,7 +37,6 @@ class Halogen(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRat
     private var partPeakHours = 0.0
     var offPeakHours = 0.0
 
-
     var energyAtPreState = 0.0
     var energyAtPostState = 0.0
     var currentPower = 0.0
@@ -58,14 +57,6 @@ class Halogen(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRat
     private var controls = ""
     private var hasControls = ""
 
-    var postpeakHours = 0.0
-    var postpartPeakHours = 0.0
-    var postoffPeakHours = 0.0
-    private var alternateActualWatts = 0.0
-    private var alternateNumberOfFixtures = 0
-    private var alternateLampsPerFixture = 0
-
-
 
     //Where you extract from user inputs and assign to variables
     override fun setup() {
@@ -81,14 +72,6 @@ class Halogen(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRat
             partPeakHours = (featureData["Part Peak Hours"]!! as Int).toDouble()
             offPeakHours = (featureData["Off Peak Hours"]!! as Int).toDouble()
 
-            alternateActualWatts = featureData["Alternate Actual Watts"]!! as Double
-            alternateNumberOfFixtures = featureData["Alternate Number of Fixtures"]!! as Int
-            alternateLampsPerFixture = featureData["Alternate Lamps Per Fixture"]!! as Int
-
-            postpeakHours = (featureData["Suggested Peak Hours"]!! as Int).toDouble()
-            postpartPeakHours = (featureData["Suggested Part Peak Hours"]!! as Int).toDouble()
-            postoffPeakHours = (featureData["Suggested Off Peak Hours"]!! as Int).toDouble()
-
             controls = featureData["Type of Control"]!! as String
             hasControls = featureData["Controls"]!! as String
 
@@ -96,6 +79,8 @@ class Halogen(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRat
             e.printStackTrace()
         }
     }
+
+
     /**
      * Time | Energy | Power - Pre State
      * */
@@ -104,16 +89,30 @@ class Halogen(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRat
             val usageHours = UsageLighting()
             usageHours.peakHours = 4336.0
             return usageHours.yearly()
-        }
-        else {
+        } else {
             val usageHours = UsageLighting()
             usageHours.peakHours = peakHours
             usageHours.partPeakHours = partPeakHours
             usageHours.offPeakHours = offPeakHours
-            if (usageHours.yearly() > 0){
+            if (usageHours.yearly() > 0) {
                 return usageHours.yearly()
             }
             return usageHoursBusiness.yearly()
+        }
+    }
+
+    private fun usageLightingPre(): UsageLighting {
+        if (hasControls == "Yes" && controls == "Daylight Sensor") {
+            val usageHours = UsageLighting()
+            usageHours.peakHours = 4336.0
+            return usageHours
+        } else {
+            val usageHours = UsageLighting()
+            usageHours.peakHours = peakHours
+            usageHours.partPeakHours = partPeakHours
+            usageHours.offPeakHours = offPeakHours
+
+            return usageHours
         }
     }
 
@@ -125,19 +124,20 @@ class Halogen(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRat
     fun prePower(): Double {
         return actualWatts * numberOfFixtures * lampsPerFixtures / 1000
     }
+
+
     /**
      * Cost - Pre State
      * */
     override fun costPreState(element: List<JsonElement?>): Double {
-
         val usageHours = UsageLighting()
         usageHours.peakHours = peakHours
         usageHours.partPeakHours = partPeakHours
         usageHours.offPeakHours = offPeakHours
 
-
         return costElectricity(prePower(), usageHours, electricityRate)
     }
+
 
     /**
      * Cost - Post State
@@ -156,19 +156,15 @@ class Halogen(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRat
         val expectedLife = LEDlifeHours / usageHoursSpecific.yearly()
         val maintenanceSavings = totalUnits * bulbcost * replacementIndex / expectedLife
 
-        // Adding new variables for the report
-        val selfinstallcost = this.selfinstallcost()
-
         // Delta is going to be Power Used * Percentage Power Reduced
         // Percentage Power Reduced - we get it from the Base - ELighting
 
         val energySavings = preEnergy() * percentPowerReduced
         val coolingSavings = energySavings * cooling / seer
 
-
         val energyAtPostState = preEnergy() - energySavings
-        val paybackmonth = selfinstallcost / energySavings * 12
-        val paybackyear = selfinstallcost / energySavings
+        val paybackmonth = installCost() / energySavings * 12
+        val paybackyear = installCost() / energySavings
         val totalsavings = energySavings + coolingSavings + maintenanceSavings
 
         val postRow = mutableMapOf<String, String>()
@@ -177,7 +173,6 @@ class Halogen(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRat
         postRow["__cooling_savings"] = coolingSavings.toString()
         postRow["__energy_savings"] = energySavings.toString()
         postRow["__energy_at_post_state"] = energyAtPostState.toString()
-        postRow["__selfinstall_cost"] = selfinstallcost.toString()
         postRow["__payback_month"] = paybackmonth.toString()
         postRow["__payback_year"] = paybackyear.toString()
         postRow["__total_savings"] = totalsavings.toString()
@@ -188,38 +183,31 @@ class Halogen(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRat
         dataHolder.rows?.add(postRow)
 
         return -99.99
-
     }
+
 
     /**
      * PowerTimeChange >> Hourly Energy Use - Pre
      * */
     override fun hourlyEnergyUsagePre(): List<Double> = listOf(0.0, 0.0)
 
+
     /**
      * PowerTimeChange >> Hourly Energy Use - Post
      * */
     override fun hourlyEnergyUsagePost(element: JsonElement): List<Double> = listOf(0.0, 0.0)
 
+
     /**
      * Post Yearly Usage Hours
      * */
-
-
     override fun usageHoursPost(): Double {
-        val postusageHours = UsageLighting()
-        postusageHours.postpeakHours = postpeakHours
-        postusageHours.postpartPeakHours = postpartPeakHours
-        postusageHours.postoffPeakHours = postoffPeakHours
-
-        if (postusageHours.yearly() > 0.0)
-            return postusageHours.yearly()
-
         if (usageHoursPre() > 0)
             return usageHoursPre()
 
         return usageHoursBusiness.yearly()
     }
+
 
     /**
      * PowerTimeChange >> Energy Efficiency Calculations
@@ -229,9 +217,9 @@ class Halogen(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRat
     }
 
     override fun energyTimeChange(): Double {
-        return  actualWatts * numberOfFixtures * lampsPerFixtures / 1000 * usageHoursPost()
-
+        return actualWatts * numberOfFixtures * lampsPerFixtures / 1000 * usageHoursPost()
     }
+
     override fun energyPowerTimeChange(): Double {
         return prePower() * percentPowerReduced * usageHoursPost()
     }
@@ -243,13 +231,11 @@ class Halogen(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRat
     fun postEnergy(): Double {
         return preEnergy() - energySavings()
     }
+
     fun energySavings(): Double {
         return preEnergy() * percentPowerReduced
     }
 
-    fun selfinstallcost(): Double {
-        return ledbulbcost * alternateNumberOfFixtures * alternateLampsPerFixture
-    }
     fun totalEnergySavings(): Double {
         if (controls != null) {
             val coolingSavings = (preEnergy() - energyPowerChange()) * cooling / seer
@@ -258,20 +244,14 @@ class Halogen(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRat
             val coolingSavings = (preEnergy() - energyPowerTimeChange()) * cooling / seer
             return (preEnergy() - energyPowerTimeChange()) + coolingSavings
         }
-
     }
 
     fun totalSavings(): Double {
-        if (controls == null && usageHoursPost() != null){
-            val postPower = energyPowerTimeChange()/usageHoursPost()
-            val postusageHours = UsageLighting()
-            postusageHours.postpeakHours = postpeakHours
-            postusageHours.postpartPeakHours = postpartPeakHours
-            postusageHours.postoffPeakHours = postoffPeakHours
-            return costElectricity(postPower, postusageHours, electricityRate)
-        }
-        else {
-            val postPower = energyPowerChange()/usageHoursPre()
+        if (controls == null && usageHoursPost() != null) {
+            val postPower = energyPowerTimeChange() / usageHoursPost()
+            return costElectricity(postPower, usageLightingPre(), electricityRate)
+        } else {
+            val postPower = energyPowerChange() / usageHoursPre()
             val usageHours = UsageLighting()
             usageHours.peakHours = peakHours
             usageHours.partPeakHours = partPeakHours
@@ -280,17 +260,22 @@ class Halogen(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRat
         }
     }
 
+
     /**
     //NPV for Lighting - assume 10 years life cycle
      **/
     var presentvaluefactor = 7.722
 
-    fun elecinstallcost(): Double {
-        return ledbulbcost * alternateNumberOfFixtures * alternateLampsPerFixture + electricianCost
+    // TODO: implement me!
+    fun installCost(): Double {
+        return 0.0
     }
+
     fun netPresentValue(): Double {
-        return totalSavings() * presentvaluefactor - elecinstallcost()
+        return totalSavings() * presentvaluefactor - installCost()
     }
+
+
     /**
      * Energy Efficiency Lookup Query Definition
      * */
@@ -319,5 +304,4 @@ class Halogen(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRat
     private fun getFormMapper() = FormMapper(context, R.raw.halogen)
     private fun getModel() = getFormMapper().decodeJSON()
     private fun getGFormElements() = getFormMapper().mapIdToElements(getModel())
-
 }
