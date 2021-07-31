@@ -66,6 +66,33 @@
           "param": "Model Number",
           "validation": "optional",
           "id": "17"
+        },
+        {
+          "index": 19,
+          "hint": "mandatory",
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:Drop Ceiling,2:Dry Wall",
+          "param": "Ceiling Type",
+          "validation": "mandatory",
+          "id": "19"
+        },
+        {
+          "index": 101,
+          "hint": "mandatory",
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:Lamp Replacement,2:Retrofit,3:Direct Replacement Fixture",
+          "param": "Replacement Type",
+          "validation": "mandatory",
+          "id": "101"
+        },
+        {
+          "index": 102,
+          "hint": "mandatory",
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:Yes,2:No",
+          "param": "Ceiling greater than 10 feet?",
+          "validation": "mandatory",
+          "id": "102"
         }
       ],
       "id": "1"
