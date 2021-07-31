@@ -277,7 +277,10 @@ class SorterForWordDocumentGenerator {
             ))
         }
         // val paybackMonth = (totalCost / totalSavings * 12) + 4
-        val paybackYear: Double = (totalCost / totalSavings) + (4 / 12)
+        val costOverSavings =
+                if (totalSavings == 0.0) 0.0
+                else totalCost / totalSavings
+        val paybackYear: Double = costOverSavings + (4.0 / 12.0)
         val netPresentValue: Double = (totalSavings * presentvaluefactor) -  totalCost
 
         return HvacValues(
@@ -334,9 +337,13 @@ class SorterForWordDocumentGenerator {
          }
 
         val waterheater = audit[waterheater]!!.first() as WaterHeater
-        val paybackMonth = (totalCost / totalSavings * 12) + 4
-        val paybackYear: Double = (totalCost / totalSavings) + (4 / 12)
-        val netPresentValue: Double = (totalSavings * presentvaluefactor) -  totalCost
+
+        val costOverSavings =
+                if (totalSavings == 0.0) 0.0
+                else totalCost / totalSavings
+        val paybackMonth = (costOverSavings * 12.0) + 4.0
+        val paybackYear = costOverSavings + (4.0 / 12.0)
+        val netPresentValue = (totalSavings * presentvaluefactor) -  totalCost
 
         return WaterHeaterValues(
                 totalSavings,
@@ -454,7 +461,9 @@ class SorterForWordDocumentGenerator {
             }
         }
 
-        val paybackMonth = if (totalSavings == 0.0) 0.0 else totalCost / totalSavings * 12
+        val paybackMonth =
+                if (totalSavings == 0.0) 0.0
+                else totalCost / totalSavings * 12
         val netPresentValue: Double = (totalSavings * presentvaluefactor) -  totalCost
         return RefrigerationValues(
                 totalCost,
@@ -535,6 +544,10 @@ class SorterForWordDocumentGenerator {
                 }
             }
 
+            val costOverSavings =
+                    if (savings == 0.0) 0.0
+                    else implementationCost / savings
+
             instances.add(
                     EquipmentInstances(
                             "Combination Oven",
@@ -544,7 +557,7 @@ class SorterForWordDocumentGenerator {
                             materialCost,
                             implementationCost,
                             savings,
-                            implementationCost / savings * 12
+                            costOverSavings * 12
                     )
             )
         }
@@ -576,6 +589,10 @@ class SorterForWordDocumentGenerator {
                 }
             }
 
+            val costOverSavings =
+                    if (savings == 0.0) 0.0
+                    else implementationCost / savings
+
             instances.add(
                     EquipmentInstances(
                             "Conveyor Broiler",
@@ -585,7 +602,7 @@ class SorterForWordDocumentGenerator {
                             materialCost,
                             implementationCost,
                             savings,
-                            implementationCost / savings * 12
+                            costOverSavings * 12
                     )
             )
         }
@@ -620,6 +637,10 @@ class SorterForWordDocumentGenerator {
                 }
             }
 
+            val costOverSavings =
+                    if (savings == 0.0) 0.0
+                    else implementationCost / savings
+
             instances.add(
                     EquipmentInstances(
                             "Dishwasher",
@@ -629,7 +650,7 @@ class SorterForWordDocumentGenerator {
                             materialCost,
                             implementationCost,
                             savings,
-                            implementationCost / savings * 12
+                            costOverSavings * 12
                     )
             )
         }
@@ -661,6 +682,10 @@ class SorterForWordDocumentGenerator {
                 }
             }
 
+            val costOverSavings =
+                    if (savings == 0.0) 0.0
+                    else implementationCost / savings
+
             instances.add(
                     EquipmentInstances(
                             "Griddle",
@@ -670,7 +695,7 @@ class SorterForWordDocumentGenerator {
                             materialCost,
                             implementationCost,
                             savings,
-                            implementationCost / savings * 12
+                            costOverSavings * 12
                     )
             )
         }
@@ -696,6 +721,10 @@ class SorterForWordDocumentGenerator {
 //                        postTotalkWh +=
             }
 
+            val costOverSavings =
+                    if (savings == 0.0) 0.0
+                    else implementationCost / savings
+
             instances.add(
                     EquipmentInstances(
                             "Hot Food Cabinet",
@@ -705,7 +734,7 @@ class SorterForWordDocumentGenerator {
                             materialCost,
                             implementationCost,
                             savings,
-                            implementationCost / savings * 12
+                            costOverSavings * 12
                     )
             )
         }
@@ -733,6 +762,10 @@ class SorterForWordDocumentGenerator {
                 }
             }
 
+            val costOverSavings =
+                    if (savings == 0.0) 0.0
+                    else implementationCost / savings
+
             instances.add(
                     EquipmentInstances(
                             "Ice Maker",
@@ -742,7 +775,7 @@ class SorterForWordDocumentGenerator {
                             materialCost,
                             implementationCost,
                             savings,
-                            implementationCost / savings * 12
+                            costOverSavings * 12
                     )
             )
         }
@@ -770,6 +803,10 @@ class SorterForWordDocumentGenerator {
                 }
             }
 
+            val costOverSavings =
+                    if (savings == 0.0) 0.0
+                    else implementationCost / savings
+
             instances.add(
                     EquipmentInstances(
                             "Pre Rinse Spray",
@@ -779,7 +816,7 @@ class SorterForWordDocumentGenerator {
                             materialCost,
                             implementationCost,
                             savings,
-                            implementationCost / savings * 12
+                            costOverSavings * 12
                     )
             )
         }
