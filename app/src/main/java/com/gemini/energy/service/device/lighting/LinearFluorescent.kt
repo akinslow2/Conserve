@@ -72,6 +72,11 @@ class LinearFluorescent(computable: Computable<*>, utilityRateGas: UtilityRate, 
     private var controls = ""
     private var hasControls = ""
 
+    var ceilingType = ""
+    var replacementType = ""
+    var isCeilingOver10Feet = ""
+    var fixtureType = ""
+
 
     override fun setup() {
         try {
@@ -82,6 +87,11 @@ class LinearFluorescent(computable: Computable<*>, utilityRateGas: UtilityRate, 
 
             val config = lightingConfig(ELightingType.LinearFluorescent)
             percentPowerReduced = config[ELightingIndex.PercentPowerReduced.value] as Double
+
+            ceilingType = featureData["Ceiling Type"]!! as String
+            replacementType = featureData["Replacement Type"]!! as String
+            isCeilingOver10Feet = featureData["Ceiling greater than 10 feet?"]!! as String
+            fixtureType = featureData["Fixture Type"]!! as String
 
             controls = featureData["Type of Control"]!! as String
             hasControls = featureData["Controls"]!! as String

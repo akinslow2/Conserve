@@ -57,6 +57,10 @@ class Halogen(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRat
     private var controls = ""
     private var hasControls = ""
 
+    var ceilingType = ""
+    var replacementType = ""
+    var isCeilingOver10Feet = ""
+
 
     //Where you extract from user inputs and assign to variables
     override fun setup() {
@@ -67,6 +71,10 @@ class Halogen(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRat
 
             val config = lightingConfig(ELightingType.Halogen)
             percentPowerReduced = config[ELightingIndex.PercentPowerReduced.value] as Double
+
+            ceilingType = featureData["Ceiling Type"]!! as String
+            replacementType = featureData["Replacement Type"]!! as String
+            isCeilingOver10Feet = featureData["Ceiling greater than 10 feet?"]!! as String
 
             peakHours = (featureData["Peak Hours"]!! as Int).toDouble()
             partPeakHours = (featureData["Part Peak Hours"]!! as Int).toDouble()

@@ -59,6 +59,10 @@ class LPSodium(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRa
     private var controls = ""
     private var hasControls = ""
 
+    var ceilingType = ""
+    var replacementType = ""
+    var isCeilingOver10Feet = ""
+
 
     //Where you extract from user inputs and assign to variables
     override fun setup() {
@@ -69,6 +73,10 @@ class LPSodium(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRa
 
             val config = lightingConfig(ELightingType.LPSodium)
             percentPowerReduced = config[ELightingIndex.PercentPowerReduced.value] as Double
+
+            ceilingType = featureData["Ceiling Type"]!! as String
+            replacementType = featureData["Replacement Type"]!! as String
+            isCeilingOver10Feet = featureData["Ceiling greater than 10 feet?"]!! as String
 
             peakHours = featureData["Peak Hours"]!! as Double
             partPeakHours = featureData["Part Peak Hours"]!! as Double
