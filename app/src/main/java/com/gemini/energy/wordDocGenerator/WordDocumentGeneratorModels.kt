@@ -1,6 +1,7 @@
 package com.gemini.energy.wordDocGenerator
 
 import com.gemini.energy.service.device.EBase
+import com.gemini.energy.wordDocGenerator.models.*
 
 //Map<AuditId: Map<EquipmentType: Equipment>>
 typealias SortedAudits =
@@ -67,41 +68,6 @@ data class WaterHeaterValues(
         val currentTotalkWh: Double,
         val postTotalkW: Double,
         val postTotalkWh: Double
-)
-
-data class LightingValues(
-        val totalcostsavings: Double, // 13
-        val totalenergysavings: Double,
-        val selfinstallcost: Int, // 14
-        val totalCost: Double, // 15
-        val paybackMonth: Double, // 16
-        val geminiPayback: Double, // 17
-        val paybackYear: Double, // 18
-        val netPresentValue: Double,
-        val lightingRows: List<LightingDataRow>,
-        val currentTotalkW: Double,
-        val currentTotalkWh: Double,
-        val postTotalkW: Double,
-        val postTotalkWh: Double
-)
-
-data class LightingDataRow(
-        val measure: String,
-        val location: String,
-        val measureDescription: String,
-        val quantity: Double,
-        val currentPowerkW: Double,
-        val usageHours: Double,
-        val currentEnergykWh: Double,
-        val postPowerkW: Double,
-        val postUsageHours: Double,
-        val postEnergykWh: Double,
-        val energySavingskWh: Double,
-        val costSavings: Double,
-        val implementationCost: Double,
-        val paybackPeriodMonths: Double,
-        val paybackPeriodYears: Double,
-        val netPresentValue: Double
 )
 
 data class RefrigerationValues(
