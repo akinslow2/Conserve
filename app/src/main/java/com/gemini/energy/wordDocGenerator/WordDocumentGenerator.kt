@@ -86,6 +86,11 @@ class WordDocumentGenerator {
 
         generateFacilityInformationPage(document, value, value.preAudit)
 
+        if (value.lighting != null) {
+            generateLightingContractorPage(document, value.lighting)
+        }
+
+
         document.addPageNumbers()
 
         writeDocument(value, document)
@@ -534,6 +539,20 @@ class WordDocumentGenerator {
                         + "estimated electricity bill savings of $$customerAnnualSavingsDuringPaybackPeriod "
                         + "a year. If there is a question or concern about your bill, please email us at "
                         + "roanoke@geminiEsolutions.com or call us at (252) 209-2236 or (800) 433-2236.")
+    }
+
+    private fun generateLightingContractorPage(document: XWPFDocument, lights: LightingValues) {
+        val p1 = document.createParagraph()
+        p1.spacingBetween = 1.5
+        p1.isPageBreak = true
+        val r1p1 = p1.createRun()
+        r1p1.fontFamily = fontAgencyFB
+        r1p1.isBold = true
+        r1p1.isItalic = true
+        r1p1.fontSize = 20
+        r1p1.setText("Specifics for Lighting Contractor")
+
+        generateLightContractorTable(document, lights)
     }
 
 
@@ -1253,6 +1272,43 @@ class WordDocumentGenerator {
         rc4r6.setText("${values.building?.postTotalkWh?.format(2) ?: "0.00"}")
 
         table.centerTable()
+    }
+
+    private fun generateLightContractorTable(document: XWPFDocument, lights: LightingValues) {
+        val rows = lights.lightingRows
+        val table = document.createTable(rows.size + 1, 7)
+
+        for (i in 0..rows.size) {
+            // safety check if no rows exist
+            if (rows.isEmpty()) {
+                return
+            }
+            val row = table.getRow(i)
+            val isFirst = i == 0
+            val rowIndex = if (isFirst) 0 else i - 1
+            val rowItem = rows[rowIndex]
+
+            fun generateCell(pos: Int, text: String) {
+                val cell = row.getCell(pos)
+                cell.verticalAlignment = XWPFTableCell.XWPFVertAlign.CENTER
+                val paragraph = cell.paragraphs[0]
+                paragraph.alignment = ParagraphAlignment.CENTER
+                val run = paragraph.createRun()
+                run.isBold = isFirst
+                run.setText(text)
+            }
+
+            generateCell(0, if (isFirst) "Zone" else rowItem.location)
+            generateCell(1, if (isFirst) "Name" else rowItem.measureDescription)
+            generateCell(2, if (isFirst) "Bulbs" else rowItem.lampsPerFixture.toString())
+            generateCell(3, if (isFirst) "Fixtures" else rowItem.numberOfFixtures.toString())
+            generateCell(4, if (isFirst) "Ceiling Type" else rowItem.ceilingType)
+            generateCell(5, if (isFirst) "Replacement Type" else rowItem.replacementType)
+            generateCell(6, if (isFirst) "Ceiling Above 10ft." else rowItem.isCeilingOver10Feet)
+        }
+
+        table.centerTable()
+        table.fitTable(4500)
     }
 
     // electricty rate calculations
