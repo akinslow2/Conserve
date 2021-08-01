@@ -16,15 +16,7 @@ data class EquipmentValues(
 ) {
     companion object {
         fun tryCreate(audit: AuditComponents): EquipmentValues? {
-            var totalSavings = 0.0
-            var totalCost = 0.0
-            val netPresentValue = 0.0
             val instances = mutableListOf<EquipmentInstances>()
-
-            var currentTotalkW = 0.0
-            var currentTotalkWh = 0.0
-            var postTotalkW = 0.0
-            var postTotalkWh = 0.0
 
             @Suppress("UNCHECKED_CAST")
             val combinationOven = audit[SorterForWordDocumentGenerator.combinationOven]!! as List<CombinationOven>
@@ -60,114 +52,69 @@ data class EquipmentValues(
             val preRinseSpray = audit[SorterForWordDocumentGenerator.preRinseSpray]!! as List<PreRinseSpray>
 
             if (combinationOven.any()) {
-                for (item in combinationOven) {
-                    if (!item.isGas()) {
-//                    currentTotalkW +=
-//                    currentTotalkWh +=
-//                    postTotalkW +=
-//                    postTotalkWh +=
-                    }
-                }
-
                 instances.add(EquipmentInstances.createCombinationOven(combinationOven))
             }
 
             // TODO: add convection oven when implemented
-            if (convectionOven.any()) { }
+            if (convectionOven.any()) {
+            }
 
             if (conveyorBroiler.any()) {
-                for (broiler in conveyorBroiler) {
-                    // @anthony, please verify that these are the correct values
-                    if (!broiler.isGas()) {
-//                    currentTotalkW +=
-//                    currentTotalkWh +=
-//                    postTotalkW +=
-//                    postTotalkWh +=
-                    }
-                }
-
                 instances.add(EquipmentInstances.createConveyorBroiler(conveyorBroiler))
             }
 
             // TODO: add conveyor oven when implemented
-            if (conveyorOven.any()) { }
+            if (conveyorOven.any()) {
+            }
 
             if (dishwasher.any()) {
-                for (washer in dishwasher) {
-                    // @anthony, please verify that these are the correct values
-                    if (!washer.isGas()) {
-//                    currentTotalkW +=
-//                    currentTotalkWh +=
-//                    postTotalkW +=
-//                    postTotalkWh +=
-                    }
-                }
-
                 instances.add(EquipmentInstances.createDishwasher(dishwasher))
             }
 
             // TODO: add fryer when implemented
-            if (fryer.any()) { }
+            if (fryer.any()) {
+            }
 
             if (griddle.any()) {
-                for (item in griddle) {
-                    // @anthony, please verify that these are the correct values
-                    if (!item.isGas()) {
-//                    currentTotalkW +=
-//                    currentTotalkWh +=
-//                    postTotalkW +=
-//                    postTotalkWh +=
-                    }
-                }
-
                 instances.add(EquipmentInstances.createGriddle(griddle))
             }
 
             if (hotFoodCabinet.any()) {
-                for (cabinet in hotFoodCabinet) {
-                    // @anthony, please verify that these are the correct values
-//                        currentTotalkW +=
-//                        currentTotalkWh +=
-//                        postTotalkW +=
-//                        postTotalkWh +=
-                }
-
                 instances.add(EquipmentInstances.createHotFoodCabinet(hotFoodCabinet))
             }
 
             if (iceMaker.any()) {
-                for (item in iceMaker) {
-                    // @anthony, please verify that these are the correct values
-                    if (!item.isGas()) {
-//                    currentTotalkW +=
-//                    currentTotalkWh +=
-//                    postTotalkW +=
-//                    postTotalkWh +=
-                    }
-                }
                 instances.add(EquipmentInstances.createIceMaker(iceMaker))
             }
 
             if (preRinseSpray.any()) {
-                for (spray in preRinseSpray) {
-                    // @anthony, please verify that these are the correct values
-                    if (!spray.isGas()) {
-                        currentTotalkW += spray.preElectricPower
-                        currentTotalkWh += spray.preElectricPower * spray.usageHoursPre()
-                        postTotalkW += spray.postElectricPower
-                        postTotalkWh += spray.postElectricPower * spray.usageHoursPost()
-                    }
-                }
-
                 instances.add(EquipmentInstances.createPreRinseSpray(preRinseSpray))
             }
 
             // TODO add SteamCooker when implemented
-            if (steamCooker.any()) { }
+            if (steamCooker.any()) {
+            }
+
+            var totalSavings = 0.0
+            var totalCost = 0.0
+            var netPresentValue = 0.0
+
+            var currentTotalkW = 0.0
+            var currentTotalkWh = 0.0
+            var postTotalkW = 0.0
+            var postTotalkWh = 0.0
 
             for (instance in instances) {
                 totalSavings += instance.costElectricity
                 totalCost += instance.implementationCost
+
+                currentTotalkW += instance.currentTotalkW
+                currentTotalkWh += instance.currentTotalkWh
+
+                postTotalkW += instance.postTotalkW
+                postTotalkWh += instance.postTotalkWh
+
+                netPresentValue += instance.netPresentValue
             }
 
             return EquipmentValues(
