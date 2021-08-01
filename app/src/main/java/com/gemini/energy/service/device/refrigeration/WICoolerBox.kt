@@ -71,8 +71,12 @@ class WICoolerBox(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
          * There could be a case where the User will input the value in KW - If that happens we need to convert the KW
          * int BTU / hr :: 1KW equals 3412.142
          * */
-        fun power(gasInput: Int, thermaleff: Int) = (gasInput / (thermaleff / 100)) * KW_CONVERSION
-        fun power2(kW: Double, electriceff: Int) = (kW / (electriceff / 100))
+        fun power(gasInput: Int, thermaleff: Int) =
+                if (thermaleff == 0) 0.0
+                else (gasInput.toDouble() / (thermaleff.toDouble() / 100.0)) * KW_CONVERSION
+        fun power2(kW: Double, electriceff: Int) =
+                if (electriceff == 0) 0.0
+                else (kW / (electriceff.toDouble() / 100.0))
 
         /**
          * Year At - Current minus the Age
@@ -225,7 +229,11 @@ class WICoolerBox(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
      * HVAC - INCENTIVES | MATERIAL COST
      * */
     override fun incentives(): Double {
-        return energyPowerChange() * 0.15 + (energyPowerChange() / usageHoursBusiness.yearly()) * 150
+        val powerChangePerYear =
+                if (usageHoursBusiness.yearly() == 0.0) 0.0
+                else energyPowerChange() / usageHoursBusiness.yearly()
+
+        return energyPowerChange() * 0.15 + powerChangePerYear * 150
     }
 
     override fun materialCost(): Double {
