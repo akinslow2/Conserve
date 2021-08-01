@@ -56,7 +56,7 @@ class IceMaker(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRa
      * powerUsed per hour (kWh)
      * */
     override fun costPreState(elements: List<JsonElement?>): Double {
-        val powerUsed = (iceHarvestRate / 24) * (energyUseRate / 100)
+        val powerUsed = (iceHarvestRate / 24.0) * (energyUseRate / 100.0)
         val usageHours = usageHoursBusiness
         return costElectricity(powerUsed, usageHours, electricityRate)
     }
@@ -104,8 +104,8 @@ class IceMaker(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRa
      * PowerTimeChange >> Energy Efficiency Calculations
      * */
     override fun energyPowerChange(): Double {
-        val powerPre = (iceHarvestRate / 24) * (energyUseRate / 100)
-        val powerPost = (alternateIceHarvestRate / 24) * (alternateEnergyUseRate / 100)
+        val powerPre = (iceHarvestRate / 24.0) * (energyUseRate / 100.0)
+        val powerPost = (alternateIceHarvestRate / 24.0) * (alternateEnergyUseRate / 100.0)
         val deltaPower = powerPre - powerPost
 
         val delta = deltaPower * usageHoursPre()
