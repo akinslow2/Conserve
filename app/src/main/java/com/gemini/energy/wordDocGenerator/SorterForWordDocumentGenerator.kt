@@ -4,6 +4,7 @@ import com.gemini.energy.presentation.util.EApplianceType
 import com.gemini.energy.service.DataHolder
 import com.gemini.energy.service.device.EBase
 import com.gemini.energy.service.device.Hvac
+import com.gemini.energy.service.device.Motors
 import com.gemini.energy.service.device.WaterHeater
 import com.gemini.energy.service.device.lighting.*
 import com.gemini.energy.service.device.plugload.*
@@ -20,6 +21,7 @@ class SorterForWordDocumentGenerator {
         const val lighting = "lighting"
         const val waterheater = "waterheater"
         const val refrigeration = "refrigeration"
+        const val motors = "motors"
 
         val combinationOven = EApplianceType.CombinationOven.value
         val convectionOven = EApplianceType.ConvectionOven.value
@@ -45,10 +47,11 @@ class SorterForWordDocumentGenerator {
         for (audit in sortedAudits) {
             val hvac = HvacValues.tryCreate(audit.value)
             val waterheater = WaterHeaterValues.tryCreate(audit.value)
+            val motors = MotorValues.tryCreate(audit.value)
             val lighting = LightingValues.tryCreate(audit.value)
             val equipment = EquipmentValues.tryCreate(audit.value)
             val refrigeration = RefrigerationValues.tryCreate(audit.value)
-            val building = prepareBuildingValuesForEquipment(lighting, equipment, hvac, waterheater, refrigeration)
+            val building = prepareBuildingValuesForEquipment(lighting, equipment, hvac, waterheater, refrigeration, motors)
             val preaudit = prepareValuesForPreAudit(audit.value)
 
             val zones = aggregateZoneNames(audit.value)
@@ -67,6 +70,7 @@ class SorterForWordDocumentGenerator {
                         waterheater,
                         refrigeration,
                         equipment,
+                        motors,
                         building))
             }
         }
@@ -168,6 +172,8 @@ class SorterForWordDocumentGenerator {
                         lighting to mutableListOf(),
                         refrigeration to mutableListOf(),
 
+                        motors to mutableListOf(),
+
                         combinationOven to mutableListOf(),
                         convectionOven to mutableListOf(),
                         conveyorBroiler to mutableListOf(),
@@ -190,6 +196,8 @@ class SorterForWordDocumentGenerator {
 
                 // Water Heater
                 is WaterHeater -> sorted[value.computable.auditId]!![waterheater]!!.add(value)
+
+                is Motors -> sorted[value.computable.auditId]!![motors]!!.add(value)
 
                 // Lighting
                 is Cfl -> sorted[value.computable.auditId]!![lighting]!!.add(value)
@@ -235,7 +243,8 @@ class SorterForWordDocumentGenerator {
             equipments: EquipmentValues?,
             hvacs: HvacValues?,
             waterHeater: WaterHeaterValues?,
-            refrigeration: RefrigerationValues?): BuildingValues {
+            refrigeration: RefrigerationValues?,
+            motor: MotorValues?): BuildingValues {
 
         fun calculatePaybackYear(cost: Double?, savings: Double?) =
                 if (cost != null && savings != null && savings > 0.0)
@@ -251,13 +260,15 @@ class SorterForWordDocumentGenerator {
                 (equipments?.totalSavings ?: 0.0) +
                 (hvacs?.totalSavings ?: 0.0) +
                 (waterHeater?.totalSavings ?: 0.0) +
-                (refrigeration?.totalSavings ?: 0.0)
+                (refrigeration?.totalSavings ?: 0.0) +
+                (motor?.totalSavings ?: 0.0)
 
         val buildingTotalCost = (lightings?.totalCost ?: 0.0) +
                 (hvacs?.totalCost ?: 0.0) +
                 (equipments?.totalCost ?: 0.0) +
                 (waterHeater?.totalCost ?: 0.0) +
-                (refrigeration?.totalCost ?: 0.0)
+                (refrigeration?.totalCost ?: 0.0) +
+                (motor?.totalCost ?: 0.0)
 
         val buildingPayback =
                 if (buildingTotalSavings == 0.0) 0.0
@@ -271,7 +282,8 @@ class SorterForWordDocumentGenerator {
                         (hvacs?.netPresentValue ?: 0.0) +
                         (equipments?.netPresentValue ?: 0.0) +
                         (waterHeater?.netPresentValue ?: 0.0) +
-                        (refrigeration?.netPresentValue ?: 0.0)
+                        (refrigeration?.netPresentValue ?: 0.0)  +
+                        (motor?.netPresentValue ?: 0.0)
 
         val currentTotalkW = (lightings?.currentTotalkW ?: 0.0) +
                 (hvacs?.currentTotalkW ?: 0.0) +
