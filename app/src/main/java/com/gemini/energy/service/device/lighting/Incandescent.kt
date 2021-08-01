@@ -117,7 +117,7 @@ class Incandescent(computable: Computable<*>, utilityRateGas: UtilityRate, utili
     }
 
     fun prePower(): Double {
-        return actualWatts * numberOfFixtures * lampsPerFixtures / 1000
+        return actualWatts * numberOfFixtures * lampsPerFixtures / 1000.0
     }
 
 
@@ -149,19 +149,19 @@ class Incandescent(computable: Computable<*>, utilityRateGas: UtilityRate, utili
 
         val totalUnits = lampsPerFixtures * numberOfFixtures
 
-        val replacementIndex = LEDlifeHours / lifeHours
-        val expectedLife = LEDlifeHours / usageHoursSpecific.yearly()
-        val maintenanceSavings = totalUnits * bulbcost * replacementIndex / expectedLife
+        val replacementIndex = if (lifeHours == 0.0) 0.0 else LEDlifeHours / lifeHours
+        val expectedLife = if (usageHoursSpecific.yearly() == 0.0) 0.0 else LEDlifeHours / usageHoursSpecific.yearly()
+        val maintenanceSavings = if (expectedLife == 0.0) 0.0 else totalUnits * bulbcost * replacementIndex / expectedLife
 
         // Delta is going to be Power Used * Percentage Power Reduced
         // Percentage Power Reduced - we get it from the Base - ELighting
 
         val energySavings = prePower() * percentPowerReduced
-        val coolingSavings = energySavings * cooling / seer
+        val coolingSavings = if (seer == 0) 0.0 else  energySavings * cooling / seer.toDouble()
 
         val energyAtPostState = preEnergy() - energySavings
-        val paybackmonth = installCost() / energySavings * 12
-        val paybackyear = installCost() / energySavings
+        val paybackmonth = if (energySavings == 0.0) 0.0 else installCost() / energySavings * 12
+        val paybackyear = if (energySavings == 0.0) 0.0 else installCost() / energySavings
         val totalsavings = totalSavings()
 
         val postRow = mutableMapOf<String, String>()
@@ -214,7 +214,7 @@ class Incandescent(computable: Computable<*>, utilityRateGas: UtilityRate, utili
     }
 
     override fun energyTimeChange(): Double {
-        return actualWatts * numberOfFixtures * lampsPerFixtures / 1000 * usageHoursPost()
+        return actualWatts * numberOfFixtures * lampsPerFixtures / 1000.0 * usageHoursPost()
     }
 
     override fun energyPowerTimeChange(): Double {
@@ -234,11 +234,13 @@ class Incandescent(computable: Computable<*>, utilityRateGas: UtilityRate, utili
     }
 
     fun totalEnergySavings(): Double {
+        val coolingOverSeer = if (seer == 0) 0.0 else cooling / seer.toDouble()
+
         if (controls != null) {
-            val coolingSavings = (preEnergy() - energyPowerChange()) * cooling / seer
+            val coolingSavings = (preEnergy() - energyPowerChange()) * coolingOverSeer
             return (preEnergy() - energyPowerChange()) + coolingSavings
         } else {
-            val coolingSavings = (preEnergy() - energyPowerTimeChange()) * cooling / seer
+            val coolingSavings = (preEnergy() - energyPowerTimeChange()) * coolingOverSeer
             return (preEnergy() - energyPowerTimeChange()) + coolingSavings
         }
     }
@@ -248,12 +250,12 @@ class Incandescent(computable: Computable<*>, utilityRateGas: UtilityRate, utili
 
         val totalUnits = lampsPerFixtures * numberOfFixtures
 
-        val replacementIndex = LEDlifeHours / lifeHours
-        val expectedLife = LEDlifeHours / usageHoursSpecific.yearly()
-        val maintenanceSavings = totalUnits * bulbcost * replacementIndex / expectedLife
+        val replacementIndex = if (lifeHours == 0.0) 0.0 else LEDlifeHours / lifeHours
+        val expectedLife = if (usageHoursSpecific.yearly() == 0.0) 0.0 else  LEDlifeHours / usageHoursSpecific.yearly()
+        val maintenanceSavings = if (expectedLife == 0.0) 0.0 else totalUnits * bulbcost * replacementIndex / expectedLife
 
         val energySavings = prePower() * percentPowerReduced
-        val coolingSavings = energySavings * cooling / seer
+        val coolingSavings = if (seer == 0) 0.0 else  energySavings * cooling / seer.toDouble()
 
         val usageHours = UsageLighting()
         usageHours.peakHours = peakHours
