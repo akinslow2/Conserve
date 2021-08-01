@@ -365,6 +365,12 @@ class WordDocumentGenerator {
                         + "We strongly recommend you replace all non-LED bulbs and ensure the bathroom lights are off at the end of the day.",
                 addBreakAfter = true)
 
+        if (lights.lightingRows.any { it.isCeilingOver10Feet.toLowerCase() == "yes" }) {
+            document.createNormalParagraph(
+                    "There is an additional $500 fee to replace lighting with a ceiling over 10 feet to rent the lift needed.",
+                    addBreakAfter = true)
+        }
+
         document.createNormalParagraph("Please see the next page for specifics of each lighting measure.")
 
         createLightingTable1(document, lights)

@@ -4,6 +4,7 @@ import com.gemini.energy.service.device.EBase
 import com.gemini.energy.service.device.lighting.*
 import com.gemini.energy.wordDocGenerator.*
 import com.google.gson.JsonNull
+import java.util.*
 
 
 /**
@@ -140,6 +141,10 @@ data class LightingValues(
                 currentTotalkWh += light.preEnergy()
                 postTotalkW += light.postPower()
                 postTotalkWh += light.postEnergy()
+            }
+
+            if (lightingRows.any { it.isCeilingOver10Feet.toLowerCase(Locale.ROOT) == "yes" }) {
+                totalInstallCost += 500
             }
 
             val paybackYear: Double =
