@@ -115,6 +115,10 @@ class Motors(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRate
         return costElectricity(powerUsed, usageHours, electricityRate)
     }
 
+    private val costPremiumMotor = 697
+    private val costStandardMotor = 555
+    val implementationCost = (costPremiumMotor - costStandardMotor)
+
     /**
      * Cost - Post State
      * */
@@ -133,12 +137,6 @@ class Motors(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRate
                 if (usageHoursPre() == 0.0) 0.0
                 else energyPowerChange() / usageHoursPre()
 
-        //3. Implementation Cost
-        // ToDo - The below cost would be a look up in the future.
-        val costPremiumMotor = 697
-        val costStandardMotor = 555
-        val implementationCost = (costPremiumMotor - costStandardMotor)
-
         val postRow = mutableMapOf<String, String>()
         postRow["__energy_savings"] = energySavings.toString()
         postRow["__demand_savings"] = demandSavings.toString()
@@ -150,7 +148,6 @@ class Motors(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRate
         dataHolder.rows?.add(postRow)
 
         return -99.99
-
     }
 
     /**
