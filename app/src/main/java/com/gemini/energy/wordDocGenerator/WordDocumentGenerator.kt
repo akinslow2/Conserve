@@ -1327,42 +1327,16 @@ class WordDocumentGenerator {
     }
 
     fun calculateScheduleF(kW: Double, kWh: Double): Double {
-        var totalDemand = 0.0
-        for (i in 1..kW.toInt()) {
-            if (i <= 15) {
-                totalDemand += 0.0
-            }
-            else {
-                totalDemand += 9.50
-            }
-        }
-        println("total demand is ${totalDemand}")
+        val totalDemand = calculateDemandCharegeForScheduleF(kW)
+        val totalEnergy = calculateEnergyChargeForScheduleF(kWh)
 
-        var totalEnergy = 0.0
-        for (i in 1..kWh.toInt()) {
-            if (i <= 2500) {
-                totalEnergy += 0.1288
-            }
-            else if (i <= 1000) {
-                totalEnergy += 0.0918
-            }
-            else if (i <= 50000) {
-                totalEnergy += 0.077
-            }
-            else {
-                totalEnergy += 0.066
-            }
-        }
-        println("total energy is ${totalEnergy}")
-
-        var totalCost = totalDemand + totalEnergy
+        val totalCost = totalDemand + totalEnergy
         println("cost 1 is ${totalCost}")
 
         if (kW >= 100) {
-            var otherPotentialCost = kWh * 0.1697
+            val otherPotentialCost = kWh * 0.1697
             println("cost 2 is ${otherPotentialCost}")
             if (totalCost > otherPotentialCost) {
-                //        totalCost = otherPotentialCost
                 return otherPotentialCost
             }
         }
@@ -1389,6 +1363,56 @@ class WordDocumentGenerator {
         val totalCost = totalDemand + totalEnergy
         println("totalCost $totalCost")
         return totalCost
+    }
+
+    fun calculateEnergyChargeForScheduleF(kWh: Double): Double {
+        val energyChargeFirst2500kWh = 0.1288
+        val energyChargeNext7500kWh = 0.0918
+        val energyChargeNext40000kWh = 0.0776
+        val energyChargeOver50000kWh = 0.0660
+
+        var totalEnergyCharge = 0.0
+        if (kWh >= 2500.0) {
+            totalEnergyCharge += 2500.0 * energyChargeFirst2500kWh
+        } else {
+            totalEnergyCharge += kWh * energyChargeFirst2500kWh
+            return totalEnergyCharge
+        }
+        println("energy cost first 2500 $totalEnergyCharge")
+
+        var remainingkWh = kWh - 2500.0
+        if (remainingkWh >= 7500.0) {
+            totalEnergyCharge += 7500.0 * energyChargeNext7500kWh
+        } else {
+            totalEnergyCharge += remainingkWh * energyChargeNext7500kWh
+            return totalEnergyCharge
+        }
+        println("energy cost next 7500 $totalEnergyCharge")
+
+        remainingkWh -= 7500.0
+        if (remainingkWh >= 40000.0) {
+            totalEnergyCharge += 40000.0 * energyChargeNext40000kWh
+        } else {
+            totalEnergyCharge += remainingkWh * energyChargeNext40000kWh
+            return totalEnergyCharge
+        }
+        println("energy cost next 40000 $totalEnergyCharge")
+
+        remainingkWh -= 40000.0
+        totalEnergyCharge += remainingkWh * energyChargeOver50000kWh
+
+        println("total energy is ${totalEnergyCharge}")
+        return totalEnergyCharge
+    }
+
+    fun calculateDemandCharegeForScheduleF(kW: Double): Double {
+        val demandChargeOver15kW = 9.5
+
+        // no cost 15 and under
+        val demandKW = kW - 15.0
+
+        return if (kW <= 15) 0.0
+        else demandKW * demandChargeOver15kW
     }
 
     // ApachePOI setup
