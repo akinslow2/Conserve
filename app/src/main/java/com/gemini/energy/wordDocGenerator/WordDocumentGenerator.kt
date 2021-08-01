@@ -655,22 +655,13 @@ class WordDocumentGenerator {
                 "    Refrigeration (NPV)",
                 values.refrigeration?.netPresentValue?.format(0) ?: "N/A")
 
-//        TODO: aggregate motors
-//        generateInfoRow(
-//                "    Motors (NPV)",
-//                values.motor?.netPresentValue?.format(0) ?: "N/A")
-
-//        TODO: equipment NPV
-//        generateInfoRow(
-//                "    Other Equipment (NPV)",
-//                values.equipment?.totalNetPresentValue?.format(0) ?: "N/A")
         generateInfoRow(
                 "    Motors (NPV)",
-                "TODO")
+                values.motor?.netPresentValue?.format(0) ?: "N/A")
 
         generateInfoRow(
                 "    Other Equipment (NPV)",
-                "TODO")
+                values.equipment?.netPresentValue?.format(0) ?: "N/A")
 
         table.fitTable(4500)
         table.centerTable()
