@@ -39,7 +39,6 @@ class WordDocumentGenerator {
     }
 
 
-
     /** Triggers the document generation for each audit and saves documents to appropriate place **/
     fun triggerGeneration(ebases: MutableList<EBase>) {
         setupNeededForApacheToWork()
@@ -237,11 +236,11 @@ class WordDocumentGenerator {
                         + "Review you HVAC technician's maintenance scope of work it should include:")
 
         val hvacBullets = arrayOf(
-                        "Cleaning the condenser",
-                        "Checking the economizer (if applicable)",
-                        "Checking and replacing filters",
-                        "Charging the refrigerant",
-                        "Tightening belts (if applicable)")
+                "Cleaning the condenser",
+                "Checking the economizer (if applicable)",
+                "Checking and replacing filters",
+                "Charging the refrigerant",
+                "Tightening belts (if applicable)")
         document.createBullets(hvacBullets)
 
         document.createNormalParagraph("If your HVAC technician is not checking all of these components "
@@ -284,7 +283,7 @@ class WordDocumentGenerator {
                                 + "current federal minimum is 13.")
             }
 
-            if (instance.thermotype == "Analog"){
+            if (instance.thermotype == "Analog") {
                 document.createNormalParagraph(
                         "We strongly recommend installing a programmable thermostat with a remote control app. "
                                 + "Installation of a programmable thermostat with remote programming will save you "
@@ -320,8 +319,7 @@ class WordDocumentGenerator {
                     "Water Heating Savings",
                     "Implementation of recommended water heater measures will result in minimum annual savings of ",
                     waterheater.totalSavings)
-        }
-        else {
+        } else {
             document.createHeaderWithNoRecommendedMeasures("Water Heating Savings")
         }
 
@@ -335,8 +333,8 @@ class WordDocumentGenerator {
 
         document.createNormalParagraph(
                 "Replacing your water heater(s) will result in a total cost of $${waterheater.totalCost.format(0)} but will result in a minimum of $${waterheater.totalSavings.format(0)} in annual savings. " +
-                "This equates to a payback period of approximately ${waterheater.paybackMonth.format(0)} months. " +
-                "This investment will result in a NPV of $${waterheater.netPresentValue.format(0)}. ",
+                        "This equates to a payback period of approximately ${waterheater.paybackMonth.format(0)} months. " +
+                        "This investment will result in a NPV of $${waterheater.netPresentValue.format(0)}. ",
                 addBreakAfter = true)
 
         createWaterHeaterTable(document, waterheater)
@@ -564,7 +562,7 @@ class WordDocumentGenerator {
 
     // generate tables
     private fun createEnergySavingsTable(document: XWPFDocument, values: PreparedForDocument) {
-      val table = document.createTable(15, 2)
+        val table = document.createTable(15, 2)
 
         var currentRow = 0
 
@@ -655,7 +653,7 @@ class WordDocumentGenerator {
 
         generateInfoRow(
                 "    Water Heater (NPV)",
-                values.waterHeater?.netPresentValue?.format(0) ?:"N/A")
+                values.waterHeater?.netPresentValue?.format(0) ?: "N/A")
 
         generateInfoRow(
                 "    Refrigeration (NPV)",
@@ -821,7 +819,7 @@ class WordDocumentGenerator {
             val rcell4 = pcell4.createRun()
             rcell4.setText((if (isFirst) "Current Power (kW)" else rowItem.currentPowerkW.format(2)))
 
-                        val cell5 = row.getCell(5)
+            val cell5 = row.getCell(5)
             cell5.verticalAlignment = XWPFTableCell.XWPFVertAlign.CENTER
             val pcell5 = cell5.paragraphs[0]
             pcell5.alignment = ParagraphAlignment.CENTER
@@ -1080,7 +1078,7 @@ class WordDocumentGenerator {
     }
 
     private fun generateElectrictyCalculationTable(document: XWPFDocument, values: PreparedForDocument) {
-        val table = document.createTable(7,5)
+        val table = document.createTable(7, 5)
 
         // header row
         val row0 = table.getRow(0)
@@ -1269,6 +1267,7 @@ class WordDocumentGenerator {
         rc4r6.setText("${values.building?.postTotalkWh?.format(2) ?: "0.00"}")
 
         table.centerTable()
+        table.fitTable(4500)
     }
 
     private fun generateLightContractorTable(document: XWPFDocument, lights: LightingValues) {
@@ -1314,12 +1313,10 @@ class WordDocumentGenerator {
         if (structure == "F") {
             println("calculate schedule F")
             return calculateScheduleF(kW, kWh)
-        }
-        else if (structure == "F TOD") {
+        } else if (structure == "F TOD") {
             println("calculate schedule F TOD")
             return calculateScheduleFTOD(kW, kWh)
-        }
-        else if (structure == "H") {
+        } else if (structure == "H") {
             println("calculate schedule H")
             return calculateScheduleH(kW, kWh)
         }
