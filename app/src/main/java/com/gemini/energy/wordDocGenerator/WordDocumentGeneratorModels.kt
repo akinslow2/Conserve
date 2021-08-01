@@ -59,5 +59,6 @@ data class PreparedForDocument(
         val waterHeater: WaterHeaterValues?,
         val refrigeration: RefrigerationValues?,
         val equipment: EquipmentValues?,
+        val motor: MotorValues?,
         val building: BuildingValues
 )
