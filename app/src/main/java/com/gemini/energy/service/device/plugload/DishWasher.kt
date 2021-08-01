@@ -30,6 +30,9 @@ class DishWasher(computable: Computable<*>, utilityRateGas: UtilityRate, utility
         return super.compute(extra = ({ Timber.d(it) }))
     }
 
+    // TODO: provide value
+    val presentValueFactor = 1.0
+
     /**
      * Usage Hours
      * */

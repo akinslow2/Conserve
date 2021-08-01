@@ -25,6 +25,9 @@ class IceMaker(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRa
         return super.compute(extra = ({ Timber.d(it) }))
     }
 
+    // TODO: provide value
+    val presentValueFactor = 1.0
+
     private var iceHarvestRate = 0.0
     private var energyUseRate = 0.0
 

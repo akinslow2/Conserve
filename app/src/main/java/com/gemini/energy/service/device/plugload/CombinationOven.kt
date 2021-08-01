@@ -45,6 +45,9 @@ class CombinationOven(computable: Computable<*>, utilityRateGas: UtilityRate, ut
 
     }
 
+    // TODO: provide value
+    val presentValueFactor = 1.0
+
     private fun isElectric() = fuelType == "Electric"
     override fun isGas() = fuelType == "Gas"
 
