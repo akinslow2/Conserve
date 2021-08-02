@@ -252,23 +252,38 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
         return age - 15
     }
 
-    /*
-    ** Calculations for annual demand, power, and energy for pre and post in the area that the HVAC system serves
-     */
-    var coolingkbtu = 24 * uvalue * cdd * (2 * (areaLength*areaWidth + areaLength * areaHeight + areaWidth * areaHeight)) / 1000
-    var heatingkbtu = 24 * uvalue * hdd * (2 * (areaLength*areaWidth + areaLength * areaHeight + areaWidth * areaHeight)) / 1000
+    /**
+     * * Calculations for annual demand, power, and energy for pre and post in the area that the HVAC system serves
+     * */
+    fun coolingkbtu(): Double {
+        val area = (2.0 * (areaLength * areaWidth + areaLength * areaHeight + areaWidth * areaHeight))
+        val occupancyBtu = 600.0 * occupancy
+        val areakBtu = 24.0 * uvalue * cdd.toDouble() * area / 1000.0
+
+        return areakBtu + occupancyBtu
+    }
+
+    fun heatingkbtu(): Double {
+        val area =  (2 * (areaLength * areaWidth + areaLength * areaHeight + areaWidth * areaHeight))
+        val occupancyBtu = 600.0 * occupancy
+        val areakBtu = 24.0 * uvalue * hdd.toDouble() * area / 1000.0
+
+        return areakBtu + occupancyBtu
+    }
 
 
     fun energyPre(): Double {
-        if (heatEfficiency == 0.0 || seer == 0.0) return 0.0
-        return heatingkbtu / heatEfficiency + coolingkbtu / seer
+        val heat = if (heatEfficiency == 0.0) 0.0 else heatingkbtu() / heatEfficiency
+        val cool = if (seer == 0.0) 0.0 else coolingkbtu() / seer
+        return heat + cool
     }
 
     var prePowerUsed = power(kbtu, seer)
 
     fun energyPost(): Double {
-        if (hspf == 0.0 || alternateSeer == 0.0) return 0.0
-        return heatingkbtu / hspf + coolingkbtu / alternateSeer
+        val heat = if (hspf == 0.0) 0.0 else heatingkbtu() / hspf
+        val cool = if (alternateSeer == 0.0) 0.0 else coolingkbtu() / alternateSeer
+        return heat + cool
     }
 
     var postSize = kbtu
