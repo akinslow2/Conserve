@@ -51,7 +51,7 @@ class SorterForWordDocumentGenerator {
             val lighting = LightingValues.tryCreate(audit.value)
             val equipment = EquipmentValues.tryCreate(audit.value)
             val refrigeration = RefrigerationValues.tryCreate(audit.value)
-            val building = prepareBuildingValuesForEquipment(lighting, equipment, hvac, waterheater, refrigeration, motors)
+            val building = BuildingValues.create(lighting, equipment, hvac, waterheater, refrigeration, motors)
             val preaudit = prepareValuesForPreAudit(audit.value)
 
             val zones = aggregateZoneNames(audit.value)
@@ -236,101 +236,5 @@ class SorterForWordDocumentGenerator {
         }
 
         return sorted
-    }
-
-    private fun prepareBuildingValuesForEquipment(
-            lightings: LightingValues?,
-            equipments: EquipmentValues?,
-            hvacs: HvacValues?,
-            waterHeater: WaterHeaterValues?,
-            refrigeration: RefrigerationValues?,
-            motor: MotorValues?): BuildingValues {
-
-        fun calculatePaybackYear(cost: Double?, savings: Double?) =
-                if (cost != null && savings != null && savings > 0.0)
-                    cost / savings
-                else 0.0
-
-        fun calculatePaybackMonth(cost: Double?, savings: Double?) =
-                if (cost != null && savings != null && savings > 0.0)
-                    cost / savings * 12
-                else 0.0
-
-        val buildingTotalSavings = (lightings?.totalcostsavings ?: 0.0) +
-                (equipments?.totalSavings ?: 0.0) +
-                (hvacs?.totalSavings ?: 0.0) +
-                (waterHeater?.totalSavings ?: 0.0) +
-                (refrigeration?.totalSavings ?: 0.0) +
-                (motor?.totalSavings ?: 0.0)
-
-        val buildingTotalCost = (lightings?.totalCost ?: 0.0) +
-                (hvacs?.totalCost ?: 0.0) +
-                (equipments?.totalCost ?: 0.0) +
-                (waterHeater?.totalCost ?: 0.0) +
-                (refrigeration?.totalCost ?: 0.0) +
-                (motor?.totalCost ?: 0.0)
-
-        val buildingPayback =
-                if (buildingTotalSavings == 0.0) 0.0
-                else buildingTotalCost / buildingTotalSavings
-
-        val buildingPaybackMonth =
-                if (buildingTotalSavings == 0.0) 0.0
-                else buildingTotalCost / buildingTotalSavings * 12
-
-        val buildingNetPresentValue =(lightings?.netPresentValue ?: 0.0) +
-                        (hvacs?.netPresentValue ?: 0.0) +
-                        (equipments?.netPresentValue ?: 0.0) +
-                        (waterHeater?.netPresentValue ?: 0.0) +
-                        (refrigeration?.netPresentValue ?: 0.0)  +
-                        (motor?.netPresentValue ?: 0.0)
-
-        val currentTotalkW = (lightings?.currentTotalkW ?: 0.0) +
-                (hvacs?.currentTotalkW ?: 0.0) +
-                (equipments?.currentTotalkW ?: 0.0) +
-                (waterHeater?.currentTotalkW ?: 0.0) +
-                (refrigeration?.currentTotalkW ?: 0.0)
-
-        val currentTotalkWh = (lightings?.currentTotalkWh ?: 0.0) +
-                (hvacs?.currentTotalkWh ?: 0.0) +
-                (equipments?.currentTotalkWh ?: 0.0) +
-                (waterHeater?.currentTotalkWh ?: 0.0) +
-                (refrigeration?.currentTotalkWh ?: 0.0)
-
-        val postTotalkW = (lightings?.postTotalkW ?: 0.0) +
-                (hvacs?.postTotalkW ?: 0.0) +
-                (equipments?.postTotalkW ?: 0.0) +
-                (waterHeater?.postTotalkW ?: 0.0) +
-                (refrigeration?.postTotalkW ?: 0.0)
-
-        val postTotalkWh = (lightings?.postTotalkWh ?: 0.0) +
-                (hvacs?.postTotalkWh ?: 0.0) +
-                (equipments?.postTotalkWh ?: 0.0) +
-                (waterHeater?.postTotalkWh ?: 0.0) +
-                (refrigeration?.postTotalkWh ?: 0.0)
-
-        return BuildingValues(
-                buildingNetPresentValue,
-                buildingTotalSavings,
-                buildingPayback,
-                buildingPaybackMonth,
-                buildingTotalCost,
-                hvacs?.totalCost ?: 0.0,
-                calculatePaybackYear(hvacs?.totalCost, hvacs?.totalSavings),
-                calculatePaybackMonth(hvacs?.totalCost, hvacs?.totalSavings),
-                equipments?.totalCost ?: 0.0,
-                calculatePaybackYear(equipments?.totalCost, equipments?.totalSavings),
-                calculatePaybackMonth(equipments?.totalCost, equipments?.totalSavings),
-                refrigeration?.totalCost ?: 0.0,
-                calculatePaybackYear(refrigeration?.totalCost, refrigeration?.totalSavings),
-                calculatePaybackMonth(refrigeration?.totalCost, refrigeration?.totalSavings),
-                waterHeater?.totalCost ?: 0.0,
-                calculatePaybackYear(waterHeater?.totalCost, waterHeater?.totalSavings),
-                calculatePaybackMonth(waterHeater?.totalCost, waterHeater?.totalSavings),
-                currentTotalkW,
-                currentTotalkWh,
-                postTotalkW,
-                postTotalkWh
-        )
     }
 }
