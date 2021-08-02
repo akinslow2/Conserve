@@ -44,26 +44,15 @@ data class HvacValues(
                 costPostState += hvac.costPostState(element, DataHolder())
 
                 totalSavings += hvac.totalSavings()
-                totalCost = hvac.implementationCost()
+                totalCost += hvac.implementationCost()
 
                 // @anthony, please verify that these are the correct values
-                currentTotalkW = hvac.energyPre()
-                currentTotalkWh = hvac.energyPre() * hvac.usageHoursPre()
-                postTotalkW = hvac.energyPost()
-                postTotalkWh = hvac.energyPost() * hvac.usageHoursPost()
+                currentTotalkW += hvac.energyPre()
+                currentTotalkWh += hvac.energyPre() * hvac.usageHoursPre()
+                postTotalkW += hvac.energyPost()
+                postTotalkWh += hvac.energyPost() * hvac.usageHoursPost()
 
                 instances.add(HvacInstances.createFromHvac(hvac))
-//                instances.add(HvacInstances(
-//                        hvac.quantity,
-//                        hvac.year(),
-//                        hvac.age,
-//                        hvac.kbtu.toInt(),
-//                        hvac.seer,
-//                        hvac.overAge(),
-//                        hvac.economizer,
-//                        hvac.thermotype,
-//                        hvac.netPresentValue
-//                ))
             }
             val costOverSavings =
                     if (totalSavings == 0.0) 0.0
