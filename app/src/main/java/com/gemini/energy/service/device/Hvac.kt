@@ -1,4 +1,4 @@
- package com.gemini.energy.service.device
+package com.gemini.energy.service.device
 
 import android.content.Context
 import com.gemini.energy.R
@@ -8,7 +8,6 @@ import com.gemini.energy.service.DataHolder
 import com.gemini.energy.service.IComputable
 import com.gemini.energy.service.OutgoingRows
 import com.gemini.energy.service.type.UsageHours
-import com.gemini.energy.service.type.UsageLighting
 import com.gemini.energy.service.type.UsageSimple
 import com.gemini.energy.service.type.UtilityRate
 import com.google.gson.JsonArray
@@ -50,14 +49,14 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
          * Fetches the EER based on the specific Match Criteria via the Parse API
 
         fun extractEER(elements: List<JsonElement?>): Double {
-            elements.forEach {
-                it?.let {
-                    if (it.asJsonObject.has("eer")) {
-                        return it.asJsonObject.get("eer").asDouble
-                    }
-                }
-            }
-            return 0.0
+        elements.forEach {
+        it?.let {
+        if (it.asJsonObject.has("eer")) {
+        return it.asJsonObject.get("eer").asDouble
+        }
+        }
+        }
+        return 0.0
         }
 
         /**
@@ -66,22 +65,22 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
          * This is used to calculate the Energy
          * */
         fun extractHours(elements: List<JsonElement?>): Int {
-            elements.forEach {
-                it?.let {
-                    if (it.asJsonObject.has("hours")) {
-                        return it.asJsonObject.get("hours").asInt
-                    }
-                }
-            }
-            return 0
+        elements.forEach {
+        it?.let {
+        if (it.asJsonObject.has("hours")) {
+        return it.asJsonObject.get("hours").asInt
         }
-        * */
+        }
+        }
+        return 0
+        }
+         * */
         /**
          * HVAC - Power Consumed
          * There could be a case where the User will input the value in KW - If that happens we need to convert the KW
          * int kbtu / hr :: 1KW equals 3412.142
          * */
-        fun power(kbtu: Double, seer: Double) = (kbtu / seer)
+        fun power(kbtu: Double, seer: Double) = if (seer == 0.0) 0.0 else (kbtu / seer)
 
         /**
          * Year At - Current minus the Age
@@ -94,10 +93,10 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
             return dateFormatter.format(calendar.time).toInt()
         }
 
-        fun firstNotNull (valueFirst: Double, valueSecond: Double) =
+        fun firstNotNull(valueFirst: Double, valueSecond: Double) =
                 if (valueFirst == 0.0) valueSecond else valueFirst
 
-        fun firstNotNull (valueFirst: Int, valueSecond: Int) =
+        fun firstNotNull(valueFirst: Int, valueSecond: Int) =
                 if (valueFirst == 0) valueSecond else valueFirst
     }
 
@@ -174,7 +173,7 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
     var areaHeight = 0.0
     var areaWidth = 0.0
     var areaLength = 0.0
-    var heatEfficiency = .9
+    var heatEfficiency = 0.9
     var hspf = 8.0
     var occupancy = 0
 
@@ -185,7 +184,7 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
             businessname = preAudit["General Client Info Business Name"]!! as String
             auditmonth = preAudit["General Client Info Audit Month"]!! as String
             audityear = preAudit["General Client Info Audit Year"]!! as String
-            clientaddress  = "${preAudit["General Client Info Address Line 1"]} ${preAudit["General Client Info Address Line 2"]} ${preAudit["General Client Info Address City"]}, ${preAudit["General Client Info Address State"]} ${preAudit["General Client Info Address Zip Code"]}"
+            clientaddress = "${preAudit["General Client Info Address Line 1"]} ${preAudit["General Client Info Address Line 2"]} ${preAudit["General Client Info Address City"]}, ${preAudit["General Client Info Address State"]} ${preAudit["General Client Info Address Zip Code"]}"
             startday = preAudit["General Client Info Assessment Start Day"]!! as String
             endday = preAudit["General Client Info Assessment End Day"]!! as String
             operationhours = preAudit["Operation Hours Monday Operating Hours"]!! as String
@@ -332,7 +331,7 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
 
         Timber.d("HVAC :: Pre Power Used -- [$powerUsed]")
   */
-        if (offPeakHours > 0.0) return  costElectricity(prePowerUsed, preUsageHours, electricityRate)
+        if (offPeakHours > 0.0) return costElectricity(prePowerUsed, preUsageHours, electricityRate)
         return costElectricity(energyPre(), electricityRate) + costElectricityFromPowerAndDemand(prePowerUsed, electricityRate)
     }
 
@@ -347,8 +346,8 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
         Timber.d("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
 
 
-       // try {
-       //     postSize = element.asJsonObject.get(HVAC_DB_BTU).asInt
+        // try {
+        //     postSize = element.asJsonObject.get(HVAC_DB_BTU).asInt
         //    postEER = element.asJsonObject.get(HVAC_DB_EER).asDouble
         //} catch (e: Exception) {
         //    e.printStackTrace()
@@ -356,8 +355,9 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
 
 
         if (offPeakHours > 0.0) return costElectricity(postPowerUsed, postUsageHours, electricityRate) + costElectricityFromPowerAndDemand(postPowerUsed, electricityRate)
+
         return costElectricity(energyPost(), electricityRate) + costElectricityFromPowerAndDemand(postPowerUsed, electricityRate)
-        }
+    }
 
     /**
      * Manually Builds the Post State Response from the Suggested Alternative
@@ -384,10 +384,13 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
      * HVAC - INCENTIVES | MATERIAL COST
      * */
     override fun incentives(): Double {
-        if (utilitycompany == "pge") {return energyPowerChange() * 0.15 + (energyPowerChange() / usageHoursPre()) * 150 }
-        else { return 0.0}
+        if (utilitycompany == "pge") {
+            val powerChangeOverHoursPre = if (usageHoursPre() == 0.0) 0.0 else energyPowerChange() / usageHoursPre()
+            return energyPowerChange() * 0.15 + powerChangeOverHoursPre * 150
+        } else return 0.0
     }
-//@K2 does kbtu have to be a double to be in the equation below? Right now it is an INT
+
+    //@K2 does kbtu have to be a double to be in the equation below? Right now it is an INT
 //    @anthony it will need to be a double
     // anytime you are returning a double, all values in the equation must be doubles
     override fun materialCost(): Double {
@@ -397,9 +400,10 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
     override fun laborCost(): Double {
         return 0.0
     }
-/*
-    Net Present Value
- */
+
+    /*
+        Net Present Value
+     */
     val netPresentValue = (presentvaluefactor * (energyPre() - energyPost())) - materialCost()
 
     /**
@@ -418,7 +422,12 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
     override fun usageHoursPre(): Double {
         return peakHours + partPeakHours + offPeakHours
     }
-    override fun usageHoursPost(): Double = 0.0
+
+    override fun usageHoursPost(): Double {
+        // TODO: check if hours should change
+        return usageHoursPre()
+    }
+
 
     /**
      * PowerTimeChange >> Energy Efficiency Calculations
@@ -427,9 +436,9 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
      * */
     override fun energyPowerChange(): Double {
 
-          // Step 3 : Get the Delta
-        val powerPre = kbtu / seer
-        val powerPost = kbtu / alternateSeer
+        // Step 3 : Get the Delta
+        val powerPre = if (seer == 0.0) 0.0 else kbtu / seer
+        val powerPost = if (alternateSeer == 0.0) 0.0 else kbtu / alternateSeer
         val pSavings = (powerPre - powerPost)
 
         val delta = pSavings * usageHoursPre()
@@ -446,7 +455,6 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
 
         return costElectricity(energyPowerChange(), electricityRate) + costElectricityFromPowerAndDemand(powerDelta, electricityRate)
     }
-
 
 
     override fun energyTimeChange(): Double = 0.0
@@ -495,6 +503,7 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
             "Operation Hours Monday Operating Hours", "Area Total (Sq.Ft.)",
             "Others Utility Company", "Others Electric Rate Structure", "Others Gas Rate Structure",
             "General Client Info Facility Type")
+
     override fun featureDataFields() = getGFormElements().map { it.value.param!! }.toMutableList()
 
     override fun preStateFields() = mutableListOf("")
