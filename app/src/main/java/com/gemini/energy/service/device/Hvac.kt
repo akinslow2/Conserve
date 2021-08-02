@@ -197,7 +197,8 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
             state = preAudit["General Client Info State"]!! as String
 
             eer = featureData["EER"]!! as Double
-            seer = featureData["SEER"]!! as Double
+            val inputSeer = featureData["SEER"]!! as Double
+            seer = if (inputSeer > 0.0) inputSeer else seer
             age = featureData["Age"]!! as Int
             kbtu = featureData["Cooling Capacity (kBtu/hr)"]!! as Double
             gasInput = featureData["Heating Input (kBtu/hr)"]!! as Int
@@ -206,10 +207,18 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
             thermotype = featureData["Thermostat Type"]!! as String
             quantity = featureData["Quantity"]!! as Int
 
-            cddThreshold = featureData["AC Temperature Threshold"]!! as Int
-            hddThreshold = featureData["Heat Temperature Threshold"]!! as Int
-            cdd = featureData["Cooling Degree Days"]!! as Int
-            hdd = featureData["Heating Degree Days"]!! as Int
+            val inputCddThreshold = featureData["AC Temperature Threshold"]!! as Int
+            cddThreshold = if (inputCddThreshold > 0) inputCddThreshold else cddThreshold
+
+            val inputHddThreshold = featureData["Heat Temperature Threshold"]!! as Int
+            hddThreshold = if (inputHddThreshold > 0) inputHddThreshold else hddThreshold
+
+            val inputCdd = featureData["Cooling Degree Days"]!! as Int
+            cdd = if (inputCdd > 0) inputCdd else cdd
+
+            val inputhdd = featureData["Heating Degree Days"]!! as Int
+            hdd = if (inputhdd > 0) inputhdd else hdd
+
             insulation = featureData["Insulation"]!! as String
             areaLength = featureData["Length of Served Area"]!! as Double
             areaWidth = featureData["Width of Served Area"]!! as Double
@@ -219,7 +228,8 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
             partPeakHours = featureData["Part Peak Hours"]!! as Double
             offPeakHours = featureData["Off Peak Hours"]!! as Double
 
-            alternateSeer = featureData["Alternate SEER"]!! as Double
+            val inputAltSeer = featureData["Alternate SEER"]!! as Double
+            alternateSeer = if (inputAltSeer > 0) inputAltSeer else alternateSeer
             alternateEer = featureData["Alternate EER"]!! as Double
             alternateBtu = featureData["Alternate Cooling Capacity (Btu/hr)"]!! as Int
 
