@@ -522,25 +522,17 @@ class WordDocumentGenerator {
 
         generateElectrictyCalculationTable(document, values)
 
-        val currentElectricityCharge = electrictyCharge(
-                values.preAudit.electricstructure,
-                values.building.currentTotalkW,
-                values.building.currentTotalkWh).format(2)
         document.createNormalParagraph(
-                "Given current building aggregation, current total charge is $${currentElectricityCharge}")
+                "Given current building aggregation, current total charge is "
+                        + "$${values.building.currentElectricityCharge.format(2)}")
 
-        val postElectricityCharge = electrictyCharge(
-                values.preAudit.electricstructure,
-                values.building.postTotalkW,
-                values.building.postTotalkWh).format(2)
         document.createNormalParagraph(
-                "Given current building aggregation, post total charge is $${postElectricityCharge}")
+                "Given current building aggregation, post total charge is "
+                        + "$${values.building.postElectricityCharge.format(2)}")
 
-        // TODO: calculate this!
-        val customerAnnualSavingsDuringPaybackPeriod = "TODO"
         document.createNormalParagraph(
                 "By allowing Roanoke Electric to implement these proposed changes you will see an "
-                        + "estimated electricity bill savings of $$customerAnnualSavingsDuringPaybackPeriod "
+                        + "estimated electricity bill savings of $${values.building.customerAnnualSavingsDuringPaybackPeriod.format(2)} "
                         + "a year. If there is a question or concern about your bill, please email us at "
                         + "roanoke@geminiEsolutions.com or call us at (252) 209-2236 or (800) 433-2236.")
     }
@@ -558,7 +550,6 @@ class WordDocumentGenerator {
 
         generateLightContractorTable(document, lights)
     }
-
 
     // generate tables
     private fun createEnergySavingsTable(document: XWPFDocument, values: PreparedForDocument) {
@@ -1209,110 +1200,7 @@ class WordDocumentGenerator {
         table.fitTable(4500)
     }
 
-    // electricty rate calculations
-    fun electrictyCharge(structure: String, kW: Double, kWh: Double): Double {
-//        val electrictySchedule = preaudit.electricstructure
-        if (structure == "F") {
-            println("calculate schedule F")
-            return calculateScheduleF(kW, kWh)
-        } else if (structure == "F TOD") {
-            println("calculate schedule F TOD")
-            return calculateScheduleFTOD(kW, kWh)
-        } else if (structure == "H") {
-            println("calculate schedule H")
-            return calculateScheduleH(kW, kWh)
-        }
-        return 0.0
-    }
 
-    fun calculateScheduleF(kW: Double, kWh: Double): Double {
-        val totalDemand = calculateDemandCharegeForScheduleF(kW)
-        val totalEnergy = calculateEnergyChargeForScheduleF(kWh)
-
-        val totalCost = totalDemand + totalEnergy
-        println("cost 1 is ${totalCost}")
-
-        if (kW >= 100) {
-            val otherPotentialCost = kWh * 0.1697
-            println("cost 2 is ${otherPotentialCost}")
-            if (totalCost > otherPotentialCost) {
-                return otherPotentialCost
-            }
-        }
-        return totalCost
-    }
-
-    fun calculateScheduleFTOD(kW: Double, kWh: Double): Double {
-        // calculating based on assumption that all hours are off peak
-        val totalDemand = kW * 4.95
-        println("totalDemand $totalDemand")
-        val totalEnergy = kWh * 0.05
-        println("totalEnergy $totalEnergy")
-        val totalCost = totalDemand + totalEnergy
-        println("totalCost $totalCost")
-        return totalCost
-    }
-
-    fun calculateScheduleH(kW: Double, kWh: Double): Double {
-        // calculating based on assumption that all hours are off peak
-        val totalDemand = kW * 5.20
-        println("totalDemand $totalDemand")
-        val totalEnergy = kWh * 0.0449
-        println("totalEnergy $totalEnergy")
-        val totalCost = totalDemand + totalEnergy
-        println("totalCost $totalCost")
-        return totalCost
-    }
-
-    fun calculateEnergyChargeForScheduleF(kWh: Double): Double {
-        val energyChargeFirst2500kWh = 0.1288
-        val energyChargeNext7500kWh = 0.0918
-        val energyChargeNext40000kWh = 0.0776
-        val energyChargeOver50000kWh = 0.0660
-
-        var totalEnergyCharge = 0.0
-        if (kWh >= 2500.0) {
-            totalEnergyCharge += 2500.0 * energyChargeFirst2500kWh
-        } else {
-            totalEnergyCharge += kWh * energyChargeFirst2500kWh
-            return totalEnergyCharge
-        }
-        println("energy cost first 2500 $totalEnergyCharge")
-
-        var remainingkWh = kWh - 2500.0
-        if (remainingkWh >= 7500.0) {
-            totalEnergyCharge += 7500.0 * energyChargeNext7500kWh
-        } else {
-            totalEnergyCharge += remainingkWh * energyChargeNext7500kWh
-            return totalEnergyCharge
-        }
-        println("energy cost next 7500 $totalEnergyCharge")
-
-        remainingkWh -= 7500.0
-        if (remainingkWh >= 40000.0) {
-            totalEnergyCharge += 40000.0 * energyChargeNext40000kWh
-        } else {
-            totalEnergyCharge += remainingkWh * energyChargeNext40000kWh
-            return totalEnergyCharge
-        }
-        println("energy cost next 40000 $totalEnergyCharge")
-
-        remainingkWh -= 40000.0
-        totalEnergyCharge += remainingkWh * energyChargeOver50000kWh
-
-        println("total energy is ${totalEnergyCharge}")
-        return totalEnergyCharge
-    }
-
-    fun calculateDemandCharegeForScheduleF(kW: Double): Double {
-        val demandChargeOver15kW = 9.5
-
-        // no cost 15 and under
-        val demandKW = kW - 15.0
-
-        return if (kW <= 15) 0.0
-        else demandKW * demandChargeOver15kW
-    }
 
     // ApachePOI setup
     private fun setupNeededForApacheToWork() {
