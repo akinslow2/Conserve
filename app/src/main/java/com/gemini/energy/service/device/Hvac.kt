@@ -176,6 +176,7 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
     var areaLength = 0.0
     var heatEfficiency = .9
     var hspf = 8.0
+    var occupancy = 0
 
     override fun setup() {
         try {
@@ -195,6 +196,7 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
             bldgtype = preAudit["General Client Info Facility Type"]!! as String
             city = preAudit["General Client Info City"]!! as String
             state = preAudit["General Client Info State"]!! as String
+            occupancy = preAudit["Area Occupancy"]!! as Int
 
             eer = featureData["EER"]!! as Double
             val inputSeer = featureData["SEER"]!! as Double
