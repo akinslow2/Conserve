@@ -22,7 +22,10 @@ data class LightingValues(
         val currentTotalkW: Double,
         val currentTotalkWh: Double,
         val postTotalkW: Double,
-        val postTotalkWh: Double
+        val postTotalkWh: Double,
+        val kWSavings: Double,
+        val kWhSavings: Double,
+        val hvacAdditionalkWhSavings: Double
 ) {
     companion object {
 
@@ -155,6 +158,11 @@ data class LightingValues(
 
             val netPresentValue: Double = (totalSavings * presentvaluefactor) - totalInstallCost
 
+            val totalkWhSavings = currentTotalkWh - postTotalkWh
+            val totalkWSavings = currentTotalkW - postTotalkW
+
+            val additionalHvacSavings = totalkWhSavings * 3410.0 / 17.0 / 1000.0
+
             return LightingValues(
                     totalSavings,
                     totalEnergySavings,
@@ -167,7 +175,10 @@ data class LightingValues(
                     currentTotalkW,
                     currentTotalkWh,
                     postTotalkW,
-                    postTotalkWh)
+                    postTotalkWh,
+                    totalkWSavings,
+                    totalkWhSavings,
+                    additionalHvacSavings)
         }
 
 
