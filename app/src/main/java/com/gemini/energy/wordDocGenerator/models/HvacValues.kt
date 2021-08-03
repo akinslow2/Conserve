@@ -18,7 +18,7 @@ data class HvacValues(
         val postTotalkWh: Double
 ) {
     companion object {
-        fun tryCreate(audit: AuditComponents): HvacValues? {
+        fun tryCreate(audit: AuditComponents, additionalkWhSavingsFromLighting: Double): HvacValues? {
             if (!audit[SorterForWordDocumentGenerator.hvac]!!.any()) {
                 return null
             }
@@ -59,6 +59,8 @@ data class HvacValues(
                     else totalCost / totalSavings
             val paybackYear: Double = costOverSavings + (4.0 / 12.0)
             val netPresentValue: Double = (totalSavings * presentvaluefactor) - totalCost
+
+            postTotalkWh -= additionalkWhSavingsFromLighting
 
             return HvacValues(
                     instances.toList(),

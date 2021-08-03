@@ -55,10 +55,11 @@ class SorterForWordDocumentGenerator {
             if (preaudit == null || preaudit.businessname.isBlank()) {
                 continue
             } else {
-                val hvac = HvacValues.tryCreate(audit.value)
+
                 val waterheater = WaterHeaterValues.tryCreate(audit.value)
                 val motors = MotorValues.tryCreate(audit.value)
                 val lighting = LightingValues.tryCreate(audit.value)
+                val hvac = HvacValues.tryCreate(audit.value, lighting?.hvacAdditionalkWhSavings ?: 0.0)
                 val equipment = EquipmentValues.tryCreate(audit.value)
                 val refrigeration = RefrigerationValues.tryCreate(audit.value)
                 val building = BuildingValues.create(preaudit, lighting, equipment, hvac, waterheater, refrigeration, motors)
