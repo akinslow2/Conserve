@@ -27,6 +27,7 @@ class Incandescent(computable: Computable<*>, utilityRateGas: UtilityRate, utili
     override fun compute(): Observable<Computable<*>> {
         return super.compute(extra = ({ Timber.d(it) }))
     }
+
     //create variable here if you want to make it global to the class with private
     private var percentPowerReduced = 0.0
     private var actualWatts = 0.0
@@ -56,17 +57,12 @@ class Incandescent(computable: Computable<*>, utilityRateGas: UtilityRate, utili
 
     var electricianCost = timeperfixture * numberOfFixtures * electricanHourlyRate
 
-
     private var controls = ""
     private var hasControls = ""
 
-    var postpeakHours = 0.0
-    var postpartPeakHours = 0.0
-    var postoffPeakHours = 0.0
-    private var alternateActualWatts = 0.0
-    private var alternateNumberOfFixtures = 0
-    private var alternateLampsPerFixture = 0
-
+    var ceilingType = ""
+    var replacementType = ""
+    var isCeilingOver10Feet = ""
 
 
     //Where you extract from user inputs and assign to variables
@@ -79,9 +75,9 @@ class Incandescent(computable: Computable<*>, utilityRateGas: UtilityRate, utili
             val config = lightingConfig(ELightingType.Incandescent)
             percentPowerReduced = config[ELightingIndex.PercentPowerReduced.value] as Double
 
-            alternateActualWatts = featureData["Alternate Actual Watts"]!! as Double
-            alternateNumberOfFixtures = featureData["Alternate Number of Fixtures"]!! as Int
-            alternateLampsPerFixture = featureData["Alternate Lamps Per Fixture"]!! as Int
+            ceilingType = featureData["Ceiling Type"]!! as String
+            replacementType = featureData["Replacement Type"]!! as String
+            isCeilingOver10Feet = featureData["Ceiling greater than 10 feet?"]!! as String
 
             controls = featureData["Type of Control"]!! as String
             hasControls = featureData["Controls"]!! as String
@@ -89,15 +85,12 @@ class Incandescent(computable: Computable<*>, utilityRateGas: UtilityRate, utili
             peakHours = (featureData["Peak Hours"]!! as Int).toDouble()
             partPeakHours = (featureData["Part Peak Hours"]!! as Int).toDouble()
             offPeakHours = (featureData["Off Peak Hours"]!! as Int).toDouble()
-
-            postpeakHours = featureData["Suggested Peak Hours"]!! as Double
-            postpartPeakHours = featureData["Suggested Part Peak Hours"]!! as Double
-            postoffPeakHours = featureData["Suggested Off Peak Hours"]!! as Double
-
         } catch (e: Exception) {
             e.printStackTrace()
         }
     }
+
+
     /**
      * Time | Energy | Power - Pre State
      * */
@@ -106,13 +99,12 @@ class Incandescent(computable: Computable<*>, utilityRateGas: UtilityRate, utili
             val usageHours = UsageLighting()
             usageHours.peakHours = 4336.0
             return usageHours.yearly()
-        }
-        else {
+        } else {
             val usageHours = UsageLighting()
             usageHours.peakHours = peakHours
             usageHours.partPeakHours = partPeakHours
             usageHours.offPeakHours = offPeakHours
-            if (usageHours.yearly() > 0){
+            if (usageHours.yearly() > 0) {
                 return usageHours.yearly()
             }
             return usageHoursBusiness.yearly()
@@ -125,8 +117,10 @@ class Incandescent(computable: Computable<*>, utilityRateGas: UtilityRate, utili
     }
 
     fun prePower(): Double {
-        return actualWatts * numberOfFixtures * lampsPerFixtures / 1000
+        return actualWatts * numberOfFixtures * lampsPerFixtures / 1000.0
     }
+
+
     /**
      * Cost - Pre State
      * */
@@ -141,6 +135,7 @@ class Incandescent(computable: Computable<*>, utilityRateGas: UtilityRate, utili
         return costElectricity(prePower(), usageHours, electricityRate)
     }
 
+
     /**
      * Cost - Post State
      * */
@@ -154,23 +149,20 @@ class Incandescent(computable: Computable<*>, utilityRateGas: UtilityRate, utili
 
         val totalUnits = lampsPerFixtures * numberOfFixtures
 
-        val replacementIndex = LEDlifeHours / lifeHours
-        val expectedLife = LEDlifeHours / usageHoursSpecific.yearly()
-        val maintenanceSavings = totalUnits * bulbcost * replacementIndex / expectedLife
-
-        // Adding new variables for the report
-        val selfinstallcost = this.selfinstallcost()
+        val replacementIndex = if (lifeHours == 0.0) 0.0 else LEDlifeHours / lifeHours
+        val expectedLife = if (usageHoursSpecific.yearly() == 0.0) 0.0 else LEDlifeHours / usageHoursSpecific.yearly()
+        val maintenanceSavings = if (expectedLife == 0.0) 0.0 else totalUnits * bulbcost * replacementIndex / expectedLife
 
         // Delta is going to be Power Used * Percentage Power Reduced
         // Percentage Power Reduced - we get it from the Base - ELighting
 
         val energySavings = prePower() * percentPowerReduced
-        val coolingSavings = energySavings * cooling / seer
+        val coolingSavings = if (seer == 0) 0.0 else  energySavings * cooling / seer.toDouble()
 
         val energyAtPostState = preEnergy() - energySavings
-        val paybackmonth = selfinstallcost / energySavings * 12
-        val paybackyear = selfinstallcost / energySavings
-        val totalsavings =  totalSavings()
+        val paybackmonth = if (energySavings == 0.0) 0.0 else installCost() / energySavings * 12
+        val paybackyear = if (energySavings == 0.0) 0.0 else installCost() / energySavings
+        val totalsavings = totalSavings()
 
         val postRow = mutableMapOf<String, String>()
         postRow["__life_hours"] = lifeHours.toString()
@@ -178,7 +170,6 @@ class Incandescent(computable: Computable<*>, utilityRateGas: UtilityRate, utili
         postRow["__cooling_savings"] = coolingSavings.toString()
         postRow["__energy_savings"] = energySavings.toString()
         postRow["__energy_at_post_state"] = energyAtPostState.toString()
-        postRow["__selfinstall_cost"] = selfinstallcost.toString()
         postRow["__payback_month"] = paybackmonth.toString()
         postRow["__payback_year"] = paybackyear.toString()
         postRow["__total_savings"] = totalsavings.toString()
@@ -189,40 +180,31 @@ class Incandescent(computable: Computable<*>, utilityRateGas: UtilityRate, utili
         dataHolder.rows?.add(postRow)
 
         return -99.99
-
     }
+
 
     /**
      * PowerTimeChange >> Hourly Energy Use - Pre
      * */
     override fun hourlyEnergyUsagePre(): List<Double> = listOf(0.0, 0.0)
 
+
     /**
      * PowerTimeChange >> Hourly Energy Use - Post
      * */
     override fun hourlyEnergyUsagePost(element: JsonElement): List<Double> = listOf(0.0, 0.0)
 
+
     /**
      * Post Yearly Usage Hours
      * */
-
-
     override fun usageHoursPost(): Double {
-        val postusageHours = UsageLighting()
-        postusageHours.postpeakHours = postpeakHours
-        postusageHours.postpartPeakHours = postpartPeakHours
-        postusageHours.postoffPeakHours = postoffPeakHours
-
-        postusageHours.build()
-
-        if (postusageHours.yearly() > 0.0)
-            return postusageHours.yearly()
-
         if (usageHoursPre() > 0)
             return usageHoursPre()
 
         return usageHoursBusiness.yearly()
     }
+
 
     /**
      * PowerTimeChange >> Energy Efficiency Calculations
@@ -232,9 +214,9 @@ class Incandescent(computable: Computable<*>, utilityRateGas: UtilityRate, utili
     }
 
     override fun energyTimeChange(): Double {
-        return  actualWatts * numberOfFixtures * lampsPerFixtures / 1000 * usageHoursPost()
-
+        return actualWatts * numberOfFixtures * lampsPerFixtures / 1000.0 * usageHoursPost()
     }
+
     override fun energyPowerTimeChange(): Double {
         return prePower() * percentPowerReduced * usageHoursPost()
     }
@@ -246,36 +228,34 @@ class Incandescent(computable: Computable<*>, utilityRateGas: UtilityRate, utili
     fun postEnergy(): Double {
         return preEnergy() - energySavings()
     }
+
     fun energySavings(): Double {
         return preEnergy() * percentPowerReduced
     }
 
-    fun selfinstallcost(): Double {
-        return ledbulbcost * alternateNumberOfFixtures * alternateLampsPerFixture
-    }
     fun totalEnergySavings(): Double {
+        val coolingOverSeer = if (seer == 0) 0.0 else cooling / seer.toDouble()
+
         if (controls != null) {
-            val coolingSavings = (preEnergy() - energyPowerChange()) * cooling / seer
+            val coolingSavings = (preEnergy() - energyPowerChange()) * coolingOverSeer
             return (preEnergy() - energyPowerChange()) + coolingSavings
         } else {
-            val coolingSavings = (preEnergy() - energyPowerTimeChange()) * cooling / seer
+            val coolingSavings = (preEnergy() - energyPowerTimeChange()) * coolingOverSeer
             return (preEnergy() - energyPowerTimeChange()) + coolingSavings
         }
-
     }
 
     fun totalSavings(): Double {
-
         val lifeHours = lightingConfig(ELightingType.Incandescent)[ELightingIndex.LifeHours.value] as Double
 
         val totalUnits = lampsPerFixtures * numberOfFixtures
 
-        val replacementIndex = LEDlifeHours / lifeHours
-        val expectedLife = LEDlifeHours / usageHoursSpecific.yearly()
-        val maintenanceSavings = totalUnits * bulbcost * replacementIndex / expectedLife
+        val replacementIndex = if (lifeHours == 0.0) 0.0 else LEDlifeHours / lifeHours
+        val expectedLife = if (usageHoursSpecific.yearly() == 0.0) 0.0 else  LEDlifeHours / usageHoursSpecific.yearly()
+        val maintenanceSavings = if (expectedLife == 0.0) 0.0 else totalUnits * bulbcost * replacementIndex / expectedLife
 
         val energySavings = prePower() * percentPowerReduced
-        val coolingSavings = energySavings * cooling / seer
+        val coolingSavings = if (seer == 0) 0.0 else  energySavings * cooling / seer.toDouble()
 
         val usageHours = UsageLighting()
         usageHours.peakHours = peakHours
@@ -287,28 +267,37 @@ class Incandescent(computable: Computable<*>, utilityRateGas: UtilityRate, utili
 
         return energycostSavings * 8 + maintenanceSavings
     }
+
+
     /**
     //NPV for Lighting - assume 10 years life cycle
      **/
     var presentvaluefactor = 7.722
 
-    fun elecinstallcost(): Double {
-        return ledbulbcost * alternateNumberOfFixtures * alternateLampsPerFixture + electricianCost
+    fun installCost(): Double {
+        val timePerFixture = Utils.timePerFixture(replacementType, ceilingType)
+        val electricianCost = Utils.electricianCost(timePerFixture, numberOfFixtures)
+        return Utils.installCost(replacementType, ledbulbcost, lampsPerFixtures, numberOfFixtures, electricianCost)
     }
+
     fun netPresentValue(): Double {
-        return totalSavings() * presentvaluefactor - elecinstallcost()
+        return totalSavings() * presentvaluefactor - installCost()
     }
+
+
     /**
      * Energy Efficiency Lookup Query Definition
      * */
     override fun efficientLookup() = false
     override fun queryEfficientFilter() = ""
 
+
     /**
      * State if the Equipment has a Post UsageHours Hours (Specific) ie. A separate set of
      * Weekly UsageHours Hours apart from the PreAudit
      * */
     override fun usageHoursSpecific() = false
+
 
     /**
      * Define all the fields here - These would be used to Generate the Outgoing Rows or perform the Energy Calculation
@@ -326,5 +315,4 @@ class Incandescent(computable: Computable<*>, utilityRateGas: UtilityRate, utili
     private fun getFormMapper() = FormMapper(context, R.raw.incandescent)
     private fun getModel() = getFormMapper().decodeJSON()
     private fun getGFormElements() = getFormMapper().mapIdToElements(getModel())
-
 }

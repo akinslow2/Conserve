@@ -28,7 +28,7 @@ class Cfl(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEle
         return super.compute(extra = ({ Timber.d(it) }))
     }
 
-//create variable here if you want to make it global to the class with private
+    //create variable here if you want to make it global to the class with private
     private var percentPowerReduced = 0.0
     private var actualWatts = 0.0
     var lampsPerFixtures = 0
@@ -55,13 +55,9 @@ class Cfl(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEle
     private var controls = ""
     private var hasControls = ""
 
-    var postpeakHours = 0.0
-    var postpartPeakHours = 0.0
-    var postoffPeakHours = 0.0
-    private var alternateActualWatts = 0.0
-    private var alternateNumberOfFixtures = 0
-    private var alternateLampsPerFixture = 0
-
+    var ceilingType = ""
+    var replacementType = ""
+    var isCeilingOver10Feet = ""
 
 
     //Where you extract from user inputs and assign to variables
@@ -74,17 +70,13 @@ class Cfl(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEle
             val config = lightingConfig(ELightingType.CFL)
             percentPowerReduced = config[ELightingIndex.PercentPowerReduced.value] as Double
 
+            ceilingType = featureData["Ceiling Type"]!! as String
+            replacementType = featureData["Replacement Type"]!! as String
+            isCeilingOver10Feet = featureData["Ceiling greater than 10 feet?"]!! as String
+
             peakHours = featureData["Peak Hours"]!! as Double
             partPeakHours = featureData["Part Peak Hours"]!! as Double
             offPeakHours = featureData["Off Peak Hours"]!! as Double
-
-            alternateActualWatts = featureData["Alternate Actual Watts"]!! as Double
-            alternateNumberOfFixtures = featureData["Alternate Number of Fixtures"]!! as Int
-            alternateLampsPerFixture = featureData["Alternate Lamps Per Fixture"]!! as Int
-
-            postpeakHours = featureData["Suggested Peak Hours"]!! as Double
-            postpartPeakHours = featureData["Suggested Part Peak Hours"]!! as Double
-            postoffPeakHours = featureData["Suggested Off Peak Hours"]!! as Double
 
             controls = featureData["Type of Control"]!! as String
             hasControls = featureData["Controls"]!! as String
@@ -93,6 +85,8 @@ class Cfl(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEle
             e.printStackTrace()
         }
     }
+
+
     /**
      * Time | Energy | Power - Pre State
      * */
@@ -101,16 +95,30 @@ class Cfl(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEle
             val usageHours = UsageLighting()
             usageHours.peakHours = 4336.0
             return usageHours.yearly()
-        }
-        else {
+        } else {
             val usageHours = UsageLighting()
             usageHours.peakHours = peakHours
             usageHours.partPeakHours = partPeakHours
             usageHours.offPeakHours = offPeakHours
-            if (usageHours.yearly() > 0){
+            if (usageHours.yearly() > 0) {
                 return usageHours.yearly()
             }
             return usageHoursBusiness.yearly()
+        }
+    }
+
+    private fun usageLightingPre(): UsageLighting {
+        if (hasControls == "Yes" && controls == "Daylight Sensor") {
+            val usageHours = UsageLighting()
+            usageHours.peakHours = 4336.0
+            return usageHours
+        } else {
+            val usageHours = UsageLighting()
+            usageHours.peakHours = peakHours
+            usageHours.partPeakHours = partPeakHours
+            usageHours.offPeakHours = offPeakHours
+
+            return usageHours
         }
     }
 
@@ -120,18 +128,18 @@ class Cfl(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEle
     }
 
     fun prePower(): Double {
-        return actualWatts * numberOfFixtures * lampsPerFixtures / 1000
+        return actualWatts * numberOfFixtures * lampsPerFixtures / 1000.0
     }
+
+
     /**
      * Cost - Pre State
      * */
     override fun costPreState(element: List<JsonElement?>): Double {
-
         val usageHours = UsageLighting()
         usageHours.peakHours = peakHours
         usageHours.partPeakHours = partPeakHours
         usageHours.offPeakHours = offPeakHours
-
 
         return costElectricity(prePower(), usageHours, electricityRate)
     }
@@ -149,23 +157,19 @@ class Cfl(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEle
 
         val totalUnits = lampsPerFixtures * numberOfFixtures
 
-        val replacementIndex = LEDlifeHours / lifeHours
-        val expectedLife = LEDlifeHours / usageHoursSpecific.yearly()
-        val maintenanceSavings = totalUnits * bulbcost * replacementIndex / expectedLife
-
-        // Adding new variables for the report
-        val selfinstallcost = this.selfinstallcost()
+        val replacementIndex = if (lifeHours == 0.0) 0.0 else LEDlifeHours / lifeHours
+        val expectedLife = if (usageHoursSpecific.yearly() == 0.0) 0.0 else LEDlifeHours / usageHoursSpecific.yearly()
+        val maintenanceSavings = if (expectedLife == 0.0) 0.0 else totalUnits * bulbcost * replacementIndex / expectedLife
 
         // Delta is going to be Power Used * Percentage Power Reduced
         // Percentage Power Reduced - we get it from the Base - ELighting
 
         val energySavings = preEnergy() * percentPowerReduced
-        val coolingSavings = energySavings * cooling / seer
-
+        val coolingSavings = if (seer == 0) 0.0 else energySavings * cooling / seer.toDouble()
 
         val energyAtPostState = preEnergy() - energySavings
-        val paybackmonth = selfinstallcost / energySavings * 12
-        val paybackyear = selfinstallcost / energySavings
+        val paybackmonth = if (energySavings == 0.0) 0.0 else installCost() / energySavings * 12
+        val paybackyear = if (energySavings == 0.0) 0.0 else installCost() / energySavings
         val totalsavings = energySavings + coolingSavings + maintenanceSavings
 
         val postRow = mutableMapOf<String, String>()
@@ -174,7 +178,7 @@ class Cfl(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEle
         postRow["__cooling_savings"] = coolingSavings.toString()
         postRow["__energy_savings"] = energySavings.toString()
         postRow["__energy_at_post_state"] = energyAtPostState.toString()
-        postRow["__selfinstall_cost"] = selfinstallcost.toString()
+        postRow["__selfinstall_cost"] = installCost().toString()
         postRow["__payback_month"] = paybackmonth.toString()
         postRow["__payback_year"] = paybackyear.toString()
         postRow["__total_savings"] = totalsavings.toString()
@@ -185,38 +189,31 @@ class Cfl(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEle
         dataHolder.rows?.add(postRow)
 
         return -99.99
-
     }
+
 
     /**
      * PowerTimeChange >> Hourly Energy Use - Pre
      * */
     override fun hourlyEnergyUsagePre(): List<Double> = listOf(0.0, 0.0)
 
+
     /**
      * PowerTimeChange >> Hourly Energy Use - Post
      * */
     override fun hourlyEnergyUsagePost(element: JsonElement): List<Double> = listOf(0.0, 0.0)
 
+
     /**
      * Post Yearly Usage Hours
      * */
-
-
     override fun usageHoursPost(): Double {
-        val postusageHours = UsageLighting()
-        postusageHours.postpeakHours = postpeakHours
-        postusageHours.postpartPeakHours = postpartPeakHours
-        postusageHours.postoffPeakHours = postoffPeakHours
-
-        if (postusageHours.yearly() > 0.0)
-            return postusageHours.yearly()
-
         if (usageHoursPre() > 0)
             return usageHoursPre()
 
         return usageHoursBusiness.yearly()
     }
+
 
     /**
      * PowerTimeChange >> Energy Efficiency Calculations
@@ -226,9 +223,9 @@ class Cfl(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEle
     }
 
     override fun energyTimeChange(): Double {
-        return  actualWatts * numberOfFixtures * lampsPerFixtures / 1000 * usageHoursPost()
-
+        return actualWatts * numberOfFixtures * lampsPerFixtures / 1000.0 * usageHoursPost()
     }
+
     override fun energyPowerTimeChange(): Double {
         return prePower() * percentPowerReduced * usageHoursPost()
     }
@@ -240,36 +237,30 @@ class Cfl(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEle
     fun postEnergy(): Double {
         return preEnergy() - energySavings()
     }
+
     fun energySavings(): Double {
         return preEnergy() * percentPowerReduced
     }
 
-    fun selfinstallcost(): Double {
-        return ledbulbcost * alternateNumberOfFixtures * alternateLampsPerFixture
-    }
-
     fun totalEnergySavings(): Double {
+        val coolingOverSeer = if (seer == 0) 0.0 else cooling / seer.toDouble()
+
         if (controls != null) {
-            val coolingSavings = (preEnergy() - energyPowerChange()) * cooling / seer
+            val coolingSavings = (preEnergy() - energyPowerChange()) * coolingOverSeer
             return (preEnergy() - energyPowerChange()) + coolingSavings
         } else {
-            val coolingSavings = (preEnergy() - energyPowerTimeChange()) * cooling / seer
+            val coolingSavings = (preEnergy() - energyPowerTimeChange()) * coolingOverSeer
             return (preEnergy() - energyPowerTimeChange()) + coolingSavings
         }
 
     }
 
     fun totalSavings(): Double {
-        if (controls == null && usageHoursPost() != null){
-            val postPower = energyPowerTimeChange()/usageHoursPost()
-            val postusageHours = UsageLighting()
-            postusageHours.postpeakHours = postpeakHours
-            postusageHours.postpartPeakHours = postpartPeakHours
-            postusageHours.postoffPeakHours = postoffPeakHours
-            return costElectricity(postPower, postusageHours, electricityRate)
-        }
-        else {
-            val postPower = energyPowerChange()/usageHoursPre()
+        if (controls == null && usageHoursPost() != null) {
+            val postPower = if (usageHoursPost() == 0.0) 0.0 else energyPowerTimeChange() / usageHoursPost()
+            return costElectricity(postPower, usageLightingPre(), electricityRate)
+        } else {
+            val postPower = if (usageHoursPre() == 0.0) 0.0 else energyPowerChange() / usageHoursPre()
             val usageHours = UsageLighting()
             usageHours.peakHours = peakHours
             usageHours.partPeakHours = partPeakHours
@@ -277,11 +268,14 @@ class Cfl(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEle
             return costElectricity(postPower, usageHours, electricityRate)
         }
     }
+
+
     /**
      * Energy Efficiency Lookup Query Definition
      * */
     override fun efficientLookup() = false
     override fun queryEfficientFilter() = ""
+
 
     /**
      * State if the Equipment has a Post UsageHours Hours (Specific) ie. A separate set of
@@ -289,16 +283,20 @@ class Cfl(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEle
      * */
     override fun usageHoursSpecific() = false
 
+
     /**
     //NPV for Lighting- assume 10 years life cycle
-    **/
+     **/
     var presentvaluefactor = 7.722
 
-    fun elecinstallcost(): Double {
-        return ledbulbcost * alternateNumberOfFixtures * alternateLampsPerFixture + electricianCost
+    fun installCost(): Double {
+        val timePerFixture = Utils.timePerFixture(replacementType, ceilingType)
+        val electricianCost = Utils.electricianCost(timePerFixture, numberOfFixtures)
+        return Utils.installCost(replacementType, ledbulbcost, lampsPerFixtures, numberOfFixtures, electricianCost)
     }
+
     fun netPresentValue(): Double {
-        return totalSavings() * presentvaluefactor - elecinstallcost()
+        return totalSavings() * presentvaluefactor - installCost()
     }
 
 
@@ -318,6 +316,4 @@ class Cfl(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEle
     private fun getFormMapper() = FormMapper(context, R.raw.cfl)
     private fun getModel() = getFormMapper().decodeJSON()
     private fun getGFormElements() = getFormMapper().mapIdToElements(getModel())
-
-
 }

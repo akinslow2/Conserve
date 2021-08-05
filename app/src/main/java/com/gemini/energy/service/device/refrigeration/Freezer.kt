@@ -90,7 +90,7 @@ class Freezer(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRat
 
         try {
             val dailyEnergyUsed = featureData["Daily Energy Used"]!! as Double
-            hourlyEnergy = dailyEnergyUsed / 24
+            hourlyEnergy = dailyEnergyUsed / 24.0
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -107,7 +107,7 @@ class Freezer(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRat
         try {
             //ToDo: Check how this is being impacted within the current code base !!
             val postDailyEnergyUsed = element.asJsonObject.get("daily_energy_use").asDouble
-            hourlyEnergy = postDailyEnergyUsed / 24
+            hourlyEnergy = postDailyEnergyUsed / 24.0
         } catch (e: Exception) {
             e.printStackTrace()
         }

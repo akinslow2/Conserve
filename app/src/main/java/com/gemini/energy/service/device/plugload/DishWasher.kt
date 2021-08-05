@@ -30,6 +30,9 @@ class DishWasher(computable: Computable<*>, utilityRateGas: UtilityRate, utility
         return super.compute(extra = ({ Timber.d(it) }))
     }
 
+    // TODO: provide value
+    val presentValueFactor = 1.0
+
     /**
      * Usage Hours
      * */
@@ -70,7 +73,7 @@ class DishWasher(computable: Computable<*>, utilityRateGas: UtilityRate, utility
             */
             waterConsumption = featureData["Water Consumption"]!! as Double
             numberOfRacks = featureData["Number of Racks"]!! as Int
-            cyclesPerDay = featureData["Cycles per Day"]!! as Int
+            cyclesPerDay = featureData["Cycles per Day"] as Int
             daysUsed = featureData["Days Used"]!! as Int
             waterTemperature = featureData["Water Temperature (oF)"]!! as Int
             efficiency = featureData["Efficiency"]!! as Double
@@ -153,16 +156,24 @@ class DishWasher(computable: Computable<*>, utilityRateGas: UtilityRate, utility
         try {
             val annualHours = usageHoursPre()
             val alpha = (waterConsumption * numberOfRacks * cyclesPerDay * daysUsed * annualHours * 8.34 * waterTemperature)
-            annualEnergyGas = ((alpha / efficiency) + (idleEnergyRate * 3412.14 * annualHours)) / 99976.1
-            annualEnergyElectric = (alpha / (efficiency * 3412.14)) + (idleEnergyRate * annualHours)
+
+            val alphaGas =
+                    if (efficiency == 0.0)
+                        0.0 else alpha / efficiency
+            annualEnergyGas = (alphaGas + (idleEnergyRate * 3412.14 * annualHours)) / 99976.1
+
+            val alphaElectric =
+                    if (efficiency == 0.0) 0.0
+                    else alpha / (efficiency * 3412.14)
+            annualEnergyElectric = alphaElectric + (idleEnergyRate * annualHours)
 
         } catch (e: Exception) {
             e.printStackTrace()
         }
-        val hoursInyear: Int = 8760
 
-        var hourlyEnergyGas = annualEnergyGas / hoursInyear
-        var hourlyEnergyElectric = annualEnergyElectric / hoursInyear
+        val hoursInyear = 8760.0
+        val hourlyEnergyGas = annualEnergyGas / hoursInyear
+        val hourlyEnergyElectric = annualEnergyElectric / hoursInyear
 
         return listOf(hourlyEnergyElectric, hourlyEnergyGas)
     }
@@ -186,15 +197,23 @@ class DishWasher(computable: Computable<*>, utilityRateGas: UtilityRate, utility
 
             val alpha = (waterConsumptionPost * numberOfRacksPost * cyclesPerDayPost * daysUsedPost *
                     annualHoursPost * 8.34 * waterTemperaturePost)
-            annualEnergyGas = ((alpha / efficiencyPost) + (idleEnergyRatePost * 3412.14 * annualHoursPost)) / 99976.1
-            annualEnergyElectric = (alpha / (efficiencyPost * 3412.14)) + (idleEnergyRatePost * annualHoursPost)
+
+            val alphaGas =
+                    if (efficiencyPost == 0.0) 0.0
+                    else alpha / efficiencyPost
+            annualEnergyGas = (alphaGas + (idleEnergyRatePost * 3412.14 * annualHoursPost)) / 99976.1
+
+            val alphaElectric =
+                    if (efficiencyPost == 0.0) 0.0
+                    else alpha / (efficiencyPost * 3412.14)
+            annualEnergyElectric = alphaElectric + (idleEnergyRatePost * annualHoursPost)
 
         } catch (e: Exception) {
             e.printStackTrace()
         }
-        val hoursInyear: Int = 8760
-        var hourlyEnergyGas = annualEnergyGas / hoursInyear
-        var hourlyEnergyElectric = annualEnergyElectric / hoursInyear
+        val hoursInyear = 8760.0
+        val hourlyEnergyGas = annualEnergyGas / hoursInyear
+        val hourlyEnergyElectric = annualEnergyElectric / hoursInyear
 
         return listOf(hourlyEnergyElectric, hourlyEnergyGas)
     }

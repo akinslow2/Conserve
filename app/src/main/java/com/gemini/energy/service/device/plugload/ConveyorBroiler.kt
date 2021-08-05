@@ -28,6 +28,9 @@ class ConveyorBroiler(computable: Computable<*>, utilityRateGas: UtilityRate,
         return super.compute(extra = ({ Timber.d(it) }))
     }
 
+    // TODO: provide value
+    val presentValueFactor = 1.0
+
     /**
      * Usage Hours
      * */

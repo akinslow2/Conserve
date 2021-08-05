@@ -67,11 +67,12 @@ open class UtilityRate(private val context: Context) {
     fun nonTimeOfUse() = utility.getNoneTOU(structure)
 
     fun getDemandRate(): Double {
-        return structure.values.first().first().toDouble()
+
+        return structure.values.firstOrNull()?.firstOrNull()?.toDouble() ?: 0.0
     }
 
     fun getEnergyCharge(): Double {
-        return structure.values.first().last().toDouble()
+        return structure.values.firstOrNull()?.lastOrNull()?.toDouble() ?: 0.0
     }
 
     companion object {

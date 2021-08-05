@@ -27,6 +27,9 @@ class PreRinseSpray(computable: Computable<*>, utilityRateGas: UtilityRate, util
         return super.compute(extra = ({ Timber.d(it) }))
     }
 
+    // TODO: provide value
+    val presentValueFactor = 1.0
+
     /**
      * Usage Hours
      * */
@@ -119,9 +122,15 @@ class PreRinseSpray(computable: Computable<*>, utilityRateGas: UtilityRate, util
 
         try {
             val alpha = (flowRate * 60 * annualHours * 8.34 * waterTemperature)
-            annualEnergyUseElectric = alpha / (3412.14 * efficiency)
+
+            annualEnergyUseElectric =
+                    if (efficiency == 0.0) 0.0
+                    else alpha / (3412.14 * efficiency)
             preElectricPower = annualEnergyUseElectric
-            annualEnergyUseGas = alpha / (99976.1 * efficiency)
+
+            annualEnergyUseGas =
+                    if (efficiency == 0.0) 0.0
+                    else alpha / (99976.1 * efficiency)
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -143,9 +152,15 @@ class PreRinseSpray(computable: Computable<*>, utilityRateGas: UtilityRate, util
 
         try {
             val alpha = flowRatePost * 60 * annualHoursPost * 8.34 * waterTemperaturePost
-            annualEnergyUseElectric = alpha / (3412.14 * efficiencyPost)
+
+            annualEnergyUseElectric =
+                    if (efficiencyPost == 0.0) 0.0
+                    else alpha / (3412.14 * efficiencyPost)
             postElectricPower = annualEnergyUseElectric
-            annualEnergyUseGas = alpha / (99976.1 * efficiencyPost)
+
+            annualEnergyUseGas =
+                    if (efficiencyPost == 0.0) 0.0
+                    else alpha / (99976.1 * efficiencyPost)
 
         } catch (e: Exception) {
             e.printStackTrace()
