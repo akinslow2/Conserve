@@ -43,8 +43,9 @@ class Cfl(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEle
     private val bulbcost = 1.5
     private val ledbulbcost = 3.0
 
-    private val LEDlifeHours = 30000
+    private val LEDlifeHours = 40000.0
     private var seer = 10.0
+
     private var cooling = 3.142
 
     private var timeperfixture = 0.33

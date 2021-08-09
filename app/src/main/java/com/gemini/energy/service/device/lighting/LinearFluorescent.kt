@@ -60,8 +60,9 @@ class LinearFluorescent(computable: Computable<*>, utilityRateGas: UtilityRate, 
     private val bulbcost = 4.0
     private val ledbulbcost = 7.0
 
-    private val LEDlifeHours = 30000.0
+    private val LEDlifeHours = 40000.0
     private var seer = 10.0
+
     private var cooling = 3.142
 
     private var timeperfixture = 0.33

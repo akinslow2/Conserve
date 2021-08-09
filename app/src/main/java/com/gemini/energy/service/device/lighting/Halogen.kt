@@ -49,7 +49,7 @@ class Halogen(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRat
     private var seer = 10.0
     private var cooling = 3.142
 
-    private val LEDlifeHours = 30000
+    private val LEDlifeHours = 40000.0
     private var timeperfixture = 0.33
     private var electricanHourlyRate = 25
 
