@@ -49,7 +49,11 @@ class HPSodium(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRa
     private var seer = 10
     private var cooling = 3.142
 
-    private val LEDlifeHours = 30000
+    private val LEDlifeHours = 40000
+    private var timeperfixture = 0.33
+    private var electricanHourlyRate = 25
+
+    var electricianCost = timeperfixture * numberOfFixtures * electricanHourlyRate
 
     private var controls = ""
     private var hasControls = ""
