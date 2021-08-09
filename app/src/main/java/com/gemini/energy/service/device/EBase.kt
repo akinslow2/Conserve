@@ -518,6 +518,6 @@ abstract class EBase(val computable: Computable<*>,
                 ELightingType.Halogen -> listOf(5000.0, 0.75, 0.95)
                 ELightingType.Incandescent -> listOf(2500.0, 0.9, 0.9)
                 ELightingType.LinearFluorescent -> listOf(10000.0, 0.85, 0.85)
-                ELightingType.HPSodium -> listOf(24000.0, 0.25, 0.85)
-                ELightingType.LPSodium -> listOf(18000.0, 0.25, 0.85)}
+                ELightingType.HPSodium -> listOf(24000.0, 0.5, 0.85)
+                ELightingType.LPSodium -> listOf(18000.0, 0.4, 0.85)}
 }
