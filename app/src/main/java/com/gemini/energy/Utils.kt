@@ -18,3 +18,45 @@ enum class Branches(val string: String) {
     BGE("BGE"),
     REC("REC")
 }
+
+
+/**
+ * @return formatted json string
+ */
+fun Any.prettyPrint(): String {
+
+    var indentLevel = 0
+    val indentWidth = 4
+
+    fun padding() = "".padStart(indentLevel * indentWidth)
+
+    val toString = toString()
+
+    val stringBuilder = StringBuilder(toString.length)
+
+    var i = 0
+    while (i < toString.length) {
+        when (val char = toString[i]) {
+            '(', '[', '{' -> {
+                indentLevel++
+                stringBuilder.append(char).append("\n").append(padding())
+            }
+            ')', ']', '}' -> {
+                indentLevel--
+                stringBuilder.append("\n").append(padding()).append(char)
+            }
+            ',' -> {
+                stringBuilder.append(char).append("\n").append(padding())
+                // ignore space after comma as we have added a newline
+                val nextChar = toString.getOrElse(i + 1) { char }
+                if (nextChar == ' ') i++
+            }
+            else -> {
+                stringBuilder.append(char)
+            }
+        }
+        i++
+    }
+
+    return stringBuilder.toString()
+}
