@@ -95,6 +95,9 @@ class ParseAPI {
 
         private val okHttpClient = OkHttpClient()
                 .newBuilder()
+                .connectTimeout(5, TimeUnit.MINUTES)
+                .readTimeout(5, TimeUnit.MINUTES)
+                .writeTimeout(5, TimeUnit.MINUTES)
                 .addInterceptor {
                     val original = it.request()
                     val request = original.newBuilder()
