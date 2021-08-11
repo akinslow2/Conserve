@@ -1,6 +1,7 @@
 package com.gemini.energy.service.sync
 
 import android.annotation.SuppressLint
+import android.util.Log
 import com.gemini.energy.App
 import com.gemini.energy.data.local.dao.*
 import com.gemini.energy.data.local.model.*
@@ -10,6 +11,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.merge
 import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
+import kotlin.reflect.typeOf
 
 /**
  * Read all the Data from the Local DB and Build the Collection
@@ -47,8 +49,13 @@ class Collection(private val mListener: Listener?) {
 
     private fun load() = audit()?.subscribe({ audit = it }, { it.printStackTrace() }, { zone() })
 
-    private fun audit() = auditDAO?.getAll()?.toObservable()
+    private fun audit(): Observable<List<AuditLocalModel>>? {
+        Timber.i("~~~~~ Collection: audit()")
+        return auditDAO?.getAll()?.toObservable()
+    }
+
     private fun zone() {
+        Timber.i("~~~~~ Collection: zone()")
         val taskHolder: MutableList<Observable<List<ZoneLocalModel>>> = mutableListOf()
         audit.forEach {
             zoneDao?.getAllByAudit(it.auditId)?.let {
@@ -66,9 +73,10 @@ class Collection(private val mListener: Listener?) {
                     }
                 }, { it.printStackTrace() }, { type() })
 
-    }
+    } // end zone()
 
     private fun type() {
+        Timber.i("~~~~~ Collection: type()")
         val taskHolder: MutableList<Observable<List<TypeLocalModel>>> = mutableListOf()
         audit.forEach {
             typeDao?.getAllTypeByAudit(it.auditId)?.let {
@@ -91,9 +99,10 @@ class Collection(private val mListener: Listener?) {
                     }
 
                 }, { it.printStackTrace() }, { feature() })
-    }
+    } // end type()
 
     private fun feature() {
+        Timber.i("~~~~~ Collection: feature()")
         val taskHolderTypeFeature: MutableList<Observable<List<FeatureLocalModel>>> = mutableListOf()
         typeIds.forEach {
             if (it != null) {
@@ -111,51 +120,53 @@ class Collection(private val mListener: Listener?) {
         }
 
         fun auditFeatureExec() {
+            Timber.i("~~~~~ Collection: feature().auditFeatureExec()")
             taskHolderAuditFeature.merge()
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe({
-
                         if (it.isNotEmpty()) {
                             it[0].auditId?.let { id ->
                                 featureAudit[id] = it
                             }
                         }
-
                     }, { it.printStackTrace() }, { complete() })
         }
 
         fun typeFeatureExec() {
+            Timber.i("~~~~~ Collection: feature().typeFeatureExec()")
             taskHolderTypeFeature.merge()
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe({
-
                         if (it.isNotEmpty()) {
                             it[0].typeId?.let { id ->
                                 featureType[id] = it
                             }
                         }
-
-                    }, { it.printStackTrace() }, { auditFeatureExec() })
+                    }, { it.printStackTrace() }, {
+                        auditFeatureExec()
+                    })
         }
 
         typeFeatureExec()
 
-    }
+    } // end feature()
 
     private fun complete() {
+        Timber.i("~~~~~ Collection: complete()")
+
         val graveZoneIds: MutableList<Long> = mutableListOf()
         val graveTypeIds: MutableList<Long> = mutableListOf()
         val graveAuditIds: MutableList<Long> = mutableListOf()
 
         val graveObs = gravesDao?.getAll()?.toObservable()
-        graveObs?.subscribe({
-            it.forEach {
-                when {
-                    it.type == 0 -> graveAudit.add(it)
-                    it.type == 1 -> graveZone.add(it)
-                    it.type == 2 -> graveType.add(it)
+        graveObs?.subscribe({ graveList ->
+            graveList.forEach {
+                when (it.type) {
+                    0 -> graveAudit.add(it)
+                    1 -> graveZone.add(it)
+                    2 -> graveType.add(it)
                 }
                 grave.add(it)
                 graveIds.add(it.oid)
@@ -163,22 +174,9 @@ class Collection(private val mListener: Listener?) {
                 graveZoneIds.addAll(graveZone.map { it.oid })
                 graveTypeIds.addAll(graveType.map { it.oid })
                 graveAuditIds.addAll(graveAudit.map { it.oid })
-
             }
-
-            Timber.d("Grave Audit - $graveAuditIds")
-            Timber.d("Grave Zone - $graveZoneIds")
-            Timber.d("Grave Type - $graveTypeIds")
-            Timber.d("Grave Ids - $graveIds")
-
-        }, { it.printStackTrace() }, {
-
-            mListener?.onPostExecute(this)
-
-        })
-
-
-    }
+        }, { it.printStackTrace() }, { mListener?.onPostExecute(this) })
+    } // end complete()
 
     override fun toString(): String {
         return "Audit -- $audit" +
@@ -188,8 +186,7 @@ class Collection(private val mListener: Listener?) {
     }
 
     init {
-
-        Timber.d("Collection :: INIT")
+        Timber.i("~~~~~ Collection: INIT")
         db = AuditDatabase.newInstance(App.instance)
         auditDAO = db?.auditDao()
         zoneDao = db?.zoneDao()
@@ -202,7 +199,7 @@ class Collection(private val mListener: Listener?) {
 
     companion object {
         fun create(mListener: Listener? = null): Collection {
-            Timber.d("Collection :: CREATE")
+            Timber.i("~~~~~ Collection: create($mListener)")
             return Collection(mListener)
         }
     }
@@ -211,5 +208,4 @@ class Collection(private val mListener: Listener?) {
         fun onPreExecute()
         fun onPostExecute(col: Collection?)
     }
-
 }
