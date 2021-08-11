@@ -221,12 +221,15 @@ class AuditActivity : BaseActivity(), AuditListFragment.OnAuditSelectedListener 
 
     private fun sync() = Connection().sync(mListener)
 
-    private val mListener: Syncer.Listener = object: Syncer.Listener {
-        override fun onPreExecute() { linlaHeaderProgress.visibility = View.VISIBLE }
-        override fun onPostDownload(sync: Syncer) {
+    private val mListener: Syncer.Listener = object : Syncer.Listener {
+        override fun onPreExecute() {
+            linlaHeaderProgress.visibility = View.VISIBLE
+        }
 
-            val mColListenerUpload: Collection.Listener = object: Collection.Listener {
+        override fun onPostDownload(sync: Syncer) {
+            val mColListenerUpload: Collection.Listener = object : Collection.Listener {
                 override fun onPreExecute() {}
+
                 override fun onPostExecute(col: Collection?) {
                     col?.let {
                         sync.refreshCollection(it)
@@ -236,9 +239,13 @@ class AuditActivity : BaseActivity(), AuditListFragment.OnAuditSelectedListener 
             }
 
             Collection.create(mColListenerUpload)
-
         }
-        override fun onPostExecute() { auditListFragment.refresh(); linlaHeaderProgress.visibility = View.GONE }
+
+        override fun onPostExecute() {
+            Timber.i("~~~~~ syncer post execute, updating view")
+            auditListFragment.refresh()
+            linlaHeaderProgress.visibility = View.GONE
+        }
     }
 
     private fun writeLog() {
