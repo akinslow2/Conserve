@@ -781,10 +781,10 @@ class WordDocumentGenerator {
 
     private fun createLightingTable3(document: XWPFDocument, lights: LightingValues) {
         val rows = lights.lightingRows
-        val table = document.createTable(rows.size + 1, 13)
+        val table = document.createTable(rows.size + 1, 11)
 
         for (i in 0..rows.size) {
-            // saftey check if no rows exist
+            // safety check if no rows exist
             if (rows.isEmpty()) {
                 return
             }
@@ -882,7 +882,7 @@ class WordDocumentGenerator {
             val rcell9 = pcell9.createRun()
             rcell9.fontFamily = fontTeko
             rcell9.fontSize = 12
-            rcell9.setText(if (isFirst) "Life Cost Savings" else "$${rowItem.costSavings.format(0)}")
+            rcell9.setText(if (isFirst) "Life Cost Savings" else "$${rowItem.netPresentValue.format(0)}")
 
             val cell10 = row.getCell(10)
             cell10.verticalAlignment = XWPFTableCell.XWPFVertAlign.CENTER
