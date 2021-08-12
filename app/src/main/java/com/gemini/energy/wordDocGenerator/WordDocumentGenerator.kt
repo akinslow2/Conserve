@@ -202,7 +202,7 @@ class WordDocumentGenerator {
                 "Improved profit margins,",
                 "Increased thermal comfort in your building, and",
                 "More control over how energy is consumed.")
-        document.createBullets(bullets1, greyColor)
+        document.createBullets(bullets1, greyColor, fontSize = 14)
 /*
         if (buildingValues.buildingTotalCost > 5000) {
             val qualifyP = document.createParagraph()
