@@ -892,24 +892,6 @@ class WordDocumentGenerator {
             rcell10.fontFamily = fontTeko
             rcell10.fontSize = 12
             rcell10.setText(if (isFirst) "Implementation Cost" else "$${rowItem.implementationCost.format(0)}")
-
-            val cell11 = row.getCell(11)
-            cell11.verticalAlignment = XWPFTableCell.XWPFVertAlign.CENTER
-            val pcell11 = cell11.paragraphs[0]
-            pcell11.alignment = ParagraphAlignment.CENTER
-            val rcell11 = pcell11.createRun()
-            rcell11.fontFamily = fontTeko
-            rcell11.fontSize = 12
-            rcell11.setText(if (isFirst) "Payback Period (months)" else rowItem.paybackPeriodMonths.format(0))
-
-            val cell12 = row.getCell(12)
-            cell12.verticalAlignment = XWPFTableCell.XWPFVertAlign.CENTER
-            val pcell12 = cell12.paragraphs[0]
-            pcell12.alignment = ParagraphAlignment.CENTER
-            val rcell12 = pcell12.createRun()
-            rcell12.fontFamily = fontTeko
-            rcell12.fontSize = 12
-            rcell12.setText(if (isFirst) "Payback Period (years)" else rowItem.paybackPeriodYears.format(1))
         }
 
         table.centerTable()
