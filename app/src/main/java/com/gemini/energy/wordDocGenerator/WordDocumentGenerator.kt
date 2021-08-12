@@ -120,29 +120,29 @@ class WordDocumentGenerator {
         p2.alignment = ParagraphAlignment.CENTER
         val r1p2 = p2.createRun()
         r1p2.fontFamily = fontTeko
-        r1p2.fontSize = 12
+        r1p2.fontSize = 13
         r1p2.color = greyColor
         r1p2.setText("This report presents the results of an energy assessment conducted ${preAudit.auditmonth} ${preAudit.startday}")
         val r2p2 = p2.createRun()
         r2p2.fontFamily = fontTeko
-        r2p2.fontSize = 12
+        r2p2.fontSize = 13
         r2p2.color = greyColor
         r2p2.subscript = VerticalAlign.SUPERSCRIPT
         r2p2.setText("th")
         val r3p2 = p2.createRun()
         r3p2.fontFamily = fontTeko
-        r3p2.fontSize = 12
+        r3p2.fontSize = 13
         r3p2.color = greyColor
         r3p2.setText(" through ${preAudit.auditmonth} ${preAudit.endday}")
         val r4p2 = p2.createRun()
         r4p2.fontFamily = fontTeko
-        r4p2.fontSize = 12
+        r4p2.fontSize = 13
         r4p2.color = greyColor
         r4p2.subscript = VerticalAlign.SUPERSCRIPT
         r4p2.setText("th")
         val r5p2 = p2.createRun()
         r5p2.fontFamily = fontTeko
-        r5p2.fontSize = 12
+        r5p2.fontSize = 13
         r5p2.color = greyColor
         r5p2.setText(" and evaluation of potential improvements to reduce energy consumption and related operating cost at ")
         r5p2.addBreak()
@@ -468,7 +468,7 @@ class WordDocumentGenerator {
         p2.spacingBetween = 1.5
         val r1p2 = p2.createRun()
         r1p2.fontFamily = fontTeko
-        r1p2.fontSize = 12
+        r1p2.fontSize = 13
         r1p2.setText("${preAudit.businessname}is ${preAudit.bldgarea.format(0)} square feet and includes a ${values.zoneString}. ${preAudit.businessname} is open daily from ${preAudit.operationhours}. This building is classified as ${preAudit.bldgtype}.")
         r1p2.addBreak()
         r1p2.addBreak()
@@ -483,14 +483,14 @@ class WordDocumentGenerator {
         val r1p3 = p3.createRun()
         r1p3.fontFamily = fontTeko
         r1p3.isBold
-        r1p3.fontSize = 12
+        r1p3.fontSize = 13
         r1p3.setText("Energy Savings Disclaimer")
 
         val p4 = document.createParagraph()
         p4.spacingBetween = 1.5
         val r1p4 = p4.createRun()
         r1p4.fontFamily = fontTeko
-        r1p4.fontSize = 12
+        r1p4.fontSize = 13
         r1p4.setText("While electric companies and affiliates offering this program rely on industry best-practices, on-site data loggers, and energy savings modeling software to make energy savings predictions as accurate as possible," +
                 " it is important to understand that the Easy Plan report is intended to inform participants of the ESTIMATED energy cost savings they should expect to realize - assuming all recommended work is done." +
                 " The estimated savings reflected in the Easy Plan therefore are in no way a guarantee of the actual savings.")
@@ -516,10 +516,12 @@ class WordDocumentGenerator {
         p2.spacingBetween = 1.5
         val r1p2 = p2.createRun()
         r1p2.fontFamily = fontTeko
+        r1p2.fontSize = 13
         r1p2.setText("Rates from https://www.roanokeelectric.com/about-us/resources/rates/")
         r1p2.addCarriageReturn()
         val r2p2 = p2.createRun()
         r2p2.fontFamily = fontTeko
+        r2p2.fontSize = 13
         r2p2.setText("Building is using schedule ${values.preAudit.electricstructure}")
 
         generateElectrictyCalculationTable(document, values)

@@ -95,7 +95,7 @@ fun XWPFDocument.createHeaderWithNoRecommendedMeasures(headerText: String) {
  */
 fun XWPFDocument.createNormalParagraph(
         text: String,
-        fontSize: Int = 12,
+        fontSize: Int = 13,
         fontColor: String = WordDocumentGenerator.blackColor,
         isStartOfNewPage: Boolean = false,
         addBreakAfter: Boolean = false) {
@@ -126,7 +126,7 @@ fun XWPFDocument.createNormalParagraph(
 fun XWPFDocument.createBullets(
         items: Array<String>,
         fontColor: String = WordDocumentGenerator.blackColor,
-        fontSize: Int = 12,
+        fontSize: Int = 13,
         isBold: Boolean = false,
         isItalic: Boolean = false) {
 
