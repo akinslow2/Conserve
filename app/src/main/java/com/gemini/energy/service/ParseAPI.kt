@@ -10,6 +10,7 @@ import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.*
+import java.util.concurrent.TimeUnit
 
 class ParseAPI {
 
@@ -51,7 +52,7 @@ class ParseAPI {
         fun fetchFeature(@Query("where") where: String): Single<JsonObject>
 
         @GET("classes/$SYNC_FEATURE")
-        fun fetchFeature(): Single<JsonObject>
+        fun fetchFeature(@Query("limit") limit: Int = 1000): Single<JsonObject>
 
         @GET("classes/$SYNC_GRAVES")
         fun fetchGraves(): Single<JsonObject>
@@ -84,6 +85,9 @@ class ParseAPI {
 
         private val okHttpClient = OkHttpClient()
                 .newBuilder()
+                .connectTimeout(5, TimeUnit.MINUTES)
+                .readTimeout(5, TimeUnit.MINUTES)
+                .writeTimeout(5, TimeUnit.MINUTES)
                 .addInterceptor {
                     val original = it.request()
                     val request = original.newBuilder()
@@ -105,7 +109,6 @@ class ParseAPI {
 
             return retrofit.create(ParseAPIService::class.java)
         }
-
     }
 }
 
