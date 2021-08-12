@@ -348,7 +348,7 @@ class WordDocumentGenerator {
 
         document.createNormalParagraph("Benefits of LED bulbs include:")
 
-        val bullets = arrayOf("Lower maintenance costs", "Less air-conditioning required", "Happier customers")
+        val bullets = arrayOf("Lower maintenance costs", "Better quality light", "Less air-conditioning required", "Happier customers")
         document.createBullets(bullets)
 
         document.createNormalParagraph(
@@ -356,11 +356,9 @@ class WordDocumentGenerator {
                         + "$${lights.totalCost.format(0)} but will result in an estimated "
                         + "minimum of $${lights.totalcostsavings.format(0)} in annual savings. "
                         + "This equates to a payback period of approximately ${lights.paybackMonth.format(0)} "
-                        + "months. Alternatively, to replace all non-LED bulbs will result in a minimum of "
-                        + "$${lights.totalcostsavings.format(0)} in annual savings and cost approximately $${lights.totalCost.format(0)}. "
-                        + "This equates to a payback period of approximately ${lights.paybackMonth.format(0)} months. "
-                        + "Overall, implementing the LED retrofit translates to a minimum NPV of $${lights.netPresentValue.format(0)}. "
-                        + "We strongly recommend you replace all non-LED bulbs and ensure the bathroom lights are off at the end of the day.",
+                        + "months. "
+                        + "Overall, accounting for maintenance savings, implementing the LED retrofit translates to a minimum NPV of $${lights.netPresentValue.format(0)}. "
+                        + "We strongly recommend you replace all non-LED bulbs.",
                 addBreakAfter = true)
 
         if (lights.lightingRows.any { it.isCeilingOver10Feet.toLowerCase() == "yes" }) {
@@ -374,8 +372,8 @@ class WordDocumentGenerator {
         createLightingTable1(document, lights)
 
         document.createNormalParagraph(
-                "The savings represented in the table below reflect the maintenance and cooling costs abated "
-                        + "because LED bulbs have a longer life and produce considerably less heat.",
+                "The savings represented in the table below reflect the bulb replacement costs abated "
+                        + "because LED bulbs will last 2 to 3 times longer.",
                 isStartOfNewPage = true)
 
         createLightingTable3(document, lights)
