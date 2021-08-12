@@ -25,16 +25,16 @@ class Utils {
          * @param ceilingType
          *
          * @return number of hours in double
+         * @k2, I removed the ceiling type because it currently requires the data collector to know that retrofit goes with drywall. If they mess up then the cost is impacted changing from 1 to 0.5/
+         * Since both retrofit and DirectReplacement Fixture are 1 hour, the ceiling type doesn't matter in this particular decision making. Please check for correct coding.
          */
         fun timePerFixture(replacementType: String, ceilingType: String): Double {
             if (replacementType == ReplacementType.Retrofit.type) {
-                if (ceilingType == CeilingType.DryWall.type) { return 1.0 }
-                return 0.0
+                 return 1.0
             }
 
             if (replacementType == ReplacementType.DirectReplacementFixture.type) {
-                if (ceilingType == CeilingType.DropCeiling.type) { return 1.0 }
-                return 0.0
+                 return 1.0
             }
 
             // return lamp replacement as default
@@ -66,6 +66,7 @@ class Utils {
          * @param electricianCost use [timePerFixture] to get this value
          *
          * @return installation cost
+         * @k2 missing directReplaceLFInstall in the install cost...
          */
         fun installCost(
                 replacementType: String,

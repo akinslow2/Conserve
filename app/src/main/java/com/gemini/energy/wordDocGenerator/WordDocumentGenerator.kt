@@ -185,7 +185,7 @@ class WordDocumentGenerator {
         val differenceBetweenEnergySavingsAndMaintenanceSavings = "TODO"
         document.createNormalParagraph(
                 "The Pay as You Save program means you will receive all the recommended upgrades at "
-                        + "no cost AND see your monthly energy bill greatly reduced from pre-Covid levels."
+                        + "no cost AND see your monthly energy bill greatly reduced from pre-Covid levels. "
                         + "The utility will recover the costs by adding a charge to your bill that equates "
                         + "to the project cost paid out monthly over 12 years. This charge will last for 12 years. "
                         + "This is not a loan, the charge is only tied to the meter, and will stay on "
@@ -196,10 +196,10 @@ class WordDocumentGenerator {
                 fontColor = greyColor)
 
         val bullets1 = arrayOf(
-                "reduced energy costs,",
-                "improved profit margins,",
-                "increased thermal comfort in your building, and",
-                "more control over how energy is consumed.")
+                "Reduced energy costs,",
+                "Improved profit margins,",
+                "Increased thermal comfort in your building, and",
+                "More control over how energy is consumed.")
         document.createBullets(bullets1, greyColor)
 /*
         if (buildingValues.buildingTotalCost > 5000) {
