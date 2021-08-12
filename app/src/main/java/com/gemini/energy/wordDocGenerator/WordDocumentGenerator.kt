@@ -365,7 +365,7 @@ class WordDocumentGenerator {
 
         if (lights.lightingRows.any { it.isCeilingOver10Feet.toLowerCase() == "yes" }) {
             document.createNormalParagraph(
-                    "There is an additional $500 fee to replace lighting with a ceiling over 10 feet to rent the lift needed.",
+                    "There is an additional $500 fee to rent the lift needed to replace lighting located in a ceiling over 10 feet .",
                     addBreakAfter = true)
         }
 
