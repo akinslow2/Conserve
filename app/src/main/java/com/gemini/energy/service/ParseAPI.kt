@@ -51,7 +51,7 @@ class ParseAPI {
         fun fetchAudit(@Query("where") where: String): Single<JsonObject>
 
         @GET("classes/$SYNC_AUDIT")
-        fun fetchAudit(): Single<JsonObject>
+        fun fetchAudit(@Query("limit") limit: Int = 1000): Single<JsonObject>
 
         @POST("classes/$SYNC_FEATURE")
         fun saveFeature(@Body body: JsonObject): Single<JsonObject>
@@ -63,7 +63,7 @@ class ParseAPI {
         fun fetchFeature(@Query("where") where: String): Single<JsonObject>
 
         @GET("classes/$SYNC_FEATURE")
-        fun fetchFeature(@Query("limit") limit: Int = 1000): Single<JsonObject>
+        fun fetchFeature(@Query("limit") limit: Int = 10000): Single<JsonObject>
 
         @GET("classes/$SYNC_GRAVES")
         fun fetchGraves(): Single<JsonObject>
