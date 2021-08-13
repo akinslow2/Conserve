@@ -3,6 +3,12 @@ package com.gemini.energy.service.device.lighting
 class Utils {
     companion object Utils {
 
+        /**
+         * future value factor
+         * assuming 7% compound interest factor
+         */
+        const val futureValueFactor = 0.7130
+
         private const val electricianHourlyRate = 70.0
 
         /**
