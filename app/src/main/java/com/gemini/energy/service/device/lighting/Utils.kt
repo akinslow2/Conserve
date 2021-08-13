@@ -67,6 +67,9 @@ class Utils {
          *
          * @return installation cost
          * @k2 missing directReplaceLFInstall in the install cost...
+         * @Anthony the implementation of installCost() in LinearFluorescent.kt checks if the replacement type is direct replacement
+         * and if it is it calls [directReplacementInstallCostLinearFluorescent]
+         * the unused (and now removed) function directReplaceLFInstall returned the same value as [directReplacementInstallCostLinearFluorescent]
          */
         fun installCost(
                 replacementType: String,
@@ -88,6 +91,7 @@ class Utils {
 
         /**
          * get the installation cost for direct replacement on a linear fluorescent instance
+         *      for linear fluorescent ONLY
          *
          * @param fixtureCost use [fixtureCost] to get the value for this parameter
          * @param numberOfFixtures number of fixtures to replace
@@ -144,22 +148,6 @@ class Utils {
          */
         private fun directReplaceInstall(ledBulbCost: Double, lampsPerFixture: Int, numberOfFixtures: Int, electricianCost: Double): Double {
             return (ledBulbCost * lampsPerFixture * numberOfFixtures) + electricianCost
-        }
-
-
-        /**
-         * Customer wants contractor to direct replace fixtures (for linear fluorescent ONLY)
-         *
-         * @param fixtureType type of fixture
-         * @param numberOfFixtures number of fixtures
-         * @param electricianCost use [timePerFixture] to get this value
-         *
-         * @return direct replacement cost (for linear fluorescent ONLY)
-         */
-        private fun directReplaceLFInstall(fixtureType: String, numberOfFixtures: Int, electricianCost: Double): Double {
-            val fixtureCost = if (fixtureType == LfFixtureType.twoXtwo.type)  60.0 else 120.0
-
-            return (fixtureCost * numberOfFixtures.toDouble()) + electricianCost
         }
     }
 }
