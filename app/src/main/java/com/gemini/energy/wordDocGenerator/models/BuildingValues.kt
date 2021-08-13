@@ -236,21 +236,23 @@ data class BuildingValues(
         }
 
         private fun calculateEnergyChargeForScheduleF(kWh: Double): Double {
+            val annualkWH = kWh * 12.0
+
             val energyChargeFirst2500kWh = 0.1288
             val energyChargeNext7500kWh = 0.0918
             val energyChargeNext40000kWh = 0.0776
             val energyChargeOver50000kWh = 0.0660
 
             var totalEnergyCharge = 0.0
-            if (kWh >= 2500.0) {
+            if (annualkWH >= 2500.0) {
                 totalEnergyCharge += 2500.0 * energyChargeFirst2500kWh
             } else {
-                totalEnergyCharge += kWh * energyChargeFirst2500kWh
+                totalEnergyCharge += annualkWH * energyChargeFirst2500kWh
                 return totalEnergyCharge
             }
             println("energy cost first 2500 $totalEnergyCharge")
 
-            var remainingkWh = kWh - 2500.0
+            var remainingkWh = annualkWH - 2500.0
             if (remainingkWh >= 7500.0) {
                 totalEnergyCharge += 7500.0 * energyChargeNext7500kWh
             } else {
