@@ -27,8 +27,9 @@ class Utils {
          * @return number of hours in double
          * @k2, I removed the ceiling type because it currently requires the data collector to know that retrofit goes with drywall. If they mess up then the cost is impacted changing from 1 to 0.5/
          * Since both retrofit and DirectReplacement Fixture are 1 hour, the ceiling type doesn't matter in this particular decision making. Please check for correct coding.
+         * @Anthony changes look fine, removed the ceiling type as it is no longer needed
          */
-        fun timePerFixture(replacementType: String, ceilingType: String): Double {
+        fun timePerFixture(replacementType: String): Double {
             if (replacementType == ReplacementType.Retrofit.type) {
                  return 1.0
             }
