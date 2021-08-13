@@ -61,7 +61,7 @@ class WordDocumentGenerator {
     private fun generateDocument(value: PreparedForDocument, document: XWPFDocument): XWPFDocument {
         generateFirstPage(document, value.preAudit)
 
-        generateElectrictyCalculationPage(document, value)
+        generateElectricityCalculationPage(document, value)
 
         generateEnergySavingPotentialPage(document, value)
 
@@ -501,7 +501,7 @@ class WordDocumentGenerator {
 
     }
 
-    private fun generateElectrictyCalculationPage(document: XWPFDocument, values: PreparedForDocument) {
+    private fun generateElectricityCalculationPage(document: XWPFDocument, values: PreparedForDocument) {
         val p1 = document.createParagraph()
         p1.spacingBetween = 1.5
         p1.isPageBreak = true
