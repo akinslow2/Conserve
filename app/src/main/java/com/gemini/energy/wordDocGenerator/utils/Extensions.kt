@@ -180,6 +180,70 @@ fun XWPFDocument.addPageNumbers() {
  * Word document table extensions
  */
 
+
+/**
+ * create header row in table for financial components
+ *
+ * @param cell1 value shown in cell one, defaults to "Financial Components"
+ * @param cell2 value shown in cell two, defaults to "Financial Overview"
+ * @param rowIndex row index, defaults to 0 (initial row)
+ */
+fun XWPFTable.generateFinancialComponentsHeaderRow(
+        cell1: String = "Financial Components",
+        cell2: String = "Financial Overview",
+        rowIndex: Int = 0) {
+    val row0 = this.getRow(rowIndex)
+    val c0r0 = row0.getCell(0)
+    c0r0.color = WordDocumentGenerator.tableGreenColor
+    val pc0r0 = c0r0.paragraphs[0]
+    pc0r0.alignment = ParagraphAlignment.CENTER
+    val rc0r0 = pc0r0.createRun()
+    rc0r0.fontFamily = WordDocumentGenerator.fontTeko
+    rc0r0.fontSize = 12
+    rc0r0.isBold = true
+    rc0r0.color = WordDocumentGenerator.whiteColor
+    rc0r0.setText(cell1)
+
+    val c1r0 = row0.getCell(1)
+    c1r0.color = WordDocumentGenerator.tableGreenColor
+    val pc1r0 = c1r0.paragraphs[0]
+    pc1r0.alignment = ParagraphAlignment.CENTER
+    val rc1r0 = pc1r0.createRun()
+    rc1r0.fontFamily = WordDocumentGenerator.fontTeko
+    rc1r0.fontSize = 12
+    rc1r0.isBold = true
+    rc1r0.color = WordDocumentGenerator.whiteColor
+    rc1r0.setText(cell2)
+}
+
+
+/**
+ * create detail row in table for financial components
+ *
+ * @param cell1 value shown in cell one
+ * @param cell2 value shown in cell two
+ * @param rowIndex row index
+ */
+fun XWPFTable.generateFinancialComponentsDetailRow(cell1: String, cell2: String, rowIndex: Int) {
+    val row = this.getRow(rowIndex)
+    val cell0 = row.getCell(0)
+    val para0 = cell0.paragraphs[0]
+    val para0run = para0.createRun()
+    para0run.fontFamily = WordDocumentGenerator.fontTeko
+    para0run.fontSize = 12
+    para0run.isBold = true
+    para0run.setText(cell1)
+
+    val cellOne = row.getCell(1)
+    val para1 = cellOne.paragraphs[0]
+    para1.alignment = ParagraphAlignment.CENTER
+    val para1run = para1.createRun()
+    para1run.fontSize = 12
+    para1run.fontFamily = WordDocumentGenerator.fontTeko
+    para1run.setText(cell2)
+}
+
+
 /**
  * merge cell(s) horizontally
  *
