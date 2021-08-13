@@ -286,9 +286,11 @@ class Cfl(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEle
 
 
     /**
-    //NPV for Lighting- assume 10 years life cycle
-    **/
-    var presentvaluefactor = 7.722
+     * NPV for Lighting
+     * assume 10 years life cycle
+     * assuming 7% compound interest factor
+     **/
+    var presentvaluefactor = 7.024
 
     fun installCost(): Double {
         val timePerFixture = Utils.timePerFixture(replacementType)
