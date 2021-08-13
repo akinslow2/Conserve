@@ -6,6 +6,13 @@ class Utils {
         private const val electricianHourlyRate = 100.0
 
         /**
+         * future value factor
+         * assuming 7% compound interest factor
+         */
+        const val futureValueFactor = 0.7130
+
+        
+        /**
          * gets fixture cost for linear fluorescent
          *
          * @param fixtureType
