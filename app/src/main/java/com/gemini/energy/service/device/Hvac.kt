@@ -117,10 +117,8 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
      * */
     private var presentvaluefactor = 12.462
 
-    /**
-     * HVAC - Age
-     * */
-    var age = 0
+    /** year equipment was manufactured **/
+    var year = 0
 
 
     /**
@@ -200,7 +198,7 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
             eer = featureData["EER"]!! as Double
             val inputSeer = featureData["SEER"]!! as Double
             seer = if (inputSeer > 0.0) inputSeer else seer
-            age = featureData["Age"]!! as Int
+            year = featureData["Year"]!! as Int
             kbtu = featureData["Cooling Capacity (kBtu/hr)"]!! as Double
             gasInput = featureData["Heating Input (kBtu/hr)"]!! as Int
             gasOutput = featureData["Heating Output (kBtu/hr)"]!! as Int

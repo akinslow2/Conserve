@@ -7,16 +7,11 @@ import com.gemini.energy.presentation.form.FormMapper
 import com.gemini.energy.service.DataHolder
 import com.gemini.energy.service.IComputable
 import com.gemini.energy.service.OutgoingRows
-import com.gemini.energy.service.device.EBase
 import com.gemini.energy.service.type.UsageHours
 import com.gemini.energy.service.type.UsageSimple
 import com.gemini.energy.service.type.UtilityRate
-import com.google.gson.JsonArray
 import com.google.gson.JsonElement
-import com.google.gson.JsonObject
 import io.reactivex.Observable
-import io.reactivex.Single
-import org.json.JSONObject
 import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.*
@@ -110,10 +105,8 @@ class WaterHeater(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
                 if (valueFirst == 0) valueSecond else valueFirst
     }
 
-    /**
-     * HVAC - Age
-     * */
-    var age = 0
+    /** year equipment was manufactured **/
+    var year = 0
 
 
     /**
@@ -153,7 +146,7 @@ class WaterHeater(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
 
             quantity = featureData["Quantity"]!! as Int
 
-            age = featureData["Age"]!! as Int
+            year = featureData["Year"]!! as Int
 //            btu = featureData["Cooling Capacity (Btu/hr)"]!! as Int
             gasInput = featureData["Heating Input (Btu/hr)"]!! as Int
             gasOutput = featureData["Heating Output (Btu/hr)"]!! as Int

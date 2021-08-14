@@ -198,10 +198,8 @@ class WIRefrigerator(computable: Computable<*>, utilityRateGas: UtilityRate, uti
         }
     }
 
-    /**
-     * HVAC - Age
-     * */
-    var age = 0
+    /** year equipment was manufactured **/
+    var year = 0
 
 
     /**
@@ -240,7 +238,7 @@ class WIRefrigerator(computable: Computable<*>, utilityRateGas: UtilityRate, uti
         try {
             quantity = featureData["Quantity"]!! as Int
 
-            age = featureData["Age"]!! as Int
+            year = featureData["Year"]!! as Int
             peakHours = featureData["Peak Hours"]!! as Double
             partPeakHours = featureData["Part Peak Hours"]!! as Double
             offPeakHours = featureData["Off Peak Hours"]!! as Double

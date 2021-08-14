@@ -96,10 +96,8 @@ class WICoolerBox(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
                 if (valueFirst == 0) valueSecond else valueFirst
     }
 
-    /**
-     * HVAC - Age
-     * */
-    var age = 0
+    /** year equipment was manufactured **/
+    var year = 0
 
 
     /**
@@ -135,6 +133,7 @@ class WICoolerBox(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
     override fun setup() {
         try {
             quantity = featureData["Quantity"]!! as Int
+            year = featureData["Year"]!! as Int
 
             kW = featureData["Heating Power (kW)"]!! as Double
             peakHours = featureData["Peak Hours"]!! as Double

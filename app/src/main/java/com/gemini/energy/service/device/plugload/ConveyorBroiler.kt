@@ -44,7 +44,9 @@ class ConveyorBroiler(computable: Computable<*>, utilityRateGas: UtilityRate,
     private var idleHours = 0.0
     private var broilerType = ""
     private var conveyorWidth = 0.0
-    var age = 0.0
+
+    /** year equipment was manufactured **/
+    var year = 0
 
     override fun setup() {
         try {
@@ -59,7 +61,7 @@ class ConveyorBroiler(computable: Computable<*>, utilityRateGas: UtilityRate,
 
             broilerType = featureData["Broiler Type"]!! as String
             conveyorWidth = featureData["Conveyor Width"]!! as Double
-            age = (featureData["Age"]!! as Int).toDouble()
+            year = featureData["Year"]!! as Int
 
             energyInputRate = featureData["Energy Input Rate"]!! as Double
             idleEnergyRate = featureData["Idle Energy Rate"]!! as Double
