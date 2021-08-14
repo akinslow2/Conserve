@@ -3,7 +3,7 @@ package com.gemini.energy.service.device.lighting
 class Utils {
     companion object Utils {
 
-        private const val electricianHourlyRate = 100.0
+        const val electricianHourlyRate = 100.0
 
         /**
          * future value factor
@@ -11,7 +11,6 @@ class Utils {
          */
         const val futureValueFactor = 0.7130
 
-        
         /**
          * gets fixture cost for linear fluorescent
          *
