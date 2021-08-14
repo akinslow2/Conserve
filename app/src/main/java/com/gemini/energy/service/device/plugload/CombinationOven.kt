@@ -61,7 +61,8 @@ class CombinationOven(computable: Computable<*>, utilityRateGas: UtilityRate, ut
     private var preIdleEnergyRateConvection = 0.0
     private var preIdleEnergyRateSteam = 0.0
 
-    var age = 0.0
+    /** year equipment was manufactured **/
+    var year = 0
 
     /**
      * The Adjustment Factor is taken care within the setup()
@@ -192,7 +193,7 @@ class CombinationOven(computable: Computable<*>, utilityRateGas: UtilityRate, ut
             waterUseSteam = featureData["Steam Water Usage Rate"]!! as Double
 
             steamPanSize = featureData["Size (Steam Pans)"]!! as Int
-            age = (featureData["Age"]!! as Int).toDouble()
+            year = featureData["Year"]!! as Int
 
         } catch (e: Exception) {
             e.printStackTrace()

@@ -19,7 +19,8 @@ class Refrigerator(computable: Computable<*>, utilityRateGas: UtilityRate, utili
                    usageHours: UsageHours, outgoingRows: OutgoingRows, private val context: Context) :
         EBase(computable, utilityRateGas, utilityRateElectricity, usageHours, outgoingRows), IComputable {
 
-    var age = 0.0
+    /** year equipment was manufactured **/
+    var year = 0
 
     /**
      * Entry Point
@@ -30,7 +31,7 @@ class Refrigerator(computable: Computable<*>, utilityRateGas: UtilityRate, utili
 
     override fun setup() {
         try {
-            age = (featureData["Age"]!! as Int).toDouble()
+            year = featureData["Year"]!! as Int
         } catch (e: Exception) {
             e.printStackTrace()
         }
