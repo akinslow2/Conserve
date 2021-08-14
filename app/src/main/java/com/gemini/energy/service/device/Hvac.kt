@@ -255,7 +255,7 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
      * * Calculations for annual demand, power, and energy for pre and post in the area that the HVAC system serves
      * */
     fun coolingkbtu(): Double {
-        val area = (2.0 * (areaLength * areaWidth + areaLength * areaHeight + areaWidth * areaHeight))
+        val area = (areaLength * areaWidth) + (2 * (areaLength * areaHeight + areaWidth * areaHeight))
         val occupancyBtu = 600.0 * occupancy
         val areakBtu = 24.0 * uvalue * cdd.toDouble() * area / 1000.0
 
@@ -263,7 +263,7 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
     }
 
     fun heatingkbtu(): Double {
-        val area =  (2 * (areaLength * areaWidth + areaLength * areaHeight + areaWidth * areaHeight))
+        val area =  (areaLength * areaWidth) + (2 * (areaLength * areaHeight + areaWidth * areaHeight))
         val occupancyBtu = 600.0 * occupancy
         val areakBtu = 24.0 * uvalue * hdd.toDouble() * area / 1000.0
 
