@@ -298,7 +298,8 @@ class LinearFluorescent(computable: Computable<*>, utilityRateGas: UtilityRate, 
     }
 
     fun netPresentValue(): Double {
-        return totalSavings() * presentvaluefactor - installCost()
+        val totalLamps = lampsPerFixtures * numberOfFixtures
+        return (totalLamps * (Utils.electricianHourlyRate / 6)  + (totalLamps * bulbcost)) * Utils.futureValueFactor + (totalSavings() * presentvaluefactor) - installCost()
     }
 
 

@@ -287,7 +287,8 @@ class LPSodium(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRa
     }
 
     fun netPresentValue(): Double {
-        return totalSavings() * presentvaluefactor - installCost()
+        val totalLamps = lampsPerFixtures * numberOfFixtures
+        return (totalLamps * (Utils.electricianHourlyRate / 6)  + (totalLamps * bulbcost)) * Utils.futureValueFactor + (totalSavings() * presentvaluefactor) - installCost()
     }
 
 
