@@ -1,8 +1,7 @@
 package com.gemini.energy.wordDocGenerator
 
 import com.gemini.energy.service.device.EBase
-import com.gemini.energy.wordDocGenerator.models.HvacValues
-import com.gemini.energy.wordDocGenerator.models.PreAuditValues
+import com.gemini.energy.wordDocGenerator.models.*
 
 //Map<AuditId: Map<EquipmentType: Equipment>>
 typealias SortedAudits =
@@ -14,115 +13,115 @@ typealias AuditComponents = MutableMap<String, MutableList<EBase>>
 
 // TODO: finish refactor of moving models & initialization to separate files
 
-data class HvacInstances(
-        val quantity: Int, // 21
-        val year: Int, // 22
-        val age: Int, // 29
-        val btu: Int, //23
-        val seer: Double, // 24
-        val overage: Int, //25
-        val economizer: String,
-        val thermotype: String,
-        val npvalue: Double
-)
+//data class HvacInstances(
+//        val quantity: Int, // 21
+//        val year: Int, // 22
+//        val age: Int, // 29
+//        val btu: Int, //23
+//        val seer: Double, // 24
+//        val overage: Int, //25
+//        val economizer: String,
+//        val thermotype: String,
+//        val npvalue: Double
+//)
 
-data class WaterHeaterValues(
-        val totalSavings: Double, //1
-        val totalCost: Double, //2
-        val paybackMonth: Double, //3
-        val paybackYear: Double, //4
-        val netPresentValue: Double, //5
-        val quantity: Int,
-        val year: Int,
-        val age: Int,
-        val thermaleff: Int,
-        val fueltype: String,
-        val unittype: String,
-        val capacity: Double,
-        val currentTotalkW: Double,
-        val currentTotalkWh: Double,
-        val postTotalkW: Double,
-        val postTotalkWh: Double
-)
+//data class WaterHeaterValues(
+//        val totalSavings: Double, //1
+//        val totalCost: Double, //2
+//        val paybackMonth: Double, //3
+//        val paybackYear: Double, //4
+//        val netPresentValue: Double, //5
+//        val quantity: Int,
+//        val year: Int,
+//        val age: Int,
+//        val thermaleff: Int,
+//        val fueltype: String,
+//        val unittype: String,
+//        val capacity: Double,
+//        val currentTotalkW: Double,
+//        val currentTotalkWh: Double,
+//        val postTotalkW: Double,
+//        val postTotalkWh: Double
+//)
 
-data class LightingValues(
-        val totalcostsavings: Double, // 13
-        val totalenergysavings: Double,
-        val totalCost: Double, // 15
-        val paybackMonth: Double, // 16
-        val geminiPayback: Double, // 17
-        val paybackYear: Double, // 18
-        val netPresentValue: Double,
-        val lightingRows: List<LightingDataRow>,
-        val currentTotalkW: Double,
-        val currentTotalkWh: Double,
-        val postTotalkW: Double,
-        val postTotalkWh: Double
-)
+//data class LightingValues(
+//        val totalcostsavings: Double, // 13
+//        val totalenergysavings: Double,
+//        val totalCost: Double, // 15
+//        val paybackMonth: Double, // 16
+//        val geminiPayback: Double, // 17
+//        val paybackYear: Double, // 18
+//        val netPresentValue: Double,
+//        val lightingRows: List<LightingDataRow>,
+//        val currentTotalkW: Double,
+//        val currentTotalkWh: Double,
+//        val postTotalkW: Double,
+//        val postTotalkWh: Double
+//)
 
-data class LightingDataRow(
-        val measure: String,
-        val location: String,
-        val measureDescription: String,
-        val lampsPerFixture: Int,
-        val numberOfFixtures: Int,
-        val quantity: Double,
-        val ceilingType: String,
-        val replacementType: String,
-        val isCeilingOver10Feet: String,
-        val currentPowerkW: Double,
-        val usageHours: Double,
-        val currentEnergykWh: Double,
-        val postPowerkW: Double,
-        val postUsageHours: Double,
-        val postEnergykWh: Double,
-        val energySavingskWh: Double,
-        val costSavings: Double,
-        val implementationCost: Double,
-        val paybackPeriodMonths: Double,
-        val paybackPeriodYears: Double,
-        val netPresentValue: Double
-)
+//data class LightingDataRow(
+//        val measure: String,
+//        val location: String,
+//        val measureDescription: String,
+//        val lampsPerFixture: Int,
+//        val numberOfFixtures: Int,
+//        val quantity: Double,
+//        val ceilingType: String,
+//        val replacementType: String,
+//        val isCeilingOver10Feet: String,
+//        val currentPowerkW: Double,
+//        val usageHours: Double,
+//        val currentEnergykWh: Double,
+//        val postPowerkW: Double,
+//        val postUsageHours: Double,
+//        val postEnergykWh: Double,
+//        val energySavingskWh: Double,
+//        val costSavings: Double,
+//        val implementationCost: Double,
+//        val paybackPeriodMonths: Double,
+//        val paybackPeriodYears: Double,
+//        val netPresentValue: Double
+//)
 
-data class RefrigerationValues(
-        val totalCost: Double,
-        val totalSavings: Double,
-        val paybackMonth: Double,
-        val netPresentValue: Double,
-        val currentTotalkW: Double,
-        val currentTotalkWh: Double,
-        val postTotalkW: Double,
-        val postTotalkWh: Double
-)
+//data class RefrigerationValues(
+//        val totalCost: Double,
+//        val totalSavings: Double,
+//        val paybackMonth: Double,
+//        val netPresentValue: Double,
+//        val currentTotalkW: Double,
+//        val currentTotalkWh: Double,
+//        val postTotalkW: Double,
+//        val postTotalkWh: Double
+//)
 
-data class EquipmentInstances(
-        val name: String, // 27
-        val delta: Double, // 26
-        val costElectricity: Double, // 28
-        val age: Double, // 29
-        val materialCost: Double, // 32
-        val implementationCost: Double,
-        val totalsavings: Double,
-        val paybackMonth: Double,
-        val netPresentValue: Double
-)
+//data class EquipmentInstances(
+//        val name: String, // 27
+//        val delta: Double, // 26
+//        val costElectricity: Double, // 28
+//        val age: Double, // 29
+//        val materialCost: Double, // 32
+//        val implementationCost: Double,
+//        val totalsavings: Double,
+//        val paybackMonth: Double,
+//        val netPresentValue: Double
+//)
 
-data class EquipmentValues(
-        val instances: List<EquipmentInstances>,
-        val totalSavings: Double, // 31
-        val totalCost: Double,
-        val totalNetPresentValue: Double,
-        val currentTotalkW: Double,
-        val currentTotalkWh: Double,
-        val postTotalkW: Double,
-        val postTotalkWh: Double
-)
+//data class EquipmentValues(
+//        val instances: List<EquipmentInstances>,
+//        val totalSavings: Double, // 31
+//        val totalCost: Double,
+//        val totalNetPresentValue: Double,
+//        val currentTotalkW: Double,
+//        val currentTotalkWh: Double,
+//        val postTotalkW: Double,
+//        val postTotalkWh: Double
+//)
 
-data class MotorValues(
-        val totalCost: Double,
-        val totalSavings: Double,
-        val netPresentValue: Double
-)
+//data class MotorValues(
+//        val totalCost: Double,
+//        val totalSavings: Double,
+//        val netPresentValue: Double
+//)
 
 data class BuildingValues(
         val buildingNetPresentValue: Double,

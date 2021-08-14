@@ -3,7 +3,7 @@ package com.gemini.energy.wordDocGenerator.models
 import com.gemini.energy.service.DataHolder
 import com.gemini.energy.service.device.Hvac
 import com.gemini.energy.wordDocGenerator.AuditComponents
-import com.gemini.energy.wordDocGenerator.HvacInstances
+import com.gemini.energy.wordDocGenerator.models.*
 import com.gemini.energy.wordDocGenerator.SorterForWordDocumentGenerator
 
 data class HvacValues(
@@ -54,17 +54,7 @@ data class HvacValues(
                 postTotalkW = hvac.energyPost()
                 postTotalkWh = hvac.energyPost() * hvac.usageHoursPost()
 
-                instances.add(HvacInstances(
-                        hvac.quantity,
-                        hvac.year(),
-                        hvac.age,
-                        hvac.kbtu.toInt(),
-                        hvac.seer,
-                        hvac.overAge(),
-                        hvac.economizer,
-                        hvac.thermotype,
-                        hvac.netPresentValue
-                ))
+                instances.add(HvacInstances.createFromHvac(hvac))
             }
 
             val costToSavings =

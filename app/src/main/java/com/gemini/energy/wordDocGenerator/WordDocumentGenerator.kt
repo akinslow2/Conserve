@@ -9,8 +9,7 @@ import com.gemini.energy.branch
 import com.gemini.energy.format
 import com.gemini.energy.presentation.audit.DropBox
 import com.gemini.energy.service.device.EBase
-import com.gemini.energy.wordDocGenerator.models.HvacValues
-import com.gemini.energy.wordDocGenerator.models.PreAuditValues
+import com.gemini.energy.wordDocGenerator.models.*
 import org.apache.poi.wp.usermodel.HeaderFooterType
 import org.apache.poi.xwpf.usermodel.*
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.*
