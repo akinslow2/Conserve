@@ -161,6 +161,8 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
     var utilitycompany = ""
     var electricstructure = ""
     var gasstructure = ""
+    val occupancy = 0
+
     var economizer = ""
     var thermotype = ""
     var uvalue = 0.15 //for details see document "U Value Calculations" in the Building Calculations Folder
@@ -233,20 +235,33 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
     /**
      ** Calculations for annual demand, power, and energy for pre and post in the area that the HVAC system serves
      * */
-    var coolingkbtu = 24 * uvalue * cdd * (2 * (areaLength * areaWidth + areaLength * areaHeight + areaWidth * areaHeight)) / 1000.0
-    var heatingkbtu = 24 * uvalue * hdd * (2 * (areaLength * areaWidth + areaLength * areaHeight + areaWidth * areaHeight)) / 1000.0
+    fun coolingkbtu(): Double {
+        val area = (areaLength * areaWidth) + (2 * (areaLength * areaHeight + areaWidth * areaHeight))
+        val occupancyBtu = 600.0 * occupancy
+        val areakBtu = 24.0 * uvalue * cdd.toDouble() * area / 1000.0
+
+        return areakBtu + occupancyBtu
+    }
+
+    fun heatingkbtu(): Double {
+        val area =  (areaLength * areaWidth) + (2 * (areaLength * areaHeight + areaWidth * areaHeight))
+        val occupancyBtu = 600.0 * occupancy
+        val areakBtu = 24.0 * uvalue * hdd.toDouble() * area / 1000.0
+
+        return areakBtu + occupancyBtu
+    }
 
     fun energyPre(): Double {
-        val heat = if (heatEfficiency == 0.0) 0.0 else heatingkbtu / heatEfficiency
-        val cool = if (seer == 0.0) 0.0 else coolingkbtu / seer
+        val heat = if (heatEfficiency == 0.0) 0.0 else heatingkbtu() / heatEfficiency
+        val cool = if (seer == 0.0) 0.0 else coolingkbtu() / seer
         return heat + cool
     }
 
     var prePowerUsed = power(kbtu, seer)
 
     fun energyPost(): Double {
-        val heat = if (hspf == 0.0) 0.0 else heatingkbtu / hspf
-        val cool = if (alternateSeer == 0.0) 0.0 else coolingkbtu / alternateSeer
+        val heat = if (hspf == 0.0) 0.0 else heatingkbtu() / hspf
+        val cool = if (alternateSeer == 0.0) 0.0 else coolingkbtu() / alternateSeer
         return heat + cool
     }
 
