@@ -42,7 +42,9 @@ class PreRinseSpray(computable: Computable<*>, utilityRateGas: UtilityRate, util
     private var waterTemperature = 0
     private var efficiency = 0.0
     private var waterHeater = ""
-    var age = 0.0
+
+    /** year equipment was manufactured **/
+    var year = 0
 
     override fun setup() {
         try {
@@ -55,7 +57,7 @@ class PreRinseSpray(computable: Computable<*>, utilityRateGas: UtilityRate, util
             waterTemperature = featureData["Water Temperature (oF)"]!! as Int
             efficiency = featureData["Efficiency"]!! as Double
             waterHeater = featureData["Water Heater"]!! as String
-            age = (featureData["Age"]!! as Int).toDouble()
+            year = featureData["Year"]!! as Int
         } catch (e: Exception) {
             e.printStackTrace()
         }

@@ -201,10 +201,8 @@ class WIFreezer(computable: Computable<*>, utilityRateGas: UtilityRate, utilityR
         }
     }
 
-    /**
-     * HVAC - Age
-     * */
-    var age = 0
+    /** year equipment was manufactured **/
+    var year = 0
 
 
     /**
@@ -238,11 +236,12 @@ class WIFreezer(computable: Computable<*>, utilityRateGas: UtilityRate, utilityR
     var capacity = 0.0
     var Nfan = 0
 
+
     override fun setup() {
         try {
             quantity = featureData["Quantity"]!! as Int
 
-            age = featureData["Age"]!! as Int
+            year = featureData["Year"]!! as Int
             peakHours = featureData["Peak Hours"]!! as Double
             partPeakHours = featureData["Part Peak Hours"]!! as Double
             offPeakHours = featureData["Off Peak Hours"]!! as Double

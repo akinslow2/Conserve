@@ -40,7 +40,9 @@ class HotFoodCabinet(computable: Computable<*>, utilityRateGas: UtilityRate, uti
     private var cabinetVolume = 0.0
     private var idleEnergyRate = 0.0
     private var size = ""
-    var age = 0.0
+
+    /** year equipment was manufactured **/
+    var year = 0
 
 
     override fun setup() {
@@ -53,7 +55,7 @@ class HotFoodCabinet(computable: Computable<*>, utilityRateGas: UtilityRate, uti
             cabinetVolume = featureData["Cabinet Volume"]!! as Double
             idleEnergyRate = featureData["Idle Energy Rate"]!! as Double
             size = featureData["Size"]!! as String
-            age = (featureData["Age"]!! as Int).toDouble()
+            year = featureData["Year"]!! as Int
 
         } catch (e: Exception) {
             e.printStackTrace()
