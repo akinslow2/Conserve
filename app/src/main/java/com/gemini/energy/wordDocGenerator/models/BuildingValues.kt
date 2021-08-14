@@ -75,7 +75,7 @@ data class BuildingValues(
                     postkWh,
                     currentElectricityCharge,
                     postElectricityCharge,
-                    calculateAnnualSavingsDuringPaybackPeriod(totalCost, totalSavings)
+                    calculateAnnualSavingsDuringPaybackPeriod(totalCost, postElectricityCharge)
             )
         }
 
@@ -287,9 +287,9 @@ data class BuildingValues(
             else demandKW * demandChargeOver15kW
         }
 
-        private fun calculateAnnualSavingsDuringPaybackPeriod(totalCost: Double, totalCostSavings: Double): Double {
+        private fun calculateAnnualSavingsDuringPaybackPeriod(totalCost: Double, postElectricityCharge: Double): Double {
             val utilityMonthlyCharge = totalCost / 12.0 / 12.0
-            return totalCostSavings - (utilityMonthlyCharge * 12)
+            return postElectricityCharge - (utilityMonthlyCharge * 12)
         }
     }
 }
