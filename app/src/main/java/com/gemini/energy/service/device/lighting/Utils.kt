@@ -9,7 +9,7 @@ class Utils {
          */
         const val futureValueFactor = 0.7130
 
-        private const val electricianHourlyRate = 70.0
+        const val electricianHourlyRate = 70.0
 
         /**
          * gets fixture cost for linear fluorescent
