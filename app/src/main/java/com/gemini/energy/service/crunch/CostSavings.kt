@@ -272,8 +272,8 @@ class CostSavings {
                     val rateWinter: Double
 
                     if (isNoTOU(schedule)) {
-                        rateSummer = structure[ERateKey.SummerNone.value]!![3].toDouble()
-                        rateWinter = structure[ERateKey.WinterNone.value]!![3].toDouble()
+                        rateSummer = structure[ERateKey.SummerNone.value]?.lastOrNull()?.toDouble() ?: 0.0
+                        rateWinter = structure[ERateKey.WinterNone.value]?.lastOrNull()?.toDouble() ?: 0.0
                     } else {
                         rateSummer = structure[ERateKey.SummerOff.value]!![3].toDouble()
                         rateWinter = structure[ERateKey.WinterOff.value]!![3].toDouble()
