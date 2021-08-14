@@ -167,16 +167,10 @@ class WaterHeater(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
     }
      override fun isGas() = fueltype == "Natural Gas"
 
-    /**
-     * Getting year of device and how much over life it is
-     */
-    fun year(): Int {
-        return getYear(age)
+    fun overAge(): Int {
+        return getAge(year) - 15
     }
 
-    fun overAge(): Int {
-        return age - 15
-    }
     val prepowerUsedGas = power(gasInput, thermaleff) * quantity
     val prepowerUsedElectricity = power2(kW, electriceff) * quantity
     val prepowerUsed = if (isGas()) prepowerUsedGas else prepowerUsedElectricity

@@ -238,15 +238,8 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
     }
 
 
-    /**
-     * Getting year of device and how much over life it is
-     */
-    fun year(): Int {
-        return getYear(age)
-    }
-
     fun overAge(): Int {
-        return age - 15
+        return getAge(year) - 15
     }
 
     /**
@@ -473,7 +466,7 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
      * */
     override fun queryHVACEer() = JSONObject()
             .put("type", HVAC_EER)
-            .put("data.year", getYear(age))
+            .put("data.year", getYear(year))
             .put("data.size_btu_per_hr_min", JSONObject().put("\$lte", kbtu))
             .put("data.size_btu_per_hr_max", JSONObject().put("\$gte", kbtu))
             .toString()
