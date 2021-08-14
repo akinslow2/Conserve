@@ -278,7 +278,7 @@ class Cfl(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEle
     val presentvaluefactor = 7.722
 
     fun installCost(): Double {
-        val timePerFixture = Utils.timePerFixture(replacementType, ceilingType)
+        val timePerFixture = Utils.timePerFixture(replacementType)
         val electricianCost = Utils.electricianCost(timePerFixture, numberOfFixtures)
         return Utils.installCost(replacementType, ledbulbcost, lampsPerFixtures, numberOfFixtures, electricianCost)
     }
