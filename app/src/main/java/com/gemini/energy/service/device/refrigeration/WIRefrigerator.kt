@@ -252,15 +252,8 @@ class WIRefrigerator(computable: Computable<*>, utilityRateGas: UtilityRate, uti
 
     override fun isGas() = fueltype == "Natural Gas"
 
-    /**
-     * Getting year of device and how much over life it is
-     */
-    fun year(): Int {
-        return getYear(age)
-    }
-
     fun overAge(): Int {
-        return age - 15
+        return getAge(year) - 15
     }
 
     /**
