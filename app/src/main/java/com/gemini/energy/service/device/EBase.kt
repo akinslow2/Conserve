@@ -23,6 +23,7 @@ import io.reactivex.Single
 import io.reactivex.functions.Function
 import org.json.JSONObject
 import timber.log.Timber
+import java.util.*
 
 abstract class EBase(val computable: Computable<*>,
                      private val utilityRateGas: UtilityRate,
@@ -535,4 +536,14 @@ abstract class EBase(val computable: Computable<*>,
                 ELightingType.LinearFluorescent -> listOf(10000.0, 0.85, 0.85)
                 ELightingType.HPSodium -> listOf(24000.0, 0.5, 0.85) //was 0.25 PercentPowerReduced)
                 ELightingType.LPSodium -> listOf(18000.0, 0.4, 0.85)} //was 0.25 PercentPowerReduced) - 3X life
+
+
+    /***
+     * Shared utility functions
+     */
+
+    fun getAge(year: Int): Int {
+        val currentYear = Calendar.getInstance().get(Calendar.YEAR);
+        return currentYear - year
+    }
 }
