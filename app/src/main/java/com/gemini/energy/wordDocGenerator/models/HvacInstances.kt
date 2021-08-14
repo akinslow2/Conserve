@@ -17,8 +17,8 @@ data class HvacInstances(
         fun createFromHvac(hvac: Hvac): HvacInstances {
             return HvacInstances(
                         hvac.quantity,
-                        hvac.year(),
-                        hvac.age,
+                        hvac.year,
+                        hvac.getAge(hvac.year),
                         hvac.kbtu.toInt(),
                         hvac.seer,
                         hvac.overAge(),
