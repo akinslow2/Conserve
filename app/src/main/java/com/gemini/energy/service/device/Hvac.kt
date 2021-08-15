@@ -172,6 +172,14 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
     var hdd = 2696 // Using weather station at Suffolk, Suffolk Municipal Airport, VA with 63 degree base temp - lowest of June 2018 to June 2021 (degreedays.net)
     var cddTotal = 0
     var hddTotal = 0
+    var thermostatChangeForNonBusiness = ""
+    var adjustedHeatSetPoint = 0
+    var adjustedCoolSetPoint = 0
+    var cddBusinessHours = 0
+    var hddBusinessHours = 0
+    var cddCloseHours = 0
+    var hddCloseHours = 0
+
     var quantity = 0
     var insulation = ""
     var areaHeight = 0.0
@@ -220,6 +228,14 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
 
             val inputHddThreshold = featureData["Heat Temperature Threshold"]!! as Int
             hddThreshold = if (inputHddThreshold > 0) inputHddThreshold else hddThreshold
+
+            thermostatChangeForNonBusiness = featureData["How is thermostat changed for non-business?"]!! as String
+            adjustedHeatSetPoint = featureData["Adjusted Heat Set Point"]!! as Int
+            adjustedCoolSetPoint = featureData["Adjusted Cool Set Point"]!! as Int
+            cddBusinessHours = featureData["Cooling Degree Days Business Hours"]!! as Int
+            hddBusinessHours = featureData["Heating Degree Days Business Hours"]!! as Int
+            cddCloseHours = featureData["Cooling Degree Days Closed Hours"]!! as Int
+            hddCloseHours = featureData["Heating Degree Days Closed Hours"]!! as Int
 
             cddTotal = featureData["Cooling Degree Days Total"]!! as Int
             hddTotal = featureData["Heating Degree Days Total"]!! as Int
