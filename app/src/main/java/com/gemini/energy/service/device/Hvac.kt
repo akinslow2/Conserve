@@ -141,6 +141,7 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
     var economizer = ""
     var thermotype = ""
     var uvalue = 0.15 //for details see document "U Value Calculations" in the Building Calculations Folder
+
     var cddThreshold = 67 //assumes five degrees from 72 desired temp
     var hddThreshold = 63 //assumes five degree from 68 desired temp
     var cdd = 1495 // Using weather station at Suffolk, Suffolk Municipal Airport, VA with 67 degree base temp - lowest of June 2018 to June 2021(degreedays.net) 2200
@@ -254,17 +255,29 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
      * * Calculations for annual demand, power, and energy for pre and post in the area that the HVAC system serves
      * */
     fun coolingkbtu(): Double {
+        val hours = when (thermostatChangeForNonBusiness) {
+            "No Change" -> cddTotal
+            "Turned Off" -> cddBusinessHours
+            else -> cddBusinessHours + cddCloseHours
+        }
+
         val area = (areaLength * areaWidth) + (2 * (areaLength * areaHeight + areaWidth * areaHeight))
         val occupancyBtu = 600.0 * occupancy
-        val areakBtu = 24.0 * uvalue * cdd.toDouble() * area / 1000.0
+        val areakBtu = 24.0 * uvalue * hours.toDouble() * area / 1000.0
 
         return areakBtu + occupancyBtu
     }
 
     fun heatingkbtu(): Double {
+        val hours = when (thermostatChangeForNonBusiness) {
+            "No Change" -> hddTotal
+            "Turned Off" -> hddBusinessHours
+            else -> hddBusinessHours + hddCloseHours
+        }
+
         val area =  (areaLength * areaWidth) + (2 * (areaLength * areaHeight + areaWidth * areaHeight))
         val occupancyBtu = 600.0 * occupancy
-        val areakBtu = 24.0 * uvalue * hdd.toDouble() * area / 1000.0
+        val areakBtu = 24.0 * uvalue * hours.toDouble() * area / 1000.0
 
         return areakBtu + occupancyBtu
     }
