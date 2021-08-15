@@ -166,6 +166,8 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
     var hddThreshold = 63 //assumes five degree from 68 desired temp
     var cdd = 1495 // Using weather station at Suffolk, Suffolk Municipal Airport, VA with 67 degree base temp - lowest of June 2018 to June 2021(degreedays.net)
     var hdd = 2696 // Using weather station at Suffolk, Suffolk Municipal Airport, VA with 63 degree base temp - lowest of June 2018 to June 2021 (degreedays.net)
+    var cddTotal = 0
+    var hddTotal = 0
     var quantity = 0
     var insulation = ""
     var areaHeight = 0.0
@@ -212,11 +214,8 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
             val inputHddThreshold = featureData["Heat Temperature Threshold"]!! as Int
             hddThreshold = if (inputHddThreshold > 0) inputHddThreshold else hddThreshold
 
-            val inputCdd = featureData["Cooling Degree Days"]!! as Int
-            cdd = if (inputCdd > 0) inputCdd else cdd
-
-            val inputhdd = featureData["Heating Degree Days"]!! as Int
-            hdd = if (inputhdd > 0) inputhdd else hdd
+            cddTotal = featureData["Cooling Degree Days Total"]!! as Int
+            hddTotal = featureData["Heating Degree Days Total"]!! as Int
 
             insulation = featureData["Is there Insulation in the building?"]!! as String
             areaLength = featureData["Length of Served Area"]!! as Double
@@ -226,11 +225,6 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
             peakHours = featureData["Peak Hours"]!! as Double
             partPeakHours = featureData["Part Peak Hours"]!! as Double
             offPeakHours = featureData["Off Peak Hours"]!! as Double
-
-//            val inputAltSeer = featureData["Alternate SEER"]!! as Double
-//            alternateSeer = if (inputAltSeer > 0) inputAltSeer else alternateSeer
-//            alternateEer = featureData["Alternate EER"]!! as Double
-//            alternateBtu = featureData["Alternate Cooling Capacity (Btu/hr)"]!! as Int
 
         } catch (e: Exception) {
             e.printStackTrace()
