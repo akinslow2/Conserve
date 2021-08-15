@@ -170,6 +170,8 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
     var hddThreshold = 63 //assumes five degree from 68 desired temp
     var cdd = 1495 // Using weather station at Suffolk, Suffolk Municipal Airport, VA with 67 degree base temp - lowest of June 2018 to June 2021(degreedays.net)
     var hdd = 2696 // Using weather station at Suffolk, Suffolk Municipal Airport, VA with 63 degree base temp - lowest of June 2018 to June 2021 (degreedays.net)
+    var cddTotal = 0
+    var hddTotal = 0
     var quantity = 0
     var insulation = ""
     var areaHeight = 0.0
@@ -212,8 +214,16 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
 
             cddThreshold = featureData["AC Temperature Threshold"]!! as Int
             hddThreshold = featureData["Heat Temperature Threshold"]!! as Int
-            cdd = featureData["Cooling Degree Days"]!! as Int
-            hdd = featureData["Heating Degree Days"]!! as Int
+
+            val inputCddThreshold = featureData["AC Temperature Threshold"]!! as Int
+            cddThreshold = if (inputCddThreshold > 0) inputCddThreshold else cddThreshold
+
+            val inputHddThreshold = featureData["Heat Temperature Threshold"]!! as Int
+            hddThreshold = if (inputHddThreshold > 0) inputHddThreshold else hddThreshold
+
+            cddTotal = featureData["Cooling Degree Days Total"]!! as Int
+            hddTotal = featureData["Heating Degree Days Total"]!! as Int
+
             insulation = featureData["Is there Insulation in the building?"]!! as String
             areaLength = featureData["Length of Served Area"]!! as Double
             areaWidth = featureData["Width of Served Area"]!! as Double
