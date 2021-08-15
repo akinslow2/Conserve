@@ -218,7 +218,7 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
             val inputhdd = featureData["Heating Degree Days"]!! as Int
             hdd = if (inputhdd > 0) inputhdd else hdd
 
-            insulation = featureData["Insulation"]!! as String
+            insulation = featureData["Is there Insulation in the building?"]!! as String
             areaLength = featureData["Length of Served Area"]!! as Double
             areaWidth = featureData["Width of Served Area"]!! as Double
             areaHeight = featureData["Height of Served Area"]!! as Double
@@ -227,10 +227,10 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
             partPeakHours = featureData["Part Peak Hours"]!! as Double
             offPeakHours = featureData["Off Peak Hours"]!! as Double
 
-            val inputAltSeer = featureData["Alternate SEER"]!! as Double
-            alternateSeer = if (inputAltSeer > 0) inputAltSeer else alternateSeer
-            alternateEer = featureData["Alternate EER"]!! as Double
-            alternateBtu = featureData["Alternate Cooling Capacity (Btu/hr)"]!! as Int
+//            val inputAltSeer = featureData["Alternate SEER"]!! as Double
+//            alternateSeer = if (inputAltSeer > 0) inputAltSeer else alternateSeer
+//            alternateEer = featureData["Alternate EER"]!! as Double
+//            alternateBtu = featureData["Alternate Cooling Capacity (Btu/hr)"]!! as Int
 
         } catch (e: Exception) {
             e.printStackTrace()

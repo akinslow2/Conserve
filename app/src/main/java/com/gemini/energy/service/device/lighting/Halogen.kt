@@ -76,9 +76,9 @@ class Halogen(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRat
             replacementType = featureData["Replacement Type"]!! as String
             isCeilingOver10Feet = featureData["Ceiling greater than 10 feet?"]!! as String
 
-            peakHours = (featureData["Peak Hours"]!! as Int).toDouble()
-            partPeakHours = (featureData["Part Peak Hours"]!! as Int).toDouble()
-            offPeakHours = (featureData["Off Peak Hours"]!! as Int).toDouble()
+            peakHours = featureData["Peak Hours"]!! as Double
+            partPeakHours = featureData["Part Peak Hours"]!! as Double
+            offPeakHours = featureData["Off Peak Hours"]!! as Double
 
             controls = featureData["Type of Control"]!! as String
             hasControls = featureData["Controls"]!! as String

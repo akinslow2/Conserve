@@ -82,9 +82,9 @@ class Incandescent(computable: Computable<*>, utilityRateGas: UtilityRate, utili
             controls = featureData["Type of Control"]!! as String
             hasControls = featureData["Controls"]!! as String
 
-            peakHours = (featureData["Peak Hours"]!! as Int).toDouble()
-            partPeakHours = (featureData["Part Peak Hours"]!! as Int).toDouble()
-            offPeakHours = (featureData["Off Peak Hours"]!! as Int).toDouble()
+            peakHours = featureData["Peak Hours"]!! as Double
+            partPeakHours = featureData["Part Peak Hours"]!! as Double
+            offPeakHours = featureData["Off Peak Hours"]!! as Double
         } catch (e: Exception) {
             e.printStackTrace()
         }
