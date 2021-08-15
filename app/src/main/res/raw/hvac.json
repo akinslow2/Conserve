@@ -242,6 +242,69 @@
           "param": "Thermostat Company/Brand",
           "validation": "optional",
           "id": "36"
+        },
+        {
+          "index": 37,
+          "hint": "",
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:No Change,2:Turned Off,3:Adjusted",
+          "param": "How is thermostat changed for non-business?",
+          "validation": "optional",
+          "id": "37"
+        },
+        {
+          "index": 38,
+          "hint": "55",
+          "dataType": "introw",
+          "defaultValues": "",
+          "param": "Adjusted Heat Set Point",
+          "validation": "optional",
+          "id": "38"
+        },
+        {
+          "index": 39,
+          "hint": "80",
+          "dataType": "introw",
+          "defaultValues": "",
+          "param": "Adjusted Cool Set Point",
+          "validation": "optional",
+          "id": "39"
+        },
+        {
+          "index": 301,
+          "hint": "to be completed by analyst",
+          "dataType": "introw",
+          "defaultValues": "",
+          "param": "Cooling Degree Days Business Hours",
+          "validation": "optional",
+          "id": "301"
+        },
+        {
+          "index": 302,
+          "hint": "to be completed by analyst",
+          "dataType": "introw",
+          "defaultValues": "",
+          "param": "Heating Degree Days Business Hours",
+          "validation": "optional",
+          "id": "302"
+        },
+        {
+          "index": 303,
+          "hint": "to be completed by analyst",
+          "dataType": "introw",
+          "defaultValues": "",
+          "param": "Cooling Degree Days Closed Hours",
+          "validation": "optional",
+          "id": "303"
+        },
+        {
+          "index": 304,
+          "hint": "to be completed by analyst",
+          "dataType": "introw",
+          "defaultValues": "",
+          "param": "Heating Degree Days Closed Hours",
+          "validation": "optional",
+          "id": "304"
         }
       ],
       "id": "3"
