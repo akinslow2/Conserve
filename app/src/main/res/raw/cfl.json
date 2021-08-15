@@ -137,7 +137,7 @@
       "elements": [
         {
           "index": 32,
-          "hint": "",
+          "hint": "insert if you can",
           "dataType": "decimalrow",
           "defaultValues": "",
           "param": "Actual Watts",
@@ -148,47 +148,56 @@
       "id": "3"
     },
     {
-      "index": 5,
-      "section": "TOU",
+      "index": 4,
+      "section": "Time of Use",
       "elements": [
         {
-          "index": 51,
-          "hint": "",
+          "index": 41,
+          "hint": "analyst will input",
           "dataType": "decimalrow",
           "defaultValues": "",
           "param": "Peak Hours",
           "validation": "optional",
-          "id": "51"
+          "id": "41"
         },
         {
-          "index": 52,
-          "hint": "",
+          "index": 42,
+          "hint": "analyst will input",
           "dataType": "decimalrow",
           "defaultValues": "",
           "param": "Part Peak Hours",
           "validation": "optional",
-          "id": "52"
+          "id": "42"
         },
         {
-          "index": 53,
-          "hint": "",
+          "index": 43,
+          "hint": "analyst will input",
           "dataType": "decimalrow",
           "defaultValues": "",
           "param": "Off Peak Hours",
           "validation": "optional",
-          "id": "53"
+          "id": "43"
         },
         {
-          "index": 54,
+          "index": 44,
           "hint": "",
           "dataType": "textrow",
           "defaultValues": "",
           "param": "Light Sensor Serial",
+          "validation": "",
+          "id": "44"
+        },
+        {
+          "index": 45,
+          "hint": "issues or observations here",
+          "dataType": "textrow",
+          "defaultValues": "",
+          "param": "Notes from Space or Equipment",
           "validation": "optional",
-          "id": "54"
+          "id": "45"
         }
       ],
-      "id": "5"
+      "id": "4"
     }
   ]
 }

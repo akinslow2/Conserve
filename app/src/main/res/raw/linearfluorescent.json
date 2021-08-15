@@ -155,7 +155,7 @@
       "elements": [
         {
           "index": 31,
-          "hint": "",
+          "hint": "insert if you can",
           "dataType": "decimalrow",
           "defaultValues": "",
           "param": "Actual Watts",
@@ -167,80 +167,55 @@
     },
     {
       "index": 4,
-      "section": "Ballast",
+      "section": "Time of Use",
       "elements": [
         {
           "index": 41,
-          "hint": "",
-          "dataType": "pickerinputrow",
-          "defaultValues": "1:Rapid,2:Instant,3:Programmed",
-          "param": "Strike Time",
+          "hint": "analyst will input",
+          "dataType": "decimalrow",
+          "defaultValues": "",
+          "param": "Peak Hours",
           "validation": "optional",
           "id": "41"
         },
         {
           "index": 42,
-          "hint": "",
-          "dataType": "pickerinputrow",
-          "defaultValues": "1:Very High,2:High,3:Normal,4:Reduced",
-          "param": "Ballast Factor",
+          "hint": "analyst will input",
+          "dataType": "decimalrow",
+          "defaultValues": "",
+          "param": "Part Peak Hours",
           "validation": "optional",
           "id": "42"
         },
         {
           "index": 43,
-          "hint": "",
-          "dataType": "pickerinputrow",
-          "defaultValues": "1:Electronic,2:Magnetic",
-          "param": "Ballast Type",
-          "validation": "optional",
-          "id": "43"
-        }
-      ],
-      "id": "4"
-    },
-    {
-      "index": 5,
-      "section": "Time of Use",
-      "elements": [
-        {
-          "index": 51,
-          "hint": "",
-          "dataType": "decimalrow",
-          "defaultValues": "",
-          "param": "Peak Hours",
-          "validation": "optional",
-          "id": "51"
-        },
-        {
-          "index": 52,
-          "hint": "",
-          "dataType": "decimalrow",
-          "defaultValues": "",
-          "param": "Part Peak Hours",
-          "validation": "optional",
-          "id": "52"
-        },
-        {
-          "index": 53,
-          "hint": "",
+          "hint": "analyst will input",
           "dataType": "decimalrow",
           "defaultValues": "",
           "param": "Off Peak Hours",
           "validation": "optional",
-          "id": "53"
+          "id": "43"
         },
         {
-          "index": 54,
-          "hint": "",
+          "index": 44,
+          "hint": "insert last 3 digits",
           "dataType": "textrow",
           "defaultValues": "",
           "param": "Light Sensor Serial",
           "validation": "",
-          "id": "54"
+          "id": "44"
+        },
+        {
+          "index": 45,
+          "hint": "issues or observations here",
+          "dataType": "textrow",
+          "defaultValues": "",
+          "param": "Notes from Space or Equipment",
+          "validation": "optional",
+          "id": "45"
         }
       ],
-      "id": "5"
+      "id": "4"
     }
   ]
 }
