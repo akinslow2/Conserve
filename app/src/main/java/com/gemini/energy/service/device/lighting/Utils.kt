@@ -26,19 +26,13 @@ class Utils {
          *
          * @return number of hours in double
          */
-        fun timePerFixture(replacementType: String, ceilingType: String): Double {
+        fun timePerFixture(replacementType: String): Double {
             if (replacementType == ReplacementType.Retrofit.type) {
-                if (ceilingType == CeilingType.DryWall.type) {
-                    return 1.0
-                }
-                return 0.0
+                 return 1.0
             }
 
             if (replacementType == ReplacementType.DirectReplacementFixture.type) {
-                if (ceilingType == CeilingType.DropCeiling.type) {
-                    return 1.0
-                }
-                return 0.0
+                 return 1.0
             }
 
             // return lamp replacement as default

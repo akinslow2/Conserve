@@ -300,7 +300,7 @@ class LinearFluorescent(computable: Computable<*>, utilityRateGas: UtilityRate, 
     var presentvaluefactor = 7.722
 
     fun installCost(): Double {
-        val timePerFixture = Utils.timePerFixture(replacementType, ceilingType)
+        val timePerFixture = Utils.timePerFixture(replacementType)
         val electricianCost = Utils.electricianCost(timePerFixture, numberOfFixtures)
 
         if (replacementType == ReplacementType.DirectReplacementFixture.type) {
