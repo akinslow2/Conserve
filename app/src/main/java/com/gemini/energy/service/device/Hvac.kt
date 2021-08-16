@@ -138,6 +138,7 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
 
     var hvacSystem = ""
     var gasstructure = ""
+
     var economizer = ""
     var thermotype = ""
     var uvalue = 0.15 //for details see document "U Value Calculations" in the Building Calculations Folder
@@ -198,6 +199,7 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
             bldgtype = preAudit["General Client Info Facility Type"]!! as String
             city = preAudit["General Client Info City"]!! as String
             state = preAudit["General Client Info State"]!! as String
+            occupancy = preAudit["Area Occupancy"]!! as Int
 
             // parse hvac data
             eer = featureData["EER"]!! as Double
