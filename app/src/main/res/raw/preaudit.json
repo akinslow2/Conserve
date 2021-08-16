@@ -328,6 +328,15 @@
           "param": "Conditioned (Sq.Ft.)",
           "validation": "optional",
           "id": "52"
+        },
+        {
+          "index": 53,
+          "hint": "",
+          "dataType": "introw",
+          "defaultValues": "",
+          "param": "Occupancy",
+          "validation": "optional",
+          "id": "53"
         }
       ],
       "id": "5"
