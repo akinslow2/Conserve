@@ -161,7 +161,7 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
     var utilitycompany = ""
     var electricstructure = ""
     var gasstructure = ""
-    val occupancy = 0
+    var occupancy = 0
 
     var economizer = ""
     var thermotype = ""
@@ -207,6 +207,7 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
             bldgtype = preAudit["General Client Info Facility Type"]!! as String
             city = preAudit["General Client Info City"]!! as String
             state = preAudit["General Client Info State"]!! as String
+            occupancy = preAudit["Area Occupancy"]!! as Int
 
             eer = featureData["EER"]!! as Double
 
