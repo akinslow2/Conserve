@@ -10,6 +10,8 @@ import com.gemini.energy.format
 import com.gemini.energy.presentation.audit.DropBox
 import com.gemini.energy.service.device.EBase
 import com.gemini.energy.wordDocGenerator.models.*
+import com.gemini.energy.wordDocGenerator.utils.generateFinancialComponentsDetailRow
+import com.gemini.energy.wordDocGenerator.utils.generateFinancialComponentsHeaderRow
 import org.apache.poi.wp.usermodel.HeaderFooterType
 import org.apache.poi.xwpf.usermodel.*
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.*
@@ -25,18 +27,21 @@ class WordDocumentGenerator {
 
     private lateinit var documents: List<XWPFDocument>
 
-    //Hex #'s used for the colors
-    private val greyColor = "595959"
-    private val tableGreyColor = "D9D9D9"
-    private val greenColor = "70ad47"
-    private val tableGreenColor = "469B43"
-    private val blackColor = "000000"
-    private val whiteColor = "ffffff"
+    companion object {
+        //Hex #'s used for the colors
+        private val greyColor = "595959"
+        private val tableGreyColor = "D9D9D9"
+        val greenColor = "70ad47"
+        val tableGreenColor = "469B43"
+        val blackColor = "000000"
+        val whiteColor = "ffffff"
 
-    private val fontAgencyFB = "Agency FB"
-    private val fontUnivers = "Univers LT Std 39 Thin UltraCn"
+        val fontAgencyFB = "Agency FB"
+        private val fontUnivers = "Univers LT Std 39 Thin UltraCn"
 
-    private val manuallyGeneratedValue = "INSERTME"
+        private val manuallyGeneratedValue = "INSERTME"
+    }
+
 
 
     /** Triggers the document generation for each audit and saves documents to appropriate place **/
@@ -640,81 +645,48 @@ class WordDocumentGenerator {
 
     private fun createEnergySavingsTable(document: XWPFDocument, values: PreparedForDocument) {
         val table = document.createTable(15, 2)
-
         var currentRow = 0
 
-        fun generateHeaderRow(cell1: String, cell2: String) {
-            val row0 = table.getRow(currentRow)
-            val c0r0 = row0.getCell(0)
-            c0r0.color = tableGreenColor
-            val pc0r0 = c0r0.paragraphs[0]
-            pc0r0.alignment = ParagraphAlignment.CENTER
-            val rc0r0 = pc0r0.createRun()
-            rc0r0.fontFamily = fontAgencyFB
-            rc0r0.isBold = true
-            rc0r0.color = whiteColor
-            rc0r0.setText(cell1)
+        table.generateFinancialComponentsHeaderRow()
+        currentRow +=1
 
-            val c1r0 = row0.getCell(1)
-            c1r0.color = tableGreenColor
-            val pc1r0 = c1r0.paragraphs[0]
-            pc1r0.alignment = ParagraphAlignment.CENTER
-            val rc1r0 = pc1r0.createRun()
-            rc1r0.fontFamily = fontAgencyFB
-            rc1r0.isBold = true
-            rc1r0.color = whiteColor
-            rc1r0.setText(cell2)
-
-            currentRow += 1
-        }
-
-        fun generateInfoRow(cell1: String, cell2: String) {
-            val row = table.getRow(currentRow)
-            val cell0 = row.getCell(0)
-            val para0 = cell0.paragraphs[0]
-            val para0run = para0.createRun()
-            para0run.fontFamily = fontAgencyFB
-            para0run.isBold = true
-            para0run.setText(cell1)
-
-            val cell1 = row.getCell(1)
-            val para1 = cell1.paragraphs[0]
-            para1.alignment = ParagraphAlignment.CENTER
-            val para1run = para1.createRun()
-            para1run.fontFamily = fontAgencyFB
-            para1run.setText(cell2)
-
-            currentRow += 1
-        }
-
-        // Header row
-        generateHeaderRow("Financial Components", "Financial Overview")
-
-        generateInfoRow(
+        table.generateFinancialComponentsDetailRow(
                 "Financial Overview",
-                "\$${values.building.buildingTotalSavings.format(0)}")
+                "\$${values.building.buildingTotalSavings.format(0)}",
+                currentRow)
+        currentRow +=1
 
         if (values.preAudit.electrificationSavings > 0.0) {
-            generateInfoRow(
+            table.generateFinancialComponentsDetailRow(
                 "Electrification Savings ($/yr)",
-                "\$${values.preAudit.electrificationSavings.format(0)}")
+                "\$${values.preAudit.electrificationSavings.format(0)}",
+                currentRow)
+            currentRow +=1
         }
 
-        generateInfoRow(
+        table.generateFinancialComponentsDetailRow(
                 "Implementation Cost (\$)",
-                "\$${values.building.buildingTotalCost.format(0)}")
+                "\$${values.building.buildingTotalCost.format(0)}",
+                currentRow)
+        currentRow +=1
 
-        generateInfoRow(
+        table.generateFinancialComponentsDetailRow(
                 "    Lighting (\$)",
-                "\$${values.lighting?.totalCost?.format(0) ?: "N/A"}")
+                "\$${values.lighting?.totalCost?.format(0) ?: "N/A"}",
+                currentRow)
+        currentRow +=1
 
-        generateInfoRow(
+        table.generateFinancialComponentsDetailRow(
                 "    HVAC (\$)",
-                "\$${values.building.hvacTotalCost.format(0)}")
+                "\$${values.building.hvacTotalCost.format(0)}",
+                currentRow)
+        currentRow +=1
 
-        generateInfoRow(
+        table.generateFinancialComponentsDetailRow(
                 "    Plug Load (\$)",
-                "\$${values.building.equipmentTotalCost.format(0)}")
+                "\$${values.building.equipmentTotalCost.format(0)}",
+                currentRow)
+        currentRow +=1
 
         // seperator
         val separatorRow = table.getRow(currentRow)
@@ -722,33 +694,47 @@ class WordDocumentGenerator {
         separatorRow.getCell(1).color = tableGreyColor
         currentRow += 1
 
-        generateInfoRow(
+        table.generateFinancialComponentsDetailRow(
                 "Net Present Value (NPV)",
-                values.building.buildingNetPresentValue.format(0))
+                values.building.buildingNetPresentValue.format(0),
+                currentRow)
+        currentRow +=1
 
-        generateInfoRow(
+        table.generateFinancialComponentsDetailRow(
                 "    Lighting (NVP)",
-                values.lighting?.netPresentValue?.format(0) ?: "N/A")
+                values.lighting?.netPresentValue?.format(0) ?: "N/A",
+                currentRow)
+        currentRow +=1
 
-        generateInfoRow(
+        table.generateFinancialComponentsDetailRow(
                 "    HVAC (NPV)",
-                values.hvac?.netPresentValue?.format(0) ?: "N/A")
+                values.hvac?.netPresentValue?.format(0) ?: "N/A",
+                currentRow)
+        currentRow +=1
 
-        generateInfoRow(
+        table.generateFinancialComponentsDetailRow(
                 "    Water Heater (NPV)",
-                values.waterHeater?.netPresentValue?.format(0) ?:"N/A")
+                values.waterHeater?.netPresentValue?.format(0) ?:"N/A",
+                currentRow)
+        currentRow +=1
 
-        generateInfoRow(
+        table.generateFinancialComponentsDetailRow(
                 "    Refrigeration (NPV)",
-                values.refrigeration?.netPresentValue?.format(0) ?: "N/A")
+                values.refrigeration?.netPresentValue?.format(0) ?: "N/A",
+                currentRow)
+        currentRow +=1
 
-        generateInfoRow(
+        table.generateFinancialComponentsDetailRow(
                 "    Motors (NPV)",
-                values.motor?.netPresentValue?.format(0) ?: "N/A")
+                values.motor?.netPresentValue?.format(0) ?: "N/A",
+                currentRow)
+        currentRow +=1
 
-        generateInfoRow(
+        table.generateFinancialComponentsDetailRow(
                 "    Other Equipment (NPV)",
-                values.equipment?.netPresentValue?.format(0) ?: "N/A")
+                values.equipment?.netPresentValue?.format(0) ?: "N/A",
+                currentRow)
+        currentRow +=1
 
         fitTable(table, 4500)
         centerTable(table)
