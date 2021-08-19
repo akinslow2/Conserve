@@ -617,6 +617,8 @@ class WordDocumentGenerator {
         r1p4.setText("The estimated annual energy saving numbers reflected in the Easy Plan are based on the last 12 months weather and energy costs, as well as the behavior patterns during the time that " +
                 "the on-site data loggers were active. Since future weather, behavior, and energy costs cannot be accurately predicted, there will be a variable difference between estimated and actual savings.")
 
+        generateElectrictyCalculationTable(document, values)
+
     }
 
     private fun generateLightingContractorPage(document: XWPFDocument, lights: LightingValues) {
