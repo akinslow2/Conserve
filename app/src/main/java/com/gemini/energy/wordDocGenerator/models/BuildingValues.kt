@@ -236,7 +236,7 @@ data class BuildingValues(
         }
 
         private fun calculateEnergyChargeForScheduleF(kWh: Double): Double {
-            val annualkWH = kWh * 12.0
+            val monthlykWh = kWh / 12.0
 
             val energyChargeFirst2500kWh = 0.1288
             val energyChargeNext7500kWh = 0.0918
@@ -244,20 +244,20 @@ data class BuildingValues(
             val energyChargeOver50000kWh = 0.0660
 
             var totalEnergyCharge = 0.0
-            if (annualkWH >= 2500.0) {
+            if (monthlykWh >= 2500.0) {
                 totalEnergyCharge += 2500.0 * energyChargeFirst2500kWh
             } else {
-                totalEnergyCharge += annualkWH * energyChargeFirst2500kWh
-                return totalEnergyCharge
+                totalEnergyCharge += monthlykWh * energyChargeFirst2500kWh
+                return totalEnergyCharge * 12.0
             }
             println("energy cost first 2500 $totalEnergyCharge")
 
-            var remainingkWh = annualkWH - 2500.0
+            var remainingkWh = monthlykWh - 2500.0
             if (remainingkWh >= 7500.0) {
                 totalEnergyCharge += 7500.0 * energyChargeNext7500kWh
             } else {
                 totalEnergyCharge += remainingkWh * energyChargeNext7500kWh
-                return totalEnergyCharge
+                return totalEnergyCharge * 12.0
             }
             println("energy cost next 7500 $totalEnergyCharge")
 
@@ -266,15 +266,19 @@ data class BuildingValues(
                 totalEnergyCharge += 40000.0 * energyChargeNext40000kWh
             } else {
                 totalEnergyCharge += remainingkWh * energyChargeNext40000kWh
-                return totalEnergyCharge
+                return totalEnergyCharge * 12.0
             }
             println("energy cost next 40000 $totalEnergyCharge")
 
             remainingkWh -= 40000.0
             totalEnergyCharge += remainingkWh * energyChargeOver50000kWh
 
-            println("total energy is ${totalEnergyCharge}")
-            return totalEnergyCharge
+            val annualEnergyCharge = totalEnergyCharge * 12.0
+
+            println("total energy is ${annualEnergyCharge}")
+            return annualEnergyCharge
+
+
         }
 
         private fun calculateDemandCharegeForScheduleF(kW: Double): Double {
