@@ -542,6 +542,8 @@ class WordDocumentGenerator {
         r1p2.addBreak()
         r1p2.addBreak()
         r1p2.setText("${preAudit.businessname}is on the ${preAudit.gasstructure} ${preAudit.utilitycompany} gas rate schedule and for above stated time period, ${preAudit.businessname} used $manuallyGeneratedValue therms at a cost of $$manuallyGeneratedValue.")
+
+        generateElectrictyCalculationTable(document, values)
     }
 
     private fun generateLightingContractorPage(document: XWPFDocument, lights: LightingValues) {
