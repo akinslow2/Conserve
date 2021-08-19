@@ -11,7 +11,10 @@ import com.gemini.energy.presentation.audit.DropBox
 import com.gemini.energy.service.device.EBase
 import com.gemini.energy.wordDocGenerator.models.*
 import com.gemini.energy.wordDocGenerator.utils.*
-import org.apache.poi.xwpf.usermodel.*
+import org.apache.poi.xwpf.usermodel.ParagraphAlignment
+import org.apache.poi.xwpf.usermodel.VerticalAlign
+import org.apache.poi.xwpf.usermodel.XWPFDocument
+import org.apache.poi.xwpf.usermodel.XWPFTableCell
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
@@ -390,14 +393,14 @@ class WordDocumentGenerator {
         r1p1.isBold = true
         r1p1.isItalic = true
         r1p1.fontSize = 20
-        r1p1.setText("Equipment Savings")
+        r1p1.setText("Kitchen Equipment Savings")
 
         val p2 = document.createParagraph()
         p2.spacingBetween = 1.5
         val r1p2 = p2.createRun()
         r1p2.fontFamily = fontTeko
         r1p2.fontSize = 18
-        r1p2.setText("Implementation of recommended Equipment Savings will result in a minimum savings of ")
+        r1p2.setText("Implementation of recommended Kitchen Equipment Savings will result in a minimum savings of ")
         val r2p2 = p2.createRun()
         r2p2.fontFamily = fontTeko
         r2p2.isBold = true
@@ -605,7 +608,7 @@ class WordDocumentGenerator {
         currentRow += 1
 
         table.generateFinancialComponentsDetailRow(
-                "    Plug Load (\$)",
+                "    Kitchen Equipment (\$)",
                 "\$${values.building.equipmentTotalCost.format(0)}",
                 currentRow)
         currentRow += 1
@@ -653,7 +656,7 @@ class WordDocumentGenerator {
         currentRow += 1
 
         table.generateFinancialComponentsDetailRow(
-                "    Other Equipment (NPV)",
+                "    Kitchen Equipment (NPV)",
                 values.equipment?.netPresentValue?.format(0) ?: "N/A",
                 currentRow)
         currentRow += 1
@@ -963,7 +966,7 @@ class WordDocumentGenerator {
                 values.waterHeater?.postTotalkWh?.format(2) ?: "0.00")
 
         createRow(
-                "Other Equipment",
+                "Kitchen Equipment",
                 values.equipment?.currentTotalkW?.format(2) ?: "0.00",
                 values.equipment?.currentTotalkWh?.format(2) ?: "0.00",
                 values.equipment?.postTotalkW?.format(2) ?: "0.00",
