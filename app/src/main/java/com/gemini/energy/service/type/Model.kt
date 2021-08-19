@@ -66,8 +66,8 @@ data class TOU(
     override fun partPeak() = partPeak
     override fun noPeak() = noPeak
 
-    override fun weightedAverage() = (((summerOn() + summerPart() + summerOff()) / 3) * 0.3333) +
-            (((winterOn() + winterPart() + winterOff()) / 3) * 0.6666)
+    override fun weightedAverage() = (((summerOn() + summerPart() + summerOff()) / 3) * 0.3536) +
+            (((winterOn() + winterPart() + winterOff()) / 3) * 0.6463)
 
     override fun toString(): String {
         return ">>> Summer On : $summerOn \n" +

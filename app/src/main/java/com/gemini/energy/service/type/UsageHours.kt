@@ -57,8 +57,8 @@ open class UsageHours {
     }
 
     companion object {
-        private const val WEIGHT_SUMMER = .504
-        private const val WEIGHT_WINTER = .496
+        private const val WEIGHT_SUMMER = .3536
+        private const val WEIGHT_WINTER = .6464
     }
 
     fun initUsage(usage: Map<EDay, String?>): UsageHours {
