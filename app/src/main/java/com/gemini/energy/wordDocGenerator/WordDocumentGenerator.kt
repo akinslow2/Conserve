@@ -10,14 +10,15 @@ import com.gemini.energy.format
 import com.gemini.energy.presentation.audit.DropBox
 import com.gemini.energy.service.device.EBase
 import com.gemini.energy.wordDocGenerator.models.*
-import org.apache.poi.wp.usermodel.HeaderFooterType
-import org.apache.poi.xwpf.usermodel.*
-import org.openxmlformats.schemas.wordprocessingml.x2006.main.*
+import com.gemini.energy.wordDocGenerator.utils.*
+import org.apache.poi.xwpf.usermodel.ParagraphAlignment
+import org.apache.poi.xwpf.usermodel.VerticalAlign
+import org.apache.poi.xwpf.usermodel.XWPFDocument
+import org.apache.poi.xwpf.usermodel.XWPFTableCell
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
 import java.io.IOException
-import java.math.BigInteger
 import java.util.*
 
 
@@ -25,18 +26,21 @@ class WordDocumentGenerator {
 
     private lateinit var documents: List<XWPFDocument>
 
-    //Hex #'s used for the colors
-    private val greyColor = "595959"
-    private val tableGreyColor = "D9D9D9"
-    private val greenColor = "70ad47"
-    private val tableGreenColor = "469B43"
-    private val blackColor = "000000"
-    private val whiteColor = "ffffff"
+    companion object {
+        //Hex #'s used for the colors
+        private val greyColor = "595959"
+        private val tableGreyColor = "D9D9D9"
+        val greenColor = "70ad47"
+        val tableGreenColor = "469B43"
+        val blackColor = "000000"
+        val whiteColor = "ffffff"
 
-    private val fontAgencyFB = "Agency FB"
-    private val fontUnivers = "Univers LT Std 39 Thin UltraCn"
+        val fontAgencyFB = "Agency FB"
+        private val fontUnivers = "Univers LT Std 39 Thin UltraCn"
 
-    private val manuallyGeneratedValue = "INSERTME"
+        private val manuallyGeneratedValue = "INSERTME"
+    }
+
 
 
     /** Triggers the document generation for each audit and saves documents to appropriate place **/
@@ -87,7 +91,7 @@ class WordDocumentGenerator {
             generateLightingContractorPage(document, value.lighting)
         }
 
-        addPageNumbers(document)
+        document.addPageNumbers()
 
         writeDocument(value, document)
 
@@ -191,7 +195,7 @@ class WordDocumentGenerator {
                 "improved profit margins,",
                 "increased thermal comfort in your building, and",
                 "more control over how energy is consumed.")
-        createBullets(document, bullets1, 12, greyColor, false, false)
+        document.createBullets(bullets1, fontColor = greyColor)
 
         if (values.building.buildingTotalCost > 5000) {
             val qualifyP = document.createParagraph()
@@ -248,7 +252,7 @@ class WordDocumentGenerator {
                         "Checking and replacing filters",
                         "Charging the refrigerant",
                         "Tightening belts (if applicable)")
-        createBullets(document, hvacBullets, 12, blackColor, false, false)
+        document.createBullets(hvacBullets)
 
         document.createNormalParagraph(
                         "If your HVAC technician is not checking all of these components or you do not "
@@ -274,7 +278,7 @@ class WordDocumentGenerator {
                         "More consistent temperature throughout the space",
                         "Better for the environment"
                 )
-                createBullets(document, hvacBullets, 12, blackColor, false, false)
+                document.createBullets(hvacBullets)
             }
 
             if (instance.age <= 15 && instance.quantity > 1) {
@@ -316,7 +320,7 @@ class WordDocumentGenerator {
                     "Reduced energy consumption",
                     "More control over temperature settings",
                     "Better for the environment")
-            createBullets(document, hvacBullets, 12, blackColor, false, false)
+            document.createBullets(hvacBullets)
         }
 
         createHvacTable(document, hvac, building)
@@ -409,7 +413,7 @@ class WordDocumentGenerator {
         document.createNormalParagraph("Benefits of LED bulbs include:")
 
         val bullets = arrayOf("Lower maintenance costs", "Less air-conditioning required", "Happier customers")
-        createBullets(document, bullets, 12, blackColor, false, false)
+        document.createBullets(bullets)
 
         document.createNormalParagraph("Replacing all of your non-LED bulbs and adding controls will "
                 + "cost approximately $${lights.totalCost.format(0)} but will result in a minimum "
@@ -424,12 +428,12 @@ class WordDocumentGenerator {
                 + "Overall, implementing the LED retrofit translates to a minimum NPV of "
                 + "$${lights.netPresentValue.format(0)}. We strongly recommend you replace "
                 + "all non-LED bulbs and ensure the bathroom lights are off at the end of the day.",
-                true)
+                addBreakAfter = true)
 
         if (lights.lightingRows.any{it.isCeilingOver10Feet.toLowerCase() == "yes"}) {
             document.createNormalParagraph(
                     "There is an additional $500 fee to replace lighting with a ceiling over 10 feet to rent the lift needed.",
-                    true)
+                    addBreakAfter = true)
         }
 
         document.createNormalParagraph("Please see the next page for specifics of each measure. "
@@ -564,82 +568,49 @@ class WordDocumentGenerator {
     /** generate tables */
 
     private fun createEnergySavingsTable(document: XWPFDocument, values: PreparedForDocument) {
-      val table = document.createTable(15, 2)
-
+        val table = document.createTable(15, 2)
         var currentRow = 0
 
-        fun generateHeaderRow(cell1: String, cell2: String) {
-            val row0 = table.getRow(currentRow)
-            val c0r0 = row0.getCell(0)
-            c0r0.color = tableGreenColor
-            val pc0r0 = c0r0.paragraphs[0]
-            pc0r0.alignment = ParagraphAlignment.CENTER
-            val rc0r0 = pc0r0.createRun()
-            rc0r0.fontFamily = fontAgencyFB
-            rc0r0.isBold = true
-            rc0r0.color = whiteColor
-            rc0r0.setText(cell1)
+        table.generateFinancialComponentsHeaderRow()
+        currentRow += 1
 
-            val c1r0 = row0.getCell(1)
-            c1r0.color = tableGreenColor
-            val pc1r0 = c1r0.paragraphs[0]
-            pc1r0.alignment = ParagraphAlignment.CENTER
-            val rc1r0 = pc1r0.createRun()
-            rc1r0.fontFamily = fontAgencyFB
-            rc1r0.isBold = true
-            rc1r0.color = whiteColor
-            rc1r0.setText(cell2)
-
-            currentRow += 1
-        }
-
-        fun generateInfoRow(cell1: String, cell2: String) {
-            val row = table.getRow(currentRow)
-            val cell0 = row.getCell(0)
-            val para0 = cell0.paragraphs[0]
-            val para0run = para0.createRun()
-            para0run.fontFamily = fontAgencyFB
-            para0run.isBold = true
-            para0run.setText(cell1)
-
-            val cell1 = row.getCell(1)
-            val para1 = cell1.paragraphs[0]
-            para1.alignment = ParagraphAlignment.CENTER
-            val para1run = para1.createRun()
-            para1run.fontFamily = fontAgencyFB
-            para1run.setText(cell2)
-
-            currentRow += 1
-        }
-
-        // Header row
-        generateHeaderRow("Financial Components", "Financial Overview")
-
-        generateInfoRow(
+        table.generateFinancialComponentsDetailRow(
                 "Financial Overview",
-                "\$${values.building.buildingTotalSavings.format(0)}")
+                "\$${values.building.buildingTotalSavings.format(0)}",
+                currentRow)
+        currentRow += 1
 
         if (values.preAudit.electrificationSavings > 0.0) {
-            generateInfoRow(
+            table.generateFinancialComponentsDetailRow(
                 "Electrification Savings ($/yr)",
-                "\$${values.preAudit.electrificationSavings.format(0)}")
+                "\$${values.preAudit.electrificationSavings.format(0)}",
+                currentRow)
+            currentRow += 1
         }
 
-        generateInfoRow(
+        table.generateFinancialComponentsDetailRow(
                 "Implementation Cost (\$)",
-                "\$${values.building.buildingTotalCost.format(0)}")
+                "\$${values.building.buildingTotalCost.format(0)}",
+                currentRow)
+        currentRow += 1
 
-        generateInfoRow(
+        table.generateFinancialComponentsDetailRow(
                 "    Lighting (\$)",
-                "\$${values.lighting?.totalCost?.format(0) ?: "N/A"}")
+                "\$${values.lighting?.totalCost?.format(0) ?: "N/A"}",
+                currentRow)
+        currentRow += 1
 
-        generateInfoRow(
+        table.generateFinancialComponentsDetailRow(
                 "    HVAC (\$)",
-                "\$${values.building.hvacTotalCost.format(0)}")
+                "\$${values.building.hvacTotalCost.format(0)}",
+                currentRow)
+        currentRow += 1
 
-        generateInfoRow(
+        table.generateFinancialComponentsDetailRow(
                 "    Plug Load (\$)",
-                "\$${values.building.equipmentTotalCost.format(0)}")
+                "\$${values.building.equipmentTotalCost.format(0)}",
+                currentRow)
+        currentRow += 1
 
         // seperator
         val separatorRow = table.getRow(currentRow)
@@ -647,36 +618,50 @@ class WordDocumentGenerator {
         separatorRow.getCell(1).color = tableGreyColor
         currentRow += 1
 
-        generateInfoRow(
+        table.generateFinancialComponentsDetailRow(
                 "Net Present Value (NPV)",
-                values.building.buildingNetPresentValue.format(0))
+                values.building.buildingNetPresentValue.format(0),
+                currentRow)
+        currentRow += 1
 
-        generateInfoRow(
+        table.generateFinancialComponentsDetailRow(
                 "    Lighting (NVP)",
-                values.lighting?.netPresentValue?.format(0) ?: "N/A")
+                values.lighting?.netPresentValue?.format(0) ?: "N/A",
+                currentRow)
+        currentRow += 1
 
-        generateInfoRow(
+        table.generateFinancialComponentsDetailRow(
                 "    HVAC (NPV)",
-                values.hvac?.netPresentValue?.format(0) ?: "N/A")
+                values.hvac?.netPresentValue?.format(0) ?: "N/A",
+                currentRow)
+        currentRow += 1
 
-        generateInfoRow(
+        table.generateFinancialComponentsDetailRow(
                 "    Water Heater (NPV)",
-                values.waterHeater?.netPresentValue?.format(0) ?:"N/A")
+                values.waterHeater?.netPresentValue?.format(0) ?:"N/A",
+                currentRow)
+        currentRow += 1
 
-        generateInfoRow(
+        table.generateFinancialComponentsDetailRow(
                 "    Refrigeration (NPV)",
-                values.refrigeration?.netPresentValue?.format(0) ?: "N/A")
+                values.refrigeration?.netPresentValue?.format(0) ?: "N/A",
+                currentRow)
+        currentRow += 1
 
-        generateInfoRow(
+        table.generateFinancialComponentsDetailRow(
                 "    Motors (NPV)",
-                values.motor?.netPresentValue?.format(0) ?: "N/A")
+                values.motor?.netPresentValue?.format(0) ?: "N/A",
+                currentRow)
+        currentRow += 1
 
-        generateInfoRow(
+        table.generateFinancialComponentsDetailRow(
                 "    Other Equipment (NPV)",
-                values.equipment?.totalNetPresentValue?.format(0) ?: "N/A")
+                values.equipment?.totalNetPresentValue?.format(0) ?: "N/A",
+                currentRow)
+        currentRow += 1
 
-        fitTable(table, 4500)
-        centerTable(table)
+        table.fitTable(4500)
+        table.centerTable()
     }
 
     private fun createLightingTable1(document: XWPFDocument, lights: LightingValues) {
@@ -773,8 +758,8 @@ class WordDocumentGenerator {
         rc1r5.fontFamily = fontAgencyFB
         rc1r5.setText(lights.paybackMonth.format(0))
 
-        centerTable(table)
-        fitTable(table, 4000)
+        table.centerTable()
+        table.fitTable(4000)
     }
 
     private fun createLightingTable3(document: XWPFDocument, lights: LightingValues) {
@@ -884,7 +869,7 @@ class WordDocumentGenerator {
             rcell12.setText(if (isFirst) "Payback Period (years)" else rowItem.paybackPeriodYears.format(1))
         }
 
-        centerTable(table)
+        table.centerTable()
     }
 
     private fun createHvacTable(document: XWPFDocument, hvac: HvacValues, building: BuildingValues) {
@@ -982,8 +967,8 @@ class WordDocumentGenerator {
         rc1r5.fontFamily = fontAgencyFB
         rc1r5.setText(building.hvacPaybackMonth.format(0))
 
-        centerTable(table)
-        fitTable(table, 4000)
+        table.centerTable()
+        table.fitTable(4000)
     }
 
     private fun createWaterHeaterTable(document: XWPFDocument, waterheater: WaterHeaterValues) {
@@ -1081,8 +1066,8 @@ class WordDocumentGenerator {
         rc1r5.fontFamily = fontAgencyFB
         rc1r5.setText(waterheater.paybackMonth.format(0))
 
-        centerTable(table)
-        fitTable(table, 4000)
+        table.centerTable()
+        table.fitTable(4000)
     }
 
     private fun generateElectrictyCalculationTable(document: XWPFDocument, values: PreparedForDocument) {
@@ -1274,7 +1259,7 @@ class WordDocumentGenerator {
         var rc4r6 = pc4r6.createRun()
         rc4r6.setText("${values.building?.postTotalkWh?.format(2) ?: "0.00"}")
 
-        centerTable(table)
+        table.centerTable()
     }
 
     private fun generateLightContractorTable(document: XWPFDocument, lights: LightingValues) {
@@ -1310,120 +1295,9 @@ class WordDocumentGenerator {
             generateCell(6, if (isFirst) "Ceiling Above 10ft." else rowItem.isCeilingOver10Feet)
         }
 
-        centerTable(table)
-        fitTable(table, 4500)
+        table.centerTable()
+        table.fitTable(4500)
     }
-
-    // doc utils
-
-    /**
-     * creates a paragraph in the given document [this]
-     * with normal formatting
-     *
-     * @param text paragraph text
-     * @param addBreak if a line break should be added after paragraph text, defaults to false
-     */
-    fun XWPFDocument.createNormalParagraph(text: String, addBreak: Boolean = false) {
-        val paragraph = this.createParagraph()
-        paragraph.spacingBetween = 1.5
-        val run = paragraph.createRun()
-        run.fontFamily = fontAgencyFB
-        run.fontSize = 12
-        run.setText(text)
-
-        if (addBreak)
-            run.addBreak()
-    }
-
-    // table utils
-    private fun createBullets(document: XWPFDocument, items: Array<String>, size: Int, color: String, isBold: Boolean, isItalic: Boolean) {
-        val cTAbstractNum = CTAbstractNum.Factory.newInstance()
-        cTAbstractNum.abstractNumId = BigInteger.valueOf(0)
-        val cTLvl = cTAbstractNum.addNewLvl()
-        cTLvl.addNewLvlText().setVal("•")
-
-        val abstractNum = XWPFAbstractNum(cTAbstractNum)
-        val numbering = document.createNumbering()
-        val abstractNumID = numbering.addAbstractNum(abstractNum)
-        val numID = numbering.addNum(abstractNumID)
-
-        for (item in items) {
-            val bulletedPara = document.createParagraph()
-            bulletedPara.numID = numID
-            bulletedPara.spacingBetween = 1.5
-            val run = bulletedPara.createRun()
-            run.fontFamily = fontAgencyFB
-            run.fontSize = size
-            run.color = color
-            if (isBold) {
-                run.isBold = true
-            }
-            if (isItalic) {
-                run.isItalic = true
-            }
-            run.setText(item)
-        }
-    }
-
-    private fun addPageNumbers(document: XWPFDocument) {
-        val footer = document.createFooter(HeaderFooterType.DEFAULT);
-
-        var paragraph = footer.getParagraphArray(0)
-        if (paragraph == null) paragraph = footer.createParagraph()
-        paragraph.alignment = ParagraphAlignment.RIGHT
-
-        val run = paragraph.createRun()
-        run.setText("Page ")
-        paragraph.ctp.addNewFldSimple().instr = "PAGE |\\* ARABIC MERGEFORMAT"
-    }
-
-    private fun mergeCellHorizontally(table: XWPFTable, row: Int, fromCol: Int, toCol: Int) {
-        for (colIndex in fromCol..toCol) {
-            val cell = table.getRow(row).getCell(colIndex)
-            val hmerge = CTHMerge.Factory.newInstance()
-            if (colIndex == fromCol) {
-                // The first merged cell is set with RESTART merge value
-                hmerge.setVal(STMerge.RESTART)
-            } else {
-                // Cells which join (merge) the first one, are set with CONTINUE
-                hmerge.setVal(STMerge.CONTINUE)
-                // and the content should be removed
-                for (i in cell.paragraphs.size downTo 1) {
-                    cell.removeParagraph(0)
-                }
-                cell.addParagraph()
-            }
-            // Try getting the TcPr. Not simply setting an new one every time.
-            var tcPr: CTTcPr? = cell.ctTc.tcPr
-            if (tcPr === null) {
-                // only set an new TcPr if there is not one already
-                tcPr = CTTcPr.Factory.newInstance()
-                tcPr!!.hMerge = hmerge
-                cell.ctTc.tcPr = tcPr
-            } else {
-                tcPr.hMerge = hmerge
-            }
-        }
-    }
-
-    private fun centerTable(table: XWPFTable) {
-        val t = table.ctTbl
-        val pr = t.tblPr
-        val jc = pr.addNewJc()
-        jc.setVal(STJc.CENTER)
-        pr.jc = jc
-    }
-
-    private fun fitTable(table: XWPFTable, width: Long) {
-        val ctTbl = table.ctTbl
-        val properties = ctTbl.tblPr
-        val tblW = properties.tblW
-        tblW.type = STTblWidth.PCT
-        tblW.w = BigInteger.valueOf(width)
-        properties.tblW = tblW
-        ctTbl.tblPr = properties
-    }
-
 
 
     /**  ApachePOI setup */
