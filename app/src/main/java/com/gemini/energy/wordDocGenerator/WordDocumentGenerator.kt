@@ -558,7 +558,9 @@ class WordDocumentGenerator {
         generateLightContractorTable(document, lights)
     }
 
-    // generate tables
+
+    /** generate tables */
+
     private fun createEnergySavingsTable(document: XWPFDocument, values: PreparedForDocument) {
       val table = document.createTable(15, 2)
 
@@ -1421,89 +1423,9 @@ class WordDocumentGenerator {
     }
 
 
-    // electricty rate calculations
-    fun electrictyCharge(structure: String, kW: Double, kWh: Double): Double {
-        if (structure == "F") {
-            println("calculate schedule F")
-            return calculateScheduleF(kW, kWh)
-        }
-        else if (structure == "F TOD") {
-            println("calculate schedule F TOD")
-            return calculateScheduleFTOD(kW, kWh)
-        }
-        else if (structure == "H") {
-            println("calculate schedule H")
-            return calculateScheduleH(kW, kWh)
-        }
-        return 0.0
-    }
 
-    fun calculateScheduleF(kW: Double, kWh: Double): Double {
-        var totalDemand = 0.0
-        for (i in 1..kW.toInt()) {
-            if (i <= 15) {
-                totalDemand += 0.0
-            }
-            else {
-                totalDemand += 9.50
-            }
-        }
-        println("total demand is ${totalDemand}")
+    /**  ApachePOI setup */
 
-        var totalEnergy = 0.0
-        for (i in 1..kWh.toInt()) {
-            if (i <= 2500) {
-                totalEnergy += 0.1288
-            }
-            else if (i <= 1000) {
-                totalEnergy += 0.0918
-            }
-            else if (i <= 50000) {
-                totalEnergy += 0.077
-            }
-            else {
-                totalEnergy += 0.066
-            }
-        }
-        println("total energy is ${totalEnergy}")
-
-        var totalCost = totalDemand + totalEnergy
-        println("cost 1 is ${totalCost}")
-
-        if (kW >= 100) {
-            var otherPotentialCost = kWh * 0.1697
-            println("cost 2 is ${otherPotentialCost}")
-            if (totalCost > otherPotentialCost) {
-                //        totalCost = otherPotentialCost
-                return otherPotentialCost
-            }
-        }
-        return totalCost
-    }
-
-    fun calculateScheduleFTOD(kW: Double, kWh: Double): Double {
-        // calculating based on assumption that all hours are off peak
-        val totalDemand = kW * 4.95
-        println("totalDemand $totalDemand")
-        val totalEnergy = kWh * 0.05
-        println("totalEnergy $totalEnergy")
-        val totalCost = totalDemand + totalEnergy
-        println("totalCost $totalCost")
-        return totalCost
-    }
-
-    fun calculateScheduleH(kW: Double, kWh: Double): Double {
-        // calculating based on assumption that all hours are off peak
-        val totalDemand = kW * 5.20
-        println("totalDemand $totalDemand")
-        val totalEnergy = kWh * 0.0449
-        println("totalEnergy $totalEnergy")
-        val totalCost = totalDemand + totalEnergy
-        println("totalCost $totalCost")
-        return totalCost
-    }
-
-    // ApachePOI setup
     private fun setupNeededForApacheToWork() {
         System.setProperty("org.apache.poi.javax.xml.stream.XMLInputFactory", "com.fasterxml.aalto.stax.InputFactoryImpl")
         System.setProperty("org.apache.poi.javax.xml.stream.XMLOutputFactory", "com.fasterxml.aalto.stax.OutputFactoryImpl")
