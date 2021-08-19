@@ -59,11 +59,7 @@ class WordDocumentGenerator {
     private fun generateDocument(value: PreparedForDocument, document: XWPFDocument): XWPFDocument {
         generateFirstPage(document, value.preAudit)
 
-        generateElectrictyCalculationPage(document, value)
-
-        generateEnergySavingPotentialPage(
-                document,
-                value)
+        generateEnergySavingPotentialPage(document, value)
 
         if (value.lighting != null) {
             generateLightingSavingsPage(document, value.lighting)
@@ -546,43 +542,6 @@ class WordDocumentGenerator {
         r1p2.addBreak()
         r1p2.addBreak()
         r1p2.setText("${preAudit.businessname}is on the ${preAudit.gasstructure} ${preAudit.utilitycompany} gas rate schedule and for above stated time period, ${preAudit.businessname} used $manuallyGeneratedValue therms at a cost of $$manuallyGeneratedValue.")
-    }
-
-    // @Anthony this function generates a page in the word doc that displays the latest calculations you requested
-    private fun generateElectrictyCalculationPage(document: XWPFDocument, values: PreparedForDocument) {
-        val p1 = document.createParagraph()
-        p1.spacingBetween = 1.5
-        p1.isPageBreak = true
-        val r1p1 = p1.createRun()
-        r1p1.fontFamily = fontAgencyFB
-        r1p1.isBold = true
-        r1p1.fontSize = 16
-        r1p1.setText("Electricity Calculations")
-        r1p1.addBreak()
-
-        val p2 = document.createParagraph()
-        p2.spacingBetween = 1.5
-        val r1p2 = p2.createRun()
-        r1p2.fontFamily = fontAgencyFB
-        r1p2.setText("Rates from https://www.roanokeelectric.com/about-us/resources/rates/")
-        r1p2.addCarriageReturn()
-        val r2p2 = p2.createRun()
-        r2p2.fontFamily = fontAgencyFB
-        r2p2.setText("Building is using schedule ${values.preAudit.electricstructure}")
-
-        generateElectrictyCalculationTable(document, values)
-
-        val p3 = document.createParagraph()
-        p3.spacingBetween = 1.5
-        val r1p3 = p3.createRun()
-        r1p3.fontFamily = fontAgencyFB
-        r1p3.setText("Given current building aggregation, current total charge is $${electrictyCharge(values.preAudit.electricstructure, values.building.currentTotalkW, values.building.currentTotalkWh).format(2)}")
-
-        val p4 = document.createParagraph()
-        p4.spacingBetween = 1.5
-        val r1p4 = p4.createRun()
-        r1p4.fontFamily = fontAgencyFB
-        r1p4.setText("Given current building aggregation, current total charge is $${electrictyCharge(values.preAudit.electricstructure, values.building.postTotalkW, values.building.postTotalkW).format(2)}")
     }
 
     private fun generateLightingContractorPage(document: XWPFDocument, lights: LightingValues) {
