@@ -555,7 +555,7 @@ class WordDocumentGenerator {
 
     // generate tables
     private fun createEnergySavingsTable(document: XWPFDocument, values: PreparedForDocument) {
-        val table = document.createTable(15, 2)
+        val table = document.createTable(19, 2)
         var currentRow = 0
 
         // Header row
@@ -583,6 +583,24 @@ class WordDocumentGenerator {
         table.generateFinancialComponentsDetailRow(
                 "    HVAC (\$)",
                 "\$${values.building.hvacTotalCost.format(0)}",
+                currentRow)
+        currentRow += 1
+
+        table.generateFinancialComponentsDetailRow(
+                "    Water Heater (\$)",
+                "\$${values.building.waterHeaterTotalCost.format(0)}",
+                currentRow)
+        currentRow += 1
+
+        table.generateFinancialComponentsDetailRow(
+                "    Refrigeration (\$)",
+                "\$${values.building.refrigerationTotalCost.format(0)}",
+                currentRow)
+        currentRow += 1
+
+        table.generateFinancialComponentsDetailRow(
+                "    Motors (\$)",
+                "\$${values.motor?.totalCost?.format(0) ?: "N/A"}",
                 currentRow)
         currentRow += 1
 
