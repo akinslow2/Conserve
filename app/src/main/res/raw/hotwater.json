@@ -78,7 +78,7 @@
         },
         {
           "index": 19,
-          "hint": "80",
+          "hint": "Rq if Gas (80)",
           "dataType": "introw",
           "defaultValues": "",
           "param": "Thermal Efficiency",
@@ -87,7 +87,7 @@
         },
         {
           "index": 110,
-          "hint": "99",
+          "hint": "Rq if Electricity (99)",
           "dataType": "decimalrow",
           "defaultValues": "",
           "param": "Heating Electric Efficiency",
