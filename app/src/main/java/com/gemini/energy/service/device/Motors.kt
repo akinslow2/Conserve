@@ -61,8 +61,9 @@ class Motors(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRate
     /**
      * Suggested Alternative
      * */
-    private var alternateHp = 0.0
-    private var alternateEfficiency = 0.0
+//    @anthony: alternate needed for HP and Efficiency
+    private var alternateHp = 100.0
+    private var alternateEfficiency = 100.0
 
     private var peakHours = 0.0
     private var partPeakHours = 0.0
@@ -76,10 +77,6 @@ class Motors(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRate
             hp = featureData["Horsepower (HP)"]!! as Double
             efficiency = featureData["Efficiency"]!! as Double
 
-            alternateHp = featureData["Alternate Horsepower (HP)"]!! as Double
-            alternateEfficiency = featureData["Alternate Efficiency"]!! as Double
-
-            peakHours = featureData["Peak Hours"]!! as Double
             peakHours = featureData["Peak Hours"]!! as Double
             partPeakHours = featureData["Part Peak Hours"]!! as Double
             offPeakHours = featureData["Off Peak Hours"]!! as Double
