@@ -10,16 +10,15 @@ import com.gemini.energy.format
 import com.gemini.energy.presentation.audit.DropBox
 import com.gemini.energy.service.device.EBase
 import com.gemini.energy.wordDocGenerator.models.*
-import com.gemini.energy.wordDocGenerator.utils.generateFinancialComponentsDetailRow
-import com.gemini.energy.wordDocGenerator.utils.generateFinancialComponentsHeaderRow
-import org.apache.poi.wp.usermodel.HeaderFooterType
-import org.apache.poi.xwpf.usermodel.*
-import org.openxmlformats.schemas.wordprocessingml.x2006.main.*
+import com.gemini.energy.wordDocGenerator.utils.*
+import org.apache.poi.xwpf.usermodel.ParagraphAlignment
+import org.apache.poi.xwpf.usermodel.VerticalAlign
+import org.apache.poi.xwpf.usermodel.XWPFDocument
+import org.apache.poi.xwpf.usermodel.XWPFTableCell
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
 import java.io.IOException
-import java.math.BigInteger
 import java.util.*
 
 
@@ -94,7 +93,7 @@ class WordDocumentGenerator {
             generateLightingContractorPage(document, value.lighting)
         }
 
-        addPageNumbers(document)
+        document.addPageNumbers()
 
         writeDocument(value, document)
 
@@ -201,7 +200,7 @@ class WordDocumentGenerator {
                 " Overall, you can expect:")
 
         val bullets1 = arrayOf("reduced energy costs,", "improved profit margins,", "increased thermal comfort in your building, and", "more control over how energy is consumed.")
-        createBullets(document, bullets1, 12, greyColor, false, false)
+        document.createBullets(bullets1, fontColor = greyColor)
 
         createEnergySavingsTable(document, values)
     }
@@ -250,7 +249,7 @@ class WordDocumentGenerator {
                     "Checking and replacing filters",
                     "Charging the refrigerant",
                     "Tightening belts (if applicable)")
-        createBullets(document, haasMaintenanceBullets, 12, blackColor, false, false)
+        document.createBullets(haasMaintenanceBullets)
 
         val p5 = document.createParagraph()
         val r1p5 = p5.createRun()
@@ -285,7 +284,7 @@ class WordDocumentGenerator {
                         "More consistent temperature throughout the space",
                         "Better for the environment"
                 )
-                createBullets(document, hvacBullets, 12, blackColor, false, false)
+                document.createBullets(hvacBullets)
             }
             if (instance.age < 15 && instance.quantity > 1) {
                 val hvacP1 = document.createParagraph()
@@ -303,7 +302,7 @@ class WordDocumentGenerator {
                         "Charging the refrigerant",
                         "Tightening belts (if applicable)"
                 )
-                createBullets(document, hvacBullets, 12, blackColor, false, false)
+                document.createBullets(hvacBullets)
 
                 val hvacP2 = document.createParagraph()
                 hvacP2.spacingBetween = 1.5
@@ -328,7 +327,7 @@ class WordDocumentGenerator {
                         "Charging the refrigerant",
                         "Tightening belts (if applicable)"
                 )
-                createBullets(document, hvacBullets, 12, blackColor, false, false)
+                document.createBullets(hvacBullets)
 
                 val hvacP2 = document.createParagraph()
                 hvacP2.spacingBetween = 1.5
@@ -365,7 +364,7 @@ class WordDocumentGenerator {
                     "Reduced maintenance costs",
                     "More control over temperature settings",
                     "Better for the environment")
-            createBullets(document, hvacBullets, 12, blackColor, false, false)
+            document.createBullets(hvacBullets)
         }
 
         createHvacTable(document, hvac, building)
@@ -460,7 +459,7 @@ class WordDocumentGenerator {
         r1p3.setText("Benefits of LED bulbs include:")
 
         val bullets = arrayOf("Lower maintenance costs", "Less air-conditioning required", "Happier customers")
-        createBullets(document, bullets, 12, blackColor, false, false)
+        document.createBullets(bullets)
 
         val p4 = document.createParagraph()
         p4.spacingBetween = 1.5
@@ -736,8 +735,8 @@ class WordDocumentGenerator {
                 currentRow)
         currentRow +=1
 
-        fitTable(table, 4500)
-        centerTable(table)
+        table.fitTable(4500)
+        table.centerTable()
     }
 
     private fun createLightingTable1(document: XWPFDocument, lights: LightingValues) {
@@ -834,8 +833,8 @@ class WordDocumentGenerator {
         rc1r5.fontFamily = fontAgencyFB
         rc1r5.setText(lights.paybackMonth.format(0))
 
-        centerTable(table)
-        fitTable(table, 4000)
+        table.centerTable()
+        table.fitTable(4000)
     }
 
     private fun createLightingTable3(document: XWPFDocument, lights: LightingValues) {
@@ -958,8 +957,8 @@ class WordDocumentGenerator {
             rcell12.setText(if (isFirst) "Payback Period (years)" else rowItem.paybackPeriodYears.format(1))
         }
 
-        centerTable(table)
-        fitTable(table, 4000)
+        table.centerTable()
+        table.fitTable(4000)
     }
 
     private fun generateLightContractorTable(document: XWPFDocument, lights: LightingValues) {
@@ -1033,8 +1032,8 @@ class WordDocumentGenerator {
             rcell6.setText(if (isFirst) "Ceiling Above 10ft." else rowItem.isCeilingOver10Feet)
         }
 
-        centerTable(table)
-        fitTable(table, 4500)
+        table.centerTable()
+        table.fitTable(4500)
     }
 
     private fun createHvacTable(document: XWPFDocument, hvac: HvacValues, building: BuildingValues) {
@@ -1132,8 +1131,8 @@ class WordDocumentGenerator {
         rc1r5.fontFamily = fontAgencyFB
         rc1r5.setText(building.hvacPaybackMonth.format(0))
 
-        centerTable(table)
-        fitTable(table, 4000)
+        table.centerTable()
+        table.fitTable(4000)
     }
 
     private fun createWaterHeaterTable(document: XWPFDocument, waterheater: WaterHeaterValues) {
@@ -1231,8 +1230,8 @@ class WordDocumentGenerator {
         rc1r5.fontFamily = fontAgencyFB
         rc1r5.setText(waterheater.paybackMonth.format(0))
 
-        centerTable(table)
-        fitTable(table, 4000)
+        table.centerTable()
+        table.fitTable(4000)
     }
 
     private fun generateElectrictyCalculationTable(document: XWPFDocument, values: PreparedForDocument) {
@@ -1424,99 +1423,9 @@ class WordDocumentGenerator {
         var rc4r6 = pc4r6.createRun()
         rc4r6.setText("${values.building?.postTotalkWh?.format(2) ?: "0.00"}")
 
-        centerTable(table)
+        table.centerTable()
     }
 
-
-    /** table utils */
-
-    private fun createBullets(document: XWPFDocument, items: Array<String>, size: Int, color: String, isBold: Boolean, isItalic: Boolean) {
-        val cTAbstractNum = CTAbstractNum.Factory.newInstance()
-        cTAbstractNum.abstractNumId = BigInteger.valueOf(0)
-        val cTLvl = cTAbstractNum.addNewLvl()
-        cTLvl.addNewLvlText().setVal("•")
-
-        val abstractNum = XWPFAbstractNum(cTAbstractNum)
-        val numbering = document.createNumbering()
-        val abstractNumID = numbering.addAbstractNum(abstractNum)
-        val numID = numbering.addNum(abstractNumID)
-
-        for (item in items) {
-            val bulletedPara = document.createParagraph()
-            bulletedPara.numID = numID
-            bulletedPara.spacingBetween = 1.5
-            val run = bulletedPara.createRun()
-            run.fontFamily = fontAgencyFB
-            run.fontSize = size
-            run.color = color
-            if (isBold) {
-                run.isBold = true
-            }
-            if (isItalic) {
-                run.isItalic = true
-            }
-            run.setText(item)
-        }
-    }
-
-    private fun addPageNumbers(document: XWPFDocument) {
-        val footer = document.createFooter(HeaderFooterType.DEFAULT);
-
-        var paragraph = footer.getParagraphArray(0)
-        if (paragraph == null) paragraph = footer.createParagraph()
-        paragraph.alignment = ParagraphAlignment.RIGHT
-
-        val run = paragraph.createRun()
-        run.setText("Page ")
-        paragraph.ctp.addNewFldSimple().instr = "PAGE |\\* ARABIC MERGEFORMAT"
-    }
-
-    private fun mergeCellHorizontally(table: XWPFTable, row: Int, fromCol: Int, toCol: Int) {
-        for (colIndex in fromCol..toCol) {
-            val cell = table.getRow(row).getCell(colIndex)
-            val hmerge = CTHMerge.Factory.newInstance()
-            if (colIndex == fromCol) {
-                // The first merged cell is set with RESTART merge value
-                hmerge.setVal(STMerge.RESTART)
-            } else {
-                // Cells which join (merge) the first one, are set with CONTINUE
-                hmerge.setVal(STMerge.CONTINUE)
-                // and the content should be removed
-                for (i in cell.paragraphs.size downTo 1) {
-                    cell.removeParagraph(0)
-                }
-                cell.addParagraph()
-            }
-            // Try getting the TcPr. Not simply setting an new one every time.
-            var tcPr: CTTcPr? = cell.ctTc.tcPr
-            if (tcPr === null) {
-                // only set an new TcPr if there is not one already
-                tcPr = CTTcPr.Factory.newInstance()
-                tcPr!!.hMerge = hmerge
-                cell.ctTc.tcPr = tcPr
-            } else {
-                tcPr.hMerge = hmerge
-            }
-        }
-    }
-
-    private fun centerTable(table: XWPFTable) {
-        val t = table.ctTbl
-        val pr = t.tblPr
-        val jc = pr.addNewJc()
-        jc.setVal(STJc.CENTER)
-        pr.jc = jc
-    }
-
-    private fun fitTable(table: XWPFTable, width: Long) {
-        val ctTbl = table.ctTbl
-        val properties = ctTbl.tblPr
-        val tblW = properties.tblW
-        tblW.type = STTblWidth.PCT
-        tblW.w = BigInteger.valueOf(width)
-        properties.tblW = tblW
-        ctTbl.tblPr = properties
-    }
 
 
     /**  ApachePOI setup */
