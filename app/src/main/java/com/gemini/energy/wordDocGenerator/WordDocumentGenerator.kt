@@ -511,14 +511,14 @@ class WordDocumentGenerator {
         r1p1.isBold = true
         r1p1.isItalic = true
         r1p1.fontSize = 20
-        r1p1.setText("Equipment Savings")
+        r1p1.setText("Kitchen Equipment Savings")
 
         val p2 = document.createParagraph()
         p2.spacingBetween = 1.5
         val r1p2 = p2.createRun()
         r1p2.fontFamily = fontAgencyFB
         r1p2.fontSize = 18
-        r1p2.setText("Implementation of recommended Equipment Savings will result in a minimum savings of ")
+        r1p2.setText("Implementation of recommended Kitchen Equipment Savings will result in a minimum savings of ")
         val r2p2 = p2.createRun()
         r2p2.fontFamily = fontAgencyFB
         r2p2.isBold = true
@@ -700,7 +700,7 @@ class WordDocumentGenerator {
         currentRow += 1
 
         table.generateFinancialComponentsDetailRow(
-                "    Plug Load (\$)",
+                "    Kitchen Equipment (\$)",
                 "\$${values.building.equipmentTotalCost.format(0)}",
                 currentRow)
         currentRow +=1
@@ -748,7 +748,7 @@ class WordDocumentGenerator {
         currentRow +=1
 
         table.generateFinancialComponentsDetailRow(
-                "    Other Equipment (NPV)",
+                "    Kitchen Equipment (NPV)",
                 values.equipment?.netPresentValue?.format(0) ?: "N/A",
                 currentRow)
         currentRow +=1
@@ -1392,7 +1392,7 @@ class WordDocumentGenerator {
         val c0r5 = row5.getCell(0)
         val pc0r5 = c0r5.paragraphs[0]
         val rc0r5 = pc0r5.createRun()
-        rc0r5.setText("Other Equipment")
+        rc0r5.setText("Kitchen Equipment")
 
         val c1r5 = row5.getCell(1)
         val pc1r5 = c1r5.paragraphs[0]
