@@ -6,7 +6,11 @@ import com.gemini.energy.wordDocGenerator.AuditComponents
 import com.gemini.energy.wordDocGenerator.SorterForWordDocumentGenerator
 import com.google.gson.JsonArray
 
-data class MotorValues(val netPresentValue: Double) {
+data class MotorValues(
+        val netPresentValue: Double,
+        val totalSavings: Double,
+        val totalCost: Double
+) {
     companion object {
         fun tryCreate(audit: AuditComponents): MotorValues? {
             if (!audit[SorterForWordDocumentGenerator.motors]!!.any()) {
@@ -36,7 +40,7 @@ data class MotorValues(val netPresentValue: Double) {
 
             val netPresentValue = (totalSavings * presentValueFactor) - totalCost
 
-            return MotorValues(netPresentValue)
+            return MotorValues(netPresentValue, totalSavings, totalCost)
         }
     }
 }
