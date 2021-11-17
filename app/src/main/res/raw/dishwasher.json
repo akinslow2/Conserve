@@ -81,7 +81,7 @@
           "hint": "",
           "dataType": "pickerinputrow",
           "defaultValues": "1:Gas,2:Electric",
-          "param": "Water Heater",
+          "param": "Heating Element",
           "validation": "mandatory",
           "id": "19"
         },
