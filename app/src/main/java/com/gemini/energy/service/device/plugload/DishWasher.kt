@@ -79,7 +79,7 @@ class DishWasher(computable: Computable<*>, utilityRateGas: UtilityRate, utility
             waterTemperature = featureData["Water Temperature (oF)"]!! as Int
             efficiency = featureData["Efficiency"]!! as Double
             idleEnergyRate = featureData["Idle Energy Rate"]!! as Double
-            waterHeater = featureData["Water Heater"]!! as String
+            waterHeater = featureData["Heating Element"]!! as String
             year = featureData["Year"]!! as Int
         } catch (e: Exception) {
             e.printStackTrace()
