@@ -181,14 +181,52 @@ data class BuildingValues(
                         (refrigeration?.postTotalkWh ?: 0.0) +
                         (motor?.postTotalkWh ?: 0.0)
 
+        //NEED TO UPDATE FOR TUCSON ELECTRIC POWER RATES FOUND HERE: https://www.tep.com/rates/
         private fun electrictyCharge(structure: String, kW: Double, kWh: Double): Double {
             return when (structure) {
                 "F" -> calculateScheduleF(kW, kWh)
                 "F TOD" -> calculateScheduleFTOD(kW, kWh)
                 "H" -> calculateScheduleH(kW, kWh)
+
+                //Tucson Electric Power
+                /*
+                "SGS TOU" -> calculateScheduleSGSTOU(kW, kWh)           //https://www.tep.com/sgs-tou/
+                "SGS Peak Demand" -> calculateScheduleSGSPD(kW, kWh)    //https://www.tep.com/sgs-peak-demand/
+                "SGS Demand TOU" -> calculateScheduleSGSDTOU(kW, kWh)   //https://www.tep.com/sgs-demand-tou/
+                "SGS Basic" -> calculateScheduleSGSB(kW, kWh)           //https://www.tep.com/sgs-basic/
+                "MGS" -> calculateScheduleMGS(kW, kWh)                  //https://www.tep.com/mgs/
+                "MGS TOU" -> calculateScheduleMGSTOU(kW, kWh)           //https://www.tep.com/mgs-tou/
+
+                //Trico Electric Cooperative: https://www.trico.coop/member-services/understanding-your-rates/
+                "Trico GS1" -> calculateScheduleTricoGS1(kW, kWh)       //https://www.trico.coop/wp-content/uploads/GS1-1.pdf
+                "Trico GS2" -> calculateScheduleTricoGS2(kW, kWh)       //https://www.trico.coop/wp-content/uploads/GS2-1.pdf
+                "Trico GSTOU" -> calculateScheduleTricoGSTOU(kW, kWh)   //https://www.trico.coop/wp-content/uploads/GSTOU.pdf
+                 */
+
                 else -> 0.0
             }
         }
+
+        /*
+        private fun calculateScheduleSGSTOU(kW: Double, kWh: Double): Double {
+            println("calculate schedule SGS TOU")
+            // calculating based on assumption that all hours are off peak - NOT a good assumption
+            val totalDemand = calculateDemandChargeForScheduleSGSTOU(kW)
+            val totalEnergy = calculateEnergyChargeForScheduleSGSTOU(kWh)
+
+            val totalCost = totalDemand + totalEnergy
+            println("cost 1 is ${totalCost}")
+
+            if (kW >= 100) {
+                val otherPotentialCost = kWh * 0.1697
+                println("cost 2 is ${otherPotentialCost}")
+                if (totalCost > otherPotentialCost) {
+                    return otherPotentialCost
+                }
+            }
+            return totalCost
+        }
+         */
 
         private fun calculateScheduleF(kW: Double, kWh: Double): Double {
             println("calculate schedule F")
