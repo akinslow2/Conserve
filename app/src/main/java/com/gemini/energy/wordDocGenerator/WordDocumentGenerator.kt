@@ -510,7 +510,7 @@ class WordDocumentGenerator {
         r1p1.fontFamily = fontTeko
         r1p1.isBold = true
         r1p1.fontSize = 16
-        r1p1.setText("Electricity Calculations")
+        r1p1.setText("Energy Calculations")
         r1p1.addBreak()
 
         val p2 = document.createParagraph()
@@ -518,7 +518,9 @@ class WordDocumentGenerator {
         val r1p2 = p2.createRun()
         r1p2.fontFamily = fontTeko
         r1p2.fontSize = 13
-        r1p2.setText("Rates from https://www.roanokeelectric.com/about-us/resources/rates/")
+        r1p2.setText("Electric rates from https://www.tep.com/rates/")
+        r1p2.addCarriageReturn()
+        r1p2.setText("Gas rates from https://www.swgas.com/en/arizona-rates-and-regulation")
         r1p2.addCarriageReturn()
         val r2p2 = p2.createRun()
         r2p2.fontFamily = fontTeko
