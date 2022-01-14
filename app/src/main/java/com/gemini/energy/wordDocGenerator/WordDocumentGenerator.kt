@@ -186,38 +186,38 @@ class WordDocumentGenerator {
         r3p2.setText("with a co-payment of $0")
         r3p2.addBreak()
 
-        // TODO: calculate this!
-        val differenceBetweenEnergySavingsAndMaintenanceSavings = "TODO"
-        document.createNormalParagraph(
-                "The Pay as You Save program means you will receive all the recommended upgrades at "
-                        + "no cost AND see your monthly energy bill greatly reduced from pre-Covid levels. "
-                        + "The utility will recover the costs by adding a charge to your bill that equates "
-                        + "to the project cost paid out monthly over 12 years. This charge will last for 12 years. "
-                        + "This is not a loan, the charge is only tied to the meter, and will stay on "
-                        + "the meter even if you relocate. In addition, we expect business cost savings due "
-                        + "to these upgrades to total $$differenceBetweenEnergySavingsAndMaintenanceSavings. "
-                        + "Overall, you can expect:",
-                fontSize = 14,
-                fontColor = greyColor)
-
-        val bullets1 = arrayOf(
-                "Reduced energy costs,",
-                "Improved profit margins,",
-                "Increased thermal comfort in your building, and",
-                "More control over how energy is consumed.")
-        document.createBullets(bullets1, greyColor, fontSize = 14)
-/*
-        if (buildingValues.buildingTotalCost > 5000) {
-            val qualifyP = document.createParagraph()
-            qualifyP.spacingBetween = 1.5
-            val qualifyR = qualifyP.createRun()
-            qualifyR.fontFamily = fontTeko
-            qualifyR.fontSize = 12
-            qualifyR.color = greyColor
-            qualifyR.setText("The implementation costs of all the measures qualify you for a 0% interest loan. By implementing these energy efficiency measures, you will join the courageous few energy heroes who are making the effort to make your community cleaner.")
-
-        }
-*/
+//        // TODO: calculate this!
+//        val differenceBetweenEnergySavingsAndMaintenanceSavings = "TODO"
+//        document.createNormalParagraph(
+//                "The Pay as You Save program means you will receive all the recommended upgrades at "
+//                        + "no cost AND see your monthly energy bill greatly reduced from pre-Covid levels. "
+//                        + "The utility will recover the costs by adding a charge to your bill that equates "
+//                        + "to the project cost paid out monthly over 12 years. This charge will last for 12 years. "
+//                        + "This is not a loan, the charge is only tied to the meter, and will stay on "
+//                        + "the meter even if you relocate. In addition, we expect business cost savings due "
+//                        + "to these upgrades to total $$differenceBetweenEnergySavingsAndMaintenanceSavings. "
+//                        + "Overall, you can expect:",
+//                fontSize = 14,
+//                fontColor = greyColor)
+//
+//        val bullets1 = arrayOf(
+//                "Reduced energy costs,",
+//                "Improved profit margins,",
+//                "Increased thermal comfort in your building, and",
+//                "More control over how energy is consumed.")
+//        document.createBullets(bullets1, greyColor, fontSize = 14)
+///*
+//        if (buildingValues.buildingTotalCost > 5000) {
+//            val qualifyP = document.createParagraph()
+//            qualifyP.spacingBetween = 1.5
+//            val qualifyR = qualifyP.createRun()
+//            qualifyR.fontFamily = fontTeko
+//            qualifyR.fontSize = 12
+//            qualifyR.color = greyColor
+//            qualifyR.setText("The implementation costs of all the measures qualify you for a 0% interest loan. By implementing these energy efficiency measures, you will join the courageous few energy heroes who are making the effort to make your community cleaner.")
+//
+//        }
+//*/
 
         createEnergySavingsTable(document, values)
     }
@@ -536,10 +536,10 @@ class WordDocumentGenerator {
                         + "$${values.building.postElectricityCharge.format(2)}")
 
         document.createNormalParagraph(
-                "By allowing Roanoke Electric to implement these proposed changes you will see an "
+                "By allowing Tuscon Electric Power to implement these proposed changes you will see an "
                         + "estimated electricity bill savings of $${values.building.customerAnnualSavingsDuringPaybackPeriod.format(2)} "
                         + "a year. If there is a question or concern about your bill, please email us at "
-                        + "roanoke@geminiEsolutions.com or call us at (252) 209-2236 or (800) 433-2236.")
+                        + "dyosuico@geminiEsolutions.com or call us at (252) 209-2236 or (800) 433-2236.")
     }
 
     private fun generateLightingContractorPage(document: XWPFDocument, lights: LightingValues) {
