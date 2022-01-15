@@ -1,185 +1,192 @@
 {
   "geminiForm": [
     {
-      "index": 1,
       "section": "Lighting",
+      "id": "lighting",
+      "index": 1,
       "elements": [
         {
-          "index": 13,
-          "hint": "mandatory",
-          "dataType": "pickerinputrow",
-          "defaultValues": "1:LED,2:Linear Flourescent,3:Halogen,4:High Pressure Sodium,5:Incandescent,6:Metal Halide,7:Mercury Vapor,8:Compact Fluorescent,9:EXIT (Compact Flourescent),10:EXIT (Incandescent),11:EXIT (LED)",
-          "param": "Lamp type",
-          "validation": "mandatory",
-          "id": "13"
-        },
-        {
-          "index": 14,
-          "hint": "mandatory",
-          "dataType": "introw",
-          "defaultValues": "",
+          "id": "lamps_fixture",
           "param": "Lamps Per Fixture",
-          "validation": "mandatory",
-          "id": "14"
-        },
-        {
-          "index": 15,
-          "hint": "mandatory",
+          "index": 11,
           "dataType": "introw",
           "defaultValues": "",
-          "param": "Number of Fixtures",
           "validation": "mandatory",
-          "id": "15"
+          "hint": "Rq"
         },
         {
-          "index": 16,
-          "hint": "",
-          "dataType": "textrow",
+          "id": "fixtures",
+          "param": "Number of Fixtures",
+          "index": 12,
+          "dataType": "introw",
           "defaultValues": "",
+          "validation": "mandatory",
+          "hint": "Rq"
+        },
+        {
+          "id": "make",
           "param": "Make",
-          "validation": "optional",
-          "id": "16"
-        },
-        {
-          "index": 17,
-          "hint": "",
+          "index": 13,
           "dataType": "textrow",
           "defaultValues": "",
-          "param": "Model Number",
           "validation": "optional",
-          "id": "17"
+          "hint": "Rq if Visible"
         },
         {
-          "index": 19,
-          "hint": "mandatory",
+          "id": "model_num",
+          "param": "Model Number",
+          "index": 14,
+          "dataType": "textrow",
+          "defaultValues": "",
+          "validation": "optional",
+          "hint": "Rq if Visible"
+        },
+        {
+          "id": "ceiling_type",
+          "param": "Ceiling Type",
+          "index": 15,
           "dataType": "pickerinputrow",
           "defaultValues": "1:Drop Ceiling,2:Dry Wall",
-          "param": "Ceiling Type",
           "validation": "mandatory",
-          "id": "19"
+          "hint": "Rq"
         },
         {
-          "index": 101,
-          "hint": "mandatory",
+          "id": "replacement_type",
+          "param": "Replacement Type",
+          "index": 16,
           "dataType": "pickerinputrow",
           "defaultValues": "1:Lamp Replacement,2:Retrofit,3:Direct Replacement Fixture",
-          "param": "Replacement Type",
           "validation": "mandatory",
-          "id": "101"
+          "hint": "Rq"
         },
         {
-          "index": 102,
-          "hint": "mandatory",
+          "id": "ceiling_height",
+          "param": "Ceiling greater than 10 feet?",
+          "index": 17,
           "dataType": "pickerinputrow",
           "defaultValues": "1:Yes,2:No",
-          "param": "Ceiling greater than 10 feet?",
           "validation": "mandatory",
-          "id": "102"
+          "hint": "Rq"
         }
-      ],
-      "id": "1"
+      ]
     },
     {
-      "index": 2,
       "section": "Controls",
+      "id": "controls",
+      "index": 2,
       "elements": [
         {
+          "id": "controls",
+          "param": "Controls",
           "index": 21,
-          "hint": "mandatory",
           "dataType": "pickerinputrow",
           "defaultValues": "1:Yes,2:No",
-          "param": "Controls",
           "validation": "mandatory",
-          "id": "21"
+          "hint": "Rq"
         },
         {
-          "index": 22,
-          "hint": "",
-          "dataType": "pickerinputrow",
-          "defaultValues": "1:Occupancy Sensor,2:Motion Sensor,3:Daylight Sensor,4:Timer,5:Dimmer",
+          "id": "control_type",
           "param": "Type of Control",
+          "index": 22,
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:Occupancy Sensor,2:Motion Sensor,3:Daylight Sensor,4:Timer,5:Dimmer,6:High Level Trim",
           "validation": "optional",
-          "id": "22"
+          "hint": "Rq if Controls is Yes"
         },
         {
+          "id": "control_number",
+          "param": "Number of Lamps Controlled",
           "index": 23,
-          "hint": "",
           "dataType": "introw",
           "defaultValues": "",
-          "param": "Number of Lamps Controlled",
           "validation": "optional",
-          "id": "23"
+          "hint": "Rq if Controls is Yes"
         }
-      ],
-      "id": "2"
+      ]
     },
     {
-      "index": 3,
       "section": "Power | Usage",
+      "id": "power_usage",
+      "index": 3,
       "elements": [
         {
+          "id": "watts",
+          "param": "Actual Watts",
           "index": 31,
-          "hint": "insert if you can",
           "dataType": "decimalrow",
           "defaultValues": "",
-          "param": "Actual Watts",
-          "validation": "",
-          "id": "31"
+          "validation": "optional",
+          "hint": "Rq if visible"
         }
-      ],
-      "id": "3"
+      ]
     },
     {
-      "index": 4,
       "section": "Time of Use",
+      "id": "time_of_use",
+      "index": 4,
       "elements": [
         {
-          "index": 41,
-          "hint": "analyst will input",
-          "dataType": "decimalrow",
-          "defaultValues": "",
+          "id": "peak_hours",
           "param": "Peak Hours",
-          "validation": "optional",
-          "id": "41"
-        },
-        {
-          "index": 42,
-          "hint": "analyst will input",
+          "index": 41,
           "dataType": "decimalrow",
           "defaultValues": "",
+          "validation": "optional",
+          "hint": ""
+        },
+        {
+          "id": "part_hours",
           "param": "Part Peak Hours",
-          "validation": "optional",
-          "id": "42"
-        },
-        {
-          "index": 43,
-          "hint": "analyst will input",
+          "index": 42,
           "dataType": "decimalrow",
           "defaultValues": "",
+          "validation": "optional",
+          "hint": ""
+        },
+        {
+          "id": "off_hours",
           "param": "Off Peak Hours",
+          "index": 43,
+          "dataType": "decimalrow",
+          "defaultValues": "",
           "validation": "optional",
-          "id": "43"
+          "hint": ""
         },
         {
+          "id": "sensor_num",
+          "param": "Sensor Number (first 4 digits)",
           "index": 44,
-          "hint": "",
           "dataType": "textrow",
           "defaultValues": "",
-          "param": "Light Sensor Serial",
-          "validation": "",
-          "id": "44"
+          "validation": "optional",
+          "hint": ""
+        }
+      ]
+    },
+    {
+      "section": "Other",
+      "id": "other",
+      "index": 5,
+      "elements": [
+        {
+          "id": "daylight_check",
+          "param": "Sufficient Daylight Levels?",
+          "index": 51,
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:Yes,2:No",
+          "validation": "mandatory",
+          "hint": "Rq"
         },
         {
-          "index": 45,
-          "hint": "issues or observations here",
+          "id": "notes",
+          "param": "Notes about Space or Equipment",
+          "index": 52,
           "dataType": "textrow",
           "defaultValues": "",
-          "param": "Notes from Space or Equipment",
           "validation": "optional",
-          "id": "45"
+          "hint": "Space is underlit"
         }
-      ],
-      "id": "4"
+      ]
     }
   ]
 }
