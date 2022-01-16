@@ -127,6 +127,7 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
     var kbtu = 0.0
     private var gasInput = 0
     private var gasOutput = 0
+    private var tons = 0
 
 
     /**
@@ -177,6 +178,7 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
     var cddCloseHours = 0
     var hddCloseHours = 0
 
+    var typeOfUnit = ""
     var quantity = 0
     var insulation = ""
     var areaHeight = 0.0
@@ -206,6 +208,7 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
             state = preAudit["General Client Info State"]!! as String
             occupancy = preAudit["Area Occupancy"]!! as Int
 
+            typeOfUnit = featureData["Type of Package Unit"]!! as String
             eer = featureData["EER"]!! as Double
             val inputSeer = featureData["SEER"]!! as Double
             seer = if (inputSeer > 0.0) inputSeer else seer
@@ -213,6 +216,7 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
             kbtu = featureData["Cooling Capacity (kBtu/hr)"]!! as Double
             gasInput = featureData["Heating Input (kBtu/hr)"]!! as Int
             gasOutput = featureData["Heating Output (kBtu/hr)"]!! as Int
+            tons = featureData["Cooling Capacity (Tons)"]!! as Int
             economizer = featureData["Economizer"]!! as String
             thermotype = featureData["Thermostat Type"]!! as String
             quantity = featureData["Quantity"]!! as Int
