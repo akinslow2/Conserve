@@ -125,8 +125,10 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
      * HVAC - British Thermal Unit
      * */
     var kbtu = 0.0
+
     private var gasInput = 0.0
     private var gasOutput = 0.0
+    private var tons = 0.0
 
 
     /**
@@ -173,6 +175,7 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
     var cddCloseHours = 0
     var hddCloseHours = 0
 
+    var typeOfUnit = ""
     var quantity = 0
     var insulation = ""
     var areaHeight = 0.0
@@ -198,6 +201,7 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
             gasstructure = preAudit["Others Gas Rate Structure"]!! as String
             bldgtype = preAudit["General Client Info Facility Type"]!! as String
 
+            typeOfUnit = featureData["Type of Package Unit"]!! as String
             eer = featureData["EER"]!! as Double
             val inputSeer = featureData["SEER"]!! as Double
             seer = if (inputSeer > 0.0) inputSeer else seer
@@ -205,6 +209,7 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
             kbtu = featureData["Cooling Capacity (kBtu/hr)"]!! as Double
             gasInput = featureData["Heating Input (kBtu/hr)"]!! as Double
             gasOutput = featureData["Heating Output (kBtu/hr)"]!! as Double
+            tons = featureData["Cooling Capacity (tons)"]!! as Double
             economizer = featureData["Economizer"]!! as String
             thermotype = featureData["Thermostat Type"]!! as String
             quantity = featureData["Quantity"]!! as Int
