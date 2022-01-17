@@ -1,160 +1,160 @@
 {
   "geminiForm": [
     {
-      "index": 1,
       "section": "Pre Rinse Spray",
+      "id": "pre_rinse_spray",
+      "index": 1,
       "elements": [
         {
-          "index": 11,
-          "hint": "",
-          "dataType": "textrow",
-          "defaultValues": "",
+          "id": "model",
           "param": "Model Number",
-          "validation": "mandatory",
-          "id": "11"
-        },
-        {
-          "index": 12,
-          "hint": "",
+          "index": 11,
           "dataType": "textrow",
           "defaultValues": "",
+          "validation": "mandatory",
+          "hint": "Rq"
+        },
+        {
+          "id": "make",
           "param": "Company",
+          "index": 12,
+          "dataType": "textrow",
+          "defaultValues": "",
           "validation": "mandatory",
-          "id": "12"
+          "hint": "Rq"
         },
         {
-          "index": 13,
-          "hint": "",
-          "dataType": "introw",
-          "defaultValues": "",
+          "id": "qty",
           "param": "Quantity",
-          "validation": "mandatory",
-          "id": "13"
-        },
-        {
-          "index": 14,
-          "hint": "",
+          "index": 13,
           "dataType": "introw",
           "defaultValues": "",
-          "param": "Year",
           "validation": "mandatory",
-          "id": "14"
+          "hint": "Rq"
         },
         {
+          "id": "year_installed",
+          "param": "Year Installed",
+          "index": 14,
+          "dataType": "introw",
+          "defaultValues": "",
+          "validation": "optional",
+          "hint": "helpful"
+        },
+        {
+          "id": "new_install",
+          "param": "New at installation?",
           "index": 15,
-          "hint": "",
           "dataType": "pickerinputrow",
           "defaultValues": "1:Yes,2:No",
-          "param": "Control",
-          "validation": "mandatory",
-          "id": "15"
+          "validation": "optional",
+          "hint": ""
         },
         {
+          "id": "control",
+          "param": "Control",
           "index": 16,
-          "hint": "gal/min",
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:Yes,2:No",
+          "validation": "optional",
+          "hint": ""
+        },
+        {
+          "id": "flow_rate",
+          "param": "Flow Rate",
+          "index": 17,
           "dataType": "decimalrow",
           "defaultValues": "",
-          "param": "Flow Rate",
           "validation": "optional",
-          "id": "16"
+          "hint": "gal/min"
         },
         {
-          "index": 17,
-          "hint": "",
+          "id": "water_heater",
+          "param": "Water Heater",
+          "index": 18,
           "dataType": "pickerinputrow",
           "defaultValues": "1:Gas,2:Electric",
-          "param": "Water Heater",
-          "validation": "mandatory",
-          "id": "17"
+          "validation": "optional",
+          "hint": ""
         },
         {
-          "index": 18,
-          "hint": "",
+          "id": "water_temp",
+          "param": "Water Temperature (oF)",
+          "index": 19,
           "dataType": "introw",
           "defaultValues": "",
-          "param": "Water Temperature (oF)",
-          "validation": "mandatory",
-          "id": "18"
+          "validation": "optional",
+          "hint": ""
         },
         {
-          "index": 19,
-          "hint": "",
-          "dataType": "decimalrow",
-          "defaultValues": "",
+          "id": "efficiency",
           "param": "Efficiency",
-          "validation": "mandatory",
-          "id": "19"
+          "index": 110,
+          "dataType": "decimalrow",
+          "defaultValues": "",
+          "validation": "optional",
+          "hint": ""
         }
-      ],
-      "id": "1"
+      ]
     },
     {
+      "section": "Time of Use",
+      "id": "time_of_use",
       "index": 2,
-      "section": "TOU",
       "elements": [
         {
-          "index": 21,
-          "hint": "",
-          "dataType": "decimalrow",
-          "defaultValues": "",
+          "id": "peak_hours",
           "param": "Peak Hours",
-          "validation": "optional",
-          "id": "21"
-        },
-        {
-          "index": 22,
-          "hint": "",
+          "index": 21,
           "dataType": "decimalrow",
           "defaultValues": "",
+          "validation": "optional",
+          "hint": "analyst will input"
+        },
+        {
+          "id": "part_hours",
           "param": "Part Peak Hours",
-          "validation": "optional",
-          "id": "22"
-        },
-        {
-          "index": 23,
-          "hint": "",
+          "index": 22,
           "dataType": "decimalrow",
           "defaultValues": "",
+          "validation": "optional",
+          "hint": "analyst will input"
+        },
+        {
+          "id": "off_hours",
           "param": "Off Peak Hours",
-          "validation": "mandatory",
-          "id": "23"
+          "index": 23,
+          "dataType": "decimalrow",
+          "defaultValues": "",
+          "validation": "optional",
+          "hint": "analyst will input"
         }
-      ],
-      "id": "2"
+      ]
     },
     {
+      "section": "Other",
+      "id": "other",
       "index": 3,
-      "section": "Suggested Time",
       "elements": [
         {
+          "id": "notes",
+          "param": "Notes about Space or Equipment",
           "index": 31,
-          "hint": "",
-          "dataType": "decimalrow",
+          "dataType": "textarearow",
           "defaultValues": "",
-          "param": "Suggested Peak Hours",
           "validation": "optional",
-          "id": "31"
+          "hint": ""
         },
         {
+          "id": "sprayer_times",
+          "param": "What times is the sprayer used?",
           "index": 32,
-          "hint": "",
-          "dataType": "decimalrow",
+          "dataType": "textarearow",
           "defaultValues": "",
-          "param": "Suggested Part Peak Hours",
-          "validation": "optional",
-          "id": "32"
-        },
-        {
-          "index": 33,
-          "hint": "",
-          "dataType": "decimalrow",
-          "defaultValues": "",
-          "param": "Suggested Off Peak Hours",
-          "validation": "optional",
-          "id": "33"
+          "validation": "mandatory",
+          "hint": "Rq"
         }
-      ],
-      "id": "3"
+      ]
     }
   ]
 }

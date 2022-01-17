@@ -1,196 +1,239 @@
 {
   "geminiForm": [
     {
-      "index": 1,
       "section": "Dish Washer",
+      "id": "dish_washer",
+      "index": 1,
       "elements": [
         {
-          "index": 11,
-          "hint": "",
-          "dataType": "textrow",
-          "defaultValues": "",
+          "id": "model",
           "param": "Model Number",
-          "validation": "mandatory",
-          "id": "11"
-        },
-        {
-          "index": 12,
-          "hint": "",
+          "index": 11,
           "dataType": "textrow",
           "defaultValues": "",
+          "validation": "mandatory",
+          "hint": "Rq"
+        },
+        {
+          "id": "make",
           "param": "Company",
+          "index": 12,
+          "dataType": "textrow",
+          "defaultValues": "",
           "validation": "mandatory",
-          "id": "12"
+          "hint": "Rq"
         },
         {
-          "index": 13,
-          "hint": "",
-          "dataType": "introw",
-          "defaultValues": "",
+          "id": "qty",
           "param": "Quantity",
-          "validation": "mandatory",
-          "id": "13"
-        },
-        {
-          "index": 14,
-          "hint": "",
+          "index": 13,
           "dataType": "introw",
           "defaultValues": "",
-          "param": "Year",
           "validation": "mandatory",
-          "id": "14"
+          "hint": "Rq"
         },
         {
+          "id": "year_installed",
+          "param": "Year Installed",
+          "index": 14,
+          "dataType": "introw",
+          "defaultValues": "",
+          "validation": "optional",
+          "hint": "helpful"
+        },
+        {
+          "id": "new_install",
+          "param": "New at installation?",
           "index": 15,
-          "hint": "",
           "dataType": "pickerinputrow",
           "defaultValues": "1:Yes,2:No",
+          "validation": "optional",
+          "hint": ""
+        },
+        {
+          "id": "control",
           "param": "Control",
-          "validation": "mandatory",
-          "id": "15"
-        },
-        {
           "index": 16,
-          "hint": "kW",
-          "dataType": "decimalrow",
-          "defaultValues": "",
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:Yes,2:No",
+          "validation": "optional",
+          "hint": ""
+        },
+        {
+          "id": "idle_energy",
           "param": "Idle Energy Rate",
-          "validation": "optional",
-          "id": "16"
-        },
-        {
           "index": 17,
-          "hint": "gal/rack.cycle",
           "dataType": "decimalrow",
           "defaultValues": "",
-          "param": "Water Consumption",
           "validation": "optional",
-          "id": "17"
+          "hint": "kW (analyst will enter)"
         },
         {
+          "id": "water_consumption",
+          "param": "Water Consumption",
           "index": 18,
-          "hint": "",
+          "dataType": "decimalrow",
+          "defaultValues": "",
+          "validation": "optional",
+          "hint": "gal/rack.cycle (analyst will enter)"
+        },
+        {
+          "id": "num_racks",
+          "param": "Number of Racks",
+          "index": 19,
           "dataType": "introw",
           "defaultValues": "",
-          "param": "Number of Racks",
-          "validation": "mandatory",
-          "id": "18"
+          "validation": "optional",
+          "hint": ""
         },
         {
-          "index": 19,
-          "hint": "",
+          "id": "heating_element",
+          "param": "Heating Element",
+          "index": 110,
           "dataType": "pickerinputrow",
           "defaultValues": "1:Gas,2:Electric",
-          "param": "Heating Element",
-          "validation": "mandatory",
-          "id": "19"
+          "validation": "optional",
+          "hint": ""
         },
         {
-          "index": 110,
-          "hint": "",
-          "dataType": "introw",
-          "defaultValues": "",
+          "id": "cycles_day",
           "param": "Cycles per Day",
-          "validation": "mandatory",
-          "id": "110"
-        },
-        {
           "index": 111,
-          "hint": "",
           "dataType": "introw",
           "defaultValues": "",
+          "validation": "optional",
+          "hint": ""
+        },
+        {
+          "id": "water_temp",
           "param": "Water Temperature (oF)",
-          "validation": "mandatory",
-          "id": "111"
-        },
-        {
           "index": 112,
-          "hint": "",
-          "dataType": "decimalrow",
-          "defaultValues": "",
-          "param": "Efficiency",
-          "validation": "mandatory",
-          "id": "112"
-        },
-        {
-          "index": 113,
-          "hint": "days/year",
           "dataType": "introw",
           "defaultValues": "",
+          "validation": "optional",
+          "hint": ""
+        },
+        {
+          "id": "efficiency",
+          "param": "Efficiency",
+          "index": 113,
+          "dataType": "decimalrow",
+          "defaultValues": "",
+          "validation": "optional",
+          "hint": ""
+        },
+        {
+          "id": "days_used",
           "param": "Days Used",
-          "validation": "mandatory",
-          "id": "113"
+          "index": 114,
+          "dataType": "introw",
+          "defaultValues": "",
+          "validation": "optional",
+          "hint": "days/year"
         }
-      ],
-      "id": "1"
+      ]
     },
     {
+      "section": "Additional",
+      "id": "additional",
       "index": 2,
-      "section": "TOU",
       "elements": [
         {
+          "id": "energystar",
+          "param": "Energy Star?",
           "index": 21,
-          "hint": "",
-          "dataType": "decimalrow",
-          "defaultValues": "",
-          "param": "Peak Hours",
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:yes,2:no",
           "validation": "optional",
-          "id": "21"
+          "hint": ""
         },
         {
+          "id": "sanitizer_type",
+          "param": "Sanitzer type",
           "index": 22,
-          "hint": "",
-          "dataType": "decimalrow",
-          "defaultValues": "",
-          "param": "Part Peak Hours",
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:chemical,2:high temperature booster",
           "validation": "optional",
-          "id": "22"
+          "hint": ""
         },
         {
+          "id": "load_optimized",
+          "param": "Are loads of dishes optimized?",
           "index": 23,
-          "hint": "",
-          "dataType": "decimalrow",
-          "defaultValues": "",
-          "param": "Off Peak Hours",
-          "validation": "mandatory",
-          "id": "23"
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:yes,2:no",
+          "validation": "optional",
+          "hint": ""
+        },
+        {
+          "id": "pre_rinse",
+          "param": "Pre-rinse sprayer",
+          "index": 24,
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:yes,2:no",
+          "validation": "optional",
+          "hint": ""
         }
-      ],
-      "id": "2"
+      ]
     },
     {
+      "section": "Time of Use",
+      "id": "time_of_use",
       "index": 3,
-      "section": "Suggested Time",
       "elements": [
         {
+          "id": "peak_hours",
+          "param": "Peak Hours",
           "index": 31,
-          "hint": "",
           "dataType": "decimalrow",
           "defaultValues": "",
-          "param": "Suggested Peak Hours",
           "validation": "optional",
-          "id": "31"
+          "hint": "analyst will input"
         },
         {
+          "id": "part_hours",
+          "param": "Part Peak Hours",
           "index": 32,
-          "hint": "",
           "dataType": "decimalrow",
           "defaultValues": "",
-          "param": "Suggested Part Peak Hours",
           "validation": "optional",
-          "id": "32"
+          "hint": "analyst will input"
         },
         {
+          "id": "off_hours",
+          "param": "Off Peak Hours",
           "index": 33,
-          "hint": "",
           "dataType": "decimalrow",
           "defaultValues": "",
-          "param": "Suggested Off Peak Hours",
           "validation": "optional",
-          "id": "33"
+          "hint": "analyst will input"
         }
-      ],
-      "id": "3"
+      ]
+    },
+    {
+      "section": "Other",
+      "id": "other",
+      "index": 4,
+      "elements": [
+        {
+          "id": "notes",
+          "param": "Notes about Space or Equipment",
+          "index": 41,
+          "dataType": "textarearow",
+          "defaultValues": "",
+          "validation": "optional",
+          "hint": ""
+        },
+        {
+          "id": "dishwash_times",
+          "param": "What times is the dishwasher used?",
+          "index": 42,
+          "dataType": "textarearow",
+          "defaultValues": "",
+          "validation": "optional",
+          "hint": "Rq"
+        }
+      ]
     }
   ]
 }

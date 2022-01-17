@@ -1,221 +1,205 @@
 {
   "geminiForm": [
     {
+      "section": "WaterHeating - Main",
+      "id": "waterheating_main",
       "index": 1,
-      "section": "WaterHeating - Main ",
       "elements": [
         {
+          "id": "unit_type",
+          "param": "Type of Unit",
           "index": 11,
-          "hint": "",
           "dataType": "pickerinputrow",
           "defaultValues": "1:storage tank,2:tankless/instantaneous,3:heat pump,4:solar powered,5:condensing",
-          "param": "Type of Unit",
           "validation": "mandatory",
-          "id": "11"
+          "hint": "Rq"
         },
         {
-          "index": 12,
-          "hint": "",
-          "dataType": "pickerinputrow",
-          "defaultValues": "1:Natural Gas,2:Electric",
+          "id": "fuel_type",
           "param": "Fuel Type",
-          "validation": "mandatory",
-          "id": "12"
-        },
-        {
-          "index": 13,
-          "hint": "",
-          "dataType": "textrow",
-          "defaultValues": "",
-          "param": "Make",
-          "validation": "mandatory",
-          "id": "13"
-        },
-        {
-          "index": 14,
-          "hint": "",
-          "dataType": "textrow",
-          "defaultValues": "",
-          "param": "Model Number",
-          "validation": "mandatory",
-          "id": "14"
-        },
-        {
-          "index": 15,
-          "hint": "",
-          "dataType": "decimalrow",
-          "defaultValues": "",
-          "param": "Capacity (U.S. Gal)",
-          "validation": "mandatory",
-          "id": "15"
-        },
-        {
-          "index": 16,
-          "hint": "",
-          "dataType": "introw",
-          "defaultValues": "",
-          "param": "Quantity",
-          "validation": "mandatory",
-          "id": "16"
-        },
-        {
-          "index": 17,
-          "hint": "",
-          "dataType": "introw",
-          "defaultValues": "",
-          "param": "Heating Output (Btu/hr)",
-          "validation": "optional",
-          "id": "17"
-        },
-        {
-          "index": 18,
-          "hint": "",
-          "dataType": "introw",
-          "defaultValues": "",
-          "param": "Heating Input (Btu/hr)",
-          "validation": "optional",
-          "id": "18"
-        },
-        {
-          "index": 19,
-          "hint": "Rq if Gas",
-          "dataType": "introw",
-          "defaultValues": "",
-          "param": "Thermal Efficiency",
-          "validation": "optional",
-          "id": "19"
-        },
-        {
-          "index": 110,
-          "hint": "Rq if Electricity",
-          "dataType": "decimalrow",
-          "defaultValues": "",
-          "param": "Heating Electirc Efficiency",
-          "validation": "optional",
-          "id": "110"
-        },
-        {
-          "index": 111,
-          "hint": "",
-          "dataType": "decimalrow",
-          "defaultValues": "",
-          "param": "Heating Power (kW)",
-          "validation": "optional",
-          "id": "111"
-        },
-        {
-          "index": 112,
-          "hint": "",
-          "dataType": "decimalrow",
-          "defaultValues": "",
-          "param": "Recovery Rate (gals/hr)",
-          "validation": "optional",
-          "id": "112"
-        },
-        {
-          "index": 113,
-          "hint": "",
-          "dataType": "introw",
-          "defaultValues": "",
-          "param": "Year",
-          "validation": "mandatory",
-          "id": "113"
-        }
-      ],
-      "id": "1"
-    },
-    {
-      "index": 2,
-      "section": "Time of Use",
-      "elements": [
-        {
-          "index": 21,
-          "hint": "",
-          "dataType": "decimalrow",
-          "defaultValues": "",
-          "param": "Peak Hours",
-          "validation": "optional",
-          "id": "21"
-        },
-        {
-          "index": 22,
-          "hint": "",
-          "dataType": "decimalrow",
-          "defaultValues": "",
-          "param": "Part Peak Hours",
-          "validation": "optional",
-          "id": "22"
-        },
-        {
-          "index": 23,
-          "hint": "",
-          "dataType": "decimalrow",
-          "defaultValues": "",
-          "param": "Off Peak Hours",
-          "validation": "mandatory",
-          "id": "23"
-        }
-      ],
-      "id": "2"
-    },
-    {
-      "index": 3,
-      "section": "WaterHeating - Other",
-      "elements": [
-        {
-          "index": 31,
-          "hint": "",
-          "dataType": "decimalrow",
-          "defaultValues": "",
-          "param": "Set Point (oF)",
-          "validation": "optional",
-          "id": "31"
-        },
-        {
-          "index": 32,
-          "hint": "",
+          "index": 12,
           "dataType": "pickerinputrow",
-          "defaultValues": "1:Yes/No",
-          "param": "Freeze Protection",
+          "defaultValues": "1:Electric,2:Fuel Oil,3:Propane,4:Methane Gas,5:Unknown",
+          "validation": "mandatory",
+          "hint": "Rq"
+        },
+        {
+          "id": "make",
+          "param": "Make",
+          "index": 13,
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:AO Smith,2:Rheem,3:Kenmore,4:Whirlpool,5:American Standard,6:American Water Heaters,7:Bosch,8:EcoSmart,9:Navien,10:Noritz,11:Reliance,12:Rinnai,13:Bradford White,14:Takagi,15:Stiebel Eltron",
+          "validation": "mandatory",
+          "hint": "Rq"
+        },
+        {
+          "id": "model_num",
+          "param": "Model Number",
+          "index": 14,
+          "dataType": "textrow",
+          "defaultValues": "",
           "validation": "optional",
-          "id": "32"
+          "hint": "Rq if visibile"
+        },
+        {
+          "id": "capacity",
+          "param": "Capacity (U.S. Gal)",
+          "index": 15,
+          "dataType": "decimalrow",
+          "defaultValues": "",
+          "validation": "mandatory",
+          "hint": "Rq"
+        },
+        {
+          "id": "quantity",
+          "param": "Quantity",
+          "index": 16,
+          "dataType": "introw",
+          "defaultValues": "",
+          "validation": "mandatory",
+          "hint": "Rq"
+        },
+        {
+          "id": "gas_output",
+          "param": "Heating Output (Btu/hr)",
+          "index": 17,
+          "dataType": "introw",
+          "defaultValues": "",
+          "validation": "optional",
+          "hint": ""
+        },
+        {
+          "id": "gas_input",
+          "param": "Heating Input (Btu/hr)",
+          "index": 18,
+          "dataType": "introw",
+          "defaultValues": "",
+          "validation": "mandatory",
+          "hint": "Rq if relevant"
+        },
+        {
+          "id": "thermal_eff",
+          "param": "Thermal Efficiency",
+          "index": 19,
+          "dataType": "introw",
+          "defaultValues": "",
+          "validation": "optional",
+          "hint": "Rq if available"
+        },
+        {
+          "id": "electric_eff",
+          "param": "Efficiency Factor (EF or UEF)",
+          "index": 110,
+          "dataType": "decimalrow",
+          "defaultValues": "",
+          "validation": "optional",
+          "hint": "Rq if available"
+        },
+        {
+          "id": "electric_power",
+          "param": "Heating Power (kW)",
+          "index": 111,
+          "dataType": "decimalrow",
+          "defaultValues": "",
+          "validation": "optional",
+          "hint": "Rq if available"
+        },
+        {
+          "id": "recovery_rate",
+          "param": "Recovery Rate (Gal/hr)",
+          "index": 112,
+          "dataType": "decimalrow",
+          "defaultValues": "",
+          "validation": "optional",
+          "hint": ""
+        },
+        {
+          "id": "manuf_year",
+          "param": "Year Manufactured",
+          "index": 113,
+          "dataType": "introw",
+          "defaultValues": "",
+          "validation": "optional",
+          "hint": "2015.0"
         }
-      ],
-      "id": "3"
+      ]
     },
     {
-      "index": 5,
-      "section": "Suggested Time",
+      "section": "WaterHeating - Other",
+      "id": "waterheating_other",
+      "index": 2,
       "elements": [
         {
-          "index": 51,
-          "hint": "",
-          "dataType": "decimalrow",
-          "defaultValues": "",
-          "param": "Suggested Peak Hours",
-          "validation": "optional",
-          "id": "51"
+          "id": "ducting",
+          "param": "Connection",
+          "index": 21,
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:Ducted,2:not ducted",
+          "validation": "mandatory",
+          "hint": "Rq"
         },
         {
-          "index": 52,
-          "hint": "",
+          "id": "water_use",
+          "param": "Water Use",
+          "index": 22,
           "dataType": "decimalrow",
           "defaultValues": "",
-          "param": "Suggested Part Peak Hours",
           "validation": "optional",
-          "id": "52"
+          "hint": "Rq if available"
         },
         {
-          "index": 53,
-          "hint": "",
+          "id": "",
+          "param": "Amperage",
+          "index": 23,
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:15,2:30",
+          "validation": "optional",
+          "hint": "Useful"
+        },
+        {
+          "id": "insulated",
+          "param": "Insulated hot water piping",
+          "index": 24,
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:Yes,2:No",
+          "validation": "optional",
+          "hint": ""
+        },
+        {
+          "id": "freeze_protect",
+          "param": "Freeze Protection",
+          "index": 25,
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:Yes,2:No",
+          "validation": "optional",
+          "hint": ""
+        },
+        {
+          "id": "set_point",
+          "param": "Set Point (oF)",
+          "index": 26,
           "dataType": "decimalrow",
           "defaultValues": "",
-          "param": "Suggested Off Peak Hours",
           "validation": "optional",
-          "id": "53"
+          "hint": ""
         }
-      ],
-      "id": "5"
+      ]
+    },
+    {
+      "section": "Other",
+      "id": "other",
+      "index": 3,
+      "elements": [
+        {
+          "id": "notes",
+          "param": "Notes about Space or Equipment",
+          "index": 31,
+          "dataType": "textarearow",
+          "defaultValues": "",
+          "validation": "optional",
+          "hint": ""
+        }
+      ]
     }
   ]
 }

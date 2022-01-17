@@ -1,185 +1,582 @@
 {
   "geminiForm": [
     {
-      "index": 1,
       "section": "Walk-In Freezer",
+      "id": "walk_in_freezer",
+      "index": 1,
       "elements": [
         {
+          "id": "equip_type",
+          "param": "Equipment Type",
           "index": 11,
-          "hint": "",
           "dataType": "pickerinputrow",
           "defaultValues": "1:Ultra-low Temperature Freezer,2:Solid Door Freezer,3:Solid Door Refrigerator,4:Glass Door Refrigerator",
-          "param": "Equipment Type",
-          "validation": "",
-          "id": "11"
+          "validation": "optional",
+          "hint": ""
         },
         {
+          "id": "style_type",
+          "param": "Style Type",
           "index": 12,
-          "hint": "",
           "dataType": "pickerinputrow",
           "defaultValues": "1:Milk or Beverage Cabinet,2:Other,3:Pass-Through,4:Reach-in,5:Undercounter,6:Wedge Case,7:Work-Top Table,8:Roll-in",
-          "param": "Style Type",
           "validation": "optional",
-          "id": "12"
+          "hint": ""
         },
         {
-          "index": 13,
-          "hint": "cu. ft.",
-          "dataType": "decimalrow",
-          "defaultValues": "",
+          "id": "volume",
           "param": "Total Volume",
-          "validation": "",
-          "id": "13"
+          "index": 13,
+          "dataType": "decimalrow",
+          "defaultValues": "",
+          "validation": "optional",
+          "hint": ""
         },
         {
-          "index": 14,
-          "hint": "",
-          "dataType": "textrow",
-          "defaultValues": "",
+          "id": "model_num",
           "param": "Model Number",
-          "validation": "",
-          "id": "14"
-        },
-        {
-          "index": 15,
-          "hint": "",
+          "index": 14,
           "dataType": "textrow",
           "defaultValues": "",
+          "validation": "optional",
+          "hint": ""
+        },
+        {
+          "id": "company",
           "param": "Company",
-          "validation": "",
-          "id": "15"
-        },
-        {
-          "index": 16,
-          "hint": "",
-          "dataType": "introw",
-          "defaultValues": "",
-          "param": "Year",
-          "validation": "",
-          "id": "16"
-        },
-        {
-          "index": 17,
-          "hint": "",
-          "dataType": "pickerinputrow",
-          "defaultValues": "1:Yes,2:No",
-          "param": "Control",
-          "validation": "",
-          "id": "17"
-        },
-        {
-          "index": 18,
-          "hint": "",
-          "dataType": "introw",
-          "defaultValues": "",
-          "param": "Quantity",
-          "validation": "",
-          "id": "18"
-        },
-        {
-          "index": 19,
-          "hint": "kWh",
-          "dataType": "decimalrow",
-          "defaultValues": "",
-          "param": "Daily Energy Used",
-          "validation": "optional",
-          "id": "19"
-        }
-      ],
-      "id": "1"
-    },
-    {
-      "index": 2,
-      "section": "TOU",
-      "elements": [
-        {
-          "index": 21,
-          "hint": "",
-          "dataType": "decimalrow",
-          "defaultValues": "",
-          "param": "Peak Hours",
-          "validation": "optional",
-          "id": "21"
-        },
-        {
-          "index": 22,
-          "hint": "",
-          "dataType": "decimalrow",
-          "defaultValues": "",
-          "param": "Part Peak Hours",
-          "validation": "optional",
-          "id": "22"
-        },
-        {
-          "index": 23,
-          "hint": "",
-          "dataType": "decimalrow",
-          "defaultValues": "",
-          "param": "Off Peak Hours",
-          "validation": "",
-          "id": "23"
-        }
-      ],
-      "id": "2"
-    },
-    {
-      "index": 3,
-      "section": "Labor Cost",
-      "elements": [
-        {
-          "index": 31,
-          "hint": "",
-          "dataType": "introw",
-          "defaultValues": "",
-          "param": "Zip Code",
-          "validation": "",
-          "id": "31"
-        },
-        {
-          "index": 32,
-          "hint": "",
+          "index": 15,
           "dataType": "textrow",
           "defaultValues": "",
-          "param": "Profession",
-          "validation": "",
-          "id": "32"
+          "validation": "optional",
+          "hint": ""
+        },
+        {
+          "id": "manuf_year",
+          "param": "Year",
+          "index": 16,
+          "dataType": "introw",
+          "defaultValues": "",
+          "validation": "optional",
+          "hint": ""
+        },
+        {
+          "id": "control",
+          "param": "Control",
+          "index": 17,
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:",
+          "validation": "optional",
+          "hint": ""
+        },
+        {
+          "id": "quantity",
+          "param": "Quantity",
+          "index": 18,
+          "dataType": "introw",
+          "defaultValues": "",
+          "validation": "optional",
+          "hint": ""
+        },
+        {
+          "id": "daily_energy",
+          "param": "Daily Energy Used",
+          "index": 19,
+          "dataType": "decimalrow",
+          "defaultValues": "",
+          "validation": "optional",
+          "hint": ""
         }
-      ],
-      "id": "3"
+      ]
     },
     {
-      "index": 4,
-      "section": "Suggested Time",
+      "section": "TOU",
+      "id": "tou",
+      "index": 2,
       "elements": [
         {
-          "index": 41,
-          "hint": "",
+          "id": "peak_hours",
+          "param": "Peak Hours",
+          "index": 21,
           "dataType": "decimalrow",
           "defaultValues": "",
-          "param": "Suggested Peak Hours",
           "validation": "optional",
-          "id": "41"
+          "hint": ""
         },
         {
-          "index": 42,
-          "hint": "",
+          "id": "part_hours",
+          "param": "Part Peak Hours",
+          "index": 22,
           "dataType": "decimalrow",
           "defaultValues": "",
-          "param": "Suggested Part Peak Hours",
           "validation": "optional",
-          "id": "42"
+          "hint": ""
         },
         {
-          "index": 43,
-          "hint": "",
+          "id": "off_hours",
+          "param": "Off Peak Hours",
+          "index": 23,
           "dataType": "decimalrow",
           "defaultValues": "",
-          "param": "Suggested Off Peak Hours",
           "validation": "optional",
-          "id": "43"
+          "hint": ""
         }
-      ],
-      "id": "4"
+      ]
+    },
+    {
+      "section": "Doors",
+      "id": "doors",
+      "index": 3,
+      "elements": [
+        {
+          "id": "self_close",
+          "param": "Do doors self-close?",
+          "index": 31,
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:yes,2:no",
+          "validation": "optional",
+          "hint": ""
+        },
+        {
+          "id": "door_seal",
+          "param": "quality of door seal",
+          "index": 32,
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:weak,2:adequate,3:strong",
+          "validation": "",
+          "hint": ""
+        }
+      ]
+    },
+    {
+      "section": "Condenser Unit",
+      "id": "condenser_unit",
+      "index": 4,
+      "elements": [
+        {
+          "id": "make",
+          "param": "Make",
+          "index": 41,
+          "dataType": "textrow",
+          "defaultValues": "",
+          "validation": "optional",
+          "hint": ""
+        },
+        {
+          "id": "condenser_model",
+          "param": "Model Number",
+          "index": 42,
+          "dataType": "textrow",
+          "defaultValues": "",
+          "validation": "optional",
+          "hint": ""
+        },
+        {
+          "id": "condenser_manuf_yr",
+          "param": "Year",
+          "index": 43,
+          "dataType": "introw",
+          "defaultValues": "",
+          "validation": "optional",
+          "hint": ""
+        },
+        {
+          "id": "condenser_quantity",
+          "param": "Quantity",
+          "index": 44,
+          "dataType": "introw",
+          "defaultValues": "",
+          "validation": "optional",
+          "hint": ""
+        },
+        {
+          "id": "capacity",
+          "param": "Capacity (BTU)",
+          "index": 45,
+          "dataType": "introw",
+          "defaultValues": "",
+          "validation": "optional",
+          "hint": ""
+        },
+        {
+          "id": "fan",
+          "param": "Condensor Fan (HP)",
+          "index": 46,
+          "dataType": "decimalrow",
+          "defaultValues": "",
+          "validation": "optional",
+          "hint": ""
+        },
+        {
+          "id": "condensor_clean",
+          "param": "Condensor Clean?",
+          "index": 47,
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:1,2:2,3:3,4:4,5:5",
+          "validation": "optional",
+          "hint": ""
+        },
+        {
+          "id": "power",
+          "param": "Heating Power (kW)",
+          "index": 48,
+          "dataType": "decimalrow",
+          "defaultValues": "",
+          "validation": "optional",
+          "hint": ""
+        },
+        {
+          "id": "refrigerant_type",
+          "param": "Refrigerant Type",
+          "index": 49,
+          "dataType": "textrow",
+          "defaultValues": "",
+          "validation": "optional",
+          "hint": ""
+        },
+        {
+          "id": "read_nameplate",
+          "param": "Readable Nameplate?",
+          "index": 410,
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:yes,2:no",
+          "validation": "optional",
+          "hint": ""
+        },
+        {
+          "id": "insulated_line",
+          "param": "Suction line insulated?",
+          "index": 411,
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:yes,2:no",
+          "validation": "optional",
+          "hint": ""
+        },
+        {
+          "id": "location",
+          "param": "location",
+          "index": 412,
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:inside,2:outside",
+          "validation": "optional",
+          "hint": ""
+        },
+        {
+          "id": "variable_fan",
+          "param": "variable speed fan?",
+          "index": 413,
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:yes,2:no",
+          "validation": "optional",
+          "hint": ""
+        },
+        {
+          "id": "head_controls",
+          "param": "floating head pressure controls?",
+          "index": 414,
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:yes,2:no",
+          "validation": "optional",
+          "hint": ""
+        },
+        {
+          "id": "defrost_controls",
+          "param": "Defrost controls",
+          "index": 415,
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:defrost timer,2:advanced defrost controls,3:none",
+          "validation": "optional",
+          "hint": ""
+        },
+        {
+          "id": "temp",
+          "param": "Temp",
+          "index": 416,
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:Medium,2:Low",
+          "validation": "optional",
+          "hint": "Rq for condensing unit"
+        },
+        {
+          "id": "compressor_size",
+          "param": "Condensor Compressor Size (HP)",
+          "index": 417,
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:1,2:1.5,3:2,4:2.5,5:3,6:3.5,7:4,8:4.5,9:5",
+          "validation": "optional",
+          "hint": "Rq for condensing unit"
+        },
+        {
+          "id": "compressor_phase",
+          "param": "Compressor Phase",
+          "index": 418,
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:1,2:3",
+          "validation": "optional",
+          "hint": "Rq for condensing unit"
+        }
+      ]
+    },
+    {
+      "section": "Condenser Time of Use",
+      "id": "condenser_time_of_use",
+      "index": 5,
+      "elements": [
+        {
+          "id": "cond_peak_hours",
+          "param": "Peak Hours",
+          "index": 51,
+          "dataType": "decimalrow",
+          "defaultValues": "",
+          "validation": "optional",
+          "hint": ""
+        },
+        {
+          "id": "cond_part_hours",
+          "param": "Part Peak Hours",
+          "index": 52,
+          "dataType": "decimalrow",
+          "defaultValues": "",
+          "validation": "optional",
+          "hint": ""
+        },
+        {
+          "id": "cond_off_hours",
+          "param": "Off Peak Hours",
+          "index": 53,
+          "dataType": "decimalrow",
+          "defaultValues": "",
+          "validation": "optional",
+          "hint": ""
+        },
+        {
+          "id": "cond_sensor_number",
+          "param": "Sensor Number (first 4 digits)",
+          "index": 54,
+          "dataType": "introw",
+          "defaultValues": "",
+          "validation": "optional",
+          "hint": ""
+        }
+      ]
+    },
+    {
+      "section": "Evaporator",
+      "id": "evaporator",
+      "index": 6,
+      "elements": [
+        {
+          "id": "",
+          "param": "Make",
+          "index": 61,
+          "dataType": "textrow",
+          "defaultValues": "",
+          "validation": "optional",
+          "hint": ""
+        },
+        {
+          "id": "evap_make",
+          "param": "Model Number",
+          "index": 62,
+          "dataType": "textrow",
+          "defaultValues": "",
+          "validation": "optional",
+          "hint": ""
+        },
+        {
+          "id": "evap_model_number",
+          "param": "Serial Number",
+          "index": 63,
+          "dataType": "decimalrow",
+          "defaultValues": "",
+          "validation": "optional",
+          "hint": ""
+        },
+        {
+          "id": "evap_serial_number",
+          "param": "Capacity (BTU)",
+          "index": 64,
+          "dataType": "decimalrow",
+          "defaultValues": "",
+          "validation": "",
+          "hint": ""
+        },
+        {
+          "id": "evap_capacity",
+          "param": "Fan (HP)",
+          "index": 65,
+          "dataType": "decimalrow",
+          "defaultValues": "",
+          "validation": "optional",
+          "hint": ""
+        },
+        {
+          "id": "evaporator_fan",
+          "param": "Refrigerant Type",
+          "index": 66,
+          "dataType": "textrow",
+          "defaultValues": "",
+          "validation": "optional",
+          "hint": ""
+        },
+        {
+          "id": "evap_refrigerant_type",
+          "param": "Readable Namplate?",
+          "index": 67,
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:yes,2:no",
+          "validation": "optional",
+          "hint": ""
+        },
+        {
+          "id": "evap_nameplate",
+          "param": "Coil Clean?",
+          "index": 68,
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:yes,2:no",
+          "validation": "optional",
+          "hint": ""
+        },
+        {
+          "id": "evap_coil",
+          "param": "Quantity of evaporators",
+          "index": 69,
+          "dataType": "introw",
+          "defaultValues": "",
+          "validation": "optional",
+          "hint": ""
+        },
+        {
+          "id": "evap_quantity",
+          "param": "Quantity of fans",
+          "index": 610,
+          "dataType": "introw",
+          "defaultValues": "",
+          "validation": "optional",
+          "hint": "Rq for FanMotor Controls"
+        },
+        {
+          "id": "evap_fan_quantity",
+          "param": "Type of existing fans?",
+          "index": 611,
+          "dataType": "textrow",
+          "defaultValues": "",
+          "validation": "optional",
+          "hint": ""
+        },
+        {
+          "id": "evap_fan_type",
+          "param": "Advanced fan controls?",
+          "index": 612,
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:yes,2:no",
+          "validation": "optional",
+          "hint": ""
+        },
+        {
+          "id": "evap_fan_controls",
+          "param": "Outdoor air economization?",
+          "index": 613,
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:yes,2:no",
+          "validation": "optional",
+          "hint": ""
+        },
+        {
+          "id": "air_economization",
+          "param": "Temperature Range",
+          "index": 614,
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:Low",
+          "validation": "optional",
+          "hint": "Rq for FanMotor Controls"
+        },
+        {
+          "id": "temp_range",
+          "param": "Fan Motor Type",
+          "index": 615,
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:SP,2:ECM,3:Synchronous,4:Unknown",
+          "validation": "optional",
+          "hint": "Rq for FanMotor Controls"
+        },
+        {
+          "id": "fan_motor_type",
+          "param": "Motor Type",
+          "index": 616,
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:Brushless Permanent Magnet,2:Synchronous",
+          "validation": "optional",
+          "hint": "Rq for FanMotor Replacement"
+        },
+        {
+          "id": "motor_type",
+          "param": "Refrigeration Type",
+          "index": 617,
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:Case,2:Walk-In",
+          "validation": "optional",
+          "hint": "Rq for FanMotor Repalcement"
+        }
+      ]
+    },
+    {
+      "section": "Evaporator Time of Use",
+      "id": "evaporator_time_of_use",
+      "index": 7,
+      "elements": [
+        {
+          "id": "evap_peak_hours",
+          "param": "Peak Hours",
+          "index": 71,
+          "dataType": "decimalrow",
+          "defaultValues": "",
+          "validation": "optional",
+          "hint": ""
+        },
+        {
+          "id": "evap_part_hours",
+          "param": "Part Peak Hours",
+          "index": 72,
+          "dataType": "decimalrow",
+          "defaultValues": "",
+          "validation": "optional",
+          "hint": ""
+        },
+        {
+          "id": "evap_off_hours",
+          "param": "Off Peak Hours",
+          "index": 73,
+          "dataType": "decimalrow",
+          "defaultValues": "",
+          "validation": "optional",
+          "hint": ""
+        },
+        {
+          "id": "evap_sensor_num",
+          "param": "Sensor Number (first 4 digits)",
+          "index": 74,
+          "dataType": "introw",
+          "defaultValues": "",
+          "validation": "optional",
+          "hint": ""
+        }
+      ]
+    },
+    {
+      "section": "Other",
+      "id": "other",
+      "index": 8,
+      "elements": [
+        {
+          "id": "notes",
+          "param": "Notes about Space or Equipment",
+          "index": 81,
+          "dataType": "textarearow",
+          "defaultValues": "",
+          "validation": "optional",
+          "hint": ""
+        }
+      ]
     }
   ]
 }

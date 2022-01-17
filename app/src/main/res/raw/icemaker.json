@@ -1,160 +1,201 @@
 {
   "geminiForm": [
     {
-      "index": 1,
       "section": "Ice Maker",
+      "id": "ice_maker",
+      "index": 1,
       "elements": [
         {
-          "index": 11,
-          "hint": "lbs/day",
-          "dataType": "decimalrow",
-          "defaultValues": "",
+          "id": "ice_rate",
           "param": "Ice Harvest Rate",
-          "validation": "optional",
-          "id": "11"
-        },
-        {
-          "index": 12,
-          "hint": "kWh/100lbs",
+          "index": 11,
           "dataType": "decimalrow",
           "defaultValues": "",
-          "param": "Energy Use Rate",
           "validation": "optional",
-          "id": "12"
+          "hint": "lbs/day (Rq)"
         },
         {
+          "id": "energy_rate",
+          "param": "Energy Use Rate",
+          "index": 12,
+          "dataType": "decimalrow",
+          "defaultValues": "",
+          "validation": "optional",
+          "hint": "kWh/100lbs (Rq)"
+        },
+        {
+          "id": "ice_type",
+          "param": "Ice Type",
           "index": 13,
-          "hint": "",
           "dataType": "pickerinputrow",
           "defaultValues": "1:Cube,2:Continuous",
-          "param": "Ice Type",
           "validation": "mandatory",
-          "id": "13"
+          "hint": "Rq"
         },
         {
-          "index": 14,
-          "hint": "",
-          "dataType": "pickerinputrow",
-          "defaultValues": "1:IMH-A,2:RCRC-A,3:RCU-A,4:SC-A",
+          "id": "machine_type",
           "param": "Machine Type",
-          "validation": "optional",
-          "id": "14"
+          "index": 14,
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:Ice Making Head,2:Remote Condensing Unit,3:Self Contained Unit",
+          "validation": "mandatory",
+          "hint": "Rq"
         },
         {
-          "index": 15,
-          "hint": "",
-          "dataType": "textrow",
-          "defaultValues": "",
+          "id": "model",
           "param": "Model Number",
-          "validation": "mandatory",
-          "id": "15"
-        },
-        {
-          "index": 16,
-          "hint": "",
+          "index": 15,
           "dataType": "textrow",
           "defaultValues": "",
+          "validation": "optional",
+          "hint": "Rq"
+        },
+        {
+          "id": "make",
           "param": "Company",
-          "validation": "mandatory",
-          "id": "16"
+          "index": 16,
+          "dataType": "textrow",
+          "defaultValues": "",
+          "validation": "optional",
+          "hint": "Rq"
         },
         {
-          "index": 17,
-          "hint": "",
-          "dataType": "introw",
-          "defaultValues": "",
+          "id": "qtr",
           "param": "Quantity",
-          "validation": "mandatory",
-          "id": "17"
-        },
-        {
-          "index": 18,
-          "hint": "",
+          "index": 17,
           "dataType": "introw",
           "defaultValues": "",
-          "param": "Year",
           "validation": "mandatory",
-          "id": "18"
+          "hint": "Rq"
         },
         {
+          "id": "year_installed",
+          "param": "Year Installed",
+          "index": 18,
+          "dataType": "introw",
+          "defaultValues": "",
+          "validation": "optional",
+          "hint": "Helpful"
+        },
+        {
+          "id": "new_install",
+          "param": "Bought New?",
           "index": 19,
-          "hint": "",
           "dataType": "pickerinputrow",
           "defaultValues": "1:Yes,2:No",
+          "validation": "optional",
+          "hint": ""
+        },
+        {
+          "id": "controls",
           "param": "Control",
-          "validation": "mandatory",
-          "id": "19"
+          "index": 110,
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:Yes,2:No",
+          "validation": "optional",
+          "hint": ""
+        },
+        {
+          "id": "energystar",
+          "param": "Energy Star?",
+          "index": 111,
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:Yes,2:No",
+          "validation": "optional",
+          "hint": ""
         }
-      ],
-      "id": "1"
+      ]
     },
     {
-      "index": 2,
       "section": "TOU",
+      "id": "tou",
+      "index": 2,
       "elements": [
         {
-          "index": 21,
-          "hint": "",
-          "dataType": "decimalrow",
-          "defaultValues": "",
+          "id": "peak_hours",
           "param": "Peak Hours",
-          "validation": "optional",
-          "id": "21"
-        },
-        {
-          "index": 22,
-          "hint": "",
+          "index": 21,
           "dataType": "decimalrow",
           "defaultValues": "",
+          "validation": "optional",
+          "hint": ""
+        },
+        {
+          "id": "part_hours",
           "param": "Part Peak Hours",
-          "validation": "optional",
-          "id": "22"
-        },
-        {
-          "index": 23,
-          "hint": "",
+          "index": 22,
           "dataType": "decimalrow",
           "defaultValues": "",
+          "validation": "optional",
+          "hint": ""
+        },
+        {
+          "id": "off_hours",
           "param": "Off Peak Hours",
+          "index": 23,
+          "dataType": "decimalrow",
+          "defaultValues": "",
           "validation": "mandatory",
-          "id": "23"
+          "hint": ""
         }
-      ],
-      "id": "2"
+      ]
     },
     {
+      "section": "Storage Bin",
+      "id": "storage_bin",
       "index": 3,
-      "section": "Suggested Time",
       "elements": [
         {
+          "id": "insulated",
+          "param": "Well insulated?",
           "index": 31,
-          "hint": "",
-          "dataType": "decimalrow",
-          "defaultValues": "",
-          "param": "Suggested Peak Hours",
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:Yes,2:No",
           "validation": "optional",
-          "id": "31"
-        },
-        {
-          "index": 32,
-          "hint": "",
-          "dataType": "decimalrow",
-          "defaultValues": "",
-          "param": "Suggested Part Peak Hours",
-          "validation": "optional",
-          "id": "32"
-        },
-        {
-          "index": 33,
-          "hint": "",
-          "dataType": "decimalrow",
-          "defaultValues": "",
-          "param": "Suggested Off Peak Hours",
-          "validation": "optional",
-          "id": "33"
+          "hint": ""
         }
-      ],
-      "id": "3"
+      ]
+    },
+    {
+      "section": "",
+      "id": "",
+      "index": 4,
+      "elements": [
+        {
+          "id": "ice_sensor",
+          "param": "Ice level sensor?",
+          "index": 41,
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:Yes,2:No",
+          "validation": "optional",
+          "hint": ""
+        },
+        {
+          "id": "ice_sensorused",
+          "param": "Ice level sensor in use?",
+          "index": 42,
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:Yes,2:No",
+          "validation": "optional",
+          "hint": ""
+        }
+      ]
+    },
+    {
+      "section": "Other",
+      "id": "other",
+      "index": 5,
+      "elements": [
+        {
+          "id": "notes",
+          "param": "Notes about Space or Equipment",
+          "index": 51,
+          "dataType": "textarearow",
+          "defaultValues": "",
+          "validation": "optional",
+          "hint": ""
+        }
+      ]
     }
   ]
 }
