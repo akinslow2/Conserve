@@ -1,555 +1,555 @@
 {
   "geminiForm": [
     {
-      "section": "HVAC - Main",
-      "id": "hvac_main",
       "index": 1,
+      "section": "HVAC - Main ",
       "elements": [
         {
-          "id": "package_type",
-          "param": "Type of Package Unit",
           "index": 11,
+          "hint": "Rq",
           "dataType": "pickerinputrow",
           "defaultValues": "1:heat pump,2:package unit",
+          "param": "Type of Package Unit",
           "validation": "mandatory",
-          "hint": "Rq"
+          "id": "11"
         },
         {
-          "id": "hp_type",
-          "param": "If Heat Pump What Type",
           "index": 12,
+          "hint": "",
           "dataType": "pickerinputrow",
           "defaultValues": "1:ductless heat pump,2:VRF,3:air-to-air,4:air-to-water,5:water-to-water",
+          "param": "If Heat Pump What Type",
           "validation": "optional",
-          "hint": ""
+          "id": "12"
         },
         {
-          "id": "make",
-          "param": "Make",
           "index": 13,
+          "hint": "Rq",
           "dataType": "pickerinputrow",
           "defaultValues": "1:York,2:Carrier,3:Rheem,4:Lennox,5:Daikin,6:American Standard,7:Marvair,8:Nordyne,9:Other",
+          "param": "Make",
           "validation": "mandatory",
-          "hint": "Rq"
+          "id": "13"
         },
         {
-          "id": "nameplate_readable",
-          "param": "Nameplate Readable?",
           "index": 14,
+          "hint": "Rq",
           "dataType": "pickerinputrow",
           "defaultValues": "1:Yes,2:No,3:Slightly",
+          "param": "Nameplate Readable?",
           "validation": "mandatory",
-          "hint": "Rq"
+          "id": "14"
         },
         {
-          "id": "model",
-          "param": "Model Number",
           "index": 15,
+          "hint": "Rq",
           "dataType": "textrow",
           "defaultValues": "",
+          "param": "Model Number",
           "validation": "optional",
-          "hint": "Rq"
+          "id": "15"
         },
         {
-          "id": "year_inst",
-          "param": "Year installed",
           "index": 16,
+          "hint": "",
           "dataType": "introw",
           "defaultValues": "",
+          "param": "Year installed",
           "validation": "optional",
-          "hint": ""
+          "id": "16"
         },
         {
-          "id": "qty",
-          "param": "Quantity",
           "index": 17,
+          "hint": "Rq",
           "dataType": "introw",
           "defaultValues": "",
+          "param": "Quantity",
           "validation": "mandatory",
-          "hint": "Rq"
+          "id": "17"
         },
         {
-          "id": "eer",
-          "param": "EER",
           "index": 18,
+          "hint": "",
           "dataType": "decimalrow",
           "defaultValues": "",
+          "param": "EER",
           "validation": "optional",
-          "hint": ""
+          "id": "18"
         },
         {
-          "id": "seer",
-          "param": "SEER",
           "index": 19,
+          "hint": "Rq",
           "dataType": "decimalrow",
           "defaultValues": "",
+          "param": "SEER",
           "validation": "optional",
-          "hint": "Rq"
+          "id": "19"
         },
         {
-          "id": "hspf",
-          "param": "HSPF",
           "index": 110,
+          "hint": "Rq for HeatPump",
           "dataType": "decimalrow",
           "defaultValues": "",
+          "param": "HSPF",
           "validation": "optional",
-          "hint": "Rq for HeatPump"
+          "id": "110"
         },
         {
-          "id": "cooling_cap",
-          "param": "Cooling Capacity (kBtu/hr)",
           "index": 111,
+          "hint": "Rq - 24",
           "dataType": "decimalrow",
           "defaultValues": "",
+          "param": "Cooling Capacity (kBtu/hr)",
           "validation": "optional",
-          "hint": "Rq - 24"
+          "id": "111"
         },
         {
-          "id": "cooling_captons",
-          "param": "Cooling Capacity (tons)",
           "index": 112,
+          "hint": "3.0",
           "dataType": "decimalrow",
           "defaultValues": "",
+          "param": "Cooling Capacity (tons)",
           "validation": "optional",
-          "hint": "3.0"
+          "id": "112"
         },
         {
-          "id": "heat_out",
-          "param": "Heating Output (kBtu/hr)",
           "index": 113,
+          "hint": "Rq for Package Unit",
           "dataType": "decimalrow",
           "defaultValues": "",
+          "param": "Heating Output (kBtu/hr)",
           "validation": "optional",
-          "hint": "Rq for Package Unit"
+          "id": "113"
         },
         {
-          "id": "heat_in",
-          "param": "Heating Input (kBtu/hr)",
           "index": 114,
+          "hint": "Rq for Package Unit",
           "dataType": "decimalrow",
           "defaultValues": "",
+          "param": "Heating Input (kBtu/hr)",
           "validation": "optional",
-          "hint": "Rq for Package Unit"
+          "id": "114"
         },
         {
-          "id": "heat_efficiency",
-          "param": "Heating Electric Efficiency",
           "index": 115,
+          "hint": "",
           "dataType": "decimalrow",
           "defaultValues": "",
+          "param": "Heating Electric Efficiency",
           "validation": "optional",
-          "hint": ""
+          "id": "115"
         },
         {
-          "id": "heat_power",
-          "param": "Heating Power (kW)",
           "index": 116,
+          "hint": "",
           "dataType": "decimalrow",
           "defaultValues": "",
+          "param": "Heating Power (kW)",
           "validation": "optional",
-          "hint": ""
+          "id": "116"
         },
         {
-          "id": "variable_speed",
-          "param": "Variable speed",
           "index": 117,
+          "hint": "",
           "dataType": "pickerinputrow",
           "defaultValues": "1:yes,2:no",
+          "param": "Variable speed",
           "validation": "optional",
-          "hint": ""
+          "id": "117"
         },
         {
-          "id": "humidity_control",
-          "param": "Humidity controls",
           "index": 118,
+          "hint": "",
           "dataType": "pickerinputrow",
           "defaultValues": "1:yes,2:no",
+          "param": "Humidity controls",
           "validation": "optional",
-          "hint": ""
+          "id": "118"
         },
         {
-          "id": "economizer",
-          "param": "Economizer",
           "index": 119,
+          "hint": "",
           "dataType": "pickerinputrow",
           "defaultValues": "1:yes,2:no",
+          "param": "Economizer",
           "validation": "optional",
-          "hint": ""
+          "id": "119"
         },
         {
-          "id": "manuf_year",
-          "param": "Year",
           "index": 120,
+          "hint": "Rq 2006",
           "dataType": "introw",
           "defaultValues": "",
+          "param": "Year",
           "validation": "optional",
-          "hint": "Rq 2006"
+          "id": "120"
         },
         {
-          "id": "alternate_seer",
-          "param": "Alternate SEER",
           "index": 121,
+          "hint": "Input based on contractor recommendation",
           "dataType": "decimalrow",
           "defaultValues": "",
+          "param": "Alternate SEER",
           "validation": "optional",
-          "hint": "Input based on contractor recommendation"
+          "id": "121"
         },
         {
-          "id": "alternate_hspf",
-          "param": "Alternate HSPF",
           "index": 122,
+          "hint": "Input based on contractor recommendation",
           "dataType": "decimalrow",
           "defaultValues": "",
+          "param": "Alternate HSPF",
           "validation": "optional",
-          "hint": "Input based on contractor recommendation"
+          "id": "122"
         }
-      ]
+      ],
+      "id": "1"
     },
     {
-      "section": "Thermostat",
-      "id": "thermostat",
       "index": 2,
+      "section": "Thermostat",
       "elements": [
         {
-          "id": "thermostat_type",
-          "param": "Thermostat Type",
           "index": 21,
+          "hint": "",
           "dataType": "pickerinputrow",
           "defaultValues": "1:programmable,2:analog",
+          "param": "Thermostat Type",
           "validation": "optional",
-          "hint": ""
+          "id": "21"
         },
         {
-          "id": "heat_set",
-          "param": "Business Hours Set Point - Heat (F)",
           "index": 22,
+          "hint": "",
           "dataType": "introw",
           "defaultValues": "",
+          "param": "Business Hours Set Point - Heat (F)",
           "validation": "optional",
-          "hint": ""
+          "id": "22"
         },
         {
-          "id": "cool_set",
-          "param": "Business Hours Set Point - A/C (F)",
           "index": 23,
+          "hint": "",
           "dataType": "introw",
           "defaultValues": "",
+          "param": "Business Hours Set Point - A/C (F)",
           "validation": "optional",
-          "hint": ""
+          "id": "23"
         },
         {
-          "id": "thermostat_access",
-          "param": "Thermostat Easily Accessible?",
           "index": 24,
+          "hint": "",
           "dataType": "pickerinputrow",
           "defaultValues": "1:Yes,2:No",
+          "param": "Thermostat Easily Accessible?",
           "validation": "optional",
-          "hint": ""
+          "id": "24"
         },
         {
-          "id": "room_temp",
-          "param": "Room Temperature (oF)",
           "index": 25,
+          "hint": "",
           "dataType": "decimalrow",
           "defaultValues": "",
+          "param": "Room Temperature (oF)",
           "validation": "optional",
-          "hint": ""
+          "id": "25"
         },
         {
-          "id": "thermostat_brand",
-          "param": "Thermostat Company/Brand",
           "index": 26,
+          "hint": "",
           "dataType": "textrow",
           "defaultValues": "",
+          "param": "Thermostat Company/Brand",
           "validation": "optional",
-          "hint": ""
+          "id": "26"
         },
         {
-          "id": "thermostat_change",
-          "param": "How is thermostat changed for non-business?",
           "index": 27,
+          "hint": "",
           "dataType": "pickerinputrow",
           "defaultValues": "1:No Change,2:Turned Off,3:Adjusted",
+          "param": "How is thermostat changed for non-business?",
           "validation": "optional",
-          "hint": ""
+          "id": "27"
         },
         {
-          "id": "heat_setadj",
-          "param": "Non-Business Hours Set Point - Heat (F)",
           "index": 28,
+          "hint": "55.0",
           "dataType": "introw",
           "defaultValues": "",
+          "param": "Non-Business Hours Set Point - Heat (F)",
           "validation": "optional",
-          "hint": "55.0"
+          "id": "28"
         },
         {
-          "id": "cool_setadj",
-          "param": "Non-Business Hours Set Point - A/C (F)",
           "index": 29,
+          "hint": "80.0",
           "dataType": "introw",
           "defaultValues": "",
+          "param": "Non-Business Hours Set Point - A/C (F)",
           "validation": "optional",
-          "hint": "80.0"
+          "id": "29"
         }
-      ]
+      ],
+      "id": "2"
     },
     {
-      "section": "Distribution",
-      "id": "distribution",
       "index": 3,
+      "section": "Distribution",
       "elements": [
         {
-          "id": "dist_type",
-          "param": "Type of Distribution",
           "index": 31,
+          "hint": "",
           "dataType": "pickerinputrow",
           "defaultValues": "1:Ducted,2:Hydronic",
+          "param": "Type of Distribution",
           "validation": "optional",
-          "hint": ""
+          "id": "31"
         },
         {
-          "id": "ins_duct",
-          "param": "Insulated Ductwork",
           "index": 32,
+          "hint": "",
           "dataType": "pickerinputrow",
           "defaultValues": "1:yes,2:no",
+          "param": "Insulated Ductwork",
           "validation": "optional",
-          "hint": ""
+          "id": "32"
         }
-      ]
+      ],
+      "id": "3"
     },
     {
-      "section": "Filters",
-      "id": "filters",
       "index": 4,
+      "section": "Filters",
       "elements": [
         {
-          "id": "filter_change",
-          "param": "How frequent are the filters changed? (changes/yr)",
           "index": 41,
+          "hint": "",
           "dataType": "textrow",
           "defaultValues": "",
+          "param": "How frequent are the filters changed? (changes/yr)",
           "validation": "optional",
-          "hint": ""
+          "id": "41"
         },
         {
-          "id": "merv",
-          "param": "MERV rating",
           "index": 42,
+          "hint": "",
           "dataType": "pickerinputrow",
           "defaultValues": "1:6,2:8,3:11,4:13",
+          "param": "MERV rating",
           "validation": "optional",
-          "hint": ""
+          "id": "42"
         }
-      ]
+      ],
+      "id": "4"
     },
     {
-      "section": "Time of Use",
-      "id": "time_of_use",
       "index": 5,
+      "section": "Time of Use",
       "elements": [
         {
-          "id": "motor_hrs",
-          "param": "Estimated Motor Run Hours",
           "index": 51,
+          "hint": "Rq",
           "dataType": "decimalrow",
           "defaultValues": "",
+          "param": "Estimated Motor Run Hours",
           "validation": "optional",
-          "hint": "Rq"
+          "id": "51"
         },
         {
-          "id": "peak_hours",
-          "param": "Peak Hours",
           "index": 52,
+          "hint": "Rq",
           "dataType": "decimalrow",
           "defaultValues": "",
+          "param": "Peak Hours",
           "validation": "optional",
-          "hint": "Rq"
+          "id": "52"
         },
         {
-          "id": "part_hours",
-          "param": "Part Peak Hours",
           "index": 53,
+          "hint": "Rq",
           "dataType": "decimalrow",
           "defaultValues": "",
+          "param": "Part Peak Hours",
           "validation": "optional",
-          "hint": "Rq"
+          "id": "53"
         },
         {
-          "id": "off_hours",
-          "param": "Off Peak Hours",
           "index": 54,
+          "hint": "Rq",
           "dataType": "decimalrow",
           "defaultValues": "",
+          "param": "Off Peak Hours",
           "validation": "optional",
-          "hint": "Rq"
+          "id": "54"
         }
-      ]
+      ],
+      "id": "5"
     },
     {
-      "section": "Other - HVAC",
-      "id": "other_hvac",
       "index": 6,
+      "section": "Other - HVAC",
       "elements": [
         {
-          "id": "cdd_open",
-          "param": "Cooling Degree Days Business Hours",
           "index": 61,
+          "hint": "Rq",
           "dataType": "introw",
           "defaultValues": "",
+          "param": "Cooling Degree Days Business Hours",
           "validation": "optional",
-          "hint": "Rq"
+          "id": "61"
         },
         {
-          "id": "hdd_open",
-          "param": "Heating Degree Days Business Hours",
           "index": 62,
+          "hint": "Rq",
           "dataType": "introw",
           "defaultValues": "",
+          "param": "Heating Degree Days Business Hours",
           "validation": "optional",
-          "hint": "Rq"
+          "id": "62"
         },
         {
-          "id": "cdd_closed",
-          "param": "Cooling Degree Days Closed Hours",
           "index": 63,
+          "hint": "Rq",
           "dataType": "introw",
           "defaultValues": "",
+          "param": "Cooling Degree Days Closed Hours",
           "validation": "optional",
-          "hint": "Rq"
+          "id": "63"
         },
         {
-          "id": "hdd_closed",
-          "param": "Heating Degree Days Closed Hours",
           "index": 64,
+          "hint": "Rq",
           "dataType": "introw",
           "defaultValues": "",
+          "param": "Heating Degree Days Closed Hours",
           "validation": "optional",
-          "hint": "Rq"
+          "id": "64"
         }
-      ]
+      ],
+      "id": "6"
     },
     {
-      "section": "Space Specifics",
-      "id": "space_specifics",
       "index": 7,
+      "section": "Space Specifics",
       "elements": [
         {
-          "id": "ac_threshold_open",
-          "param": "AC Temperature Threshold - Open",
           "index": 71,
+          "hint": "Rq",
           "dataType": "introw",
           "defaultValues": "",
+          "param": "AC Temperature Threshold - Open",
           "validation": "optional",
-          "hint": "Rq"
+          "id": "71"
         },
         {
-          "id": "heat_threshold_open",
-          "param": "Heat Temperature Threshold - Open",
           "index": 72,
+          "hint": "Rq",
           "dataType": "introw",
           "defaultValues": "",
+          "param": "Heat Temperature Threshold - Open",
           "validation": "optional",
-          "hint": "Rq"
+          "id": "72"
         },
         {
-          "id": "ac_threshold_closed",
-          "param": "AC Temperature Threshold - Closed",
           "index": 73,
+          "hint": "Rq",
           "dataType": "introw",
           "defaultValues": "",
+          "param": "AC Temperature Threshold - Closed",
           "validation": "optional",
-          "hint": "Rq"
+          "id": "73"
         },
         {
-          "id": "heat_threshold_closed",
-          "param": "Heat Temperature Threshold - Closed",
           "index": 74,
+          "hint": "Rq",
           "dataType": "introw",
           "defaultValues": "",
+          "param": "Heat Temperature Threshold - Closed",
           "validation": "optional",
-          "hint": "Rq"
+          "id": "74"
         },
         {
-          "id": "insulation",
-          "param": "Is there Insulation in the area?",
           "index": 75,
+          "hint": "Rq",
           "dataType": "pickerinputrow",
           "defaultValues": "1:Yes,2:No",
+          "param": "Is there Insulation in the area?",
           "validation": "optional",
-          "hint": "Rq"
+          "id": "75"
         },
         {
-          "id": "length_space",
-          "param": "Length of Served Area",
           "index": 76,
+          "hint": "Rq",
           "dataType": "decimalrow",
           "defaultValues": "",
+          "param": "Length of Served Area",
           "validation": "optional",
-          "hint": "Rq"
+          "id": "76"
         },
         {
-          "id": "width_space",
-          "param": "Width of Served Area",
           "index": 77,
+          "hint": "Rq",
           "dataType": "decimalrow",
           "defaultValues": "",
+          "param": "Width of Served Area",
           "validation": "optional",
-          "hint": "Rq"
+          "id": "77"
         },
         {
-          "id": "height_space",
-          "param": "Height of Served Area",
           "index": 78,
+          "hint": "Rq",
           "dataType": "decimalrow",
           "defaultValues": "",
+          "param": "Height of Served Area",
           "validation": "optional",
-          "hint": "Rq"
+          "id": "78"
         }
-      ]
+      ],
+      "id": "7"
     },
     {
-      "section": "Sensors",
-      "id": "sensors",
       "index": 8,
+      "section": "Sensors",
       "elements": [
         {
-          "id": "motor_sensor",
-          "param": "Motor Sensor Serial",
           "index": 81,
+          "hint": "insert last 3 digits",
           "dataType": "textrow",
           "defaultValues": "",
+          "param": "Motor Sensor Serial",
           "validation": "mandatory",
-          "hint": "insert last 3 digits"
+          "id": "81"
         },
         {
-          "id": "intemp_sensor",
-          "param": "Interior Temperature Sensor Serial",
           "index": 82,
+          "hint": "insert last 3 digits",
           "dataType": "textrow",
           "defaultValues": "",
+          "param": "Interior Temperature Sensor Serial",
           "validation": "mandatory",
-          "hint": "insert last 3 digits"
+          "id": "82"
         },
         {
-          "id": "outtemp_sensor",
-          "param": "Exterior Temperature Sensor Serial",
           "index": 83,
+          "hint": "insert last 3 digits",
           "dataType": "textrow",
           "defaultValues": "",
+          "param": "Exterior Temperature Sensor Serial",
           "validation": "mandatory",
-          "hint": "insert last 3 digits"
+          "id": "83"
         },
         {
-          "id": "notes",
-          "param": "Notes from Space or Equipment",
           "index": 84,
+          "hint": "issues or observations here",
           "dataType": "textrow",
           "defaultValues": "",
+          "param": "Notes from Space or Equipment",
           "validation": "optional",
-          "hint": "issues or observations here"
+          "id": "84"
         }
-      ]
+      ],
+      "id": "8"
     }
   ]
 }

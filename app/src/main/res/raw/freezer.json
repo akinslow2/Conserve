@@ -1,232 +1,232 @@
 {
   "geminiForm": [
     {
-      "section": "Freezer",
-      "id": "freezer",
       "index": 1,
+      "section": "Freezer",
       "elements": [
         {
-          "id": "door_type",
-          "param": "Door Type",
           "index": 11,
+          "hint": "Rq",
           "dataType": "pickerinputrow",
           "defaultValues": "1:Solid,2:Glass,3:Solid Chest,4:Glass Chest,5:None",
+          "param": "Door Type",
           "validation": "optional",
-          "hint": "Rq"
+          "id": "11"
         },
         {
-          "id": "num_doors",
-          "param": "Number of Doors",
           "index": 12,
+          "hint": "",
           "dataType": "introw",
           "defaultValues": "",
+          "param": "Number of Doors",
           "validation": "optional",
-          "hint": ""
+          "id": "12"
         },
         {
-          "id": "equip_type",
-          "param": "Equipment Type",
           "index": 13,
+          "hint": "",
           "dataType": "pickerinputrow",
           "defaultValues": "1:Ultra-low Temperature Freezer,2:Solid Door Freezer,3:Solid Door Refrigerator,4:Glass Door Refrigerator",
+          "param": "Equipment Type",
           "validation": "optional",
-          "hint": ""
+          "id": "13"
         },
         {
-          "id": "style_type",
-          "param": "Style Type",
           "index": 14,
+          "hint": "",
           "dataType": "pickerinputrow",
           "defaultValues": "1:Milk or Beverage Cabinet,2:Other,3:Pass-Through,4:Reach-in,5:Undercounter,6:Wedge Case,7:Work-Top Table,8:Roll-in",
+          "param": "Style Type",
           "validation": "optional",
-          "hint": ""
+          "id": "14"
         },
         {
-          "id": "volume",
-          "param": "Total Volume (cu.ft.)",
           "index": 15,
+          "hint": "Rq",
           "dataType": "decimalrow",
           "defaultValues": "",
+          "param": "Total Volume (cu.ft.)",
           "validation": "optional",
-          "hint": "Rq"
+          "id": "15"
         },
         {
-          "id": "model_num",
-          "param": "Model Number",
           "index": 16,
+          "hint": "Rq",
           "dataType": "textrow",
           "defaultValues": "",
+          "param": "Model Number",
           "validation": "optional",
-          "hint": "Rq"
+          "id": "16"
         },
         {
-          "id": "company",
-          "param": "Company",
           "index": 17,
+          "hint": "Rq",
           "dataType": "textrow",
           "defaultValues": "",
+          "param": "Company",
           "validation": "optional",
-          "hint": "Rq"
+          "id": "17"
         },
         {
-          "id": "year_installed",
-          "param": "Year Installed",
           "index": 18,
+          "hint": "Rq",
           "dataType": "introw",
           "defaultValues": "",
+          "param": "Year Installed",
           "validation": "optional",
-          "hint": "Rq"
+          "id": "18"
         },
         {
-          "id": "new_install",
-          "param": "Bought New?",
           "index": 19,
+          "hint": "Rq",
           "dataType": "pickerinputrow",
           "defaultValues": "1:Yes,2:No",
+          "param": "Bought New?",
           "validation": "optional",
-          "hint": "Rq"
+          "id": "19"
         },
         {
-          "id": "control",
-          "param": "Plug Load Control",
           "index": 110,
+          "hint": "",
           "dataType": "pickerinputrow",
           "defaultValues": "1:Yes,2:No",
+          "param": "Plug Load Control",
           "validation": "optional",
-          "hint": ""
+          "id": "110"
         },
         {
-          "id": "quantity",
-          "param": "Quantity",
           "index": 111,
+          "hint": "Rq",
           "dataType": "introw",
           "defaultValues": "",
+          "param": "Quantity",
           "validation": "optional",
-          "hint": "Rq"
+          "id": "111"
         },
         {
-          "id": "daily_energy",
-          "param": "Daily Energy Used",
           "index": 112,
+          "hint": "",
           "dataType": "decimalrow",
           "defaultValues": "",
+          "param": "Daily Energy Used",
           "validation": "optional",
-          "hint": ""
+          "id": "112"
         },
         {
-          "id": "age",
-          "param": "Estimated Age",
           "index": 113,
+          "hint": "Helpful",
           "dataType": "pickerinputrow",
           "defaultValues": "1:pre1993,2:1993to2001,3:2002to2010,4:2010+",
+          "param": "Estimated Age",
           "validation": "optional",
-          "hint": "Helpful"
+          "id": "113"
         },
         {
-          "id": "condensor_size",
-          "param": "Condensor Compressor Size (HP)",
           "index": 114,
+          "hint": "Rq for condensing unit",
           "dataType": "decimalrow",
           "defaultValues": "",
+          "param": "Condensor Compressor Size (HP)",
           "validation": "optional",
-          "hint": "Rq for condensing unit"
+          "id": "114"
         }
-      ]
+      ],
+      "id": "1"
     },
     {
-      "section": "TOU",
-      "id": "tou",
       "index": 2,
+      "section": "TOU",
       "elements": [
         {
-          "id": "peak_hours",
-          "param": "Peak Hours",
           "index": 21,
+          "hint": "",
           "dataType": "decimalrow",
           "defaultValues": "",
+          "param": "Peak Hours",
           "validation": "optional",
-          "hint": ""
+          "id": "21"
         },
         {
-          "id": "part_hours",
-          "param": "Part Peak Hours",
           "index": 22,
+          "hint": "",
           "dataType": "decimalrow",
           "defaultValues": "",
+          "param": "Part Peak Hours",
           "validation": "optional",
-          "hint": ""
+          "id": "22"
         },
         {
-          "id": "off_hours",
-          "param": "Off Peak Hours",
           "index": 23,
+          "hint": "",
           "dataType": "decimalrow",
           "defaultValues": "",
+          "param": "Off Peak Hours",
           "validation": "mandatory",
-          "hint": ""
+          "id": "23"
         }
-      ]
+      ],
+      "id": "2"
     },
     {
-      "section": "Other",
-      "id": "other",
       "index": 3,
+      "section": "Other",
       "elements": [
         {
-          "id": "energystar",
-          "param": "Energy Star Rating?",
           "index": 31,
+          "hint": "",
           "dataType": "pickerinputrow",
           "defaultValues": "1:Yes,2:No",
+          "param": "Energy Star Rating?",
           "validation": "optional",
-          "hint": ""
+          "id": "31"
         },
         {
-          "id": "led",
-          "param": "LED lighting?",
           "index": 32,
+          "hint": "Rq for LED replacement",
           "dataType": "pickerinputrow",
           "defaultValues": "1:Yes,2:No",
+          "param": "LED lighting?",
           "validation": "optional",
-          "hint": "Rq for LED replacement"
+          "id": "32"
         },
         {
-          "id": "lumens",
-          "param": "Light Lumens",
           "index": 33,
+          "hint": "Rq for LED replacement",
           "dataType": "pickerinputrow",
           "defaultValues": "1:0 to 1,2:700,3:1,4:701 and above",
+          "param": "Light Lumens",
           "validation": "",
-          "hint": "Rq for LED replacement"
+          "id": "33"
         },
         {
-          "id": "temp_setting",
-          "param": "Temperature Setting",
           "index": 34,
+          "hint": "",
           "dataType": "decimalrow",
           "defaultValues": "",
+          "param": "Temperature Setting",
           "validation": "",
-          "hint": ""
+          "id": "34"
         },
         {
-          "id": "quality_seal",
-          "param": "Quality of Door Seal",
           "index": 35,
+          "hint": "",
           "dataType": "pickerinputrow",
           "defaultValues": "1:poor,2:adequate,3:strong",
+          "param": "Quality of Door Seal",
           "validation": "",
-          "hint": ""
+          "id": "35"
         },
         {
-          "id": "notes",
-          "param": "Notes about Space or Equipment",
           "index": 36,
+          "hint": "",
           "dataType": "textarearow",
           "defaultValues": "",
+          "param": "Notes about Space or Equipment",
           "validation": "optional",
-          "hint": ""
+          "id": "36"
         }
-      ]
+      ],
+      "id": "3"
     }
   ]
 }
