@@ -200,6 +200,7 @@ class WIRefrigerator(computable: Computable<*>, utilityRateGas: UtilityRate, uti
 
     /** year equipment was manufactured **/
     var year = 0
+    var compressorTons = 0.0
 
 
     /**
@@ -239,6 +240,7 @@ class WIRefrigerator(computable: Computable<*>, utilityRateGas: UtilityRate, uti
             quantity = featureData["Quantity"]!! as Int
 
             year = featureData["Year"]!! as Int
+            compressorTons = (featureData["Condensor Compressor Size (HP)"]!! as String).toDouble()
             peakHours = featureData["Peak Hours"]!! as Double
             partPeakHours = featureData["Part Peak Hours"]!! as Double
             offPeakHours = featureData["Off Peak Hours"]!! as Double
@@ -376,11 +378,15 @@ class WIRefrigerator(computable: Computable<*>, utilityRateGas: UtilityRate, uti
      * HVAC - INCENTIVES | MATERIAL COST
      * */
     override fun incentives(): Double {
-        val powerChangePerYear =
-                if (usageHoursBusiness.yearly() == 0.0) 0.0
-                else energyPowerChange() / usageHoursBusiness.yearly()
+       var total = 0.0
 
-        return energyPowerChange() * 0.15 + powerChangePerYear * 150
+        // automatic door closer
+        total +=  70
+
+        // efficient compressors
+        total += compressorTons * 120
+
+        return total
     }
 
     override fun materialCost(): Double {

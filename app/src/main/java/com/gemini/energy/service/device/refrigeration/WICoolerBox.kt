@@ -219,11 +219,12 @@ class WICoolerBox(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
      * HVAC - INCENTIVES | MATERIAL COST
      * */
     override fun incentives(): Double {
-        val powerChangePerYear =
-                if (usageHoursBusiness.yearly() == 0.0) 0.0
-                else energyPowerChange() / usageHoursBusiness.yearly()
+         var total = 0.0
 
-        return energyPowerChange() * 0.15 + powerChangePerYear * 150
+        // automatic door closer
+        total +=  70
+
+        return total
     }
 
     override fun materialCost(): Double {

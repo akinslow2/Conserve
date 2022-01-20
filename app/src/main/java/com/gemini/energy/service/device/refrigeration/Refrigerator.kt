@@ -23,6 +23,8 @@ class Refrigerator(computable: Computable<*>, utilityRateGas: UtilityRate, utili
     var year = 0
     var styleType = ""
     var totalVolume = 0.0
+    var numberOfDoors = 0
+    var compressorTons = 0.0
 
 
     /**
@@ -37,6 +39,8 @@ class Refrigerator(computable: Computable<*>, utilityRateGas: UtilityRate, utili
             year = featureData["Year installed"]!! as Int
             styleType = featureData["Style Type"]!! as String
             totalVolume = featureData["Total Volume (cu.ft.)"]!! as Double
+            numberOfDoors = featureData["Number of Doors"]!! as Int
+            compressorTons = featureData["Condensor Compressor Size (HP)"]!! as Double
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -53,7 +57,24 @@ class Refrigerator(computable: Computable<*>, utilityRateGas: UtilityRate, utili
     }
 
     override fun incentives(): Double {
-        return 0.0
+         var total = 0.0
+
+        // reach in energy star
+        if (styleType == "Reach-in") {
+            if (numberOfDoors == 1) {
+                total += 30
+            } else if (numberOfDoors == 2 || numberOfDoors == 3) {
+                total += 100
+            }
+        }
+
+        // automatic door closer
+        total += numberOfDoors * 70
+
+        // efficient condensor
+        total += compressorTons * 18
+
+        return total
     }
 
     override fun materialCost(): Double {
