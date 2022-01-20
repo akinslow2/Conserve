@@ -311,6 +311,11 @@ class LinearFluorescent(computable: Computable<*>, utilityRateGas: UtilityRate, 
             }
         }
 
+        // add controls
+        if (hasControls == "No") {
+            total += 0.12 * actualWatts
+        }
+
         return total
     }
 

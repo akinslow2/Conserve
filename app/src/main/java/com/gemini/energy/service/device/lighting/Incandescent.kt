@@ -293,6 +293,11 @@ class Incandescent(computable: Computable<*>, utilityRateGas: UtilityRate, utili
         // replacement to LED
         total += 7.50 * numberOfFixtures * lampsPerFixtures
 
+        // add controls
+        if (hasControls == "No") {
+            total += 0.12 * actualWatts
+        }
+
         return total
     }
 

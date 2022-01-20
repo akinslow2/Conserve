@@ -291,6 +291,17 @@ class LPSodium(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRa
         return (totalLamps * (Utils.electricianHourlyRate / 6)  + (totalLamps * bulbcost)) * Utils.futureValueFactor + (totalSavings() * presentvaluefactor) - installCost()
     }
 
+    override fun incentives(): Double {
+        var total = 0.0
+
+        // add controls
+        if (hasControls == "No") {
+            total += 0.12 * actualWatts
+        }
+
+        return total
+    }
+
 
     /**
      * Energy Efficiency Lookup Query Definition

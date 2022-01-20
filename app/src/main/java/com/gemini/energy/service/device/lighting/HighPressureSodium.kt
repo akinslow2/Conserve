@@ -309,6 +309,11 @@ class HPSodium(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRa
             total += 165 * numberOfFixtures
         }
 
+        // add controls
+        if (hasControls == "No") {
+            total += 0.12 * actualWatts
+        }
+
         return total
     }
 

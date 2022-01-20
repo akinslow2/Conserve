@@ -302,6 +302,17 @@ class Cfl(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEle
         return (totalLamps * (Utils.electricianHourlyRate / 6)  + (totalLamps * bulbcost)) * Utils.futureValueFactor + (totalSavings() * presentvaluefactor) - installCost()
     }
 
+    override fun incentives(): Double {
+        var total = 0.0
+
+        // add controls
+        if (hasControls == "No") {
+            total += 0.12 * actualWatts
+        }
+
+        return total
+    }
+
 
     /**
      * Define all the fields here - These would be used to Generate the Outgoing Rows or perform the Energy Calculation
