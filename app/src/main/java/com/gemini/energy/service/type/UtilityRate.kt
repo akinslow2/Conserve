@@ -2,8 +2,6 @@ package com.gemini.energy.service.type
 
 import android.content.Context
 import com.gemini.energy.presentation.util.ERateKey
-import timber.log.Timber
-import kotlin.reflect.typeOf
 
 open class UtilityRate(private val context: Context) {
 
@@ -67,12 +65,11 @@ open class UtilityRate(private val context: Context) {
     fun nonTimeOfUse() = utility.getNoneTOU(structure)
 
     fun getDemandRate(): Double {
-
-        return structure.values.firstOrNull()?.firstOrNull()?.toDouble() ?: 0.0
+        return structure.values.firstOrNull()?.lastOrNull()?.toDouble() ?: 0.0
     }
 
     fun getEnergyCharge(): Double {
-        return structure.values.firstOrNull()?.lastOrNull()?.toDouble() ?: 0.0
+        return structure.values.firstOrNull()?.firstOrNull()?.toDouble() ?: 0.0
     }
 
     companion object {
@@ -121,12 +118,13 @@ interface IUtility {
 
 class Electricity(private val rateStructure: String, private val companyCode: String) : IUtility {
 
-    enum class EKey(val index: Int) { Season(1), Peak(4) }
-    enum class EValue(val index: Int) { EnergyCharge(5), Average(6), Demand(3) }
+    enum class EKey(val index: Int) { Season(1), Peak(2) }
+    enum class EValue(val index: Int) { EnergyCharge(3), ServiceCharge(7), Demand(5) }
 
     override fun getKey(columns: List<String>) = listOf(columns[EKey.Season.index] + "-" + columns[EKey.Peak.index])
-    override fun getValue(columns: List<String>, header: String) = listOf(listOf(columns[EValue.EnergyCharge.index],
-            columns[EValue.Average.index], columns[EValue.Demand.index]))
+    override fun getValue(columns: List<String>, header: String) =
+            listOf(
+                    listOf(columns[EValue.EnergyCharge.index], columns[EValue.ServiceCharge.index], columns[EValue.Demand.index]))
 
     override fun getResourcePath() = "utility/${companyCode}_electric.csv"
     override fun getSeparator(): Char = ','
@@ -135,10 +133,11 @@ class Electricity(private val rateStructure: String, private val companyCode: St
 
     override fun getTOU(structure: HashMap<String, List<String>>) = TOU(
             structure[ERateKey.SummerOn.value]!![0].toDouble(),
-            structure[ERateKey.SummerPart.value]!![0].toDouble(),
+            0.0,
             structure[ERateKey.SummerOff.value]!![0].toDouble(),
-            structure[ERateKey.WinterPart.value]!![0].toDouble(),
-            structure[ERateKey.WinterOff.value]!![0].toDouble())
+            structure[ERateKey.WinterOn.value]!![0].toDouble(),
+            structure[ERateKey.WinterOff.value]!![0].toDouble()
+    )
 
     override fun getNoneTOU(structure: HashMap<String, List<String>>) = TOUNone(
             structure[ERateKey.SummerNone.value]?.get(0)?.toDouble() ?: 0.0,

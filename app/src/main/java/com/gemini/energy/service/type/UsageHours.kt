@@ -4,7 +4,6 @@ import com.gemini.energy.presentation.util.EDay
 import com.gemini.energy.presentation.util.ERateKey
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.HashMap
 
 
 open class UsageHours {
@@ -38,9 +37,9 @@ open class UsageHours {
         val usageByPeak = mapper.mappedHoursYearly()
         return TOU(
                 usageByPeak[ERateKey.SummerOn]!! * WEIGHT_SUMMER,
-                usageByPeak[ERateKey.SummerPart]!! * WEIGHT_SUMMER,
+                0.0,
                 usageByPeak[ERateKey.SummerOff]!! * WEIGHT_SUMMER,
-                usageByPeak[ERateKey.WinterPart]!! * WEIGHT_WINTER,
+                usageByPeak[ERateKey.WinterOn]!! * WEIGHT_WINTER,
                 usageByPeak[ERateKey.WinterOff]!! * WEIGHT_WINTER
         )
     }
@@ -117,11 +116,6 @@ open class UsageHours {
                                     outgoing[ERateKey.SummerOff] = tmp!! + delta
                                 }
 
-                                if (isSummerPartialPeak(current)) {
-                                    val tmp = outgoing[ERateKey.SummerPart]
-                                    outgoing[ERateKey.SummerPart] = tmp!! + delta
-                                }
-
                                 if (isSummerPeak(current)) {
                                     val tmp = outgoing[ERateKey.SummerOn]
                                     outgoing[ERateKey.SummerOn] = tmp!! + delta
@@ -132,9 +126,9 @@ open class UsageHours {
                                     outgoing[ERateKey.WinterOff] = tmp!! + delta
                                 }
 
-                                if (isWinterPartialPeak(current)) {
-                                    val tmp = outgoing[ERateKey.WinterPart]
-                                    outgoing[ERateKey.WinterPart] = tmp!! + delta
+                                if (isWinterPeak(current)) {
+                                    val tmp = outgoing[ERateKey.WinterOn]
+                                    outgoing[ERateKey.WinterOn] = tmp!! + delta
                                 }
 
                                 calendar.time = current
