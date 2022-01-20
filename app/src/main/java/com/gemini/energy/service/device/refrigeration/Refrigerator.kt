@@ -52,6 +52,7 @@ class Refrigerator(computable: Computable<*>, utilityRateGas: UtilityRate, utili
     override fun costPreState(elements: List<JsonElement?>): Double {
         val powerUsed = hourlyEnergyUsagePre()[0]
         val costElectricity: Double
+        // TODO - confirm correct costElectricity formula - use hours in a year since refrigerator is running during non-business hours as well
         costElectricity = costElectricity(powerUsed, super.usageHoursBusiness, super.electricityRate)
         return costElectricity
     }
@@ -78,10 +79,12 @@ class Refrigerator(computable: Computable<*>, utilityRateGas: UtilityRate, utili
     }
 
     override fun materialCost(): Double {
+        // @DY - add different material costs for diff style types, e.g. reach-in or number of doors
         return 2500.0
     }
 
     override fun laborCost(): Double {
+        // @DY - determine labor costs by researching and calling contractors for quotes
         return 0.0
     }
 
@@ -99,6 +102,7 @@ class Refrigerator(computable: Computable<*>, utilityRateGas: UtilityRate, utili
         return costElectricity
     }
 
+    // TODO - installCost should be: materialCost + laborCost - incentives
     fun installCost(): Double {
         val increCost = replacementIncrementalcost
         val totalCost = increCost * 4 //@AK2 fill
@@ -116,6 +120,11 @@ class Refrigerator(computable: Computable<*>, utilityRateGas: UtilityRate, utili
     override fun hourlyEnergyUsagePre(): List<Double> {
         var hourlyEnergy = 0.0
 
+        // @ DY - take refrigerators we have assessed, call manufacturers about daily energy usage. ask for procedural assumptions (time running, # cycles/day)
+        // taking voltage * amperage = power -> power * time = energy
+        // find variance depending on behavior and determine how significantly it will affect energy usage
+        // have typically used spreadsheet of assumed default values based on style type and cubic feet - see Burlington
+        // resources: https://caenergywise.com/calculators/
         try {
             val dailyEnergyUsed = featureData["Daily Energy Used"]!! as Double
             hourlyEnergy = dailyEnergyUsed / 24.0
