@@ -235,7 +235,13 @@ class WaterHeater(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
      * HVAC - INCENTIVES | MATERIAL COST
      * */
     override fun incentives(): Double {
-        return 0.0
+          var total = 0.0
+
+          if (unittype == "heat pump") {
+              total += 950 * quantity
+          }
+
+        return total
     }
 
     override fun materialCost(): Double {
