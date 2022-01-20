@@ -287,6 +287,15 @@ class Incandescent(computable: Computable<*>, utilityRateGas: UtilityRate, utili
         return (totalLamps * (Utils.electricianHourlyRate / 6)  + (totalLamps * bulbcost)) * Utils.futureValueFactor + (totalSavings() * presentvaluefactor) - installCost()
     }
 
+    override fun incentives(): Double {
+        var total = 0.0
+
+        // replacement to LED
+        total += 7.50 * numberOfFixtures * lampsPerFixtures
+
+        return total
+    }
+
 
     /**
      * Energy Efficiency Lookup Query Definition
