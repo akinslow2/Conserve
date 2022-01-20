@@ -227,19 +227,16 @@ open class UsageHours {
 
             }
 
-            private fun isSummerPeak(now: Date) = inBetween(now, getTime("12:00"), getTime("18:00"))
+            private fun isSummerPeak(now: Date) = inBetween(now, getTime("14:00"), getTime("20:00"))
 
-            private fun isSummerPartialPeak(now: Date) = inBetween(now, getTime("08:30"), getTime("12:00")) ||
-                    inBetween(now, getTime("18:00"), getTime("21:30"))
+            private fun isSummerOffPeak(now: Date) = inBetween(now, getTime("20:00"), getTime("23:50"))
+                    || inBetween(now, getTime("00:00"), getTime("14:00"))
 
-            private fun isSummerOffPeak(now: Date) = inBetween(now, getTime("21:30"), getTime("23:59")) ||
-                    inBetween(now, getTime("00:00"), getTime("08:30"))
+            private fun isWinterPeak(now: Date) = inBetween(now, getTime("6:00"), getTime("10:00"))
+                    || inBetween(now, getTime("17:00"), getTime("21:00"))
 
-            private fun isWinterPartialPeak(now: Date) = inBetween(now, getTime("08:30"), getTime("21:30"))
-
-            private fun isWinterOffPeak(now: Date) = inBetween(now, getTime("21:30"), getTime("23:59")) ||
-                    inBetween(now, getTime("00:00"), getTime("08:30"))
-
+            private fun isWinterOffPeak(now: Date) = inBetween(now, getTime("10:00"), getTime("17:00")) ||
+                    inBetween(now, getTime("21:00"), getTime("6:30"))
         }
     }
 
