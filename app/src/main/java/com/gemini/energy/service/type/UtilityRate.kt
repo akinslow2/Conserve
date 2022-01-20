@@ -157,10 +157,10 @@ class Gas(private val rateStructure: String = "") : IUtility {
         return outgoing
     }
 
-    override fun getResourcePath() = "utility/pge_gas.csv"
+    override fun getResourcePath() = "utility/swg_gas.csv"
     override fun getSeparator() = ','
     override fun getRowIdentifier(): Regex {
-        return ".*".toRegex()
+        return "^${getRate()}.*".toRegex()
     }
 
     override fun getRate() = rateStructure
@@ -168,17 +168,19 @@ class Gas(private val rateStructure: String = "") : IUtility {
     override fun getTOU(structure: HashMap<String, List<String>>) = TOU()
 
     override fun getNoneTOU(structure: HashMap<String, List<String>>) = TOUNone(
-            structure[ERateKey.GasSummer.value]!![0].toDouble(),
-            structure[ERateKey.SummerExcess.value]!![0].toDouble(),
-            structure[ERateKey.GasWinter.value]!![0].toDouble(),
-            structure[ERateKey.WinterExcess.value]!![0].toDouble())
+            structure["0_600-service"]!![0].toDouble(),
+            structure["0_600-commodity"]!![0].toDouble(),
+            structure["0_600-service"]!![0].toDouble(),
+            structure["0_600-commodity"]!![0].toDouble())
 
     companion object {
         private val keys = listOf(
-                ERateKey.Slab1.value, ERateKey.Slab2.value, ERateKey.Slab3.value,
-                ERateKey.Slab4.value, ERateKey.Slab5.value, ERateKey.Surcharge.value,
-                ERateKey.SummerTransport.value, ERateKey.WinterTransport.value,
-                ERateKey.SummerExcess.value, ERateKey.WinterExcess.value)
+            "0_600-service", "0_600-commodity",
+                "601_7200-service", "601_7200-commodity",
+                "7201_50000-service", "7201_50000-commodity",
+                "50001_180000-service", "50001_180000-commodity",
+                "180001-service", "180001-commodity"
+        )
 
         const val FIRST_SLAB = 4000.0
 

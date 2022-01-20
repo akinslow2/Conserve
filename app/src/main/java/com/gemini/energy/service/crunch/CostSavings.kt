@@ -4,7 +4,6 @@ import com.gemini.energy.domain.entity.Computable
 import com.gemini.energy.presentation.util.ERateKey
 import com.gemini.energy.service.CostElectric
 import com.gemini.energy.service.DataHolder
-import com.gemini.energy.service.type.Gas
 import com.gemini.energy.service.type.UsageHours
 import com.gemini.energy.service.type.UtilityRate
 import io.reactivex.functions.Function
@@ -66,10 +65,22 @@ class CostSavings {
          * Compute Cost Gas
          * */
         fun costGas(energyUsed: Double, rate: UtilityRate): Double {
-            val gas= rate.nonTimeOfUse()
-            val rateFirst = (gas.summerNone() + gas.winterNone()) / 2
-            val rateExcess = (gas.summerExcess() + gas.winterExcess()) / 2
-            return (energyUsed) * (if (energyUsed > Gas.FIRST_SLAB) rateExcess else rateFirst)
+            val structure = rate.structure
+            var commodity = 0.0
+
+            if (energyUsed <= 600) {
+                commodity = structure["0_600-commodity"]!!.first().toDouble()
+            } else if (energyUsed <= 7200) {
+                commodity = structure["601_7200-commodity"]!!.first().toDouble()
+            } else if (energyUsed <= 50000) {
+                commodity = structure["7201_50000-commodity"]!!.first().toDouble()
+            } else if (energyUsed <= 180000) {
+                commodity = structure["50001_180000-commodity"]!!.first().toDouble()
+            } else {
+                commodity = structure["180001-commodity"]!!.first().toDouble()
+            }
+
+            return energyUsed * commodity
         }
 
         /**

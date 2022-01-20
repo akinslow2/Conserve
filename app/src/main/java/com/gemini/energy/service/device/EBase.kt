@@ -67,14 +67,15 @@ abstract class EBase(val computable: Computable<*>,
      * Electricity | Gas Utility Rate Setup
      * */
     private fun setupUtility(base: EBase) {
-        base.gasRate = utilityRateGas.initUtility(Gas()).build()
-        //Others has been added to the Electric Rate Structure as a fix cause the Section Name
-        //is added to the Element Key
-        val fix = "Others"
+        val prefix = "Others"
 
-        if (preAudit.containsKey("$fix Electric Rate Structure") && preAudit.containsKey("$fix Electric Utility Company")) {
-            base.electricRateStructure = preAudit["$fix Electric Rate Structure"] as String
-            base.electricCompanyCode = preAudit["$fix Electric Utility Company"] as String
+        if (preAudit.containsKey("$prefix Gas Utility Company") && preAudit.containsKey("$prefix Gas Rate Structure")) {
+            base.gasRate = utilityRateGas.initUtility(Gas(preAudit["$prefix Gas Rate Structure"] as String)).build()
+        }
+
+        if (preAudit.containsKey("$prefix Electric Rate Structure") && preAudit.containsKey("$prefix Electric Utility Company")) {
+            base.electricRateStructure = preAudit["$prefix Electric Rate Structure"] as String
+            base.electricCompanyCode = preAudit["$prefix Electric Utility Company"] as String
         }
 
         Timber.d("####### RATE STRUCTURE CHECKER #######")
@@ -489,14 +490,22 @@ abstract class EBase(val computable: Computable<*>,
      * ToDo: The Gas Rate should be an Average calculated from all the Rates for that Year.
      * */
     fun costGas(energyUsed: Double): Double {
-        val gas= gasRate.nonTimeOfUse()
-        val rateFirst = (gas.summerNone() + gas.winterNone()) / 2
-        val rateExcess = (gas.summerExcess() + gas.winterExcess()) / 2
+        val structure = gasRate.structure
+        var commodity = 0.0
 
-        Timber.d("RATE FIRST :: $rateFirst")
-        Timber.d("RATE SECOND :: $rateExcess")
+        if (energyUsed <= 600) {
+            commodity = structure["0_600-commodity"]!!.first().toDouble()
+        } else if (energyUsed <= 7200) {
+            commodity = structure["601_7200-commodity"]!!.first().toDouble()
+        } else if (energyUsed <= 50000) {
+            commodity = structure["7201_50000-commodity"]!!.first().toDouble()
+        } else if (energyUsed <= 180000) {
+            commodity = structure["50001_180000-commodity"]!!.first().toDouble()
+        } else {
+            commodity = structure["180001-commodity"]!!.first().toDouble()
+        }
 
-        return (energyUsed) * (if (energyUsed > Gas.FIRST_SLAB) rateExcess else rateFirst)
+        return energyUsed * commodity
     }
 
     /**
