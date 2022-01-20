@@ -161,6 +161,7 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
     var gasUtilityCompany = ""
     var electricstructure = ""
     var gasstructure = ""
+    var bms = ""
     var economizer = ""
     var thermotype = ""
     var uvalue = 0.15 //for details see document "U Value Calculations" in the Building Calculations Folder
@@ -206,6 +207,7 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
             electricstructure = preAudit["Others Electric Rate Structure"]!! as String
             gasstructure = preAudit["Others Gas Rate Structure"]!! as String
             bldgtype = preAudit["General Client Info Facility Type"]!! as String
+            bms = preAudit["General Site Access and Notes Is there a Building Management System (BMS) in use for energy management?"]!! as String
 
             typeOfUnit = featureData["Type of Package Unit"]!! as String
             eer = featureData["EER"]!! as Double
@@ -397,10 +399,29 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
      * HVAC - INCENTIVES | MATERIAL COST
      * */
     override fun incentives(): Double {
-        if (utilitycompany == "pge") {
-            val powerChangeOverHoursPre = if (usageHoursPre() == 0.0) 0.0 else energyPowerChange() / usageHoursPre()
-            return energyPowerChange() * 0.15 + powerChangeOverHoursPre * 150
-        } else return 0.0
+        var total = 0.0
+
+        // replace 2-5 ton heat pump
+        if (typeOfUnit == "heat pump" && tons in 2..5) {
+            when {
+                alternateSeer >= 18 -> total += 395.0 * quantity
+                alternateSeer >= 17 -> total += 295.0 * quantity
+                alternateSeer >= 16 -> total += 195.0 * quantity
+                alternateSeer >= 15 -> total += 95.0 * quantity
+            }
+        }
+
+        // replace non-programmable thermostat
+        if (thermotype == "Analog") {
+            total += 130.0 * quantity
+        }
+
+        // building energy management system
+        if (bms == "yes") {
+            total += 0.8 * bldgarea
+        }
+
+        return total
     }
 
     //@K2 does kbtu have to be a double to be in the equation below? Right now it is an INT
