@@ -75,6 +75,7 @@ class LinearFluorescent(computable: Computable<*>, utilityRateGas: UtilityRate, 
     var replacementType = ""
     var isCeilingOver10Feet = ""
     var fixtureType = ""
+    var tubeType = ""
 
 
     override fun setup() {
@@ -90,6 +91,7 @@ class LinearFluorescent(computable: Computable<*>, utilityRateGas: UtilityRate, 
             replacementType = featureData["Replacement Type"]!! as String
             isCeilingOver10Feet = featureData["Ceiling greater than 10 feet?"]!! as String
             fixtureType = featureData["Fixture Type"]!! as String
+            tubeType = featureData["Lamp Tube Type"]!! as String
 
             controls = featureData["Type of Control"]!! as String
             hasControls = featureData["Controls"]!! as String
@@ -298,6 +300,18 @@ class LinearFluorescent(computable: Computable<*>, utilityRateGas: UtilityRate, 
     fun netPresentValue(): Double {
         val totalLamps = lampsPerFixtures * numberOfFixtures
         return (totalLamps * (Utils.electricianHourlyRate / 6)  + (totalLamps * bulbcost)) * Utils.futureValueFactor + (totalSavings() * presentvaluefactor) - installCost()
+    }
+
+    override fun incentives(): Double {
+        var total = 0.0
+
+        if (tubeType == "T12" || tubeType == "T8") {
+            if (fixtureType == "2x2" || fixtureType == "2x4") {
+                total += 6.5 * numberOfFixtures * lampsPerFixtures
+            }
+        }
+
+        return total
     }
 
 
