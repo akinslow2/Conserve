@@ -144,21 +144,17 @@ class WaterHeater(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
     override fun setup() {
         try {
             quantity = featureData["Quantity"]!! as Int
-            year = featureData["Year"]!! as Int
+            year = featureData["Year Manufactured"]!! as Int
 
             gasInput = featureData["Heating Input (Btu/hr)"]!! as Int
             gasOutput = featureData["Heating Output (Btu/hr)"]!! as Int
             thermaleff = featureData["Thermal Efficiency"]!! as Int
-            electriceff = featureData["Heating Electirc Efficiency"]!! as Double
+            electriceff = (featureData["Thermal Efficiency"]!! as Int).toDouble()
 
             kW = featureData["Heating Power (kW)"]!! as Double
             fueltype = featureData["Fuel Type"]!! as String
             unittype = featureData["Type of Unit"]!! as String
             capacity = featureData["Capacity (U.S. Gal)"]!! as Double
-
-            peakHours = featureData["Peak Hours"]!! as Double
-            partPeakHours = featureData["Part Peak Hours"]!! as Double
-            offPeakHours = featureData["Off Peak Hours"]!! as Double
         } catch (e: Exception) {
             e.printStackTrace()
         }

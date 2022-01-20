@@ -136,8 +136,6 @@ class WICoolerBox(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
             year = featureData["Year"]!! as Int
 
             kW = featureData["Heating Power (kW)"]!! as Double
-            peakHours = featureData["Peak Hours"]!! as Double
-            offPeakHours = featureData["Off Peak Hours"]!! as Double
         } catch (e: Exception) {
             e.printStackTrace()
         }

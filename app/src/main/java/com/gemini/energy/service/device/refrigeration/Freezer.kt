@@ -19,8 +19,10 @@ class Freezer(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRat
               usageHours: UsageHours, outgoingRows: OutgoingRows, private val context: Context) :
         EBase(computable, utilityRateGas, utilityRateElectricity, usageHours, outgoingRows), IComputable {
 
-    /** year equipment was manufactured **/
+    /** year equipment was installed **/
     var year = 0
+    var styleType = ""
+    var totalVolume = 0.0
 
     /**
      * Entry Point
@@ -31,7 +33,9 @@ class Freezer(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRat
 
     override fun setup() {
         try {
-            year = featureData["Year"]!! as Int
+            year = featureData["Year Installed"]!! as Int
+            styleType = featureData["Style Type"]!! as String
+            totalVolume = featureData["Total Volume (cu.ft.)"]!! as Double
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -148,10 +152,10 @@ class Freezer(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRat
      * */
     override fun efficientLookup() = true
     override fun queryEfficientFilter() = JSONObject()
-            .put("data.style_type", featureData["Product Type"])
+            .put("data.style_type", styleType)
             .put("data.total_volume", JSONObject()
-                    .put("\$gte", featureData["Total Volume"] as Double - 2)
-                    .put("\$lte", featureData["Total Volume"] as Double + 2))
+                    .put("\$gte", totalVolume - 2)
+                    .put("\$lte", totalVolume as Double + 2))
             .toString()
 
     /**

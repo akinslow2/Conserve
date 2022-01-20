@@ -42,7 +42,7 @@ class HotFoodCabinet(computable: Computable<*>, utilityRateGas: UtilityRate, uti
     private var idleEnergyRate = 0.0
     private var size = ""
 
-    /** year equipment was manufactured **/
+    /** year equipment was installed **/
     var year = 0
 
 
@@ -56,7 +56,7 @@ class HotFoodCabinet(computable: Computable<*>, utilityRateGas: UtilityRate, uti
             cabinetVolume = featureData["Cabinet Volume"]!! as Double
             idleEnergyRate = featureData["Idle Energy Rate"]!! as Double
             size = featureData["Size"]!! as String
-            year = featureData["Year"]!! as Int
+            year = featureData["Year Installed"]!! as Int
 
         } catch (e: Exception) {
             e.printStackTrace()
