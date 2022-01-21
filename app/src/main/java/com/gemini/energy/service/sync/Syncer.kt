@@ -14,7 +14,6 @@ import io.reactivex.rxkotlin.merge
 import io.reactivex.schedulers.Schedulers
 import org.json.JSONObject
 import timber.log.Timber
-import java.lang.StringBuilder
 import java.util.*
 
 @SuppressLint("CheckResult")
@@ -163,8 +162,16 @@ class Syncer(private val parseAPIService: ParseAPI.ParseAPIService,
                         rFeature.forEach {
 
                             val auditId = it.asJsonObject.get("auditId").asString
-                            val zoneId = it.asJsonObject.get("zoneId").asString
-                            val typeId = it.asJsonObject.get("typeId").asString
+                            var zoneId: String? = null
+                            if (!it.asJsonObject.get("zoneId").isJsonNull) {
+                                zoneId = it.asJsonObject.get("zoneId").asString
+                            }
+
+                            var typeId: String? = null
+                            if (!it.asJsonObject.get("typeId").isJsonNull) {
+                                typeId = it.asJsonObject.get("typeId").asString
+                            }
+
                             val belongsTo = it.asJsonObject.get("belongsTo").asString
 
                             val usn = it.asJsonObject.get("usn").asInt
@@ -174,17 +181,21 @@ class Syncer(private val parseAPIService: ParseAPI.ParseAPIService,
                             val dataTypes = splitFields(it.asJsonObject.get("dataType").asString)
                             val fields = splitFields(it.asJsonObject.get("fields").asString)
                             val formIds = splitFields(it.asJsonObject.get("formId").asString)
-                            val id = splitFields(it.asJsonObject.get("id").asString)
+
+                            var id: List<String>? = null
+                            if (it.asJsonObject.has("id") && !it.asJsonObject.get("id").isJsonNull) {
+                                id = splitFields(it.asJsonObject.get("id").asString)
+                            }
 
                             val _auditId = auditId.toLong()
 
                             fun addFeatureToModel(formIds: List<String>) {
                                 for (i in 0 until formIds.count() - 1) {
                                     val feature = FeatureLocalModel(
-                                            id[i].toInt(), formIds[i].toInt(),
+                                            id?.get(i)?.toInt(), formIds[i].toInt(),
                                             belongsTo, dataTypes[i],
                                             usn, null,
-                                            zoneId.toLong(), typeId.toLong(),
+                                            zoneId?.toLong(), typeId?.toLong(),
                                             fields[i], values[i],
                                             null, null,
                                             Date(), Date())
@@ -195,7 +206,7 @@ class Syncer(private val parseAPIService: ParseAPI.ParseAPIService,
                             fun addPreAuditToModel(formIds: List<String>) {
                                 for (i in 0 until formIds.count() - 1) {
                                     val feature = FeatureLocalModel(
-                                            id[i].toInt(), formIds[i].toInt(),
+                                            id?.get(i)?.toInt(), formIds[i].toInt(),
                                             belongsTo, dataTypes[i],
                                             usn, _auditId,
                                             null, null,
@@ -209,11 +220,11 @@ class Syncer(private val parseAPIService: ParseAPI.ParseAPIService,
                             // non preaudit data
                             // *** Load Feature by Type to the Local DB
                             if (typeId != "null") {
-                                if (col.featureType.containsKey(typeId.toLong())) {
+                                if (col.featureType.containsKey(typeId?.toLong())) {
                                     // make sure data from server always overrides local data
                                     addFeatureToModel(formIds)
                                 } else {
-                                    if (toDeleteType.contains(typeId.toLong())) { /*DO NOTHING*/
+                                    if (toDeleteType.contains(typeId?.toLong())) { /*DO NOTHING*/
                                     } else {
                                         addFeatureToModel(formIds)
                                     }
@@ -327,10 +338,14 @@ class Syncer(private val parseAPIService: ParseAPI.ParseAPIService,
                             // 3. Type Entry - To Local DB
                             type?.keySet()?.forEach {
                                 val inner = type.get(it).asJsonObject
+
                                 val iUsn = inner.get("usn").asInt
                                 val iName = inner.get("name").asString
                                 val iType = inner.get("type").asString
-                                val iSubType = inner.get("subtype").asString
+                                var iSubType: String? = null
+                                if (!inner.get("subtype").isJsonNull) {
+                                    iSubType = inner.get("subtype").asString
+                                }
                                 val iMod = inner.get("mod").asString
                                 val iId = inner.get("id").asLong
                                 val iZoneId = inner.get("zoneId").asLong
