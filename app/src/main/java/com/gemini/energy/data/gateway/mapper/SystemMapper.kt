@@ -3,8 +3,8 @@ package com.gemini.energy.data.gateway.mapper
 import com.gemini.energy.data.local.model.*
 import com.gemini.energy.domain.entity.*
 import com.gemini.energy.presentation.util.EApplianceType
-import com.gemini.energy.presentation.util.ERefrigerationType
 import com.gemini.energy.presentation.util.ELightingType
+import com.gemini.energy.presentation.util.ERefrigerationType
 import com.gemini.energy.presentation.util.EZoneType
 
 class SystemMapper {
@@ -71,9 +71,9 @@ class SystemMapper {
 
         val eZoneType = EZoneType.get(computable.auditScopeType)
         val entity = when (eZoneType) {
-            EZoneType.Plugload      -> Computable<EApplianceType>(EApplianceType.get(computable.auditScopeSubType)!!)
-            EZoneType.Refrigeration -> Computable(ERefrigerationType.get(computable.auditScopeSubType)!!)
-            EZoneType.Lighting      -> Computable<ELightingType>(ELightingType.get(computable.auditScopeSubType)!!)
+            EZoneType.Plugload      -> Computable<EApplianceType>(EApplianceType.get(computable.auditScopeSubType ?: "none")!!)
+            EZoneType.Refrigeration -> Computable(ERefrigerationType.get(computable.auditScopeSubType ?: "none")!!)
+            EZoneType.Lighting      -> Computable<ELightingType>(ELightingType.get(computable.auditScopeSubType ?: "none")!!)
             else                    -> Computable()
         }
 
