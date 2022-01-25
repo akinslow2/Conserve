@@ -33,6 +33,7 @@ class WaterHeater(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
          * Conversion Factor from Watts to Kilo Watts
          * */
         private const val KW_CONVERSION = 0.001
+        private const val therm_CONVERSION = 99976.1
 
         private const val HVAC_EER = "hvac_eer"
         private const val HVAC_COOLING_HOURS = "cooling_hours"
@@ -78,9 +79,10 @@ class WaterHeater(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
          * There could be a case where the User will input the value in KW - If that happens we need to convert the KW
          * int BTU / hr :: 1KW equals 3412.142
          * */
-        fun power(gasInput: Double, thermaleff: Double): Double {
-            if (thermaleff == 0.0) return 0.0
-            return (gasInput / (thermaleff / 100.0)) * KW_CONVERSION
+
+        fun power(gasInput: Int, thermaleff: Int): Double  {
+            if (thermaleff == 0) return 0.0
+            return (gasInput / (thermaleff.toDouble() / 100.0)) / therm_CONVERSION
         }
 
         fun power2(kW: Double, electriceff: Double): Double {
@@ -134,6 +136,7 @@ class WaterHeater(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
     var unittype = ""
     var capacity = 0.0
     var postthermeff = 95.0
+
     var posteleceff = 350.0
 
     override fun setup() {
@@ -162,13 +165,11 @@ class WaterHeater(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
         return getAge(year) - 15
     }
 
-    val prepowerUsedGas = power(gasInput, thermaleff) * quantity
+    val prepowerUsedGas = power(gasInput.toInt(), thermaleff.toInt()) * quantity
     val prepowerUsedElectricity = power2(kW, electriceff) * quantity
-    val prepowerUsed = if (isGas()) prepowerUsedGas else prepowerUsedElectricity
 
-    val postpowerUsedGas = power(gasInput, postthermeff) * quantity
     val postpowerUsedElectricity = power2(kW, posteleceff) * quantity
-    val postpowerUsed = if (isGas()) postpowerUsedGas else postpowerUsedElectricity
+    val postpowerUsed = postpowerUsedElectricity
     var ElectricPowerSavings = prepowerUsedElectricity - postpowerUsedElectricity
 
     /**
@@ -210,19 +211,16 @@ class WaterHeater(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
         //Note Change - Newer units run's 50% less often
         val postUsageHours = UsageSimple(0.0, 0.0, 1.5 * 365.0)
 
-        val postGcost: Double
-        val postEcost: Double
-        val powerUsed = if (isGas()) postpowerUsedGas else postpowerUsedElectricity
-        Timber.d("HotWater :: Power Used (Electricity) -- [$postpowerUsedElectricity]")
-        Timber.d("HotWater :: Power Used (Gas) -- [$postpowerUsedGas]")
 
+            val postEcost: Double
+            val powerUsed = postpowerUsedElectricity
+         Timber.d("HotWater :: Power Used (Electricity) -- [$postpowerUsedElectricity]")
 
         Timber.d("HotWater :: Post Power Used -- [$powerUsed]")
         postEcost = costElectricity(powerUsed, postUsageHours, electricityRate)
 
-        postGcost = costGas(powerUsed)
 
-        return if (isGas()) postGcost else postEcost
+             return postEcost
     }
 
     /**
@@ -272,7 +270,10 @@ class WaterHeater(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
     }
 
     fun totalSavings(): Double {
-        return costElectricity(energyPowerChange(), electricityRate) + costElectricityFromPowerAndDemand(ElectricPowerSavings, electricityRate)
+
+        val gascost = costGas(prepowerUsedGas)
+        return if (isGas()) gascost + costElectricity(energyPowerChange(), electricityRate) + costElectricityFromPowerAndDemand(ElectricPowerSavings, electricityRate)
+             else costElectricity(energyPowerChange(),electricityRate) + costElectricityFromPowerAndDemand(ElectricPowerSavings, electricityRate)
     }
 
     override fun energyTimeChange(): Double = 0.0
