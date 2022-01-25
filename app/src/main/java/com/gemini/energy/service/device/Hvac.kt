@@ -188,10 +188,13 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
     var areaHeight = 0.0
     var areaWidth = 0.0
     var areaLength = 0.0
-    var heatEfficiency = 0.8
+
+    var heatEfficiency = 0.9
     var heatElecEfficiency = 5.0
     var hspf = 10.0
+    var alternateHspf = 8.0
     var namePlate = ""
+
 
     override fun setup() {
         try {
@@ -215,13 +218,14 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
 
             val inputSeer = featureData["SEER"]!! as Double
             seer = if (inputSeer > 0.0) inputSeer else seer
+
             val altSeer = featureData["Alternate SEER"]!! as Double
             alternateSeer = if (altSeer > 0.0) altSeer else alternateSeer
             val inputHeatEffElec = featureData["Heating Electric Efficiency"]!! as Double
             heatElecEfficiency = if (inputHeatEffElec > 0.0) inputHeatEffElec else heatElecEfficiency
-            val altHSPF = featureData["Alternate HSPF"]!! as Double
-            hspf = if (altHSPF > 0.0) altHSPF else hspf
 
+            val inputAltHspf = featureData["Alternate HSPF"]!! as Double
+            alternateHspf = if (inputAltHspf > 0.0) inputAltHspf else alternateHspf
 
             year = featureData["Year"]!! as Int
 
@@ -321,8 +325,9 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
     var prePowerUsed = power(kbtu, seer)
 
     fun energyPost(): Double {
-        val heat = heatingkbtu() / hspf
-        val cool = coolingkbtu() / alternateSeer
+        val heat = if (alternateHspf == 0.0) 0.0 else heatingkbtu() / alternateHspf
+        val cool = if (alternateSeer == 0.0) 0.0 else coolingkbtu() / alternateSeer
+
         return heat + cool
     }
 
