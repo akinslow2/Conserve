@@ -33,6 +33,7 @@ class WaterHeater(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
          * Conversion Factor from Watts to Kilo Watts
          * */
         private const val KW_CONVERSION = 0.001
+        private const val therm_CONVERSION = 99976.1
 
         private const val HVAC_EER = "hvac_eer"
         private const val HVAC_COOLING_HOURS = "cooling_hours"
@@ -80,7 +81,7 @@ class WaterHeater(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
          * */
         fun power(gasInput: Int, thermaleff: Int): Double  {
             if (thermaleff == 0) return 0.0
-            return (gasInput / (thermaleff.toDouble() / 100.0)) * KW_CONVERSION
+            return (gasInput / (thermaleff.toDouble() / 100.0)) / therm_CONVERSION
         }
 
         fun power2(kW: Double, electriceff: Double): Double {
@@ -138,7 +139,6 @@ class WaterHeater(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
     var fueltype = ""
     var unittype = ""
     var capacity = 0.0
-    var postthermeff = 95
     var posteleceff = 350.0
 
     override fun setup() {
@@ -159,8 +159,8 @@ class WaterHeater(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
             e.printStackTrace()
         }
     }
-
-     override fun isGas() = fueltype == "Natural Gas"
+    // changed to "Methane Gas"
+    override fun isGas() = fueltype == "Methane Gas"
 
     fun overAge(): Int {
         return getAge(year) - 15
@@ -168,11 +168,9 @@ class WaterHeater(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
 
     val prepowerUsedGas = power(gasInput, thermaleff) * quantity
     val prepowerUsedElectricity = power2(kW, electriceff) * quantity
-    val prepowerUsed = if (isGas()) prepowerUsedGas else prepowerUsedElectricity
 
-    val postpowerUsedGas = power(gasInput, postthermeff) * quantity
     val postpowerUsedElectricity = power2(kW, posteleceff) * quantity
-    val postpowerUsed = if (isGas()) postpowerUsedGas else postpowerUsedElectricity
+    val postpowerUsed = postpowerUsedElectricity
     var ElectricPowerSavings = prepowerUsedElectricity - postpowerUsedElectricity
 
     /**
@@ -202,8 +200,7 @@ class WaterHeater(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
     }
 
 
-
-            /**
+    /**
      * Cost - Post State
      * */
     override fun costPostState(element: JsonElement, dataHolder: DataHolder): Double {
@@ -216,19 +213,14 @@ class WaterHeater(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
                 val postUsageHours = UsageSimple(0.0, 0.0, 1.5 * 365.0)
          //val postUsageHours = computable.udf1 as UsageSimple
 
-            val postGcost: Double
             val postEcost: Double
-            val powerUsed = if (isGas()) postpowerUsedGas else postpowerUsedElectricity
-        Timber.d("HotWater :: Power Used (Electricity) -- [$postpowerUsedElectricity]")
-            Timber.d("HotWater :: Power Used (Gas) -- [$postpowerUsedGas]")
-
+            val powerUsed = postpowerUsedElectricity
+         Timber.d("HotWater :: Power Used (Electricity) -- [$postpowerUsedElectricity]")
 
             Timber.d("HotWater :: Post Power Used -- [$powerUsed]")
             postEcost = costElectricity(powerUsed, postUsageHours, electricityRate)
 
-            postGcost = costGas(powerUsed)
-
-             return if (isGas()) postGcost else postEcost
+             return postEcost
     }
 
       /**
@@ -285,7 +277,9 @@ class WaterHeater(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
     }
 
     fun totalSavings(): Double {
-        return costElectricity(energyPowerChange(),electricityRate) + costElectricityFromPowerAndDemand(ElectricPowerSavings, electricityRate)
+        val gascost = costGas(prepowerUsedGas)
+        return if (isGas()) gascost + costElectricity(energyPowerChange(), electricityRate) + costElectricityFromPowerAndDemand(ElectricPowerSavings, electricityRate)
+             else costElectricity(energyPowerChange(),electricityRate) + costElectricityFromPowerAndDemand(ElectricPowerSavings, electricityRate)
     }
 
     override fun energyTimeChange(): Double = 0.0
