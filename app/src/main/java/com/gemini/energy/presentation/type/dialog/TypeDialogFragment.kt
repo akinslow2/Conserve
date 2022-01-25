@@ -9,8 +9,8 @@ import android.widget.*
 import com.gemini.energy.R
 import com.gemini.energy.presentation.type.list.model.TypeModel
 import com.gemini.energy.presentation.util.EApplianceType
-import com.gemini.energy.presentation.util.ERefrigerationType
 import com.gemini.energy.presentation.util.ELightingType
+import com.gemini.energy.presentation.util.ERefrigerationType
 import com.gemini.energy.presentation.util.EZoneType
 import com.mobsandgeeks.saripaar.ValidationError
 import com.mobsandgeeks.saripaar.Validator
@@ -46,7 +46,7 @@ class TypeDialogFragment : DialogFragment(), Validator.ValidationListener {
 
         type?.let {
             scopeType = it.type!!
-            scopeSubType = it.subType!!
+            scopeSubType = it.subType ?: "none"
         }
     }
 
