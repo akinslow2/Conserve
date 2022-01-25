@@ -8,5 +8,5 @@ data class ComputableLocalModel(
         var auditScopeId: Long,
         var auditScopeName: String,
         var auditScopeType: String,
-        var auditScopeSubType: String
+        var auditScopeSubType: String?
 )
