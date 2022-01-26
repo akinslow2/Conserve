@@ -172,6 +172,8 @@ class WaterHeater(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
     val postpowerUsedElectricity = power2(kW, posteleceff) * quantity
     val postpowerUsed = postpowerUsedElectricity
     var ElectricPowerSavings = prepowerUsedElectricity - postpowerUsedElectricity
+    var usageHoursPre = 3.0 * 365
+    var energySavings = if(isGas()) prepowerUsedGas * usageHoursPre else ElectricPowerSavings
 
     /**
      * Cost - Pre State
