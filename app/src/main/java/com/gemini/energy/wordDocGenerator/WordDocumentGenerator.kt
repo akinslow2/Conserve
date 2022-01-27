@@ -721,15 +721,9 @@ class WordDocumentGenerator {
 
     private fun createLightingTable3(document: XWPFDocument, lights: LightingValues) {
         val rows = lights.lightingRows
-        val table = document.createTable(rows.size + 1, 13)
 
-        val borderSize = 8 // measured in eight of pixel
-        table.setInsideHBorder(XWPFTable.XWPFBorderType.SINGLE, borderSize, 0, blackColor)
-        table.setInsideVBorder(XWPFTable.XWPFBorderType.SINGLE, borderSize, 0, blackColor)
-        table.setTopBorder(XWPFTable.XWPFBorderType.SINGLE, borderSize, 0, blackColor)
-        table.setBottomBorder(XWPFTable.XWPFBorderType.SINGLE, borderSize, 0, blackColor)
-        table.setLeftBorder(XWPFTable.XWPFBorderType.SINGLE, borderSize, 0, blackColor)
-        table.setRightBorder(XWPFTable.XWPFBorderType.SINGLE, borderSize, 0, blackColor)
+        val table = document.createTable(rows.size + 1, 11)
+        table.addBorders()
 
         for (i in 0..rows.size) {
             // saftey check if no rows exist
@@ -741,58 +735,45 @@ class WordDocumentGenerator {
             val isFirst = i == 0
             val isLast = i == rows.size
 
-            fun createCell(index: Int, text: String) {
-                val cell = row.getCell(index)
-                cell.verticalAlignment = XWPFTableCell.XWPFVertAlign.CENTER
-                val pcell = cell.paragraphs[0]
-                pcell.alignment = ParagraphAlignment.CENTER
-                val rcell = pcell.createRun()
-                rcell.fontFamily = fontGeorgia
-                rcell.fontSize = 12
-                rcell.isBold = isFirst || isLast
-                rcell.setText(text)
-            }
-
-
             when {
                 isFirst -> {
-                    createCell(0 , "Measure")
-                    createCell(1, "Location")
-                    createCell(2, "Measure Description")
-                    createCell(3, "Quantity")
-                    createCell(4, "Current Power (kW)")
-                    createCell(5, "Usage (hrs)")
-                    createCell(6, "Post Power (kW)")
-                    createCell(7, "Post Usage (hrs)")
-                    createCell(8, "Energy Savings (kWh)")
-                    createCell(9, "Life Cost Savings")
-                    createCell(10, "Implementation Cost")
+                    row.createEquipmentInstanceCell(0 , "Measure", true)
+                    row.createEquipmentInstanceCell(1, "Location", true)
+                    row.createEquipmentInstanceCell(2, "Measure Description", true)
+                    row.createEquipmentInstanceCell(3, "Quantity", true)
+                    row.createEquipmentInstanceCell(4, "Current Power (kW)", true)
+                    row.createEquipmentInstanceCell(5, "Usage (hrs)", true)
+                    row.createEquipmentInstanceCell(6, "Post Power (kW)", true)
+                    row.createEquipmentInstanceCell(7, "Post Usage (hrs)", true)
+                    row.createEquipmentInstanceCell(8, "Energy Savings (kWh)", true)
+                    row.createEquipmentInstanceCell(9, "Life Cost Savings", true)
+                    row.createEquipmentInstanceCell(10, "Implementation Cost", true)
                 }
                 isLast -> {
-                    createCell(3, lights.quantityOfBulbs.toString())
-                    createCell(4, lights.currentTotalkW.format(2))
-                    createCell(5, lights.preUsageHours.format(0))
-                    createCell(6, lights.postTotalkW.format(2))
-                    createCell(7, lights.postUsageHours.format(0))
-                    createCell(8, lights.kWhSavings.format(0))
-                    createCell(9, lights.netPresentValue.format(0))
-                    createCell(10, lights.totalCost.format(0))
+                    row.createEquipmentInstanceCell(3, lights.quantityOfBulbs.toString(), true)
+                    row.createEquipmentInstanceCell(4, lights.currentTotalkW.format(2), true)
+                    row.createEquipmentInstanceCell(5, lights.preUsageHours.format(0), true)
+                    row.createEquipmentInstanceCell(6, lights.postTotalkW.format(2), true)
+                    row.createEquipmentInstanceCell(7, lights.postUsageHours.format(0), true)
+                    row.createEquipmentInstanceCell(8, lights.kWhSavings.format(0), true)
+                    row.createEquipmentInstanceCell(9, lights.netPresentValue.format(0), true)
+                    row.createEquipmentInstanceCell(10, lights.totalCost.format(0), true)
                 }
                 else -> { // lighting item
                     val rowIndex = if (isFirst) 0 else i - 1
                     val rowItem = rows[rowIndex]
 
-                    createCell(0 , rowItem.measure)
-                    createCell(1, rowItem.location)
-                    createCell(2, rowItem.measureDescription)
-                    createCell(3, rowItem.quantity.format(0))
-                    createCell(4, rowItem.currentPowerkW.format(2))
-                    createCell(5, rowItem.usageHours.format(0))
-                    createCell(6, rowItem.postPowerkW.format(2))
-                    createCell(7, rowItem.postUsageHours.format(0))
-                    createCell(8, rowItem.energySavingskWh.format(0))
-                    createCell(9, "$${rowItem.netPresentValue.format(0)}")
-                    createCell(10, "$${rowItem.implementationCost.format(0)}")
+                    row.createEquipmentInstanceCell(0 , rowItem.measure, false)
+                    row.createEquipmentInstanceCell(1, rowItem.location, false)
+                    row.createEquipmentInstanceCell(2, rowItem.measureDescription, false)
+                    row.createEquipmentInstanceCell(3, rowItem.quantity.format(0), false)
+                    row.createEquipmentInstanceCell(4, rowItem.currentPowerkW.format(2), false)
+                    row.createEquipmentInstanceCell(5, rowItem.usageHours.format(0), false)
+                    row.createEquipmentInstanceCell(6, rowItem.postPowerkW.format(2), false)
+                    row.createEquipmentInstanceCell(7, rowItem.postUsageHours.format(0), false)
+                    row.createEquipmentInstanceCell(8, rowItem.energySavingskWh.format(0), false)
+                    row.createEquipmentInstanceCell(9, "$${rowItem.netPresentValue.format(0)}", false)
+                    row.createEquipmentInstanceCell(10, "$${rowItem.implementationCost.format(0)}", false)
                 }
             }
         }

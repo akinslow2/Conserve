@@ -3,10 +3,7 @@ package com.gemini.energy.wordDocGenerator.utils
 import com.gemini.energy.format
 import com.gemini.energy.wordDocGenerator.WordDocumentGenerator
 import org.apache.poi.wp.usermodel.HeaderFooterType
-import org.apache.poi.xwpf.usermodel.ParagraphAlignment
-import org.apache.poi.xwpf.usermodel.XWPFAbstractNum
-import org.apache.poi.xwpf.usermodel.XWPFDocument
-import org.apache.poi.xwpf.usermodel.XWPFTable
+import org.apache.poi.xwpf.usermodel.*
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.*
 import java.math.BigInteger
 /**
@@ -310,4 +307,38 @@ fun XWPFTable.fitTable(width: Long) {
     tblW.w = BigInteger.valueOf(width)
     properties.tblW = tblW
     ctTbl.tblPr = properties
+}
+
+
+/**
+ * add all borders to table
+ */
+fun XWPFTable.addBorders() {
+    val borderSize = 8 // measured in eight of pixel
+        this.setInsideHBorder(XWPFTable.XWPFBorderType.SINGLE, borderSize, 0, WordDocumentGenerator.blackColor)
+        this.setInsideVBorder(XWPFTable.XWPFBorderType.SINGLE, borderSize, 0, WordDocumentGenerator.blackColor)
+        this.setTopBorder(XWPFTable.XWPFBorderType.SINGLE, borderSize, 0, WordDocumentGenerator.blackColor)
+        this.setBottomBorder(XWPFTable.XWPFBorderType.SINGLE, borderSize, 0, WordDocumentGenerator.blackColor)
+        this.setLeftBorder(XWPFTable.XWPFBorderType.SINGLE, borderSize, 0, WordDocumentGenerator.blackColor)
+        this.setRightBorder(XWPFTable.XWPFBorderType.SINGLE, borderSize, 0, WordDocumentGenerator.blackColor)
+}
+
+
+/**
+ * create cell for equipment instances table
+ *
+ * @param index index of cell
+ * @param text text of cell
+ * @param isBold if the text should be bold
+ */
+fun XWPFTableRow.createEquipmentInstanceCell(index: Int, text: String, isBold: Boolean) {
+    val cell = this.getCell(index)
+    cell.verticalAlignment = XWPFTableCell.XWPFVertAlign.CENTER
+    val pcell = cell.paragraphs[0]
+    pcell.alignment = ParagraphAlignment.CENTER
+    val rcell = pcell.createRun()
+    rcell.fontFamily = WordDocumentGenerator.fontGeorgia
+    rcell.fontSize = 12
+    rcell.isBold = isBold//isFirst || isLast
+    rcell.setText(text)
 }
