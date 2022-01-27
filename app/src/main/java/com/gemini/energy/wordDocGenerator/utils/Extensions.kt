@@ -149,7 +149,7 @@ fun XWPFDocument.createBullets(
     for (item in items) {
         val bulletedPara = this.createParagraph()
         bulletedPara.numID = numID
-        bulletedPara.spacingBetween = 1.5
+        bulletedPara.spacingBetween = 1.15
         val run = bulletedPara.createRun()
         run.fontFamily = WordDocumentGenerator.fontGeorgia
         run.fontSize = fontSize
