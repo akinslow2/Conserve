@@ -11,10 +11,7 @@ import com.gemini.energy.presentation.audit.DropBox
 import com.gemini.energy.service.device.EBase
 import com.gemini.energy.wordDocGenerator.models.*
 import com.gemini.energy.wordDocGenerator.utils.*
-import org.apache.poi.xwpf.usermodel.ParagraphAlignment
-import org.apache.poi.xwpf.usermodel.VerticalAlign
-import org.apache.poi.xwpf.usermodel.XWPFDocument
-import org.apache.poi.xwpf.usermodel.XWPFTableCell
+import org.apache.poi.xwpf.usermodel.*
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
@@ -649,6 +646,14 @@ class WordDocumentGenerator {
         val rows = lights.lightingRows
         val table = document.createTable(rows.size + 1, 11)
 
+        val borderSize = 8 // measured in eigth of pixel
+        table.setInsideHBorder(XWPFTable.XWPFBorderType.SINGLE, borderSize, 0, blackColor)
+        table.setInsideVBorder(XWPFTable.XWPFBorderType.SINGLE, borderSize, 0, blackColor)
+        table.setTopBorder(XWPFTable.XWPFBorderType.SINGLE, borderSize, 0, blackColor)
+        table.setBottomBorder(XWPFTable.XWPFBorderType.SINGLE, borderSize, 0, blackColor)
+        table.setLeftBorder(XWPFTable.XWPFBorderType.SINGLE, borderSize, 0, blackColor)
+        table.setRightBorder(XWPFTable.XWPFBorderType.SINGLE, borderSize, 0, blackColor)
+
         for (i in 0..rows.size) {
             // safety check if no rows exist
             if (rows.isEmpty()) {
@@ -667,6 +672,7 @@ class WordDocumentGenerator {
             val rcell0 = pcell0.createRun()
             rcell0.fontFamily = fontGeorgia
             rcell0.fontSize = 12
+            rcell0.isBold = isFirst
             rcell0.setText(if (isFirst) "Measure" else rowItem.measure)
 
             val cell1 = row.getCell(1)
@@ -676,6 +682,7 @@ class WordDocumentGenerator {
             val rcell1 = pcell1.createRun()
             rcell1.fontFamily = fontGeorgia
             rcell1.fontSize = 12
+            rcell1.isBold = isFirst
             rcell1.setText(if (isFirst) "Location" else rowItem.location)
 
             val cell2 = row.getCell(2)
@@ -685,6 +692,7 @@ class WordDocumentGenerator {
             val rcell2 = pcell2.createRun()
             rcell2.fontFamily = fontGeorgia
             rcell2.fontSize = 12
+            rcell2.isBold = isFirst
             rcell2.setText(if (isFirst) "Measure Description" else rowItem.measureDescription)
 
             val cell3 = row.getCell(3)
@@ -694,6 +702,7 @@ class WordDocumentGenerator {
             val rcell3 = pcell3.createRun()
             rcell3.fontFamily = fontGeorgia
             rcell3.fontSize = 12
+            rcell3.isBold = isFirst
             rcell3.setText(if (isFirst) "Quantity" else rowItem.quantity.format(0))
 
             val cell4 = row.getCell(4)
@@ -703,6 +712,7 @@ class WordDocumentGenerator {
             val rcell4 = pcell4.createRun()
             rcell4.fontFamily = fontGeorgia
             rcell4.fontSize = 12
+            rcell4.isBold = isFirst
             rcell4.setText((if (isFirst) "Current Power (kW)" else rowItem.currentPowerkW.format(2)))
 
             val cell5 = row.getCell(5)
@@ -712,6 +722,7 @@ class WordDocumentGenerator {
             val rcell5 = pcell5.createRun()
             rcell5.fontFamily = fontGeorgia
             rcell5.fontSize = 12
+            rcell5.isBold = isFirst
             rcell5.setText(if (isFirst) "Usage (hrs)" else rowItem.usageHours.format(0))
 
             val cell6 = row.getCell(6)
@@ -721,6 +732,7 @@ class WordDocumentGenerator {
             val rcell6 = pcell6.createRun()
             rcell6.fontFamily = fontGeorgia
             rcell6.fontSize = 12
+            rcell6.isBold = isFirst
             rcell6.setText(if (isFirst) "Post Power (kW)" else rowItem.postPowerkW.format(2))
 
             val cell7 = row.getCell(7)
@@ -730,6 +742,7 @@ class WordDocumentGenerator {
             val rcell7 = pcell7.createRun()
             rcell7.fontFamily = fontGeorgia
             rcell7.fontSize = 12
+            rcell7.isBold = isFirst
             rcell7.setText(if (isFirst) "Post Usage (hrs)" else rowItem.postUsageHours.format(0))
 
             val cell8 = row.getCell(8)
@@ -739,6 +752,7 @@ class WordDocumentGenerator {
             val rcell8 = pcell8.createRun()
             rcell8.fontFamily = fontGeorgia
             rcell8.fontSize = 12
+            rcell8.isBold = isFirst
             rcell8.setText(if (isFirst) "Energy Savings (kWh)" else rowItem.energySavingskWh.format(0))
 
             val cell9 = row.getCell(9)
@@ -748,6 +762,7 @@ class WordDocumentGenerator {
             val rcell9 = pcell9.createRun()
             rcell9.fontFamily = fontGeorgia
             rcell9.fontSize = 12
+            rcell9.isBold = isFirst
             rcell9.setText(if (isFirst) "Life Cost Savings" else "$${rowItem.netPresentValue.format(0)}")
 
             val cell10 = row.getCell(10)
@@ -757,6 +772,7 @@ class WordDocumentGenerator {
             val rcell10 = pcell10.createRun()
             rcell10.fontFamily = fontGeorgia
             rcell10.fontSize = 12
+            rcell10.isBold = isFirst
             rcell10.setText(if (isFirst) "Implementation Cost" else "$${rowItem.implementationCost.format(0)}")
         }
 
