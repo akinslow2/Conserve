@@ -249,6 +249,8 @@ class WordDocumentGenerator {
                 "Tightening belts (if applicable)")
         document.createBullets(hvacBullets)
 
+        document.createNormalParagraph("The details of your HVAC units are below:")
+
         createHvacDetailsTable(document, hvac)
 
         for (instance in hvac.instances) {
