@@ -166,19 +166,18 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
     var thermotype = ""
     var uvalue = 0.15 //for details see document "U Value Calculations" in the Building Calculations Folder
 
-    var cddThreshold = 67 //assumes five degrees from 72 desired temp
-    var hddThreshold = 63 //assumes five degree from 68 desired temp
-    var cdd = 1495 // Using weather station at Suffolk, Suffolk Municipal Airport, VA with 67 degree base temp - lowest of June 2018 to June 2021(degreedays.net)
-    var hdd = 2696 // Using weather station at Suffolk, Suffolk Municipal Airport, VA with 63 degree base temp - lowest of June 2018 to June 2021 (degreedays.net)
+    var cddThreshold = 67 //assumes five degrees from 72 desired temp - **not used at this time
+    var hddThreshold = 63 //assumes five degree from 68 desired temp - **not used at this time
     var cddTotal = 0
     var hddTotal = 0
     var thermostatChangeForNonBusiness = ""
     var adjustedHeatSetPoint = 0
     var adjustedCoolSetPoint = 0
-    var cddBusinessHours = 0
-    var hddBusinessHours = 0
-    var cddCloseHours = 0
-    var hddCloseHours = 0
+    // defaults based off of Tucson weather M-F 9am-5pm - Business_Hours_Degree_Days_Calculator
+    var cddBusinessHours = 1446
+    var hddBusinessHours = 68
+    var cddCloseHours = 2459
+    var hddCloseHours = 952
 
     var typeOfUnit = ""
     var quantity = 0
