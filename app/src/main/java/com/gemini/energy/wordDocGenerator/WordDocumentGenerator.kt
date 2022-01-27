@@ -11,7 +11,10 @@ import com.gemini.energy.presentation.audit.DropBox
 import com.gemini.energy.service.device.EBase
 import com.gemini.energy.wordDocGenerator.models.*
 import com.gemini.energy.wordDocGenerator.utils.*
-import org.apache.poi.xwpf.usermodel.*
+import org.apache.poi.xwpf.usermodel.ParagraphAlignment
+import org.apache.poi.xwpf.usermodel.VerticalAlign
+import org.apache.poi.xwpf.usermodel.XWPFDocument
+import org.apache.poi.xwpf.usermodel.XWPFTableCell
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
@@ -277,6 +280,8 @@ class WordDocumentGenerator {
                 "Charging the refrigerant",
                 "Tightening belts (if applicable)")
         document.createBullets(hvacBullets)
+
+        createHvacDetailsTable(document, hvac)
 
         for (instance in hvac.instances) {
 
@@ -735,6 +740,42 @@ class WordDocumentGenerator {
 
         table.centerTable()
         table.fitTable(4000)
+    }
+
+    private fun createHvacDetailsTable(document: XWPFDocument, hvac: HvacValues) {
+        val rows = hvac.instances
+        val table = document.createTable(rows.size + 1, 8)
+        table.addBorders()
+
+        for (i in 0..rows.size) {
+            val row = table.getRow(i)
+            val isFirst = i == 0
+
+            if (isFirst) {
+                row.createEquipmentInstanceCell(0, "Equipment", true)
+                row.createEquipmentInstanceCell(1, "Location", true)
+                row.createEquipmentInstanceCell(2, "Quantity", true)
+                row.createEquipmentInstanceCell(3, "Size", true)
+                row.createEquipmentInstanceCell(4, "Year Installed", true)
+                row.createEquipmentInstanceCell(5, "SEER value", true)
+                row.createEquipmentInstanceCell(6, "Years Past Expected Life", true)
+                row.createEquipmentInstanceCell(7, "Suggested Intervention", true)
+            } else {
+                val rowIndex = if (isFirst) 0 else i - 1
+                val rowItem = rows[rowIndex]
+
+                row.createEquipmentInstanceCell(0, rowItem.type, false)
+                row.createEquipmentInstanceCell(1, rowItem.location, false)
+                row.createEquipmentInstanceCell(2, rowItem.quantity.toString(), false)
+                row.createEquipmentInstanceCell(3, "${rowItem.btu}-kBTU", false)
+                row.createEquipmentInstanceCell(4, rowItem.year.toString(), false)
+                row.createEquipmentInstanceCell(5, rowItem.seer.toString(), false)
+                row.createEquipmentInstanceCell(6, rowItem.overage.toString(), false)
+                row.createEquipmentInstanceCell(7, rowItem.suggestedIntervention, false  )
+            }
+        }
+
+        table.centerTable()
     }
 
     private fun createWaterHeaterTable(document: XWPFDocument, waterheater: WaterHeaterValues) {
