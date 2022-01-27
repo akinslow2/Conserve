@@ -29,11 +29,12 @@ fun XWPFDocument.createHeaderWithSavings(
     val p1 = this.createParagraph()
     p1.spacingBetween = 1.5
     p1.isPageBreak = true
+    p1.alignment = ParagraphAlignment.CENTER
     val r1p1 = p1.createRun()
     r1p1.fontFamily = WordDocumentGenerator.fontGeorgia
     r1p1.isBold = true
     r1p1.isItalic = true
-    r1p1.fontSize = 16
+    r1p1.fontSize = 20
     r1p1.setText(headerText)
     r1p1.addBreak()
 
@@ -72,11 +73,12 @@ fun XWPFDocument.createHeaderWithNoRecommendedMeasures(headerText: String) {
     val p1 = this.createParagraph()
     p1.spacingBetween = 1.5
     p1.isPageBreak = true
+    p1.alignment = ParagraphAlignment.CENTER
     val r1p1 = p1.createRun()
     r1p1.fontFamily = WordDocumentGenerator.fontGeorgia
     r1p1.isBold = true
     r1p1.isItalic = true
-    r1p1.fontSize = 16
+    r1p1.fontSize = 20
     r1p1.setText(headerText)
     r1p1.addBreak()
 
