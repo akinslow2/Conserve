@@ -481,37 +481,37 @@ class WordDocumentGenerator {
         currentRow += 1
 
         table.generateFinancialComponentsDetailRow(
-                "    Lighting (\$)",
+                "        Lighting (\$)",
                 "\$${values.lighting?.totalCost?.format(0) ?: "N/A"}",
                 currentRow)
         currentRow += 1
 
         table.generateFinancialComponentsDetailRow(
-                "    HVAC (\$)",
+                "        HVAC (\$)",
                 "\$${values.building.hvacTotalCost.format(0)}",
                 currentRow)
         currentRow += 1
 
         table.generateFinancialComponentsDetailRow(
-                "    Water Heater (\$)",
+                "        Water Heater (\$)",
                 "\$${values.building.waterHeaterTotalCost.format(0)}",
                 currentRow)
         currentRow += 1
 
         table.generateFinancialComponentsDetailRow(
-                "    Refrigeration (\$)",
+                "        Refrigeration (\$)",
                 "\$${values.building.refrigerationTotalCost.format(0)}",
                 currentRow)
         currentRow += 1
 
         table.generateFinancialComponentsDetailRow(
-                "    Motors (\$)",
+                "        Motors (\$)",
                 "\$${values.motor?.totalCost?.format(0) ?: "N/A"}",
                 currentRow)
         currentRow += 1
 
         table.generateFinancialComponentsDetailRow(
-                "    Kitchen Equipment (\$)",
+                "        Kitchen Equipment (\$)",
                 "\$${values.building.equipmentTotalCost.format(0)}",
                 currentRow)
         currentRow += 1
@@ -529,37 +529,37 @@ class WordDocumentGenerator {
         currentRow += 1
 
         table.generateFinancialComponentsDetailRow(
-                "    Lighting (NVP)",
+                "        Lighting (NVP)",
                 values.lighting?.netPresentValue?.format(0) ?: "N/A",
                 currentRow)
         currentRow += 1
 
         table.generateFinancialComponentsDetailRow(
-                "    HVAC (NPV)",
+                "        HVAC (NPV)",
                 values.hvac?.netPresentValue?.format(0) ?: "N/A",
                 currentRow)
         currentRow += 1
 
         table.generateFinancialComponentsDetailRow(
-                "    Water Heater (NPV)",
+                "        Water Heater (NPV)",
                 values.waterHeater?.netPresentValue?.format(0) ?: "N/A",
                 currentRow)
         currentRow += 1
 
         table.generateFinancialComponentsDetailRow(
-                "    Refrigeration (NPV)",
+                "        Refrigeration (NPV)",
                 values.refrigeration?.netPresentValue?.format(0) ?: "N/A",
                 currentRow)
         currentRow += 1
 
         table.generateFinancialComponentsDetailRow(
-                "    Motors (NPV)",
+                "        Motors (NPV)",
                 values.motor?.netPresentValue?.format(0) ?: "N/A",
                 currentRow)
         currentRow += 1
 
         table.generateFinancialComponentsDetailRow(
-                "    Kitchen Equipment (NPV)",
+                "        Kitchen Equipment (NPV)",
                 values.equipment?.netPresentValue?.format(0) ?: "N/A",
                 currentRow)
         currentRow += 1
