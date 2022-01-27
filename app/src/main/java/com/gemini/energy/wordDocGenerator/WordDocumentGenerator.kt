@@ -110,6 +110,7 @@ class WordDocumentGenerator {
                 isStartOfNewPage = true)
 
             createLightingTable3(document, value.lighting)
+
             generateLightingContractorPage(document, value.lighting)
         }
 
@@ -251,16 +252,9 @@ class WordDocumentGenerator {
                     "There is an additional $500 fee to rent the lift needed to replace lighting located in a ceiling that is higher than 15 feet.")
         }
 
-        document.createNormalParagraph("Please see the next page for specifics of each lighting measure.")
+        document.createNormalParagraph("Please see the appendix for specifics of each lighting measure.")
 
         createLightingTable1(document, lights)
-
-        document.createNormalParagraph(
-                "The savings represented in the table below reflect the bulb replacement costs abated "
-                        + "because LED bulbs will last 2 to 3 times longer.",
-                isStartOfNewPage = true)
-
-        createLightingTable3(document, lights)
     }
 
     private fun generateHvacSavingsPage(document: XWPFDocument, hvac: HvacValues, building: BuildingValues) {
