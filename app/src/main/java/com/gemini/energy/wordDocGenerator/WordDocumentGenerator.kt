@@ -601,7 +601,7 @@ class WordDocumentGenerator {
         val rows = lights.lightingRows
         val table = document.createTable(rows.size + 1, 11)
 
-        val borderSize = 8 // measured in eigth of pixel
+        val borderSize = 8 // measured in eight of pixel
         table.setInsideHBorder(XWPFTable.XWPFBorderType.SINGLE, borderSize, 0, blackColor)
         table.setInsideVBorder(XWPFTable.XWPFBorderType.SINGLE, borderSize, 0, blackColor)
         table.setTopBorder(XWPFTable.XWPFBorderType.SINGLE, borderSize, 0, blackColor)
@@ -617,118 +617,61 @@ class WordDocumentGenerator {
 
             val row = table.getRow(i)
             val isFirst = i == 0
-            val rowIndex = if (isFirst) 0 else i - 1
-            val rowItem = rows[rowIndex]
+            val isLast = i == rows.size
 
-            val cell0 = row.getCell(0)
-            cell0.verticalAlignment = XWPFTableCell.XWPFVertAlign.CENTER
-            val pcell0 = cell0.paragraphs[0]
-            pcell0.alignment = ParagraphAlignment.CENTER
-            val rcell0 = pcell0.createRun()
-            rcell0.fontFamily = fontGeorgia
-            rcell0.fontSize = 12
-            rcell0.isBold = isFirst
-            rcell0.setText(if (isFirst) "Measure" else rowItem.measure)
+            fun createCell(index: Int, text: String) {
+                val cell = row.getCell(index)
+                cell.verticalAlignment = XWPFTableCell.XWPFVertAlign.CENTER
+                val pcell = cell.paragraphs[0]
+                pcell.alignment = ParagraphAlignment.CENTER
+                val rcell = pcell.createRun()
+                rcell.fontFamily = fontGeorgia
+                rcell.fontSize = 12
+                rcell.isBold = isFirst || isLast
+                rcell.setText(text)
+            }
 
-            val cell1 = row.getCell(1)
-            cell1.verticalAlignment = XWPFTableCell.XWPFVertAlign.CENTER
-            val pcell1 = cell1.paragraphs[0]
-            pcell1.alignment = ParagraphAlignment.CENTER
-            val rcell1 = pcell1.createRun()
-            rcell1.fontFamily = fontGeorgia
-            rcell1.fontSize = 12
-            rcell1.isBold = isFirst
-            rcell1.setText(if (isFirst) "Location" else rowItem.location)
+            when {
+                isFirst -> {
+                    createCell(0 , "Measure")
+                    createCell(1, "Location")
+                    createCell(2, "Measure Description")
+                    createCell(3, "Quantity")
+                    createCell(4, "Current Power (kW)")
+                    createCell(5, "Usage (hrs)")
+                    createCell(6, "Post Power (kW)")
+                    createCell(7, "Post Usage (hrs)")
+                    createCell(8, "Energy Savings (kWh)")
+                    createCell(9, "Life Cost Savings")
+                    createCell(10, "Implementation Cost")
+                }
+                isLast -> {
+                    createCell(3, lights.quantityOfBulbs.toString())
+                    createCell(4, lights.currentTotalkW.format(2))
+                    createCell(5, lights.preUsageHours.format(0))
+                    createCell(6, lights.postTotalkW.format(2))
+                    createCell(7, lights.postUsageHours.format(0))
+                    createCell(8, lights.kWhSavings.format(0))
+                    createCell(9, lights.netPresentValue.format(0))
+                    createCell(10, lights.totalCost.format(0))
+                }
+                else -> { // lighting item
+                    val rowIndex = if (isFirst) 0 else i - 1
+                    val rowItem = rows[rowIndex]
 
-            val cell2 = row.getCell(2)
-            cell2.verticalAlignment = XWPFTableCell.XWPFVertAlign.CENTER
-            val pcell2 = cell2.paragraphs[0]
-            pcell2.alignment = ParagraphAlignment.CENTER
-            val rcell2 = pcell2.createRun()
-            rcell2.fontFamily = fontGeorgia
-            rcell2.fontSize = 12
-            rcell2.isBold = isFirst
-            rcell2.setText(if (isFirst) "Measure Description" else rowItem.measureDescription)
-
-            val cell3 = row.getCell(3)
-            cell3.verticalAlignment = XWPFTableCell.XWPFVertAlign.CENTER
-            val pcell3 = cell3.paragraphs[0]
-            pcell3.alignment = ParagraphAlignment.CENTER
-            val rcell3 = pcell3.createRun()
-            rcell3.fontFamily = fontGeorgia
-            rcell3.fontSize = 12
-            rcell3.isBold = isFirst
-            rcell3.setText(if (isFirst) "Quantity" else rowItem.quantity.format(0))
-
-            val cell4 = row.getCell(4)
-            cell4.verticalAlignment = XWPFTableCell.XWPFVertAlign.CENTER
-            val pcell4 = cell4.paragraphs[0]
-            pcell4.alignment = ParagraphAlignment.CENTER
-            val rcell4 = pcell4.createRun()
-            rcell4.fontFamily = fontGeorgia
-            rcell4.fontSize = 12
-            rcell4.isBold = isFirst
-            rcell4.setText((if (isFirst) "Current Power (kW)" else rowItem.currentPowerkW.format(2)))
-
-            val cell5 = row.getCell(5)
-            cell5.verticalAlignment = XWPFTableCell.XWPFVertAlign.CENTER
-            val pcell5 = cell5.paragraphs[0]
-            pcell5.alignment = ParagraphAlignment.CENTER
-            val rcell5 = pcell5.createRun()
-            rcell5.fontFamily = fontGeorgia
-            rcell5.fontSize = 12
-            rcell5.isBold = isFirst
-            rcell5.setText(if (isFirst) "Usage (hrs)" else rowItem.usageHours.format(0))
-
-            val cell6 = row.getCell(6)
-            cell6.verticalAlignment = XWPFTableCell.XWPFVertAlign.CENTER
-            val pcell6 = cell6.paragraphs[0]
-            pcell6.alignment = ParagraphAlignment.CENTER
-            val rcell6 = pcell6.createRun()
-            rcell6.fontFamily = fontGeorgia
-            rcell6.fontSize = 12
-            rcell6.isBold = isFirst
-            rcell6.setText(if (isFirst) "Post Power (kW)" else rowItem.postPowerkW.format(2))
-
-            val cell7 = row.getCell(7)
-            cell7.verticalAlignment = XWPFTableCell.XWPFVertAlign.CENTER
-            val pcell7 = cell7.paragraphs[0]
-            pcell7.alignment = ParagraphAlignment.CENTER
-            val rcell7 = pcell7.createRun()
-            rcell7.fontFamily = fontGeorgia
-            rcell7.fontSize = 12
-            rcell7.isBold = isFirst
-            rcell7.setText(if (isFirst) "Post Usage (hrs)" else rowItem.postUsageHours.format(0))
-
-            val cell8 = row.getCell(8)
-            cell8.verticalAlignment = XWPFTableCell.XWPFVertAlign.CENTER
-            val pcell8 = cell8.paragraphs[0]
-            pcell8.alignment = ParagraphAlignment.CENTER
-            val rcell8 = pcell8.createRun()
-            rcell8.fontFamily = fontGeorgia
-            rcell8.fontSize = 12
-            rcell8.isBold = isFirst
-            rcell8.setText(if (isFirst) "Energy Savings (kWh)" else rowItem.energySavingskWh.format(0))
-
-            val cell9 = row.getCell(9)
-            cell9.verticalAlignment = XWPFTableCell.XWPFVertAlign.CENTER
-            val pcell9 = cell9.paragraphs[0]
-            pcell9.alignment = ParagraphAlignment.CENTER
-            val rcell9 = pcell9.createRun()
-            rcell9.fontFamily = fontGeorgia
-            rcell9.fontSize = 12
-            rcell9.isBold = isFirst
-            rcell9.setText(if (isFirst) "Life Cost Savings" else "$${rowItem.netPresentValue.format(0)}")
-
-            val cell10 = row.getCell(10)
-            cell10.verticalAlignment = XWPFTableCell.XWPFVertAlign.CENTER
-            val pcell10 = cell10.paragraphs[0]
-            pcell10.alignment = ParagraphAlignment.CENTER
-            val rcell10 = pcell10.createRun()
-            rcell10.fontFamily = fontGeorgia
-            rcell10.fontSize = 12
-            rcell10.isBold = isFirst
-            rcell10.setText(if (isFirst) "Implementation Cost" else "$${rowItem.implementationCost.format(0)}")
+                    createCell(0 , rowItem.measure)
+                    createCell(1, rowItem.location)
+                    createCell(2, rowItem.measureDescription)
+                    createCell(3, rowItem.quantity.format(0))
+                    createCell(4, rowItem.currentPowerkW.format(2))
+                    createCell(5, rowItem.usageHours.format(0))
+                    createCell(6, rowItem.postPowerkW.format(2))
+                    createCell(7, rowItem.postUsageHours.format(0))
+                    createCell(8, rowItem.energySavingskWh.format(0))
+                    createCell(9, "$${rowItem.netPresentValue.format(0)}")
+                    createCell(10, "$${rowItem.implementationCost.format(0)}")
+                }
+            }
         }
 
         table.centerTable()
@@ -889,7 +832,7 @@ class WordDocumentGenerator {
                 values.equipment?.postTotalkW?.format(2) ?: "0.00",
                 values.equipment?.postTotalkWh?.format(2) ?: "0.00")
 
-         createRow(
+        createRow(
                 "Motors",
                 values.motor?.currentTotalkW?.format(2) ?: "0.00",
                 values.motor?.currentTotalkWh?.format(2) ?: "0.00",
@@ -945,7 +888,6 @@ class WordDocumentGenerator {
         table.centerTable()
         table.fitTable(4500)
     }
-
 
 
     // ApachePOI setup
