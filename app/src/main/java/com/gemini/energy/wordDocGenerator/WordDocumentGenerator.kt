@@ -285,10 +285,7 @@ class WordDocumentGenerator {
         document.createBullets(hvacBullets)
 
 
-        document.createNormalParagraph(
-                        "If your HVAC technician is not checking all of these components or you do not "
-                                + "have an HVAC technician maintaining your units, this will result in "
-                                + "increased energy bills and reduce the overall life of your equipment.")
+        document.createNormalParagraph("The details of your HVAC units are below:")
 
         createHvacDetailsTable(document, hvac)
 
