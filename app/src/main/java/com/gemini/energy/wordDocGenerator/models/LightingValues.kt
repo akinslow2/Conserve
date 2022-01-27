@@ -16,10 +16,16 @@ data class LightingValues(
         val paybackYear: Double, // 18
         val netPresentValue: Double,
         val lightingRows: List<LightingDataRow>,
+        val quantityOfBulbs: Int,
         val currentTotalkW: Double,
+        val preUsageHours: Double,
         val currentTotalkWh: Double,
         val postTotalkW: Double,
-        val postTotalkWh: Double
+        val postUsageHours: Double,
+        val postTotalkWh: Double,
+        val kWSavings: Double,
+        val kWhSavings: Double,
+        val hvacAdditionalkWhSavings: Double
 ) {
     companion object {
 
@@ -62,82 +68,110 @@ data class LightingValues(
             var totalSavings = 0.0
             var totalInstallCost = 0.0
             var totalEnergySavings = 0.0
+            var totalBulbs = 0
 
             var currentTotalkW = 0.0
             var currentTotalkWh = 0.0
+            var currentTotalHours = 0.0
+
             var postTotalkW = 0.0
             var postTotalkWh = 0.0
+            var postTotalHours = 0.0
 
             for (light in cfls) {
                 totalSavings += light.totalSavings()
                 totalInstallCost += light.installCost()
                 totalEnergySavings += light.totalEnergySavings()
+                totalBulbs += light.numberOfFixtures + light.lampsPerFixtures
 
                 // @anthony, please verify that these are the correct values
                 currentTotalkW += light.prePower()
                 currentTotalkWh += light.preEnergy()
+                currentTotalHours += light.usageHoursPre()
+
                 postTotalkW += light.postPower()
                 postTotalkWh += light.postEnergy()
+                postTotalHours += light.usageHoursPost()
             }
 
             for (light in halogens) {
                 totalSavings += light.totalSavings()
                 totalInstallCost += light.installCost()
                 totalEnergySavings += light.totalEnergySavings()
+                totalBulbs += light.numberOfFixtures + light.lampsPerFixtures
 
                 // @anthony, please verify that these are the correct values
                 currentTotalkW += light.prePower()
                 currentTotalkWh += light.preEnergy()
+                currentTotalHours += light.usageHoursPre()
+
                 postTotalkW += light.postPower()
                 postTotalkWh += light.postEnergy()
+                postTotalHours += light.usageHoursPost()
             }
 
             for (light in highPressureSodiums) {
                 totalSavings += light.totalSavings()
                 totalInstallCost += light.installCost()
                 totalEnergySavings += light.totalEnergySavings()
+                totalBulbs += light.numberOfFixtures + light.lampsPerFixtures
 
                 // @anthony, please verify that these are the correct values
                 currentTotalkW += light.prePower()
                 currentTotalkWh += light.preEnergy()
+                currentTotalHours += light.usageHoursPre()
+
                 postTotalkW += light.postPower()
                 postTotalkWh += light.postEnergy()
+                postTotalHours += light.usageHoursPost()
             }
 
             for (light in incandescents) {
                 totalSavings += light.totalSavings()
                 totalInstallCost += light.installCost()
                 totalEnergySavings += light.totalEnergySavings()
+                totalBulbs += light.numberOfFixtures + light.lampsPerFixtures
 
                 // @anthony, please verify that these are the correct values
                 currentTotalkW += light.prePower()
                 currentTotalkWh += light.preEnergy()
+                currentTotalHours += light.usageHoursPre()
+
                 postTotalkW += light.postPower()
                 postTotalkWh += light.postEnergy()
+                postTotalHours += light.usageHoursPost()
             }
 
             for (light in linearFluorescents) {
                 totalSavings += light.totalSavings()
                 totalInstallCost += light.installCost()
                 totalEnergySavings += light.totalEnergySavings()
+                totalBulbs += light.numberOfFixtures + light.lampsPerFixtures
 
                 // @anthony, please verify that these are the correct values
                 currentTotalkW += light.prePower()
                 currentTotalkWh += light.preEnergy()
+                currentTotalHours += light.usageHoursPre()
+
                 postTotalkW += light.postPower()
                 postTotalkWh += light.postEnergy()
+                postTotalHours += light.usageHoursPost()
             }
 
             for (light in lowPressureSodiums) {
                 totalSavings += light.totalSavings()
                 totalInstallCost += light.installCost()
                 totalEnergySavings += light.totalEnergySavings()
+                totalBulbs += light.numberOfFixtures + light.lampsPerFixtures
 
                 // @anthony, please verify that these are the correct values
                 currentTotalkW += light.prePower()
                 currentTotalkWh += light.preEnergy()
+                currentTotalHours += light.usageHoursPre()
+
                 postTotalkW += light.postPower()
                 postTotalkWh += light.postEnergy()
+                postTotalHours += light.usageHoursPost()
             }
 
             if (lightingRows.any { it.isCeilingOver10Feet.toLowerCase(Locale.ROOT) == "yes" }) {
@@ -158,18 +192,24 @@ data class LightingValues(
             val additionalHvacSavings = totalkWhSavings * 3410.0 / 17.0 / 1000.0
 
             return LightingValues(
-                    totalSavings,
-                    totalEnergySavings,
-                    totalInstallCost,
-                    paybackMonth,
-                    geminiPayback,
-                    paybackYear,
-                    netPresentValue,
-                    lightingRows,
-                    currentTotalkW,
-                    currentTotalkWh,
-                    postTotalkW,
-                    postTotalkWh)
+                    totalcostsavings = totalSavings,
+                    totalenergysavings = totalEnergySavings,
+                    totalCost = totalInstallCost,
+                    paybackMonth = paybackMonth,
+                    geminiPayback = geminiPayback,
+                    paybackYear = paybackYear,
+                    netPresentValue = netPresentValue,
+                    lightingRows = lightingRows,
+                    quantityOfBulbs = totalBulbs,
+                    currentTotalkW = currentTotalkW,
+                    preUsageHours = currentTotalHours,
+                    currentTotalkWh = currentTotalkWh,
+                    postTotalkW = postTotalkW,
+                    postUsageHours = postTotalHours,
+                    postTotalkWh = postTotalkWh,
+                    kWSavings = totalkWSavings,
+                    kWhSavings = totalkWhSavings,
+                    hvacAdditionalkWhSavings = additionalHvacSavings)
         }
 
 
