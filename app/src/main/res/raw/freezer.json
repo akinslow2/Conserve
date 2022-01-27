@@ -161,7 +161,7 @@
           "dataType": "decimalrow",
           "defaultValues": "",
           "param": "Off Peak Hours",
-          "validation": "mandatory",
+          "validation": "optional",
           "id": "23"
         }
       ],

@@ -28,7 +28,7 @@
           "dataType": "pickerinputrow",
           "defaultValues": "1:Ultra-low Temperature Freezer,2:Solid Door Freezer,3:Solid Door Refrigerator,4:Glass Door Refrigerator",
           "param": "Equipment Type",
-          "validation": "mandatory",
+          "validation": "optional",
           "id": "13"
         },
         {
@@ -161,7 +161,7 @@
           "dataType": "decimalrow",
           "defaultValues": "",
           "param": "Off Peak Hours",
-          "validation": "mandatory",
+          "validation": "optional",
           "id": "23"
         }
       ],

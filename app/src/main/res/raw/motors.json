@@ -19,7 +19,7 @@
           "dataType": "textrow",
           "defaultValues": "",
           "param": "Make",
-          "validation": "mandatory",
+          "validation": "optional",
           "id": "12"
         },
         {
@@ -28,7 +28,7 @@
           "dataType": "textrow",
           "defaultValues": "",
           "param": "Model Number",
-          "validation": "mandatory",
+          "validation": "optional",
           "id": "13"
         },
         {
@@ -37,7 +37,7 @@
           "dataType": "decimalrow",
           "defaultValues": "",
           "param": "Horsepower (HP)",
-          "validation": "mandatory",
+          "validation": "optional",
           "id": "14"
         },
         {
@@ -46,7 +46,7 @@
           "dataType": "introw",
           "defaultValues": "",
           "param": "Quantity",
-          "validation": "mandatory",
+          "validation": "optional",
           "id": "15"
         },
         {
@@ -64,7 +64,7 @@
           "dataType": "introw",
           "defaultValues": "",
           "param": "Nameplate Rotational Speed (NRS)",
-          "validation": "mandatory",
+          "validation": "optional",
           "id": "17"
         },
         {
@@ -73,7 +73,7 @@
           "dataType": "introw",
           "defaultValues": "",
           "param": "Measured Rotational Speed (MRS)",
-          "validation": "mandatory",
+          "validation": "optional",
           "id": "18"
         },
         {
@@ -82,7 +82,7 @@
           "dataType": "introw",
           "defaultValues": "",
           "param": "Synchronous Rotational Speed (SRS)",
-          "validation": "mandatory",
+          "validation": "optional",
           "id": "19"
         },
         {
@@ -91,7 +91,7 @@
           "dataType": "decimalrow",
           "defaultValues": "",
           "param": "Efficiency",
-          "validation": "mandatory",
+          "validation": "optional",
           "id": "110"
         },
         {
@@ -100,7 +100,7 @@
           "dataType": "pickerinputrow",
           "defaultValues": "1:Total Enclosed,2:Open Drip",
           "param": "Enclosure Type",
-          "validation": "mandatory",
+          "validation": "optional",
           "id": "111"
         },
         {

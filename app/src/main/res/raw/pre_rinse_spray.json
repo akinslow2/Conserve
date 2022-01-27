@@ -10,7 +10,7 @@
           "dataType": "textrow",
           "defaultValues": "",
           "param": "Model Number",
-          "validation": "mandatory",
+          "validation": "optional",
           "id": "11"
         },
         {
@@ -19,7 +19,7 @@
           "dataType": "textrow",
           "defaultValues": "",
           "param": "Company",
-          "validation": "mandatory",
+          "validation": "optional",
           "id": "12"
         },
         {
@@ -28,7 +28,7 @@
           "dataType": "introw",
           "defaultValues": "",
           "param": "Quantity",
-          "validation": "mandatory",
+          "validation": "optional",
           "id": "13"
         },
         {
@@ -150,7 +150,7 @@
           "dataType": "textarearow",
           "defaultValues": "",
           "param": "What times is the sprayer used?",
-          "validation": "mandatory",
+          "validation": "optional",
           "id": "32"
         }
       ],

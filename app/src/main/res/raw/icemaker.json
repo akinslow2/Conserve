@@ -28,7 +28,7 @@
           "dataType": "pickerinputrow",
           "defaultValues": "1:Cube,2:Continuous",
           "param": "Ice Type",
-          "validation": "mandatory",
+          "validation": "optional",
           "id": "13"
         },
         {
@@ -37,7 +37,7 @@
           "dataType": "pickerinputrow",
           "defaultValues": "1:Ice Making Head,2:Remote Condensing Unit,3:Self Contained Unit",
           "param": "Machine Type",
-          "validation": "mandatory",
+          "validation": "optional",
           "id": "14"
         },
         {
@@ -64,7 +64,7 @@
           "dataType": "introw",
           "defaultValues": "",
           "param": "Quantity",
-          "validation": "mandatory",
+          "validation": "optional",
           "id": "17"
         },
         {
@@ -134,7 +134,7 @@
           "dataType": "decimalrow",
           "defaultValues": "",
           "param": "Off Peak Hours",
-          "validation": "mandatory",
+          "validation": "optional",
           "id": "23"
         }
       ],

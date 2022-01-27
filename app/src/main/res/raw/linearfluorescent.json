@@ -10,7 +10,7 @@
           "dataType": "introw",
           "defaultValues": "",
           "param": "Lamps Per Fixture",
-          "validation": "mandatory",
+          "validation": "optional",
           "id": "11"
         },
         {
@@ -19,7 +19,7 @@
           "dataType": "introw",
           "defaultValues": "",
           "param": "Number of Fixtures",
-          "validation": "mandatory",
+          "validation": "optional",
           "id": "12"
         },
         {
@@ -46,7 +46,7 @@
           "dataType": "pickerinputrow",
           "defaultValues": "1:Drop Ceiling,2:Dry Wall",
           "param": "Ceiling Type",
-          "validation": "mandatory",
+          "validation": "optional",
           "id": "15"
         },
         {
@@ -55,7 +55,7 @@
           "dataType": "pickerinputrow",
           "defaultValues": "1:Lamp Replacement,2:Retrofit,3:Direct Replacement Fixture",
           "param": "Replacement Type",
-          "validation": "mandatory",
+          "validation": "optional",
           "id": "16"
         },
         {
@@ -64,7 +64,7 @@
           "dataType": "pickerinputrow",
           "defaultValues": "1:Yes,2:No",
           "param": "Ceiling greater than 10 feet?",
-          "validation": "mandatory",
+          "validation": "optional",
           "id": "17"
         },
         {
@@ -73,7 +73,7 @@
           "dataType": "pickerinputrow",
           "defaultValues": "1:2x2,2:2x4",
           "param": "Fixture Type",
-          "validation": "mandatory",
+          "validation": "optional",
           "id": "18"
         },
         {
@@ -98,7 +98,7 @@
           "dataType": "pickerinputrow",
           "defaultValues": "1:Yes,2:No",
           "param": "Controls",
-          "validation": "mandatory",
+          "validation": "optional",
           "id": "21"
         },
         {
@@ -191,7 +191,7 @@
           "dataType": "pickerinputrow",
           "defaultValues": "1:Yes,2:No",
           "param": "Sufficient Daylight Levels?",
-          "validation": "mandatory",
+          "validation": "optional",
           "id": "51"
         },
         {

@@ -10,7 +10,7 @@
           "dataType": "pickerinputrow",
           "defaultValues": "1:heat pump,2:package unit",
           "param": "Type of Package Unit",
-          "validation": "mandatory",
+          "validation": "optional",
           "id": "11"
         },
         {
@@ -28,7 +28,7 @@
           "dataType": "pickerinputrow",
           "defaultValues": "1:York,2:Carrier,3:Rheem,4:Lennox,5:Daikin,6:American Standard,7:Marvair,8:Nordyne,9:Other",
           "param": "Make",
-          "validation": "mandatory",
+          "validation": "optional",
           "id": "13"
         },
         {
@@ -37,7 +37,7 @@
           "dataType": "pickerinputrow",
           "defaultValues": "1:Yes,2:No,3:Slightly",
           "param": "Nameplate Readable?",
-          "validation": "mandatory",
+          "validation": "optional",
           "id": "14"
         },
         {
@@ -64,7 +64,7 @@
           "dataType": "introw",
           "defaultValues": "",
           "param": "Quantity",
-          "validation": "mandatory",
+          "validation": "optional",
           "id": "17"
         },
         {
@@ -518,7 +518,7 @@
           "dataType": "textrow",
           "defaultValues": "",
           "param": "Motor Sensor Serial",
-          "validation": "mandatory",
+          "validation": "optional",
           "id": "81"
         },
         {
@@ -527,7 +527,7 @@
           "dataType": "textrow",
           "defaultValues": "",
           "param": "Interior Temperature Sensor Serial",
-          "validation": "mandatory",
+          "validation": "optional",
           "id": "82"
         },
         {
@@ -536,7 +536,7 @@
           "dataType": "textrow",
           "defaultValues": "",
           "param": "Exterior Temperature Sensor Serial",
-          "validation": "mandatory",
+          "validation": "optional",
           "id": "83"
         },
         {
