@@ -40,6 +40,7 @@ fun XWPFDocument.createHeaderWithSavings(
 
     val p2 = this.createParagraph()
     p2.spacingBetween = 1.5
+    p2.alignment = ParagraphAlignment.CENTER
     val r1p2 = p2.createRun()
     r1p2.fontFamily = WordDocumentGenerator.fontGeorgia
     r1p2.fontSize = 14
@@ -84,6 +85,7 @@ fun XWPFDocument.createHeaderWithNoRecommendedMeasures(headerText: String) {
 
     val p2 = this.createParagraph()
     p2.spacingBetween = 1.5
+    p2.alignment = ParagraphAlignment.CENTER
     val r1p2 = p2.createRun()
     r1p2.fontFamily = WordDocumentGenerator.fontGeorgia
     r1p2.fontSize = 14
