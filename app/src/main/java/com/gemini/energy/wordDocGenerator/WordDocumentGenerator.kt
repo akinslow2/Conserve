@@ -112,7 +112,7 @@ class WordDocumentGenerator {
         r1p1.fontSize = 28
         r1p1.color = greyColor
         r1p1.isBold = true
-        r1p1.setText("Energy Audit Report")
+        r1p1.setText("Energy Savings Opportunity Report")
         r1p1.addBreak()
         r1p1.setText(preAudit.businessname)
         r1p1.addBreak()
@@ -125,7 +125,7 @@ class WordDocumentGenerator {
         r1p2.fontFamily = fontTeko
         r1p2.fontSize = 13
         r1p2.color = greyColor
-        r1p2.setText("This report presents the results of an energy assessment conducted ${preAudit.auditmonth} ${preAudit.startday}")
+        r1p2.setText("This report presents the results of an ASHRAE Level 2 energy assessment conducted ${preAudit.auditmonth} ${preAudit.startday}")
         val r2p2 = p2.createRun()
         r2p2.fontFamily = fontTeko
         r2p2.fontSize = 13
@@ -163,7 +163,7 @@ class WordDocumentGenerator {
         r1p1.fontFamily = fontTeko
         r1p1.isBold = true
         r1p1.fontSize = 16
-        r1p1.setText("Summary of the Building’s Energy Savings Potential")
+        r1p1.setText("Energy Savings Opportunity Summary")
         r1p1.addBreak()
 
         val p2 = document.createParagraph()
@@ -171,61 +171,64 @@ class WordDocumentGenerator {
         val r1p2 = p2.createRun()
         r1p2.fontFamily = fontTeko
         r1p2.fontSize = 20
-        r1p2.setText("Implementation of all recommended measures will provide an estimated annual savings of")
+        r1p2.setText("Implementation of all recommended measures will save you at least: ")
         r1p2.addBreak()
         val r2p2 = p2.createRun()
         r2p2.fontFamily = fontTeko
         r2p2.isBold = true
         r2p2.fontSize = 24
         r2p2.color = greenColor
-        r2p2.setText("$${values.building.buildingTotalSavings.format(0)}")
+        r2p2.setText("$${values.building.buildingTotalSavings.format(0)} every year")
         r2p2.addBreak()
-        val r3p2 = p2.createRun()
-        r3p2.fontFamily = fontTeko
-        r3p2.fontSize = 20
-        r3p2.setText("with a co-payment of $0")
-        r3p2.addBreak()
 
-        // TODO: calculate this!
-        val differenceBetweenEnergySavingsAndMaintenanceSavings = "TODO"
-        document.createNormalParagraph(
-                "The Pay as You Save program means you will receive all the recommended upgrades at "
-                        + "no cost AND see your monthly energy bill greatly reduced from pre-Covid levels. "
-                        + "The utility will recover the costs by adding a charge to your bill that equates "
-                        + "to the project cost paid out monthly over 12 years. This charge will last for 12 years. "
-                        + "This is not a loan, the charge is only tied to the meter, and will stay on "
-                        + "the meter even if you relocate. In addition, we expect business cost savings due "
-                        + "to these upgrades to total $$differenceBetweenEnergySavingsAndMaintenanceSavings. "
-                        + "Overall, you can expect:",
-                fontSize = 14,
-                fontColor = greyColor)
 
-        val bullets1 = arrayOf(
-                "Reduced energy costs,",
-                "Improved profit margins,",
-                "Increased thermal comfort in your building, and",
-                "More control over how energy is consumed.")
-        document.createBullets(bullets1, greyColor, fontSize = 14)
-/*
-        if (buildingValues.buildingTotalCost > 5000) {
-            val qualifyP = document.createParagraph()
-            qualifyP.spacingBetween = 1.5
-            val qualifyR = qualifyP.createRun()
-            qualifyR.fontFamily = fontTeko
-            qualifyR.fontSize = 12
-            qualifyR.color = greyColor
-            qualifyR.setText("The implementation costs of all the measures qualify you for a 0% interest loan. By implementing these energy efficiency measures, you will join the courageous few energy heroes who are making the effort to make your community cleaner.")
-
-        }
-*/
+        // potentially add section on zero- to low-interest financing - will wait on response from Tucson 2030 folks
 
         createEnergySavingsTable(document, values)
     }
 
+    private fun generateLightingSavingsPage(document: XWPFDocument, lights: LightingValues) {
+        document.createHeaderWithSavings(
+                "Lighting Savings",
+                "Implementation of recommended lighting measures will save you at least: ",
+                lights.totalcostsavings)
+
+        document.createNormalParagraph("Benefits of LED bulbs include:")
+
+        val bullets = arrayOf("Lower maintenance costs", "Better quality light", "Less air-conditioning required", "Happier customers")
+        document.createBullets(bullets)
+
+        document.createNormalParagraph(
+                "Replacing all of your non-LED bulbs and adding controls will cost approximately "
+                        + "$${lights.totalCost.format(0)} but will result in an estimated "
+                        + "total savings of $${lights.totalcostsavings.format(0)} over the next 10 years. "
+                        + "This equates to a payback period of approximately ${lights.paybackMonth.format(0)} "
+                        + "months. "
+                        + "Overall, accounting for maintenance savings, implementing the LED retrofit translates to a minimum NPV of $${lights.netPresentValue.format(0)}. "
+                        + "We strongly recommend you replace all non-LED bulbs.")
+
+        if (lights.lightingRows.any { it.isCeilingOver10Feet.toLowerCase() == "yes" }) {
+            document.createNormalParagraph(
+                    // @DY - change the code to ask 15 feet instead of 10 - in jsons, .kt files, and input parameters sheets
+                    "There is an additional $500 fee to rent the lift needed to replace lighting located in a ceiling that is higher than 15 feet.")
+        }
+
+        document.createNormalParagraph("Please see the next page for specifics of each lighting measure.")
+
+        createLightingTable1(document, lights)
+
+        document.createNormalParagraph(
+                "The savings represented in the table below reflect the bulb replacement costs abated "
+                        + "because LED bulbs will last 2 to 3 times longer.",
+                isStartOfNewPage = true)
+
+        createLightingTable3(document, lights)
+    }
+
     private fun generateHvacSavingsPage(document: XWPFDocument, hvac: HvacValues, building: BuildingValues) {
         document.createHeaderWithSavings(
-                "Heating, Ventilation, and Air-Conditioning Savings",
-                "Implementation of recommended HVAC measures will result in minimum annual savings of ",
+                "Heating, Ventilation, & Air-Conditioning [HVAC] Savings",
+                "Implementation of recommended HVAC measures will save you at least: ",
                 hvac.totalSavings)
 
         val p3 = document.createParagraph()
@@ -234,11 +237,15 @@ class WordDocumentGenerator {
         r1p3.isBold = true
         r1p3.isItalic = true
         r1p3.fontSize = 16
-        r1p3.setText("Package Unit")
+        //r1p3.setText("HVAC Package Unit")
 
         document.createNormalParagraph(
-                " Make sure you are having your package units checked by a HVAC technician quarterly. "
-                        + "Review you HVAC technician's maintenance scope of work it should include:")
+                "Make sure an HVAC technician checks your package units on a quarterly basis. "
+                        + "Failure to properly maintain your HVAC units results in increased energy bills "
+                        + "and shorter equipment life spans, reducing your savings potential.")
+
+        document.createNormalParagraph(
+                "The HVAC technician's maintenance scope of work should include:")
 
         val hvacBullets = arrayOf(
                 "Cleaning the condenser",
@@ -248,21 +255,17 @@ class WordDocumentGenerator {
                 "Tightening belts (if applicable)")
         document.createBullets(hvacBullets)
 
-        document.createNormalParagraph("If your HVAC technician is not checking all of these components "
-                + "or you do not have an HVAC technician maintaining your units, this will result in increased "
-                + "energy bills and reduce the overall life of your equipment.")
-
         for (instance in hvac.instances) {
 
             if (instance.age > 15) {
                 document.createNormalParagraph(
-                        "Your ${instance.quantity} ${instance.btu}-BTU HVAC package unit(s) are from ${instance.year} "
+                        "Your ${instance.quantity} ${instance.btu}-kBTU HVAC package unit(s) are from ${instance.year} "
                                 + "with a SEER value of ${instance.seer.format(0)}. "
                                 + "They are ${instance.overage} years past their expected end of life use and are at immediate risk of failure. "
                                 + "We strongly recommend replacing your package unit(s) as soon as possible. "
                                 + "This investment will result in a NPV of \$${hvac.netPresentValue.format(0)}.")
 
-                document.createNormalParagraph("Benefits of a new HVAC include:")
+                document.createNormalParagraph("Benefits of a new HVAC system with smart controls include:")
 
                 val hvacBullets = arrayOf(
                         "Lower operating costs",
@@ -276,14 +279,14 @@ class WordDocumentGenerator {
 
             if (instance.age < 15 && instance.quantity > 1) {
                 document.createNormalParagraph(
-                        "Your ${instance.quantity} ${instance.btu}-BTU HVAC package units are from "
+                        "Your ${instance.quantity} ${instance.btu}-kBTU HVAC package units are from "
                                 + "${instance.year} with a SEER value of ${instance.seer.format(0)}, "
                                 + "current federal minimum is 13.")
             }
 
             if (instance.age < 15 && instance.quantity < 2) {
                 document.createNormalParagraph(
-                        "Your ${instance.quantity} ${instance.btu}-BTU HVAC package unit is from "
+                        "Your ${instance.quantity} ${instance.btu}-kBTU HVAC package unit is from "
                                 + "${instance.year} with a SEER value of ${instance.seer.format(0)}, "
                                 + "current federal minimum is 13.")
             }
@@ -322,22 +325,15 @@ class WordDocumentGenerator {
         if (waterheater.netPresentValue > 1) {
             document.createHeaderWithSavings(
                     "Water Heating Savings",
-                    "Implementation of recommended water heater measures will result in minimum annual savings of ",
+                    "Implementation of recommended water heating upgrades will save you at least: ",
                     waterheater.totalSavings)
         } else {
             document.createHeaderWithNoRecommendedMeasures("Water Heating Savings")
         }
 
-        val p3 = document.createParagraph()
-        val r1p3 = p3.createRun()
-        r1p3.fontFamily = fontTeko
-        r1p3.isBold = true
-        r1p3.isItalic = true
-        r1p3.fontSize = 16
-        r1p3.setText(waterheater.unittype)
-
         document.createNormalParagraph(
-                "Replacing your water heater(s) will result in a total cost of $${waterheater.totalCost.format(0)} but will result in a minimum of $${waterheater.totalSavings.format(0)} in annual savings. " +
+                "Replacing your ${waterheater.unittype} water heater(s) will result in a total cost of $${waterheater.totalCost.format(0)} " +
+                        "but will result in a minimum of $${waterheater.totalSavings.format(0)} in annual savings. " +
                         "This equates to a payback period of approximately ${waterheater.paybackMonth.format(0)} months. " +
                         "This investment will result in a NPV of $${waterheater.netPresentValue.format(0)}. ",
                 addBreakAfter = true)
@@ -345,105 +341,41 @@ class WordDocumentGenerator {
         createWaterHeaterTable(document, waterheater)
     }
 
-    private fun generateLightingSavingsPage(document: XWPFDocument, lights: LightingValues) {
-        document.createHeaderWithSavings(
-                "Lighting Savings",
-                "Implementation of recommended lighting measures will result in an estimated annual savings of",
-                lights.totalcostsavings)
-
-        document.createNormalParagraph("Benefits of LED bulbs include:")
-
-        val bullets = arrayOf("Lower maintenance costs", "Better quality light", "Less air-conditioning required", "Happier customers")
-        document.createBullets(bullets)
-
-        document.createNormalParagraph(
-                "Replacing all of your non-LED bulbs and adding controls will cost approximately "
-                        + "$${lights.totalCost.format(0)} but will result in an estimated "
-                        + "minimum of $${lights.totalcostsavings.format(0)} in annual savings. "
-                        + "This equates to a payback period of approximately ${lights.paybackMonth.format(0)} "
-                        + "months. "
-                        + "Overall, accounting for maintenance savings, implementing the LED retrofit translates to a minimum NPV of $${lights.netPresentValue.format(0)}. "
-                        + "We strongly recommend you replace all non-LED bulbs.",
-                addBreakAfter = true)
-
-        if (lights.lightingRows.any { it.isCeilingOver10Feet.toLowerCase() == "yes" }) {
-            document.createNormalParagraph(
-                    "There is an additional $500 fee to rent the lift needed to replace lighting located in a ceiling over 10 feet .",
-                    addBreakAfter = true)
-        }
-
-        document.createNormalParagraph("Please see the next page for specifics of each lighting measure.")
-
-        createLightingTable1(document, lights)
-
-        document.createNormalParagraph(
-                "The savings represented in the table below reflect the bulb replacement costs abated "
-                        + "because LED bulbs will last 2 to 3 times longer.",
-                isStartOfNewPage = true)
-
-        createLightingTable3(document, lights)
-    }
-
     private fun generateEquipmentSavingsPage(document: XWPFDocument, equipment: EquipmentValues) {
-        val p1 = document.createParagraph()
-        p1.spacingBetween = 1.5
-        p1.isPageBreak = true
-        val r1p1 = p1.createRun()
-        r1p1.fontFamily = fontTeko
-        r1p1.isBold = true
-        r1p1.isItalic = true
-        r1p1.fontSize = 20
-        r1p1.setText("Kitchen Equipment Savings")
+        if (equipment.netPresentValue > 1) {
+            document.createHeaderWithSavings(
+                    "Kitchen Equipment Savings",
+                    "Implementation of recommended kitchen equipment upgrades will save you at least: ",
+                    equipment.totalSavings)
 
-        val p2 = document.createParagraph()
-        p2.spacingBetween = 1.5
-        val r1p2 = p2.createRun()
-        r1p2.fontFamily = fontTeko
-        r1p2.fontSize = 18
-        r1p2.setText("Implementation of recommended Kitchen Equipment Savings will result in a minimum savings of ")
-        val r2p2 = p2.createRun()
-        r2p2.fontFamily = fontTeko
-        r2p2.isBold = true
-        r2p2.fontSize = 24
-        r2p2.color = greenColor
-        r2p2.setText("$${equipment.totalSavings.format(0)}/year")
-
-        for (equip in equipment.instances) {
-            val p3 = document.createParagraph()
-            val r1p3 = p3.createRun()
-            r1p3.fontFamily = fontTeko
-            r1p3.fontSize = 13
-            r1p3.setText("Your ${equip.name} is ${equip.age.format(0)} years old and as a result is annually consuming ${equip.delta.format(0)} kWh more energy than a newer version. " +
-                    "We recommend you replace the ${equip.name} with a newer version to save $${equip.costElectricity.format(0)} of dollars per year. " +
-                    "The cost for a new ${equip.name} is roughly $${equip.materialCost.format(0)} with an expected payback period for this replacement is ${equip.paybackMonth.format(0)} months." +
-                    "This investment will result in a NPV of \$${equip.netPresentValue.format(0)}")
-            r1p3.addBreak()
+            for (equip in equipment.instances) {
+                val p3 = document.createParagraph()
+                val r1p3 = p3.createRun()
+                r1p3.fontFamily = fontTeko
+                r1p3.fontSize = 13
+                r1p3.setText("Your ${equip.name} is ${equip.age.format(0)} years old and as a result is annually consuming " +
+                        "${equip.delta.format(0)} kWh more energy than a newer, higher-efficiency version. " +
+                        "We recommend you replace the ${equip.name} with a high-effiency version to save $${equip.costElectricity.format(0)} per year. " +
+                        "The implementation cost for a new ${equip.name} is roughly $${equip.materialCost.format(0)} " +
+                        "and the expected payback period for this replacement is ${equip.paybackMonth.format(0)} months. " +
+                        "This investment will result in a NPV of \$${equip.netPresentValue.format(0)}")
+                r1p3.addBreak()
+            }
+        } else {
+            document.createHeaderWithNoRecommendedMeasures("Kitchen Equipment Savings")
         }
+
     }
 
     private fun generateRefrigerationSavingsPage(document: XWPFDocument, refrigeration: RefrigerationValues) {
-        val p1 = document.createParagraph()
-        p1.spacingBetween = 1.5
-        p1.isPageBreak = true
-        val r1p1 = p1.createRun()
-        r1p1.fontFamily = fontTeko
-        r1p1.isBold = true
-        r1p1.isItalic = true
-        r1p1.fontSize = 20
-        r1p1.setText("Refrigeration Savings")
-
-        val p2 = document.createParagraph()
-        p2.spacingBetween = 1.5
-        val r1p2 = p2.createRun()
-        r1p2.fontFamily = fontTeko
-        r1p2.fontSize = 18
-        r1p2.setText("Implementing all refrigeration measures will result in a minimum savings of  ")
-        val r2p2 = p2.createRun()
-        r2p2.fontFamily = fontTeko
-        r2p2.isBold = true
-        r2p2.fontSize = 24
-        r2p2.color = greenColor
-        r2p2.setText("$${refrigeration.totalSavings.format(0)}.")
+        if (refrigeration.netPresentValue > 1) {
+            document.createHeaderWithSavings(
+                    "Refrigeration Savings",
+                    "Implementation of recommended refrigeration upgrades will save you at least: ",
+                    refrigeration.totalSavings)
+        } else {
+            document.createHeaderWithNoRecommendedMeasures("Refrigeration Savings")
+        }
 
         val p3 = document.createParagraph()
         p3.spacingBetween = 1.5
@@ -470,13 +402,13 @@ class WordDocumentGenerator {
         val r1p2 = p2.createRun()
         r1p2.fontFamily = fontTeko
         r1p2.fontSize = 13
-        r1p2.setText("${preAudit.businessname}is ${preAudit.bldgarea.format(0)} square feet and includes a ${values.zoneString}. ${preAudit.businessname} is open daily from ${preAudit.operationhours}. This building is classified as ${preAudit.bldgtype}.")
+        r1p2.setText("${preAudit.businessname} is ${preAudit.bldgarea.format(0)} square feet and includes spaces for ${values.zoneString}. ${preAudit.businessname} is open daily from ${preAudit.operationhours}. This building is classified as ${preAudit.bldgtype}.")
         r1p2.addBreak()
         r1p2.addBreak()
-        r1p2.setText("${preAudit.businessname}is on the ${preAudit.electricstructure} ${preAudit.utilitycompany} electric rate schedule. In the one-year period from $manuallyGeneratedValue through $manuallyGeneratedValue, ${preAudit.businessname} consumed $manuallyGeneratedValue kWh, resulting in an electrical cost of $$manuallyGeneratedValue.")
+        r1p2.setText("${preAudit.businessname} is on the ${preAudit.utilitycompany} ${preAudit.electricstructure} electric rate schedule. In the one-year period from $manuallyGeneratedValue through $manuallyGeneratedValue, ${preAudit.businessname} consumed $manuallyGeneratedValue kWh, resulting in an electrical cost of $$manuallyGeneratedValue.")
         r1p2.addBreak()
         r1p2.addBreak()
-        r1p2.setText("${preAudit.businessname}is on the ${preAudit.gasstructure} ${preAudit.utilitycompany} gas rate schedule and for above stated time period, ${preAudit.businessname} used $manuallyGeneratedValue therms at a cost of $$manuallyGeneratedValue.")
+        r1p2.setText("${preAudit.businessname} is on the ${preAudit.utilitycompany} ${preAudit.gasstructure} gas rate schedule and for above stated time period, ${preAudit.businessname} used $manuallyGeneratedValue therms at a cost of $$manuallyGeneratedValue.")
         r1p2.addBreak()
 
         val p3 = document.createParagraph()
@@ -484,7 +416,7 @@ class WordDocumentGenerator {
         val r1p3 = p3.createRun()
         r1p3.fontFamily = fontTeko
         r1p3.isBold
-        r1p3.fontSize = 13
+        r1p3.fontSize = 20
         r1p3.setText("Energy Savings Disclaimer")
 
         val p4 = document.createParagraph()
@@ -492,12 +424,11 @@ class WordDocumentGenerator {
         val r1p4 = p4.createRun()
         r1p4.fontFamily = fontTeko
         r1p4.fontSize = 13
-        r1p4.setText("While electric companies and affiliates offering this program rely on industry best-practices, on-site data loggers, and energy savings modeling software to make energy savings predictions as accurate as possible," +
-                " it is important to understand that the Easy Plan report is intended to inform participants of the ESTIMATED energy cost savings they should expect to realize - assuming all recommended work is done." +
-                " The estimated savings reflected in the Easy Plan therefore are in no way a guarantee of the actual savings.")
+        r1p4.setText("While Gemini Energy Solutions relies on industry best-practices, on-site data loggers, and energy savings modeling software to make energy savings predictions as accurate as possible," +
+                " it is important to understand that Gemini's Energy Savings Opportunity Report is intended to inform participants of the ESTIMATED energy cost savings they should expect to realize - assuming all recommended work is done.")
         r1p4.addBreak()
         r1p4.addBreak()
-        r1p4.setText("The estimated annual energy saving numbers reflected in the Easy Plan are based on the last 12 months weather and energy costs, as well as the behavior patterns during the time that " +
+        r1p4.setText("The estimated annual energy saving numbers reflected in the Energy Savings Opportunity Report are based on the last 12 months of weather and energy costs, as well as the behavior patterns during the time that " +
                 "the on-site data loggers were active. Since future weather, behavior, and energy costs cannot be accurately predicted, there will be a variable difference between estimated and actual savings.")
 
     }
@@ -566,7 +497,7 @@ class WordDocumentGenerator {
         currentRow += 1
 
         table.generateFinancialComponentsDetailRow(
-                "Financial Overview",
+                "Total Savings over Life of Equipment",
                 "\$${values.building.buildingTotalSavings.format(0)}",
                 currentRow)
         currentRow += 1

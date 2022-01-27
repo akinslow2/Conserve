@@ -42,7 +42,7 @@ fun XWPFDocument.createHeaderWithSavings(
     p2.spacingBetween = 1.5
     val r1p2 = p2.createRun()
     r1p2.fontFamily = WordDocumentGenerator.fontTeko
-    r1p2.fontSize = 18
+    r1p2.fontSize = 14
     r1p2.setText(implementationText)
     r1p2.addBreak()
     val r2p2 = p2.createRun()
@@ -51,7 +51,14 @@ fun XWPFDocument.createHeaderWithSavings(
     r2p2.fontSize = 24
     r2p2.color = WordDocumentGenerator.greenColor
     r2p2.setText("$${savingsValue.format(0)}")
-    r2p2.addBreak()
+    val r3p2 = p2.createRun()
+    r3p2.fontFamily = WordDocumentGenerator.fontTeko
+    r3p2.isBold = true
+    r3p2.isItalic = true
+    r3p2.fontSize = 24
+    r3p2.color = WordDocumentGenerator.greenColor
+    r3p2.setText(" every year")
+    r3p2.addBreak()
 }
 
 
@@ -77,8 +84,8 @@ fun XWPFDocument.createHeaderWithNoRecommendedMeasures(headerText: String) {
     p2.spacingBetween = 1.5
     val r1p2 = p2.createRun()
     r1p2.fontFamily = WordDocumentGenerator.fontTeko
-    r1p2.fontSize = 18
-    r1p2.setText("At this time there are no recommended measures")
+    r1p2.fontSize = 14
+    r1p2.setText("At this time, there are no recommended measures to take.")
     r1p2.addBreak()
 }
 
