@@ -291,54 +291,15 @@ class WordDocumentGenerator {
 
         createHvacDetailsTable(document, hvac)
 
-        for (instance in hvac.instances) {
-
-            if (instance.age > 15) {
-                document.createNormalParagraph(
-                        "Your ${instance.quantity} ${instance.btu}-kBTU HVAC package unit(s) are from ${instance.year} "
-                                + "with a SEER value of ${instance.seer.format(0)}. "
-                                + "They are ${instance.overage} years past their expected end of life use and are at immediate risk of failure. "
-                                + "We strongly recommend replacing your package unit(s) as soon as possible. "
-                                + "This investment will result in a NPV of \$${hvac.netPresentValue.format(0)}.")
-
-                document.createNormalParagraph("Benefits of a new HVAC system with smart controls include:")
-
-                val hvacBullets = arrayOf(
+        document.createNormalParagraph("Benefits of a new HVAC system with smart controls include:")
+        val hvacBullets2 = arrayOf(
                         "Lower operating costs",
                         "Less risk of failure and disruption of business",
                         "More control over temperature settings",
                         "More consistent temperature throughout the space",
                         "Better for the environment"
                 )
-                document.createBullets(hvacBullets)
-            }
-
-            if (instance.age < 15 && instance.quantity > 1) {
-                document.createNormalParagraph(
-                        "Your ${instance.quantity} ${instance.btu}-kBTU HVAC package units are from "
-                                + "${instance.year} with a SEER value of ${instance.seer.format(0)}, "
-                                + "current federal minimum is 13.")
-            }
-
-            if (instance.age < 15 && instance.quantity < 2) {
-                document.createNormalParagraph(
-                        "Your ${instance.quantity} ${instance.btu}-kBTU HVAC package unit is from "
-                                + "${instance.year} with a SEER value of ${instance.seer.format(0)}, "
-                                + "current federal minimum is 13.")
-            }
-
-            if (instance.thermotype == "Analog") {
-                document.createNormalParagraph(
-                        "We strongly recommend installing a programmable thermostat with a remote control app. "
-                                + "Installation of a programmable thermostat with remote programming will save you "
-                                + "thousands of dollars over its life. Having a remote control app is important because "
-                                + "the vast majority of people have their programmable thermostat programmed incorrectly. "
-                                + "With a remote programmable thermostats you have the ability to easily see what your "
-                                + "temperature set-points are and simply adjust them at need from your phone."
-                                + "Imagine having your space comfortable when you enter without having to have the HVAC "
-                                + "running the entire time you are away.")
-            }
-        }
+        document.createBullets(hvacBullets2)
 
         if (hvac.instances.any { i -> i.age < 15 }) {
             document.createNormalParagraph(
