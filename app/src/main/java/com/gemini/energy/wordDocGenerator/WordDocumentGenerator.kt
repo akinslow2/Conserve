@@ -163,33 +163,38 @@ class WordDocumentGenerator {
     }
 
     private fun generateEnergySavingPotentialPage(document: XWPFDocument, values: PreparedForDocument) {
+//        val p1 = document.createParagraph()
+//        p1.spacingBetween = 1.5
+//        p1.isPageBreak = true
+//        val r1p1 = p1.createRun()
+//        r1p1.fontFamily = fontGeorgia
+//        r1p1.isBold = true
+//        r1p1.fontSize = 16
+//        r1p1.setText("Energy Savings Opportunity Summary")
+//        r1p1.addBreak()
+//
+//        val p2 = document.createParagraph()
+//        p2.spacingBetween = 1.5
+//        val r1p2 = p2.createRun()
+//        r1p2.fontFamily = fontGeorgia
+//        r1p2.fontSize = 20
+//        r1p2.setText("Implementation of all recommended measures will save you at least: ")
+//        r1p2.addBreak()
+//        val r2p2 = p2.createRun()
+//        r2p2.fontFamily = fontGeorgia
+//        r2p2.isBold = true
+//        r2p2.fontSize = 24
+//        r2p2.color = greenColor
+//        r2p2.setText("$${values.building.buildingTotalSavings.format(0)} every year")
+//        r2p2.addBreak()
+        document.createHeaderWithSavings(
+                "Energy Savings Opportunity Summary",
+                "Implementation of all recommended measures will save you at least:",
+                values.building.buildingTotalSavings)
+
         val p1 = document.createParagraph()
-        p1.spacingBetween = 1.5
-        p1.isPageBreak = true
-        val r1p1 = p1.createRun()
-        r1p1.fontFamily = fontGeorgia
-        r1p1.isBold = true
-        r1p1.fontSize = 16
-        r1p1.setText("Energy Savings Opportunity Summary")
-        r1p1.addBreak()
-
-        val p2 = document.createParagraph()
-        p2.spacingBetween = 1.5
-        val r1p2 = p2.createRun()
-        r1p2.fontFamily = fontGeorgia
-        r1p2.fontSize = 20
-        r1p2.setText("Implementation of all recommended measures will save you at least: ")
-        r1p2.addBreak()
-        val r2p2 = p2.createRun()
-        r2p2.fontFamily = fontGeorgia
-        r2p2.isBold = true
-        r2p2.fontSize = 24
-        r2p2.color = greenColor
-        r2p2.setText("$${values.building.buildingTotalSavings.format(0)} every year")
-        r2p2.addBreak()
-
-        val r3p2 = p2.createRun()
-        r3p2.fontFamily = fontTeko
+        val r3p2 = p1.createRun()
+        r3p2.fontFamily = fontGeorgia
         r3p2.fontSize = 20
         r3p2.setText("with a co-payment of $0")
         r3p2.addBreak()
@@ -435,6 +440,7 @@ class WordDocumentGenerator {
         val p1 = document.createParagraph()
         p1.spacingBetween = 1.5
         p1.isPageBreak = true
+        p1.alignment = ParagraphAlignment.CENTER
         val r1p1 = p1.createRun()
         r1p1.fontFamily = fontGeorgia
         r1p1.isBold = true
@@ -482,11 +488,12 @@ class WordDocumentGenerator {
         val p1 = document.createParagraph()
         p1.spacingBetween = 1.5
         p1.isPageBreak = true
+        p1.alignment = ParagraphAlignment.CENTER
         val r1p1 = p1.createRun()
         r1p1.fontFamily = fontGeorgia
         r1p1.isBold = true
-        r1p1.fontSize = 16
-        r1p1.setText("Electricity Calculations")
+        r1p1.fontSize = 20
+        r1p1.setText("Energy Calculations")
         r1p1.addBreak()
 
         val p2 = document.createParagraph()
@@ -508,6 +515,7 @@ class WordDocumentGenerator {
         val p1 = document.createParagraph()
         p1.spacingBetween = 1.5
         p1.isPageBreak = true
+        p1.alignment = ParagraphAlignment.CENTER
         val r1p1 = p1.createRun()
         r1p1.fontFamily = fontGeorgia
         r1p1.isBold = true
