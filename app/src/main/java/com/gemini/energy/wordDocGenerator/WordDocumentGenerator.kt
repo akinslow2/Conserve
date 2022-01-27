@@ -158,7 +158,6 @@ class WordDocumentGenerator {
     }
 
     private fun generateEnergySavingPotentialPage(document: XWPFDocument, values: PreparedForDocument) {
-
         document.createHeaderWithSavings(
                 "Energy Savings Opportunity Summary",
                 "Implementation of all recommended measures will save you at least:",
