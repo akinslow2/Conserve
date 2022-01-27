@@ -31,7 +31,7 @@ fun XWPFDocument.createHeaderWithSavings(
     p1.spacingBetween = 1.5
     p1.isPageBreak = true
     val r1p1 = p1.createRun()
-    r1p1.fontFamily = WordDocumentGenerator.fontTeko
+    r1p1.fontFamily = WordDocumentGenerator.fontGeorgia
     r1p1.isBold = true
     r1p1.isItalic = true
     r1p1.fontSize = 16
@@ -41,18 +41,18 @@ fun XWPFDocument.createHeaderWithSavings(
     val p2 = this.createParagraph()
     p2.spacingBetween = 1.5
     val r1p2 = p2.createRun()
-    r1p2.fontFamily = WordDocumentGenerator.fontTeko
+    r1p2.fontFamily = WordDocumentGenerator.fontGeorgia
     r1p2.fontSize = 14
     r1p2.setText(implementationText)
     r1p2.addBreak()
     val r2p2 = p2.createRun()
-    r2p2.fontFamily = WordDocumentGenerator.fontTeko
+    r2p2.fontFamily = WordDocumentGenerator.fontGeorgia
     r2p2.isBold = true
     r2p2.fontSize = 24
     r2p2.color = WordDocumentGenerator.greenColor
     r2p2.setText("$${savingsValue.format(0)}")
     val r3p2 = p2.createRun()
-    r3p2.fontFamily = WordDocumentGenerator.fontTeko
+    r3p2.fontFamily = WordDocumentGenerator.fontGeorgia
     r3p2.isBold = true
     r3p2.isItalic = true
     r3p2.fontSize = 24
@@ -73,7 +73,7 @@ fun XWPFDocument.createHeaderWithNoRecommendedMeasures(headerText: String) {
     p1.spacingBetween = 1.5
     p1.isPageBreak = true
     val r1p1 = p1.createRun()
-    r1p1.fontFamily = WordDocumentGenerator.fontTeko
+    r1p1.fontFamily = WordDocumentGenerator.fontGeorgia
     r1p1.isBold = true
     r1p1.isItalic = true
     r1p1.fontSize = 16
@@ -83,7 +83,7 @@ fun XWPFDocument.createHeaderWithNoRecommendedMeasures(headerText: String) {
     val p2 = this.createParagraph()
     p2.spacingBetween = 1.5
     val r1p2 = p2.createRun()
-    r1p2.fontFamily = WordDocumentGenerator.fontTeko
+    r1p2.fontFamily = WordDocumentGenerator.fontGeorgia
     r1p2.fontSize = 14
     r1p2.setText("At this time, there are no recommended measures to take.")
     r1p2.addBreak()
@@ -111,7 +111,7 @@ fun XWPFDocument.createNormalParagraph(
     paragraph.spacingBetween = 1.5
     paragraph.isPageBreak = isStartOfNewPage
     val run = paragraph.createRun()
-    run.fontFamily = WordDocumentGenerator.fontTeko
+    run.fontFamily = WordDocumentGenerator.fontGeorgia
     run.fontSize = fontSize
     run.color = fontColor
     run.setText(text)
@@ -152,7 +152,7 @@ fun XWPFDocument.createBullets(
         bulletedPara.numID = numID
         bulletedPara.spacingBetween = 1.5
         val run = bulletedPara.createRun()
-        run.fontFamily = WordDocumentGenerator.fontTeko
+        run.fontFamily = WordDocumentGenerator.fontGeorgia
         run.fontSize = fontSize
         run.color = fontColor
         if (isBold) {
@@ -205,7 +205,7 @@ fun XWPFTable.generateFinancialComponentsHeaderRow(
     val pc0r0 = c0r0.paragraphs[0]
     pc0r0.alignment = ParagraphAlignment.CENTER
     val rc0r0 = pc0r0.createRun()
-    rc0r0.fontFamily = WordDocumentGenerator.fontTeko
+    rc0r0.fontFamily = WordDocumentGenerator.fontGeorgia
     rc0r0.fontSize = 12
     rc0r0.isBold = true
     rc0r0.color = WordDocumentGenerator.whiteColor
@@ -216,7 +216,7 @@ fun XWPFTable.generateFinancialComponentsHeaderRow(
     val pc1r0 = c1r0.paragraphs[0]
     pc1r0.alignment = ParagraphAlignment.CENTER
     val rc1r0 = pc1r0.createRun()
-    rc1r0.fontFamily = WordDocumentGenerator.fontTeko
+    rc1r0.fontFamily = WordDocumentGenerator.fontGeorgia
     rc1r0.fontSize = 12
     rc1r0.isBold = true
     rc1r0.color = WordDocumentGenerator.whiteColor
@@ -236,7 +236,7 @@ fun XWPFTable.generateFinancialComponentsDetailRow(cell1: String, cell2: String,
     val cell0 = row.getCell(0)
     val para0 = cell0.paragraphs[0]
     val para0run = para0.createRun()
-    para0run.fontFamily = WordDocumentGenerator.fontTeko
+    para0run.fontFamily = WordDocumentGenerator.fontGeorgia
     para0run.fontSize = 12
     para0run.isBold = true
     para0run.setText(cell1)
@@ -246,7 +246,7 @@ fun XWPFTable.generateFinancialComponentsDetailRow(cell1: String, cell2: String,
     para1.alignment = ParagraphAlignment.CENTER
     val para1run = para1.createRun()
     para1run.fontSize = 12
-    para1run.fontFamily = WordDocumentGenerator.fontTeko
+    para1run.fontFamily = WordDocumentGenerator.fontGeorgia
     para1run.setText(cell2)
 }
 
