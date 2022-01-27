@@ -37,8 +37,9 @@ class WordDocumentGenerator {
 
         const val fontAgencyFB = "Agency FB"
         private const val fontUnivers = "Univers LT Std 39 Thin UltraCn"
-
         const val fontTeko = "Teko"
+
+        const val fontGeorgia = "Georgia"
 
         private const val manuallyGeneratedValue = "INSERTME"
     }
@@ -108,7 +109,7 @@ class WordDocumentGenerator {
         p1.alignment = ParagraphAlignment.CENTER
         p1.spacingBetween = 1.5
         val r1p1 = p1.createRun()
-        r1p1.fontFamily = fontTeko
+        r1p1.fontFamily = fontGeorgia
         r1p1.fontSize = 28
         r1p1.color = greyColor
         r1p1.isBold = true
@@ -122,29 +123,29 @@ class WordDocumentGenerator {
         p2.spacingBetween = 1.08
         p2.alignment = ParagraphAlignment.CENTER
         val r1p2 = p2.createRun()
-        r1p2.fontFamily = fontTeko
+        r1p2.fontFamily = fontGeorgia
         r1p2.fontSize = 13
         r1p2.color = greyColor
         r1p2.setText("This report presents the results of an ASHRAE Level 2 energy assessment conducted ${preAudit.auditmonth} ${preAudit.startday}")
         val r2p2 = p2.createRun()
-        r2p2.fontFamily = fontTeko
+        r2p2.fontFamily = fontGeorgia
         r2p2.fontSize = 13
         r2p2.color = greyColor
         r2p2.subscript = VerticalAlign.SUPERSCRIPT
         r2p2.setText("th")
         val r3p2 = p2.createRun()
-        r3p2.fontFamily = fontTeko
+        r3p2.fontFamily = fontGeorgia
         r3p2.fontSize = 13
         r3p2.color = greyColor
         r3p2.setText(" through ${preAudit.auditmonth} ${preAudit.endday}")
         val r4p2 = p2.createRun()
-        r4p2.fontFamily = fontTeko
+        r4p2.fontFamily = fontGeorgia
         r4p2.fontSize = 13
         r4p2.color = greyColor
         r4p2.subscript = VerticalAlign.SUPERSCRIPT
         r4p2.setText("th")
         val r5p2 = p2.createRun()
-        r5p2.fontFamily = fontTeko
+        r5p2.fontFamily = fontGeorgia
         r5p2.fontSize = 13
         r5p2.color = greyColor
         r5p2.setText(" and evaluation of potential improvements to reduce energy consumption and related operating cost at ")
@@ -160,7 +161,7 @@ class WordDocumentGenerator {
         p1.spacingBetween = 1.5
         p1.isPageBreak = true
         val r1p1 = p1.createRun()
-        r1p1.fontFamily = fontTeko
+        r1p1.fontFamily = fontGeorgia
         r1p1.isBold = true
         r1p1.fontSize = 16
         r1p1.setText("Energy Savings Opportunity Summary")
@@ -169,12 +170,12 @@ class WordDocumentGenerator {
         val p2 = document.createParagraph()
         p2.spacingBetween = 1.5
         val r1p2 = p2.createRun()
-        r1p2.fontFamily = fontTeko
+        r1p2.fontFamily = fontGeorgia
         r1p2.fontSize = 20
         r1p2.setText("Implementation of all recommended measures will save you at least: ")
         r1p2.addBreak()
         val r2p2 = p2.createRun()
-        r2p2.fontFamily = fontTeko
+        r2p2.fontFamily = fontGeorgia
         r2p2.isBold = true
         r2p2.fontSize = 24
         r2p2.color = greenColor
@@ -232,7 +233,7 @@ class WordDocumentGenerator {
 
         val p3 = document.createParagraph()
         val r1p3 = p3.createRun()
-        r1p3.fontFamily = fontTeko
+        r1p3.fontFamily = fontGeorgia
         r1p3.isBold = true
         r1p3.isItalic = true
         r1p3.fontSize = 16
@@ -350,7 +351,7 @@ class WordDocumentGenerator {
             for (equip in equipment.instances) {
                 val p3 = document.createParagraph()
                 val r1p3 = p3.createRun()
-                r1p3.fontFamily = fontTeko
+                r1p3.fontFamily = fontGeorgia
                 r1p3.fontSize = 13
                 r1p3.setText("Your ${equip.name} is ${equip.age.format(0)} years old and as a result is annually consuming " +
                         "${equip.delta.format(0)} kWh more energy than a newer, higher-efficiency version. " +
@@ -379,7 +380,7 @@ class WordDocumentGenerator {
         val p3 = document.createParagraph()
         p3.spacingBetween = 1.5
         val r1p3 = p3.createRun()
-        r1p3.fontFamily = fontTeko
+        r1p3.fontFamily = fontGeorgia
         r1p3.fontSize = 18
         r1p3.setText("The estimated cost is ${refrigeration.totalCost.format(2)}, resulting in a payback of ${refrigeration.paybackMonth.format(2)} months. " +
                 "This investment will result in a NPV of $${refrigeration.netPresentValue.format(0)}")
@@ -390,7 +391,7 @@ class WordDocumentGenerator {
         p1.spacingBetween = 1.5
         p1.isPageBreak = true
         val r1p1 = p1.createRun()
-        r1p1.fontFamily = fontTeko
+        r1p1.fontFamily = fontGeorgia
         r1p1.isBold = true
         r1p1.isItalic = true
         r1p1.fontSize = 20
@@ -399,7 +400,7 @@ class WordDocumentGenerator {
         val p2 = document.createParagraph()
         p2.spacingBetween = 1.5
         val r1p2 = p2.createRun()
-        r1p2.fontFamily = fontTeko
+        r1p2.fontFamily = fontGeorgia
         r1p2.fontSize = 13
         r1p2.setText("${preAudit.businessname} is ${preAudit.bldgarea.format(0)} square feet and includes spaces for ${values.zoneString}. ${preAudit.businessname} is open daily from ${preAudit.operationhours}. This building is classified as ${preAudit.bldgtype}.")
         r1p2.addBreak()
@@ -413,7 +414,7 @@ class WordDocumentGenerator {
         val p3 = document.createParagraph()
         p3.spacingBetween = 1.5
         val r1p3 = p3.createRun()
-        r1p3.fontFamily = fontTeko
+        r1p3.fontFamily = fontGeorgia
         r1p3.isBold
         r1p3.fontSize = 20
         r1p3.setText("Energy Savings Disclaimer")
@@ -421,7 +422,7 @@ class WordDocumentGenerator {
         val p4 = document.createParagraph()
         p4.spacingBetween = 1.5
         val r1p4 = p4.createRun()
-        r1p4.fontFamily = fontTeko
+        r1p4.fontFamily = fontGeorgia
         r1p4.fontSize = 13
         r1p4.setText("While Gemini Energy Solutions relies on industry best-practices, on-site data loggers, and energy savings modeling software to make energy savings predictions as accurate as possible," +
                 " it is important to understand that Gemini's Energy Savings Opportunity Report is intended to inform participants of the ESTIMATED energy cost savings they should expect to realize - assuming all recommended work is done.")
@@ -437,7 +438,7 @@ class WordDocumentGenerator {
         p1.spacingBetween = 1.5
         p1.isPageBreak = true
         val r1p1 = p1.createRun()
-        r1p1.fontFamily = fontTeko
+        r1p1.fontFamily = fontGeorgia
         r1p1.isBold = true
         r1p1.fontSize = 16
         r1p1.setText("Energy Calculations")
@@ -446,14 +447,14 @@ class WordDocumentGenerator {
         val p2 = document.createParagraph()
         p2.spacingBetween = 1.5
         val r1p2 = p2.createRun()
-        r1p2.fontFamily = fontTeko
+        r1p2.fontFamily = fontGeorgia
         r1p2.fontSize = 13
         r1p2.setText("Electric rates from https://www.tep.com/rates/")
         r1p2.addCarriageReturn()
         r1p2.setText("Gas rates from https://www.swgas.com/en/arizona-rates-and-regulation")
         r1p2.addCarriageReturn()
         val r2p2 = p2.createRun()
-        r2p2.fontFamily = fontTeko
+        r2p2.fontFamily = fontGeorgia
         r2p2.fontSize = 13
         r2p2.setText("Building is using schedule ${values.preAudit.electricstructure}")
 
@@ -479,7 +480,7 @@ class WordDocumentGenerator {
         p1.spacingBetween = 1.5
         p1.isPageBreak = true
         val r1p1 = p1.createRun()
-        r1p1.fontFamily = fontTeko
+        r1p1.fontFamily = fontGeorgia
         r1p1.isBold = true
         r1p1.isItalic = true
         r1p1.fontSize = 20
@@ -651,7 +652,7 @@ class WordDocumentGenerator {
             val pcell0 = cell0.paragraphs[0]
             pcell0.alignment = ParagraphAlignment.CENTER
             val rcell0 = pcell0.createRun()
-            rcell0.fontFamily = fontTeko
+            rcell0.fontFamily = fontGeorgia
             rcell0.fontSize = 12
             rcell0.setText(if (isFirst) "Measure" else rowItem.measure)
 
@@ -660,7 +661,7 @@ class WordDocumentGenerator {
             val pcell1 = cell1.paragraphs[0]
             pcell1.alignment = ParagraphAlignment.CENTER
             val rcell1 = pcell1.createRun()
-            rcell1.fontFamily = fontTeko
+            rcell1.fontFamily = fontGeorgia
             rcell1.fontSize = 12
             rcell1.setText(if (isFirst) "Location" else rowItem.location)
 
@@ -669,7 +670,7 @@ class WordDocumentGenerator {
             val pcell2 = cell2.paragraphs[0]
             pcell2.alignment = ParagraphAlignment.CENTER
             val rcell2 = pcell2.createRun()
-            rcell2.fontFamily = fontTeko
+            rcell2.fontFamily = fontGeorgia
             rcell2.fontSize = 12
             rcell2.setText(if (isFirst) "Measure Description" else rowItem.measureDescription)
 
@@ -678,7 +679,7 @@ class WordDocumentGenerator {
             val pcell3 = cell3.paragraphs[0]
             pcell3.alignment = ParagraphAlignment.CENTER
             val rcell3 = pcell3.createRun()
-            rcell3.fontFamily = fontTeko
+            rcell3.fontFamily = fontGeorgia
             rcell3.fontSize = 12
             rcell3.setText(if (isFirst) "Quantity" else rowItem.quantity.format(0))
 
@@ -687,7 +688,7 @@ class WordDocumentGenerator {
             val pcell4 = cell4.paragraphs[0]
             pcell4.alignment = ParagraphAlignment.CENTER
             val rcell4 = pcell4.createRun()
-            rcell4.fontFamily = fontTeko
+            rcell4.fontFamily = fontGeorgia
             rcell4.fontSize = 12
             rcell4.setText((if (isFirst) "Current Power (kW)" else rowItem.currentPowerkW.format(2)))
 
@@ -696,7 +697,7 @@ class WordDocumentGenerator {
             val pcell5 = cell5.paragraphs[0]
             pcell5.alignment = ParagraphAlignment.CENTER
             val rcell5 = pcell5.createRun()
-            rcell5.fontFamily = fontTeko
+            rcell5.fontFamily = fontGeorgia
             rcell5.fontSize = 12
             rcell5.setText(if (isFirst) "Usage (hrs)" else rowItem.usageHours.format(0))
 
@@ -705,7 +706,7 @@ class WordDocumentGenerator {
             val pcell6 = cell6.paragraphs[0]
             pcell6.alignment = ParagraphAlignment.CENTER
             val rcell6 = pcell6.createRun()
-            rcell6.fontFamily = fontTeko
+            rcell6.fontFamily = fontGeorgia
             rcell6.fontSize = 12
             rcell6.setText(if (isFirst) "Post Power (kW)" else rowItem.postPowerkW.format(2))
 
@@ -714,7 +715,7 @@ class WordDocumentGenerator {
             val pcell7 = cell7.paragraphs[0]
             pcell7.alignment = ParagraphAlignment.CENTER
             val rcell7 = pcell7.createRun()
-            rcell7.fontFamily = fontTeko
+            rcell7.fontFamily = fontGeorgia
             rcell7.fontSize = 12
             rcell7.setText(if (isFirst) "Post Usage (hrs)" else rowItem.postUsageHours.format(0))
 
@@ -723,7 +724,7 @@ class WordDocumentGenerator {
             val pcell8 = cell8.paragraphs[0]
             pcell8.alignment = ParagraphAlignment.CENTER
             val rcell8 = pcell8.createRun()
-            rcell8.fontFamily = fontTeko
+            rcell8.fontFamily = fontGeorgia
             rcell8.fontSize = 12
             rcell8.setText(if (isFirst) "Energy Savings (kWh)" else rowItem.energySavingskWh.format(0))
 
@@ -732,7 +733,7 @@ class WordDocumentGenerator {
             val pcell9 = cell9.paragraphs[0]
             pcell9.alignment = ParagraphAlignment.CENTER
             val rcell9 = pcell9.createRun()
-            rcell9.fontFamily = fontTeko
+            rcell9.fontFamily = fontGeorgia
             rcell9.fontSize = 12
             rcell9.setText(if (isFirst) "Life Cost Savings" else "$${rowItem.netPresentValue.format(0)}")
 
@@ -741,7 +742,7 @@ class WordDocumentGenerator {
             val pcell10 = cell10.paragraphs[0]
             pcell10.alignment = ParagraphAlignment.CENTER
             val rcell10 = pcell10.createRun()
-            rcell10.fontFamily = fontTeko
+            rcell10.fontFamily = fontGeorgia
             rcell10.fontSize = 12
             rcell10.setText(if (isFirst) "Implementation Cost" else "$${rowItem.implementationCost.format(0)}")
         }
@@ -827,35 +828,35 @@ class WordDocumentGenerator {
             val cell0 = row.getCell(0)
             val para0 = cell0.paragraphs[0]
             val run0 = para0.createRun()
-            run0.fontFamily = fontTeko
+            run0.fontFamily = fontGeorgia
             run0.fontSize = 12
             run0.setText(cell0Text)
 
             val cell1 = row.getCell(1)
             val para1 = cell1.paragraphs[0]
             val run1 = para1.createRun()
-            run1.fontFamily = fontTeko
+            run1.fontFamily = fontGeorgia
             run1.fontSize = 12
             run1.setText(cell1Text)
 
             val cell2 = row.getCell(2)
             val para2 = cell2.paragraphs[0]
             val run2 = para2.createRun()
-            run2.fontFamily = fontTeko
+            run2.fontFamily = fontGeorgia
             run2.fontSize = 12
             run2.setText(cell2Text)
 
             val cell3 = row.getCell(3)
             val para3 = cell3.paragraphs[0]
             val run3 = para3.createRun()
-            run3.fontFamily = fontTeko
+            run3.fontFamily = fontGeorgia
             run3.fontSize = 12
             run3.setText(cell3Text)
 
             val cell4 = row.getCell(4)
             val para4 = cell4.paragraphs[0]
             val run4 = para4.createRun()
-            run4.fontFamily = fontTeko
+            run4.fontFamily = fontGeorgia
             run4.fontSize = 12
             run4.setText(cell4Text)
 
@@ -942,7 +943,7 @@ class WordDocumentGenerator {
                 val paragraph = cell.paragraphs[0]
                 paragraph.alignment = ParagraphAlignment.CENTER
                 val run = paragraph.createRun()
-                run.fontFamily = fontTeko
+                run.fontFamily = fontGeorgia
                 run.fontSize = 12
                 run.isBold = isFirst
                 run.setText(text)
