@@ -91,6 +91,18 @@ class WordDocumentGenerator {
 
         generateFacilityInformationPage(document, value, value.preAudit)
 
+        val appendix = document.createParagraph()
+        appendix.spacingBetween = 1.5
+        appendix.isPageBreak = true
+        appendix.alignment = ParagraphAlignment.CENTER
+        val appendixRun = appendix.createRun()
+        appendixRun.fontFamily = fontGeorgia
+        appendixRun.isBold = true
+        appendixRun.isItalic = true
+        appendixRun.fontSize = 20
+        appendixRun.setText("Appendix")
+        appendixRun.addBreak()
+
         if (value.lighting != null) {
             document.createNormalParagraph(
                 "The savings represented in the table below reflect the bulb replacement costs abated because LED bulbs will last 2 to 3 times longer. "
