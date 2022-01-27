@@ -28,18 +28,20 @@ class WordDocumentGenerator {
 
     companion object {
         //Hex #'s used for the colors
-        private val greyColor = "595959"
-        private val tableGreyColor = "D9D9D9"
-        val greenColor = "70ad47"
-        val tableGreenColor = "469B43"
-        val blackColor = "000000"
-        val whiteColor = "ffffff"
+        private const val greyColor = "595959"
+        private const val tableGreyColor = "D9D9D9"
+        const val greenColor = "70ad47"
+        const val tableGreenColor = "469B43"
+        const val blackColor = "000000"
+        const val whiteColor = "ffffff"
 
-        val fontAgencyFB = "Agency FB"
-        val fontTeko = "Teko"
-        private val fontUnivers = "Univers LT Std 39 Thin UltraCn"
+        const val fontAgencyFB = "Agency FB"
+        private const val fontUnivers = "Univers LT Std 39 Thin UltraCn"
+        const val fontTeko = "Teko"
 
-        private val manuallyGeneratedValue = "INSERTME"
+        const val fontGeorgia = "Georgia"
+
+        private const val manuallyGeneratedValue = "INSERTME"
     }
 
 
@@ -105,7 +107,7 @@ class WordDocumentGenerator {
         p1.alignment = ParagraphAlignment.CENTER
         p1.spacingBetween = 1.5
         val r1p1 = p1.createRun()
-        r1p1.fontFamily = fontUnivers
+        r1p1.fontFamily = fontGeorgia
         r1p1.fontSize = 28
         r1p1.color = greyColor
         r1p1.isBold = true
@@ -119,30 +121,33 @@ class WordDocumentGenerator {
         p2.spacingBetween = 1.08
         p2.alignment = ParagraphAlignment.CENTER
         val r1p2 = p2.createRun()
-        r1p2.fontFamily = fontAgencyFB
-        r1p2.fontSize = 12
+
+        r1p2.fontFamily = fontGeorgia
+        r1p2.fontSize = 13
         r1p2.color = greyColor
         r1p2.setText("This report presents the results of an ASHRAE Level 2 energy assessment conducted ${preAudit.auditmonth} ${preAudit.startday}")
         val r2p2 = p2.createRun()
-        r2p2.fontFamily = fontAgencyFB
-        r2p2.fontSize = 12
+        r2p2.fontFamily = fontGeorgia
+        r2p2.fontSize = 13
         r2p2.color = greyColor
         r2p2.subscript = VerticalAlign.SUPERSCRIPT
         r2p2.setText("th")
+
         val r3p2 = p2.createRun()
-        r3p2.fontFamily = fontAgencyFB
-        r3p2.fontSize = 12
+        r3p2.fontFamily = fontGeorgia
+        r3p2.fontSize = 13
         r3p2.color = greyColor
         r3p2.setText(" through ${preAudit.auditmonth} ${preAudit.endday}")
         val r4p2 = p2.createRun()
-        r4p2.fontFamily = fontAgencyFB
-        r4p2.fontSize = 12
+        r4p2.fontFamily = fontGeorgia
+        r4p2.fontSize = 13
         r4p2.color = greyColor
         r4p2.subscript = VerticalAlign.SUPERSCRIPT
         r4p2.setText("th")
+
         val r5p2 = p2.createRun()
-        r5p2.fontFamily = fontAgencyFB
-        r5p2.fontSize = 12
+        r5p2.fontFamily = fontGeorgia
+        r5p2.fontSize = 13
         r5p2.color = greyColor
         r5p2.setText(" and evaluation of potential improvements to reduce energy consumption and related operating cost at ")
         r5p2.addBreak()
@@ -157,7 +162,7 @@ class WordDocumentGenerator {
         p1.spacingBetween = 1.5
         p1.isPageBreak = true
         val r1p1 = p1.createRun()
-        r1p1.fontFamily = fontAgencyFB
+        r1p1.fontFamily = fontGeorgia
         r1p1.isBold = true
         r1p1.fontSize = 16
         r1p1.setText("Energy Savings Opportunity Summary")
@@ -166,13 +171,13 @@ class WordDocumentGenerator {
         val p2 = document.createParagraph()
         p2.spacingBetween = 1.5
         val r1p2 = p2.createRun()
-        r1p2.fontFamily = fontAgencyFB
+        r1p2.fontFamily = fontGeorgia
         r1p2.fontSize = 20
 
         r1p2.setText("Implementation of all recommended measures will save you at least: ")
         r1p2.addBreak()
         val r2p2 = p2.createRun()
-        r2p2.fontFamily = fontAgencyFB
+        r2p2.fontFamily = fontGeorgia
         r2p2.isBold = true
         r2p2.fontSize = 24
         r2p2.color = greenColor
@@ -180,7 +185,7 @@ class WordDocumentGenerator {
         r2p2.addBreak()
 
         val r3p2 = p2.createRun()
-        r3p2.fontFamily = fontAgencyFB
+        r3p2.fontFamily = fontGeorgia
         r3p2.fontSize = 20
         r3p2.setText("with a Net Present Value (NPV) of ${values.building.buildingNetPresentValue.format(0)}")
         r3p2.addBreak()
@@ -188,7 +193,7 @@ class WordDocumentGenerator {
         val p3 = document.createParagraph()
         p3.spacingBetween = 1.5
         val r1p3 = p3.createRun()
-        r1p3.fontFamily = fontAgencyFB
+        r1p3.fontFamily = fontGeorgia
         r1p3.fontSize = 12
         r1p3.color = greyColor
         r1p3.setText("The analysis shows a high potential for energy savings which will:")
@@ -204,7 +209,7 @@ class WordDocumentGenerator {
             val qualifyP = document.createParagraph()
             qualifyP.spacingBetween = 1.5
             val qualifyR = qualifyP.createRun()
-            qualifyR.fontFamily = fontAgencyFB
+            qualifyR.fontFamily = fontGeorgia
             qualifyR.fontSize = 12
             qualifyR.color = greyColor
             qualifyR.setText("The implementation costs of all the measures qualify you for a 0% interest loan. By implementing these energy efficiency measures, you will join the courageous few energy heroes who are making the effort to make your community cleaner.")
@@ -262,7 +267,7 @@ class WordDocumentGenerator {
 
         val p3 = document.createParagraph()
         val r1p3 = p3.createRun()
-        r1p3.fontFamily = fontAgencyFB
+        r1p3.fontFamily = fontGeorgia
         r1p3.isBold = true
         r1p3.isItalic = true
         r1p3.fontSize = 16
@@ -392,7 +397,7 @@ class WordDocumentGenerator {
             for (equip in equipment.instances) {
                 val p3 = document.createParagraph()
                 val r1p3 = p3.createRun()
-                r1p3.fontFamily = fontTeko
+                r1p3.fontFamily = fontGeorgia
                 r1p3.fontSize = 13
                 r1p3.setText("Your ${equip.name} is ${equip.age.format(0)} years old and as a result is annually consuming " +
                         "${equip.delta.format(0)} kWh more energy than a newer, higher-efficiency version. " +
@@ -422,7 +427,7 @@ class WordDocumentGenerator {
         val p3 = document.createParagraph()
         p3.spacingBetween = 1.5
         val r1p3 = p3.createRun()
-        r1p3.fontFamily = fontAgencyFB
+        r1p3.fontFamily = fontGeorgia
         r1p3.fontSize = 18
         r1p3.setText("The estimated cost is ${refrigeration.totalCost.format(2)}, resulting in a payback of ${refrigeration.paybackMonth.format(2)} months. " +
                 "This investment will result in a NPV of $${refrigeration.netPresentValue.format(0)}")
@@ -433,7 +438,7 @@ class WordDocumentGenerator {
         p1.spacingBetween = 1.5
         p1.isPageBreak = true
         val r1p1 = p1.createRun()
-        r1p1.fontFamily = fontAgencyFB
+        r1p1.fontFamily = fontGeorgia
         r1p1.isBold = true
         r1p1.isItalic = true
         r1p1.fontSize = 20
@@ -442,8 +447,7 @@ class WordDocumentGenerator {
         val p2 = document.createParagraph()
         p2.spacingBetween = 1.5
         val r1p2 = p2.createRun()
-
-        r1p2.fontFamily = fontTeko
+        r1p2.fontFamily = fontGeorgia
         r1p2.fontSize = 13
         r1p2.setText("${preAudit.businessname} is ${preAudit.bldgarea.format(0)} square feet and includes spaces for ${values.zoneString}. ${preAudit.businessname} is open daily from ${preAudit.operationhours}. This building is classified as ${preAudit.bldgtype}.")
         r1p2.addBreak()
@@ -458,7 +462,7 @@ class WordDocumentGenerator {
         val p3 = document.createParagraph()
         p3.spacingBetween = 1.5
         val r1p3 = p3.createRun()
-        r1p3.fontFamily = fontTeko
+        r1p3.fontFamily = fontGeorgia
         r1p3.isBold
         r1p3.fontSize = 20
         r1p3.setText("Energy Savings Disclaimer")
@@ -466,7 +470,7 @@ class WordDocumentGenerator {
         val p4 = document.createParagraph()
         p4.spacingBetween = 1.5
         val r1p4 = p4.createRun()
-        r1p4.fontFamily = fontTeko
+        r1p4.fontFamily = fontGeorgia
         r1p4.fontSize = 13
         r1p4.setText("While Gemini Energy Solutions relies on industry best-practices, on-site data loggers, and energy savings modeling software to make energy savings predictions as accurate as possible," +
                 " it is important to understand that Gemini's Energy Savings Opportunity Report is intended to inform participants of the ESTIMATED energy cost savings they should expect to realize - assuming all recommended work is done.")
@@ -482,7 +486,7 @@ class WordDocumentGenerator {
         p1.spacingBetween = 1.5
         p1.isPageBreak = true
         val r1p1 = p1.createRun()
-        r1p1.fontFamily = fontTeko
+        r1p1.fontFamily = fontGeorgia
         r1p1.isBold = true
         r1p1.fontSize = 16
         r1p1.setText("Energy Calculations")
@@ -491,14 +495,14 @@ class WordDocumentGenerator {
         val p2 = document.createParagraph()
         p2.spacingBetween = 1.5
         val r1p2 = p2.createRun()
-        r1p2.fontFamily = fontTeko
+        r1p2.fontFamily = fontGeorgia
         r1p2.fontSize = 13
         r1p2.setText("Electric rates from https://www.tep.com/rates/")
         r1p2.addCarriageReturn()
         r1p2.setText("Gas rates from https://www.swgas.com/en/arizona-rates-and-regulation")
         r1p2.addCarriageReturn()
         val r2p2 = p2.createRun()
-        r2p2.fontFamily = fontTeko
+        r2p2.fontFamily = fontGeorgia
         r2p2.fontSize = 13
         r2p2.setText("Building is using schedule ${values.preAudit.electricstructure}")
 
@@ -510,7 +514,7 @@ class WordDocumentGenerator {
         p1.spacingBetween = 1.5
         p1.isPageBreak = true
         val r1p1 = p1.createRun()
-        r1p1.fontFamily = fontAgencyFB
+        r1p1.fontFamily = fontGeorgia
         r1p1.isBold = true
         r1p1.isItalic = true
         r1p1.fontSize = 20
@@ -646,7 +650,7 @@ class WordDocumentGenerator {
         val pcell0r0 = cell0r0.paragraphs[0]
         pcell0r0.alignment = ParagraphAlignment.CENTER
         val rcell0r0 = cell0r0.paragraphs[0].createRun()
-        rcell0r0.fontFamily = fontAgencyFB
+        rcell0r0.fontFamily = fontGeorgia
         rcell0r0.color = whiteColor
         rcell0r0.isBold = true
         rcell0r0.setText("Financial Components")
@@ -656,7 +660,7 @@ class WordDocumentGenerator {
         val pcell1ro = cell1r0.paragraphs[0]
         pcell1ro.alignment = ParagraphAlignment.CENTER
         val rcell1r0 = cell1r0.paragraphs[0].createRun()
-        rcell1r0.fontFamily = fontAgencyFB
+        rcell1r0.fontFamily = fontGeorgia
         rcell1r0.color = whiteColor
         rcell1r0.isBold = true
         rcell1r0.setText("Financial Overview")
@@ -665,7 +669,7 @@ class WordDocumentGenerator {
 
         val c0r1 = row1.getCell(0)
         val rc0r1 = c0r1.paragraphs[0].createRun()
-        rc0r1.fontFamily = fontAgencyFB
+        rc0r1.fontFamily = fontGeorgia
         rc0r1.isBold = true
         rc0r1.setText("Minimum Electrical Cost Savings ($/yr)")
 
@@ -673,14 +677,14 @@ class WordDocumentGenerator {
         val pc1r1 = c1r1.paragraphs[0]
         pc1r1.alignment = ParagraphAlignment.CENTER
         val rc1r1 = c1r1.paragraphs[0].createRun()
-        rc1r1.fontFamily = fontAgencyFB
+        rc1r1.fontFamily = fontGeorgia
         rc1r1.setText("\$${lights.totalcostsavings.format(0)}")
 
         val row2 = table.getRow(2)
 
         val c0r2 = row2.getCell(0)
         val rc0r2 = c0r2.paragraphs[0].createRun()
-        rc0r2.fontFamily = fontAgencyFB
+        rc0r2.fontFamily = fontGeorgia
         rc0r2.isBold = true
         rc0r2.setText("Implementation Cost ($)")
 
@@ -688,14 +692,14 @@ class WordDocumentGenerator {
         val pc1r2 = c1r2.paragraphs[0]
         pc1r2.alignment = ParagraphAlignment.CENTER
         val rc1r2 = pc1r2.createRun()
-        rc1r2.fontFamily = fontAgencyFB
+        rc1r2.fontFamily = fontGeorgia
         rc1r2.setText("\$${lights.totalCost}")
 
         val row3 = table.getRow(3)
 
         val c0r3 = row3.getCell(0)
         val rc0r3 = c0r3.paragraphs[0].createRun()
-        rc0r3.fontFamily = fontAgencyFB
+        rc0r3.fontFamily = fontGeorgia
         rc0r3.isBold = true
         rc0r3.setText("Payback")
 
@@ -705,14 +709,14 @@ class WordDocumentGenerator {
         val pc0r4 = c0r4.paragraphs[0]
         pc0r4.alignment = ParagraphAlignment.RIGHT
         val rc0r4 = pc0r4.createRun()
-        rc0r4.fontFamily = fontAgencyFB
+        rc0r4.fontFamily = fontGeorgia
         rc0r4.setText("Year")
 
         val c1r4 = row4.getCell(1)
         val pc1r4 = c1r4.paragraphs[0]
         pc1r4.alignment = ParagraphAlignment.CENTER
         val rc1r4 = pc1r4.createRun()
-        rc1r4.fontFamily = fontAgencyFB
+        rc1r4.fontFamily = fontGeorgia
         rc1r4.setText(lights.paybackYear.format(2))
 
         val row5 = table.getRow(5)
@@ -721,14 +725,14 @@ class WordDocumentGenerator {
         val pc0r5 = c0r5.paragraphs[0]
         pc0r5.alignment = ParagraphAlignment.RIGHT
         val rc0r5 = pc0r5.createRun()
-        rc0r5.fontFamily = fontAgencyFB
+        rc0r5.fontFamily = fontGeorgia
         rc0r5.setText("Month")
 
         val c1r5 = row5.getCell(1)
         val pc1r5 = c1r5.paragraphs[0]
         pc1r5.alignment = ParagraphAlignment.CENTER
         val rc1r5 = pc1r5.createRun()
-        rc1r5.fontFamily = fontAgencyFB
+        rc1r5.fontFamily = fontGeorgia
         rc1r5.setText(lights.paybackMonth.format(0))
 
         table.centerTable()
@@ -755,6 +759,8 @@ class WordDocumentGenerator {
             val pcell0 = cell0.paragraphs[0]
             pcell0.alignment = ParagraphAlignment.CENTER
             val rcell0 = pcell0.createRun()
+            rcell0.fontFamily = fontGeorgia
+            rcell0.fontSize = 12
             rcell0.setText(if (isFirst) "Measure" else rowItem.measure)
 
             val cell1 = row.getCell(1)
@@ -762,6 +768,8 @@ class WordDocumentGenerator {
             val pcell1 = cell1.paragraphs[0]
             pcell1.alignment = ParagraphAlignment.CENTER
             val rcell1 = pcell1.createRun()
+            rcell1.fontFamily = fontGeorgia
+            rcell1.fontSize = 12
             rcell1.setText(if (isFirst) "Location" else rowItem.location)
 
             val cell2 = row.getCell(2)
@@ -769,6 +777,8 @@ class WordDocumentGenerator {
             val pcell2 = cell2.paragraphs[0]
             pcell2.alignment = ParagraphAlignment.CENTER
             val rcell2 = pcell2.createRun()
+            rcell2.fontFamily = fontGeorgia
+            rcell2.fontSize = 12
             rcell2.setText(if (isFirst) "Measure Description" else rowItem.measureDescription)
 
             val cell3 = row.getCell(3)
@@ -776,6 +786,8 @@ class WordDocumentGenerator {
             val pcell3 = cell3.paragraphs[0]
             pcell3.alignment = ParagraphAlignment.CENTER
             val rcell3 = pcell3.createRun()
+            rcell3.fontFamily = fontGeorgia
+            rcell3.fontSize = 12
             rcell3.setText(if (isFirst) "Quantity" else rowItem.quantity.format(0))
 
             val cell4 = row.getCell(4)
@@ -783,6 +795,8 @@ class WordDocumentGenerator {
             val pcell4 = cell4.paragraphs[0]
             pcell4.alignment = ParagraphAlignment.CENTER
             val rcell4 = pcell4.createRun()
+            rcell4.fontFamily = fontGeorgia
+            rcell4.fontSize = 12
             rcell4.setText((if (isFirst) "Current Power (kW)" else rowItem.currentPowerkW.format(2)))
 
                         val cell5 = row.getCell(5)
@@ -790,6 +804,8 @@ class WordDocumentGenerator {
             val pcell5 = cell5.paragraphs[0]
             pcell5.alignment = ParagraphAlignment.CENTER
             val rcell5 = pcell5.createRun()
+            rcell5.fontFamily = fontGeorgia
+            rcell5.fontSize = 12
             rcell5.setText(if (isFirst) "Usage (hrs)" else rowItem.usageHours.format(0))
 
             val cell6 = row.getCell(6)
@@ -797,6 +813,8 @@ class WordDocumentGenerator {
             val pcell6 = cell6.paragraphs[0]
             pcell6.alignment = ParagraphAlignment.CENTER
             val rcell6 = pcell6.createRun()
+            rcell6.fontFamily = fontGeorgia
+            rcell6.fontSize = 12
             rcell6.setText(if (isFirst) "Post Power (kW)" else rowItem.postPowerkW.format(2))
 
             val cell7 = row.getCell(7)
@@ -804,6 +822,8 @@ class WordDocumentGenerator {
             val pcell7 = cell7.paragraphs[0]
             pcell7.alignment = ParagraphAlignment.CENTER
             val rcell7 = pcell7.createRun()
+            rcell7.fontFamily = fontGeorgia
+            rcell7.fontSize = 12
             rcell7.setText(if (isFirst) "Post Usage (hrs)" else rowItem.postUsageHours.format(0))
 
             val cell8 = row.getCell(8)
@@ -811,6 +831,8 @@ class WordDocumentGenerator {
             val pcell8 = cell8.paragraphs[0]
             pcell8.alignment = ParagraphAlignment.CENTER
             val rcell8 = pcell8.createRun()
+            rcell8.fontFamily = fontGeorgia
+            rcell8.fontSize = 12
             rcell8.setText(if (isFirst) "Energy Savings (kWh)" else rowItem.energySavingskWh.format(0))
 
             val cell9 = row.getCell(9)
@@ -818,13 +840,17 @@ class WordDocumentGenerator {
             val pcell9 = cell9.paragraphs[0]
             pcell9.alignment = ParagraphAlignment.CENTER
             val rcell9 = pcell9.createRun()
-            rcell9.setText(if (isFirst) "Life Cost Savings" else "$${rowItem.costSavings.format(0)}")
+            rcell9.fontFamily = fontGeorgia
+            rcell9.fontSize = 12
+            rcell9.setText(if (isFirst) "Life Cost Savings" else "$${rowItem.netPresentValue.format(0)}")
 
             val cell10 = row.getCell(10)
             cell10.verticalAlignment = XWPFTableCell.XWPFVertAlign.CENTER
             val pcell10 = cell10.paragraphs[0]
             pcell10.alignment = ParagraphAlignment.CENTER
             val rcell10 = pcell10.createRun()
+            rcell10.fontFamily = fontGeorgia
+            rcell10.fontSize = 12
             rcell10.setText(if (isFirst) "Implementation Cost" else "$${rowItem.implementationCost.format(0)}")
 
             val cell11 = row.getCell(11)
@@ -854,7 +880,7 @@ class WordDocumentGenerator {
         val pcellr0 = cell0r0.paragraphs[0]
         pcellr0.alignment = ParagraphAlignment.CENTER
         val rcell0r0 = cell0r0.paragraphs[0].createRun()
-        rcell0r0.fontFamily = fontAgencyFB
+        rcell0r0.fontFamily = fontGeorgia
         rcell0r0.color = whiteColor
         rcell0r0.isBold = true
         rcell0r0.setText("Financial Components")
@@ -864,7 +890,7 @@ class WordDocumentGenerator {
         val pcell1r0 = cell1r0.paragraphs[0]
         pcell1r0.alignment = ParagraphAlignment.CENTER
         val rcell1r0 = cell1r0.paragraphs[0].createRun()
-        rcell1r0.fontFamily = fontAgencyFB
+        rcell1r0.fontFamily = fontGeorgia
         rcell1r0.color = whiteColor
         rcell1r0.isBold = true
         rcell1r0.setText("Financial Overview")
@@ -874,7 +900,7 @@ class WordDocumentGenerator {
 
         val c0r1 = row1.getCell(0)
         val rc0r1 = c0r1.paragraphs[0].createRun()
-        rc0r1.fontFamily = fontAgencyFB
+        rc0r1.fontFamily = fontGeorgia
         rc0r1.isBold = true
         rc0r1.setText("Total Electrical Cost Savings ($/yr)")
 
@@ -882,14 +908,14 @@ class WordDocumentGenerator {
         val pc1r1 = c1r1.paragraphs[0]
         pc1r1.alignment = ParagraphAlignment.CENTER
         val rc1r1 = c1r1.paragraphs[0].createRun()
-        rc1r1.fontFamily = fontAgencyFB
+        rc1r1.fontFamily = fontGeorgia
         rc1r1.setText("\$${hvac.totalSavings.format(0)}")
 
         val row2 = table.getRow(2)
 
         val c0r2 = row2.getCell(0)
         val rc0r2 = c0r2.paragraphs[0].createRun()
-        rc0r2.fontFamily = fontAgencyFB
+        rc0r2.fontFamily = fontGeorgia
         rc0r2.isBold = true
         rc0r2.setText("Implementation Cost ($)")
 
@@ -897,14 +923,14 @@ class WordDocumentGenerator {
         val pc1r2 = c1r2.paragraphs[0]
         pc1r2.alignment = ParagraphAlignment.CENTER
         val rc1r2 = pc1r2.createRun()
-        rc1r2.fontFamily = fontAgencyFB
+        rc1r2.fontFamily = fontGeorgia
         rc1r2.setText("\$${hvac.totalCost.format(0)}")
 
         val row3 = table.getRow(3)
 
         val c0r3 = row3.getCell(0)
         val rc0r3 = c0r3.paragraphs[0].createRun()
-        rc0r3.fontFamily = fontAgencyFB
+        rc0r3.fontFamily = fontGeorgia
         rc0r3.isBold = true
         rc0r3.setText("Payback")
 
@@ -914,14 +940,14 @@ class WordDocumentGenerator {
         val pc0r4 = c0r4.paragraphs[0]
         pc0r4.alignment = ParagraphAlignment.RIGHT
         val rc0r4 = pc0r4.createRun()
-        rc0r4.fontFamily = fontAgencyFB
+        rc0r4.fontFamily = fontGeorgia
         rc0r4.setText("Year")
 
         val c1r4 = row4.getCell(1)
         val pc1r4 = c1r4.paragraphs[0]
         pc1r4.alignment = ParagraphAlignment.CENTER
         val rc1r4 = pc1r4.createRun()
-        rc1r4.fontFamily = fontAgencyFB
+        rc1r4.fontFamily = fontGeorgia
         rc1r4.setText(building.hvacPaybackYear.format(2))
 
         val row5 = table.getRow(5)
@@ -930,14 +956,14 @@ class WordDocumentGenerator {
         val pc0r5 = c0r5.paragraphs[0]
         pc0r5.alignment = ParagraphAlignment.RIGHT
         val rc0r5 = pc0r5.createRun()
-        rc0r5.fontFamily = fontAgencyFB
+        rc0r5.fontFamily = fontGeorgia
         rc0r5.setText("Month")
 
         val c1r5 = row5.getCell(1)
         val pc1r5 = c1r5.paragraphs[0]
         pc1r5.alignment = ParagraphAlignment.CENTER
         val rc1r5 = pc1r5.createRun()
-        rc1r5.fontFamily = fontAgencyFB
+        rc1r5.fontFamily = fontGeorgia
         rc1r5.setText(building.hvacPaybackMonth.format(0))
 
         table.centerTable()
@@ -953,7 +979,7 @@ class WordDocumentGenerator {
         val pcellr0 = cell0r0.paragraphs[0]
         pcellr0.alignment = ParagraphAlignment.CENTER
         val rcell0r0 = cell0r0.paragraphs[0].createRun()
-        rcell0r0.fontFamily = fontAgencyFB
+        rcell0r0.fontFamily = fontGeorgia
         rcell0r0.color = whiteColor
         rcell0r0.isBold = true
         rcell0r0.setText("Financial Components")
@@ -963,7 +989,7 @@ class WordDocumentGenerator {
         val pcell1r0 = cell1r0.paragraphs[0]
         pcell1r0.alignment = ParagraphAlignment.CENTER
         val rcell1r0 = cell1r0.paragraphs[0].createRun()
-        rcell1r0.fontFamily = fontAgencyFB
+        rcell1r0.fontFamily = fontGeorgia
         rcell1r0.color = whiteColor
         rcell1r0.isBold = true
         rcell1r0.setText("Financial Overview")
@@ -973,7 +999,7 @@ class WordDocumentGenerator {
 
         val c0r1 = row1.getCell(0)
         val rc0r1 = c0r1.paragraphs[0].createRun()
-        rc0r1.fontFamily = fontAgencyFB
+        rc0r1.fontFamily = fontGeorgia
         rc0r1.isBold = true
         rc0r1.setText("Total Electrical Cost Savings ($/yr)")
 
@@ -981,14 +1007,14 @@ class WordDocumentGenerator {
         val pc1r1 = c1r1.paragraphs[0]
         pc1r1.alignment = ParagraphAlignment.CENTER
         val rc1r1 = c1r1.paragraphs[0].createRun()
-        rc1r1.fontFamily = fontAgencyFB
+        rc1r1.fontFamily = fontGeorgia
         rc1r1.setText("\$${waterheater.totalSavings.format(0)}")
 
         val row2 = table.getRow(2)
 
         val c0r2 = row2.getCell(0)
         val rc0r2 = c0r2.paragraphs[0].createRun()
-        rc0r2.fontFamily = fontAgencyFB
+        rc0r2.fontFamily = fontGeorgia
         rc0r2.isBold = true
         rc0r2.setText("Implementation Cost ($)")
 
@@ -996,14 +1022,14 @@ class WordDocumentGenerator {
         val pc1r2 = c1r2.paragraphs[0]
         pc1r2.alignment = ParagraphAlignment.CENTER
         val rc1r2 = pc1r2.createRun()
-        rc1r2.fontFamily = fontAgencyFB
+        rc1r2.fontFamily = fontGeorgia
         rc1r2.setText("\$${waterheater.totalCost.format(0)}")
 
         val row3 = table.getRow(3)
 
         val c0r3 = row3.getCell(0)
         val rc0r3 = c0r3.paragraphs[0].createRun()
-        rc0r3.fontFamily = fontAgencyFB
+        rc0r3.fontFamily = fontGeorgia
         rc0r3.isBold = true
         rc0r3.setText("Payback")
 
@@ -1013,14 +1039,14 @@ class WordDocumentGenerator {
         val pc0r4 = c0r4.paragraphs[0]
         pc0r4.alignment = ParagraphAlignment.RIGHT
         val rc0r4 = pc0r4.createRun()
-        rc0r4.fontFamily = fontAgencyFB
+        rc0r4.fontFamily = fontGeorgia
         rc0r4.setText("Year")
 
         val c1r4 = row4.getCell(1)
         val pc1r4 = c1r4.paragraphs[0]
         pc1r4.alignment = ParagraphAlignment.CENTER
         val rc1r4 = pc1r4.createRun()
-        rc1r4.fontFamily = fontAgencyFB
+        rc1r4.fontFamily = fontGeorgia
         rc1r4.setText(waterheater.paybackYear.format(2))
 
         val row5 = table.getRow(5)
@@ -1029,14 +1055,14 @@ class WordDocumentGenerator {
         val pc0r5 = c0r5.paragraphs[0]
         pc0r5.alignment = ParagraphAlignment.RIGHT
         val rc0r5 = pc0r5.createRun()
-        rc0r5.fontFamily = fontAgencyFB
+        rc0r5.fontFamily = fontGeorgia
         rc0r5.setText("Month")
 
         val c1r5 = row5.getCell(1)
         val pc1r5 = c1r5.paragraphs[0]
         pc1r5.alignment = ParagraphAlignment.CENTER
         val rc1r5 = pc1r5.createRun()
-        rc1r5.fontFamily = fontAgencyFB
+        rc1r5.fontFamily = fontGeorgia
         rc1r5.setText(waterheater.paybackMonth.format(0))
 
         table.centerTable()
@@ -1044,193 +1070,105 @@ class WordDocumentGenerator {
     }
 
     private fun generateElectrictyCalculationTable(document: XWPFDocument, values: PreparedForDocument) {
-        val table = document.createTable(7,5)
+        val table = document.createTable(8, 5)
 
-        // header row
-        val row0 = table.getRow(0)
-        val c0r0 = row0.getCell(0)
+        var rowIndex = 0
+        fun createRow(cell0Text: String, cell1Text: String, cell2Text: String, cell3Text: String, cell4Text: String) {
+            val row = table.getRow(rowIndex)
 
-        val c1r0 = row0.getCell(1)
-        val pc1r0 = c1r0.paragraphs[0]
-        var rc1r0 = pc1r0.createRun()
-        rc1r0.setText("Current Total kW")
+            val cell0 = row.getCell(0)
+            val para0 = cell0.paragraphs[0]
+            val run0 = para0.createRun()
+            run0.fontFamily = fontGeorgia
+            run0.fontSize = 12
+            run0.setText(cell0Text)
 
-        val c2r0 = row0.getCell(2)
-        val pc2r0 = c2r0.paragraphs[0]
-        var rc2r0 = pc2r0.createRun()
-        rc2r0.setText("Current Total kWh")
+            val cell1 = row.getCell(1)
+            val para1 = cell1.paragraphs[0]
+            val run1 = para1.createRun()
+            run1.fontFamily = fontGeorgia
+            run1.fontSize = 12
+            run1.setText(cell1Text)
 
-        val c3r0 = row0.getCell(3)
-        val pc3r0 = c3r0.paragraphs[0]
-        var rc3r0 = pc3r0.createRun()
-        rc3r0.setText("Post Total kW")
+            val cell2 = row.getCell(2)
+            val para2 = cell2.paragraphs[0]
+            val run2 = para2.createRun()
+            run2.fontFamily = fontGeorgia
+            run2.fontSize = 12
+            run2.setText(cell2Text)
 
-        val c4r0 = row0.getCell(4)
-        val pc4r0 = c4r0.paragraphs[0]
-        var rc4r0 = pc4r0.createRun()
-        rc4r0.setText("Post Total kWh")
+            val cell3 = row.getCell(3)
+            val para3 = cell3.paragraphs[0]
+            val run3 = para3.createRun()
+            run3.fontFamily = fontGeorgia
+            run3.fontSize = 12
+            run3.setText(cell3Text)
 
-        // hvac row
-        val row1 = table.getRow(1)
-        val c0r1 = row1.getCell(0)
-        val pc0r1 = c0r1.paragraphs[0]
-        val rc0r1 = pc0r1.createRun()
-        rc0r1.setText("HVAC")
+            val cell4 = row.getCell(4)
+            val para4 = cell4.paragraphs[0]
+            val run4 = para4.createRun()
+            run4.fontFamily = fontGeorgia
+            run4.fontSize = 12
+            run4.setText(cell4Text)
 
-        val c1r1 = row1.getCell(1)
-        val pc1r1 = c1r1.paragraphs[0]
-        var rc1r1 = pc1r1.createRun()
-        rc1r1.setText("${values.hvac?.currentTotalkW?.format(2) ?: "0.00"}")
+            rowIndex += 1
+        }
 
-        val c2r1 = row1.getCell(2)
-        val pc2r1 = c2r1.paragraphs[0]
-        var rc2r1 = pc2r1.createRun()
-        rc2r1.setText("${values.hvac?.currentTotalkWh?.format(2) ?: "0.00"}")
+        createRow(
+                "",
+                "Current Total kW",
+                "Current Total kWh",
+                "Post Total kW",
+                "Post Total kWh")
 
-        val c3r1 = row1.getCell(3)
-        val pc3r1 = c3r1.paragraphs[0]
-        var rc3r1 = pc3r1.createRun()
-        rc3r1.setText("${values.hvac?.postTotalkW?.format(2) ?: "0.00"}")
+        createRow(
+                "HVAC",
+                values.hvac?.currentTotalkW?.format(2) ?: "0.00",
+                values.hvac?.currentTotalkWh?.format(2) ?: "0.00",
+                values.hvac?.postTotalkW?.format(2) ?: "0.00",
+                values.hvac?.postTotalkWh?.format(2) ?: "0.00")
 
-        val c4r1 = row1.getCell(4)
-        val pc4r1 = c4r1.paragraphs[0]
-        var rc4r1 = pc4r1.createRun()
-        rc4r1.setText("${values.hvac?.postTotalkWh?.format(2) ?: "0.00"}")
+        createRow(
+                "Lighting",
+                values.lighting?.currentTotalkW?.format(2) ?: "0.00",
+                values.lighting?.currentTotalkWh?.format(2) ?: "0.00",
+                values.lighting?.postTotalkW?.format(2) ?: "0.00",
+                values.lighting?.postTotalkWh?.format(2) ?: "0.00")
 
-        // lighting row
-        val row2 = table.getRow(2)
-        val c0r2 = row2.getCell(0)
-        val pc0r2 = c0r2.paragraphs[0]
-        val rc0r2 = pc0r2.createRun()
-        rc0r2.setText("Lighting")
+        createRow(
+                "Refrigeration",
+                values.refrigeration?.currentTotalkW?.format(2) ?: "0.00",
+                values.refrigeration?.currentTotalkWh?.format(2) ?: "0.00",
+                values.refrigeration?.postTotalkW?.format(2) ?: "0.00",
+                values.refrigeration?.postTotalkWh?.format(2) ?: "0.00")
 
-        val c1r2 = row2.getCell(1)
-        val pc1r2 = c1r2.paragraphs[0]
-        var rc1r2 = pc1r2.createRun()
-        rc1r2.setText("${values.lighting?.currentTotalkW?.format(2) ?: "0.00"}")
+        createRow(
+                "Water Heater",
+                values.waterHeater?.currentTotalkW?.format(2) ?: "0.00",
+                values.waterHeater?.currentTotalkWh?.format(2) ?: "0.00",
+                values.waterHeater?.postTotalkW?.format(2) ?: "0.00",
+                values.waterHeater?.postTotalkWh?.format(2) ?: "0.00")
 
-        val c2r2 = row2.getCell(2)
-        val pc2r2 = c2r2.paragraphs[0]
-        var rc2r2 = pc2r2.createRun()
-        rc2r2.setText("${values.lighting?.currentTotalkWh?.format(2) ?: "0.00"}")
+        createRow(
+                "Kitchen Equipment",
+                values.equipment?.currentTotalkW?.format(2) ?: "0.00",
+                values.equipment?.currentTotalkWh?.format(2) ?: "0.00",
+                values.equipment?.postTotalkW?.format(2) ?: "0.00",
+                values.equipment?.postTotalkWh?.format(2) ?: "0.00")
 
-        val c3r2 = row2.getCell(3)
-        val pc3r2 = c3r2.paragraphs[0]
-        var rc3r2 = pc3r2.createRun()
-        rc3r2.setText("${values.lighting?.postTotalkW?.format(2) ?: "0.00"}")
+         createRow(
+                "Motors",
+                values.motor?.currentTotalkW?.format(2) ?: "0.00",
+                values.motor?.currentTotalkWh?.format(2) ?: "0.00",
+                values.motor?.postTotalkW?.format(2) ?: "0.00",
+                values.motor?.postTotalkWh?.format(2) ?: "0.00")
 
-        val c4r2 = row2.getCell(4)
-        val pc4r2 = c4r2.paragraphs[0]
-        var rc4r2 = pc4r2.createRun()
-        rc4r2.setText("${values.lighting?.postTotalkWh?.format(2) ?: "0.00"}")
-
-        // refirgeration row
-        val row3 = table.getRow(3)
-        val c0r3 = row3.getCell(0)
-        val pc0r3 = c0r3.paragraphs[0]
-        val rc0r3 = pc0r3.createRun()
-        rc0r3.setText("Refrigeration")
-
-        val c1r3 = row3.getCell(1)
-        val pc1r3 = c1r3.paragraphs[0]
-        var rc1r3 = pc1r3.createRun()
-        rc1r3.setText("${values.refrigeration?.currentTotalkW?.format(2) ?: "0.00"}")
-
-        val c2r3 = row3.getCell(2)
-        val pc2r3 = c2r3.paragraphs[0]
-        var rc2r3 = pc2r3.createRun()
-        rc2r3.setText("${values.refrigeration?.currentTotalkWh?.format(2) ?: "0.00"}")
-
-        val c3r3 = row3.getCell(3)
-        val pc3r3 = c3r3.paragraphs[0]
-        var rc3r3 = pc3r3.createRun()
-        rc3r3.setText("${values.refrigeration?.postTotalkW?.format(2) ?: "0.00"}")
-
-        val c4r3 = row3.getCell(4)
-        val pc4r3 = c4r3.paragraphs[0]
-        var rc4r3 = pc4r3.createRun()
-        rc4r3.setText("${values.refrigeration?.postTotalkWh?.format(2) ?: "0.00"}")
-
-        // water heater row
-        val row4 = table.getRow(4)
-        val c0r4 = row4.getCell(0)
-        val pc0r4 = c0r4.paragraphs[0]
-        val rc0r4 = pc0r4.createRun()
-        rc0r4.setText("Water Heater")
-
-        val c1r4 = row4.getCell(1)
-        val pc1r4 = c1r4.paragraphs[0]
-        var rc1r4 = pc1r4.createRun()
-        rc1r4.setText("${values.waterHeater?.currentTotalkW?.format(2) ?: "0.00"}")
-
-        val c2r4 = row4.getCell(2)
-        val pc2r4 = c2r4.paragraphs[0]
-        var rc2r4 = pc2r4.createRun()
-        rc2r4.setText("${values.waterHeater?.currentTotalkWh?.format(2) ?: "0.00"}")
-
-        val c3r4 = row4.getCell(3)
-        val pc3r4 = c3r4.paragraphs[0]
-        var rc3r4 = pc3r4.createRun()
-        rc3r4.setText("${values.waterHeater?.postTotalkW?.format(2) ?: "0.00"}")
-
-        val c4r4 = row4.getCell(4)
-        val pc4r4 = c4r4.paragraphs[0]
-        var rc4r4 = pc4r4.createRun()
-        rc4r4.setText("${values.waterHeater?.postTotalkWh?.format(2) ?: "0.00"}")
-
-        // equipment row
-        val row5 = table.getRow(5)
-        val c0r5 = row5.getCell(0)
-        val pc0r5 = c0r5.paragraphs[0]
-        val rc0r5 = pc0r5.createRun()
-        rc0r5.setText("Kitchen Equipment")
-
-        val c1r5 = row5.getCell(1)
-        val pc1r5 = c1r5.paragraphs[0]
-        var rc1r5 = pc1r5.createRun()
-        rc1r5.setText("${values.equipment?.currentTotalkW?.format(2) ?: "0.00"}")
-
-        val c2r5 = row5.getCell(2)
-        val pc2r5 = c2r5.paragraphs[0]
-        var rc2r5 = pc2r5.createRun()
-        rc2r5.setText("${values.equipment?.currentTotalkWh?.format(2) ?: "0.00"}")
-
-        val c3r5 = row5.getCell(3)
-        val pc3r5 = c3r5.paragraphs[0]
-        var rc3r5 = pc3r5.createRun()
-        rc3r5.setText("${values.equipment?.postTotalkW?.format(2) ?: "0.00"}")
-
-        val c4r5 = row5.getCell(4)
-        val pc4r5 = c4r5.paragraphs[0]
-        var rc4r5 = pc4r5.createRun()
-        rc4r5.setText("${values.equipment?.postTotalkWh?.format(2) ?: "0.00"}")
-
-        // building row
-        val row6 = table.getRow(6)
-        val c0r6 = row6.getCell(0)
-        val pc0r6 = c0r6.paragraphs[0]
-        val rc0r6 = pc0r6.createRun()
-        rc0r6.setText("Building")
-
-        val c1r6 = row6.getCell(1)
-        val pc1r6 = c1r6.paragraphs[0]
-        var rc1r6 = pc1r6.createRun()
-        rc1r6.setText("${values.building?.currentTotalkW?.format(2) ?: "0.00"}")
-
-        val c2r6 = row6.getCell(2)
-        val pc2r6 = c2r6.paragraphs[0]
-        var rc2r6 = pc2r6.createRun()
-        rc2r6.setText("${values.building?.currentTotalkWh?.format(2) ?: "0.00"}")
-
-        val c3r6 = row6.getCell(3)
-        val pc3r6 = c3r6.paragraphs[0]
-        var rc3r6 = pc3r6.createRun()
-        rc3r6.setText("${values.building?.postTotalkW?.format(2) ?: "0.00"}")
-
-        val c4r6 = row6.getCell(4)
-        val pc4r6 = c4r6.paragraphs[0]
-        var rc4r6 = pc4r6.createRun()
-        rc4r6.setText("${values.building?.postTotalkWh?.format(2) ?: "0.00"}")
+        createRow(
+                "Building",
+                values.building.currentTotalkW.format(2),
+                values.building.currentTotalkWh.format(2),
+                values.building.postTotalkW.format(2),
+                values.building.postTotalkWh.format(2))
 
         table.centerTable()
     }
@@ -1255,6 +1193,8 @@ class WordDocumentGenerator {
                 val paragraph = cell.paragraphs[0]
                 paragraph.alignment = ParagraphAlignment.CENTER
                 val run = paragraph.createRun()
+                run.fontFamily = fontGeorgia
+                run.fontSize = 12
                 run.isBold = isFirst
                 run.setText(text)
             }

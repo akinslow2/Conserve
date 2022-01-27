@@ -9,7 +9,11 @@ import com.google.gson.JsonArray
 data class MotorValues(
         val totalCost: Double,
         val totalSavings: Double,
-        val netPresentValue: Double
+        val netPresentValue: Double,
+        val currentTotalkW: Double,
+        val currentTotalkWh: Double,
+        val postTotalkW: Double,
+        val postTotalkWh: Double
 ) {
     companion object {
         fun tryCreate(audit: AuditComponents): MotorValues? {
@@ -41,9 +45,13 @@ data class MotorValues(
         val netPresentValue = (totalSavings * presentValueFactor) - totalCost
 
         return MotorValues(
-                totalCost,
-                totalSavings,
-                netPresentValue)
+                totalCost = totalCost,
+                totalSavings = totalSavings,
+                netPresentValue = netPresentValue,
+                currentTotalkW = currentTotalkW,
+                currentTotalkWh = currentTotalkWh,
+                postTotalkW = postTotalkW,
+                postTotalkWh = postTotalkWh)
         }
     }
 }
