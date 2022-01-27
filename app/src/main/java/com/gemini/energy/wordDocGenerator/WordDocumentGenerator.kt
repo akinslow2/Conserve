@@ -574,7 +574,7 @@ class WordDocumentGenerator {
         currentRow += 1
 
         table.generateFinancialComponentsDetailRow(
-                "        Lighting (NVP)",
+                "        Lighting (NPV)",
                 values.lighting?.netPresentValue?.format(0) ?: "N/A",
                 currentRow)
         currentRow += 1
