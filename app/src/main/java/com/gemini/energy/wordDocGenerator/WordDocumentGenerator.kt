@@ -502,20 +502,6 @@ class WordDocumentGenerator {
         r2p2.setText("Building is using schedule ${values.preAudit.electricstructure}")
 
         generateElectrictyCalculationTable(document, values)
-
-        document.createNormalParagraph(
-                "Given current building aggregation, current total charge is "
-                        + "$${values.building.currentElectricityCharge.format(2)}")
-
-        document.createNormalParagraph(
-                "Given current building aggregation, post total charge is "
-                        + "$${values.building.postElectricityCharge.format(2)}")
-
-        document.createNormalParagraph(
-                "By allowing Roanoke Electric to implement these proposed changes you will see an "
-                        + "estimated electricity bill savings of $${values.building.customerAnnualSavingsDuringPaybackPeriod.format(2)} "
-                        + "a year. If there is a question or concern about your bill, please email us at "
-                        + "roanoke@geminiEsolutions.com or call us at (252) 209-2236 or (800) 433-2236.")
     }
 
     private fun generateLightingContractorPage(document: XWPFDocument, lights: LightingValues) {
