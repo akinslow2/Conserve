@@ -20,9 +20,12 @@ data class PreAuditValues(
         val operationhours: String, //8
         val bldgarea: Double, // 7
         val bldgtype: String, // 12
-        val electricstructure: String, //10
-        val utilitycompany: String, //9
-        val gasstructure: String // 11
+        val gasCompany: String,
+        val gasStructure: String,
+        val electricCompany: String,
+        val electricStructure: String,
+        val gasApplicableToBuilding: Boolean
+
 )
 
 data class PreparedForDocument(

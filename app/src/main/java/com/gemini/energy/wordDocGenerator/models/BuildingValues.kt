@@ -48,34 +48,34 @@ data class BuildingValues(
             val postkW = postTotalkW(lightings, equipments, hvacs, waterHeater, refrigeration, motor)
             val postkWh = postTotalkWh(lightings, equipments, hvacs, waterHeater, refrigeration, motor)
 
-            val currentElectricityCharge = electrictyCharge(preAudit.electricstructure, currentkW, currentkWh)
-            val postElectricityCharge = electrictyCharge(preAudit.electricstructure, postkW, postkWh)
+            val currentElectricityCharge = electrictyCharge(preAudit.electricStructure, currentkW, currentkWh)
+            val postElectricityCharge = electrictyCharge(preAudit.electricStructure, postkW, postkWh)
 
             return BuildingValues(
-                    totalNetPresentValue(lightings, equipments, hvacs, waterHeater, refrigeration, motor),
-                    totalSavings,
-                    paybackYears,
-                    paybackMonths,
-                    totalCost,
-                    hvacs?.totalCost ?: 0.0,
-                    calculatePaybackYear(hvacs?.totalCost, hvacs?.totalSavings),
-                    calculatePaybackMonth(hvacs?.totalCost, hvacs?.totalSavings),
-                    equipments?.totalCost ?: 0.0,
-                    calculatePaybackYear(equipments?.totalCost, equipments?.totalSavings),
-                    calculatePaybackMonth(equipments?.totalCost, equipments?.totalSavings),
-                    refrigeration?.totalCost ?: 0.0,
-                    calculatePaybackYear(refrigeration?.totalCost, refrigeration?.totalSavings),
-                    calculatePaybackMonth(refrigeration?.totalCost, refrigeration?.totalSavings),
-                    waterHeater?.totalCost ?: 0.0,
-                    calculatePaybackYear(waterHeater?.totalCost, waterHeater?.totalSavings),
-                    calculatePaybackMonth(waterHeater?.totalCost, waterHeater?.totalSavings),
-                    currentkW,
-                    currentkWh,
-                    postkW,
-                    postkWh,
-                    currentElectricityCharge,
-                    postElectricityCharge,
-                    calculateAnnualSavingsDuringPaybackPeriod(totalCost, postElectricityCharge)
+                    buildingNetPresentValue = totalNetPresentValue(lightings, equipments, hvacs, waterHeater, refrigeration, motor),
+                    buildingTotalSavings = totalSavings,
+                    buildingPayback = paybackYears,
+                    buildingPaybackMonth = paybackMonths,
+                    buildingTotalCost = totalCost,
+                    hvacTotalCost = hvacs?.totalCost ?: 0.0,
+                    hvacPaybackYear = calculatePaybackYear(hvacs?.totalCost, hvacs?.totalSavings),
+                    hvacPaybackMonth = calculatePaybackMonth(hvacs?.totalCost, hvacs?.totalSavings),
+                    equipmentTotalCost = equipments?.totalCost ?: 0.0,
+                    equipmentPaybackYear = calculatePaybackYear(equipments?.totalCost, equipments?.totalSavings),
+                    equipmentPaybackMonth = calculatePaybackMonth(equipments?.totalCost, equipments?.totalSavings),
+                    refrigerationTotalCost = refrigeration?.totalCost ?: 0.0,
+                    refrigerationPaybackYear = calculatePaybackYear(refrigeration?.totalCost, refrigeration?.totalSavings),
+                    refrigerationPaybackMonth = calculatePaybackMonth(refrigeration?.totalCost, refrigeration?.totalSavings),
+                    waterHeaterTotalCost = waterHeater?.totalCost ?: 0.0,
+                    waterHeaterPaybackYear = calculatePaybackYear(waterHeater?.totalCost, waterHeater?.totalSavings),
+                    waterHeaterPaybackMonth = calculatePaybackMonth(waterHeater?.totalCost, waterHeater?.totalSavings),
+                    currentTotalkW = currentkW,
+                    currentTotalkWh = currentkWh,
+                    postTotalkW = postkW,
+                    postTotalkWh = postkWh,
+                    currentElectricityCharge = currentElectricityCharge,
+                    postElectricityCharge = postElectricityCharge,
+                    customerAnnualSavingsDuringPaybackPeriod = calculateAnnualSavingsDuringPaybackPeriod(totalCost, postElectricityCharge)
             )
         }
 
