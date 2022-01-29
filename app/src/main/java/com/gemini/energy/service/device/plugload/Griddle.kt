@@ -49,6 +49,7 @@ class Griddle(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRat
 
     /** year equipment was manufactured **/
     var year = 0
+    var make = ""
 
 
     override fun setup() {
@@ -69,6 +70,8 @@ class Griddle(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRat
 
             fuelType = featureData["Fuel Type"]!! as String
             year = featureData["Year"]!! as Int
+
+            make = featureData["Company"]!! as String
 
             usageHours = UsageSimple(peakHours, partPeakHours, offPeakHours)
         } catch (e: Exception) {
