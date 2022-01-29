@@ -464,10 +464,20 @@ class WordDocumentGenerator {
         r1p4.fontFamily = fontGeorgia
         r1p4.fontSize = 13
         r1p4.setText("While Gemini Energy Solutions relies on industry best-practices, on-site data loggers, and energy savings modeling software to make energy savings predictions as accurate as possible," +
-                " it is important to understand that Gemini's Energy Savings Opportunity Report is intended to inform participants of the ESTIMATED energy cost savings they should expect to realize - assuming all recommended work is done.")
-        r1p4.addBreak()
-        r1p4.addBreak()
-        r1p4.setText("The estimated annual energy saving numbers reflected in the Energy Savings Opportunity Report are based on the last 12 months of weather and energy costs, as well as the behavior patterns during the time that " +
+                " it is important to understand that Gemini's Energy Savings Opportunity Report is intended to inform participants of the ")
+        val r2p4 = p4.createRun()
+        r2p4.fontFamily = fontGeorgia
+        r2p4.fontSize = 13
+        r2p4.isItalic = true
+        r2p4.setText("ESTIMATED")
+
+        val r3p4 = p4.createRun()
+        r3p4.fontFamily = fontGeorgia
+        r3p4.fontSize = 13
+        r3p4.setText(" energy cost savings they should expect to realize - assuming all recommended work is done.")
+        r3p4.addBreak()
+        r3p4.addBreak()
+        r3p4.setText("The estimated annual energy saving numbers reflected in the Energy Savings Opportunity Report are based on the last 12 months of weather and energy costs, as well as the behavior patterns during the time that " +
                 "the on-site data loggers were active. Since future weather, behavior, and energy costs cannot be accurately predicted, there will be a variable difference between estimated and actual savings.")
 
     }
