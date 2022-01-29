@@ -76,6 +76,7 @@ class LinearFluorescent(computable: Computable<*>, utilityRateGas: UtilityRate, 
     var replacementType = ""
     var isCeilingOver10Feet = ""
     var fixtureType = ""
+    var tubeType = ""
 
 
     override fun setup() {
@@ -91,6 +92,7 @@ class LinearFluorescent(computable: Computable<*>, utilityRateGas: UtilityRate, 
             replacementType = featureData["Replacement Type"]!! as String
             isCeilingOver10Feet = featureData["Ceiling greater than 10 feet?"]!! as String
             fixtureType = featureData["Fixture Type"]!! as String
+            tubeType = featureData["Lamp Tube Type"]!! as String
 
             controls = featureData["Type of Control"]!! as String
             hasControls = featureData["Controls"]!! as String
@@ -301,6 +303,36 @@ class LinearFluorescent(computable: Computable<*>, utilityRateGas: UtilityRate, 
         return (totalLamps * (Utils.electricianHourlyRate / 6)  + (totalLamps * bulbcost)) * Utils.futureValueFactor + (totalSavings() * presentvaluefactor) - installCost()
     }
 
+    override fun laborCost(): Double {
+        val timePerFixture = Utils.timePerFixture(replacementType)
+        return Utils.electricianCost(timePerFixture, numberOfFixtures)
+    }
+
+    override fun materialCost(): Double {
+        if (replacementType == ReplacementType.DirectReplacementFixture.type) {
+            val fixtureCost = Utils.fixtureCost(fixtureType)
+            return fixtureCost * numberOfFixtures
+        }
+
+        return lampsPerFixtures * numberOfFixtures * ledbulbcost
+    }
+
+    override fun incentives(): Double {
+        var total = 0.0
+
+        if (tubeType == "T12" || tubeType == "T8") {
+            if (fixtureType == "2x2" || fixtureType == "2x4") {
+                total += 6.5 * numberOfFixtures * lampsPerFixtures
+            }
+        }
+
+        // add controls
+        if (hasControls == "No") {
+            total += 0.12 * actualWatts
+        }
+
+        return total
+    }
 
     /**
      * Energy Efficiency Lookup Query Definition
