@@ -231,8 +231,9 @@ fun XWPFTable.generateFinancialComponentsHeaderRow(
  * @param cell1 value shown in cell one
  * @param cell2 value shown in cell two
  * @param rowIndex row index
+ * @param cell2IsBold is the text in cell 2 should be bold
  */
-fun XWPFTable.generateFinancialComponentsDetailRow(cell1: String, cell2: String, rowIndex: Int) {
+fun XWPFTable.generateFinancialComponentsDetailRow(cell1: String, cell2: String, rowIndex: Int, cell2IsBold: Boolean = false) {
     val row = this.getRow(rowIndex)
     val cell0 = row.getCell(0)
     val para0 = cell0.paragraphs[0]
@@ -247,6 +248,7 @@ fun XWPFTable.generateFinancialComponentsDetailRow(cell1: String, cell2: String,
     para1.alignment = ParagraphAlignment.CENTER
     val para1run = para1.createRun()
     para1run.fontSize = 12
+    para1run.isBold = cell2IsBold
     para1run.fontFamily = WordDocumentGenerator.fontGeorgia
     para1run.setText(cell2)
 }
