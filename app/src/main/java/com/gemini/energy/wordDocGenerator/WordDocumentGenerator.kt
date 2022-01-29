@@ -641,7 +641,7 @@ class WordDocumentGenerator {
         currentRow += 1
 
         table.generateFinancialComponentsDetailRow(
-                "Net Present Value ($)",
+                "Net Present Value",
                 "$${lights.netPresentValue.format(0)}",
                 currentRow)
 
@@ -760,7 +760,7 @@ class WordDocumentGenerator {
         currentRow += 1
 
         table.generateFinancialComponentsDetailRow(
-                "Net Present Value ($)",
+                "Net Present Value",
                 "$${hvac.netPresentValue.format(0)}",
                 currentRow)
 
@@ -854,7 +854,7 @@ class WordDocumentGenerator {
         currentRow += 1
 
         table.generateFinancialComponentsDetailRow(
-                "Net Present Value ($)",
+                "Net Present Value",
                 "$${waterheater.netPresentValue.format(0)}",
                 currentRow)
 
