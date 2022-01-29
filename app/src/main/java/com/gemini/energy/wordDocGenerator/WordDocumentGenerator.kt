@@ -20,6 +20,7 @@ import java.io.FileInputStream
 import java.io.FileOutputStream
 import java.io.IOException
 import java.util.*
+import kotlin.math.absoluteValue
 
 
 class WordDocumentGenerator {
@@ -604,45 +605,52 @@ class WordDocumentGenerator {
 
         table.generateFinancialComponentsDetailRow(
                 "Net Present Value (NPV)",
-                values.building.buildingNetPresentValue.format(0),
+                values.building.buildingNetPresentValue.absoluteValue.format(0),
                 currentRow,
-                cell2IsBold = true)
+                cell2IsBold = true,
+                cell2Color = if (values.building.buildingNetPresentValue >= 0) blackColor else redColor)
         currentRow += 1
 
         table.generateFinancialComponentsDetailRow(
                 "        Lighting (NPV)",
-                values.lighting?.netPresentValue?.format(0) ?: "N/A",
-                currentRow)
+                values.lighting?.netPresentValue?.absoluteValue?.format(0) ?: "N/A",
+                currentRow,
+                cell2Color = if (values.lighting?.netPresentValue == null || values.lighting.netPresentValue >= 0) blackColor else redColor)
         currentRow += 1
 
         table.generateFinancialComponentsDetailRow(
                 "        HVAC (NPV)",
-                values.hvac?.netPresentValue?.format(0) ?: "N/A",
-                currentRow)
+                values.hvac?.netPresentValue?.absoluteValue?.format(0) ?: "N/A",
+                currentRow,
+                cell2Color = if (values.hvac?.netPresentValue == null || values.hvac.netPresentValue >= 0) blackColor else redColor)
         currentRow += 1
 
         table.generateFinancialComponentsDetailRow(
                 "        Water Heater (NPV)",
-                values.waterHeater?.netPresentValue?.format(0) ?: "N/A",
-                currentRow)
+                values.waterHeater?.netPresentValue?.absoluteValue?.format(0) ?: "N/A",
+                currentRow,
+                cell2Color = if (values.waterHeater?.netPresentValue == null || values.waterHeater.netPresentValue >= 0) blackColor else redColor)
         currentRow += 1
 
         table.generateFinancialComponentsDetailRow(
                 "        Refrigeration (NPV)",
-                values.refrigeration?.netPresentValue?.format(0) ?: "N/A",
-                currentRow)
+                values.refrigeration?.netPresentValue?.absoluteValue?.format(0) ?: "N/A",
+                currentRow,
+                cell2Color = if (values.refrigeration?.netPresentValue == null || values.refrigeration.netPresentValue >= 0) blackColor else redColor)
         currentRow += 1
 
         table.generateFinancialComponentsDetailRow(
                 "        Motors (NPV)",
-                values.motor?.netPresentValue?.format(0) ?: "N/A",
-                currentRow)
+                values.motor?.netPresentValue?.absoluteValue?.format(0) ?: "N/A",
+                currentRow,
+                cell2Color = if (values.motor?.netPresentValue == null || values.motor.netPresentValue >= 0) blackColor else redColor)
         currentRow += 1
 
         table.generateFinancialComponentsDetailRow(
                 "        Kitchen Equipment (NPV)",
-                values.equipment?.totalNetPresentValue?.format(0) ?: "N/A",
-                currentRow)
+                values.equipment?.totalNetPresentValue?.absoluteValue?.format(0) ?: "N/A",
+                currentRow,
+                cell2Color = if (values.equipment?.totalNetPresentValue == null || values.equipment.totalNetPresentValue >= 0) blackColor else redColor)
         currentRow += 1
 
         table.fitTable(4500)
@@ -700,7 +708,7 @@ class WordDocumentGenerator {
 
         table.generateFinancialComponentsDetailRow(
                 "Net Present Value",
-                "$${lights.netPresentValue.format(0)}",
+                "$${lights.netPresentValue.absoluteValue.format(0)}",
                 currentRow,
                 cell2Color = if (lights.netPresentValue >= 0) blackColor else redColor)
 
@@ -821,7 +829,7 @@ class WordDocumentGenerator {
 
         table.generateFinancialComponentsDetailRow(
                 "Net Present Value",
-                "$${hvac.netPresentValue.format(0)}",
+                "$${hvac.netPresentValue.absoluteValue.format(0)}",
                 currentRow,
                 cell2Color = if (hvac.netPresentValue >= 0) blackColor else redColor)
 
@@ -916,7 +924,7 @@ class WordDocumentGenerator {
 
         table.generateFinancialComponentsDetailRow(
                 "Net Present Value",
-                "$${waterheater.netPresentValue.format(0)}",
+                "$${waterheater.netPresentValue.absoluteValue.format(0)}",
                 currentRow,
                 cell2Color = if (waterheater.netPresentValue >= 0) blackColor else redColor)
 
