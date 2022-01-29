@@ -44,6 +44,7 @@ class HotFoodCabinet(computable: Computable<*>, utilityRateGas: UtilityRate, uti
 
     /** year equipment was installed **/
     var year = 0
+    var make = ""
 
 
     override fun setup() {
@@ -52,6 +53,8 @@ class HotFoodCabinet(computable: Computable<*>, utilityRateGas: UtilityRate, uti
             partPeakHours = featureData["Part Peak Hours"]!! as Double
             offPeakHours = featureData["Off Peak Hours"]!! as Double
             usageHours = UsageSimple(peakHours, partPeakHours, offPeakHours)
+
+            make = featureData["Company"]!! as String
 
             cabinetVolume = featureData["Cabinet Volume"]!! as Double
             idleEnergyRate = featureData["Idle Energy Rate"]!! as Double
