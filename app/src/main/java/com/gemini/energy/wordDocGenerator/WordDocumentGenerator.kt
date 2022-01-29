@@ -338,6 +338,11 @@ class WordDocumentGenerator {
         }
 
         for (equip in equipment.instances) {
+            var paybackString =
+                    if (equip.paybackMonth > 11)
+                        (equip.paybackMonth / 12).format(1) + " years"
+                    else equip.paybackMonth.format(0) + " months"
+
                 val p = document.createParagraph()
                 val run = p.createRun()
                 run.fontFamily = fontGeorgia
@@ -346,7 +351,7 @@ class WordDocumentGenerator {
                         "${equip.delta.format(0)} kWh more energy than a newer, higher-efficiency version. " +
                         "We recommend you replace the ${equip.name} with a high-effiency version to save $${equip.costElectricity.format(0)} per year. " +
                         "The implementation cost for a new ${equip.name} is roughly $${equip.materialCost.format(0)} " +
-                        "and the expected payback period for this replacement is ${equip.paybackMonth.format(0)} months. " +
+                        "and the expected payback period for this replacement is ${paybackString}. " +
                         "This investment will result in a NPV of \$${equip.netPresentValue.format(0)}")
                 run.addBreak()
             }
