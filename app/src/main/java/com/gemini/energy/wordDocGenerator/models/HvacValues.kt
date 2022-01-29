@@ -2,13 +2,17 @@ package com.gemini.energy.wordDocGenerator.models
 
 import com.gemini.energy.service.DataHolder
 import com.gemini.energy.service.device.Hvac
-import com.gemini.energy.wordDocGenerator.*
+import com.gemini.energy.wordDocGenerator.AuditComponents
+import com.gemini.energy.wordDocGenerator.SorterForWordDocumentGenerator
 
 data class HvacValues(
         val instances: List<HvacInstances>,
 
         val costPostState: Double, // 20
         val totalCost: Double,
+        val materialCost: Double,
+        val laborCost: Double,
+        val incentives: Double,
         val totalSavings: Double,
         val paybackYear: Double,
         val netPresentValue: Double,
@@ -28,6 +32,10 @@ data class HvacValues(
 
             var costPostState = 0.0
             var totalCost = 0.0
+            var materialCost = 0.0
+            var laborCost = 0.0
+            var incentives = 0.0
+
             var totalSavings = 0.0
             val presentvaluefactor = 12.462
             val instances = mutableListOf<HvacInstances>()
@@ -45,6 +53,9 @@ data class HvacValues(
 
                 totalSavings += hvac.totalSavings()
                 totalCost += hvac.implementationCost()
+                materialCost += hvac.materialCost()
+                laborCost += hvac.laborCost()
+                incentives += hvac.incentives()
 
                 // @anthony, please verify that these are the correct values
                 currentTotalkW += hvac.energyPre()
@@ -63,17 +74,19 @@ data class HvacValues(
             postTotalkWh -= additionalkWhSavingsFromLighting
 
             return HvacValues(
-                    instances.toList(),
-
-                    costPostState,
-                    totalCost,
-                    totalSavings,
-                    paybackYear,
-                    netPresentValue,
-                    currentTotalkW,
-                    currentTotalkWh,
-                    postTotalkW,
-                    postTotalkWh
+                    instances = instances.toList(),
+                    costPostState = costPostState,
+                    totalCost = totalCost,
+                    materialCost = materialCost,
+                    laborCost = laborCost,
+                    incentives = incentives,
+                    totalSavings = totalSavings,
+                    paybackYear = paybackYear,
+                    netPresentValue = netPresentValue,
+                    currentTotalkW = currentTotalkW,
+                    currentTotalkWh = currentTotalkWh,
+                    postTotalkW = postTotalkW,
+                    postTotalkWh = postTotalkWh
             )
         }
     }
