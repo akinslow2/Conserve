@@ -290,6 +290,41 @@ class HPSodium(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRa
         return (totalLamps * (Utils.electricianHourlyRate / 6)  + (totalLamps * bulbcost)) * Utils.futureValueFactor + (totalSavings() * presentvaluefactor) - installCost()
     }
 
+    override fun laborCost(): Double {
+        val timePerFixture = Utils.timePerFixture(replacementType)
+        return Utils.electricianCost(timePerFixture, numberOfFixtures)
+    }
+
+    override fun materialCost(): Double {
+        return lampsPerFixtures * numberOfFixtures * ledbulbcost
+    }
+
+    override fun incentives(): Double {
+        var total = 0.0
+
+        // replace lamps to LED
+        total += 45.0 * numberOfFixtures * lampsPerFixtures
+
+        // replace fixture to LED
+        if (actualWatts <= 50) {
+            total += 90 * numberOfFixtures
+        } else if (actualWatts <= 150) {
+            total += 105 * numberOfFixtures
+        } else if (actualWatts <= 400) {
+            total += 190 * numberOfFixtures
+        } else if (actualWatts <= 750) {
+            total += 85 * numberOfFixtures
+        } else if (actualWatts > 750) {
+            total += 165 * numberOfFixtures
+        }
+
+        // add controls
+        if (hasControls == "No") {
+            total += 0.12 * actualWatts
+        }
+
+        return total
+    }
 
     /**
      * Energy Efficiency Lookup Query Definition
