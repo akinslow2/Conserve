@@ -68,6 +68,8 @@ class WordDocumentGenerator {
 
         generateEnergySavingPotentialPage(document, value)
 
+        generateElectricityCalculationPage(document, value)
+
         if (value.lighting != null) {
             generateLightingSavingsPage(document, value.lighting)
         }
