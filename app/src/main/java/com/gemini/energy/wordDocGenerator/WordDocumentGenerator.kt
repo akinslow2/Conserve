@@ -91,6 +91,8 @@ class WordDocumentGenerator {
 
         generateFacilityInformationPage(document, value, value.preAudit)
 
+        //////////////////////
+        /// APPENDIX START ///
         val appendix = document.createParagraph()
         appendix.spacingBetween = 1.5
         appendix.isPageBreak = true
@@ -102,6 +104,29 @@ class WordDocumentGenerator {
         appendixRun.fontSize = 20
         appendixRun.setText("Appendix")
         appendixRun.addBreak()
+
+        val p2 = document.createParagraph()
+        p2.spacingBetween = 1.5
+
+        val r1p2 = p2.createRun()
+        r1p2.fontFamily = fontGeorgia
+        r1p2.fontSize = 13
+        r1p2.setText("Electric rates from https://www.tep.com/rates/")
+        r1p2.addBreak()
+        r1p2.setText("Building is using electric schedule ${value.preAudit.electricStructure}")
+        r1p2.addCarriageReturn()
+
+
+        if (value.preAudit.gasApplicableToBuilding) {
+            val r2p2 = p2.createRun()
+            r2p2.fontFamily = fontGeorgia
+            r2p2.fontSize = 13
+            r2p2.setText("Gas rates from https://www.swgas.com/en/arizona-rates-and-regulation")
+            r1p2.addBreak()
+            r2p2.setText("Building is using gas schedule ${value.preAudit.gasStructure}")
+            r2p2.addCarriageReturn()
+        }
+
 
         if (value.lighting != null) {
             document.createNormalParagraph(
@@ -397,28 +422,8 @@ class WordDocumentGenerator {
     }
 
     private fun generateElectricityCalculationPage(document: XWPFDocument, values: PreparedForDocument) {
-        val p1 = document.createParagraph()
-        p1.spacingBetween = 1.5
-        p1.isPageBreak = true
-        p1.alignment = ParagraphAlignment.CENTER
-        val r1p1 = p1.createRun()
-        r1p1.fontFamily = fontGeorgia
-        r1p1.isBold = true
-        r1p1.fontSize = 20
-        r1p1.setText("Energy Calculations")
-        r1p1.addBreak()
 
-        val p2 = document.createParagraph()
-        p2.spacingBetween = 1.5
-        val r1p2 = p2.createRun()
-        r1p2.fontFamily = fontGeorgia
-        r1p2.fontSize = 13
-        r1p2.setText("Rates from https://www.roanokeelectric.com/about-us/resources/rates/")
-        r1p2.addCarriageReturn()
-        val r2p2 = p2.createRun()
-        r2p2.fontFamily = fontGeorgia
-        r2p2.fontSize = 13
-        r2p2.setText("Building is using schedule ${values.preAudit.electricstructure}")
+        document.createNormalParagraph("The summary of the changes in peak demand (kW) and energy (kWh) can be seen below:")
 
         generateElectrictyCalculationTable(document, values)
     }
