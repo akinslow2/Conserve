@@ -263,12 +263,15 @@ class WordDocumentGenerator {
         val bullets = arrayOf("Lower maintenance costs", "Better quality light", "Less air-conditioning required", "Happier customers")
         document.createBullets(bullets)
 
+        val paybackString =
+                    if (lights.paybackMonth > 11)
+                        (lights.paybackMonth / 12).format(1) + " years"
+                    else lights.paybackMonth.format(0) + " months"
         document.createNormalParagraph(
                 "Replacing all of your non-LED bulbs and adding controls will cost approximately "
                         + "$${lights.totalCost.format(0)} but will result in an estimated "
                         + "total savings of $${lights.totalcostsavings.format(0)} over the next 10 years. "
-                        + "This equates to a payback period of approximately ${lights.paybackMonth.format(0)} "
-                        + "months. "
+                        + "This equates to a payback period of approximately ${paybackString}."
                         + "Overall, accounting for maintenance savings, implementing the LED retrofit translates to a minimum NPV of $${lights.netPresentValue.format(0)}. "
                         + "We strongly recommend you replace all non-LED bulbs.")
 
