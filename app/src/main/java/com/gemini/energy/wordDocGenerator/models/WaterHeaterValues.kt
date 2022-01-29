@@ -2,7 +2,8 @@ package com.gemini.energy.wordDocGenerator.models
 
 import com.gemini.energy.service.DataHolder
 import com.gemini.energy.service.device.WaterHeater
-import com.gemini.energy.wordDocGenerator.*
+import com.gemini.energy.wordDocGenerator.AuditComponents
+import com.gemini.energy.wordDocGenerator.SorterForWordDocumentGenerator
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 
@@ -22,7 +23,8 @@ data class WaterHeaterValues(
         val currentTotalkW: Double,
         val currentTotalkWh: Double,
         val postTotalkW: Double,
-        val postTotalkWh: Double
+        val postTotalkWh: Double,
+        val energySavings: Double
 ) {
     companion object {
         fun tryCreate(audit: AuditComponents): WaterHeaterValues? {
@@ -43,6 +45,8 @@ data class WaterHeaterValues(
             var postTotalkW = 0.0
             var postTotalkWh = 0.0
 
+            var totalEnergySavings = 0.0
+
             for (waterheater in waterheaters) {
                 val postState = waterheater.buildPostState().blockingGet()
                 var element: JsonElement = JsonObject()
@@ -53,6 +57,8 @@ data class WaterHeaterValues(
 
                 totalSavings += waterheater.totalSavings()
                 totalCost += waterheater.implementationCost()
+
+                totalEnergySavings += waterheater.energySavings
 
                 // @anthony, please verify that these are the correct values
                 if (!waterheater.isGas()) {
@@ -88,7 +94,8 @@ data class WaterHeaterValues(
                     currentTotalkW,
                     currentTotalkWh,
                     postTotalkW,
-                    postTotalkWh)
+                    postTotalkWh,
+                    totalEnergySavings)
         }
     }
 }
