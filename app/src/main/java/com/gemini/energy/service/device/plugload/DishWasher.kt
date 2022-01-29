@@ -57,6 +57,7 @@ class DishWasher(computable: Computable<*>, utilityRateGas: UtilityRate, utility
 
     /** year equipment was installed **/
     var year = 0
+    var make = ""
 
     override fun setup() {
         try {
@@ -81,6 +82,8 @@ class DishWasher(computable: Computable<*>, utilityRateGas: UtilityRate, utility
             idleEnergyRate = featureData["Idle Energy Rate"]!! as Double
             waterHeater = featureData["Heating Element"]!! as String
             year = featureData["Year Installed"]!! as Int
+
+            make = featureData["Company"]!! as String
         } catch (e: Exception) {
             e.printStackTrace()
         }
