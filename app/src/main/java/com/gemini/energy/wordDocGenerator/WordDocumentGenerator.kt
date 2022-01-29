@@ -504,6 +504,12 @@ class WordDocumentGenerator {
         generateLightContractorTable(document, lights)
     }
 
+    private fun nullableCostString(cost: Double?): String {
+        if (cost == null) return "N/A"
+
+        return "$" + cost.format(0)
+    }
+
     // generate tables
     private fun createEnergySavingsTable(document: XWPFDocument, values: PreparedForDocument) {
         val table = document.createTable(19, 2)
@@ -528,7 +534,7 @@ class WordDocumentGenerator {
 
         table.generateFinancialComponentsDetailRow(
                 "        Lighting (\$)",
-                "\$${values.lighting?.totalCost?.format(0) ?: "N/A"}",
+                nullableCostString(values.lighting?.totalCost),
                 currentRow)
         currentRow += 1
 
@@ -552,7 +558,7 @@ class WordDocumentGenerator {
 
         table.generateFinancialComponentsDetailRow(
                 "        Motors (\$)",
-                "\$${values.motor?.totalCost?.format(0) ?: "N/A"}",
+                nullableCostString(values.motor?.totalCost),
                 currentRow)
         currentRow += 1
 
