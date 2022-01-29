@@ -528,7 +528,8 @@ class WordDocumentGenerator {
                 "Total Savings over Life of Equipment",
                 "\$${values.building.buildingTotalSavings.format(0)}",
                 currentRow,
-                cell2IsBold = true)
+                cell2IsBold = true,
+                cell2Color = if (values.building.buildingTotalSavings >= 0) blackColor else redColor)
         currentRow += 1
 
 //        if (values.preAudit.electrificationSavings > 0.0) {
@@ -549,43 +550,50 @@ class WordDocumentGenerator {
         table.generateFinancialComponentsDetailRow(
                 "Implementation Cost (\$)",
                 "\$${values.building.buildingTotalCost.format(0)}",
-                currentRow)
+                currentRow,
+                cell2Color = if (values.building.buildingTotalCost >= 0) blackColor else redColor)
         currentRow += 1
 
         table.generateFinancialComponentsDetailRow(
                 "        Lighting (\$)",
                 nullableCostString(values.lighting?.totalCost),
-                currentRow)
+                currentRow,
+                cell2Color = if (values.lighting == null || values.lighting.totalCost >= 0) blackColor else redColor)
         currentRow += 1
 
         table.generateFinancialComponentsDetailRow(
                 "        HVAC (\$)",
                 "\$${values.building.hvacTotalCost.format(0)}",
-                currentRow)
+                currentRow,
+                cell2Color = if (values.building.hvacTotalCost >= 0) blackColor else redColor)
         currentRow += 1
 
         table.generateFinancialComponentsDetailRow(
                 "        Water Heater (\$)",
                 "\$${values.building.waterHeaterTotalCost.format(0)}",
-                currentRow)
+                currentRow,
+                cell2Color = if (values.building.waterHeaterTotalCost >= 0) blackColor else redColor)
         currentRow += 1
 
         table.generateFinancialComponentsDetailRow(
                 "        Refrigeration (\$)",
                 "\$${values.building.refrigerationTotalCost.format(0)}",
-                currentRow)
+                currentRow,
+                cell2Color = if (values.building.refrigerationTotalCost >= 0) blackColor else redColor)
         currentRow += 1
 
         table.generateFinancialComponentsDetailRow(
                 "        Motors (\$)",
                 nullableCostString(values.motor?.totalCost),
-                currentRow)
+                currentRow,
+                cell2Color = if (values.motor == null || values.motor.totalCost >= 0) blackColor else redColor)
         currentRow += 1
 
         table.generateFinancialComponentsDetailRow(
                 "        Kitchen Equipment (\$)",
                 "\$${values.building.equipmentTotalCost.format(0)}",
-                currentRow)
+                currentRow,
+                cell2Color = if (values.building.equipmentTotalCost > 0) blackColor else redColor)
         currentRow += 1
 
         // seperator
