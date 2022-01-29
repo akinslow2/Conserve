@@ -63,6 +63,7 @@ class CombinationOven(computable: Computable<*>, utilityRateGas: UtilityRate, ut
 
     /** year equipment was manufactured **/
     var year = 0
+    var make = ""
 
     /**
      * The Adjustment Factor is taken care within the setup()
@@ -194,6 +195,8 @@ class CombinationOven(computable: Computable<*>, utilityRateGas: UtilityRate, ut
 
             steamPanSize = featureData["Size (Steam Pans)"]!! as Int
             year = featureData["Year"]!! as Int
+
+            make = featureData["Company"]!! as String
 
         } catch (e: Exception) {
             e.printStackTrace()
