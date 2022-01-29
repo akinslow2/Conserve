@@ -12,6 +12,9 @@ data class LightingValues(
         val totalenergysavings: Double,
         val totalCost: Double, // 15
         val implementationCost: Double,
+        val materialCost: Double,
+        val laborCost: Double,
+        val incentives: Double,
         val paybackMonth: Double, // 16
         val geminiPayback: Double, // 17
         val paybackYear: Double, // 18
@@ -69,6 +72,10 @@ data class LightingValues(
             var totalSavings = 0.0
             var totalInstallCost = 0.0
             var implementationCost = 0.0
+            var materialCost = 0.0
+            var laborCost = 0.0
+            var incentives = 0.0
+
             var totalEnergySavings = 0.0
             var totalBulbs = 0
 
@@ -84,6 +91,10 @@ data class LightingValues(
                 totalSavings += light.totalSavings()
                 totalInstallCost += light.installCost()
                 implementationCost += light.implementationCost()
+                materialCost += light.materialCost()
+                laborCost += light.laborCost()
+                incentives += light.incentives()
+
                 totalEnergySavings += light.totalEnergySavings()
                 totalBulbs += light.numberOfFixtures + light.lampsPerFixtures
 
@@ -101,6 +112,10 @@ data class LightingValues(
                 totalSavings += light.totalSavings()
                 totalInstallCost += light.installCost()
                 implementationCost += light.implementationCost()
+                materialCost += light.materialCost()
+                laborCost += light.laborCost()
+                incentives += light.incentives()
+
                 totalEnergySavings += light.totalEnergySavings()
                 totalBulbs += light.numberOfFixtures + light.lampsPerFixtures
 
@@ -118,6 +133,10 @@ data class LightingValues(
                 totalSavings += light.totalSavings()
                 totalInstallCost += light.installCost()
                 implementationCost += light.implementationCost()
+                materialCost += light.materialCost()
+                laborCost += light.laborCost()
+                incentives += light.incentives()
+
                 totalEnergySavings += light.totalEnergySavings()
                 totalBulbs += light.numberOfFixtures + light.lampsPerFixtures
 
@@ -135,6 +154,10 @@ data class LightingValues(
                 totalSavings += light.totalSavings()
                 totalInstallCost += light.installCost()
                 implementationCost += light.implementationCost()
+                materialCost += light.materialCost()
+                laborCost += light.laborCost()
+                incentives += light.incentives()
+
                 totalEnergySavings += light.totalEnergySavings()
                 totalBulbs += light.numberOfFixtures + light.lampsPerFixtures
 
@@ -152,6 +175,9 @@ data class LightingValues(
                 totalSavings += light.totalSavings()
                 totalInstallCost += light.installCost()
                 implementationCost += light.implementationCost()
+                materialCost += light.materialCost()
+                laborCost += light.laborCost()
+                incentives += light.incentives()
                 totalEnergySavings += light.totalEnergySavings()
                 totalBulbs += light.numberOfFixtures + light.lampsPerFixtures
 
@@ -169,6 +195,10 @@ data class LightingValues(
                 totalSavings += light.totalSavings()
                 totalInstallCost += light.installCost()
                 implementationCost += light.implementationCost()
+                materialCost += light.materialCost()
+                laborCost += light.laborCost()
+                incentives += light.incentives()
+
                 totalEnergySavings += light.totalEnergySavings()
                 totalBulbs += light.numberOfFixtures + light.lampsPerFixtures
 
@@ -204,6 +234,9 @@ data class LightingValues(
                     totalenergysavings = totalEnergySavings,
                     implementationCost = implementationCost,
                     totalCost = totalInstallCost,
+                    materialCost = materialCost,
+                    laborCost = laborCost,
+                    incentives = incentives,
                     paybackMonth = paybackMonth,
                     geminiPayback = geminiPayback,
                     paybackYear = paybackYear,

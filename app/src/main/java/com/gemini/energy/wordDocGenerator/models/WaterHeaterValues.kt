@@ -10,6 +10,9 @@ import com.google.gson.JsonObject
 data class WaterHeaterValues(
         val totalSavings: Double, //1
         val totalCost: Double, //2
+        val materialCost: Double,
+        var laborCost: Double,
+        val incentives: Double,
         val paybackMonth: Double, //3
         val paybackYear: Double, //4
         val netPresentValue: Double, //5
@@ -37,6 +40,10 @@ data class WaterHeaterValues(
 
             var costPostState = 0.0
             var totalCost = 0.0
+            var materialCost = 0.0
+            var laborCost = 0.0
+            var incentives = 0.0
+
             var totalSavings = 0.0
             val presentvaluefactor = 10.38
 
@@ -57,6 +64,9 @@ data class WaterHeaterValues(
 
                 totalSavings += waterheater.totalSavings()
                 totalCost += waterheater.implementationCost()
+                materialCost += waterheater.materialCost()
+                laborCost += waterheater.laborCost()
+                incentives += waterheater.incentives()
 
                 totalEnergySavings += waterheater.energySavings
 
@@ -79,23 +89,46 @@ data class WaterHeaterValues(
             val netPresentValue = (totalSavings * presentvaluefactor) - totalCost
 
             return WaterHeaterValues(
-                    totalSavings,
-                    totalCost,
-                    paybackMonth,
-                    paybackYear,
-                    netPresentValue,
-                    waterheater.quantity,
-                    waterheater.year,
-                    waterheater.getAge(waterheater.year),
-                    waterheater.thermaleff.toInt(),
-                    waterheater.fueltype,
-                    waterheater.unittype,
-                    waterheater.capacity,
-                    currentTotalkW,
-                    currentTotalkWh,
-                    postTotalkW,
-                    postTotalkWh,
-                    totalEnergySavings)
+//<<<<<<< HEAD
+//                    totalSavings,
+//                    totalCost,
+//                    paybackMonth,
+//                    paybackYear,
+//                    netPresentValue,
+//                    waterheater.quantity,
+//                    waterheater.year,
+//                    waterheater.getAge(waterheater.year),
+//                    waterheater.thermaleff.toInt(),
+//                    waterheater.fueltype,
+//                    waterheater.unittype,
+//                    waterheater.capacity,
+//                    currentTotalkW,
+//                    currentTotalkWh,
+//                    postTotalkW,
+//                    postTotalkWh,
+//                    totalEnergySavings)
+//=======
+                    totalSavings = totalSavings,
+                    totalCost = totalCost,
+                    materialCost = materialCost,
+                    laborCost = laborCost,
+                    incentives = incentives,
+                    paybackMonth = paybackMonth,
+                    paybackYear = paybackYear,
+                    netPresentValue = netPresentValue,
+                    quantity = waterheater.quantity,
+                    year = waterheater.year,
+                    age = waterheater.getAge(waterheater.year),
+                    thermaleff = waterheater.thermaleff.toInt(),
+                    fueltype = waterheater.fueltype,
+                    unittype = waterheater.unittype,
+                    capacity = waterheater.capacity,
+                    currentTotalkW = currentTotalkW,
+                    currentTotalkWh = currentTotalkWh,
+                    postTotalkW = postTotalkW,
+                    postTotalkWh = postTotalkWh,
+                    energySavings = totalEnergySavings)
+//>>>>>>> 0772da76... feat: add materialCost, laborCots, and incentives to hvac, lighting, and water heater values gathered for word doc generation
         }
     }
 }
