@@ -498,7 +498,8 @@ class WordDocumentGenerator {
         table.generateFinancialComponentsDetailRow(
                 "Total Savings over Life of Equipment",
                 "\$${values.building.buildingTotalSavings.format(0)}",
-                currentRow)
+                currentRow,
+                cell2IsBold = true)
         currentRow += 1
 
 //        if (values.preAudit.electrificationSavings > 0.0) {
