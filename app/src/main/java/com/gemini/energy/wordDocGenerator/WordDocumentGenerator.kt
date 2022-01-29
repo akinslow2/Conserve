@@ -65,9 +65,9 @@ class WordDocumentGenerator {
     private fun generateDocument(value: PreparedForDocument, document: XWPFDocument): XWPFDocument {
         generateFirstPage(document, value.preAudit)
 
-        generateElectricityCalculationPage(document, value)
-
         generateEnergySavingPotentialPage(document, value)
+
+        generateElectricityCalculationPage(document, value)
 
         if (value.lighting != null) {
             generateLightingSavingsPage(document, value.lighting)
