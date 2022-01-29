@@ -555,10 +555,16 @@ class WordDocumentGenerator {
     }
 
     private fun createLightingTable1(document: XWPFDocument, lights: LightingValues) {
-        val table = document.createTable(5, 2)
+        val table = document.createTable(6, 2)
         var currentRow = 0
 
         table.generateFinancialComponentsHeaderRow()
+        currentRow += 1
+
+        table.generateFinancialComponentsDetailRow(
+                "Energy Savings",
+                "${(lights.kWhSavings + lights.hvacAdditionalkWhSavings).format(0)} kWh/year",
+                currentRow)
         currentRow += 1
 
         table.generateFinancialComponentsDetailRow(
@@ -650,10 +656,16 @@ class WordDocumentGenerator {
     }
 
     private fun createHvacTable(document: XWPFDocument, hvac: HvacValues, building: BuildingValues) {
-        val table = document.createTable(5, 2)
+        val table = document.createTable(6, 2)
         var currentRow = 0
 
         table.generateFinancialComponentsHeaderRow()
+        currentRow += 1
+
+        table.generateFinancialComponentsDetailRow(
+                "Energy Savings",
+                "${(hvac.currentTotalkWh - hvac.postTotalkWh).format(0)} kWh/year",
+                currentRow)
         currentRow += 1
 
         table.generateFinancialComponentsDetailRow(
@@ -720,10 +732,16 @@ class WordDocumentGenerator {
     }
 
     private fun createWaterHeaterTable(document: XWPFDocument, waterheater: WaterHeaterValues) {
-        val table = document.createTable(5, 2)
+        val table = document.createTable(6, 2)
         var currentRow = 0
 
         table.generateFinancialComponentsHeaderRow()
+        currentRow += 1
+
+        table.generateFinancialComponentsDetailRow(
+                "Energy Savings",
+                "${waterheater.energySavings.format(0)} kWh/year",
+                currentRow)
         currentRow += 1
 
         table.generateFinancialComponentsDetailRow(
