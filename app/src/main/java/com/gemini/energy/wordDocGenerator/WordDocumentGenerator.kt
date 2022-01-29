@@ -510,7 +510,8 @@ class WordDocumentGenerator {
         table.generateFinancialComponentsDetailRow(
                 "Net Present Value (NPV)",
                 values.building.buildingNetPresentValue.format(0),
-                currentRow)
+                currentRow,
+                cell2IsBold = true)
         currentRow += 1
 
         table.generateFinancialComponentsDetailRow(
