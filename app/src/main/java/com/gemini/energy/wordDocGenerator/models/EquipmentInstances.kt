@@ -5,6 +5,7 @@ import com.gemini.energy.service.device.plugload.*
 
 data class EquipmentInstances(
         val name: String, // 27
+        val make: String,
         val delta: Double, // 26
         val costElectricity: Double, // 28
         val age: Double, // 29
@@ -58,19 +59,20 @@ data class EquipmentInstances(
             val netPresentValue = (savings * presentValueFactor) - (implementationCost + materialCost)
 
             return EquipmentInstances(
-                    "Combination Oven",
-                    single.energyPowerChange(),
-                    costElectricity,
-                    single.getAge(single.year).toDouble(),
-                    materialCost,
-                    implementationCost,
-                    savings,
-                    costOverSavings * 12,
-                    netPresentValue,
-                    currentTotalkW,
-                    currentTotalkWh,
-                    postTotalkW,
-                    postTotalkWh
+                    name = "Combination Oven",
+                    make = single.make,
+                    delta = single.energyPowerChange(),
+                    costElectricity = costElectricity,
+                    age = single.getAge(single.year).toDouble(),
+                    materialCost = materialCost,
+                    implementationCost = implementationCost,
+                    totalsavings = savings,
+                    paybackMonth = costOverSavings * 12,
+                    netPresentValue = netPresentValue,
+                    currentTotalkW = currentTotalkW,
+                    currentTotalkWh = currentTotalkWh,
+                    postTotalkW = postTotalkW,
+                    postTotalkWh = postTotalkWh
             )
         }
 
@@ -112,19 +114,20 @@ data class EquipmentInstances(
             val netPresentValue = (savings * presentValueFactor) - (implementationCost + materialCost)
 
             return EquipmentInstances(
-                    "Conveyor Broiler",
-                    single.energyPowerChange(),
-                    costElectricity,
-                    single.getAge(single.year).toDouble(),
-                    materialCost,
-                    implementationCost,
-                    savings,
-                    costOverSavings * 12,
-                    netPresentValue,
-                    currentTotalkW,
-                    currentTotalkWh,
-                    postTotalkW,
-                    postTotalkWh
+                    name = "Conveyor Broiler",
+                    make = single.make,
+                    delta = single.energyPowerChange(),
+                    costElectricity = costElectricity,
+                    age = single.getAge(single.year).toDouble(),
+                    materialCost = materialCost,
+                    implementationCost = implementationCost,
+                    totalsavings = savings,
+                    paybackMonth = costOverSavings * 12,
+                    netPresentValue = netPresentValue,
+                    currentTotalkW = currentTotalkW,
+                    currentTotalkWh = currentTotalkWh,
+                    postTotalkW = postTotalkW,
+                    postTotalkWh = postTotalkWh
             )
         }
 
@@ -169,19 +172,20 @@ data class EquipmentInstances(
             val netPresentValue = (savings * presentValueFactor) - (implementationCost + materialCost)
 
             return EquipmentInstances(
-                    "Dishwasher",
-                    single.energyPowerChange(),
-                    costElectricity,
-                    single.getAge(single.year).toDouble(),
-                    materialCost,
-                    implementationCost,
-                    savings,
-                    costOverSavings * 12,
-                    netPresentValue,
-                    currentTotalkW,
-                    currentTotalkWh,
-                    postTotalkW,
-                    postTotalkWh
+                    name = "Dishwasher",
+                    make = single.make,
+                    delta = single.energyPowerChange(),
+                    costElectricity = costElectricity,
+                    age = single.getAge(single.year).toDouble(),
+                    materialCost = materialCost,
+                    implementationCost = implementationCost,
+                    totalsavings = savings,
+                    paybackMonth = costOverSavings * 12,
+                    netPresentValue = netPresentValue,
+                    currentTotalkW = currentTotalkW,
+                    currentTotalkWh = currentTotalkWh,
+                    postTotalkW = postTotalkW,
+                    postTotalkWh = postTotalkWh
             )
         }
 
@@ -223,19 +227,20 @@ data class EquipmentInstances(
             val netPresentValue = (savings * presentValueFactor) - (implementationCost + materialCost)
 
             return EquipmentInstances(
-                    "Griddle",
-                    single.energyPowerChange(),
-                    costElectricity,
-                    single.getAge(single.year).toDouble(),
-                    materialCost,
-                    implementationCost,
-                    savings,
-                    costOverSavings * 12,
-                    netPresentValue,
-                    currentTotalkW,
-                    currentTotalkWh,
-                    postTotalkW,
-                    postTotalkWh
+                    name = "Griddle",
+                    make = single.make,
+                    delta = single.energyPowerChange(),
+                    costElectricity = costElectricity,
+                    age = single.getAge(single.year).toDouble(),
+                    materialCost = materialCost,
+                    implementationCost = implementationCost,
+                    totalsavings = savings,
+                    paybackMonth = costOverSavings * 12,
+                    netPresentValue = netPresentValue,
+                    currentTotalkW = currentTotalkW,
+                    currentTotalkWh = currentTotalkWh,
+                    postTotalkW = postTotalkW,
+                    postTotalkWh = postTotalkWh
             )
         }
 
@@ -277,19 +282,20 @@ data class EquipmentInstances(
             val netPresentValue = (savings * presentValueFactor) - (implementationCost + materialCost)
 
             return EquipmentInstances(
-                    "Hot Food Cabinet",
-                    single.energyPowerChange(),
-                    costElectricity,
-                    single.getAge(single.year).toDouble(),
-                    materialCost,
-                    implementationCost,
-                    savings,
-                    costOverSavings * 12,
-                    netPresentValue,
-                    currentTotalkW,
-                    currentTotalkWh,
-                    postTotalkW,
-                    postTotalkWh
+                    name = "Hot Food Cabinet",
+                    make = single.make,
+                    delta = single.energyPowerChange(),
+                    costElectricity = costElectricity,
+                    age = single.getAge(single.year).toDouble(),
+                    materialCost = materialCost,
+                    implementationCost = implementationCost,
+                    totalsavings = savings,
+                    paybackMonth = costOverSavings * 12,
+                    netPresentValue = netPresentValue,
+                    currentTotalkW = currentTotalkW,
+                    currentTotalkWh = currentTotalkWh,
+                    postTotalkW = postTotalkW,
+                    postTotalkWh = postTotalkWh
             )
         }
 
@@ -331,19 +337,20 @@ data class EquipmentInstances(
             val netPresentValue = (savings * presentValueFactor) - (implementationCost + materialCost)
 
             return EquipmentInstances(
-                    "Ice Maker",
-                    single.energyPowerChange(),
-                    costElectricity,
-                    single.getAge(single.year).toDouble(),
-                    materialCost,
-                    implementationCost,
-                    savings,
-                    costOverSavings * 12,
-                    netPresentValue,
-                    currentTotalkW,
-                    currentTotalkWh,
-                    postTotalkW,
-                    postTotalkWh
+                    name = "Ice Maker",
+                    make = single.make,
+                    delta = single.energyPowerChange(),
+                    costElectricity = costElectricity,
+                    age = single.getAge(single.year).toDouble(),
+                    materialCost = materialCost,
+                    implementationCost = implementationCost,
+                    totalsavings = savings,
+                    paybackMonth = costOverSavings * 12,
+                    netPresentValue = netPresentValue,
+                    currentTotalkW = currentTotalkW,
+                    currentTotalkWh = currentTotalkWh,
+                    postTotalkW = postTotalkW,
+                    postTotalkWh = postTotalkWh
             )
         }
 
@@ -385,19 +392,20 @@ data class EquipmentInstances(
             val netPresentValue = (savings * presentValueFactor) - (implementationCost + materialCost)
 
             return EquipmentInstances(
-                    "Pre Rinse Spray",
-                    single.energyPowerChange(),
-                    costElectricity,
-                    single.getAge(single.year).toDouble(),
-                    materialCost,
-                    implementationCost,
-                    savings,
-                    costOverSavings * 12,
-                    netPresentValue,
-                    currentTotalkW,
-                    currentTotalkWh,
-                    postTotalkW,
-                    postTotalkWh
+                    name = "Pre Rinse Spray",
+                    make = single.make,
+                    delta = single.energyPowerChange(),
+                    costElectricity = costElectricity,
+                    age = single.getAge(single.year).toDouble(),
+                    materialCost = materialCost,
+                    implementationCost = implementationCost,
+                    totalsavings = savings,
+                    paybackMonth = costOverSavings * 12,
+                    netPresentValue = netPresentValue,
+                    currentTotalkW = currentTotalkW,
+                    currentTotalkWh = currentTotalkWh,
+                    postTotalkW = postTotalkW,
+                    postTotalkWh = postTotalkWh
             )
         }
     }
