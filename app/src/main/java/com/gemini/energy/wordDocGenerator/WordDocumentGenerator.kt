@@ -567,8 +567,8 @@ class WordDocumentGenerator {
         currentRow += 1
 
         table.generateFinancialComponentsDetailRow(
-                "Minimum Electrical Cost Savings ($/yr)",
-                "$${lights.totalcostsavings.format(0)}",
+                "Minimum Electrical Cost Savings",
+                "$${lights.totalcostsavings.format(0)}/year",
                 currentRow)
         currentRow += 1
 
@@ -668,8 +668,8 @@ class WordDocumentGenerator {
         currentRow += 1
 
         table.generateFinancialComponentsDetailRow(
-                "Minimum Electrical Cost Savings ($/yr)",
-                "$${hvac.totalSavings.format(0)}",
+                "Minimum Electrical Cost Savings",
+                "$${hvac.totalSavings.format(0)}/year",
                 currentRow)
         currentRow += 1
 
@@ -744,8 +744,8 @@ class WordDocumentGenerator {
         currentRow += 1
 
         table.generateFinancialComponentsDetailRow(
-                "Minimum Electrical Cost Savings ($/yr)",
-                "$${waterheater.totalSavings.format(0)}",
+                "Minimum Electrical Cost Savings",
+                "$${waterheater.totalSavings.format(0)}/year",
                 currentRow)
         currentRow += 1
 
