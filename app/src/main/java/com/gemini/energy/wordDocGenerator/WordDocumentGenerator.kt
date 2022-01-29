@@ -597,8 +597,8 @@ class WordDocumentGenerator {
         currentRow += 1
 
         table.generateFinancialComponentsDetailRow(
-                "Payback (yr)",
-                lights.paybackYear.format(1),
+                "Payback",
+                lights.paybackYear.format(1) + " years",
                 currentRow)
         currentRow += 1
 
@@ -716,8 +716,8 @@ class WordDocumentGenerator {
         currentRow += 1
 
         table.generateFinancialComponentsDetailRow(
-                "Payback (yr)",
-                hvac.paybackYear.format(1),
+                "Payback",
+                hvac.paybackYear.format(1) + " years",
                 currentRow)
         currentRow += 1
 
@@ -810,8 +810,8 @@ class WordDocumentGenerator {
         currentRow += 1
 
         table.generateFinancialComponentsDetailRow(
-                "Payback (yr)",
-                waterheater.paybackYear.format(1),
+                "Payback",
+                waterheater.paybackYear.format(1) + " years",
                 currentRow)
         currentRow += 1
 
