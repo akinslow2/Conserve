@@ -614,97 +614,40 @@ class WordDocumentGenerator {
 
     private fun createLightingTable1(document: XWPFDocument, lights: LightingValues) {
         val table = document.createTable(6, 2)
-        val row0 = table.getRow(0)
 
-        val cell0r0 = row0.getCell(0)
-        cell0r0.color = tableGreenColor
-        val pcell0r0 = cell0r0.paragraphs[0]
-        pcell0r0.alignment = ParagraphAlignment.CENTER
-        val rcell0r0 = cell0r0.paragraphs[0].createRun()
-        rcell0r0.fontFamily = fontGeorgia
-        rcell0r0.color = whiteColor
-        rcell0r0.isBold = true
-        rcell0r0.setText("Financial Components")
+        var currentRow = 0
 
-        val cell1r0 = row0.getCell(1)
-        cell1r0.color = tableGreenColor
-        val pcell1ro = cell1r0.paragraphs[0]
-        pcell1ro.alignment = ParagraphAlignment.CENTER
-        val rcell1r0 = cell1r0.paragraphs[0].createRun()
-        rcell1r0.fontFamily = fontGeorgia
-        rcell1r0.color = whiteColor
-        rcell1r0.isBold = true
-        rcell1r0.setText("Financial Overview")
+        table.generateFinancialComponentsHeaderRow()
+        currentRow += 1
 
-        val row1 = table.getRow(1)
+        table.generateFinancialComponentsDetailRow(
+                "Energy Savings",
+                "${(lights.kWhSavings + lights.hvacAdditionalkWhSavings).format(0)} kWh/year",
+                currentRow)
+        currentRow += 1
 
-        val c0r1 = row1.getCell(0)
-        val rc0r1 = c0r1.paragraphs[0].createRun()
-        rc0r1.fontFamily = fontGeorgia
-        rc0r1.isBold = true
-        rc0r1.setText("Minimum Electrical Cost Savings ($/yr)")
+        table.generateFinancialComponentsDetailRow(
+                "Minimum Electrical Cost Savings ($/yr)",
+                "$${lights.totalcostsavings.format(0)}",
+                currentRow)
+        currentRow += 1
 
-        val c1r1 = row1.getCell(1)
-        val pc1r1 = c1r1.paragraphs[0]
-        pc1r1.alignment = ParagraphAlignment.CENTER
-        val rc1r1 = c1r1.paragraphs[0].createRun()
-        rc1r1.fontFamily = fontGeorgia
-        rc1r1.setText("\$${lights.totalcostsavings.format(0)}")
+        table.generateFinancialComponentsDetailRow(
+                "Implementation Cost ($)",
+                "$${lights.totalCost.format(0)}",
+                currentRow)
+        currentRow += 1
 
-        val row2 = table.getRow(2)
+        table.generateFinancialComponentsDetailRow(
+                "Payback (yr)",
+                lights.paybackYear.format(1),
+                currentRow)
+        currentRow += 1
 
-        val c0r2 = row2.getCell(0)
-        val rc0r2 = c0r2.paragraphs[0].createRun()
-        rc0r2.fontFamily = fontGeorgia
-        rc0r2.isBold = true
-        rc0r2.setText("Implementation Cost ($)")
-
-        val c1r2 = row2.getCell(1)
-        val pc1r2 = c1r2.paragraphs[0]
-        pc1r2.alignment = ParagraphAlignment.CENTER
-        val rc1r2 = pc1r2.createRun()
-        rc1r2.fontFamily = fontGeorgia
-        rc1r2.setText("\$${lights.totalCost}")
-
-        val row3 = table.getRow(3)
-
-        val c0r3 = row3.getCell(0)
-        val rc0r3 = c0r3.paragraphs[0].createRun()
-        rc0r3.fontFamily = fontGeorgia
-        rc0r3.isBold = true
-        rc0r3.setText("Payback")
-
-        val row4 = table.getRow(4)
-
-        val c0r4 = row4.getCell(0)
-        val pc0r4 = c0r4.paragraphs[0]
-        pc0r4.alignment = ParagraphAlignment.RIGHT
-        val rc0r4 = pc0r4.createRun()
-        rc0r4.fontFamily = fontGeorgia
-        rc0r4.setText("Year")
-
-        val c1r4 = row4.getCell(1)
-        val pc1r4 = c1r4.paragraphs[0]
-        pc1r4.alignment = ParagraphAlignment.CENTER
-        val rc1r4 = pc1r4.createRun()
-        rc1r4.fontFamily = fontGeorgia
-        rc1r4.setText(lights.paybackYear.format(2))
-
-        val row5 = table.getRow(5)
-
-        val c0r5 = row5.getCell(0)
-        val pc0r5 = c0r5.paragraphs[0]
-        pc0r5.alignment = ParagraphAlignment.RIGHT
-        val rc0r5 = pc0r5.createRun()
-        rc0r5.fontFamily = fontGeorgia
-        rc0r5.setText("Month")
-
-        val c1r5 = row5.getCell(1)
-        val pc1r5 = c1r5.paragraphs[0]
-        pc1r5.alignment = ParagraphAlignment.CENTER
-        val rc1r5 = pc1r5.createRun()
-        rc1r5.fontFamily = fontGeorgia
-        rc1r5.setText(lights.paybackMonth.format(0))
+        table.generateFinancialComponentsDetailRow(
+                "Net Present Value ($)",
+                "$${lights.netPresentValue.format(0)}",
+                currentRow)
 
         table.centerTable()
         table.fitTable(4000)
@@ -774,98 +717,40 @@ class WordDocumentGenerator {
 
     private fun createHvacTable(document: XWPFDocument, hvac: HvacValues, building: BuildingValues) {
         val table = document.createTable(6, 2)
-        val row0 = table.getRow(0)
 
-        val cell0r0 = row0.getCell(0)
-        cell0r0.color = tableGreenColor
-        val pcellr0 = cell0r0.paragraphs[0]
-        pcellr0.alignment = ParagraphAlignment.CENTER
-        val rcell0r0 = cell0r0.paragraphs[0].createRun()
-        rcell0r0.fontFamily = fontGeorgia
-        rcell0r0.color = whiteColor
-        rcell0r0.isBold = true
-        rcell0r0.setText("Financial Components")
+        var currentRow = 0
 
-        val cell1r0 = row0.getCell(1)
-        cell1r0.color = tableGreenColor
-        val pcell1r0 = cell1r0.paragraphs[0]
-        pcell1r0.alignment = ParagraphAlignment.CENTER
-        val rcell1r0 = cell1r0.paragraphs[0].createRun()
-        rcell1r0.fontFamily = fontGeorgia
-        rcell1r0.color = whiteColor
-        rcell1r0.isBold = true
-        rcell1r0.setText("Financial Overview")
+        table.generateFinancialComponentsHeaderRow()
+        currentRow += 1
 
-        // row 1
-        val row1 = table.getRow(1)
+        table.generateFinancialComponentsDetailRow(
+                "Energy Savings",
+                "${(hvac.currentTotalkWh - hvac.postTotalkWh).format(0)} kWh/year",
+                currentRow)
+        currentRow += 1
 
-        val c0r1 = row1.getCell(0)
-        val rc0r1 = c0r1.paragraphs[0].createRun()
-        rc0r1.fontFamily = fontGeorgia
-        rc0r1.isBold = true
-        rc0r1.setText("Total Electrical Cost Savings ($/yr)")
+        table.generateFinancialComponentsDetailRow(
+                "Minimum Electrical Cost Savings ($/yr)",
+                "$${hvac.totalSavings.format(0)}",
+                currentRow)
+        currentRow += 1
 
-        val c1r1 = row1.getCell(1)
-        val pc1r1 = c1r1.paragraphs[0]
-        pc1r1.alignment = ParagraphAlignment.CENTER
-        val rc1r1 = c1r1.paragraphs[0].createRun()
-        rc1r1.fontFamily = fontGeorgia
-        rc1r1.setText("\$${hvac.totalSavings.format(0)}")
+        table.generateFinancialComponentsDetailRow(
+                "Implementation Cost ($)",
+                "$${hvac.totalCost.format(0)}",
+                currentRow)
+        currentRow += 1
 
-        val row2 = table.getRow(2)
+        table.generateFinancialComponentsDetailRow(
+                "Payback (yr)",
+                hvac.paybackYear.format(1),
+                currentRow)
+        currentRow += 1
 
-        val c0r2 = row2.getCell(0)
-        val rc0r2 = c0r2.paragraphs[0].createRun()
-        rc0r2.fontFamily = fontGeorgia
-        rc0r2.isBold = true
-        rc0r2.setText("Implementation Cost ($)")
-
-        val c1r2 = row2.getCell(1)
-        val pc1r2 = c1r2.paragraphs[0]
-        pc1r2.alignment = ParagraphAlignment.CENTER
-        val rc1r2 = pc1r2.createRun()
-        rc1r2.fontFamily = fontGeorgia
-        rc1r2.setText("\$${hvac.totalCost.format(0)}")
-
-        val row3 = table.getRow(3)
-
-        val c0r3 = row3.getCell(0)
-        val rc0r3 = c0r3.paragraphs[0].createRun()
-        rc0r3.fontFamily = fontGeorgia
-        rc0r3.isBold = true
-        rc0r3.setText("Payback")
-
-        val row4 = table.getRow(4)
-
-        val c0r4 = row4.getCell(0)
-        val pc0r4 = c0r4.paragraphs[0]
-        pc0r4.alignment = ParagraphAlignment.RIGHT
-        val rc0r4 = pc0r4.createRun()
-        rc0r4.fontFamily = fontGeorgia
-        rc0r4.setText("Year")
-
-        val c1r4 = row4.getCell(1)
-        val pc1r4 = c1r4.paragraphs[0]
-        pc1r4.alignment = ParagraphAlignment.CENTER
-        val rc1r4 = pc1r4.createRun()
-        rc1r4.fontFamily = fontGeorgia
-        rc1r4.setText(building.hvacPaybackYear.format(2))
-
-        val row5 = table.getRow(5)
-
-        val c0r5 = row5.getCell(0)
-        val pc0r5 = c0r5.paragraphs[0]
-        pc0r5.alignment = ParagraphAlignment.RIGHT
-        val rc0r5 = pc0r5.createRun()
-        rc0r5.fontFamily = fontGeorgia
-        rc0r5.setText("Month")
-
-        val c1r5 = row5.getCell(1)
-        val pc1r5 = c1r5.paragraphs[0]
-        pc1r5.alignment = ParagraphAlignment.CENTER
-        val rc1r5 = pc1r5.createRun()
-        rc1r5.fontFamily = fontGeorgia
-        rc1r5.setText(building.hvacPaybackMonth.format(0))
+        table.generateFinancialComponentsDetailRow(
+                "Net Present Value ($)",
+                "$${hvac.netPresentValue.format(0)}",
+                currentRow)
 
         table.centerTable()
         table.fitTable(4000)
@@ -909,98 +794,40 @@ class WordDocumentGenerator {
 
     private fun createWaterHeaterTable(document: XWPFDocument, waterheater: WaterHeaterValues) {
         val table = document.createTable(6, 2)
-        val row0 = table.getRow(0)
 
-        val cell0r0 = row0.getCell(0)
-        cell0r0.color = tableGreenColor
-        val pcellr0 = cell0r0.paragraphs[0]
-        pcellr0.alignment = ParagraphAlignment.CENTER
-        val rcell0r0 = cell0r0.paragraphs[0].createRun()
-        rcell0r0.fontFamily = fontGeorgia
-        rcell0r0.color = whiteColor
-        rcell0r0.isBold = true
-        rcell0r0.setText("Financial Components")
+        var currentRow = 0
 
-        val cell1r0 = row0.getCell(1)
-        cell1r0.color = tableGreenColor
-        val pcell1r0 = cell1r0.paragraphs[0]
-        pcell1r0.alignment = ParagraphAlignment.CENTER
-        val rcell1r0 = cell1r0.paragraphs[0].createRun()
-        rcell1r0.fontFamily = fontGeorgia
-        rcell1r0.color = whiteColor
-        rcell1r0.isBold = true
-        rcell1r0.setText("Financial Overview")
+        table.generateFinancialComponentsHeaderRow()
+        currentRow += 1
 
-        // row 1
-        val row1 = table.getRow(1)
+        table.generateFinancialComponentsDetailRow(
+                "Energy Savings",
+                "${waterheater.energySavings.format(0)} kWh/year",
+                currentRow)
+        currentRow += 1
 
-        val c0r1 = row1.getCell(0)
-        val rc0r1 = c0r1.paragraphs[0].createRun()
-        rc0r1.fontFamily = fontGeorgia
-        rc0r1.isBold = true
-        rc0r1.setText("Total Electrical Cost Savings ($/yr)")
+        table.generateFinancialComponentsDetailRow(
+                "Minimum Electrical Cost Savings ($/yr)",
+                "$${waterheater.totalSavings.format(0)}",
+                currentRow)
+        currentRow += 1
 
-        val c1r1 = row1.getCell(1)
-        val pc1r1 = c1r1.paragraphs[0]
-        pc1r1.alignment = ParagraphAlignment.CENTER
-        val rc1r1 = c1r1.paragraphs[0].createRun()
-        rc1r1.fontFamily = fontGeorgia
-        rc1r1.setText("\$${waterheater.totalSavings.format(0)}")
+        table.generateFinancialComponentsDetailRow(
+                "Implementation Cost ($)",
+                "$${waterheater.totalCost.format(0)}",
+                currentRow)
+        currentRow += 1
 
-        val row2 = table.getRow(2)
+        table.generateFinancialComponentsDetailRow(
+                "Payback (yr)",
+                waterheater.paybackYear.format(1),
+                currentRow)
+        currentRow += 1
 
-        val c0r2 = row2.getCell(0)
-        val rc0r2 = c0r2.paragraphs[0].createRun()
-        rc0r2.fontFamily = fontGeorgia
-        rc0r2.isBold = true
-        rc0r2.setText("Implementation Cost ($)")
-
-        val c1r2 = row2.getCell(1)
-        val pc1r2 = c1r2.paragraphs[0]
-        pc1r2.alignment = ParagraphAlignment.CENTER
-        val rc1r2 = pc1r2.createRun()
-        rc1r2.fontFamily = fontGeorgia
-        rc1r2.setText("\$${waterheater.totalCost.format(0)}")
-
-        val row3 = table.getRow(3)
-
-        val c0r3 = row3.getCell(0)
-        val rc0r3 = c0r3.paragraphs[0].createRun()
-        rc0r3.fontFamily = fontGeorgia
-        rc0r3.isBold = true
-        rc0r3.setText("Payback")
-
-        val row4 = table.getRow(4)
-
-        val c0r4 = row4.getCell(0)
-        val pc0r4 = c0r4.paragraphs[0]
-        pc0r4.alignment = ParagraphAlignment.RIGHT
-        val rc0r4 = pc0r4.createRun()
-        rc0r4.fontFamily = fontGeorgia
-        rc0r4.setText("Year")
-
-        val c1r4 = row4.getCell(1)
-        val pc1r4 = c1r4.paragraphs[0]
-        pc1r4.alignment = ParagraphAlignment.CENTER
-        val rc1r4 = pc1r4.createRun()
-        rc1r4.fontFamily = fontGeorgia
-        rc1r4.setText(waterheater.paybackYear.format(2))
-
-        val row5 = table.getRow(5)
-
-        val c0r5 = row5.getCell(0)
-        val pc0r5 = c0r5.paragraphs[0]
-        pc0r5.alignment = ParagraphAlignment.RIGHT
-        val rc0r5 = pc0r5.createRun()
-        rc0r5.fontFamily = fontGeorgia
-        rc0r5.setText("Month")
-
-        val c1r5 = row5.getCell(1)
-        val pc1r5 = c1r5.paragraphs[0]
-        pc1r5.alignment = ParagraphAlignment.CENTER
-        val rc1r5 = pc1r5.createRun()
-        rc1r5.fontFamily = fontGeorgia
-        rc1r5.setText(waterheater.paybackMonth.format(0))
+        table.generateFinancialComponentsDetailRow(
+                "Net Present Value ($)",
+                "$${waterheater.netPresentValue.format(0)}",
+                currentRow)
 
         table.centerTable()
         table.fitTable(4000)
