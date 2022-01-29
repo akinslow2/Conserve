@@ -257,14 +257,19 @@ class WordDocumentGenerator {
         val p3 = document.createParagraph()
         val r1p3 = p3.createRun()
         r1p3.fontFamily = fontGeorgia
-        r1p3.isBold = true
-        r1p3.isItalic = true
-        r1p3.fontSize = 16
-        //r1p3.setText("HVAC Package Unit")
+        r1p3.fontSize = 13
+        r1p3.setText("Make sure an HVAC technician checks your package units on a ")
 
-        document.createNormalParagraph(
-                "Make sure an HVAC technician checks your package units on a quarterly basis. "
-                        + "Failure to properly maintain your HVAC units results in increased energy bills "
+        val r2p3 = p3.createRun()
+        r2p3.fontFamily = fontGeorgia
+        r2p3.fontSize = 13
+        r2p3.isItalic = true
+        r2p3.setText("quarterly")
+
+        val r3p3 = p3.createRun()
+        r3p3.fontFamily = fontGeorgia
+        r3p3.fontSize = 13
+        r3p3.setText(" basis. Failure to properly maintain your HVAC units results in increased energy bills "
                         + "and shorter equipment life spans, reducing your savings potential.")
 
         document.createNormalParagraph(
