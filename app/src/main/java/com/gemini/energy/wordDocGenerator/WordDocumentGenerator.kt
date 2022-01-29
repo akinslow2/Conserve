@@ -34,6 +34,7 @@ class WordDocumentGenerator {
         const val tableGreenColor = "469B43"
         const val blackColor = "000000"
         const val whiteColor = "ffffff"
+        const val redColor = "ff0000"
 
         const val fontAgencyFB = "Agency FB"
         private const val fontUnivers = "Univers LT Std 39 Thin UltraCn"
@@ -643,7 +644,8 @@ class WordDocumentGenerator {
         table.generateFinancialComponentsDetailRow(
                 "Net Present Value",
                 "$${lights.netPresentValue.format(0)}",
-                currentRow)
+                currentRow,
+                cell2Color = if (lights.netPresentValue >= 0) blackColor else redColor)
 
         table.centerTable()
         table.fitTable(4000)
@@ -762,7 +764,8 @@ class WordDocumentGenerator {
         table.generateFinancialComponentsDetailRow(
                 "Net Present Value",
                 "$${hvac.netPresentValue.format(0)}",
-                currentRow)
+                currentRow,
+                cell2Color = if (hvac.netPresentValue >= 0) blackColor else redColor)
 
         table.centerTable()
         table.fitTable(4000)
@@ -856,7 +859,8 @@ class WordDocumentGenerator {
         table.generateFinancialComponentsDetailRow(
                 "Net Present Value",
                 "$${waterheater.netPresentValue.format(0)}",
-                currentRow)
+                currentRow,
+                cell2Color = if (waterheater.netPresentValue >= 0) blackColor else redColor)
 
         table.centerTable()
         table.fitTable(4000)
