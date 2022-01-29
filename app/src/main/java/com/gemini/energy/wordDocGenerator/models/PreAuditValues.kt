@@ -16,10 +16,11 @@ data class PreAuditValues(
         val operationhours: String, //8
         val bldgarea: Double, // 7
         val bldgtype: String, // 12
-        val electricstructure: String, //10
-        val utilitycompany: String, //9
-        val gasstructure: String, // 11
-        val electrificationSavings: Double
+        val gasCompany: String,
+        val gasStructure: String,
+        val electricCompany: String,
+        val electricStructure: String,
+        val gasApplicableToBuilding: Boolean
 ) {
     companion object {
 
@@ -53,10 +54,11 @@ data class PreAuditValues(
                     operationhours = preAudit["Operation Hours Monday Operating Hours"]!! as String,
                     bldgarea = preAudit["Area Total (Sq.Ft.)"]!! as Double,
                     bldgtype = preAudit["General Client Info Facility Type"]!! as String,
-                    electricstructure = preAudit["Others Electric Rate Structure"]!! as String,
-                    utilitycompany = preAudit["Others Electric Utility Company"]!! as String,
-                    gasstructure = preAudit["Others Gas Rate Structure"]!! as String,
-                    electrificationSavings = electrificationSavings
+                    electricCompany = preAudit["Others Electric Utility Company"]!! as String,
+                    gasCompany = preAudit["Others Gas Utility Company"]!! as String,
+                    electricStructure = preAudit["Others Electric Rate Structure"]!! as String,
+                    gasStructure = preAudit["Others Gas Rate Structure"]!! as String,
+                    gasApplicableToBuilding = preAudit["General Site Access and Notes Will all gas be removed with retrofit?"]!! as String != "na"
             )
         }
 
@@ -76,7 +78,6 @@ data class PreAuditValues(
             return preAudit.containsKey("General Client Info Business Name")
                     && preAudit.containsKey("General Client Info Audit Month")
                     && preAudit.containsKey("General Client Info Audit Year")
-                    && preAudit.containsKey("General Client Info Address")
                     && preAudit.containsKey("General Client Info Assessment Start Day")
                     && preAudit.containsKey("General Client Info Assessment End Day")
                     && preAudit.containsKey("Operation Hours Monday Operating Hours")
@@ -85,6 +86,8 @@ data class PreAuditValues(
                     && preAudit.containsKey("Others Electric Rate Structure")
                     && preAudit.containsKey("Others Electric Utility Company")
                     && preAudit.containsKey("Others Gas Rate Structure")
+                    && preAudit.containsKey("Others Gas Utility Company")
+                    && preAudit.containsKey("General Site Access and Notes Will all gas be removed with retrofit?")
         }
 
 

@@ -405,12 +405,14 @@ class WordDocumentGenerator {
         r1p2.setText("${preAudit.businessname} is ${preAudit.bldgarea.format(0)} square feet and includes spaces for ${values.zoneString}. ${preAudit.businessname} is open daily from ${preAudit.operationhours}. This building is classified as ${preAudit.bldgtype}.")
         r1p2.addBreak()
         r1p2.addBreak()
-        r1p2.setText("${preAudit.businessname} is on the ${preAudit.utilitycompany} ${preAudit.electricstructure} electric rate schedule. In the one-year period from $manuallyGeneratedValue through $manuallyGeneratedValue, ${preAudit.businessname} consumed $manuallyGeneratedValue kWh, resulting in an electrical cost of $$manuallyGeneratedValue.")
+        r1p2.setText("${preAudit.businessname} is on the ${preAudit.electricCompany} ${preAudit.electricStructure} electric rate schedule. In the one-year period from $manuallyGeneratedValue through $manuallyGeneratedValue, ${preAudit.businessname} consumed $manuallyGeneratedValue kWh, resulting in an electrical cost of $$manuallyGeneratedValue.")
         r1p2.addBreak()
         r1p2.addBreak()
 
-        r1p2.setText("${preAudit.businessname} is on the ${preAudit.utilitycompany} ${preAudit.gasstructure} gas rate schedule and for above stated time period, ${preAudit.businessname} used $manuallyGeneratedValue therms at a cost of $$manuallyGeneratedValue.")
-        r1p2.addBreak()
+        if (preAudit.gasApplicableToBuilding) {
+            r1p2.setText("${preAudit.businessname} is on the ${preAudit.gasCompany} ${preAudit.gasStructure} gas rate schedule and for above stated time period, ${preAudit.businessname} used $manuallyGeneratedValue therms at a cost of $$manuallyGeneratedValue.")
+            r1p2.addBreak()
+        }
 
         val p3 = document.createParagraph()
         p3.spacingBetween = 1.5
@@ -458,7 +460,7 @@ class WordDocumentGenerator {
         val r2p2 = p2.createRun()
         r2p2.fontFamily = fontGeorgia
         r2p2.fontSize = 13
-        r2p2.setText("Building is using schedule ${values.preAudit.electricstructure}")
+        r2p2.setText("Building is using schedule ${values.preAudit.electricStructure}")
 
         generateElectrictyCalculationTable(document, values)
     }
@@ -494,13 +496,20 @@ class WordDocumentGenerator {
                 currentRow)
         currentRow += 1
 
-        if (values.preAudit.electrificationSavings > 0.0) {
-            table.generateFinancialComponentsDetailRow(
-                "Electrification Savings ($/yr)",
-                "\$${values.preAudit.electrificationSavings.format(0)}",
-                currentRow)
-            currentRow += 1
-        }
+//        if (values.preAudit.electrificationSavings > 0.0) {
+//            table.generateFinancialComponentsDetailRow(
+//                "Electrification Savings ($/yr)",
+//                "\$${values.preAudit.electrificationSavings.format(0)}",
+//                currentRow)
+//            currentRow += 1
+//        }
+//        if (values.building > 0.0) {
+//            table.generateFinancialComponentsDetailRow(
+//                "Electrification Savings ($/yr)",
+//                "\$${values.preAudit.electrificationSavings.format(0)}",
+//                currentRow)
+//            currentRow += 1
+//        }
 
         table.generateFinancialComponentsDetailRow(
                 "Implementation Cost (\$)",
