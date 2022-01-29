@@ -574,7 +574,7 @@ class WordDocumentGenerator {
 
         table.generateFinancialComponentsDetailRow(
                 "Implementation Cost ($)",
-                "$${lights.totalCost.format(0)}",
+                "$${lights.implementationCost.format(0)}",
                 currentRow)
         currentRow += 1
 
