@@ -302,6 +302,20 @@ class LinearFluorescent(computable: Computable<*>, utilityRateGas: UtilityRate, 
         return (totalLamps * (Utils.electricianHourlyRate / 6)  + (totalLamps * bulbcost)) * Utils.futureValueFactor + (totalSavings() * presentvaluefactor) - installCost()
     }
 
+    override fun laborCost(): Double {
+        val timePerFixture = Utils.timePerFixture(replacementType)
+        return Utils.electricianCost(timePerFixture, numberOfFixtures)
+    }
+
+    override fun materialCost(): Double {
+        if (replacementType == ReplacementType.DirectReplacementFixture.type) {
+            val fixtureCost = Utils.fixtureCost(fixtureType)
+            return fixtureCost * numberOfFixtures
+        }
+
+        return lampsPerFixtures * numberOfFixtures * ledbulbcost
+    }
+
     override fun incentives(): Double {
         var total = 0.0
 

@@ -290,6 +290,15 @@ class HPSodium(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRa
         return (totalLamps * (Utils.electricianHourlyRate / 6)  + (totalLamps * bulbcost)) * Utils.futureValueFactor + (totalSavings() * presentvaluefactor) - installCost()
     }
 
+    override fun laborCost(): Double {
+        val timePerFixture = Utils.timePerFixture(replacementType)
+        return Utils.electricianCost(timePerFixture, numberOfFixtures)
+    }
+
+    override fun materialCost(): Double {
+        return lampsPerFixtures * numberOfFixtures * ledbulbcost
+    }
+
     override fun incentives(): Double {
         var total = 0.0
 
