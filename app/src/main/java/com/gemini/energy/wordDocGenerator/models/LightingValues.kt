@@ -11,6 +11,7 @@ data class LightingValues(
         val totalcostsavings: Double, // 13
         val totalenergysavings: Double,
         val totalCost: Double, // 15
+        val implementationCost: Double,
         val paybackMonth: Double, // 16
         val geminiPayback: Double, // 17
         val paybackYear: Double, // 18
@@ -67,6 +68,7 @@ data class LightingValues(
 
             var totalSavings = 0.0
             var totalInstallCost = 0.0
+            var implementationCost = 0.0
             var totalEnergySavings = 0.0
             var totalBulbs = 0
 
@@ -81,6 +83,7 @@ data class LightingValues(
             for (light in cfls) {
                 totalSavings += light.totalSavings()
                 totalInstallCost += light.installCost()
+                implementationCost += light.implementationCost()
                 totalEnergySavings += light.totalEnergySavings()
                 totalBulbs += light.numberOfFixtures + light.lampsPerFixtures
 
@@ -97,6 +100,7 @@ data class LightingValues(
             for (light in halogens) {
                 totalSavings += light.totalSavings()
                 totalInstallCost += light.installCost()
+                implementationCost += light.implementationCost()
                 totalEnergySavings += light.totalEnergySavings()
                 totalBulbs += light.numberOfFixtures + light.lampsPerFixtures
 
@@ -113,6 +117,7 @@ data class LightingValues(
             for (light in highPressureSodiums) {
                 totalSavings += light.totalSavings()
                 totalInstallCost += light.installCost()
+                implementationCost += light.implementationCost()
                 totalEnergySavings += light.totalEnergySavings()
                 totalBulbs += light.numberOfFixtures + light.lampsPerFixtures
 
@@ -129,6 +134,7 @@ data class LightingValues(
             for (light in incandescents) {
                 totalSavings += light.totalSavings()
                 totalInstallCost += light.installCost()
+                implementationCost += light.implementationCost()
                 totalEnergySavings += light.totalEnergySavings()
                 totalBulbs += light.numberOfFixtures + light.lampsPerFixtures
 
@@ -145,6 +151,7 @@ data class LightingValues(
             for (light in linearFluorescents) {
                 totalSavings += light.totalSavings()
                 totalInstallCost += light.installCost()
+                implementationCost += light.implementationCost()
                 totalEnergySavings += light.totalEnergySavings()
                 totalBulbs += light.numberOfFixtures + light.lampsPerFixtures
 
@@ -161,6 +168,7 @@ data class LightingValues(
             for (light in lowPressureSodiums) {
                 totalSavings += light.totalSavings()
                 totalInstallCost += light.installCost()
+                implementationCost += light.implementationCost()
                 totalEnergySavings += light.totalEnergySavings()
                 totalBulbs += light.numberOfFixtures + light.lampsPerFixtures
 
@@ -194,6 +202,7 @@ data class LightingValues(
             return LightingValues(
                     totalcostsavings = totalSavings,
                     totalenergysavings = totalEnergySavings,
+                    implementationCost = implementationCost,
                     totalCost = totalInstallCost,
                     paybackMonth = paybackMonth,
                     geminiPayback = geminiPayback,
