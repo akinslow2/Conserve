@@ -278,12 +278,21 @@ class WordDocumentGenerator {
                 "The HVAC technician's maintenance scope of work should include:")
 
         val hvacBullets = arrayOf(
-                "Cleaning the condenser",
-                "Checking the economizer (if applicable)",
-                "Checking and replacing filters",
-                "Charging the refrigerant",
-                "Tightening belts (if applicable)")
-        document.createBullets(hvacBullets)
+                BulletItem(arrayOf(BulletItem.Span("Cleaning the condenser"))),
+                BulletItem(arrayOf(
+                        BulletItem.Span("Checking the economizer ("),
+                        BulletItem.Span("if applicable", isItalic = true),
+                        BulletItem.Span(")")
+                )),
+                BulletItem(arrayOf(BulletItem.Span("Checking and replacing filters"))),
+                BulletItem(arrayOf(BulletItem.Span("Charging the refrigerant"))),
+                BulletItem(arrayOf(
+                        BulletItem.Span("Tightening belts ("),
+                        BulletItem.Span("if applicable", isItalic = true),
+                        BulletItem.Span(")")
+                ))
+        )
+        document.createBulletsWithInlineStyling(hvacBullets)
 
         document.createNormalParagraph("The details of your HVAC units are below:")
 
