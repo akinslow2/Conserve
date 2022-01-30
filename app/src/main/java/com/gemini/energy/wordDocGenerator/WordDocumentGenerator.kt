@@ -47,7 +47,6 @@ class WordDocumentGenerator {
     }
 
 
-
     /** Triggers the document generation for each audit and saves documents to appropriate place **/
     fun triggerGeneration(ebases: MutableList<EBase>) {
         setupNeededForApacheToWork()
@@ -133,9 +132,9 @@ class WordDocumentGenerator {
 
         if (value.lighting != null) {
             document.createNormalParagraph(
-                "The savings represented in the table below reflect the bulb replacement costs abated "
-                        + "because LED bulbs will last 2 to 3 times longer.",
-                isStartOfNewPage = true)
+                    "The savings represented in the table below reflect the bulb replacement costs abated "
+                            + "because LED bulbs will last 2 to 3 times longer.",
+                    isStartOfNewPage = true)
 
             document.createNormalParagraph("In addition, the energy savings account for the reduction in cooling load due to LED bulbs releasing less heat")
 
@@ -262,9 +261,9 @@ class WordDocumentGenerator {
         document.createBullets(bullets)
 
         val paybackString =
-                    if (lights.paybackMonth > 11)
-                        (lights.paybackMonth / 12).format(1) + " years"
-                    else lights.paybackMonth.format(0) + " months"
+                if (lights.paybackMonth > 11)
+                    (lights.paybackMonth / 12).format(1) + " years"
+                else lights.paybackMonth.format(0) + " months"
         document.createNormalParagraph(
                 "Replacing all of your non-LED bulbs and adding controls will cost approximately "
                         + "$${lights.totalCost.format(0)} but will result in an estimated "
@@ -307,19 +306,29 @@ class WordDocumentGenerator {
         r3p3.fontFamily = fontGeorgia
         r3p3.fontSize = 13
         r3p3.setText(" basis. Failure to properly maintain your HVAC units results in increased energy bills "
-                        + "and shorter equipment life spans, reducing your savings potential.")
+                + "and shorter equipment life spans, reducing your savings potential.")
 
 
         document.createNormalParagraph(
                 "The HVAC technician's maintenance scope of work should include:")
 
         val hvacBullets = arrayOf(
-                        "Cleaning the condenser",
-                        "Checking the economizer (if applicable)",
-                        "Checking and replacing filters",
-                        "Charging the refrigerant",
-                        "Tightening belts (if applicable)")
-        document.createBullets(hvacBullets)
+
+                BulletItem(arrayOf(BulletItem.Span("Cleaning the condenser"))),
+                BulletItem(arrayOf(
+                        BulletItem.Span("Checking the economizer ("),
+                        BulletItem.Span("if applicable", isItalic = true),
+                        BulletItem.Span(")")
+                )),
+                BulletItem(arrayOf(BulletItem.Span("Checking and replacing filters"))),
+                BulletItem(arrayOf(BulletItem.Span("Charging the refrigerant"))),
+                BulletItem(arrayOf(
+                        BulletItem.Span("Tightening belts ("),
+                        BulletItem.Span("if applicable", isItalic = true),
+                        BulletItem.Span(")")
+                ))
+        )
+        document.createBulletsWithInlineStyling(hvacBullets)
 
 
         document.createNormalParagraph("The details of your HVAC units are below:")
@@ -329,12 +338,12 @@ class WordDocumentGenerator {
 
         document.createNormalParagraph("Benefits of a new HVAC system with smart controls include:")
         val hvacBullets2 = arrayOf(
-                        "Lower operating costs",
-                        "Less risk of failure and disruption of business",
-                        "More control over temperature settings",
-                        "More consistent temperature throughout the space",
-                        "Better for the environment"
-                )
+                "Lower operating costs",
+                "Less risk of failure and disruption of business",
+                "More control over temperature settings",
+                "More consistent temperature throughout the space",
+                "Better for the environment"
+        )
 
         document.createBullets(hvacBullets2)
 
@@ -392,18 +401,18 @@ class WordDocumentGenerator {
                         (equip.paybackMonth / 12).format(1) + " years"
                     else equip.paybackMonth.format(0) + " months"
 
-                val p = document.createParagraph()
-                val run = p.createRun()
-                run.fontFamily = fontGeorgia
-                run.fontSize = 13
-                run.setText("Your ${equip.make} ${equip.name} is ${equip.age.format(0)} years old and as a result is annually consuming " +
-                        "${equip.delta.format(0)} kWh more energy than a newer, higher-efficiency version. " +
-                        "We recommend you replace the ${equip.name} with a high-effiency version to save $${equip.costElectricity.format(0)} per year. " +
-                        "The implementation cost for a new ${equip.name} is roughly $${equip.materialCost.format(0)} " +
-                        "and the expected payback period for this replacement is ${paybackString}. " +
-                        "This investment will result in a NPV of \$${equip.netPresentValue.format(0)}")
-                run.addBreak()
-            }
+            val p = document.createParagraph()
+            val run = p.createRun()
+            run.fontFamily = fontGeorgia
+            run.fontSize = 13
+            run.setText("Your ${equip.make} ${equip.name} is ${equip.age.format(0)} years old and as a result is annually consuming " +
+                    "${equip.delta.format(0)} kWh more energy than a newer, higher-efficiency version. " +
+                    "We recommend you replace the ${equip.name} with a high-effiency version to save $${equip.costElectricity.format(0)} per year. " +
+                    "The implementation cost for a new ${equip.name} is roughly $${equip.materialCost.format(0)} " +
+                    "and the expected payback period for this replacement is ${paybackString}. " +
+                    "This investment will result in a NPV of \$${equip.netPresentValue.format(0)}")
+            run.addBreak()
+        }
 
     }
 
@@ -734,7 +743,7 @@ class WordDocumentGenerator {
 
             when {
                 isFirst -> {
-                    row.createEquipmentInstanceCell(0 , "Measure", true)
+                    row.createEquipmentInstanceCell(0, "Measure", true)
                     row.createEquipmentInstanceCell(1, "Location", true)
                     row.createEquipmentInstanceCell(2, "Measure Description", true)
                     row.createEquipmentInstanceCell(3, "Quantity", true)
@@ -760,7 +769,7 @@ class WordDocumentGenerator {
                     val rowIndex = if (isFirst) 0 else i - 1
                     val rowItem = rows[rowIndex]
 
-                    row.createEquipmentInstanceCell(0 , rowItem.measure, false)
+                    row.createEquipmentInstanceCell(0, rowItem.measure, false)
                     row.createEquipmentInstanceCell(1, rowItem.location, false)
                     row.createEquipmentInstanceCell(2, rowItem.measureDescription, false)
                     row.createEquipmentInstanceCell(3, rowItem.quantity.format(0), false)
@@ -866,7 +875,7 @@ class WordDocumentGenerator {
                 row.createEquipmentInstanceCell(4, rowItem.year.toString(), false)
                 row.createEquipmentInstanceCell(5, rowItem.seer.toString(), false)
                 row.createEquipmentInstanceCell(6, rowItem.overage.toString(), false)
-                row.createEquipmentInstanceCell(7, rowItem.suggestedIntervention, false  )
+                row.createEquipmentInstanceCell(7, rowItem.suggestedIntervention, false)
             }
         }
 
