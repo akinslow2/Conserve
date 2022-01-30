@@ -168,6 +168,37 @@ fun XWPFDocument.createBullets(
 
 
 /**
+ * create bulleted list with inline styling information
+ *
+ * @param items list of strings to bullet
+ */
+fun XWPFDocument.createBulletsWithInlineStyling(items: Array<BulletItem>) {
+     val cTAbstractNum = CTAbstractNum.Factory.newInstance()
+    cTAbstractNum.abstractNumId = BigInteger.valueOf(0)
+    val cTLvl = cTAbstractNum.addNewLvl()
+    cTLvl.addNewLvlText().setVal("•")
+
+    val abstractNum = XWPFAbstractNum(cTAbstractNum)
+    val numbering = this.createNumbering()
+    val abstractNumID = numbering.addAbstractNum(abstractNum)
+    val numID = numbering.addNum(abstractNumID)
+
+    for (item in items) {
+        val bulletedPara = this.createParagraph()
+        bulletedPara.numID = numID
+        bulletedPara.spacingBetween = 1.15
+        for (span in item.components) {
+            val run = bulletedPara.createRun()
+            run.fontFamily = WordDocumentGenerator.fontGeorgia
+            run.fontSize = 13
+            run.isItalic = span.isItalic
+            run.setText(span.text)
+        }
+    }
+}
+
+
+/**
  * add page numbers to document
  * page numbers are added to footer
  */
@@ -232,6 +263,7 @@ fun XWPFTable.generateFinancialComponentsHeaderRow(
  * @param cell2 value shown in cell two
  * @param rowIndex row index
  * @param cell2IsBold is the text in cell 2 should be bold
+ * @param cell2Color the text color of cell2
  */
 fun XWPFTable.generateFinancialComponentsDetailRow(
         cell1: String,
