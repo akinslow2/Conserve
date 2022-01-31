@@ -115,7 +115,7 @@ class WordDocumentGenerator {
         r1p2.fontSize = 13
         r1p2.setText("Electric rates from https://www.tep.com/rates/")
         r1p2.addBreak()
-        r1p2.setText("Building is using electric rate schedule ${value.preAudit.electricStructure}")
+        r1p2.setText("Building is using electric schedule ${value.preAudit.electricStructure}")
         r1p2.addCarriageReturn()
 
 
@@ -125,13 +125,14 @@ class WordDocumentGenerator {
             r2p2.fontSize = 13
             r2p2.setText("Gas rates from https://www.swgas.com/en/arizona-rates-and-regulation")
             r1p2.addBreak()
-            r2p2.setText("Building is using gas rate schedule ${value.preAudit.gasStructure}")
+            r2p2.setText("Building is using gas schedule ${value.preAudit.gasStructure}")
             r2p2.addCarriageReturn()
         }
 
 
         if (value.lighting != null) {
             document.createNormalParagraph(
+
                 "The savings represented in the table below reflect the bulb replacement costs abated because LED bulbs will last 2 to 3 times longer. "
                         + "In addition, the energy savings account for the reduction in cooling load due to LED bulbs releasing less heat.",
                 isStartOfNewPage = true)
@@ -140,7 +141,6 @@ class WordDocumentGenerator {
 
             generateLightingContractorPage(document, value.lighting)
         }
-
 
         document.addPageNumbers()
 
@@ -169,6 +169,7 @@ class WordDocumentGenerator {
         p2.spacingBetween = 1.08
         p2.alignment = ParagraphAlignment.CENTER
         val r1p2 = p2.createRun()
+
         r1p2.fontFamily = fontGeorgia
         r1p2.fontSize = 13
         r1p2.color = greyColor
@@ -179,6 +180,7 @@ class WordDocumentGenerator {
         r2p2.color = greyColor
         r2p2.subscript = VerticalAlign.SUPERSCRIPT
         r2p2.setText("th")
+
         val r3p2 = p2.createRun()
         r3p2.fontFamily = fontGeorgia
         r3p2.fontSize = 13
@@ -190,6 +192,7 @@ class WordDocumentGenerator {
         r4p2.color = greyColor
         r4p2.subscript = VerticalAlign.SUPERSCRIPT
         r4p2.setText("th")
+
         val r5p2 = p2.createRun()
         r5p2.fontFamily = fontGeorgia
         r5p2.fontSize = 13
@@ -208,6 +211,38 @@ class WordDocumentGenerator {
                 "Implementation of all recommended measures will save you at least:",
                 values.building.buildingTotalSavings)
 
+        val p2 = document.createParagraph()
+        val r3p2 = p2.createRun()
+        r3p2.fontFamily = fontGeorgia
+        r3p2.fontSize = 20
+        r3p2.setText("with a Net Present Value (NPV) of ${values.building.buildingNetPresentValue.format(0)}")
+        r3p2.addBreak()
+
+        val p3 = document.createParagraph()
+        p3.spacingBetween = 1.5
+        val r1p3 = p3.createRun()
+        r1p3.fontFamily = fontGeorgia
+        r1p3.fontSize = 12
+        r1p3.color = greyColor
+        r1p3.setText("The analysis shows a high potential for energy savings which will:")
+
+        val bullets1 = arrayOf(
+                "reduced energy costs,",
+                "improved profit margins,",
+                "increased thermal comfort in your building, and",
+                "more control over how energy is consumed.")
+        document.createBullets(bullets1, fontColor = greyColor)
+
+        if (values.building.buildingTotalCost > 5000) {
+            val qualifyP = document.createParagraph()
+            qualifyP.spacingBetween = 1.5
+            val qualifyR = qualifyP.createRun()
+            qualifyR.fontFamily = fontGeorgia
+            qualifyR.fontSize = 12
+            qualifyR.color = greyColor
+            qualifyR.setText("The implementation costs of all the measures qualify you for a 0% interest loan. By implementing these energy efficiency measures, you will join the courageous few energy heroes who are making the effort to make your community cleaner.")
+        }
+
         // potentially add section on zero- to low-interest financing - will wait on response from Tucson 2030 folks
 
         createEnergySavingsTable(document, values)
@@ -225,9 +260,9 @@ class WordDocumentGenerator {
         document.createBullets(bullets)
 
         val paybackString =
-                    if (lights.paybackMonth > 11)
-                        (lights.paybackMonth / 12).format(1) + " years"
-                    else lights.paybackMonth.format(0) + " months"
+                if (lights.paybackMonth > 11)
+                    (lights.paybackMonth / 12).format(1) + " years"
+                else lights.paybackMonth.format(0) + " months"
         document.createNormalParagraph(
                 "Replacing all of your non-LED bulbs and adding controls will cost approximately "
                         + "$${lights.totalCost.format(0)} but will result in an estimated "
@@ -248,6 +283,7 @@ class WordDocumentGenerator {
     }
 
     private fun generateHvacSavingsPage(document: XWPFDocument, hvac: HvacValues, building: BuildingValues) {
+
         document.createHeaderWithSavings(
                 "Heating, Ventilation, & Air-Conditioning [HVAC] Savings",
                 "Implementation of recommended HVAC measures will save you at least: ",
@@ -269,12 +305,14 @@ class WordDocumentGenerator {
         r3p3.fontFamily = fontGeorgia
         r3p3.fontSize = 13
         r3p3.setText(" basis. Failure to properly maintain your HVAC units results in increased energy bills "
-                        + "and shorter equipment life spans, reducing your savings potential.")
+                + "and shorter equipment life spans, reducing your savings potential.")
+
 
         document.createNormalParagraph(
                 "The HVAC technician's maintenance scope of work should include:")
 
         val hvacBullets = arrayOf(
+
                 BulletItem(arrayOf(BulletItem.Span("Cleaning the condenser"))),
                 BulletItem(arrayOf(
                         BulletItem.Span("Checking the economizer ("),
@@ -291,29 +329,32 @@ class WordDocumentGenerator {
         )
         document.createBulletsWithInlineStyling(hvacBullets)
 
+
         document.createNormalParagraph("The details of your HVAC units are below:")
 
         createHvacDetailsTable(document, hvac)
 
+
         document.createNormalParagraph("Benefits of a new HVAC system with smart controls include:")
         val hvacBullets2 = arrayOf(
-                        "Lower operating costs",
-                        "Less risk of failure and disruption of business",
-                        "More control over temperature settings",
-                        "More consistent temperature throughout the space",
-                        "Better for the environment"
-                )
+                "Lower operating costs",
+                "Less risk of failure and disruption of business",
+                "More control over temperature settings",
+                "More consistent temperature throughout the space",
+                "Better for the environment"
+        )
+
         document.createBullets(hvacBullets2)
 
-        if (hvac.instances.any { i -> i.age < 15 }) {
+
+        if (hvac.instances.any { i -> i.age < 11 }) {
             document.createNormalParagraph(
-                    "Your HVAC system could see additional energy savings and an extended life expectancy by "
-                            + "adding controls. Benefits of HVAC controls include:")
+                    "You HVAC system could see additional energy savings and an extended life "
+                            + "expectancy by adding controls. Benefits of HVAC controls include:")
 
             val hvacBullets = arrayOf(
                     "Better HVAC performance",
                     "Reduced energy consumption",
-                    "Reduced maintenance costs",
                     "More control over temperature settings",
                     "Better for the environment")
             document.createBullets(hvacBullets)
@@ -323,6 +364,7 @@ class WordDocumentGenerator {
     }
 
     private fun generateWaterHeaterSavingsPage(document: XWPFDocument, waterheater: WaterHeaterValues) {
+
         if (waterheater.netPresentValue > 1) {
             document.createHeaderWithSavings(
                     "Water Heating Savings",
@@ -343,7 +385,7 @@ class WordDocumentGenerator {
     }
 
     private fun generateEquipmentSavingsPage(document: XWPFDocument, equipment: EquipmentValues) {
-        if (equipment.netPresentValue > 1) {
+        if (equipment.totalNetPresentValue > 1) {
             document.createHeaderWithSavings(
                     "Kitchen Equipment Savings",
                     "Implementation of recommended kitchen equipment upgrades will save you at least: ",
@@ -358,22 +400,23 @@ class WordDocumentGenerator {
                         (equip.paybackMonth / 12).format(1) + " years"
                     else equip.paybackMonth.format(0) + " months"
 
-                val p = document.createParagraph()
-                val run = p.createRun()
-                run.fontFamily = fontGeorgia
-                run.fontSize = 13
-                run.setText("Your ${equip.make} ${equip.name} is ${equip.age.format(0)} years old and as a result is annually consuming " +
-                        "${equip.delta.format(0)} kWh more energy than a newer, higher-efficiency version. " +
-                        "We recommend you replace the ${equip.name} with a high-effiency version to save $${equip.costElectricity.format(0)} per year. " +
-                        "The implementation cost for a new ${equip.name} is roughly $${equip.materialCost.format(0)} " +
-                        "and the expected payback period for this replacement is ${paybackString}. " +
-                        "This investment will result in a NPV of \$${equip.netPresentValue.format(0)}")
-                run.addBreak()
-            }
+            val p = document.createParagraph()
+            val run = p.createRun()
+            run.fontFamily = fontGeorgia
+            run.fontSize = 13
+            run.setText("Your ${equip.make} ${equip.name} is ${equip.age.format(0)} years old and as a result is annually consuming " +
+                    "${equip.delta.format(0)} kWh more energy than a newer, higher-efficiency version. " +
+                    "We recommend you replace the ${equip.name} with a high-effiency version to save $${equip.costElectricity.format(0)} per year. " +
+                    "The implementation cost for a new ${equip.name} is roughly $${equip.materialCost.format(0)} " +
+                    "and the expected payback period for this replacement is ${paybackString}. " +
+                    "This investment will result in a NPV of \$${equip.netPresentValue.format(0)}")
+            run.addBreak()
+        }
 
     }
 
     private fun generateRefrigerationSavingsPage(document: XWPFDocument, refrigeration: RefrigerationValues) {
+
         if (refrigeration.netPresentValue > 1) {
             document.createHeaderWithSavings(
                     "Refrigeration Savings",
@@ -415,6 +458,7 @@ class WordDocumentGenerator {
         r1p2.setText("${preAudit.businessname} is on the ${preAudit.electricCompany} ${preAudit.electricStructure} electric rate schedule. In the one-year period from $manuallyGeneratedValue through $manuallyGeneratedValue, ${preAudit.businessname} consumed $manuallyGeneratedValue kWh, resulting in an electrical cost of $$manuallyGeneratedValue.")
         r1p2.addBreak()
         r1p2.addBreak()
+
         if (preAudit.gasApplicableToBuilding) {
             r1p2.setText("${preAudit.businessname} is on the ${preAudit.gasCompany} ${preAudit.gasStructure} gas rate schedule and for above stated time period, ${preAudit.businessname} used $manuallyGeneratedValue therms at a cost of $$manuallyGeneratedValue.")
             r1p2.addBreak()
@@ -474,6 +518,7 @@ class WordDocumentGenerator {
         generateLightContractorTable(document, lights)
     }
 
+
     private fun nullableCostString(cost: Double?): String {
         if (cost == null) return "N/A"
 
@@ -485,7 +530,6 @@ class WordDocumentGenerator {
         val table = document.createTable(19, 2)
         var currentRow = 0
 
-        // Header row
         table.generateFinancialComponentsHeaderRow()
         currentRow += 1
 
@@ -496,6 +540,21 @@ class WordDocumentGenerator {
                 cell2IsBold = true,
                 cell2Color = if (values.building.buildingTotalSavings >= 0) blackColor else redColor)
         currentRow += 1
+
+//        if (values.preAudit.electrificationSavings > 0.0) {
+//            table.generateFinancialComponentsDetailRow(
+//                "Electrification Savings ($/yr)",
+//                "\$${values.preAudit.electrificationSavings.format(0)}",
+//                currentRow)
+//            currentRow += 1
+//        }
+//        if (values.building > 0.0) {
+//            table.generateFinancialComponentsDetailRow(
+//                "Electrification Savings ($/yr)",
+//                "\$${values.preAudit.electrificationSavings.format(0)}",
+//                currentRow)
+//            currentRow += 1
+//        }
 
         table.generateFinancialComponentsDetailRow(
                 "Implementation Cost (\$)",
@@ -597,9 +656,9 @@ class WordDocumentGenerator {
 
         table.generateFinancialComponentsDetailRow(
                 "        Kitchen Equipment (NPV)",
-                values.equipment?.netPresentValue?.absoluteValue?.format(0) ?: "N/A",
+                values.equipment?.totalNetPresentValue?.absoluteValue?.format(0) ?: "N/A",
                 currentRow,
-                cell2Color = if (values.equipment?.netPresentValue == null || values.equipment.netPresentValue >= 0) blackColor else redColor)
+                cell2Color = if (values.equipment?.totalNetPresentValue == null || values.equipment.totalNetPresentValue >= 0) blackColor else redColor)
         currentRow += 1
 
         table.fitTable(4500)
@@ -667,11 +726,12 @@ class WordDocumentGenerator {
 
     private fun createLightingTable3(document: XWPFDocument, lights: LightingValues) {
         val rows = lights.lightingRows
+
         val table = document.createTable(rows.size + 1, 11)
         table.addBorders()
 
         for (i in 0..rows.size) {
-            // safety check if no rows exist
+            // saftey check if no rows exist
             if (rows.isEmpty()) {
                 return
             }
@@ -682,7 +742,7 @@ class WordDocumentGenerator {
 
             when {
                 isFirst -> {
-                    row.createEquipmentInstanceCell(0 , "Measure", true)
+                    row.createEquipmentInstanceCell(0, "Measure", true)
                     row.createEquipmentInstanceCell(1, "Location", true)
                     row.createEquipmentInstanceCell(2, "Measure Description", true)
                     row.createEquipmentInstanceCell(3, "Quantity", true)
@@ -708,7 +768,7 @@ class WordDocumentGenerator {
                     val rowIndex = if (isFirst) 0 else i - 1
                     val rowItem = rows[rowIndex]
 
-                    row.createEquipmentInstanceCell(0 , rowItem.measure, false)
+                    row.createEquipmentInstanceCell(0, rowItem.measure, false)
                     row.createEquipmentInstanceCell(1, rowItem.location, false)
                     row.createEquipmentInstanceCell(2, rowItem.measureDescription, false)
                     row.createEquipmentInstanceCell(3, rowItem.quantity.format(0), false)
@@ -814,7 +874,7 @@ class WordDocumentGenerator {
                 row.createEquipmentInstanceCell(4, rowItem.year.toString(), false)
                 row.createEquipmentInstanceCell(5, rowItem.seer.toString(), false)
                 row.createEquipmentInstanceCell(6, rowItem.overage.toString(), false)
-                row.createEquipmentInstanceCell(7, rowItem.suggestedIntervention, false  )
+                row.createEquipmentInstanceCell(7, rowItem.suggestedIntervention, false)
             }
         }
 
@@ -982,7 +1042,6 @@ class WordDocumentGenerator {
                 values.building.postTotalkWh.format(2))
 
         table.centerTable()
-        table.fitTable(4500)
     }
 
     private fun generateLightContractorTable(document: XWPFDocument, lights: LightingValues) {
@@ -1025,7 +1084,7 @@ class WordDocumentGenerator {
     }
 
 
-    // ApachePOI setup
+    /**  ApachePOI setup */
     private fun setupNeededForApacheToWork() {
         System.setProperty("org.apache.poi.javax.xml.stream.XMLInputFactory", "com.fasterxml.aalto.stax.InputFactoryImpl")
         System.setProperty("org.apache.poi.javax.xml.stream.XMLOutputFactory", "com.fasterxml.aalto.stax.OutputFactoryImpl")
