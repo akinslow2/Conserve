@@ -91,6 +91,12 @@ class WordDocumentGenerator {
         generateFacilityInformationPage(document, value, value.preAudit)
 
         if (value.lighting != null) {
+            document.createNormalParagraph(
+                "The savings represented in the table below reflect the bulb replacement costs abated because LED bulbs will last 2 to 3 times longer. "
+                        + "In addition, the energy savings account for the reduction in cooling load due to LED bulbs releasing less heat.",
+                isStartOfNewPage = true)
+
+            createLightingTable3(document, value.lighting)
             generateLightingContractorPage(document, value.lighting)
         }
 
