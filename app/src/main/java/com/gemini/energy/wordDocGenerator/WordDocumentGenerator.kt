@@ -132,11 +132,10 @@ class WordDocumentGenerator {
 
         if (value.lighting != null) {
             document.createNormalParagraph(
-                    "The savings represented in the table below reflect the bulb replacement costs abated "
-                            + "because LED bulbs will last 2 to 3 times longer.",
-                    isStartOfNewPage = true)
 
-            document.createNormalParagraph("In addition, the energy savings account for the reduction in cooling load due to LED bulbs releasing less heat")
+                "The savings represented in the table below reflect the bulb replacement costs abated because LED bulbs will last 2 to 3 times longer. "
+                        + "In addition, the energy savings account for the reduction in cooling load due to LED bulbs releasing less heat.",
+                isStartOfNewPage = true)
 
             createLightingTable3(document, value.lighting)
 
