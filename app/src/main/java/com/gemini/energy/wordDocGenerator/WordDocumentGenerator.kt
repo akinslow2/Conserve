@@ -115,7 +115,7 @@ class WordDocumentGenerator {
         r1p2.fontSize = 13
         r1p2.setText("Electric rates from https://www.tep.com/rates/")
         r1p2.addBreak()
-        r1p2.setText("Building is using electric schedule ${value.preAudit.electricStructure}")
+        r1p2.setText("Building is using electric rate schedule ${value.preAudit.electricStructure}")
         r1p2.addCarriageReturn()
 
 
@@ -125,7 +125,7 @@ class WordDocumentGenerator {
             r2p2.fontSize = 13
             r2p2.setText("Gas rates from https://www.swgas.com/en/arizona-rates-and-regulation")
             r1p2.addBreak()
-            r2p2.setText("Building is using gas schedule ${value.preAudit.gasStructure}")
+            r2p2.setText("Building is using gas rate schedule ${value.preAudit.gasStructure}")
             r2p2.addCarriageReturn()
         }
 
