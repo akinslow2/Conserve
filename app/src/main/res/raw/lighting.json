@@ -10,7 +10,7 @@
           "dataType": "introw",
           "defaultValues": "",
           "param": "Measured Lux",
-          "validation": "mandatory",
+          "validation": "optional",
           "id": "11"
         },
         {
@@ -19,7 +19,7 @@
           "dataType": "introw",
           "defaultValues": "",
           "param": "Area (Sq. Ft.)",
-          "validation": "mandatory",
+          "validation": "optional",
           "id": "12"
         },
         {
@@ -28,7 +28,7 @@
           "dataType": "pickerinputrow",
           "defaultValues": "1:LED,2:Linear Flourescent,3:Halogen,4:High Pressure Sodium,5:Incandescent,6:Metal Halide,7:Mercury Vapor,8:Compact Fluorescent,9:EXIT (Compact Flourescent),10:EXIT (Incandescent),11:EXIT (LED)",
           "param": "Lamp type",
-          "validation": "mandatory",
+          "validation": "optional",
           "id": "13"
         },
         {
@@ -55,7 +55,7 @@
           "dataType": "introw",
           "defaultValues": "",
           "param": "Number of Fixtures",
-          "validation": "mandatory",
+          "validation": "optional",
           "id": "16"
         },
         {
@@ -64,7 +64,7 @@
           "dataType": "textrow",
           "defaultValues": "",
           "param": "Make",
-          "validation": "mandatory",
+          "validation": "optional",
           "id": "17"
         },
         {
@@ -73,7 +73,7 @@
           "dataType": "textrow",
           "defaultValues": "",
           "param": "Model Number",
-          "validation": "mandatory",
+          "validation": "optional",
           "id": "18"
         }
       ],
@@ -89,7 +89,7 @@
           "dataType": "pickerinputrow",
           "defaultValues": "1:Yes,2:No",
           "param": "Controls",
-          "validation": "mandatory",
+          "validation": "optional",
           "id": "21"
         },
         {
@@ -123,7 +123,7 @@
           "dataType": "decimalrow",
           "defaultValues": "",
           "param": "Nominal Watts",
-          "validation": "mandatory",
+          "validation": "optional",
           "id": "31"
         },
         {

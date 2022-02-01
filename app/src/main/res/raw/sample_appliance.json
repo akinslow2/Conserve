@@ -28,7 +28,7 @@
           "dataType": "pickerinputrow",
           "defaultValues": "1:Item One,2:Item Two",
           "param": "Section One Parameter Three",
-          "validation": "mandatory",
+          "validation": "optional",
           "id": "13"
         }
       ],
