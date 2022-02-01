@@ -115,7 +115,7 @@
           "hint": "",
           "dataType": "decimalrow",
           "defaultValues": "",
-          "param": "Peak Hours",
+          "param": "Condenser Peak Hours",
           "validation": "optional",
           "id": "21"
         },
@@ -124,9 +124,27 @@
           "hint": "",
           "dataType": "decimalrow",
           "defaultValues": "",
-          "param": "Off Peak Hours",
+          "param": "Condenser Part Peak Hours",
           "validation": "optional",
           "id": "22"
+        },
+        {
+          "index": 23,
+          "hint": "decimalrow",
+          "dataType": "decimalrow",
+          "defaultValues": "",
+          "param": "Condenser Off Peak Hours",
+          "validation": "optional",
+          "id": "23"
+        },
+        {
+          "index": 24,
+          "hint": "does not exist in code",
+          "dataType": "introw",
+          "defaultValues": "",
+          "param": "Sensor Number (first 4 digits)",
+          "validation": "optional",
+          "id": "24"
         }
       ],
       "id": "2"
@@ -219,7 +237,7 @@
           "hint": "",
           "dataType": "decimalrow",
           "defaultValues": "",
-          "param": "Peak Hours",
+          "param": "Evaporator Peak Hours",
           "validation": "optional",
           "id": "41"
         },
@@ -228,12 +246,46 @@
           "hint": "",
           "dataType": "decimalrow",
           "defaultValues": "",
-          "param": "Off Peak Hours",
+          "param": "Evaporator Part Peak Hours",
           "validation": "optional",
           "id": "42"
+        },
+        {
+          "index": 43,
+          "hint": "",
+          "dataType": "decimalrow",
+          "defaultValues": "",
+          "param": "Evaporator Off Peak Hours",
+          "validation": "optional",
+          "id": "43"
+        },
+        {
+          "index": 44,
+          "hint": "does not exist in code",
+          "dataType": "introw",
+          "defaultValues": "",
+          "param": "Sensor Number (first 4 digits)",
+          "validation": "optional",
+          "id": "44"
         }
       ],
       "id": "4"
+    },
+    {
+      "index": 5,
+      "section": "Other",
+      "elements": [
+        {
+          "index": 51,
+          "hint": "does not exist in code",
+          "dataType": "textarearow",
+          "defaultValues": "",
+          "param": "Notes about Space or Equipment",
+          "validation": "optional",
+          "id": "51"
+        }
+      ],
+      "id": "5"
     }
   ]
 }

@@ -6,38 +6,38 @@
       "elements": [
         {
           "index": 11,
-          "hint": "",
+          "hint": "Rq",
           "dataType": "textrow",
           "defaultValues": "",
           "param": "Model Number",
-          "validation": "mandatory",
+          "validation": "optional",
           "id": "11"
         },
         {
           "index": 12,
-          "hint": "",
+          "hint": "Rq",
           "dataType": "textrow",
           "defaultValues": "",
           "param": "Company",
-          "validation": "mandatory",
+          "validation": "optional",
           "id": "12"
         },
         {
           "index": 13,
-          "hint": "",
+          "hint": "Rq",
           "dataType": "introw",
           "defaultValues": "",
           "param": "Quantity",
-          "validation": "mandatory",
+          "validation": "optional",
           "id": "13"
         },
         {
           "index": 14,
-          "hint": "",
+          "hint": "helpful",
           "dataType": "introw",
           "defaultValues": "",
-          "param": "Year",
-          "validation": "mandatory",
+          "param": "Year Installed",
+          "validation": "optional",
           "id": "14"
         },
         {
@@ -45,53 +45,53 @@
           "hint": "",
           "dataType": "pickerinputrow",
           "defaultValues": "1:Yes,2:No",
-          "param": "Control",
-          "validation": "mandatory",
+          "param": "New at installation?",
+          "validation": "optional",
           "id": "15"
         },
         {
           "index": 16,
-          "hint": "kW",
-          "dataType": "decimalrow",
-          "defaultValues": "",
-          "param": "Idle Energy Rate",
+          "hint": "",
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:Yes,2:No",
+          "param": "Control",
           "validation": "optional",
           "id": "16"
         },
         {
           "index": 17,
-          "hint": "gal/rack.cycle",
+          "hint": "kW (analyst will enter)",
           "dataType": "decimalrow",
           "defaultValues": "",
-          "param": "Water Consumption",
+          "param": "Idle Energy Rate",
           "validation": "optional",
           "id": "17"
         },
         {
           "index": 18,
-          "hint": "",
-          "dataType": "introw",
+          "hint": "gal/rack.cycle (analyst will enter)",
+          "dataType": "decimalrow",
           "defaultValues": "",
-          "param": "Number of Racks",
-          "validation": "mandatory",
+          "param": "Water Consumption",
+          "validation": "optional",
           "id": "18"
         },
         {
           "index": 19,
           "hint": "",
-          "dataType": "pickerinputrow",
-          "defaultValues": "1:Gas,2:Electric",
-          "param": "Heating Element",
-          "validation": "mandatory",
+          "dataType": "introw",
+          "defaultValues": "",
+          "param": "Number of Racks",
+          "validation": "optional",
           "id": "19"
         },
         {
           "index": 110,
           "hint": "",
-          "dataType": "introw",
-          "defaultValues": "",
-          "param": "Cycles per Day",
-          "validation": "mandatory",
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:Gas,2:Electric",
+          "param": "Heating Element",
+          "validation": "optional",
           "id": "110"
         },
         {
@@ -99,98 +99,141 @@
           "hint": "",
           "dataType": "introw",
           "defaultValues": "",
-          "param": "Water Temperature (oF)",
-          "validation": "mandatory",
+          "param": "Cycles per Day",
+          "validation": "optional",
           "id": "111"
         },
         {
           "index": 112,
           "hint": "",
-          "dataType": "decimalrow",
+          "dataType": "introw",
           "defaultValues": "",
-          "param": "Efficiency",
-          "validation": "mandatory",
+          "param": "Water Temperature (oF)",
+          "validation": "optional",
           "id": "112"
         },
         {
           "index": 113,
+          "hint": "",
+          "dataType": "decimalrow",
+          "defaultValues": "",
+          "param": "Efficiency",
+          "validation": "optional",
+          "id": "113"
+        },
+        {
+          "index": 114,
           "hint": "days/year",
           "dataType": "introw",
           "defaultValues": "",
           "param": "Days Used",
-          "validation": "mandatory",
-          "id": "113"
+          "validation": "optional",
+          "id": "114"
         }
       ],
       "id": "1"
     },
     {
       "index": 2,
-      "section": "TOU",
+      "section": "Additional",
       "elements": [
         {
           "index": 21,
           "hint": "",
-          "dataType": "decimalrow",
-          "defaultValues": "",
-          "param": "Peak Hours",
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:yes,2:no",
+          "param": "Energy Star?",
           "validation": "optional",
           "id": "21"
         },
         {
           "index": 22,
           "hint": "",
-          "dataType": "decimalrow",
-          "defaultValues": "",
-          "param": "Part Peak Hours",
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:chemical,2:high temperature booster",
+          "param": "Sanitzer type",
           "validation": "optional",
           "id": "22"
         },
         {
           "index": 23,
           "hint": "",
-          "dataType": "decimalrow",
-          "defaultValues": "",
-          "param": "Off Peak Hours",
-          "validation": "mandatory",
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:yes,2:no",
+          "param": "Are loads of dishes optimized?",
+          "validation": "optional",
           "id": "23"
+        },
+        {
+          "index": 24,
+          "hint": "",
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:yes,2:no",
+          "param": "Pre-rinse sprayer",
+          "validation": "optional",
+          "id": "24"
         }
       ],
       "id": "2"
     },
     {
       "index": 3,
-      "section": "Suggested Time",
+      "section": "Time of Use",
       "elements": [
         {
           "index": 31,
-          "hint": "",
+          "hint": "analyst will input",
           "dataType": "decimalrow",
           "defaultValues": "",
-          "param": "Suggested Peak Hours",
+          "param": "Peak Hours",
           "validation": "optional",
           "id": "31"
         },
         {
           "index": 32,
-          "hint": "",
+          "hint": "analyst will input",
           "dataType": "decimalrow",
           "defaultValues": "",
-          "param": "Suggested Part Peak Hours",
+          "param": "Part Peak Hours",
           "validation": "optional",
           "id": "32"
         },
         {
           "index": 33,
-          "hint": "",
+          "hint": "analyst will input",
           "dataType": "decimalrow",
           "defaultValues": "",
-          "param": "Suggested Off Peak Hours",
+          "param": "Off Peak Hours",
           "validation": "optional",
           "id": "33"
         }
       ],
       "id": "3"
+    },
+    {
+      "index": 4,
+      "section": "Other",
+      "elements": [
+        {
+          "index": 41,
+          "hint": "",
+          "dataType": "textarearow",
+          "defaultValues": "",
+          "param": "Notes about Space or Equipment",
+          "validation": "optional",
+          "id": "41"
+        },
+        {
+          "index": 42,
+          "hint": "Rq",
+          "dataType": "textarearow",
+          "defaultValues": "",
+          "param": "What times is the dishwasher used?",
+          "validation": "optional",
+          "id": "42"
+        }
+      ],
+      "id": "4"
     }
   ]
 }

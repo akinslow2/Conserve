@@ -18,7 +18,7 @@ class UtilityRateTest {
     fun readUtilityDataElectric() {
         val context = InstrumentationRegistry.getTargetContext()
         val utility = UtilityRate(context)
-                .initUtility(Electricity("F TOD", "rec"))
+                .initUtility(Electricity("F TOD", "Roanoke Electric Cooperative (REC)"))
                 .build()
 
         val structure = utility.structure

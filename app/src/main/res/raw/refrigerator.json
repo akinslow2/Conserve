@@ -6,65 +6,65 @@
       "elements": [
         {
           "index": 11,
-          "hint": "",
+          "hint": "Rq",
           "dataType": "pickerinputrow",
-          "defaultValues": "1:Ultra-low Temperature Freezer,2:Solid Door Freezer,3:Solid Door Refrigerator,4:Glass Door Refrigerator",
-          "param": "Equipment Type",
-          "validation": "mandatory",
+          "defaultValues": "1:Solid,2:Glass,3:Solid Chest,4:Glass Chest,5:None",
+          "param": "Door Type",
+          "validation": "optional",
           "id": "11"
         },
         {
           "index": 12,
           "hint": "",
-          "dataType": "pickerinputrow",
-          "defaultValues": "1:Milk or Beverage Cabinet,2:Other,3:Pass-Through,4:Reach-in,5:Undercounter,6:Wedge Case,7:Work-Top Table,8:Roll-in",
-          "param": "Style Type",
+          "dataType": "introw",
+          "defaultValues": "",
+          "param": "Number of Doors",
           "validation": "optional",
           "id": "12"
         },
         {
           "index": 13,
-          "hint": "cu. ft.",
-          "dataType": "decimalrow",
-          "defaultValues": "",
-          "param": "Total Volume",
-          "validation": "mandatory",
+          "hint": "",
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:Ultra-low Temperature Freezer,2:Solid Door Freezer,3:Solid Door Refrigerator,4:Glass Door Refrigerator",
+          "param": "Equipment Type",
+          "validation": "optional",
           "id": "13"
         },
         {
           "index": 14,
-          "hint": "",
-          "dataType": "textrow",
-          "defaultValues": "",
-          "param": "Model Number",
-          "validation": "mandatory",
+          "hint": "Rq",
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:Milk or Beverage Cabinet,2:Other,3:Pass-Through,4:Reach-in,5:Undercounter,6:Wedge Case,7:Work-Top Table,8:Roll-in",
+          "param": "Style Type",
+          "validation": "optional",
           "id": "14"
         },
         {
           "index": 15,
-          "hint": "",
-          "dataType": "textrow",
+          "hint": "Rq",
+          "dataType": "decimalrow",
           "defaultValues": "",
-          "param": "Company",
-          "validation": "mandatory",
+          "param": "Total Volume (cu.ft.)",
+          "validation": "optional",
           "id": "15"
         },
         {
           "index": 16,
-          "hint": "",
-          "dataType": "introw",
+          "hint": "Rq",
+          "dataType": "textrow",
           "defaultValues": "",
-          "param": "Year",
-          "validation": "mandatory",
+          "param": "Model Number",
+          "validation": "optional",
           "id": "16"
         },
         {
           "index": 17,
-          "hint": "",
-          "dataType": "pickerinputrow",
-          "defaultValues": "1:Yes,2:No",
-          "param": "Control",
-          "validation": "mandatory",
+          "hint": "Rq",
+          "dataType": "textrow",
+          "defaultValues": "",
+          "param": "Company",
+          "validation": "optional",
           "id": "17"
         },
         {
@@ -72,18 +72,63 @@
           "hint": "",
           "dataType": "introw",
           "defaultValues": "",
-          "param": "Quantity",
-          "validation": "mandatory",
+          "param": "Year installed",
+          "validation": "optional",
           "id": "18"
         },
         {
           "index": 19,
+          "hint": "Rq",
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:Yes,2:No",
+          "param": "Bought New?",
+          "validation": "optional",
+          "id": "19"
+        },
+        {
+          "index": 110,
+          "hint": "",
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:Yes,2:No",
+          "param": "Plug Load Control",
+          "validation": "optional",
+          "id": "110"
+        },
+        {
+          "index": 111,
+          "hint": "Rq",
+          "dataType": "introw",
+          "defaultValues": "",
+          "param": "Quantity",
+          "validation": "optional",
+          "id": "111"
+        },
+        {
+          "index": 112,
           "hint": "kWh",
           "dataType": "decimalrow",
           "defaultValues": "",
           "param": "Daily Energy Used",
           "validation": "optional",
-          "id": "19"
+          "id": "112"
+        },
+        {
+          "index": 113,
+          "hint": "Helpful",
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:pre1993,2:1993to2001,3:2002to2010,4:2010+",
+          "param": "Estimated Age",
+          "validation": "optional",
+          "id": "113"
+        },
+        {
+          "index": 114,
+          "hint": "Rq for condensing unit",
+          "dataType": "decimalrow",
+          "defaultValues": "",
+          "param": "Condensor Compressor Size (HP)",
+          "validation": "optional",
+          "id": "114"
         }
       ],
       "id": "1"
@@ -116,7 +161,7 @@
           "dataType": "decimalrow",
           "defaultValues": "",
           "param": "Off Peak Hours",
-          "validation": "mandatory",
+          "validation": "optional",
           "id": "23"
         }
       ],
@@ -124,62 +169,64 @@
     },
     {
       "index": 3,
-      "section": "Labor Cost",
+      "section": "Other",
       "elements": [
         {
           "index": 31,
           "hint": "",
-          "dataType": "introw",
-          "defaultValues": "",
-          "param": "Zip Code",
-          "validation": "",
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:Yes,2:No",
+          "param": "Energy Star Rating?",
+          "validation": "optional",
           "id": "31"
         },
         {
           "index": 32,
-          "hint": "",
-          "dataType": "textrow",
-          "defaultValues": "",
-          "param": "Profession",
-          "validation": "",
+          "hint": "Rq for LED replacement",
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:Yes,2:No",
+          "param": "LED lighting?",
+          "validation": "optional",
           "id": "32"
+        },
+        {
+          "index": 33,
+          "hint": "Rq for LED replacement",
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:0 to 1,2:700,3:1,4:701 and above",
+          "param": "Light Lumens",
+          "validation": "optional",
+          "id": "33"
+        },
+        {
+          "index": 34,
+          "hint": "",
+          "dataType": "decimalrow",
+          "defaultValues": "",
+          "param": "Temperature Setting",
+          "validation": "optional",
+          "id": "34"
+        },
+        {
+          "index": 35,
+          "hint": "",
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:poor,2:adequate,3:strong",
+          "param": "Quality of Door Seal",
+          "validation": "optional",
+          "id": "35"
+        },
+        {
+          "index": 36,
+          "hint": "",
+          "dataType": "textarearow",
+          "defaultValues": "",
+          "param": "Notes about Space or Equipment",
+          "validation": "optional",
+          "id": "36"
         }
       ],
       "id": "3"
-    },
-    {
-      "index": 4,
-      "section": "Suggested Time",
-      "elements": [
-        {
-          "index": 41,
-          "hint": "",
-          "dataType": "decimalrow",
-          "defaultValues": "",
-          "param": "Suggested Peak Hours",
-          "validation": "optional",
-          "id": "41"
-        },
-        {
-          "index": 42,
-          "hint": "",
-          "dataType": "decimalrow",
-          "defaultValues": "",
-          "param": "Suggested Part Peak Hours",
-          "validation": "optional",
-          "id": "42"
-        },
-        {
-          "index": 43,
-          "hint": "",
-          "dataType": "decimalrow",
-          "defaultValues": "",
-          "param": "Suggested Off Peak Hours",
-          "validation": "optional",
-          "id": "43"
-        }
-      ],
-      "id": "4"
     }
   ]
 }
