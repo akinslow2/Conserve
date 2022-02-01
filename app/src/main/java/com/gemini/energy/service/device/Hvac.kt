@@ -213,8 +213,8 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
             eer = featureData["EER"]!! as Double
             val inputSeer = featureData["SEER"]!! as Double
             seer = if (inputSeer > 0.0) inputSeer else seer
-            val inputAltHspf = featureData["Alternate HSPF"]!! as Double
-            alternateHspf = if (inputAltHspf > 0.0) inputAltHspf else alternateHspf
+//            val inputAltHspf = featureData["Alternate HSPF"]!! as Double
+//            alternateHspf = if (inputAltHspf > 0.0) inputAltHspf else alternateHspf
             year = featureData["Year"]!! as Int
             kbtu = featureData["Cooling Capacity (kBtu/hr)"]!! as Double
             gasInput = featureData["Heating Input (kBtu/hr)"]!! as Int
