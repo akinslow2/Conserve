@@ -72,9 +72,9 @@ abstract class EBase(val computable: Computable<*>,
         //is added to the Element Key
         val fix = "Others"
 
-        if (preAudit.containsKey("$fix Electric Rate Structure") && preAudit.containsKey("$fix Utility Company")) {
+        if (preAudit.containsKey("$fix Electric Rate Structure"))
+        {
             base.electricRateStructure = preAudit["$fix Electric Rate Structure"] as String
-            base.electricCompanyCode = preAudit["$fix Utility Company"] as String
         }
 
         Timber.d("####### RATE STRUCTURE CHECKER #######")
@@ -83,9 +83,9 @@ abstract class EBase(val computable: Computable<*>,
         Timber.d(electricCompanyCode)
 
         //This is where we are initializing the Electricity Rate Class
-        //Now we are only passing the Rate Structure but we also need to pass the Company Code
+        // only need rate structure to build
         base.electricityRate = utilityRateElectricity.initUtility(
-                Electricity(electricRateStructure, electricCompanyCode)).build()
+                Electricity(electricRateStructure)).build()
 
         Timber.d("####### OBJECT CHECKER #######")
         Timber.d(gasRate.toString())
