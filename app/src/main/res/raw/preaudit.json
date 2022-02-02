@@ -88,7 +88,7 @@
           "id": "26",
           "param": "Address Line 2",
           "index": 26,
-          "dataType": "",
+          "dataType": "textrow",
           "defaultValues": "",
           "validation": "",
           "hint": ""
@@ -97,7 +97,7 @@
           "id": "27",
           "param": "City",
           "index": 27,
-          "dataType": "",
+          "dataType": "textrow",
           "defaultValues": "",
           "validation": "",
           "hint": ""
@@ -106,7 +106,7 @@
           "id": "28",
           "param": "State",
           "index": 28,
-          "dataType": "",
+          "dataType": "textrow",
           "defaultValues": "",
           "validation": "",
           "hint": ""
@@ -115,7 +115,7 @@
           "id": "29",
           "param": "Zip Code",
           "index": 29,
-          "dataType": "",
+          "dataType": "textrow",
           "defaultValues": "",
           "validation": "",
           "hint": ""
