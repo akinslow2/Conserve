@@ -83,9 +83,9 @@ abstract class EBase(val computable: Computable<*>,
         Timber.d(electricCompanyCode)
 
         //This is where we are initializing the Electricity Rate Class
-        //Now we are only passing the Rate Structure but we also need to pass the Company Code
+        //Now we are only passing the Rate Structure
         base.electricityRate = utilityRateElectricity.initUtility(
-                Electricity(electricRateStructure, electricCompanyCode)).build()
+                Electricity(electricRateStructure)).build()
 
         Timber.d("####### OBJECT CHECKER #######")
         Timber.d(gasRate.toString())

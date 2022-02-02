@@ -2,8 +2,6 @@ package com.gemini.energy.service.type
 
 import android.content.Context
 import com.gemini.energy.presentation.util.ERateKey
-import timber.log.Timber
-import kotlin.reflect.typeOf
 
 open class UtilityRate(private val context: Context) {
 
@@ -130,7 +128,7 @@ interface IUtility {
     fun getNoneTOU(structure: HashMap<String, List<String>>): TOUNone
 }
 
-class Electricity(private val rateStructure: String, private val companyCode: String) : IUtility {
+class Electricity(private val rateStructure: String) : IUtility {
 
     enum class EKey(val index: Int) { Season(1), Peak(4) }
     enum class EValue(val index: Int) { EnergyCharge(5), Average(6), Demand(3) }
@@ -140,7 +138,7 @@ class Electricity(private val rateStructure: String, private val companyCode: St
             listOf(listOf(columns[EValue.EnergyCharge.index],
             columns[EValue.Average.index], columns[EValue.Demand.index]))
 
-    override fun getResourcePath() = "utility/${companyCode}_electric.csv"
+    override fun getResourcePath() = "utility/rate_electric.csv"
     override fun getSeparator(): Char = ','
     override fun getRate() = rateStructure
     override fun getRowIdentifier() = "^${getRate()}${getSeparator()}.*".toRegex()
