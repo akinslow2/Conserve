@@ -1,7 +1,6 @@
 package com.gemini.energy.wordDocGenerator
 
 import com.gemini.energy.presentation.util.EApplianceType
-import com.gemini.energy.service.DataHolder
 import com.gemini.energy.service.device.EBase
 import com.gemini.energy.service.device.Hvac
 import com.gemini.energy.service.device.Motors
@@ -10,9 +9,6 @@ import com.gemini.energy.service.device.lighting.*
 import com.gemini.energy.service.device.plugload.*
 import com.gemini.energy.service.device.refrigeration.*
 import com.gemini.energy.wordDocGenerator.models.*
-import com.google.gson.JsonElement
-import com.google.gson.JsonNull
-import com.google.gson.JsonObject
 
 class SorterForWordDocumentGenerator {
     // use these values for sorting types of equipment that need to be aggregated for the report
@@ -102,7 +98,7 @@ class SorterForWordDocumentGenerator {
                 && equipment.preAudit.containsKey("Area Total (Sq.Ft.)")
                 && equipment.preAudit.containsKey("General Client Info Facility Type")
                 && equipment.preAudit.containsKey("Others Electric Rate Structure")
-                && equipment.preAudit.containsKey("Others Utility Company")
+                && equipment.preAudit.containsKey("Others Electric Utility Company")
                 && equipment.preAudit.containsKey("Others Gas Rate Structure")) {
             val preAudit = equipment.preAudit
             val address = "${preAudit["General Client Info Address Line 1"]} ${preAudit["General Client Info Address Line 2"]} ${preAudit["General Client Info City"]}, ${preAudit["General Client Info State"]} ${preAudit["General Client Info Zip Code"]}"
@@ -119,7 +115,7 @@ class SorterForWordDocumentGenerator {
                     preAudit["Area Total (Sq.Ft.)"]!! as Double,
                     preAudit["General Client Info Facility Type"]!! as String,
                     preAudit["Others Electric Rate Structure"]!! as String,
-                    preAudit["Others Utility Company"]!! as String,
+                    preAudit["Others Electric Utility Company"]!! as String,
                     preAudit["Others Gas Rate Structure"]!! as String
             )
 
