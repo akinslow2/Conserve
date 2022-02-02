@@ -74,8 +74,8 @@ class ParseAPI {
     }
 
     companion object {
-        private const val applicationId = "47f916f7005d19ddd78a6be6b4bdba3ca49615a0"
-        private const val masterKey = "NLI214vDqkoFTJSTtIE2xLqMme6Evd0kA1BbJ20S"
+        private const val applicationId = "myappID"
+        private const val masterKey = "LxKMehb1c5IM"
         private val loggingInterceptor = HttpLoggingInterceptor()
                 .setLevel(HttpLoggingInterceptor.Level.BODY)
 
@@ -103,7 +103,7 @@ class ParseAPI {
             val retrofit = Retrofit.Builder()
                     .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                     .addConverterFactory(GsonConverterFactory.create())
-                    .baseUrl("http://ec2-18-189-11-148.us-east-2.compute.amazonaws.com:80/parse/")
+                    .baseUrl("https://us-west-oakland.ges.clashsoft.de/parse/")
                     .client(okHttpClient.build())
                     .build()
 
