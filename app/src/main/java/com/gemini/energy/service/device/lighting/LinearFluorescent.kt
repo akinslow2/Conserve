@@ -50,7 +50,6 @@ class LinearFluorescent(computable: Computable<*>, utilityRateGas: UtilityRate, 
     var postUsageHours = 0
 
     var lampsPerFixtures = 0
-    var ballastsPerFixtures = 0
     var numberOfFixtures = 0
 
     var energyAtPreState = 0.0
@@ -84,7 +83,6 @@ class LinearFluorescent(computable: Computable<*>, utilityRateGas: UtilityRate, 
         try {
             actualWatts = featureData["Actual Watts"]!! as Double
             lampsPerFixtures = featureData["Lamps Per Fixture"]!! as Int
-            ballastsPerFixtures = featureData["Ballasts Per Fixture"]!! as Int
             numberOfFixtures = featureData["Number of Fixtures"]!! as Int
 
             val config = lightingConfig(ELightingType.LinearFluorescent)

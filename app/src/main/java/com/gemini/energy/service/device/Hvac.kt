@@ -8,14 +8,10 @@ import com.gemini.energy.service.DataHolder
 import com.gemini.energy.service.IComputable
 import com.gemini.energy.service.OutgoingRows
 import com.gemini.energy.service.type.UsageHours
-import com.gemini.energy.service.type.UsageLighting
 import com.gemini.energy.service.type.UsageSimple
 import com.gemini.energy.service.type.UtilityRate
-import com.google.gson.JsonArray
 import com.google.gson.JsonElement
-import com.google.gson.JsonObject
 import io.reactivex.Observable
-import io.reactivex.Single
 import org.json.JSONObject
 import timber.log.Timber
 import java.text.SimpleDateFormat
@@ -162,7 +158,8 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
     var operationhours = ""
     var bldgarea = 0.0
     var bldgtype = ""
-    var utilitycompany = ""
+    var electricutilitycompany = ""
+    var gasUtilityCompany = ""
     var electricstructure = ""
     var gasstructure = ""
     var occupancy = 0
@@ -205,13 +202,11 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
             endday = preAudit["General Client Info Assessment End Day"]!! as String
             operationhours = preAudit["Operation Hours Monday Operating Hours"]!! as String
             bldgarea = preAudit["Area Total (Sq.Ft.)"]!! as Double
-            utilitycompany = preAudit["Others Utility Company"]!! as String
+            electricutilitycompany = preAudit["Others Electric Utility Company"]!! as String
             electricstructure = preAudit["Others Electric Rate Structure"]!! as String
+            gasUtilityCompany = preAudit["Others Gas Utility Company"]!! as String
             gasstructure = preAudit["Others Gas Rate Structure"]!! as String
             bldgtype = preAudit["General Client Info Facility Type"]!! as String
-            city = preAudit["General Client Info City"]!! as String
-            state = preAudit["General Client Info State"]!! as String
-            occupancy = preAudit["Area Occupancy"]!! as Int
 
             eer = featureData["EER"]!! as Double
 
@@ -243,24 +238,21 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
             val inputHeatEffGas = gasOutput / gasInput
             heatEfficiency = if (inputHeatEffGas > 1.0) heatEfficiency else inputHeatEffGas
 
-            cddThreshold = featureData["AC Temperature Threshold"]!! as Int
-            hddThreshold = featureData["Heat Temperature Threshold"]!! as Int
+            cddThreshold = featureData["AC Temperature Threshold - Open"]!! as Int
+            hddThreshold = featureData["Heat Temperature Threshold - Open"]!! as Int
 
-            val inputCddThreshold = featureData["AC Temperature Threshold"]!! as Int
+            val inputCddThreshold = featureData["AC Temperature Threshold - Open"]!! as Int
             cddThreshold = if (inputCddThreshold > 0) inputCddThreshold else cddThreshold
 
-            val inputHddThreshold = featureData["Heat Temperature Threshold"]!! as Int
+            val inputHddThreshold = featureData["Heat Temperature Threshold - Open"]!! as Int
             hddThreshold = if (inputHddThreshold > 0) inputHddThreshold else hddThreshold
 
-            thermostatChangeForNonBusiness = featureData["How is thermostat changed for non-business?"]!! as String
-            adjustedHeatSetPoint = featureData["Adjusted Heat Set Point"]!! as Int
-            adjustedCoolSetPoint = featureData["Adjusted Cool Set Point"]!! as Int
             cddBusinessHours = featureData["Cooling Degree Days Business Hours"]!! as Int
             hddBusinessHours = featureData["Heating Degree Days Business Hours"]!! as Int
             cddCloseHours = featureData["Cooling Degree Days Closed Hours"]!! as Int
             hddCloseHours = featureData["Heating Degree Days Closed Hours"]!! as Int
 
-            insulation = featureData["Is there Insulation in the building?"]!! as String
+            insulation = featureData["Is there Insulation in the area?"]!! as String
             areaLength = featureData["Length of Served Area"]!! as Double
             areaWidth = featureData["Width of Served Area"]!! as Double
             areaHeight = featureData["Height of Served Area"]!! as Double
@@ -387,7 +379,7 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
      * HVAC - INCENTIVES | MATERIAL COST
      * */
     override fun incentives(): Double {
-        if (utilitycompany == "pge") {
+        if (electricutilitycompany == "pge") {
             val powerChangeToHours =
                     if (usageHoursPre() == 0.0) 0.0
                     else energyPowerChange() / usageHoursPre()

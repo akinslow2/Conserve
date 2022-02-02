@@ -124,12 +124,6 @@ class WaterHeater(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
     private var city = ""
     private var state = ""
 
-    /**
-     * Usage Hours
-     * */
-    private var peakHours = 0.0
-    private var partPeakHours = 0.0
-    private var offPeakHours = 0.0
 
 
     var quantity = 0
@@ -145,21 +139,18 @@ class WaterHeater(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
     override fun setup() {
         try {
             quantity = featureData["Quantity"]!! as Int
-            year = featureData["Year"]!! as Int
+            year = featureData["Year Manufactured"]!! as Int
 
             gasInput = (featureData["Heating Input (Btu/hr)"]!! as Int).toDouble()
             gasOutput = (featureData["Heating Output (Btu/hr)"]!! as Int).toDouble()
             thermaleff = (featureData["Thermal Efficiency"]!! as Int).toDouble()
-            electriceff = featureData["Heating Electirc Efficiency"]!! as Double
+            electriceff = featureData["Efficiency Factor (EF or UEF)"]!! as Double
 
             kW = featureData["Heating Power (kW)"]!! as Double
             fueltype = featureData["Fuel Type"]!! as String
             unittype = featureData["Type of Unit"]!! as String
             capacity = featureData["Capacity (U.S. Gal)"]!! as Double
 
-            peakHours = featureData["Peak Hours"]!! as Double
-            partPeakHours = featureData["Part Peak Hours"]!! as Double
-            offPeakHours = featureData["Off Peak Hours"]!! as Double
         } catch (e: Exception) {
             e.printStackTrace()
         }

@@ -118,9 +118,13 @@ class WICoolerBox(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
     /**
      * Usage Hours
      * */
-    private var peakHours = 0.0
-    private var partPeakHours = 0.0
-    private var offPeakHours = 0.0
+    private var evaporatorPeakHours = 0.0
+    private var evaporatorPartPeakHours = 0.0
+    private var evaporatorOffPeakHours = 0.0
+
+    private var condensorPeakHours = 0.0
+    private var condensorPartPeakHours = 0.0
+    private var condensorOffPeakHours = 0.0
 
 
     var quantity = 0
@@ -137,8 +141,14 @@ class WICoolerBox(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
             year = featureData["Year"]!! as Int
 
             kW = featureData["Heating Power (kW)"]!! as Double
-            peakHours = featureData["Peak Hours"]!! as Double
-            offPeakHours = featureData["Off Peak Hours"]!! as Double
+
+            condensorPeakHours = featureData["Condenser Peak Hours"]!! as Double
+            condensorPartPeakHours = featureData["Condenser Off Peak Hours"]!! as Double
+            condensorOffPeakHours = featureData["Condenser Off Peak Hours"]!! as Double
+
+            evaporatorPeakHours = featureData["Evaporator Peak Hours"]!! as Double
+            evaporatorPartPeakHours = featureData["Evaporator Off Peak Hours"]!! as Double
+            evaporatorOffPeakHours = featureData["Evaporator Off Peak Hours"]!! as Double
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -155,7 +165,7 @@ class WICoolerBox(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
      * */
     override fun costPreState(elements: List<JsonElement?>): Double {
 
-        val usageHours = UsageSimple(peakHours, partPeakHours, offPeakHours)
+        val usageHours = UsageSimple(condensorPeakHours, condensorPartPeakHours, condensorOffPeakHours)
         computable.udf1 = usageHours
         Timber.d(usageHours.toString())
 

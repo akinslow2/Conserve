@@ -3,8 +3,8 @@ package com.gemini.energy.wordDocGenerator.models
 import com.gemini.energy.service.DataHolder
 import com.gemini.energy.service.device.Hvac
 import com.gemini.energy.wordDocGenerator.AuditComponents
-import com.gemini.energy.wordDocGenerator.models.*
 import com.gemini.energy.wordDocGenerator.SorterForWordDocumentGenerator
+import com.google.gson.JsonArray
 
 data class HvacValues(
         val instances: List<HvacInstances>,
@@ -41,7 +41,9 @@ data class HvacValues(
 
             for (hvac in hvacs) {
                 val postState = hvac.buildPostState().blockingGet()
-                val element = postState.getAsJsonArray("results")[0].asJsonObject.get("data")
+                val element = if (postState.getAsJsonArray("results").any())
+                    postState.getAsJsonArray("results")[0].asJsonObject.get("data")
+                else JsonArray()
 
                 costPostState += hvac.costPostState(element, DataHolder())
 

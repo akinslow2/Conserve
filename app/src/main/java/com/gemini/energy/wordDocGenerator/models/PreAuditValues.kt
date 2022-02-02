@@ -44,19 +44,19 @@ data class PreAuditValues(
             val electrificationSavings = calculateCustomerCharge(equipment)
 
             return PreAuditValues(
-                    preAudit["General Client Info Business Name"]!! as String,
-                    preAudit["General Client Info Audit Month"]!! as String,
-                    preAudit["General Client Info Audit Year"]!! as String,
-                    address,
-                    preAudit["General Client Info Assessment Start Day"]!! as String,
-                    preAudit["General Client Info Assessment End Day"]!! as String,
-                    preAudit["Operation Hours Monday Operating Hours"]!! as String,
-                    preAudit["Area Total (Sq.Ft.)"]!! as Double,
-                    preAudit["General Client Info Facility Type"]!! as String,
-                    preAudit["Others Electric Rate Structure"]!! as String,
-                    preAudit["Others Utility Company"]!! as String,
-                    preAudit["Others Gas Rate Structure"]!! as String,
-                    electrificationSavings
+                    businessname = preAudit["General Client Info Business Name"]!! as String,
+                    auditmonth = preAudit["General Client Info Audit Month"]!! as String,
+                    audityear = preAudit["General Client Info Audit Year"]!! as String,
+                    clientaddress = address,
+                    startday = preAudit["General Client Info Assessment Start Day"]!! as String,
+                    endday = preAudit["General Client Info Assessment End Day"]!! as String,
+                    operationhours = preAudit["Operation Hours Monday Operating Hours"]!! as String,
+                    bldgarea = preAudit["Area Total (Sq.Ft.)"]!! as Double,
+                    bldgtype = preAudit["General Client Info Facility Type"]!! as String,
+                    electricstructure = preAudit["Others Electric Rate Structure"]!! as String,
+                    utilitycompany = preAudit["Others Electric Utility Company"]!! as String,
+                    gasstructure = preAudit["Others Gas Rate Structure"]!! as String,
+                    electrificationSavings = electrificationSavings
             )
         }
 
@@ -76,18 +76,14 @@ data class PreAuditValues(
             return preAudit.containsKey("General Client Info Business Name")
                     && preAudit.containsKey("General Client Info Audit Month")
                     && preAudit.containsKey("General Client Info Audit Year")
-                    && preAudit.containsKey("General Client Info Address Line 1")
-                    && preAudit.containsKey("General Client Info Address Line 2")
-                    && preAudit.containsKey("General Client Info City")
-                    && preAudit.containsKey("General Client Info State")
-                    && preAudit.containsKey("General Client Info Zip Code")
+                    && preAudit.containsKey("General Client Info Address")
                     && preAudit.containsKey("General Client Info Assessment Start Day")
                     && preAudit.containsKey("General Client Info Assessment End Day")
                     && preAudit.containsKey("Operation Hours Monday Operating Hours")
                     && preAudit.containsKey("Area Total (Sq.Ft.)")
                     && preAudit.containsKey("General Client Info Facility Type")
                     && preAudit.containsKey("Others Electric Rate Structure")
-                    && preAudit.containsKey("Others Utility Company")
+                    && preAudit.containsKey("Others Electric Utility Company")
                     && preAudit.containsKey("Others Gas Rate Structure")
         }
 
@@ -100,12 +96,7 @@ data class PreAuditValues(
          * @return formatted address
          */
         private fun concatenateAddress(preAudit: Map<String, Any>): String {
-            val addressLine1 = preAudit["General Client Info Address Line 1"]
-            val addressLine2 = preAudit["General Client Info Address Line 2"]
-            val city = preAudit["General Client Info City"]
-            val state = preAudit["General Client Info State"]
-            val zipCode = preAudit["General Client Info Zip Code"]
-            return "$addressLine1 $addressLine2 $city, $state $zipCode"
+            return preAudit["General Client Info Address"].toString()
         }
 
 
