@@ -188,7 +188,6 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
     var heatEfficiency = 0.9
     var hspf = 8.0
     var alternateHspf = 8.0
-    var occupancy = 0
 
     override fun setup() {
         try {
@@ -267,10 +266,9 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
         }
 
         val area = (areaLength * areaWidth) + (2 * (areaLength * areaHeight + areaWidth * areaHeight))
-        val occupancyBtu = 600.0 * occupancy
         val areakBtu = 24.0 * uvalue * hours.toDouble() * area / 1000.0
 
-        return areakBtu + occupancyBtu
+        return areakBtu
     }
 
     fun heatingkbtu(): Double {
@@ -281,10 +279,9 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
         }
 
         val area =  (areaLength * areaWidth) + (2 * (areaLength * areaHeight + areaWidth * areaHeight))
-        val occupancyBtu = 600.0 * occupancy
         val areakBtu = 24.0 * uvalue * hours.toDouble() * area / 1000.0
 
-        return areakBtu + occupancyBtu
+        return areakBtu
     }
 
 
