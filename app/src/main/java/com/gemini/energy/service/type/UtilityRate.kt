@@ -116,7 +116,7 @@ interface IUtility {
     fun getNoneTOU(structure: HashMap<String, List<String>>): TOUNone
 }
 
-class Electricity(private val rateStructure: String, private val companyCode: String) : IUtility {
+class Electricity(private val rateStructure: String) : IUtility {
 
     enum class EKey(val index: Int) { Season(1), Peak(2) }
     enum class EValue(val index: Int) { EnergyCharge(3), ServiceCharge(7), Demand(5) }
@@ -126,7 +126,7 @@ class Electricity(private val rateStructure: String, private val companyCode: St
             listOf(
                     listOf(columns[EValue.EnergyCharge.index], columns[EValue.ServiceCharge.index], columns[EValue.Demand.index]))
 
-    override fun getResourcePath() = "utility/${companyCode}_electric.csv"
+    override fun getResourcePath() = "utility/rate_electric.csv"
     override fun getSeparator(): Char = ','
     override fun getRate() = rateStructure
     override fun getRowIdentifier() = "^${getRate()}${getSeparator()}.*".toRegex()
