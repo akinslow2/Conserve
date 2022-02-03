@@ -2,8 +2,6 @@ package com.gemini.energy.service.type
 
 import android.content.Context
 import com.gemini.energy.presentation.util.ERateKey
-import timber.log.Timber
-import kotlin.reflect.typeOf
 
 open class UtilityRate(private val context: Context) {
 
@@ -133,7 +131,9 @@ class Electricity(private val rateStructure: String, private val companyCode: St
     override fun getRate() = rateStructure
     override fun getRowIdentifier() = "^${getRate()}${getSeparator()}.*".toRegex()
 
-    override fun getTOU(structure: HashMap<String, List<String>>) = TOU(
+    override fun getTOU(structure: HashMap<String, List<String>>) =
+            if (structure.isEmpty())  TOU()
+                else TOU(
             structure[ERateKey.SummerOn.value]!![0].toDouble(),
             structure[ERateKey.SummerPart.value]!![0].toDouble(),
             structure[ERateKey.SummerOff.value]!![0].toDouble(),
