@@ -19,8 +19,9 @@ class Refrigerator(computable: Computable<*>, utilityRateGas: UtilityRate, utili
                    usageHours: UsageHours, outgoingRows: OutgoingRows, private val context: Context) :
         EBase(computable, utilityRateGas, utilityRateElectricity, usageHours, outgoingRows), IComputable {
 
-    /** year equipment was manufactured **/
+    /** year equipment was installed **/
     var year = 0
+    var totalVolume = 0.0
 
     /**
      * Entry Point
@@ -31,7 +32,8 @@ class Refrigerator(computable: Computable<*>, utilityRateGas: UtilityRate, utili
 
     override fun setup() {
         try {
-            year = featureData["Year"]!! as Int
+            year = featureData["Year installed"]!! as Int
+            totalVolume = featureData["Total Volume (cu.ft.)"]!! as Double
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -150,8 +152,8 @@ class Refrigerator(computable: Computable<*>, utilityRateGas: UtilityRate, utili
     override fun queryEfficientFilter() = JSONObject()
             .put("data.style_type", featureData["Product Type"])
             .put("data.total_volume", JSONObject()
-                    .put("\$gte", featureData["Total Volume"] as Double - 2)
-                    .put("\$lte", featureData["Total Volume"] as Double + 2))
+                    .put("\$gte", totalVolume - 2)
+                    .put("\$lte", totalVolume + 2))
             .toString()
 
     /**

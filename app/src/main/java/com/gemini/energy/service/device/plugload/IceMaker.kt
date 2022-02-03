@@ -34,7 +34,7 @@ class IceMaker(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRa
     private var alternateIceHarvestRate = 100.0
     private var alternateEnergyUseRate = 6.9
 
-    /** year equipment was manufactured **/
+    /** year equipment was installed **/
     var year = 0
 
 
@@ -42,7 +42,7 @@ class IceMaker(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRa
         try {
             iceHarvestRate = featureData["Ice Harvest Rate"]!! as Double
             energyUseRate = featureData["Energy Use Rate"]!! as Double
-            year = featureData["Year"]!! as Int
+            year = featureData["Year Installed"]!! as Int
 
             /** alternateIceHarvestRate = featureData["Alternate Ice Harvest Rate"]!! as Double
             alternateEnergyUseRate = featureData["Alternate Energy Use Rate"]!! as Double */

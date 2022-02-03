@@ -125,8 +125,8 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
      * HVAC - British Thermal Unit
      * */
     var kbtu = 0.0
-    private var gasInput = 0
-    private var gasOutput = 0
+    private var gasInput = 0.0
+    private var gasOutput = 0.0
 
 
     /**
@@ -165,13 +165,9 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
 
     var cddThreshold = 67 //assumes five degrees from 72 desired temp
     var hddThreshold = 63 //assumes five degree from 68 desired temp
-    var cdd = 1495 // Using weather station at Suffolk, Suffolk Municipal Airport, VA with 67 degree base temp - lowest of June 2018 to June 2021(degreedays.net)
-    var hdd = 2696 // Using weather station at Suffolk, Suffolk Municipal Airport, VA with 63 degree base temp - lowest of June 2018 to June 2021 (degreedays.net)
     var cddTotal = 0
     var hddTotal = 0
     var thermostatChangeForNonBusiness = ""
-    var adjustedHeatSetPoint = 0
-    var adjustedCoolSetPoint = 0
     var cddBusinessHours = 0
     var hddBusinessHours = 0
     var cddCloseHours = 0
@@ -184,7 +180,6 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
     var areaLength = 0.0
     var heatEfficiency = 0.9
     var hspf = 8.0
-    var occupancy = 0
 
     override fun setup() {
         try {
@@ -198,43 +193,35 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
             endday = preAudit["General Client Info Assessment End Day"]!! as String
             operationhours = preAudit["Operation Hours Monday Operating Hours"]!! as String
             bldgarea = preAudit["Area Total (Sq.Ft.)"]!! as Double
-            utilitycompany = preAudit["Others Utility Company"]!! as String
+            utilitycompany = preAudit["Others Electric Utility Company"]!! as String
             electricstructure = preAudit["Others Electric Rate Structure"]!! as String
             gasstructure = preAudit["Others Gas Rate Structure"]!! as String
             bldgtype = preAudit["General Client Info Facility Type"]!! as String
-            city = preAudit["General Client Info City"]!! as String
-            state = preAudit["General Client Info State"]!! as String
-            occupancy = preAudit["Area Occupancy"]!! as Int
 
             eer = featureData["EER"]!! as Double
             val inputSeer = featureData["SEER"]!! as Double
             seer = if (inputSeer > 0.0) inputSeer else seer
             year = featureData["Year"]!! as Int
             kbtu = featureData["Cooling Capacity (kBtu/hr)"]!! as Double
-            gasInput = featureData["Heating Input (kBtu/hr)"]!! as Int
-            gasOutput = featureData["Heating Output (kBtu/hr)"]!! as Int
+            gasInput = featureData["Heating Input (kBtu/hr)"]!! as Double
+            gasOutput = featureData["Heating Output (kBtu/hr)"]!! as Double
             economizer = featureData["Economizer"]!! as String
             thermotype = featureData["Thermostat Type"]!! as String
             quantity = featureData["Quantity"]!! as Int
 
-            val inputCddThreshold = featureData["AC Temperature Threshold"]!! as Int
+            val inputCddThreshold = featureData["AC Temperature Threshold - Open"]!! as Int
             cddThreshold = if (inputCddThreshold > 0) inputCddThreshold else cddThreshold
 
-            val inputHddThreshold = featureData["Heat Temperature Threshold"]!! as Int
+            val inputHddThreshold = featureData["Heat Temperature Threshold - Open"]!! as Int
             hddThreshold = if (inputHddThreshold > 0) inputHddThreshold else hddThreshold
 
             thermostatChangeForNonBusiness = featureData["How is thermostat changed for non-business?"]!! as String
-            adjustedHeatSetPoint = featureData["Adjusted Heat Set Point"]!! as Int
-            adjustedCoolSetPoint = featureData["Adjusted Cool Set Point"]!! as Int
             cddBusinessHours = featureData["Cooling Degree Days Business Hours"]!! as Int
             hddBusinessHours = featureData["Heating Degree Days Business Hours"]!! as Int
             cddCloseHours = featureData["Cooling Degree Days Closed Hours"]!! as Int
             hddCloseHours = featureData["Heating Degree Days Closed Hours"]!! as Int
 
-            cddTotal = featureData["Cooling Degree Days Total"]!! as Int
-            hddTotal = featureData["Heating Degree Days Total"]!! as Int
-
-            insulation = featureData["Is there Insulation in the building?"]!! as String
+            insulation = featureData["Is there Insulation in the area?"]!! as String
             areaLength = featureData["Length of Served Area"]!! as Double
             areaWidth = featureData["Width of Served Area"]!! as Double
             areaHeight = featureData["Height of Served Area"]!! as Double
@@ -264,10 +251,9 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
         }
 
         val area = (areaLength * areaWidth) + (2 * (areaLength * areaHeight + areaWidth * areaHeight))
-        val occupancyBtu = 600.0 * occupancy
         val areakBtu = 24.0 * uvalue * hours.toDouble() * area / 1000.0
 
-        return areakBtu + occupancyBtu
+        return areakBtu
     }
 
     fun heatingkbtu(): Double {
@@ -278,10 +264,9 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
         }
 
         val area =  (areaLength * areaWidth) + (2 * (areaLength * areaHeight + areaWidth * areaHeight))
-        val occupancyBtu = 600.0 * occupancy
         val areakBtu = 24.0 * uvalue * hours.toDouble() * area / 1000.0
 
-        return areakBtu + occupancyBtu
+        return areakBtu
     }
 
 
