@@ -273,7 +273,7 @@
           "id": "49",
           "param": "Notes",
           "index": 49,
-          "dataType": "",
+          "dataType": "textrow",
           "defaultValues": "",
           "validation": "",
           "hint": ""
