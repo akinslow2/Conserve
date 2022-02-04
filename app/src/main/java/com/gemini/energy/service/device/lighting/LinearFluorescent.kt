@@ -62,14 +62,16 @@ class LinearFluorescent(computable: Computable<*>, utilityRateGas: UtilityRate, 
     private val bulbcost = 4.0
     private val ledbulbcost = 7.0
 
-    private val LEDlifeHours = 40000
-    private var seer = 10
+    private val LEDlifeHours = 40000.0
+    private var seer = 10.0
+
     private var cooling = 3.142
 
     private var timeperfixture = 0.33
     private var electricanHourlyRate = 25
 
     var electricianCost = timeperfixture * numberOfFixtures * electricanHourlyRate
+
 
     private var controls = ""
     private var hasControls = ""
@@ -116,15 +118,32 @@ class LinearFluorescent(computable: Computable<*>, utilityRateGas: UtilityRate, 
             val usageHours = UsageLighting()
             usageHours.peakHours = 4336.0
             return usageHours.yearly()
-        } else {
+        }
+        else {
             val usageHours = UsageLighting()
             usageHours.peakHours = peakHours
             usageHours.partPeakHours = partPeakHours
             usageHours.offPeakHours = offPeakHours
-            if (usageHours.yearly() > 0) {
+            if (usageHours.yearly() > 0){
                 return usageHours.yearly()
             }
             return usageHoursBusiness.yearly()
+        }
+    }
+
+    private fun usageLightingPre(): UsageLighting {
+        if (hasControls == "Yes" && controls == "Daylight Sensor") {
+            val usageHours = UsageLighting()
+            usageHours.peakHours = 4336.0
+            return usageHours
+        }
+        else {
+            val usageHours = UsageLighting()
+            usageHours.peakHours = peakHours
+            usageHours.partPeakHours = partPeakHours
+            usageHours.offPeakHours = offPeakHours
+
+            return usageHours
         }
     }
 
@@ -142,7 +161,6 @@ class LinearFluorescent(computable: Computable<*>, utilityRateGas: UtilityRate, 
      * Cost - Pre State
      * */
     override fun costPreState(element: List<JsonElement?>): Double {
-
         val usageHours = UsageLighting()
         usageHours.peakHours = peakHours
         usageHours.partPeakHours = partPeakHours
@@ -157,7 +175,6 @@ class LinearFluorescent(computable: Computable<*>, utilityRateGas: UtilityRate, 
      * Cost - Post State
      * */
     override fun costPostState(element: JsonElement, dataHolder: DataHolder): Double {
-
         Timber.d("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
         Timber.d("!!! COST POST STATE - Linear Fluorescent !!!")
         Timber.d("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
@@ -167,19 +184,19 @@ class LinearFluorescent(computable: Computable<*>, utilityRateGas: UtilityRate, 
         val totalUnits = lampsPerFixtures * numberOfFixtures
 
         val replacementIndex = if (lifeHours == 0.0) 0.0 else LEDlifeHours / lifeHours
-        val expectedLife = if (usageHoursSpecific.yearly() == 0.0) 0.0 else  LEDlifeHours / usageHoursSpecific.yearly()
+        val expectedLife = if (usageHoursSpecific.yearly() == 0.0) 0.0 else LEDlifeHours / usageHoursSpecific.yearly()
         val maintenanceSavings = if (expectedLife == 0.0) 0.0 else totalUnits * bulbcost * replacementIndex / expectedLife
 
         // Delta is going to be Power Used * Percentage Power Reduced
         // Percentage Power Reduced - we get it from the Base - ELighting
 
         val energySavings = prePower() * percentPowerReduced
-        val coolingSavings = if (seer == 0) 0.0 else energySavings * cooling / seer.toDouble()
+        val coolingSavings = if (seer == 0.0) 0.0 else energySavings * cooling / seer
 
         val energyAtPostState = preEnergy() - energySavings
         val paybackmonth = if (energySavings == 0.0) 0.0 else installCost() / energySavings * 12
         val paybackyear = if (energySavings == 0.0) 0.0 else installCost() / energySavings
-        val totalsavings = totalSavings()
+        val totalsavings =  totalSavings()
 
         val postRow = mutableMapOf<String, String>()
         postRow["__life_hours"] = lifeHours.toString()
@@ -239,7 +256,7 @@ class LinearFluorescent(computable: Computable<*>, utilityRateGas: UtilityRate, 
     }
 
     fun postPower(): Double {
-        return prePower() * (1 - percentPowerReduced)
+        return prePower() * (1.0 - percentPowerReduced)
     }
 
     fun postEnergy(): Double {
@@ -251,12 +268,11 @@ class LinearFluorescent(computable: Computable<*>, utilityRateGas: UtilityRate, 
     }
 
     fun totalEnergySavings(): Double {
-        val coolingOverSeer = if (seer == 0) 0.0 else cooling / seer.toDouble()
         if (controls != null) {
-            val coolingSavings = (preEnergy() - energyPowerChange()) * coolingOverSeer
+            val coolingSavings = if (seer == 0.0) 0.0 else (preEnergy() - energyPowerChange()) * cooling / seer
             return (preEnergy() - energyPowerChange()) + coolingSavings
         } else {
-            val coolingSavings = (preEnergy() - energyPowerTimeChange()) * coolingOverSeer
+            val coolingSavings = if (seer == 0.0) 0.0 else (preEnergy() - energyPowerTimeChange()) * cooling / seer
             return (preEnergy() - energyPowerTimeChange()) + coolingSavings
         }
     }
@@ -265,10 +281,10 @@ class LinearFluorescent(computable: Computable<*>, utilityRateGas: UtilityRate, 
         val lifeHours = lightingConfig(ELightingType.LinearFluorescent)[ELightingIndex.LifeHours.value] as Double
         val totalUnits = lampsPerFixtures * numberOfFixtures
         val replacementIndex = if (lifeHours == 0.0) 0.0 else LEDlifeHours / lifeHours
-        val expectedLife = if (usageHoursSpecific.yearly() == 0.0) 0.0 else  LEDlifeHours / usageHoursSpecific.yearly()
+        val expectedLife = if (usageHoursSpecific.yearly() == 0.0) 0.0 else LEDlifeHours / usageHoursSpecific.yearly()
         val maintenanceSavings = if (expectedLife == 0.0) 0.0 else totalUnits * bulbcost * replacementIndex / expectedLife
         val energySavings = prePower() * percentPowerReduced
-        val coolingSavings = if (seer == 0) 0.0 else energySavings * cooling / seer.toDouble()
+        val coolingSavings = if (seer == 0.0) 0.0 else energySavings * cooling / seer
 
         val usageHours = UsageLighting()
         usageHours.peakHours = peakHours
@@ -335,7 +351,6 @@ class LinearFluorescent(computable: Computable<*>, utilityRateGas: UtilityRate, 
 
         return total
     }
-
 
     /**
      * Energy Efficiency Lookup Query Definition
