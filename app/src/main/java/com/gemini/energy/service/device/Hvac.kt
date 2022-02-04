@@ -10,6 +10,9 @@ import com.gemini.energy.service.OutgoingRows
 import com.gemini.energy.service.type.UsageHours
 import com.gemini.energy.service.type.UsageSimple
 import com.gemini.energy.service.type.UtilityRate
+import com.gemini.energy.toDoubleOr
+import com.gemini.energy.toIntOr
+import com.gemini.energy.toStringOr
 import com.google.gson.JsonArray
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
@@ -80,7 +83,7 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
          * There could be a case where the User will input the value in KW - If that happens we need to convert the KW
          * int kbtu / hr :: 1KW equals 3412.142
          * */
-        fun power(kbtu: Double, seer: Double) = if (seer == 0.0) 0.0 else (kbtu / seer)
+        fun power(kbtu: Double, seer: Double) = if (seer == 0.0) 0.0 else kbtu / seer
 
         /**
          * Year At - Current minus the Age
@@ -100,6 +103,7 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
                 if (valueFirst == 0) valueSecond else valueFirst
     }
 
+
     /**
      * HVAC - Energy Efficiency Ratio
      * If not available - Build a match criteria at queryHVACEer()
@@ -108,7 +112,7 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
      * */
     private var eer = 0.0
     var seer = 9.0
-    private var alternateSeer = 16.0
+    private var alternateSeer = 20.0
     private var alternateEer = 0.0
     private var alternateBtu = 0
 
@@ -116,6 +120,9 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
      * Financial Calc Variables
      * */
     private var presentvaluefactor = 12.462
+
+    //kBtu to Therms conversion
+    private var thermconv =100
 
     /** year equipment was manufactured **/
     var year = 0
@@ -125,9 +132,10 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
      * HVAC - British Thermal Unit
      * */
     var kbtu = 0.0
-    private var gasInput = 0.0
-    private var gasOutput = 0.0
-    private var tons = 0.0
+
+    var tons = 0.0
+    private var gasInput = 1.0
+    private var gasOutput = 2.0
 
 
     /**
@@ -157,27 +165,28 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
     var operationhours = ""
     var bldgarea = 0.0
     var bldgtype = ""
-    var electricUtilityCompany = ""
+    var electricutilitycompany = ""
     var gasUtilityCompany = ""
     var electricstructure = ""
     var gasstructure = ""
-    var bms = ""
+    var occupancy = 0
+
+    var hvacType = ""
     var economizer = ""
     var thermotype = ""
     var uvalue = 0.15 //for details see document "U Value Calculations" in the Building Calculations Folder
 
-    var cddThreshold = 67 //assumes five degrees from 72 desired temp - **not used at this time
-    var hddThreshold = 63 //assumes five degree from 68 desired temp - **not used at this time
-    var cddTotal = 0
-    var hddTotal = 0
+    var cddThreshold = 67 //assumes five degrees from 72 desired temp - assumed values as a backstop are not useful until it is automated
+    var hddThreshold = 63 //assumes five degree from 68 desired temp -  assumed values as a backstop are not useful until it is automated
     var thermostatChangeForNonBusiness = ""
     var adjustedHeatSetPoint = 0
     var adjustedCoolSetPoint = 0
-    // defaults based off of Tucson weather M-F 9am-5pm - Business_Hours_Degree_Days_Calculator
-    var cddBusinessHours = 1446
-    var hddBusinessHours = 68
-    var cddCloseHours = 2459
-    var hddCloseHours = 952
+    var cddBusinessHours = 0
+    var hddBusinessHours = 0
+    var cddCloseHours = 0
+    var hddCloseHours = 0
+    var cddTotal = cddBusinessHours + cddCloseHours
+    var hddTotal = hddBusinessHours + hddCloseHours
 
     var typeOfUnit = ""
     var quantity = 0
@@ -185,14 +194,16 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
     var areaHeight = 0.0
     var areaWidth = 0.0
     var areaLength = 0.0
+
     var heatEfficiency = 0.9
-    var hspf = 8.0
+    var heatElecEfficiency = 5.0
+    var hspf = 10.0
     var alternateHspf = 8.0
-    var occupancy = 0
+    var namePlate = ""
+
 
     override fun setup() {
         try {
-
             clientname = preAudit["General Client Info Name"]!! as String
             businessname = preAudit["General Client Info Business Name"]!! as String
             auditmonth = preAudit["General Client Info Audit Month"]!! as String
@@ -202,40 +213,61 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
             endday = preAudit["General Client Info Assessment End Day"]!! as String
             operationhours = preAudit["Operation Hours Monday Operating Hours"]!! as String
             bldgarea = preAudit["Area Total (Sq.Ft.)"]!! as Double
-            electricUtilityCompany = preAudit["Others Electric Utility Company"]!! as String
-            gasUtilityCompany = preAudit["Others Gas Utility Company"]!! as String
+            electricutilitycompany = preAudit["Others Electric Utility Company"]!! as String
             electricstructure = preAudit["Others Electric Rate Structure"]!! as String
+            gasUtilityCompany = preAudit["Others Gas Utility Company"]!! as String
             gasstructure = preAudit["Others Gas Rate Structure"]!! as String
             bldgtype = preAudit["General Client Info Facility Type"]!! as String
-            bms = preAudit["General Site Access and Notes Is there a Building Management System (BMS) in use for energy management?"]!! as String
 
             typeOfUnit = featureData["Type of Package Unit"]!! as String
             eer = featureData["EER"]!! as Double
+
             val inputSeer = featureData["SEER"]!! as Double
             seer = if (inputSeer > 0.0) inputSeer else seer
+
+            val altSeer = featureData["Alternate SEER"]!! as Double
+            alternateSeer = if (altSeer > 0.0) altSeer else alternateSeer
+            val inputHeatEffElec = featureData["Heating Electric Efficiency"]!! as Double
+            heatElecEfficiency = if (inputHeatEffElec > 0.0) inputHeatEffElec else heatElecEfficiency
+
             val inputAltHspf = featureData["Alternate HSPF"]!! as Double
             alternateHspf = if (inputAltHspf > 0.0) inputAltHspf else alternateHspf
+
             year = featureData["Year"]!! as Int
+
+            hvacType = featureData["Type of Package Unit"]!! as String
+            namePlate = featureData["Nameplate Readable?"]!! as String
             kbtu = featureData["Cooling Capacity (kBtu/hr)"]!! as Double
+
             gasInput = featureData["Heating Input (kBtu/hr)"]!! as Double
             gasOutput = featureData["Heating Output (kBtu/hr)"]!! as Double
             tons = featureData["Cooling Capacity (tons)"]!! as Double
+
             economizer = featureData["Economizer"]!! as String
             thermotype = featureData["Thermostat Type"]!! as String
             quantity = featureData["Quantity"]!! as Int
 
-            val inputCddThreshold = featureData["AC Temperature Threshold - Open"]!! as Int
-            cddThreshold = if (inputCddThreshold > 0) inputCddThreshold else cddThreshold
+            val gasConserveInput = featureData["Heating Input (kBtu/hr)"]!! as Double
+            gasInput = if (gasConserveInput > 0.0) gasConserveInput else gasInput
+            val gasConserveOutput = featureData["Heating Output (kBtu/hr)"]!! as Double
+            gasOutput = if(gasConserveOutput > 0.0) gasConserveOutput else gasOutput
 
-            val inputHddThreshold = featureData["Heat Temperature Threshold - Open"]!! as Int
-            hddThreshold = if (inputHddThreshold > 0) inputHddThreshold else hddThreshold
+            val inputHeatEffGas = gasOutput / gasInput
+            heatEfficiency = if (inputHeatEffGas > 1.0) heatEfficiency else inputHeatEffGas
 
-            thermostatChangeForNonBusiness = featureData["How is thermostat changed for non-business?"]!! as String
+            //cddThreshold = featureData["AC Temperature Threshold - Open"]!! as Int
+            //hddThreshold = featureData["Heat Temperature Threshold - Open"]!! as Int
+
+            //val inputCddThreshold = featureData["AC Temperature Threshold - Open"]!! as Int
+            //cddThreshold = if (inputCddThreshold > 0) inputCddThreshold else cddThreshold
+
+            //val inputHddThreshold = featureData["Heat Temperature Threshold - Open"]!! as Int
+            //hddThreshold = if (inputHddThreshold > 0) inputHddThreshold else hddThreshold
+
             cddBusinessHours = featureData["Cooling Degree Days Business Hours"]!! as Int
             hddBusinessHours = featureData["Heating Degree Days Business Hours"]!! as Int
             cddCloseHours = featureData["Cooling Degree Days Closed Hours"]!! as Int
             hddCloseHours = featureData["Heating Degree Days Closed Hours"]!! as Int
-
 
             insulation = featureData["Is there Insulation in the area?"]!! as String
             areaLength = featureData["Length of Served Area"]!! as Double
@@ -245,7 +277,6 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
             peakHours = featureData["Peak Hours"]!! as Double
             partPeakHours = featureData["Part Peak Hours"]!! as Double
             offPeakHours = featureData["Off Peak Hours"]!! as Double
-
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -257,40 +288,43 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
     }
 
     /**
-     * * Calculations for annual demand, power, and energy for pre and post in the area that the HVAC system serves
+     ** Calculations for annual demand, power, and energy for pre and post in the area that the HVAC system serves
+     * Providing the internal heat gain and therefore cdd and hdd for business and non-business hours means that it account for the adjust thermostat
+     * Thus unless unit is turned off during non-business hours business and non-business cdd/hdd will be combined.
+     * The cdd/hdd takes into account lighting, people, and equipment. Adjusting of any of these impacts the demand.
      * */
     fun coolingkbtu(): Double {
         val hours = when (thermostatChangeForNonBusiness) {
-            "No Change" -> cddTotal
             "Turned Off" -> cddBusinessHours
-            else -> cddBusinessHours + cddCloseHours
+            else -> cddTotal
         }
 
         val area = (areaLength * areaWidth) + (2 * (areaLength * areaHeight + areaWidth * areaHeight))
-        val occupancyBtu = 600.0 * occupancy
         val areakBtu = 24.0 * uvalue * hours.toDouble() * area / 1000.0
 
-        return areakBtu + occupancyBtu
+        return areakBtu
     }
 
     fun heatingkbtu(): Double {
         val hours = when (thermostatChangeForNonBusiness) {
-            "No Change" -> hddTotal
             "Turned Off" -> hddBusinessHours
-            else -> hddBusinessHours + hddCloseHours
+            else -> hddTotal
         }
 
         val area =  (areaLength * areaWidth) + (2 * (areaLength * areaHeight + areaWidth * areaHeight))
-        val occupancyBtu = 600.0 * occupancy
         val areakBtu = 24.0 * uvalue * hours.toDouble() * area / 1000.0
 
-        return areakBtu + occupancyBtu
+        return areakBtu
     }
 
+    fun energyPreGas(): Double {
+            val heat = if (hvacType == "package unit") heatingkbtu() / heatEfficiency / thermconv else 0.0
+            return heat
+    }
 
     fun energyPre(): Double {
-        val heat = if (heatEfficiency == 0.0) 0.0 else heatingkbtu() / heatEfficiency
-        val cool = if (seer == 0.0) 0.0 else coolingkbtu() / seer
+        val heat = if (hvacType == "package unit") 0.0 else heatingkbtu() / heatElecEfficiency
+        val cool = coolingkbtu() / seer
         return heat + cool
     }
 
@@ -299,10 +333,11 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
     fun energyPost(): Double {
         val heat = if (alternateHspf == 0.0) 0.0 else heatingkbtu() / alternateHspf
         val cool = if (alternateSeer == 0.0) 0.0 else coolingkbtu() / alternateSeer
+
         return heat + cool
     }
 
-    var postSize = kbtu
+    var postSize = if (kbtu == 0.0) tons else kbtu //This is where we would adjust for right-sizing
     var postSEER = alternateSeer
     val postPowerUsed = power(postSize, postSEER)
 
@@ -315,41 +350,12 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
      * Cost - Pre State
      * */
     override fun costPreState(elements: List<JsonElement?>): Double {
-
         Timber.d("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
         Timber.d("!!! COST PRE STATE - HVAC !!!")
         Timber.d("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
-/*
-        Extracting the EER from the Database - Standard EER
-        If no value has been inputted by the user
-       if (eer == 0.0) {
-        eer = extractEER(elements)
-       }
 
-        Timber.d("::: PARAM - HVAC :::")
-        Timber.d("EER -- $eer")
-        Timber.d("AGE -- $age")
-        Timber.d("kbtu -- $kbtu")
-        Timber.d("YEAR -- ${getYear(age)}")
-
-        Timber.d("::: DATA EXTRACTOR - HVAC :::")
-        Timber.d(elements.toString())
-
-        val usageHours = UsageSimple(peakHours, partPeakHours, offPeakHours)
-        computable.udf1 = usageHours
-        Timber.d(usageHours.toString())
-
-        val powerUsedCurrent = power(kbtu, seer)
-        val powerUsedStandard = power(kbtu, eer)
-
-        val powerUsed = if (seer == null) powerUsedStandard else powerUsedCurrent
-        Timber.d("HVAC :: Power Used (Current) -- [$powerUsedCurrent]")
-        Timber.d("HVAC :: Power Used (Standard) -- [$powerUsedStandard]")
-
-        Timber.d("HVAC :: Pre Power Used -- [$powerUsed]")
-  */
         if (offPeakHours > 0.0) return costElectricity(prePowerUsed, preUsageHours, electricityRate)
-        return costElectricity(energyPre(), electricityRate) + costElectricityFromPowerAndDemand(prePowerUsed, electricityRate)
+        return costElectricity(energyPre(), electricityRate) + costElectricityFromPowerAndDemand(prePowerUsed, electricityRate) + costGas(energyPreGas())
     }
 
 
@@ -357,28 +363,18 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
      * Cost - Post State
      * */
     override fun costPostState(element: JsonElement, dataHolder: DataHolder): Double {
-
         Timber.d("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
         Timber.d("!!! COST POST STATE - HVAC !!!")
         Timber.d("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
 
-
-        // try {
-        //     postSize = element.asJsonObject.get(HVAC_DB_BTU).asInt
-        //    postEER = element.asJsonObject.get(HVAC_DB_EER).asDouble
-        //} catch (e: Exception) {
-        //    e.printStackTrace()
-        //}
-
-
         if (offPeakHours > 0.0) return costElectricity(postPowerUsed, postUsageHours, electricityRate) + costElectricityFromPowerAndDemand(postPowerUsed, electricityRate)
-
         return costElectricity(energyPost(), electricityRate) + costElectricityFromPowerAndDemand(postPowerUsed, electricityRate)
     }
 
+// This is not needed @K2
     /**
      * Manually Builds the Post State Response from the Suggested Alternative
-     * */
+
     override fun buildPostState(): Single<JsonObject> {
         val element = JsonObject()
         val data = JsonObject()
@@ -396,39 +392,20 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
 
         return Single.just(wrapper)
     }
-
+    * */
     /**
      * HVAC - INCENTIVES | MATERIAL COST
      * */
     override fun incentives(): Double {
-        var total = 0.0
-
-        // replace 2-5 ton heat pump
-        if (typeOfUnit == "heat pump" && tons in 2..5) {
-            when {
-                alternateSeer >= 18 -> total += 395.0 * quantity
-                alternateSeer >= 17 -> total += 295.0 * quantity
-                alternateSeer >= 16 -> total += 195.0 * quantity
-                alternateSeer >= 15 -> total += 95.0 * quantity
-            }
-        }
-
-        // replace non-programmable thermostat
-        if (thermotype == "Analog") {
-            total += 130.0 * quantity
-        }
-
-        // building energy management system
-        if (bms == "yes") {
-            total += 0.8 * bldgarea
-        }
-
-        return total
+        if (electricutilitycompany == "pge") {
+            val powerChangeToHours =
+                    if (usageHoursPre() == 0.0) 0.0
+                    else energyPowerChange() / usageHoursPre()
+            return energyPowerChange() * 0.15 + (powerChangeToHours) * 150
+        } else return 0.0
     }
 
-    //@K2 does kbtu have to be a double to be in the equation below? Right now it is an INT
-//    @anthony it will need to be a double
-    // anytime you are returning a double, all values in the equation must be doubles
+
     override fun materialCost(): Double {
         return 4000.0 * (kbtu / 12000.0)
     }
@@ -459,11 +436,7 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
         return peakHours + partPeakHours + offPeakHours
     }
 
-    override fun usageHoursPost(): Double {
-        // TODO: check if hours should change
-        return usageHoursPre()
-    }
-
+    override fun usageHoursPost(): Double = 0.0
 
     /**
      * PowerTimeChange >> Energy Efficiency Calculations
@@ -473,25 +446,24 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
     override fun energyPowerChange(): Double {
 
         // Step 3 : Get the Delta
+        /**
         val powerPre = if (seer == 0.0) 0.0 else kbtu / seer
         val powerPost = if (alternateSeer == 0.0) 0.0 else kbtu / alternateSeer
         val pSavings = (powerPre - powerPost)
 
-        val delta = pSavings * usageHoursPre()
+        val delta = pSavings * usageHoursPre() **/
 
         val eSavings = (energyPre() - energyPost())
 
-        Timber.d("HVAC :: Delta -- $delta")
+        //Timber.d("HVAC :: Delta -- $delta")
         Timber.d("HVAC :: Delta -- $eSavings")
 
         return eSavings
     }
 
     fun totalSavings(): Double {
-
         return costElectricity(energyPowerChange(), electricityRate) + costElectricityFromPowerAndDemand(powerDelta, electricityRate)
     }
-
 
     override fun energyTimeChange(): Double = 0.0
     override fun energyPowerTimeChange(): Double = 0.0
