@@ -249,14 +249,14 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
             val inputHeatEffGas = gasOutput / gasInput
             heatEfficiency = if (inputHeatEffGas > 1.0) heatEfficiency else inputHeatEffGas
 
-            cddThreshold = featureData["AC Temperature Threshold - Open"]!! as Int
-            hddThreshold = featureData["Heat Temperature Threshold - Open"]!! as Int
+            //cddThreshold = featureData["AC Temperature Threshold - Open"]!! as Int
+            //hddThreshold = featureData["Heat Temperature Threshold - Open"]!! as Int
 
-            val inputCddThreshold = featureData["AC Temperature Threshold - Open"]!! as Int
-            cddThreshold = if (inputCddThreshold > 0) inputCddThreshold else cddThreshold
+            //val inputCddThreshold = featureData["AC Temperature Threshold - Open"]!! as Int
+            //cddThreshold = if (inputCddThreshold > 0) inputCddThreshold else cddThreshold
 
-            val inputHddThreshold = featureData["Heat Temperature Threshold - Open"]!! as Int
-            hddThreshold = if (inputHddThreshold > 0) inputHddThreshold else hddThreshold
+            //val inputHddThreshold = featureData["Heat Temperature Threshold - Open"]!! as Int
+            //hddThreshold = if (inputHddThreshold > 0) inputHddThreshold else hddThreshold
 
             cddBusinessHours = featureData["Cooling Degree Days Business Hours"]!! as Int
             hddBusinessHours = featureData["Heating Degree Days Business Hours"]!! as Int
