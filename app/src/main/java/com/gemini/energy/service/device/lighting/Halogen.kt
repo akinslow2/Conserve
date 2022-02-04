@@ -12,6 +12,9 @@ import com.gemini.energy.service.device.EBase
 import com.gemini.energy.service.type.UsageHours
 import com.gemini.energy.service.type.UsageLighting
 import com.gemini.energy.service.type.UtilityRate
+import com.gemini.energy.toDoubleOr
+import com.gemini.energy.toIntOr
+import com.gemini.energy.toStringOr
 import com.google.gson.JsonElement
 import io.reactivex.Observable
 import timber.log.Timber

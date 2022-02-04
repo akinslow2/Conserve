@@ -11,6 +11,9 @@ import com.gemini.energy.service.device.EBase
 import com.gemini.energy.service.type.UsageHours
 import com.gemini.energy.service.type.UsageSimple
 import com.gemini.energy.service.type.UtilityRate
+import com.gemini.energy.toDoubleOr
+import com.gemini.energy.toIntOr
+import com.gemini.energy.toStringOr
 import com.google.gson.JsonArray
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
