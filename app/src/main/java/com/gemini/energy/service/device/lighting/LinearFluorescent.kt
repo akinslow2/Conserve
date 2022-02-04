@@ -287,7 +287,7 @@ class LinearFluorescent(computable: Computable<*>, utilityRateGas: UtilityRate, 
         val expectedLife = if (usageHoursSpecific.yearly() == 0.0) 0.0 else LEDlifeHours / usageHoursSpecific.yearly()
         val maintenanceSavings = if (expectedLife == 0.0) 0.0 else totalUnits * bulbcost * replacementIndex / expectedLife
         val energySavings = prePower() * percentPowerReduced
-        val coolingSavings = if (seer == 0.0) 0.0 else energySavings * cooling / seer
+        val coolingSavings = if (seer == 0) 0.0 else energySavings * cooling / seer
 
         val usageHours = UsageLighting()
         usageHours.peakHours = peakHours

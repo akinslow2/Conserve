@@ -30,6 +30,7 @@ class Incandescent(computable: Computable<*>, utilityRateGas: UtilityRate, utili
     override fun compute(): Observable<Computable<*>> {
         return super.compute(extra = ({ Timber.d(it) }))
     }
+
     //create variable here if you want to make it global to the class with private
     private var percentPowerReduced = 0.0
     private var actualWatts = 0.0
@@ -50,10 +51,10 @@ class Incandescent(computable: Computable<*>, utilityRateGas: UtilityRate, utili
 
     private val ledbulbcost = 7.5
 
-    private var seer = 10.0
+    private var seer = 10
     private var cooling = 3.142
 
-    private val LEDlifeHours = 40000.0
+    private val LEDlifeHours = 40000
 
     private var timeperfixture = 0.33
     private var electricanHourlyRate = 25
@@ -71,23 +72,23 @@ class Incandescent(computable: Computable<*>, utilityRateGas: UtilityRate, utili
     //Where you extract from user inputs and assign to variables
     override fun setup() {
         try {
-            actualWatts = featureData["Actual Watts"]!! as Double
-            lampsPerFixtures = featureData["Lamps Per Fixture"]!! as Int
-            numberOfFixtures = featureData["Number of Fixtures"]!! as Int
+            actualWatts = featureData["Actual Watts"].toDoubleOr(0.0)
+            lampsPerFixtures = featureData["Lamps Per Fixture"].toIntOr(0)
+            numberOfFixtures = featureData["Number of Fixtures"].toIntOr(0)
 
-            val config = lightingConfig(ELightingType.Incandescent)
+            val config = lightingConfig(ELightingType.CFL)
             percentPowerReduced = config[ELightingIndex.PercentPowerReduced.value] as Double
 
-            ceilingType = featureData["Ceiling Type"]!! as String
-            replacementType = featureData["Replacement Type"]!! as String
-            isCeilingOver10Feet = featureData["Ceiling greater than 10 feet?"]!! as String
+            ceilingType = featureData["Ceiling Type"].toStringOr("")
+            replacementType = featureData["Replacement Type"].toStringOr("")
+            isCeilingOver10Feet = featureData["Ceiling greater than 10 feet?"].toStringOr("")
 
-            controls = featureData["Type of Control"]!! as String
-            hasControls = featureData["Controls"]!! as String
+            peakHours = featureData["Peak Hours"].toDoubleOr(0.0)
+            partPeakHours = featureData["Part Peak Hours"].toDoubleOr(0.0)
+            offPeakHours = featureData["Off Peak Hours"].toDoubleOr(0.0)
 
-            peakHours = featureData["Peak Hours"]!! as Double
-            partPeakHours = featureData["Part Peak Hours"]!! as Double
-            offPeakHours = featureData["Off Peak Hours"]!! as Double
+            controls = featureData["Type of Control"].toStringOr("")
+            hasControls = featureData["Controls"].toStringOr("")
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -102,13 +103,12 @@ class Incandescent(computable: Computable<*>, utilityRateGas: UtilityRate, utili
             val usageHours = UsageLighting()
             usageHours.peakHours = 4336.0
             return usageHours.yearly()
-        }
-        else {
+        } else {
             val usageHours = UsageLighting()
             usageHours.peakHours = peakHours
             usageHours.partPeakHours = partPeakHours
             usageHours.offPeakHours = offPeakHours
-            if (usageHours.yearly() > 0){
+            if (usageHours.yearly() > 0) {
                 return usageHours.yearly()
             }
             return usageHoursBusiness.yearly()
@@ -120,8 +120,7 @@ class Incandescent(computable: Computable<*>, utilityRateGas: UtilityRate, utili
             val usageHours = UsageLighting()
             usageHours.peakHours = 4336.0
             return usageHours
-        }
-        else {
+        } else {
             val usageHours = UsageLighting()
             usageHours.peakHours = peakHours
             usageHours.partPeakHours = partPeakHours
@@ -159,6 +158,7 @@ class Incandescent(computable: Computable<*>, utilityRateGas: UtilityRate, utili
      * Cost - Post State
      * */
     override fun costPostState(element: JsonElement, dataHolder: DataHolder): Double {
+
         Timber.d("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
         Timber.d("!!! COST POST STATE - Incandescent !!!")
         Timber.d("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
@@ -175,7 +175,7 @@ class Incandescent(computable: Computable<*>, utilityRateGas: UtilityRate, utili
         // Percentage Power Reduced - we get it from the Base - ELighting
 
         val energySavings = prePower() * percentPowerReduced
-        val coolingSavings = if (seer == 0.0) 0.0 else energySavings * cooling / seer
+        val coolingSavings = if (seer == 0) 0.0 else energySavings * cooling / seer.toDouble()
 
         val energyAtPostState = preEnergy() - energySavings
         val paybackmonth = if (energySavings == 0.0) 0.0 else installCost() / energySavings * 12
@@ -188,6 +188,7 @@ class Incandescent(computable: Computable<*>, utilityRateGas: UtilityRate, utili
         postRow["__cooling_savings"] = coolingSavings.toString()
         postRow["__energy_savings"] = energySavings.toString()
         postRow["__energy_at_post_state"] = energyAtPostState.toString()
+        postRow["__selfinstall_cost"] = installCost().toString()
         postRow["__payback_month"] = paybackmonth.toString()
         postRow["__payback_year"] = paybackyear.toString()
         postRow["__total_savings"] = totalsavings.toString()
@@ -232,7 +233,7 @@ class Incandescent(computable: Computable<*>, utilityRateGas: UtilityRate, utili
     }
 
     override fun energyTimeChange(): Double {
-        return  actualWatts * numberOfFixtures * lampsPerFixtures / 1000.0 * usageHoursPost()
+        return actualWatts * numberOfFixtures * lampsPerFixtures / 1000.0 * usageHoursPost()
     }
 
     override fun energyPowerTimeChange(): Double {
@@ -251,15 +252,18 @@ class Incandescent(computable: Computable<*>, utilityRateGas: UtilityRate, utili
     }
 
     fun totalEnergySavings(): Double {
+        val coolingOverSeer = if (seer == 0) 0.0 else cooling / seer.toDouble()
+
         if (controls != null) {
-            val coolingSavings = if (seer == 0.0) 0.0 else (preEnergy() - energyPowerChange()) * cooling / seer
+            val coolingSavings = (preEnergy() - energyPowerChange()) * coolingOverSeer
             return (preEnergy() - energyPowerChange()) + coolingSavings
         } else {
-            val coolingSavings = if (seer == 0.0) 0.0 else (preEnergy() - energyPowerTimeChange()) * cooling / seer
+            val coolingSavings = (preEnergy() - energyPowerTimeChange()) * coolingOverSeer
             return (preEnergy() - energyPowerTimeChange()) + coolingSavings
         }
     }
 
+    //differs in Cfl.kt - need to verify relevance for Tucson changes
     fun totalSavings(): Double {
         val lifeHours = lightingConfig(ELightingType.Incandescent)[ELightingIndex.LifeHours.value] as Double
 
@@ -270,7 +274,7 @@ class Incandescent(computable: Computable<*>, utilityRateGas: UtilityRate, utili
         val maintenanceSavings = if (expectedLife == 0.0) 0.0 else totalUnits * bulbcost * replacementIndex / expectedLife
 
         val energySavings = prePower() * percentPowerReduced
-        val coolingSavings = if (seer == 0.0) 0.0 else energySavings * cooling / seer
+        val coolingSavings = if (seer == 0) 0.0 else energySavings * cooling / seer
 
         val usageHours = UsageLighting()
         usageHours.peakHours = peakHours
