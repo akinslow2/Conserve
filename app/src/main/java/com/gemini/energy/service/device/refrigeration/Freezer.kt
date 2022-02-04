@@ -33,8 +33,13 @@ class Freezer(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRat
 
     override fun setup() {
         try {
-            year = featureData["Year Installed"]!! as Int
-            volume = featureData["Total Volume (cu.ft.)"] as Double
+            year = featureData["Year installed"]!! as Int
+            doorType = featureData["Door Type"]!! as String
+            equipmentType = featureData["Equipment Type"]!! as String
+            styleType = featureData["Style Type"]!! as String
+            totalVolume = featureData["Total Volume (cu.ft.)"]!! as Double
+            numberOfDoors = featureData["Number of Doors"]!! as Int
+            compressorTons = featureData["Condensor Compressor Size (HP)"]!! as Double
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -51,15 +56,47 @@ class Freezer(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRat
     }
 
     override fun incentives(): Double {
-        return 0.0
+        var total = 0.0
+        //CA Energy Wise Foodservice Instant Rebates for ENERGY STAR: https://www.caenergywise.com/instant-rebates/
+
+        // door type
+        if (equipmentType == "Ultra-low Temperature Freezer"){
+            total += 1200.0
+        } else if (doorType == "Glass" || "Glass Chest") {
+            if (totalVolume >= 70.0){
+                total += 300.0
+            } else if (totalVolume >= 30.0) {
+                total += 100.0
+            } else if {totalVolume >= 15.0) {
+                total += 70.0
+            } else {
+                total += 30.0
+            }
+        } else if (doorType == "Solid" || "Solid Chest") {
+            if (totalVolume >= 50.0) {
+                total += 350.0
+            } else if (totalVolume >= 15.0) {
+                total += 100.0
+            } else {
+                total += 70.0
+            }
+        }
+
+        return total
     }
 
     override fun materialCost(): Double {
-        return 2500.0
+        if (equipmentType == "Ultra-low Temperature Freezer") {
+            return 15000.0
+        } else if (totalVolume >= 50.0) {
+            return 8000.0
+        } else {
+            return 4000.0
+        }
     }
 
     override fun laborCost(): Double {
-        return 0.0
+        return 1500.0
     }
 
      /**

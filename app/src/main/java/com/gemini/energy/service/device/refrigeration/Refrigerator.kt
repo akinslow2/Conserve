@@ -55,15 +55,39 @@ class Refrigerator(computable: Computable<*>, utilityRateGas: UtilityRate, utili
     }
 
     override fun incentives(): Double {
-        return 0.0
+        var total = 0.0
+        //CA Energy Wise Foodservice Instant Rebates for ENERGY STAR: https://www.caenergywise.com/instant-rebates/
+
+        // door type
+        if (doorType == "Glass" || "Glass Chest") {
+            if (totalVolume >= 30.0) {
+                total += 100.0
+            } else {
+                total += 70.0
+            }
+        } else if (doorType == "Solid" || "Solid Chest") {
+            if (totalVolume >= 50.0) {
+                total += 100.0
+            } else {
+                total += 70.0
+            }
+        }
+
+        return total
     }
 
     override fun materialCost(): Double {
-        return 2500.0
+        if (totalVolue >= 50.0) {
+            return 7500.0
+        } else if (totalVolume >= 30.0) {
+            return 5000.0
+        } else {
+            return 2500.0
+        }
     }
 
     override fun laborCost(): Double {
-        return 0.0
+        return 1500.0
     }
 
     /**
