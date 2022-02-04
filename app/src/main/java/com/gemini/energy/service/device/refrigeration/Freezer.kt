@@ -66,7 +66,7 @@ class Freezer(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRat
         // door type
         if (equipmentType == "Ultra-low Temperature Freezer"){
             total += 1200.0
-        } else if (doorType == "Glass" || "Glass Chest") {
+        } else if (doorType == "Glass" || doorType == "Glass Chest") {
             if (totalVolume >= 70.0){
                 total += 300.0
             } else if (totalVolume >= 30.0) {
@@ -76,7 +76,7 @@ class Freezer(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRat
             } else {
                 total += 30.0
             }
-        } else if (doorType == "Solid" || "Solid Chest") {
+        } else if (doorType == "Solid" || doorType == "Solid Chest") {
             if (totalVolume >= 50.0) {
                 total += 350.0
             } else if (totalVolume >= 15.0) {
