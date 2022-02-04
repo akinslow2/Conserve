@@ -144,18 +144,18 @@ class WaterHeater(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
 
     override fun setup() {
         try {
-            quantity = featureData["Quantity"]!! as Int
-            year = featureData["Year Manufactured"]!! as Int
+            quantity = featureData["Quantity"].toIntOr(0)
+            year = featureData["Year Manufactured"].toIntOr(0)
 
-            gasInput = (featureData["Heating Input (Btu/hr)"]!! as Int).toDouble()
-            gasOutput = (featureData["Heating Output (Btu/hr)"]!! as Int).toDouble()
-            thermaleff = (featureData["Thermal Efficiency"]!! as Int).toDouble()
-            electriceff = featureData["Efficiency Factor (EF or UEF)"]!! as Double
+            gasInput = (featureData["Heating Input (Btu/hr)"].toIntOr(0)).toDouble()
+            gasOutput = (featureData["Heating Output (Btu/hr)"].toIntOr(0)).toDouble()
+            thermaleff = (featureData["Thermal Efficiency"].toIntOr(0)).toDouble()
+            electriceff = featureData["Efficiency Factor (EF or UEF)"].toDoubleOr(0.0)
 
-            kW = featureData["Heating Power (kW)"]!! as Double
-            fueltype = featureData["Fuel Type"]!! as String
-            unittype = featureData["Type of Unit"]!! as String
-            capacity = featureData["Capacity (U.S. Gal)"]!! as Double
+            kW = featureData["Heating Power (kW)"].toDoubleOr(0.0)
+            fueltype = featureData["Fuel Type"].toStringOr("")
+            unittype = featureData["Type of Unit"].toStringOr("")
+            capacity = featureData["Capacity (U.S. Gal)"].toDoubleOr(0.0)
 
         } catch (e: Exception) {
             e.printStackTrace()
