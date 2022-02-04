@@ -1,0 +1,108 @@
+{
+  "geminiForm": [
+    {
+      "section": "Electric Oven",
+      "id": "electric_oven",
+      "index": 1,
+      "elements": [
+        {
+          "id": "model_num",
+          "param": "Model Number",
+          "index": 11,
+          "dataType": "textrow",
+          "defaultValues": "",
+          "validation": "optional",
+          "hint": ""
+        },
+        {
+          "id": "serial_num",
+          "param": "Serial Number",
+          "index": 12,
+          "dataType": "textrow",
+          "defaultValues": "",
+          "validation": "optional",
+          "hint": ""
+        },
+        {
+          "id": "company",
+          "param": "Company",
+          "index": 13,
+          "dataType": "textrow",
+          "defaultValues": "",
+          "validation": "optional",
+          "hint": ""
+        },
+        {
+          "id": "load_watts",
+          "param": "Load Watts",
+          "index": 14,
+          "dataType": "decimalrow",
+          "defaultValues": "",
+          "validation": "optional",
+          "hint": ""
+        },
+        {
+          "id": "max_watts",
+          "param": "Max Watts",
+          "index": 15,
+          "dataType": "decimalrow",
+          "defaultValues": "",
+          "validation": "optional",
+          "hint": ""
+        },
+        {
+          "id": "quantity",
+          "param": "Quantity",
+          "index": 16,
+          "dataType": "introw",
+          "defaultValues": "",
+          "validation": "optional",
+          "hint": ""
+        },
+        {
+          "id": "year_installed",
+          "param": "Year Installed",
+          "index": 17,
+          "dataType": "introw",
+          "defaultValues": "",
+          "validation": "optional",
+          "hint": ""
+        },
+        {
+          "id": "new_install",
+          "param": "Bought New?",
+          "index": 18,
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:Yes,2:No",
+          "validation": "optional",
+          "hint": ""
+        },
+        {
+          "id": "control",
+          "param": "Control",
+          "index": 19,
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:Yes,2:No",
+          "validation": "optional",
+          "hint": ""
+        }
+      ]
+    },
+    {
+      "section": "Other",
+      "id": "other",
+      "index": 2,
+      "elements": [
+        {
+          "id": "notes",
+          "param": "Notes about Space or Equipment",
+          "index": 21,
+          "dataType": "textarearow",
+          "defaultValues": "",
+          "validation": "optional",
+          "hint": ""
+        }
+      ]
+    }
+  ]
+}

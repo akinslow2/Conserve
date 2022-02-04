@@ -1,0 +1,140 @@
+{
+  "geminiForm": [
+    {
+      "section": "Kitchen Hood",
+      "id": "kitchen_hood",
+      "index": 1,
+      "elements": [
+        {
+          "id": "controls",
+          "param": "Controls",
+          "index": 11,
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:manual,2:automatic",
+          "validation": "optional",
+          "hint": ""
+        },
+        {
+          "id": "temp_controls",
+          "param": "temperature interlocked controls",
+          "index": 12,
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:manual,2:automatic",
+          "validation": "optional",
+          "hint": ""
+        },
+        {
+          "id": "smoke_controls",
+          "param": "smoke sensor controls",
+          "index": 13,
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:manual,2:automatic",
+          "validation": "optional",
+          "hint": ""
+        },
+        {
+          "id": "hood_cover",
+          "param": "Does kitchen hood completely cover kitchen area?",
+          "index": 14,
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:yes,2:no",
+          "validation": "optional",
+          "hint": ""
+        },
+        {
+          "id": "year_installed",
+          "param": "Year Installed",
+          "index": 15,
+          "dataType": "introw",
+          "defaultValues": "",
+          "validation": "optional",
+          "hint": ""
+        },
+        {
+          "id": "new_install",
+          "param": "Bought New?",
+          "index": 16,
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:Yes,2:No",
+          "validation": "optional",
+          "hint": ""
+        }
+      ]
+    },
+    {
+      "section": "MakeUp Air",
+      "id": "makeup_air",
+      "index": 2,
+      "elements": [
+        {
+          "id": "makeup_air",
+          "param": "tempered makeup air?",
+          "index": 21,
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:yes,2:no",
+          "validation": "optional",
+          "hint": ""
+        }
+      ]
+    },
+    {
+      "section": "Time of Use",
+      "id": "time_of_use",
+      "index": 3,
+      "elements": [
+        {
+          "id": "peak_hours",
+          "param": "Peak Hours",
+          "index": 31,
+          "dataType": "decimalrow",
+          "defaultValues": "",
+          "validation": "optional",
+          "hint": ""
+        },
+        {
+          "id": "part_hours",
+          "param": "Part Peak Hours",
+          "index": 32,
+          "dataType": "decimalrow",
+          "defaultValues": "",
+          "validation": "optional",
+          "hint": ""
+        },
+        {
+          "id": "off_hours",
+          "param": "Off Peak Hours",
+          "index": 33,
+          "dataType": "decimalrow",
+          "defaultValues": "",
+          "validation": "optional",
+          "hint": ""
+        },
+        {
+          "id": "sensor_num",
+          "param": "Sensor Number (first 4 digits)",
+          "index": 34,
+          "dataType": "introw",
+          "defaultValues": "",
+          "validation": "optional",
+          "hint": ""
+        }
+      ]
+    },
+    {
+      "section": "Other",
+      "id": "other",
+      "index": 4,
+      "elements": [
+        {
+          "id": "notes",
+          "param": "Notes about Space or Equipment",
+          "index": 41,
+          "dataType": "textarearow",
+          "defaultValues": "",
+          "validation": "optional",
+          "hint": ""
+        }
+      ]
+    }
+  ]
+}
