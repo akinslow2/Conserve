@@ -22,7 +22,7 @@ class Freezer(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRat
     /** year equipment was installed **/
     var year = 0
     var doorType = ""
-    var equipmentType ""
+    var equipmentType = ""
     var styleType = ""
     var totalVolume = 0.0
     var numberOfDoors = 0
