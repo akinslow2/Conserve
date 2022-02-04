@@ -34,7 +34,11 @@ class Refrigerator(computable: Computable<*>, utilityRateGas: UtilityRate, utili
     override fun setup() {
         try {
             year = featureData["Year installed"]!! as Int
-            volume = featureData["Total Volume (cu.ft.)"] as Double
+            doorType = featureData["Door Type"]!! as String
+            styleType = featureData["Style Type"]!! as String
+            totalVolume = featureData["Total Volume (cu.ft.)"]!! as Double
+            numberOfDoors = featureData["Number of Doors"]!! as Int
+            compressorTons = featureData["Condensor Compressor Size (HP)"]!! as Double
         } catch (e: Exception) {
             e.printStackTrace()
         }
