@@ -22,6 +22,7 @@ class Freezer(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRat
     /** year equipment was installed **/
     var year = 0
     var doorType = ""
+    var equipmentType ""
     var styleType = ""
     var totalVolume = 0.0
     var numberOfDoors = 0
@@ -193,8 +194,8 @@ class Freezer(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRat
     override fun queryEfficientFilter() = JSONObject()
             .put("data.style_type", featureData["Product Type"])
             .put("data.total_volume", JSONObject()
-                    .put("\$gte", volume - 2)
-                    .put("\$lte", volume + 2))
+                    .put("\$gte", totalVolume - 2)
+                    .put("\$lte", totalVolume + 2))
             .toString()
 
     /**
