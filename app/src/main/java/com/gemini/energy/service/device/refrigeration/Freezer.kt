@@ -67,7 +67,7 @@ class Freezer(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRat
                 total += 300.0
             } else if (totalVolume >= 30.0) {
                 total += 100.0
-            } else if {totalVolume >= 15.0) {
+            } else if (totalVolume >= 15.0) {
                 total += 70.0
             } else {
                 total += 30.0
