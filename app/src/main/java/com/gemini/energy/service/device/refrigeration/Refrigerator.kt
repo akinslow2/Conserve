@@ -84,8 +84,7 @@ class Refrigerator(computable: Computable<*>, utilityRateGas: UtilityRate, utili
     }
 
     override fun laborCost(): Double {
-        // @DY - determine labor costs by researching and calling contractors for quotes
-        return 0.0
+        return 1500.0
     }
 
     /**
