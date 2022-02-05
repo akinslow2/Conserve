@@ -240,12 +240,12 @@ class WIRefrigerator(computable: Computable<*>, utilityRateGas: UtilityRate, uti
 
     override fun setup() {
         try {
-            quantity = featureData["Quantity"]!! as Int
+            quantity = featureData["Quantity"].toIntOr(0)
 
-            year = featureData["Year"]!! as Int
-            peakHours = featureData["Peak Hours"]!! as Double
-            partPeakHours = featureData["Part Peak Hours"]!! as Double
-            offPeakHours = featureData["Off Peak Hours"]!! as Double
+            year = featureData["Year"].toIntOr(0)
+            peakHours = featureData["Peak Hours"].toDoubleOr(0.0)
+            partPeakHours = featureData["Part Peak Hours"].toDoubleOr(0.0)
+            offPeakHours = featureData["Off Peak Hours"].toDoubleOr(0.0)
         } catch (e: Exception) {
             e.printStackTrace()
         }

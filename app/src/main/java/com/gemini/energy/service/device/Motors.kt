@@ -74,15 +74,15 @@ class Motors(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRate
 
     override fun setup() {
         try {
-            srs = (featureData["Synchronous Rotational Speed (SRS)"]!! as Int).toDouble()
-            mrs = (featureData["Measured Rotational Speed (MRS)"]!! as Int).toDouble()
-            nrs = (featureData["Nameplate Rotational Speed (NRS)"]!! as Int).toDouble()
-            hp = featureData["Horsepower (HP)"]!! as Double
-            efficiency = featureData["Efficiency"]!! as Double
+            srs = (featureData["Synchronous Rotational Speed (SRS)"].toIntOr(0)).toDouble()
+            mrs = (featureData["Measured Rotational Speed (MRS)"].toIntOr(0)).toDouble()
+            nrs = (featureData["Nameplate Rotational Speed (NRS)"].toIntOr(0)).toDouble()
+            hp = featureData["Horsepower (HP)"].toDoubleOr(0.0)
+            efficiency = featureData["Efficiency"].toDoubleOr(0.0)
 
-            peakHours = featureData["Peak Hours"]!! as Double
-            partPeakHours = featureData["Part Peak Hours"]!! as Double
-            offPeakHours = featureData["Off Peak Hours"]!! as Double
+            peakHours = featureData["Peak Hours"].toDoubleOr(0.0)
+            partPeakHours = featureData["Part Peak Hours"].toDoubleOr(0.0)
+            offPeakHours = featureData["Off Peak Hours"].toDoubleOr(0.0)
         } catch (e: Exception) {
             e.printStackTrace()
         }

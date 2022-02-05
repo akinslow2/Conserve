@@ -59,22 +59,22 @@ class Griddle(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRat
         try {
 
 
-            peakHours = featureData["Peak Hours"]!! as Double
-            partPeakHours = featureData["Part Peak Hours"]!! as Double
-            offPeakHours = featureData["Off Peak Hours"]!! as Double
+            peakHours = featureData["Peak Hours"].toDoubleOr(0.0)
+            partPeakHours = featureData["Part Peak Hours"].toDoubleOr(0.0)
+            offPeakHours = featureData["Off Peak Hours"].toDoubleOr(0.0)
 
-            idleEnergy = featureData["Idle Energy"]!! as Int
-            preHeatEnergy = featureData["Preheat Energy"]!! as Int
+            idleEnergy = featureData["Idle Energy"].toIntOr(0)
+            preHeatEnergy = featureData["Preheat Energy"].toIntOr(0)
 
-            numberOfSides = featureData["Number of Sides"]!! as String
-            surfaceArea = featureData["Surface Area"]!! as Double
-            nominalWidth = featureData["Nominal Width"]!! as Double
-            productionCapacity = featureData["Production Capacity"]!! as Double
+            numberOfSides = featureData["Number of Sides"].toStringOr("")
+            surfaceArea = featureData["Surface Area"].toDoubleOr(0.0)
+            nominalWidth = featureData["Nominal Width"].toDoubleOr(0.0)
+            productionCapacity = featureData["Production Capacity"].toDoubleOr(0.0)
 
-            fuelType = featureData["Fuel Type"]!! as String
-            year = featureData["Year"]!! as Int
+            fuelType = featureData["Fuel Type"].toStringOr("")
+            year = featureData["Year"].toIntOr(0)
 
-            make = featureData["Company"]!! as String
+            make = featureData["Company"].toStringOr("")
 
             usageHours = UsageSimple(peakHours, partPeakHours, offPeakHours)
         } catch (e: Exception) {

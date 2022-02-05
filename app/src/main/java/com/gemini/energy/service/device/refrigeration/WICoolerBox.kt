@@ -140,18 +140,18 @@ class WICoolerBox(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
 
     override fun setup() {
         try {
-            quantity = featureData["Quantity"]!! as Int
-            year = featureData["Year"]!! as Int
+            quantity = featureData["Quantity"].toIntOr(0)
+            year = featureData["Year"].toIntOr(0)
 
-            kW = featureData["Heating Power (kW)"]!! as Double
+            kW = featureData["Heating Power (kW)"].toDoubleOr(0.0)
 
-            condensorPeakHours = featureData["Condenser Peak Hours"]!! as Double
-            condensorPartPeakHours = featureData["Condenser Off Peak Hours"]!! as Double
-            condensorOffPeakHours = featureData["Condenser Off Peak Hours"]!! as Double
+            condensorPeakHours = featureData["Condenser Peak Hours"].toDoubleOr(0.0)
+            condensorPartPeakHours = featureData["Condenser Off Peak Hours"].toDoubleOr(0.0)
+            condensorOffPeakHours = featureData["Condenser Off Peak Hours"].toDoubleOr(0.0)
 
-            evaporatorPeakHours = featureData["Evaporator Peak Hours"]!! as Double
-            evaporatorPartPeakHours = featureData["Evaporator Off Peak Hours"]!! as Double
-            evaporatorOffPeakHours = featureData["Evaporator Off Peak Hours"]!! as Double
+            evaporatorPeakHours = featureData["Evaporator Peak Hours"].toDoubleOr(0.0)
+            evaporatorPartPeakHours = featureData["Evaporator Off Peak Hours"].toDoubleOr(0.0)
+            evaporatorOffPeakHours = featureData["Evaporator Off Peak Hours"].toDoubleOr(0.0)
         } catch (e: Exception) {
             e.printStackTrace()
         }

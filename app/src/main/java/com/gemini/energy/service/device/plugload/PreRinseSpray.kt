@@ -53,18 +53,18 @@ class PreRinseSpray(computable: Computable<*>, utilityRateGas: UtilityRate, util
 
     override fun setup() {
         try {
-            peakHours = featureData["Peak Hours"]!! as Double
-            partPeakHours = featureData["Part Peak Hours"]!! as Double
-            offPeakHours = featureData["Off Peak Hours"]!! as Double
+            peakHours = featureData["Peak Hours"].toDoubleOr(0.0)
+            partPeakHours = featureData["Part Peak Hours"].toDoubleOr(0.0)
+            offPeakHours = featureData["Off Peak Hours"].toDoubleOr(0.0)
             usageHours = UsageSimple(peakHours, partPeakHours, offPeakHours)
 
-            flowRate = featureData["Flow Rate"]!! as Double
-            waterTemperature = featureData["Water Temperature (oF)"]!! as Int
-            efficiency = featureData["Efficiency"]!! as Double
-            waterHeater = featureData["Water Heater"]!! as String
+            flowRate = featureData["Flow Rate"].toDoubleOr(0.0)
+            waterTemperature = featureData["Water Temperature (oF)"].toIntOr(0)
+            efficiency = featureData["Efficiency"].toDoubleOr(0.0)
+            waterHeater = featureData["Water Heater"].toStringOr("")
 
-            year = featureData["Year Installed"]!! as Int
-            make = featureData["Company"]!! as String
+            year = featureData["Year Installed"].toIntOr(0)
+            make = featureData["Company"].toStringOr("")
 
         } catch (e: Exception) {
             e.printStackTrace()

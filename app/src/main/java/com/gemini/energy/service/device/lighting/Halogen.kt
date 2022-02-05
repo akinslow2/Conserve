@@ -69,23 +69,23 @@ class Halogen(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRat
     //Where you extract from user inputs and assign to variables
     override fun setup() {
         try {
-            actualWatts = featureData["Actual Watts"]!! as Double
-            lampsPerFixtures = featureData["Lamps Per Fixture"]!! as Int
-            numberOfFixtures = featureData["Number of Fixtures"]!! as Int
+            actualWatts = featureData["Actual Watts"].toDoubleOr(0.0)
+            lampsPerFixtures = featureData["Lamps Per Fixture"].toIntOr(0)
+            numberOfFixtures = featureData["Number of Fixtures"].toIntOr(0)
 
             val config = lightingConfig(ELightingType.Halogen)
             percentPowerReduced = config[ELightingIndex.PercentPowerReduced.value] as Double
 
-            ceilingType = featureData["Ceiling Type"]!! as String
-            replacementType = featureData["Replacement Type"]!! as String
-            isCeilingOver10Feet = featureData["Ceiling greater than 10 feet?"]!! as String
+            ceilingType = featureData["Ceiling Type"].toStringOr("")
+            replacementType = featureData["Replacement Type"].toStringOr("")
+            isCeilingOver10Feet = featureData["Ceiling greater than 10 feet?"].toStringOr("")
 
-            controls = featureData["Type of Control"]!! as String
-            hasControls = featureData["Controls"]!! as String
+            controls = featureData["Type of Control"].toStringOr("")
+            hasControls = featureData["Controls"].toStringOr("")
 
-            peakHours = featureData["Peak Hours"]!! as Double
-            partPeakHours = featureData["Part Peak Hours"]!! as Double
-            offPeakHours = featureData["Off Peak Hours"]!! as Double
+            peakHours = featureData["Peak Hours"].toDoubleOr(0.0)
+            partPeakHours = featureData["Part Peak Hours"].toDoubleOr(0.0)
+            offPeakHours = featureData["Off Peak Hours"].toDoubleOr(0.0)
         } catch (e: Exception) {
             e.printStackTrace()
         }

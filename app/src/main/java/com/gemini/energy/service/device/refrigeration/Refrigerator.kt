@@ -39,12 +39,12 @@ class Refrigerator(computable: Computable<*>, utilityRateGas: UtilityRate, utili
 
     override fun setup() {
         try {
-            year = featureData["Year installed"]!! as Int
-            doorType = featureData["Door Type"]!! as String
-            styleType = featureData["Style Type"]!! as String
-            totalVolume = featureData["Total Volume (cu.ft.)"]!! as Double
-            numberOfDoors = featureData["Number of Doors"]!! as Int
-            compressorTons = featureData["Condensor Compressor Size (HP)"]!! as Double
+            year = featureData["Year installed"].toIntOr(0)
+            doorType = featureData["Door Type"].toStringOr("")
+            styleType = featureData["Style Type"].toStringOr("")
+            totalVolume = featureData["Total Volume (cu.ft.)"].toDoubleOr(0.0)
+            numberOfDoors = featureData["Number of Doors"].toIntOr(0)
+            compressorTons = featureData["Condensor Compressor Size (HP)"].toDoubleOr(0.0)
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -128,7 +128,7 @@ class Refrigerator(computable: Computable<*>, utilityRateGas: UtilityRate, utili
         var hourlyEnergy = 0.0
 
         try {
-            val dailyEnergyUsed = featureData["Daily Energy Used"]!! as Double
+            val dailyEnergyUsed = featureData["Daily Energy Used"].toDoubleOr(0.0)
             hourlyEnergy = dailyEnergyUsed / 24
         } catch (e: Exception) {
             e.printStackTrace()

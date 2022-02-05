@@ -2,6 +2,9 @@ package com.gemini.energy.wordDocGenerator.models
 
 import com.gemini.energy.service.device.EBase
 import com.gemini.energy.wordDocGenerator.AuditComponents
+import com.gemini.energy.toDoubleOr
+import com.gemini.energy.toIntOr
+import com.gemini.energy.toStringOr
 
 /**
  * PreAudit values for word doc generation
@@ -45,20 +48,20 @@ data class PreAuditValues(
             val electrificationSavings = calculateCustomerCharge(equipment)
 
             return PreAuditValues(
-                    businessname = preAudit["General Client Info Business Name"]!! as String,
-                    auditmonth = preAudit["General Client Info Audit Month"]!! as String,
-                    audityear = preAudit["General Client Info Audit Year"]!! as String,
+                    businessname = preAudit["General Client Info Business Name"].toStringOr(""),
+                    auditmonth = preAudit["General Client Info Audit Month"].toStringOr(""),
+                    audityear = preAudit["General Client Info Audit Year"].toStringOr(""),
                     clientaddress = address,
-                    startday = preAudit["General Client Info Assessment Start Day"]!! as String,
-                    endday = preAudit["General Client Info Assessment End Day"]!! as String,
-                    operationhours = preAudit["Operation Hours Monday Operating Hours"]!! as String,
-                    bldgarea = preAudit["Area Total (Sq.Ft.)"]!! as Double,
-                    bldgtype = preAudit["General Client Info Facility Type"]!! as String,
-                    electricCompany = preAudit["Others Electric Utility Company"]!! as String,
-                    gasCompany = preAudit["Others Gas Utility Company"]!! as String,
-                    electricStructure = preAudit["Others Electric Rate Structure"]!! as String,
-                    gasStructure = preAudit["Others Gas Rate Structure"]!! as String,
-                    gasApplicableToBuilding = preAudit["General Site Access and Notes Will all gas be removed with retrofit?"]!! as String != "na"
+                    startday = preAudit["General Client Info Assessment Start Day"].toStringOr(""),
+                    endday = preAudit["General Client Info Assessment End Day"].toStringOr(""),
+                    operationhours = preAudit["Operation Hours Monday Operating Hours"].toStringOr(""),
+                    bldgarea = preAudit["Area Total (Sq.Ft.)"].toDoubleOr(0.0),
+                    bldgtype = preAudit["General Client Info Facility Type"].toStringOr(""),
+                    electricCompany = preAudit["Others Electric Utility Company"].toStringOr(""),
+                    gasCompany = preAudit["Others Gas Utility Company"].toStringOr(""),
+                    electricStructure = preAudit["Others Electric Rate Structure"].toStringOr(""),
+                    gasStructure = preAudit["Others Gas Rate Structure"].toStringOr(""),
+                    gasApplicableToBuilding = preAudit["General Site Access and Notes Will all gas be removed with retrofit?"].toStringOr("") != "na"
             )
         }
 
