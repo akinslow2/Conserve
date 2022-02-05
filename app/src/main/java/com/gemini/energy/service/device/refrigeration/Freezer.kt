@@ -24,6 +24,8 @@ class Freezer(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRat
 
     /** year equipment was installed **/
     var year = 0
+    var doorType = ""
+    var equipmentType = ""
     var styleType = ""
     var totalVolume = 0.0
     var numberOfDoors = 0
@@ -38,11 +40,13 @@ class Freezer(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRat
 
     override fun setup() {
         try {
-            year = featureData["Year Installed"]!! as Int
-            styleType = featureData["Style Type"]!! as String
-            totalVolume = featureData["Total Volume (cu.ft.)"]!! as Double
-            numberOfDoors = featureData["Number of Doors"]!! as Int
-            compressorTons = featureData["Condensor Compressor Size (HP)"]!! as Double
+            year = featureData["Year installed"].toIntOr(0)
+            doorType = featureData["Door Type"].toStringOr("")
+            equipmentType = featureData["Equipment Type"].toStringOr("")
+            styleType = featureData["Style Type"].toStringOr("")
+            totalVolume = featureData["Total Volume (cu.ft.)"].toDoubleOr(0.0)
+            numberOfDoors = featureData["Number of Doors"].toIntOr(0)
+            compressorTons = featureData["Condensor Compressor Size (HP)"].toDoubleOr(0.0)
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -60,31 +64,46 @@ class Freezer(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRat
 
     override fun incentives(): Double {
         var total = 0.0
+        //CA Energy Wise Foodservice Instant Rebates for ENERGY STAR: https://www.caenergywise.com/instant-rebates/
 
-        // reach in energy star
-        if (styleType == "Reach-in") {
-            if (numberOfDoors == 1) {
-                total += 55
-            } else if (numberOfDoors == 2 || numberOfDoors == 3) {
-                total += 115
+        // door type
+        if (equipmentType == "Ultra-low Temperature Freezer"){
+            total += 1200.0
+        } else if (doorType == "Glass" || doorType == "Glass Chest") {
+            if (totalVolume >= 70.0){
+                total += 300.0
+            } else if (totalVolume >= 30.0) {
+                total += 100.0
+            } else if (totalVolume >= 15.0) {
+                total += 70.0
+            } else {
+                total += 30.0
+            }
+        } else if (doorType == "Solid" || doorType == "Solid Chest") {
+            if (totalVolume >= 50.0) {
+                total += 350.0
+            } else if (totalVolume >= 15.0) {
+                total += 100.0
+            } else {
+                total += 70.0
             }
         }
-
-        // automatic door closer
-        total += numberOfDoors * 70
-
-        // efficient condensor
-        total += compressorTons * 18
 
         return total
     }
 
     override fun materialCost(): Double {
-        return 2500.0
+        if (equipmentType == "Ultra-low Temperature Freezer") {
+            return 15000.0
+        } else if (totalVolume >= 50.0) {
+            return 8000.0
+        } else {
+            return 4000.0
+        }
     }
 
     override fun laborCost(): Double {
-        return 0.0
+        return 1500.0
     }
 
      /**
@@ -119,8 +138,8 @@ class Freezer(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRat
         var hourlyEnergy = 0.0
 
         try {
-            val dailyEnergyUsed = featureData["Daily Energy Used"]!! as Double
-            hourlyEnergy = dailyEnergyUsed / 24.0
+            val dailyEnergyUsed = featureData["Daily Energy Used"].toDoubleOr(0.0)
+            hourlyEnergy = dailyEnergyUsed / 24
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -137,7 +156,7 @@ class Freezer(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRat
         try {
             //ToDo: Check how this is being impacted within the current code base !!
             val postDailyEnergyUsed = element.asJsonObject.get("daily_energy_use").asDouble
-            hourlyEnergy = postDailyEnergyUsed / 24.0
+            hourlyEnergy = postDailyEnergyUsed / 24
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -176,10 +195,10 @@ class Freezer(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRat
      * */
     override fun efficientLookup() = true
     override fun queryEfficientFilter() = JSONObject()
-            .put("data.style_type", styleType)
+            .put("data.style_type", featureData["Product Type"])
             .put("data.total_volume", JSONObject()
                     .put("\$gte", totalVolume - 2)
-                    .put("\$lte", totalVolume as Double + 2))
+                    .put("\$lte", totalVolume + 2))
             .toString()
 
     /**

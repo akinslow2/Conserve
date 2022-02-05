@@ -21,7 +21,7 @@ import timber.log.Timber
 import java.util.*
 
 class HPSodium(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateElectricity: UtilityRate,
-               usageHours: UsageHours, outgoingRows: OutgoingRows, private val context: Context) :
+                         usageHours: UsageHours, outgoingRows: OutgoingRows, private val context: Context) :
         EBase(computable, utilityRateGas, utilityRateElectricity, usageHours, outgoingRows), IComputable {
 
     /**
@@ -31,7 +31,7 @@ class HPSodium(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRa
         return super.compute(extra = ({ Timber.d(it) }))
     }
 
-    //create variable here if you want to make it global to the class with private
+//create variable here if you want to make it global to the class with private
     private var percentPowerReduced = 0.0
     private var actualWatts = 0.0
     var lampsPerFixtures = 0
@@ -49,10 +49,10 @@ class HPSodium(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRa
     private var bulbcost = 20.0
     private val ledbulbcost = 75.0
 
-    private var seer = 10
+    private var seer = 10.0
     private var cooling = 3.142
 
-    private val LEDlifeHours = 40000
+    private val LEDlifeHours = 40000.0
     private var timeperfixture = 0.33
     private var electricanHourlyRate = 25
 
@@ -69,24 +69,23 @@ class HPSodium(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRa
     //Where you extract from user inputs and assign to variables
     override fun setup() {
         try {
-            actualWatts = featureData["Actual Watts"]!! as Double
-            lampsPerFixtures = featureData["Lamps Per Fixture"]!! as Int
-            numberOfFixtures = featureData["Number of Fixtures"]!! as Int
+            actualWatts = featureData["Actual Watts"].toDoubleOr(0.0)
+            lampsPerFixtures = featureData["Lamps Per Fixture"].toIntOr(0)
+            numberOfFixtures = featureData["Number of Fixtures"].toIntOr(0)
 
             val config = lightingConfig(ELightingType.HPSodium)
             percentPowerReduced = config[ELightingIndex.PercentPowerReduced.value] as Double
 
-            ceilingType = featureData["Ceiling Type"]!! as String
-            replacementType = featureData["Replacement Type"]!! as String
-            isCeilingOver10Feet = featureData["Ceiling greater than 10 feet?"]!! as String
+            ceilingType = featureData["Ceiling Type"].toStringOr("")
+            replacementType = featureData["Replacement Type"].toStringOr("")
+            isCeilingOver10Feet = featureData["Ceiling greater than 10 feet?"].toStringOr("")
 
-            peakHours = featureData["Peak Hours"]!! as Double
-            partPeakHours = featureData["Part Peak Hours"]!! as Double
-            offPeakHours = featureData["Off Peak Hours"]!! as Double
+            controls = featureData["Type of Control"].toStringOr("")
+            hasControls = featureData["Controls"].toStringOr("")
 
-            controls = featureData["Type of Control"]!! as String
-            hasControls = featureData["Controls"]!! as String
-
+            peakHours = featureData["Peak Hours"].toDoubleOr(0.0)
+            partPeakHours = featureData["Part Peak Hours"].toDoubleOr(0.0)
+            offPeakHours = featureData["Off Peak Hours"].toDoubleOr(0.0)
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -101,12 +100,13 @@ class HPSodium(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRa
             val usageHours = UsageLighting()
             usageHours.peakHours = 4336.0
             return usageHours.yearly()
-        } else {
+        }
+        else {
             val usageHours = UsageLighting()
             usageHours.peakHours = peakHours
             usageHours.partPeakHours = partPeakHours
             usageHours.offPeakHours = offPeakHours
-            if (usageHours.yearly() > 0) {
+            if (usageHours.yearly() > 0){
                 return usageHours.yearly()
             }
             return usageHoursBusiness.yearly()
@@ -118,7 +118,8 @@ class HPSodium(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRa
             val usageHours = UsageLighting()
             usageHours.peakHours = 4336.0
             return usageHours
-        } else {
+        }
+        else {
             val usageHours = UsageLighting()
             usageHours.peakHours = peakHours
             usageHours.partPeakHours = partPeakHours
@@ -155,7 +156,6 @@ class HPSodium(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRa
      * Cost - Post State
      * */
     override fun costPostState(element: JsonElement, dataHolder: DataHolder): Double {
-
         Timber.d("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
         Timber.d("!!! COST POST STATE - HPSodium !!!")
         Timber.d("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
@@ -166,16 +166,16 @@ class HPSodium(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRa
 
         val replacementIndex = if (lifeHours == 0.0) 0.0 else LEDlifeHours / lifeHours
         val expectedLife = if (usageHoursSpecific.yearly() == 0.0) 0.0 else LEDlifeHours / usageHoursSpecific.yearly()
-        val maintenanceSavings = if (expectedLife == 0.0) 0.0 else totalUnits * bulbcost * replacementIndex / expectedLife
+        val maintenanceSavings = totalUnits * bulbcost * replacementIndex / expectedLife
 
         // Delta is going to be Power Used * Percentage Power Reduced
         // Percentage Power Reduced - we get it from the Base - ELighting
 
         val energySavings = preEnergy() * percentPowerReduced
-        val coolingSavings = if (seer == 0) 0.0 else  energySavings * cooling / seer.toDouble()
+        val coolingSavings = if (seer == 0.0) 0.0 else energySavings * cooling / seer
 
         val energyAtPostState = preEnergy() - energySavings
-        val paybackmonth = if (energySavings == 0.0) 0.0 else installCost() / energySavings * 12.0
+        val paybackmonth = if (energySavings == 0.0) 0.0 else installCost() / energySavings * 12
         val paybackyear = if (energySavings == 0.0) 0.0 else installCost() / energySavings
         val totalsavings = energySavings + coolingSavings + maintenanceSavings
 
@@ -229,7 +229,7 @@ class HPSodium(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRa
     }
 
     override fun energyTimeChange(): Double {
-        return actualWatts * numberOfFixtures * lampsPerFixtures / 1000.0 * usageHoursPost()
+        return  actualWatts * numberOfFixtures * lampsPerFixtures / 1000.0 * usageHoursPost()
     }
 
     override fun energyPowerTimeChange(): Double {
@@ -249,23 +249,22 @@ class HPSodium(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRa
     }
 
     fun totalEnergySavings(): Double {
-        val coolingOverSeer = if (seer == 0) 0.0 else cooling / seer.toDouble()
-
         if (controls != null) {
-            val coolingSavings = (preEnergy() - energyPowerChange()) * coolingOverSeer
+            val coolingSavings = if (seer == 0.0) 0.0 else (preEnergy() - energyPowerChange()) * cooling / seer
             return (preEnergy() - energyPowerChange()) + coolingSavings
         } else {
-            val coolingSavings = (preEnergy() - energyPowerTimeChange()) * coolingOverSeer
+            val coolingSavings = if (seer == 0.0) 0.0 else (preEnergy() - energyPowerTimeChange()) * cooling / seer
             return (preEnergy() - energyPowerTimeChange()) + coolingSavings
         }
     }
 
     fun totalSavings(): Double {
-        if (controls == null && usageHoursPost() != null) {
-            val postPower = if (usageHoursPost() == 0.0) 0.0 else energyPowerTimeChange() / usageHoursPost()
+        if (controls == null && usageHoursPost() != null){
+            val postPower = energyPowerTimeChange()/usageHoursPost()
             return costElectricity(postPower, usageLightingPre(), electricityRate)
-        } else {
-            val postPower = if (usageHoursPre() == 0.0) 0.0 else energyPowerChange() / usageHoursPre()
+        }
+        else {
+            val postPower = energyPowerChange()/usageHoursPre()
             val usageHours = UsageLighting()
             usageHours.peakHours = peakHours
             usageHours.partPeakHours = partPeakHours

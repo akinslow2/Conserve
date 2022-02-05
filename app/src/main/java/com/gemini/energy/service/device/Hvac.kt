@@ -204,79 +204,79 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
 
     override fun setup() {
         try {
-            clientname = preAudit["General Client Info Name"]!! as String
-            businessname = preAudit["General Client Info Business Name"]!! as String
-            auditmonth = preAudit["General Client Info Audit Month"]!! as String
-            audityear = preAudit["General Client Info Audit Year"]!! as String
+            clientname = preAudit["General Client Info Name"].toStringOr("")
+            businessname = preAudit["General Client Info Business Name"].toStringOr("")
+            auditmonth = preAudit["General Client Info Audit Month"].toStringOr("")
+            audityear = preAudit["General Client Info Audit Year"].toStringOr("")
             clientaddress = "${preAudit["General Client Info Address Line 1"]} ${preAudit["General Client Info Address Line 2"]} ${preAudit["General Client Info Address City"]}, ${preAudit["General Client Info Address State"]} ${preAudit["General Client Info Address Zip Code"]}"
-            startday = preAudit["General Client Info Assessment Start Day"]!! as String
-            endday = preAudit["General Client Info Assessment End Day"]!! as String
-            operationhours = preAudit["Operation Hours Monday Operating Hours"]!! as String
-            bldgarea = preAudit["Area Total (Sq.Ft.)"]!! as Double
-            electricutilitycompany = preAudit["Others Electric Utility Company"]!! as String
-            electricstructure = preAudit["Others Electric Rate Structure"]!! as String
-            gasUtilityCompany = preAudit["Others Gas Utility Company"]!! as String
-            gasstructure = preAudit["Others Gas Rate Structure"]!! as String
-            bldgtype = preAudit["General Client Info Facility Type"]!! as String
+            startday = preAudit["General Client Info Assessment Start Day"].toStringOr("")
+            endday = preAudit["General Client Info Assessment End Day"].toStringOr("")
+            operationhours = preAudit["Operation Hours Monday Operating Hours"].toStringOr("")
+            bldgarea = preAudit["Area Total (Sq.Ft.)"].toDoubleOr(0.0)
+            electricutilitycompany = preAudit["Others Electric Utility Company"].toStringOr("")
+            electricstructure = preAudit["Others Electric Rate Structure"].toStringOr("")
+            gasUtilityCompany = preAudit["Others Gas Utility Company"].toStringOr("")
+            gasstructure = preAudit["Others Gas Rate Structure"].toStringOr("")
+            bldgtype = preAudit["General Client Info Facility Type"].toStringOr("")
 
-            typeOfUnit = featureData["Type of Package Unit"]!! as String
-            eer = featureData["EER"]!! as Double
+            typeOfUnit = featureData["Type of Package Unit"].toStringOr("")
+            eer = featureData["EER"].toDoubleOr(0.0)
 
-            val inputSeer = featureData["SEER"]!! as Double
+            val inputSeer = featureData["SEER"].toDoubleOr(0.0)
             seer = if (inputSeer > 0.0) inputSeer else seer
 
-            val altSeer = featureData["Alternate SEER"]!! as Double
+            val altSeer = featureData["Alternate SEER"].toDoubleOr(0.0)
             alternateSeer = if (altSeer > 0.0) altSeer else alternateSeer
-            val inputHeatEffElec = featureData["Heating Electric Efficiency"]!! as Double
+            val inputHeatEffElec = featureData["Heating Electric Efficiency"].toDoubleOr(0.0)
             heatElecEfficiency = if (inputHeatEffElec > 0.0) inputHeatEffElec else heatElecEfficiency
 
-            val inputAltHspf = featureData["Alternate HSPF"]!! as Double
+            val inputAltHspf = featureData["Alternate HSPF"].toDoubleOr(0.0)
             alternateHspf = if (inputAltHspf > 0.0) inputAltHspf else alternateHspf
 
-            year = featureData["Year"]!! as Int
+            year = featureData["Year"].toIntOr(0)
 
-            hvacType = featureData["Type of Package Unit"]!! as String
-            namePlate = featureData["Nameplate Readable?"]!! as String
-            kbtu = featureData["Cooling Capacity (kBtu/hr)"]!! as Double
+            hvacType = featureData["Type of Package Unit"].toStringOr("")
+            namePlate = featureData["Nameplate Readable?"].toStringOr("")
+            kbtu = featureData["Cooling Capacity (kBtu/hr)"].toDoubleOr(0.0)
 
-            gasInput = featureData["Heating Input (kBtu/hr)"]!! as Double
-            gasOutput = featureData["Heating Output (kBtu/hr)"]!! as Double
-            tons = featureData["Cooling Capacity (tons)"]!! as Double
+            gasInput = featureData["Heating Input (kBtu/hr)"].toDoubleOr(0.0)
+            gasOutput = featureData["Heating Output (kBtu/hr)"].toDoubleOr(0.0)
+            tons = featureData["Cooling Capacity (tons)"].toDoubleOr(0.0)
 
-            economizer = featureData["Economizer"]!! as String
-            thermotype = featureData["Thermostat Type"]!! as String
-            quantity = featureData["Quantity"]!! as Int
+            economizer = featureData["Economizer"].toStringOr("")
+            thermotype = featureData["Thermostat Type"].toStringOr("")
+            quantity = featureData["Quantity"].toIntOr(0)
 
-            val gasConserveInput = featureData["Heating Input (kBtu/hr)"]!! as Double
+            val gasConserveInput = featureData["Heating Input (kBtu/hr)"].toDoubleOr(0.0)
             gasInput = if (gasConserveInput > 0.0) gasConserveInput else gasInput
-            val gasConserveOutput = featureData["Heating Output (kBtu/hr)"]!! as Double
+            val gasConserveOutput = featureData["Heating Output (kBtu/hr)"].toDoubleOr(0.0)
             gasOutput = if(gasConserveOutput > 0.0) gasConserveOutput else gasOutput
 
             val inputHeatEffGas = gasOutput / gasInput
             heatEfficiency = if (inputHeatEffGas > 1.0) heatEfficiency else inputHeatEffGas
 
-            //cddThreshold = featureData["AC Temperature Threshold - Open"]!! as Int
-            //hddThreshold = featureData["Heat Temperature Threshold - Open"]!! as Int
+            //cddThreshold = featureData["AC Temperature Threshold - Open"].toIntOr(0)
+            //hddThreshold = featureData["Heat Temperature Threshold - Open"].toIntOr(0)
 
-            //val inputCddThreshold = featureData["AC Temperature Threshold - Open"]!! as Int
+            //val inputCddThreshold = featureData["AC Temperature Threshold - Open"].toIntOr(0)
             //cddThreshold = if (inputCddThreshold > 0) inputCddThreshold else cddThreshold
 
-            //val inputHddThreshold = featureData["Heat Temperature Threshold - Open"]!! as Int
+            //val inputHddThreshold = featureData["Heat Temperature Threshold - Open"].toIntOr(0)
             //hddThreshold = if (inputHddThreshold > 0) inputHddThreshold else hddThreshold
 
-            cddBusinessHours = featureData["Cooling Degree Days Business Hours"]!! as Int
-            hddBusinessHours = featureData["Heating Degree Days Business Hours"]!! as Int
-            cddCloseHours = featureData["Cooling Degree Days Closed Hours"]!! as Int
-            hddCloseHours = featureData["Heating Degree Days Closed Hours"]!! as Int
+            cddBusinessHours = featureData["Cooling Degree Days Business Hours"].toIntOr(0)
+            hddBusinessHours = featureData["Heating Degree Days Business Hours"].toIntOr(0)
+            cddCloseHours = featureData["Cooling Degree Days Closed Hours"].toIntOr(0)
+            hddCloseHours = featureData["Heating Degree Days Closed Hours"].toIntOr(0)
 
-            insulation = featureData["Is there Insulation in the area?"]!! as String
-            areaLength = featureData["Length of Served Area"]!! as Double
-            areaWidth = featureData["Width of Served Area"]!! as Double
-            areaHeight = featureData["Height of Served Area"]!! as Double
+            insulation = featureData["Is there Insulation in the area?"].toStringOr("")
+            areaLength = featureData["Length of Served Area"].toDoubleOr(0.0)
+            areaWidth = featureData["Width of Served Area"].toDoubleOr(0.0)
+            areaHeight = featureData["Height of Served Area"].toDoubleOr(0.0)
 
-            peakHours = featureData["Peak Hours"]!! as Double
-            partPeakHours = featureData["Part Peak Hours"]!! as Double
-            offPeakHours = featureData["Off Peak Hours"]!! as Double
+            peakHours = featureData["Peak Hours"].toDoubleOr(0.0)
+            partPeakHours = featureData["Part Peak Hours"].toDoubleOr(0.0)
+            offPeakHours = featureData["Off Peak Hours"].toDoubleOr(0.0)
         } catch (e: Exception) {
             e.printStackTrace()
         }

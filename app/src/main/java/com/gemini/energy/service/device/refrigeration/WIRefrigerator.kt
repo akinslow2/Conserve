@@ -81,12 +81,13 @@ class WIRefrigerator(computable: Computable<*>, utilityRateGas: UtilityRate, uti
          * There could be a case where the User will input the value in KW - If that happens we need to convert the KW
          * int BTU / hr :: 1KW equals 3412.142
          * */
-        fun power(gasInput: Int, thermaleff: Int) =
-                if (thermaleff == 0) 0.0
-                else (gasInput.toDouble() / (thermaleff.toDouble() / 100.0)) * KW_CONVERSION
-        fun power2(kW: Double, electriceff: Int) =
-                if (electriceff == 0) 0.0
-                else (kW / (electriceff.toDouble() / 100.0))
+        fun power(gasInput: Double, thermaleff: Double) =
+                if (thermaleff == 0.0) 0.0
+                else (gasInput / (thermaleff / 100)) * KW_CONVERSION
+
+        fun power2(kW: Double, electriceff: Double) =
+                if (electriceff == 0.0) 0.0
+                else (kW / (electriceff / 100.0))
 
         /**
          * Year At - Current minus the Age
@@ -203,15 +204,14 @@ class WIRefrigerator(computable: Computable<*>, utilityRateGas: UtilityRate, uti
 
     /** year equipment was manufactured **/
     var year = 0
-    var compressorTons = 0.0
 
 
     /**
      * HVAC - British Thermal Unit
      * */
     var btu = 0
-    private var gasInput = 0
-    private var gasOutput = 0
+    private var gasInput = 0.0
+    private var gasOutput = 0.0
 
 
     /**
@@ -229,8 +229,8 @@ class WIRefrigerator(computable: Computable<*>, utilityRateGas: UtilityRate, uti
 
 
     var quantity = 0
-    var thermaleff = 0
-    var electriceff = 0
+    var thermaleff = 0.0
+    var electriceff = 0.0
     var kW = 0.0
     var fueltype = ""
     var unittype = ""
@@ -240,13 +240,12 @@ class WIRefrigerator(computable: Computable<*>, utilityRateGas: UtilityRate, uti
 
     override fun setup() {
         try {
-            quantity = featureData["Quantity"]!! as Int
+            quantity = featureData["Quantity"].toIntOr(0)
 
-            year = featureData["Year"]!! as Int
-            compressorTons = (featureData["Condensor Compressor Size (HP)"]!! as String).toDouble()
-            peakHours = featureData["Peak Hours"]!! as Double
-            partPeakHours = featureData["Part Peak Hours"]!! as Double
-            offPeakHours = featureData["Off Peak Hours"]!! as Double
+            year = featureData["Year"].toIntOr(0)
+            peakHours = featureData["Peak Hours"].toDoubleOr(0.0)
+            partPeakHours = featureData["Part Peak Hours"].toDoubleOr(0.0)
+            offPeakHours = featureData["Off Peak Hours"].toDoubleOr(0.0)
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -354,8 +353,8 @@ class WIRefrigerator(computable: Computable<*>, utilityRateGas: UtilityRate, uti
         grosskwhSavings = cuGrossEnergySavings + efccGrossEnergySavings + efmGrossEnergySavings
 
 
-        var postthermeff = 95
-        var posteleceff = 350
+        val postthermeff = 95.0
+        val posteleceff = 350.0
 
 
         val postUsageHours = computable.udf1 as UsageSimple
@@ -381,15 +380,10 @@ class WIRefrigerator(computable: Computable<*>, utilityRateGas: UtilityRate, uti
      * HVAC - INCENTIVES | MATERIAL COST
      * */
     override fun incentives(): Double {
-       var total = 0.0
-
-        // automatic door closer
-        total +=  70
-
-        // efficient compressors
-        total += compressorTons * 120
-
-        return total
+        val powerChangePerHours =
+                if (usageHoursBusiness.yearly() == 0.0) 0.0
+                else energyPowerChange() / usageHoursBusiness.yearly()
+        return energyPowerChange() * 0.15 + powerChangePerHours * 150
     }
 
     override fun materialCost(): Double {
@@ -427,8 +421,8 @@ class WIRefrigerator(computable: Computable<*>, utilityRateGas: UtilityRate, uti
         val powerUsedElectricity = power2(kW, electriceff) * quantity
         val prepowerUsed = if (isGas()) powerUsedGas else powerUsedElectricity
 
-        var postthermeff = 95
-        var posteleceff = 350
+        val postthermeff = 95.0
+        val posteleceff = 350.0
 
         val postpowerUsedGas = power(gasInput, postthermeff) * quantity
         val postpowerUsedElectricity = power2(kW, posteleceff) * quantity

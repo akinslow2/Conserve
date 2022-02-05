@@ -54,23 +54,23 @@ class ConveyorBroiler(computable: Computable<*>, utilityRateGas: UtilityRate,
 
     override fun setup() {
         try {
-            peakHours = featureData["Peak Hours"]!! as Double
-            partPeakHours = featureData["Part Peak Hours"]!! as Double
-            offPeakHours = featureData["Off Peak Hours"]!! as Double
+            peakHours = featureData["Peak Hours"].toDoubleOr(0.0)
+            partPeakHours = featureData["Part Peak Hours"].toDoubleOr(0.0)
+            offPeakHours = featureData["Off Peak Hours"].toDoubleOr(0.0)
             usageHours = UsageSimple(peakHours, partPeakHours, offPeakHours)
 
-            energyInputRate = featureData["Energy Input Rate"]!! as Double
-            idleEnergyRate = featureData["Idle Energy Rate"]!! as Double
+            energyInputRate = featureData["Energy Input Rate"].toDoubleOr(0.0)
+            idleEnergyRate = featureData["Idle Energy Rate"].toDoubleOr(0.0)
             idleHours = 1.0 //ToDo: @Johnny - not to worry at the moment
 
-            broilerType = featureData["Broiler Type"]!! as String
-            conveyorWidth = featureData["Conveyor Width"]!! as Double
-            year = featureData["Year"]!! as Int
+            broilerType = featureData["Broiler Type"].toStringOr("")
+            conveyorWidth = featureData["Conveyor Width"].toDoubleOr(0.0)
+            year = featureData["Year"].toIntOr(0)
 
-            make = featureData["Company"]!! as String
+            make = featureData["Company"].toStringOr("")
 
-            energyInputRate = featureData["Energy Input Rate"]!! as Double
-            idleEnergyRate = featureData["Idle Energy Rate"]!! as Double
+            energyInputRate = featureData["Energy Input Rate"].toDoubleOr(0.0)
+            idleEnergyRate = featureData["Idle Energy Rate"].toDoubleOr(0.0)
             idleHours = usageHours!!.yearly() * 0.9 // Assuming conveyor is idle 90% of the time
 
         } catch (e: Exception) {

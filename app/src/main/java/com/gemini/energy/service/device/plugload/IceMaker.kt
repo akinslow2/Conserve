@@ -44,14 +44,14 @@ class IceMaker(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRa
 
     override fun setup() {
         try {
-            iceHarvestRate = featureData["Ice Harvest Rate"]!! as Double
-            energyUseRate = featureData["Energy Use Rate"]!! as Double
-            year = featureData["Year Installed"]!! as Int
+            iceHarvestRate = featureData["Ice Harvest Rate"].toDoubleOr(0.0)
+            energyUseRate = featureData["Energy Use Rate"].toDoubleOr(0.0)
+            year = featureData["Year Installed"].toIntOr(0)
 
-            make = featureData["Company"]!! as String
+            make = featureData["Company"].toStringOr("")
 
-            /** alternateIceHarvestRate = featureData["Alternate Ice Harvest Rate"]!! as Double
-            alternateEnergyUseRate = featureData["Alternate Energy Use Rate"]!! as Double */
+            /** alternateIceHarvestRate = featureData["Alternate Ice Harvest Rate"].toDoubleOr(0.0)
+            alternateEnergyUseRate = featureData["Alternate Energy Use Rate"].toDoubleOr(0.0) */
 
         } catch (e: Exception) {
             e.printStackTrace()

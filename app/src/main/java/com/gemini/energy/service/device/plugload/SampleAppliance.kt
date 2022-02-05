@@ -37,11 +37,11 @@ class SampleAppliance(computable: Computable<*>, utilityRateGas: UtilityRate, ut
 
     override fun setup() {
         try {
-            sectionOneParameterOne = featureData["Section One Parameter One"]!! as Int
-            sectionOneParameterTwo = featureData["Section One Parameter Two"]!! as Double
-            sectionOneParameterThree = featureData["Section One Parameter Three"]!! as String
-            sectionTwoParameterOne = featureData["Section Two Parameter One"]!! as String
-            sectionTwoParameterTwo = featureData["Section Two Parameter Two"]!! as String
+            sectionOneParameterOne = featureData["Section One Parameter One"].toIntOr(0)
+            sectionOneParameterTwo = featureData["Section One Parameter Two"].toDoubleOr(0.0)
+            sectionOneParameterThree = featureData["Section One Parameter Three"].toStringOr("")
+            sectionTwoParameterOne = featureData["Section Two Parameter One"].toStringOr("")
+            sectionTwoParameterTwo = featureData["Section Two Parameter Two"].toStringOr("")
         } catch (e: Exception) {
             e.printStackTrace()
         }

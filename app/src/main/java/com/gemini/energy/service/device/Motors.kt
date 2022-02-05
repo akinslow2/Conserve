@@ -55,9 +55,9 @@ class Motors(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRate
 
     }
 
-    private var srs = 0
-    private var mrs = 0
-    private var nrs = 0
+    private var srs = 0.0
+    private var mrs = 0.0
+    private var nrs = 0.0
     private var hp = 0.0
     private var efficiency = 0.0
 
@@ -74,15 +74,15 @@ class Motors(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRate
 
     override fun setup() {
         try {
-            srs = featureData["Synchronous Rotational Speed (SRS)"]!! as Int
-            mrs = featureData["Measured Rotational Speed (MRS)"]!! as Int
-            nrs = featureData["Nameplate Rotational Speed (NRS)"]!! as Int
-            hp = featureData["Horsepower (HP)"]!! as Double
-            efficiency = featureData["Efficiency"]!! as Double
+            srs = (featureData["Synchronous Rotational Speed (SRS)"].toIntOr(0)).toDouble()
+            mrs = (featureData["Measured Rotational Speed (MRS)"].toIntOr(0)).toDouble()
+            nrs = (featureData["Nameplate Rotational Speed (NRS)"].toIntOr(0)).toDouble()
+            hp = featureData["Horsepower (HP)"].toDoubleOr(0.0)
+            efficiency = featureData["Efficiency"].toDoubleOr(0.0)
 
-            peakHours = featureData["Peak Hours"]!! as Double
-            partPeakHours = featureData["Part Peak Hours"]!! as Double
-            offPeakHours = featureData["Off Peak Hours"]!! as Double
+            peakHours = featureData["Peak Hours"].toDoubleOr(0.0)
+            partPeakHours = featureData["Part Peak Hours"].toDoubleOr(0.0)
+            offPeakHours = featureData["Off Peak Hours"].toDoubleOr(0.0)
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -93,13 +93,8 @@ class Motors(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRate
      * */
     override fun costPreState(elements: List<JsonElement?>): Double {
 
-        val percentageLoad =
-                if ((srs - nrs) == 0) 0.0
-                else (srs.toDouble() - mrs.toDouble()) / (srs.toDouble() - nrs.toDouble())
-        val powerUsed =
-                if (efficiency == 0.0) 0.0
-                else hp * KW_CONVERSION * percentageLoad / efficiency
-//        val nemaPremium = extractNemaPremium(elements)
+        val percentageLoad = if (srs - nrs == 0.0) 0.0 else (srs - mrs) / (srs - nrs)
+        val powerUsed = if (efficiency == 0.0) 0.0 else hp * KW_CONVERSION * percentageLoad / efficiency
         val nemaPremium = 0.0
 
         Timber.d("*** Nema Premium :: ($nemaPremium) ***")
@@ -133,9 +128,10 @@ class Motors(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRate
         val energySavings = energyPowerChange()
 
         //2. Demand Saving
-        val demandSavings =
-                if (usageHoursPre() == 0.0) 0.0
-                else energyPowerChange() / usageHoursPre()
+        val demandSavings = if (usageHoursPre() == 0.0) 0.0 else energyPowerChange() / usageHoursPre()
+
+        //3. Implementation Cost
+        // ToDo - Implementation Cost would be a look up in the future.\
 
         val postRow = mutableMapOf<String, String>()
         postRow["__energy_savings"] = energySavings.toString()
@@ -170,21 +166,14 @@ class Motors(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRate
      * PowerTimeChange >> Energy Efficiency Calculations
      * */
     override fun energyPowerChange(): Double {
-        val percentageLoadPre =
-                if ((srs - nrs) == 0) 0.0
-                else (srs.toDouble() - mrs.toDouble()) / (srs.toDouble() - nrs.toDouble())
+        val percentageLoadPre = if (srs - nrs == 0.0) 0.0 else (srs - mrs) / (srs - nrs)
         val percentageLoadPost =
                 if (percentageLoadPre > 1.0) {
-                    if (alternateHp == 0.0) 0.0
-                    else (hp / alternateHp) * percentageLoadPre
+                    if (alternateHp == 0.0) 0.0 else (hp / alternateHp) * percentageLoadPre
                 } else percentageLoadPre
 
-        val horsePowerPre =
-                if (efficiency == 0.0) 0.0
-                else (hp / efficiency) * percentageLoadPre
-        val horsePowerPost =
-                if (alternateEfficiency == 0.0) 0.0
-                else (alternateHp / alternateEfficiency) * percentageLoadPost
+        val horsePowerPre = if (efficiency == 0.0) 0.0 else (hp / efficiency) * percentageLoadPre
+        val horsePowerPost = if (alternateEfficiency == 0.0) 0.0 else (alternateHp / alternateEfficiency) * percentageLoadPost
         val deltaHorsePower = (horsePowerPre - horsePowerPost) * KW_CONVERSION
 
         // ** Note :: Load shouldn't be 1 - Ideally increase the Power of the Motor and lower the load to less than 1

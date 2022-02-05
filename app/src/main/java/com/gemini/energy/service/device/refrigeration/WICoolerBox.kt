@@ -74,12 +74,13 @@ class WICoolerBox(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
          * There could be a case where the User will input the value in KW - If that happens we need to convert the KW
          * int BTU / hr :: 1KW equals 3412.142
          * */
-        fun power(gasInput: Int, thermaleff: Int) =
-                if (thermaleff == 0) 0.0
-                else (gasInput.toDouble() / (thermaleff.toDouble() / 100.0)) * KW_CONVERSION
-        fun power2(kW: Double, electriceff: Int) =
-                if (electriceff == 0) 0.0
-                else (kW / (electriceff.toDouble() / 100.0))
+        fun power(gasInput: Double, thermaleff: Double) =
+                if (thermaleff == 0.0) 0.0
+                else (gasInput / (thermaleff / 100)) * KW_CONVERSION
+
+        fun power2(kW: Double, electriceff: Double) =
+                if (electriceff == 0.0) 0.0
+                else (kW / (electriceff / 100))
 
         /**
          * Year At - Current minus the Age
@@ -107,8 +108,8 @@ class WICoolerBox(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
      * HVAC - British Thermal Unit
      * */
     var btu = 0
-    private var gasInput = 0
-    private var gasOutput = 0
+    private var gasInput = 0.0
+    private var gasOutput = 0.0
 
 
     /**
@@ -120,14 +121,18 @@ class WICoolerBox(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
     /**
      * Usage Hours
      * */
-    private var peakHours = 0.0
-    private var partPeakHours = 0.0
-    private var offPeakHours = 0.0
+    private var evaporatorPeakHours = 0.0
+    private var evaporatorPartPeakHours = 0.0
+    private var evaporatorOffPeakHours = 0.0
+
+    private var condensorPeakHours = 0.0
+    private var condensorPartPeakHours = 0.0
+    private var condensorOffPeakHours = 0.0
 
 
     var quantity = 0
-    var thermaleff = 0
-    var electriceff = 0
+    var thermaleff = 0.0
+    var electriceff = 0.0
     var kW = 0.0
     var fueltype = ""
     var unittype = ""
@@ -135,10 +140,18 @@ class WICoolerBox(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
 
     override fun setup() {
         try {
-            quantity = featureData["Quantity"]!! as Int
-            year = featureData["Year"]!! as Int
+            quantity = featureData["Quantity"].toIntOr(0)
+            year = featureData["Year"].toIntOr(0)
 
-            kW = featureData["Heating Power (kW)"]!! as Double
+            kW = featureData["Heating Power (kW)"].toDoubleOr(0.0)
+
+            condensorPeakHours = featureData["Condenser Peak Hours"].toDoubleOr(0.0)
+            condensorPartPeakHours = featureData["Condenser Off Peak Hours"].toDoubleOr(0.0)
+            condensorOffPeakHours = featureData["Condenser Off Peak Hours"].toDoubleOr(0.0)
+
+            evaporatorPeakHours = featureData["Evaporator Peak Hours"].toDoubleOr(0.0)
+            evaporatorPartPeakHours = featureData["Evaporator Off Peak Hours"].toDoubleOr(0.0)
+            evaporatorOffPeakHours = featureData["Evaporator Off Peak Hours"].toDoubleOr(0.0)
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -155,7 +168,7 @@ class WICoolerBox(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
      * */
     override fun costPreState(elements: List<JsonElement?>): Double {
 
-        val usageHours = UsageSimple(peakHours, partPeakHours, offPeakHours)
+        val usageHours = UsageSimple(condensorPeakHours, condensorPartPeakHours, condensorOffPeakHours)
         computable.udf1 = usageHours
         Timber.d(usageHours.toString())
 
@@ -185,9 +198,8 @@ class WICoolerBox(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
         Timber.d("!!! COST POST STATE - HVAC !!!")
         Timber.d("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
 
-        var postthermeff = 95
-        var posteleceff = 350
-
+        val postthermeff = 95.0
+        val posteleceff = 350.0
 
         val postUsageHours = computable.udf1 as UsageSimple
 
@@ -222,12 +234,10 @@ class WICoolerBox(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
      * HVAC - INCENTIVES | MATERIAL COST
      * */
     override fun incentives(): Double {
-         var total = 0.0
-
-        // automatic door closer
-        total +=  70
-
-        return total
+        val powerChangeToHours =
+                if (usageHoursBusiness.yearly() == 0.0) 0.0
+                else energyPowerChange() / usageHoursBusiness.yearly()
+        return energyPowerChange() * 0.15 + (powerChangeToHours) * 150
     }
 
     override fun materialCost(): Double {
@@ -265,8 +275,8 @@ class WICoolerBox(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
         val powerUsedElectricity = power2(kW, electriceff) * quantity
         val prepowerUsed = if (isGas()) powerUsedGas else powerUsedElectricity
 
-        var postthermeff = 95
-        var posteleceff = 350
+        val postthermeff = 95.0
+        val posteleceff = 350.0
 
         val postpowerUsedGas = power(gasInput, postthermeff) * quantity
         val postpowerUsedElectricity = power2(kW, posteleceff) * quantity

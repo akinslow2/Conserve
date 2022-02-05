@@ -177,29 +177,29 @@ class CombinationOven(computable: Computable<*>, utilityRateGas: UtilityRate, ut
     override fun setup() {
 
         try {
-            fuelType = featureData["Fuel Type"]!! as String
+            fuelType = featureData["Fuel Type"].toStringOr("")
 
             //ToDo: DaysInOperation
             //This does not work. See bottom of yesterdays detailed email for clarification.
             //Also Days in operation does not change between pre and post so you can just call the variable DaysInOperation...
             daysInOperation = usageHoursPre() / 24
 
-            preIdleEnergyRateConvection = featureData["Convection Idle Rate"]!! as Double
-            preIdleEnergyRateSteam = featureData["Steam Idle Rate"]!! as Double
+            preIdleEnergyRateConvection = featureData["Convection Idle Rate"].toDoubleOr(0.0)
+            preIdleEnergyRateSteam = featureData["Steam Idle Rate"].toDoubleOr(0.0)
 
-            val rawPreHeatEnergy = featureData["Preheat Energy"]!! as Double
+            val rawPreHeatEnergy = featureData["Preheat Energy"].toDoubleOr(0.0)
             preHeatEnergy = adjustPreHeat(rawPreHeatEnergy)
 
-            preFanEnergyRate = featureData["Pre Fan Energy Rate"]!! as Double
-            postFanEnergyRate = featureData["Post Fan Energy Rate"]!! as Double
+            preFanEnergyRate = featureData["Pre Fan Energy Rate"].toDoubleOr(0.0)
+            postFanEnergyRate = featureData["Post Fan Energy Rate"].toDoubleOr(0.0)
 
-            waterUseConvection = featureData["Convection Water Usage Rate"]!! as Double
-            waterUseSteam = featureData["Steam Water Usage Rate"]!! as Double
+            waterUseConvection = featureData["Convection Water Usage Rate"].toDoubleOr(0.0)
+            waterUseSteam = featureData["Steam Water Usage Rate"].toDoubleOr(0.0)
 
-            steamPanSize = featureData["Size (Steam Pans)"]!! as Int
-            year = featureData["Year"]!! as Int
+            steamPanSize = featureData["Size (Steam Pans)"].toIntOr(0)
+            year = featureData["Year"].toIntOr(0)
 
-            make = featureData["Company"]!! as String
+            make = featureData["Company"].toStringOr("")
 
         } catch (e: Exception) {
             e.printStackTrace()

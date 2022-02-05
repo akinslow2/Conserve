@@ -24,11 +24,11 @@ class Refrigerator(computable: Computable<*>, utilityRateGas: UtilityRate, utili
 
     /** year equipment was installed **/
     var year = 0
+    var doorType = ""
     var styleType = ""
     var totalVolume = 0.0
     var numberOfDoors = 0
     var compressorTons = 0.0
-
 
     /**
      * Entry Point
@@ -39,11 +39,12 @@ class Refrigerator(computable: Computable<*>, utilityRateGas: UtilityRate, utili
 
     override fun setup() {
         try {
-            year = featureData["Year installed"]!! as Int
-            styleType = featureData["Style Type"]!! as String
-            totalVolume = featureData["Total Volume (cu.ft.)"]!! as Double
-            numberOfDoors = featureData["Number of Doors"]!! as Int
-            compressorTons = featureData["Condensor Compressor Size (HP)"]!! as Double
+            year = featureData["Year installed"].toIntOr(0)
+            doorType = featureData["Door Type"].toStringOr("")
+            styleType = featureData["Style Type"].toStringOr("")
+            totalVolume = featureData["Total Volume (cu.ft.)"].toDoubleOr(0.0)
+            numberOfDoors = featureData["Number of Doors"].toIntOr(0)
+            compressorTons = featureData["Condensor Compressor Size (HP)"].toDoubleOr(0.0)
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -55,35 +56,40 @@ class Refrigerator(computable: Computable<*>, utilityRateGas: UtilityRate, utili
     override fun costPreState(elements: List<JsonElement?>): Double {
         val powerUsed = hourlyEnergyUsagePre()[0]
         val costElectricity: Double
-        // TODO - confirm correct costElectricity formula - use hours in a year since refrigerator is running during non-business hours as well
         costElectricity = costElectricity(powerUsed, super.usageHoursBusiness, super.electricityRate)
         return costElectricity
     }
 
     override fun incentives(): Double {
-         var total = 0.0
+        var total = 0.0
+        //CA Energy Wise Foodservice Instant Rebates for ENERGY STAR: https://www.caenergywise.com/instant-rebates/
 
-        // reach in energy star
-        if (styleType == "Reach-in") {
-            if (numberOfDoors == 1) {
-                total += 30
-            } else if (numberOfDoors == 2 || numberOfDoors == 3) {
-                total += 100
+        // door type
+        if (doorType == "Glass" || doorType == "Glass Chest") {
+            if (totalVolume >= 30.0) {
+                total += 100.0
+            } else {
+                total += 70.0
+            }
+        } else if (doorType == "Solid" || doorType == "Solid Chest") {
+            if (totalVolume >= 50.0) {
+                total += 100.0
+            } else {
+                total += 70.0
             }
         }
-
-        // automatic door closer
-        total += numberOfDoors * 70
-
-        // efficient condensor
-        total += compressorTons * 18
 
         return total
     }
 
     override fun materialCost(): Double {
-        // @DY - add different material costs for diff style types, e.g. reach-in or number of doors
-        return 2500.0
+        if (totalVolume >= 50.0) {
+            return 7500.0
+        } else if (totalVolume >= 30.0) {
+            return 5000.0
+        } else {
+            return 2500.0
+        }
     }
 
     override fun laborCost(): Double {
@@ -104,7 +110,6 @@ class Refrigerator(computable: Computable<*>, utilityRateGas: UtilityRate, utili
         return costElectricity
     }
 
-    // TODO - installCost should be: materialCost + laborCost - incentives
     fun installCost(): Double {
         val increCost = replacementIncrementalcost
         val totalCost = increCost * 4 //@AK2 fill
@@ -122,14 +127,9 @@ class Refrigerator(computable: Computable<*>, utilityRateGas: UtilityRate, utili
     override fun hourlyEnergyUsagePre(): List<Double> {
         var hourlyEnergy = 0.0
 
-        // @ DY - take refrigerators we have assessed, call manufacturers about daily energy usage. ask for procedural assumptions (time running, # cycles/day)
-        // taking voltage * amperage = power -> power * time = energy
-        // find variance depending on behavior and determine how significantly it will affect energy usage
-        // have typically used spreadsheet of assumed default values based on style type and cubic feet - see Burlington
-        // resources: https://caenergywise.com/calculators/
         try {
-            val dailyEnergyUsed = featureData["Daily Energy Used"]!! as Double
-            hourlyEnergy = dailyEnergyUsed / 24.0
+            val dailyEnergyUsed = featureData["Daily Energy Used"].toDoubleOr(0.0)
+            hourlyEnergy = dailyEnergyUsed / 24
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -146,7 +146,7 @@ class Refrigerator(computable: Computable<*>, utilityRateGas: UtilityRate, utili
         try {
             //ToDo: Check how this is being impacted within the current code base !!
             val postDailyEnergyUsed = element.asJsonObject.get("daily_energy_use").asDouble
-            hourlyEnergy = postDailyEnergyUsed / 24.0
+            hourlyEnergy = postDailyEnergyUsed / 24
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -185,7 +185,7 @@ class Refrigerator(computable: Computable<*>, utilityRateGas: UtilityRate, utili
      * */
     override fun efficientLookup() = true
     override fun queryEfficientFilter() = JSONObject()
-            .put("data.style_type", styleType)
+            .put("data.style_type", featureData["Product Type"])
             .put("data.total_volume", JSONObject()
                     .put("\$gte", totalVolume - 2)
                     .put("\$lte", totalVolume + 2))

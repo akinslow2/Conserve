@@ -40,6 +40,7 @@ class Halogen(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRat
     private var partPeakHours = 0.0
     var offPeakHours = 0.0
 
+
     var energyAtPreState = 0.0
     var energyAtPostState = 0.0
     var currentPower = 0.0
@@ -48,10 +49,10 @@ class Halogen(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRat
     private var bulbcost = 2.0
     private val ledbulbcost = 4.5
 
-    private var seer = 10
+    private var seer = 10.0
     private var cooling = 3.142
 
-    private val LEDlifeHours = 40000
+    private val LEDlifeHours = 40000.0
     private var timeperfixture = 0.33
     private var electricanHourlyRate = 25
 
@@ -68,24 +69,23 @@ class Halogen(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRat
     //Where you extract from user inputs and assign to variables
     override fun setup() {
         try {
-            actualWatts = featureData["Actual Watts"]!! as Double
-            lampsPerFixtures = featureData["Lamps Per Fixture"]!! as Int
-            numberOfFixtures = featureData["Number of Fixtures"]!! as Int
+            actualWatts = featureData["Actual Watts"].toDoubleOr(0.0)
+            lampsPerFixtures = featureData["Lamps Per Fixture"].toIntOr(0)
+            numberOfFixtures = featureData["Number of Fixtures"].toIntOr(0)
 
             val config = lightingConfig(ELightingType.Halogen)
             percentPowerReduced = config[ELightingIndex.PercentPowerReduced.value] as Double
 
-            ceilingType = featureData["Ceiling Type"]!! as String
-            replacementType = featureData["Replacement Type"]!! as String
-            isCeilingOver10Feet = featureData["Ceiling greater than 10 feet?"]!! as String
+            ceilingType = featureData["Ceiling Type"].toStringOr("")
+            replacementType = featureData["Replacement Type"].toStringOr("")
+            isCeilingOver10Feet = featureData["Ceiling greater than 10 feet?"].toStringOr("")
 
-            peakHours = featureData["Peak Hours"]!! as Double
-            partPeakHours = featureData["Part Peak Hours"]!! as Double
-            offPeakHours = featureData["Off Peak Hours"]!! as Double
+            controls = featureData["Type of Control"].toStringOr("")
+            hasControls = featureData["Controls"].toStringOr("")
 
-            controls = featureData["Type of Control"]!! as String
-            hasControls = featureData["Controls"]!! as String
-
+            peakHours = featureData["Peak Hours"].toDoubleOr(0.0)
+            partPeakHours = featureData["Part Peak Hours"].toDoubleOr(0.0)
+            offPeakHours = featureData["Off Peak Hours"].toDoubleOr(0.0)
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -100,30 +100,16 @@ class Halogen(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRat
             val usageHours = UsageLighting()
             usageHours.peakHours = 4336.0
             return usageHours.yearly()
-        } else {
+        }
+        else {
             val usageHours = UsageLighting()
             usageHours.peakHours = peakHours
             usageHours.partPeakHours = partPeakHours
             usageHours.offPeakHours = offPeakHours
-            if (usageHours.yearly() > 0) {
+            if (usageHours.yearly() > 0){
                 return usageHours.yearly()
             }
             return usageHoursBusiness.yearly()
-        }
-    }
-
-    private fun usageLightingPre(): UsageLighting {
-        if (hasControls == "Yes" && controls == "Daylight Sensor") {
-            val usageHours = UsageLighting()
-            usageHours.peakHours = 4336.0
-            return usageHours
-        } else {
-            val usageHours = UsageLighting()
-            usageHours.peakHours = peakHours
-            usageHours.partPeakHours = partPeakHours
-            usageHours.offPeakHours = offPeakHours
-
-            return usageHours
         }
     }
 
@@ -154,7 +140,6 @@ class Halogen(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRat
      * Cost - Post State
      * */
     override fun costPostState(element: JsonElement, dataHolder: DataHolder): Double {
-
         Timber.d("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
         Timber.d("!!! COST POST STATE - HALOGEN !!!")
         Timber.d("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
@@ -171,7 +156,7 @@ class Halogen(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRat
         // Percentage Power Reduced - we get it from the Base - ELighting
 
         val energySavings = preEnergy() * percentPowerReduced
-        val coolingSavings = if (seer == 0) 0.0 else  energySavings * cooling / seer.toDouble()
+        val coolingSavings = if (seer == 0.0) 0.0 else energySavings * cooling / seer
 
         val energyAtPostState = preEnergy() - energySavings
         val paybackmonth = if (energySavings == 0.0) 0.0 else installCost() / energySavings * 12
@@ -228,7 +213,7 @@ class Halogen(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRat
     }
 
     override fun energyTimeChange(): Double {
-        return actualWatts * numberOfFixtures * lampsPerFixtures / 1000.0 * usageHoursPost()
+        return  actualWatts * numberOfFixtures * lampsPerFixtures / 1000.0 * usageHoursPost()
     }
 
     override fun energyPowerTimeChange(): Double {
@@ -248,22 +233,37 @@ class Halogen(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRat
     }
 
     fun totalEnergySavings(): Double {
-        val coolingOverSeer = if (seer == 0) 0.0 else cooling / seer.toDouble()
-
         if (controls != null) {
-            val coolingSavings = (preEnergy() - energyPowerChange()) * coolingOverSeer
+            val coolingSavings = if (seer == 0.0) 0.0 else (preEnergy() - energyPowerChange()) * cooling / seer
             return (preEnergy() - energyPowerChange()) + coolingSavings
         } else {
-            val coolingSavings = (preEnergy() - energyPowerTimeChange()) * coolingOverSeer
+            val coolingSavings = if (seer == 0.0) 0.0 else (preEnergy() - energyPowerTimeChange()) * cooling / seer
             return (preEnergy() - energyPowerTimeChange()) + coolingSavings
         }
     }
 
+    private fun usageLightingPre(): UsageLighting {
+        if (hasControls == "Yes" && controls == "Daylight Sensor") {
+            val usageHours = UsageLighting()
+            usageHours.peakHours = 4336.0
+            return usageHours
+        }
+        else {
+            val usageHours = UsageLighting()
+            usageHours.peakHours = peakHours
+            usageHours.partPeakHours = partPeakHours
+            usageHours.offPeakHours = offPeakHours
+
+            return usageHours
+        }
+    }
+
     fun totalSavings(): Double {
-        if (controls == null && usageHoursPost() != null) {
+        if (controls == null && usageHoursPost() != null){
             val postPower = if (usageHoursPost() == 0.0) 0.0 else energyPowerTimeChange() / usageHoursPost()
             return costElectricity(postPower, usageLightingPre(), electricityRate)
-        } else {
+        }
+        else {
             val postPower = if (usageHoursPre() == 0.0) 0.0 else energyPowerChange() / usageHoursPre()
             val usageHours = UsageLighting()
             usageHours.peakHours = peakHours
@@ -312,18 +312,19 @@ class Halogen(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRat
         return total
     }
 
-
     /**
      * Energy Efficiency Lookup Query Definition
      * */
     override fun efficientLookup() = false
     override fun queryEfficientFilter() = ""
 
+
     /**
      * State if the Equipment has a Post UsageHours Hours (Specific) ie. A separate set of
      * Weekly UsageHours Hours apart from the PreAudit
      * */
     override fun usageHoursSpecific() = false
+
 
     /**
      * Define all the fields here - These would be used to Generate the Outgoing Rows or perform the Energy Calculation
