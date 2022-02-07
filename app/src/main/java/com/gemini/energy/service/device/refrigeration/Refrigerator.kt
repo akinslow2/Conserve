@@ -129,6 +129,8 @@ class Refrigerator(computable: Computable<*>, utilityRateGas: UtilityRate, utili
 
         try {
             val dailyEnergyUsed = featureData["Daily Energy Used"].toDoubleOr(0.0)
+            //set to default typical daily energy used of 3.5 kWh/day, using Beverage Air HR2-1S
+            if (dailyEnergyUsed == 0.0) dailyEnergyUsed = 3.5
             hourlyEnergy = dailyEnergyUsed / 24
         } catch (e: Exception) {
             e.printStackTrace()
