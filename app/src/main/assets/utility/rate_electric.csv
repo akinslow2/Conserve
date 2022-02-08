@@ -1,40 +1,19 @@
-rate,season,dc_period,demand_charge,ec_period,energy_charge,average
-A-1,summer,,0,none,0.28091,0
-A-1,winter,,0,none,0.22036,0
-A-1 TOU,summer,,0,on-peak,0.29592,0
-A-1 TOU,summer,,0,part-peak,0.27227,0
-A-1 TOU,summer,,0,off-peak,0.24491,0
-A-1 TOU,winter,,0,part-peak,0.25166,0
-A-1 TOU,winter,,0,off-peak,0.23075,0
-A-6 TOU,summer,,0,on-peak,0.59927,0
-A-6 TOU,summer,,0,part-peak,0.30245,0
-A-6 TOU,summer,,0,off-peak,0.23086,0
-A-6 TOU,winter,,0,part-peak,0.24592,0
-A-6 TOU,winter,,0,off-peak,0.22767,0
-A-10,summer,,21.94,none,0.18607,0
-A-10,winter,,13.27,none,0.14531,0
-A-10 TOU,summer,,21.94,on-peak,0.23996,0
-A-10 TOU,summer,,21.94,part-peak,0.18483,0
-A-10 TOU,summer,,21.94,off-peak,0.15676,0
-A-10 TOU,winter,,13.27,part-peak,0.15544,0
-A-10 TOU,winter,,13.27,off-peak,0.13838,0
-B-1 TOU,summer,,0,on-peak,0.3555,
-B-1 TOU,summer,,0,part-peak,0.30627,
-B-1 TOU,summer,,0,off-peak,0.28546,
-B-1 TOU,winter,,0,on-peak,0.28008,
-B-1 TOU,winter,,0,off-peak,0.26396,
-B-1 TOU,winter,,0,super off-peak,0.24754,
-B-6 TOU Alt/Poly,summer,,0,on-peak,0.38509,0
-B-6 TOU Alt/Poly,summer,,0,off-peak,0.26715,0
-B-6 TOU Alt/Poly,winter,,0,on-peak,0.27748,0
-B-6 TOU Alt/Poly,winter,,0,off-peak,0.25773,0
-B-6 TOU Alt/Poly,winter,,0,super off-peak,0.24132,0
-E-19 TOU,summer,max. peak,21.94,on-peak,0.17427,0
-E-19 TOU,summer,part peak,6.1,part-peak,0.12656,0
-E-19 TOU,summer,maximum,21.1,off-peak,0.09496,0
-E-19 TOU,winter,part peak,0.14,part-peak,0.12002,0
-E-19 TOU,winter,maximum,21.1,off-peak,0.1028,0
-E-TOU-C,summer,,0,on-peak,0.44773,0
-E-TOU-C,summer,,0,off-peak,0.38429,0
-E-TOU-C,winter,,0,on-peak,0.35064,0
-E-TOU-C,winter,,0,off-peak,0.33331,0
+rate,season,hours type,energy charge to 500kWh,energy charge above 500 kWh,demand charge to 7kW,demand charge over 7kW,service charge single phase,service charge 3 phase
+SGS TOU,summer,off-peak,0.1116,0.1215,0,0,22,29
+SGS TOU,summer,on-peak,0.1524,0.1623,0,0,22,29
+SGS TOU,winter,off-peak,0.0999,0.1146,0,0,22,29
+SGS TOU,winter,on-peak,0.111,0.1256,0,0,22,29
+SGS Peak Demand,summer,none,0.0952,0.0952,10.07,14.12,22,29
+SGS Peak Demand,winter,none,0.0821,0.0821,10.07,14.12,22,29
+SGS Demand TOU,summer,on-peak,0.127,0.127,10.07,14.12,22,29
+SGS Demand TOU,summer,off-peak,0.0861,0.0861,10.07,14.12,22,29
+SGS Demand TOU,winter,on-peak,0.0871,0.0871,10.07,14.12,22,29
+SGS Demand TOU,winter,off-peak,0.076,0.076,10.07,14.12,22,29
+SGS Basic,summer,none,0.1147,0.1306,0,0,25,32
+SGS Basic,winter,none,0.10,0.1207,0,0,25,32
+MGS TOU,summer,on-peak,0.1751,0.1751,9.11,9.11,40,40
+MGS TOU,summer,off-peak,0.0835,0.0835,4.06,4.06,40,40
+MGS TOU,winter,on-peak,0.1751,0.1751,3.94,3.94,40,40
+MGS TOU,winter,off-peak,0.0835,0.0835,3.35,3.35,40,40
+MGS,summer,none,0.1132,0.1132,7.94,7.94,40,40
+MGS,winter,none,0.0971,0.0971,6.29,6.29,40,40
