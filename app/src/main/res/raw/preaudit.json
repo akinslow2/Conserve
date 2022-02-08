@@ -435,7 +435,7 @@
           "index": 84,
           "hint": "rq",
           "dataType": "pickerinputrow",
-          "defaultValues": "1:A-1,2:A-1 TOU,3:A-6 TOU,4:A-10,5:A-10 TOU,6:E-19 TOU",
+          "defaultValues": "1:A-1,2:A-1 TOU,3:A-6 TOU,4:A-10,5:A-10 TOU,6:B6,7:E-19 TOU",
           "param": "Electric Rate Structure",
           "validation": "optional",
           "id": "84"
