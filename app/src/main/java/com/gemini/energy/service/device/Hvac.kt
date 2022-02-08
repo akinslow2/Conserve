@@ -109,7 +109,7 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
      * */
     private var eer = 0.0
     var seer = 9.0
-    private var alternateSeer = 20.0
+    private var alternateSeer = 18.0
     private var alternateEer = 0.0
     private var alternateBtu = 0
 
@@ -195,7 +195,7 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
     var heatEfficiency = 0.9
     var heatElecEfficiency = 5.0
     var hspf = 10.0
-    var alternateHspf = 8.0
+    var alternateHspf = 10.0
     var namePlate = ""
 
 
@@ -222,12 +222,12 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
             val inputSeer = featureData["SEER"].toDoubleOr(0.0)
             seer = if (inputSeer > 0.0) inputSeer else seer
 
-            val altSeer = featureData["Alternate SEER"].toDoubleOr(0.0)
+            val altSeer = featureData["Alternate SEER"].toDoubleOr(18.0)
             alternateSeer = if (altSeer > 0.0) altSeer else alternateSeer
             val inputHeatEffElec = featureData["Heating Electric Efficiency"].toDoubleOr(0.0)
             heatElecEfficiency = if (inputHeatEffElec > 0.0) inputHeatEffElec else heatElecEfficiency
 
-            val inputAltHspf = featureData["Alternate HSPF"].toDoubleOr(0.0)
+            val inputAltHspf = featureData["Alternate HSPF"].toDoubleOr(10.0)
             alternateHspf = if (inputAltHspf > 0.0) inputAltHspf else alternateHspf
 
             year = featureData["Year"].toIntOr(0)
