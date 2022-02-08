@@ -426,7 +426,7 @@
           "index": 83,
           "hint": "rq",
           "dataType": "pickerinputrow",
-          "defaultValues": "1:G-NR1",
+          "defaultValues": "1:G-NR1,2:G-NR2,3:G-1 X Residential",
           "param": "Gas Rate Structure",
           "validation": "optional",
           "id": "83"
