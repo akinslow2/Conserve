@@ -37,12 +37,13 @@ open class UsageHours {
     open fun timeOfUse(): TOU {
         val usageByPeak = mapper.mappedHoursYearly()
         return TOU(
-                usageByPeak[ERateKey.SummerOn]!! * WEIGHT_SUMMER,
-                usageByPeak[ERateKey.SummerPart]!! * WEIGHT_SUMMER,
-                usageByPeak[ERateKey.SummerOff]!! * WEIGHT_SUMMER,
-                usageByPeak[ERateKey.WinterPart]!! * WEIGHT_WINTER,
-                usageByPeak[ERateKey.WinterOff]!! * WEIGHT_WINTER
-        )
+                    usageByPeak[ERateKey.SummerOn]!! * WEIGHT_SUMMER,
+                    usageByPeak[ERateKey.SummerPart]!! * WEIGHT_SUMMER,
+                    usageByPeak[ERateKey.SummerOff]!! * WEIGHT_SUMMER,
+                    usageByPeak[ERateKey.WinterPart]!! * WEIGHT_WINTER,
+                    usageByPeak[ERateKey.WinterOff]!! * WEIGHT_WINTER,
+                    usageByPeak[ERateKey.WinterSuperOff]!! * WEIGHT_WINTER
+                )
     }
 
     /**
