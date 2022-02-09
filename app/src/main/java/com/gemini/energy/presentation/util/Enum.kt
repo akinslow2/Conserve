@@ -164,7 +164,6 @@ enum class ERateKey(val value: String) {
     SummerOn("summer-on-peak"),
     WinterOff("winter-off-peak"),
     WinterPart("winter-part-peak"),
-    WinterSuperOff("winter-super-off-peak"),
 
     SummerNone("summer-none"),
     WinterNone("winter-none"),
@@ -194,7 +193,7 @@ enum class ERateKey(val value: String) {
         fun get(rateKey: String) = map[rateKey]
 
         fun getAllElectric() = listOf(SummerOff, SummerPart, SummerOn, WinterOff,
-                WinterPart, WinterSuperOff, SummerNone, WinterNone)
+                WinterPart, SummerNone, WinterNone)
 
     }
 
