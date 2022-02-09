@@ -19,7 +19,7 @@ data class WaterHeaterValues(
         val quantity: Int,
         val year: Int,
         val age: Int,
-        val thermaleff: Int,
+        val thermaleff: Double,
         val fueltype: String,
         val unittype: String,
         val capacity: Double,
