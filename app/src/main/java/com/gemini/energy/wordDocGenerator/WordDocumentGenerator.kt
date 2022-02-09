@@ -385,7 +385,7 @@ class WordDocumentGenerator {
     }
 
     private fun generateEquipmentSavingsPage(document: XWPFDocument, equipment: EquipmentValues) {
-        if (equipment.totalNetPresentValue > 1) {
+        if (equipment.netPresentValue > 1) {
             document.createHeaderWithSavings(
                     "Kitchen Equipment Savings",
                     "Implementation of recommended kitchen equipment upgrades will save you at least: ",
@@ -656,9 +656,9 @@ class WordDocumentGenerator {
 
         table.generateFinancialComponentsDetailRow(
                 "        Kitchen Equipment (NPV)",
-                values.equipment?.totalNetPresentValue?.absoluteValue?.format(0) ?: "N/A",
+                values.equipment?.netPresentValue?.absoluteValue?.format(0) ?: "N/A",
                 currentRow,
-                cell2Color = if (values.equipment?.totalNetPresentValue == null || values.equipment.totalNetPresentValue >= 0) blackColor else redColor)
+                cell2Color = if (values.equipment?.netPresentValue == null || values.equipment.netPresentValue >= 0) blackColor else redColor)
         currentRow += 1
 
         table.fitTable(4500)
