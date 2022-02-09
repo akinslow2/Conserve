@@ -564,124 +564,123 @@
           "defaultValues": "1:yes,2:no",
           "validation": "optional",
           "hint": ""
-        },
-        {
-          "index": 10,
-          "section": "Gas Slab Rate",
-          "elements": [
-            {
-              "index": 101,
-              "hint": "rq",
-              "dataType": "pickerinputrow",
-              "defaultValues": "1:0_5.0,2:5.1_16.0,3:16.1_41.0,4:41.1_123.0,5:123.1_n_up",
-              "param": "January",
-              "validation": "mandatory",
-              "id": "101"
-            },
-            {
-              "index": 102,
-              "hint": "rq",
-              "dataType": "pickerinputrow",
-              "defaultValues": "1:0_5.0,2:5.1_16.0,3:16.1_41.0,4:41.1_123.0,5:123.1_n_up",
-              "param": "February",
-              "validation": "mandatory",
-              "id": "102"
-            },
-            {
-              "index": 103,
-              "hint": "rq",
-              "dataType": "pickerinputrow",
-              "defaultValues": "1:0_5.0,2:5.1_16.0,3:16.1_41.0,4:41.1_123.0,5:123.1_n_up",
-              "param": "March",
-              "validation": "mandatory",
-              "id": "103"
-            },
-            {
-              "index": 104,
-              "hint": "rq",
-              "dataType": "pickerinputrow",
-              "defaultValues": "1:0_5.0,2:5.1_16.0,3:16.1_41.0,4:41.1_123.0,5:123.1_n_up",
-              "param": "April",
-              "validation": "mandatory",
-              "id": "104"
-            },
-            {
-              "index": 105,
-              "hint": "rq",
-              "dataType": "pickerinputrow",
-              "defaultValues": "1:0_5.0,2:5.1_16.0,3:16.1_41.0,4:41.1_123.0,5:123.1_n_up",
-              "param": "May",
-              "validation": "mandatory",
-              "id": "105"
-            },
-            {
-              "index": 106,
-              "hint": "rq",
-              "dataType": "pickerinputrow",
-              "defaultValues": "1:0_5.0,2:5.1_16.0,3:16.1_41.0,4:41.1_123.0,5:123.1_n_up",
-              "param": "June",
-              "validation": "mandatory",
-              "id": "106"
-            },
-            {
-              "index": 107,
-              "hint": "rq",
-              "dataType": "pickerinputrow",
-              "defaultValues": "1:0_5.0,2:5.1_16.0,3:16.1_41.0,4:41.1_123.0,5:123.1_n_up",
-              "param": "July",
-              "validation": "mandatory",
-              "id": "107"
-            },
-            {
-              "index": 108,
-              "hint": "rq",
-              "dataType": "pickerinputrow",
-              "defaultValues": "1:0_5.0,2:5.1_16.0,3:16.1_41.0,4:41.1_123.0,5:123.1_n_up",
-              "param": "August",
-              "validation": "mandatory",
-              "id": "108"
-            },
-            {
-              "index": 109,
-              "hint": "rq",
-              "dataType": "pickerinputrow",
-              "defaultValues": "1:0_5.0,2:5.1_16.0,3:16.1_41.0,4:41.1_123.0,5:123.1_n_up",
-              "param": "September",
-              "validation": "mandatory",
-              "id": "109"
-            },
-            {
-              "index": 110,
-              "hint": "rq",
-              "dataType": "pickerinputrow",
-              "defaultValues": "1:0_5.0,2:5.1_16.0,3:16.1_41.0,4:41.1_123.0,5:123.1_n_up",
-              "param": "October",
-              "validation": "mandatory",
-              "id": "110"
-            },
-            {
-              "index": 111,
-              "hint": "rq",
-              "dataType": "pickerinputrow",
-              "defaultValues": "1:0_5.0,2:5.1_16.0,3:16.1_41.0,4:41.1_123.0,5:123.1_n_up",
-              "param": "November",
-              "validation": "mandatory",
-              "id": "111"
-            },
-            {
-              "index": 112,
-              "hint": "rq",
-              "dataType": "pickerinputrow",
-              "defaultValues": "1:0_5.0,2:5.1_16.0,3:16.1_41.0,4:41.1_123.0,5:123.1_n_up",
-              "param": "December",
-              "validation": "mandatory",
-              "id": "112"
-              "hint": ""
-            }
-          ],
-          "id": 10
         }
       ]
+    },
+    {
+      "index": 10,
+      "section": "Gas Slab Rate",
+      "elements": [
+        {
+          "index": 101,
+          "hint": "rq",
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:0_5.0,2:5.1_16.0,3:16.1_41.0,4:41.1_123.0,5:123.1_n_up",
+          "param": "January",
+          "validation": "mandatory",
+          "id": "101"
+        },
+        {
+          "index": 102,
+          "hint": "rq",
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:0_5.0,2:5.1_16.0,3:16.1_41.0,4:41.1_123.0,5:123.1_n_up",
+          "param": "February",
+          "validation": "mandatory",
+          "id": "102"
+        },
+        {
+          "index": 103,
+          "hint": "rq",
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:0_5.0,2:5.1_16.0,3:16.1_41.0,4:41.1_123.0,5:123.1_n_up",
+          "param": "March",
+          "validation": "mandatory",
+          "id": "103"
+        },
+        {
+          "index": 104,
+          "hint": "rq",
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:0_5.0,2:5.1_16.0,3:16.1_41.0,4:41.1_123.0,5:123.1_n_up",
+          "param": "April",
+          "validation": "mandatory",
+          "id": "104"
+        },
+        {
+          "index": 105,
+          "hint": "rq",
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:0_5.0,2:5.1_16.0,3:16.1_41.0,4:41.1_123.0,5:123.1_n_up",
+          "param": "May",
+          "validation": "mandatory",
+          "id": "105"
+        },
+        {
+          "index": 106,
+          "hint": "rq",
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:0_5.0,2:5.1_16.0,3:16.1_41.0,4:41.1_123.0,5:123.1_n_up",
+          "param": "June",
+          "validation": "mandatory",
+          "id": "106"
+        },
+        {
+          "index": 107,
+          "hint": "rq",
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:0_5.0,2:5.1_16.0,3:16.1_41.0,4:41.1_123.0,5:123.1_n_up",
+          "param": "July",
+          "validation": "mandatory",
+          "id": "107"
+        },
+        {
+          "index": 108,
+          "hint": "rq",
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:0_5.0,2:5.1_16.0,3:16.1_41.0,4:41.1_123.0,5:123.1_n_up",
+          "param": "August",
+          "validation": "mandatory",
+          "id": "108"
+        },
+        {
+          "index": 109,
+          "hint": "rq",
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:0_5.0,2:5.1_16.0,3:16.1_41.0,4:41.1_123.0,5:123.1_n_up",
+          "param": "September",
+          "validation": "mandatory",
+          "id": "109"
+        },
+        {
+          "index": 110,
+          "hint": "rq",
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:0_5.0,2:5.1_16.0,3:16.1_41.0,4:41.1_123.0,5:123.1_n_up",
+          "param": "October",
+          "validation": "mandatory",
+          "id": "110"
+        },
+        {
+          "index": 111,
+          "hint": "rq",
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:0_5.0,2:5.1_16.0,3:16.1_41.0,4:41.1_123.0,5:123.1_n_up",
+          "param": "November",
+          "validation": "mandatory",
+          "id": "111"
+        },
+        {
+          "index": 112,
+          "hint": "rq",
+          "dataType": "pickerinputrow",
+          "defaultValues": "1:0_5.0,2:5.1_16.0,3:16.1_41.0,4:41.1_123.0,5:123.1_n_up",
+          "param": "December",
+          "validation": "mandatory",
+          "id": "112"
+        }
+      ],
+      "id": 10
     }
   ]
 }
