@@ -105,7 +105,7 @@ data class PreAuditValues(
             return preAudit["General Client Info Address"].toString()
         }
 
-
+        /**
         /**
          * get inputs for calculating customer charge
          *
@@ -179,5 +179,6 @@ data class PreAuditValues(
 
             return totalCustomerCharge
         }
+        */
     }
 }
