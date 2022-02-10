@@ -74,9 +74,9 @@ class Motors(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRate
 
     override fun setup() {
         try {
-            srs = (featureData["Synchronous Rotational Speed (SRS)"].toIntOr(0)).toDouble()
-            mrs = (featureData["Measured Rotational Speed (MRS)"].toIntOr(0)).toDouble()
-            nrs = (featureData["Nameplate Rotational Speed (NRS)"].toIntOr(0)).toDouble()
+            srs = featureData["Synchronous Rotational Speed (SRS)"].toDoubleOr(0.0)
+            mrs = featureData["Measured Rotational Speed (MRS)"].toDoubleOr(0.0)
+            nrs = featureData["Nameplate Rotational Speed (NRS)"].toDoubleOr(0.0)
             hp = featureData["Horsepower (HP)"].toDoubleOr(0.0)
             efficiency = featureData["Efficiency"].toDoubleOr(0.0)
 
