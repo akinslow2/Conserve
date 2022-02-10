@@ -161,10 +161,14 @@ data class PreAuditValues(
          *
          * @return yearly charge to access gas utility
          */
+        */
         private fun calculateCustomerCharge(equipment: EBase): Double {
             val electricityRetroFit = equipment.preAudit["Additions Will all gas be removed with retrofit?"] == "yes"
             if (!electricityRetroFit) return 0.0
 
+            //TEMPORARY PLEASE FIX LATER
+            return 0.0
+            /*
             val utility = equipment.gasRate
             var totalCustomerCharge = 0.0
 
@@ -178,7 +182,7 @@ data class PreAuditValues(
             }
 
             return totalCustomerCharge
+            */
         }
-        */
     }
 }
