@@ -137,6 +137,8 @@ class Syncer(private val parseAPIService: ParseAPI.ParseAPIService,
 //        uploadAudit()
     }
 
+
+    //@DY Check this function for preaudit data sync!! Look for how feature data is treated differently than preaudit
     private fun download() {
         Timber.i("~~~~~Syncer:  download()")
 
