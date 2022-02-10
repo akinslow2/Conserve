@@ -422,17 +422,19 @@ class WordDocumentGenerator {
                     "Refrigeration Savings",
                     "Implementation of recommended refrigeration upgrades will save you at least: ",
                     refrigeration.totalSavings)
+
+            val p3 = document.createParagraph()
+            p3.spacingBetween = 1.5
+            val r1p3 = p3.createRun()
+            r1p3.fontFamily = fontGeorgia
+            r1p3.fontSize = 18
+            r1p3.setText("The estimated cost is ${refrigeration.totalCost.format(2)}, resulting in a payback of ${refrigeration.paybackMonth.format(2)} months. " +
+                    "This investment will result in a NPV of $${refrigeration.netPresentValue.format(0)}")
+
         } else {
             document.createHeaderWithNoRecommendedMeasures("Refrigeration Savings")
         }
 
-        val p3 = document.createParagraph()
-        p3.spacingBetween = 1.5
-        val r1p3 = p3.createRun()
-        r1p3.fontFamily = fontGeorgia
-        r1p3.fontSize = 18
-        r1p3.setText("The estimated cost is ${refrigeration.totalCost.format(2)}, resulting in a payback of ${refrigeration.paybackMonth.format(2)} months. " +
-                "This investment will result in a NPV of $${refrigeration.netPresentValue.format(0)}")
     }
 
     private fun generateFacilityInformationPage(document: XWPFDocument, values: PreparedForDocument, preAudit: PreAuditValues) {
