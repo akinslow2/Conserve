@@ -41,8 +41,7 @@ open class UsageHours {
                     usageByPeak[ERateKey.SummerPart]!! * WEIGHT_SUMMER,
                     usageByPeak[ERateKey.SummerOff]!! * WEIGHT_SUMMER,
                     usageByPeak[ERateKey.WinterPart]!! * WEIGHT_WINTER,
-                    usageByPeak[ERateKey.WinterOff]!! * WEIGHT_WINTER,
-                    usageByPeak[ERateKey.WinterSuperOff]!! * WEIGHT_WINTER
+                    usageByPeak[ERateKey.WinterOff]!! * WEIGHT_WINTER
                 )
     }
 
