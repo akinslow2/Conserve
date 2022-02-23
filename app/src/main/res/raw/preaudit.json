@@ -577,7 +577,7 @@
           "dataType": "pickerinputrow",
           "defaultValues": "1:0_5.0,2:5.1_16.0,3:16.1_41.0,4:41.1_123.0,5:123.1_n_up",
           "param": "January",
-          "validation": "mandatory",
+          "validation": "optional",
           "id": "101"
         },
         {
@@ -586,7 +586,7 @@
           "dataType": "pickerinputrow",
           "defaultValues": "1:0_5.0,2:5.1_16.0,3:16.1_41.0,4:41.1_123.0,5:123.1_n_up",
           "param": "February",
-          "validation": "mandatory",
+          "validation": "optional",
           "id": "102"
         },
         {
@@ -595,7 +595,7 @@
           "dataType": "pickerinputrow",
           "defaultValues": "1:0_5.0,2:5.1_16.0,3:16.1_41.0,4:41.1_123.0,5:123.1_n_up",
           "param": "March",
-          "validation": "mandatory",
+          "validation": "optional",
           "id": "103"
         },
         {
@@ -604,7 +604,7 @@
           "dataType": "pickerinputrow",
           "defaultValues": "1:0_5.0,2:5.1_16.0,3:16.1_41.0,4:41.1_123.0,5:123.1_n_up",
           "param": "April",
-          "validation": "mandatory",
+          "validation": "optional",
           "id": "104"
         },
         {
@@ -613,7 +613,7 @@
           "dataType": "pickerinputrow",
           "defaultValues": "1:0_5.0,2:5.1_16.0,3:16.1_41.0,4:41.1_123.0,5:123.1_n_up",
           "param": "May",
-          "validation": "mandatory",
+          "validation": "optional",
           "id": "105"
         },
         {
@@ -622,7 +622,7 @@
           "dataType": "pickerinputrow",
           "defaultValues": "1:0_5.0,2:5.1_16.0,3:16.1_41.0,4:41.1_123.0,5:123.1_n_up",
           "param": "June",
-          "validation": "mandatory",
+          "validation": "optional",
           "id": "106"
         },
         {
@@ -631,7 +631,7 @@
           "dataType": "pickerinputrow",
           "defaultValues": "1:0_5.0,2:5.1_16.0,3:16.1_41.0,4:41.1_123.0,5:123.1_n_up",
           "param": "July",
-          "validation": "mandatory",
+          "validation": "optional",
           "id": "107"
         },
         {
@@ -640,7 +640,7 @@
           "dataType": "pickerinputrow",
           "defaultValues": "1:0_5.0,2:5.1_16.0,3:16.1_41.0,4:41.1_123.0,5:123.1_n_up",
           "param": "August",
-          "validation": "mandatory",
+          "validation": "optional",
           "id": "108"
         },
         {
@@ -649,7 +649,7 @@
           "dataType": "pickerinputrow",
           "defaultValues": "1:0_5.0,2:5.1_16.0,3:16.1_41.0,4:41.1_123.0,5:123.1_n_up",
           "param": "September",
-          "validation": "mandatory",
+          "validation": "optional",
           "id": "109"
         },
         {
@@ -658,7 +658,7 @@
           "dataType": "pickerinputrow",
           "defaultValues": "1:0_5.0,2:5.1_16.0,3:16.1_41.0,4:41.1_123.0,5:123.1_n_up",
           "param": "October",
-          "validation": "mandatory",
+          "validation": "optional",
           "id": "110"
         },
         {
@@ -667,7 +667,7 @@
           "dataType": "pickerinputrow",
           "defaultValues": "1:0_5.0,2:5.1_16.0,3:16.1_41.0,4:41.1_123.0,5:123.1_n_up",
           "param": "November",
-          "validation": "mandatory",
+          "validation": "optional",
           "id": "111"
         },
         {
@@ -676,7 +676,7 @@
           "dataType": "pickerinputrow",
           "defaultValues": "1:0_5.0,2:5.1_16.0,3:16.1_41.0,4:41.1_123.0,5:123.1_n_up",
           "param": "December",
-          "validation": "mandatory",
+          "validation": "optional",
           "id": "112"
         }
       ],
