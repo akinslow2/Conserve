@@ -149,7 +149,7 @@ class WaterHeater(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
 
             gasInput = (featureData["Heating Input (Btu/hr)"].toIntOr(0)).toDouble()
             gasOutput = (featureData["Heating Output (Btu/hr)"].toIntOr(0)).toDouble()
-            thermaleff = (featureData["Thermal Efficiency"].toIntOr(0)).toDouble()
+            thermaleff = (featureData["Thermal Efficiency"].toDoubleOr(0.0))
             electriceff = featureData["Efficiency Factor (EF or UEF)"].toDoubleOr(0.0)
 
             kW = featureData["Heating Power (kW)"].toDoubleOr(0.0)

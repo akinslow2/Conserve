@@ -79,7 +79,7 @@
         {
           "index": 19,
           "hint": "Rq if available",
-          "dataType": "introw",
+          "dataType": "decimalrow",
           "defaultValues": "",
           "param": "Thermal Efficiency",
           "validation": "optional",
