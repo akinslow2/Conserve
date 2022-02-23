@@ -1,10 +1,9 @@
 package com.gemini.energy.wordDocGenerator.models
 
 import com.gemini.energy.service.device.EBase
-import com.gemini.energy.wordDocGenerator.AuditComponents
 import com.gemini.energy.toDoubleOr
-import com.gemini.energy.toIntOr
 import com.gemini.energy.toStringOr
+import com.gemini.energy.wordDocGenerator.AuditComponents
 
 /**
  * PreAudit values for word doc generation
@@ -102,7 +101,12 @@ data class PreAuditValues(
          * @return formatted address
          */
         private fun concatenateAddress(preAudit: Map<String, Any>): String {
-            return preAudit["General Client Info Address"].toString()
+            val addressLine1 = preAudit["General Client Info Address Line 1"]
+            val addressLine2 = preAudit["General Client Info Address Line 2"]
+            val city = preAudit["General Client Info City"]
+            val state = preAudit["General Client Info State"]
+            val zipCode = preAudit["General Client Info Zip Code"]
+            return "$addressLine1 $addressLine2 $city, $state $zipCode"
         }
 
 
