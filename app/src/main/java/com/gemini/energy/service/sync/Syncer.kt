@@ -190,15 +190,31 @@ class Syncer(private val parseAPIService: ParseAPI.ParseAPIService,
                             val _auditId = auditId.toLong()
 
                             fun addFeatureToModel(formIds: List<String>) {
+                                if (formIds.contains("lamps_fixture")) {
+                                    Timber.e("Can't add feature to model")
+                                    Timber.i("audit id $auditId")
+                                    // HACK: don't add feature to model if
+                                    // form id is not an underlying int
+
+                                    // lamps_fixture is the first string in broken equipment
+                                    return
+                                }
                                 for (i in 0 until formIds.count() - 1) {
                                     val feature = FeatureLocalModel(
-                                            id?.get(i)?.toInt(), formIds[i].toInt(),
-                                            belongsTo, dataTypes[i],
-                                            usn, null,
-                                            zoneId?.toLong(), typeId?.toLong(),
-                                            fields[i], values[i],
-                                            null, null,
-                                            Date(), Date())
+                                            featureId = id?.get(i)?.toInt(),
+                                            formId = formIds[i].toIntOrNull(),
+                                            belongsTo = belongsTo,
+                                            dataType = dataTypes[i],
+                                            usn = usn,
+                                            auditId = null,
+                                            zoneId = zoneId?.toLongOrNull(),
+                                            typeId = typeId?.toLongOrNull(),
+                                            key = fields[i],
+                                            valueString = values[i],
+                                            valueInt = null,
+                                            valueDouble = null,
+                                            createdAt = Date(),
+                                            updatedAt = Date())
                                     models.add(feature)
                                 }
                             }
