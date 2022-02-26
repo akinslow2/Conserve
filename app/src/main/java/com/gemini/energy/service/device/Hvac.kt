@@ -408,7 +408,9 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
     }
 
     override fun laborCost(): Double {
-        return 0.0
+        // estimate from Marina Mechanical's bid for Aurum and online searches
+        //@DY - adjust for fuel switching from gas to electric
+        return 2500.0
     }
 
     /*
