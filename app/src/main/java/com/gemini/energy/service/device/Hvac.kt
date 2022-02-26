@@ -404,7 +404,7 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
 
 
     override fun materialCost(): Double {
-        return 4000.0 * (kbtu / 12000.0)
+        return 4000.0 * (kbtu / 12.0)
     }
 
     override fun laborCost(): Double {
