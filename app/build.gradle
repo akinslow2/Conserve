@@ -1,85 +1,25 @@
-apply plugin: 'com.android.application'
-apply plugin: 'io.fabric'
-apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
-apply plugin: 'kotlin-kapt'
-apply plugin: 'realm-android'
-
-android {
-    compileSdkVersion 26
-
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
-
-    kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_1_8.toString()
-    }
-
-    defaultConfig {
-        applicationId "com.gemini.energy"
-        minSdkVersion 19
-        targetSdkVersion 26
-        versionCode 1
-        versionName "1.0"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-        multiDexEnabled true
-    }
-
-    buildTypes {
-        debug {
-            debuggable true
-            minifyEnabled false
-        }
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-    }
-
-    dataBinding {
-        enabled true
-    }
-
-    packagingOptions {
-        pickFirst "META-INF/DEPENDENCIES"
-        // exclude "META-INF/DEPENDENCIES"
-    }
+plugins {
+    id 'java'
+    id 'org.jetbrains.kotlin.jvm' version '1.6.10'
 }
 
-androidExtensions {
-    experimental = true
+repositories {
+    mavenCentral()
 }
 
 dependencies {
-    implementation fileTree(include: ['*.jar'], dir: 'libs')
-    kapt presentationKaptDependencies
-    implementation presentationDependencies
-    implementation project(':form')
-    testImplementation presentationTestDependencies
-    androidTestImplementation presentationInstrumentationTestDependencies
-    implementation('com.crashlytics.sdk.android:crashlytics:2.10.1@aar') {
-        transitive = true
-    }
-
     // word doc generation
     implementation 'org.apache.poi:poi:4.0.1'
     implementation 'org.apache.poi:poi-ooxml:4.0.1'
     implementation 'javax.xml.stream:stax-api:1.0'
 
     // kotlin & utils
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
     implementation 'com.squareup.okhttp3:logging-interceptor:4.8.0'
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.7'
 
     // aws s3
     implementation 'com.amazonaws:aws-android-sdk-core:2.16.13'
     implementation 'com.amazonaws:aws-android-sdk-cognito:2.16.13'
     implementation 'com.amazonaws:aws-android-sdk-s3:2.16.13'
-}
-repositories {
-    mavenCentral()
 }

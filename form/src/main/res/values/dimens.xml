@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <dimen name="headerTextSize">18sp</dimen>
-    <dimen name="elementTextTitleSize">16sp</dimen>
-    <dimen name="elementTextValueSize">16sp</dimen>
-    <dimen name="elementErrorTitleSize">16sp</dimen>
-</resources>
