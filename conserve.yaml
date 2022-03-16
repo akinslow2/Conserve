@@ -1,0 +1,19 @@
+openapi: 3.0.3
+info:
+  title: Conserve Backend Service
+  description: Crunches data and generates reports
+  version: 1.0.0
+servers:
+  - url: 'https://conserve.clashsoft.de/api/v1'
+paths:
+  '/audits/{auditId}/report':
+    get:
+      tags: [Reports]
+      parameters:
+        - name: auditId
+          in: path
+          required: true
+      responses:
+        200:
+          description: Success
+      description: Generates and returns a report as a Word document
