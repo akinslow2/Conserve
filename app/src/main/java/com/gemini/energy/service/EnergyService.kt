@@ -10,8 +10,8 @@ import com.gemini.energy.service.type.UtilityRate
 import com.gemini.energy.wordDocGenerator.WordDocumentGenerator
 import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
-import io.reactivex.functions.BiFunction
 import io.reactivex.rxkotlin.merge
+import org.apache.poi.xwpf.usermodel.XWPFDocument
 
 
 class EnergyService(
@@ -43,11 +43,14 @@ class EnergyService(
     /**
      * Energy Calculation - Main Entry Point
      * */
-    fun run(callback: (status: Boolean) -> Unit) {
+    fun run(auditId: Long, callback: (result: XWPFDocument?) -> Unit) {
 
         cleanup()
 
-        disposables.add(auditGateway.getComputable()
+        // TODO this entire class is completely weird. What's with all the nested subscribes and Observables?
+        //  All the class variables could be removed as well by refactoring this into a clean method.
+        //  Probably way easier with coroutines.
+        disposables.add(auditGateway.getComputable(auditId)
                 .subscribe { computables ->
                     Observable.fromIterable(computables)
                             .subscribe({ eachComputable ->
@@ -83,16 +86,17 @@ class EnergyService(
     /**
      * Holds the Main Work - i.e Running each Energy Calculations for each of the IComputables
      * */
-    private fun doWork(callback: (status: Boolean) -> Unit) {
+    private fun doWork(callback: (result: XWPFDocument?) -> Unit) {
         disposables.add(taskHolder.merge()
                 .subscribe({
                 }, { exception ->
                     exception.printStackTrace()
-                    callback(false)
+                    callback(null)
                 }, {
-                    WordDocumentGenerator().triggerGeneration(ebases)
-
-                    callback(true) // << ** The final Exit Point ** >> //
+                    val docs = WordDocumentGenerator().triggerGeneration(ebases)
+                    // TODO the documents are grouped by audit.
+                    //  Only one audit is handled at a time so we might as well get rid of the lists.
+                    callback(docs[0])
                 }))
     }
 
@@ -128,12 +132,9 @@ class EnergyService(
 
         return Observable.zip(
                 auditGateway.getFeatureByAudit(computable.auditId),
-                auditGateway.getFeatureByType(computable.auditScopeId),
-                BiFunction<List<Feature>, List<Feature>, Observable<Computable<*>>> { featurePreAudit, featureAuditScope ->
-                    build(computable, featureAuditScope, featurePreAudit)
-                })
+                auditGateway.getFeatureByType(computable.auditScopeId)
+        ) { featurePreAudit, featureAuditScope ->
+            build(computable, featureAuditScope, featurePreAudit)
+        }
     }
-
-    private fun thread() = Thread.currentThread().name
-
 }

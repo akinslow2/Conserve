@@ -8,6 +8,7 @@ import com.gemini.energy.service.type.UsageHours
 import com.gemini.energy.service.type.UtilityRate
 import io.javalin.Javalin
 import io.javalin.apibuilder.ApiBuilder.get
+import io.javalin.http.HttpCode
 
 fun main() {
     val app = Javalin.create().start(7000)
@@ -17,7 +18,10 @@ fun main() {
             val auditId = ctx.pathParam("auditId")
             val rows = OutgoingRows()
             val service = EnergyService(ParseAuditGateway(ParseAPI.create()), UtilityRate(), UsageHours(), rows)
-            service.run {} // TODO return the document(s?)
+            service.run(auditId.toLong()) { doc ->
+                doc?.write(ctx.res.outputStream)
+                ctx.status(HttpCode.OK)
+            }
         }
     }
 
