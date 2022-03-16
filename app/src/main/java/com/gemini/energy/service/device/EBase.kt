@@ -1,8 +1,6 @@
 package com.gemini.energy.service.device
 
-import com.gemini.energy.domain.Schedulers
 import com.gemini.energy.domain.entity.Computable
-import com.gemini.energy.internal.AppSchedulers
 import com.gemini.energy.presentation.util.EDay
 import com.gemini.energy.presentation.util.ELightingType
 import com.gemini.energy.presentation.util.EZoneType
@@ -30,7 +28,6 @@ abstract class EBase(val computable: Computable<*>,
                      val operatingHours: UsageHours,
                      val outgoingRows: OutgoingRows)  {
 
-    lateinit var schedulers: Schedulers
     lateinit var gasRate: UtilityRate
     lateinit var electricityRate: UtilityRate
 
@@ -47,7 +44,6 @@ abstract class EBase(val computable: Computable<*>,
     private fun initialize() {
         val base = this
 
-        base.schedulers = AppSchedulers()
         base.featureData = computable.mappedFeatureAuditScope()
         base.preAudit = computable.mappedFeaturePreAudit()
 
@@ -137,7 +133,7 @@ abstract class EBase(val computable: Computable<*>,
         return Observable.concat(calculateEnergyPreState(extra), calculateEnergyPostState(extra),
                 calculateEnergySavings(extra), calculateCostSavings(extra))
                 .map(Mapper()).doOnComplete {
-                    outgoingRows.save()
+                    // TODO save?
                 }
 
     }
