@@ -1,10 +1,8 @@
 package com.gemini.energy.service
 
-import com.gemini.energy.service.responses.UploadImageResponse
 import com.google.gson.JsonObject
 import io.reactivex.Single
 import okhttp3.OkHttpClient
-import okhttp3.RequestBody
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
