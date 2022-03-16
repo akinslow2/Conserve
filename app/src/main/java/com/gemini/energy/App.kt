@@ -14,7 +14,7 @@ fun main() {
     val app = Javalin.create().start(57269)
 
     app.routes {
-        get("/audits/{auditId}/report") { ctx ->
+        get("/api/v1/audits/{auditId}/report") { ctx ->
             val auditId = ctx.pathParam("auditId")
             val rows = OutgoingRows()
             val service = EnergyService(ParseAuditGateway(ParseAPI.create()), UtilityRate(), UsageHours(), rows)
