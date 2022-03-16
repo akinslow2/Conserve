@@ -5,12 +5,11 @@ import com.gemini.energy.domain.entity.Feature
 import com.google.gson.JsonObject
 import io.reactivex.Single
 import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.http.*
-import java.util.concurrent.TimeUnit
+import retrofit2.http.GET
+import retrofit2.http.Query
 
 class ParseAPI {
 
@@ -37,36 +36,30 @@ class ParseAPI {
     }
 
     companion object {
-        private const val applicationId = "myappID"
-        private const val masterKey = "LxKMehb1c5IM"
-        private val loggingInterceptor = HttpLoggingInterceptor()
-                .setLevel(HttpLoggingInterceptor.Level.BODY)
+        private val serverUrl = System.getenv("PARSE_SERVER_URL")
+        private val applicationId = System.getenv("PARSE_APP_ID")
+        private val masterKey = System.getenv("PARSE_MASTER_KEY")
 
         private const val SYNC_AUDIT = "rAudit"
         private const val SYNC_FEATURE = "rFeature"
-        private const val SYNC_GRAVES = "rGraves"
 
         private val okHttpClient = OkHttpClient()
                 .newBuilder()
-                .connectTimeout(5, TimeUnit.MINUTES)
-                .readTimeout(5, TimeUnit.MINUTES)
-                .writeTimeout(5, TimeUnit.MINUTES)
                 .addInterceptor {
                     val original = it.request()
                     val request = original.newBuilder()
-                            .header("User-Agent", "OkHttp Headers.java")
                             .addHeader("Content-Type", "application/json")
                             .addHeader("X-Parse-Application-Id", applicationId)
                             .addHeader("X-Parse-REST-API-Key", masterKey)
                             .build()
-                    it.proceed(request) }
-                .addInterceptor(loggingInterceptor)
+                    it.proceed(request)
+                }
 
         fun create(): ParseAPIService {
             val retrofit = Retrofit.Builder()
                     .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                     .addConverterFactory(GsonConverterFactory.create())
-                    .baseUrl("https://us-west-oakland.ges.clashsoft.de/parse/")
+                    .baseUrl(serverUrl)
                     .client(okHttpClient.build())
                     .build()
 
