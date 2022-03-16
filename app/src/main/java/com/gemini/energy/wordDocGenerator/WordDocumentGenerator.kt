@@ -12,9 +12,6 @@ import kotlin.math.absoluteValue
 
 
 class WordDocumentGenerator {
-
-    private lateinit var documents: List<XWPFDocument>
-
     companion object {
         //Hex #'s used for the colors
         private const val greyColor = "595959"
@@ -36,7 +33,7 @@ class WordDocumentGenerator {
 
 
     /** Triggers the document generation for each audit and saves documents to appropriate place **/
-    fun triggerGeneration(ebases: MutableList<EBase>) {
+    fun triggerGeneration(ebases: MutableList<EBase>): List<XWPFDocument> {
         setupNeededForApacheToWork()
         // organization & aggregation
         val values = SorterForWordDocumentGenerator().prepareAllValues(ebases)
@@ -48,7 +45,7 @@ class WordDocumentGenerator {
             allDocuments.add(document)
         }
 
-        documents = allDocuments.toList()
+        return allDocuments.toList()
     }
 
     // generation
