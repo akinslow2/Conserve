@@ -1,16 +1,6 @@
 package com.gemini.energy.service
 
-import android.content.Context
-import android.os.Environment
-import com.dropbox.core.v2.files.FileMetadata
-import com.gemini.energy.branch
 import com.gemini.energy.domain.entity.Computable
-import com.gemini.energy.presentation.audit.DropBox
-import com.gemini.energy.presentation.audit.UploadFileTask
-import java.io.BufferedOutputStream
-import java.io.ByteArrayInputStream
-import java.io.File
-import java.io.FileOutputStream
 import java.util.*
 
 class DataHolder {
@@ -53,142 +43,9 @@ class DataHolder {
 
 }
 
-class OutgoingRows(private val context: Context) {
+class OutgoingRows {
     lateinit var computable: Computable<*>
     lateinit var dataHolder: MutableList<DataHolder>
-
-    /**
-     * Saves the Data to the Internal File System
-     * */
-    fun save() {
-
-        // Step 1: Loop over through the Data Holder
-        // Step 2: Extract out the individual components
-        // Step 3: Feed those components to the data method
-        // Step 4: Collect those data string in a list
-        // Step 5: Concatenate the list and writeToLocal that to the file
-
-        synchronized(dataHolder) {
-            val iterator = dataHolder.iterator()
-            while (iterator.hasNext()) {
-                val eachData = iterator.next()
-                val outgoing = StringBuilder()
-
-                val header = eachData.header
-                val rows = eachData.rows
-
-                outgoing.append(data(header, rows))
-                val file = getFile(eachData.path, eachData.fileName)
-                val data = outgoing.toString()
-                val path = "/General_Information/Gemini/Energy/$branch/${eachData.path}${eachData.fileName}"
-
-                writeToLocal(data, file)
-                writeToDropBox(data, path)
-            }
-
-        }
-    }
-
-    @Synchronized
-    private fun writeToDropBox(data: String, path: String) {
-
-        try {
-            if (DropBox.hasToken()) {
-                val uploadTask = UploadFileTask(DropBox.getClient(), object: UploadFileTask.Callback {
-                    override fun onUploadComplete(result: FileMetadata) {
-                    }
-                    override fun onError(e: Exception?) {
-                        e?.printStackTrace()
-                    }
-                })
-
-                uploadTask.execute(data, path)
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-
-    }
-
-    @Synchronized
-    private fun writeToLocal(data: String, file: File) {
-        try {
-            val inputStream = ByteArrayInputStream(data.toByteArray())
-            val outputStream = BufferedOutputStream(FileOutputStream(file))
-
-            val buffer = ByteArray(1024)
-            var bytesRead = inputStream.read(buffer, 0, buffer.size)
-
-            while (bytesRead > 0) {
-                outputStream.write(buffer, 0, bytesRead)
-                bytesRead = inputStream.read(buffer, 0, buffer.size)
-            }
-
-            inputStream.close()
-            outputStream.close()
-
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-    }
-
-
-    /**
-     * UtilityRate Methods
-     * */
-    private fun isExternalStorageWritable(): Boolean {
-        val state = Environment.getExternalStorageState()
-        return Environment.MEDIA_MOUNTED == state
-    }
-
-    private fun isExternalStorageReadable(): Boolean {
-        val state = Environment.getExternalStorageState()
-        return Environment.MEDIA_MOUNTED == state || Environment.MEDIA_MOUNTED_READ_ONLY == state
-    }
-
-    private fun parseFilenameFromPath(filePath: String): String {
-        val index = filePath.lastIndexOf('/') + 1
-        return filePath.substring(index)
-    }
-
-
-    /**
-     * Makes sure the Directory is created and all the folder structures are in place
-     * */
-    fun getDocumentFolderPath(subFolderPath: String? = null): File? {
-
-        val folderDir: File?
-
-        if (isExternalStorageWritable()) {
-            if (subFolderPath == null) {
-                folderDir = File(context.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS).path)
-            } else {
-                folderDir = File(context.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS).path + "/$subFolderPath")
-            }
-        } else {
-            if (subFolderPath == null) {
-                folderDir = File(context.filesDir.path + "/Documents")
-            } else {
-                folderDir = File(context.filesDir.path + "/Documents/$subFolderPath")
-            }
-        }
-
-        if (!folderDir.isDirectory) {
-            folderDir.mkdirs()
-        }
-
-        return folderDir
-    }
-
-
-    /**
-     * File Object where the Data gets written to
-     * */
-    private fun getFile(path: String, fileName: String): File {
-        val directory = getDocumentFolderPath("$GEMINI$path")!!
-        return File(directory.toString(), fileName)
-    }
-
 
     companion object {
 
