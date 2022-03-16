@@ -2,7 +2,6 @@
 package com.gemini.energy.service
 
 import android.content.Context
-import com.gemini.energy.domain.Schedulers
 import com.gemini.energy.domain.entity.Computable
 import com.gemini.energy.domain.entity.Feature
 import com.gemini.energy.domain.gateway.AuditGateway
@@ -18,7 +17,6 @@ import io.reactivex.rxkotlin.merge
 
 class EnergyService(
         private val context: Context,
-        private val schedulers: Schedulers,
         private val auditGateway: AuditGateway,
         private val utilityRateElectricity: UtilityRate,
         private val usageHours: UsageHours,
@@ -52,7 +50,6 @@ class EnergyService(
         cleanup()
 
         disposables.add(auditGateway.getComputable()
-                .subscribeOn(schedulers.subscribeOn)
                 .subscribe { computables ->
                     Observable.fromIterable(computables)
                             .subscribe({ eachComputable ->
@@ -90,7 +87,6 @@ class EnergyService(
      * */
     private fun doWork(callback: (status: Boolean) -> Unit) {
         disposables.add(taskHolder.merge()
-                .observeOn(schedulers.observeOn)
                 .subscribe({
                 }, { exception ->
                     exception.printStackTrace()
