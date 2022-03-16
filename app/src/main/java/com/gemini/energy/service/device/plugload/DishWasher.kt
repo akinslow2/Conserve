@@ -1,9 +1,6 @@
 package com.gemini.energy.service.device.plugload
 
-import android.content.Context
-import com.gemini.energy.R
 import com.gemini.energy.domain.entity.Computable
-import com.gemini.energy.presentation.form.FormMapper
 import com.gemini.energy.service.DataHolder
 import com.gemini.energy.service.IComputable
 import com.gemini.energy.service.OutgoingRows
@@ -22,7 +19,7 @@ import io.reactivex.Single
 import org.json.JSONObject
 
 class DishWasher(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateElectricity: UtilityRate,
-                      usageHours: UsageHours, outgoingRows: OutgoingRows, private val context: Context) :
+                      usageHours: UsageHours, outgoingRows: OutgoingRows) :
         EBase(computable, utilityRateGas, utilityRateElectricity, usageHours, outgoingRows), IComputable {
 
     /**
@@ -275,21 +272,10 @@ class DishWasher(computable: Computable<*>, utilityRateGas: UtilityRate, utility
     override fun laborCost(): Double = 0.0
     override fun incentives(): Double = 600.0
 
-    /**
-     * Define all the fields here - These would be used to Generate the Outgoing Rows or perform the Energy Calculation
-     * */
-    override fun preAuditFields() = mutableListOf("")
-    override fun featureDataFields() = getGFormElements().map { it.value.param!! }.toMutableList()
-
     override fun preStateFields() = mutableListOf("")
     override fun postStateFields() = mutableListOf("company","model_number","type","sanitation_method",
             "idle_energy_rate","water_consumption","rebate","pgne_measure_code","utility_company","purchase_price_per_unit")
 
     override fun computedFields() = mutableListOf("__daily_operating_hours", "__weekly_operating_hours",
             "__yearly_operating_hours", "__electric_cost")
-
-    private fun getFormMapper() = FormMapper(context, R.raw.dishwasher)
-    private fun getModel() = getFormMapper().decodeJSON()
-    private fun getGFormElements() = getFormMapper().mapIdToElements(getModel())
-
 }

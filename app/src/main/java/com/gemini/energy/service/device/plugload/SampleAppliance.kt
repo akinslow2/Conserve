@@ -1,9 +1,6 @@
 package com.gemini.energy.service.device.plugload
 
-import android.content.Context
-import com.gemini.energy.R
 import com.gemini.energy.domain.entity.Computable
-import com.gemini.energy.presentation.form.FormMapper
 import com.gemini.energy.service.DataHolder
 import com.gemini.energy.service.IComputable
 import com.gemini.energy.service.OutgoingRows
@@ -17,7 +14,7 @@ import com.google.gson.JsonElement
 import io.reactivex.Observable
 
 class SampleAppliance(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateElectricity: UtilityRate,
-                      usageHours: UsageHours, outgoingRows: OutgoingRows, private val context: Context) :
+                      usageHours: UsageHours, outgoingRows: OutgoingRows) :
         EBase(computable, utilityRateGas, utilityRateElectricity, usageHours, outgoingRows), IComputable {
 
     /**
@@ -106,25 +103,10 @@ class SampleAppliance(computable: Computable<*>, utilityRateGas: UtilityRate, ut
      * */
     override fun usageHoursSpecific() = false
 
-    /**
-     * Define all the fields here - These would be used to Generate the Outgoing Rows or perform the Energy Calculation
-     * */
-    override fun preAuditFields() = mutableListOf("")
-    override fun featureDataFields() = getGFormElements().map { it.value.param!! }.toMutableList()
-
     override fun preStateFields() = mutableListOf("Section One Parameter One", "Section One Parameter Two",
             "Section One Parameter Three", "Section Two Parameter One", "Section Two Parameter Two")
 
     override fun postStateFields() = mutableListOf("")
     override fun computedFields() = mutableListOf("")
-
-    // **Need to change this to whatever the JSON is**
-    private fun getFormMapper() = FormMapper(context, R.raw.sample_appliance)
-
-
-
-    private fun getModel() = getFormMapper().decodeJSON()
-    private fun getGFormElements() = getFormMapper().mapIdToElements(getModel())
-
 }
 

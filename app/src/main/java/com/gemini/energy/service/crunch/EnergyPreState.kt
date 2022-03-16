@@ -9,8 +9,6 @@ import java.util.*
 
 class EnergyPreState {
 
-    lateinit var featureDataFields: MutableList<String>
-    lateinit var preAuditDataFields: MutableList<String>
     lateinit var featureData: Map<String, Any>
     lateinit var preAuditData: Map<String, Any>
     lateinit var computable: Computable<*>
@@ -18,8 +16,10 @@ class EnergyPreState {
     private fun initDataHolder(): DataHolder {
         val dataHolderPreState = DataHolder()
 
-        dataHolderPreState.header?.addAll(featureDataFields)
-        dataHolderPreState.header?.addAll(preAuditDataFields)
+        // TODO review whether this is equivalent to the previous implementation,
+        //      which let the feature define the relevant keys and only added those
+        dataHolderPreState.header?.addAll(featureData.keys)
+        dataHolderPreState.header?.addAll(preAuditData.keys)
         dataHolderPreState.computable = computable
         dataHolderPreState.fileName = "${Date().time}_pre_state.csv"
 
@@ -47,11 +47,13 @@ class EnergyPreState {
 
             val dataHolderPreState = initDataHolder()
             val preRow = mutableMapOf<String, String>()
-            featureDataFields.forEach { field ->
-                preRow[field] = if (featureData.containsKey(field)) featureData[field].toString() else ""
+            // TODO review whether this is equivalent to the previous implementation,
+            //      which let the features define the keys and copied only the corresponding values
+            for (entry in featureData) {
+                preRow[entry.key] = entry.value.toString()
             }
-            preAuditDataFields.forEach { field ->
-                preRow[field] = if (preAuditData.containsKey(field)) preAuditData[field].toString() else ""
+            for (entry in preAuditData) {
+                preRow[entry.key] = entry.value.toString()
             }
 
             val costValue = cost(jsonElement)

@@ -382,14 +382,6 @@ class CombinationOven(computable: Computable<*>, utilityRateGas: UtilityRate, ut
      * */
     override fun usageHoursSpecific() = true
 
-    /**
-     * Define all the fields here - These would be used to Generate the Outgoing Rows or perform the Energy Calculation
-     * */
-    override fun preAuditFields() = mutableListOf("Number of Vacation days")
-    override fun featureDataFields() = mutableListOf("Size (Steam Pans)", "Fuel Type", "Model Number",
-            "Company", "Used During Peak", "Age", "Control", "Preheat Energy",
-            "Convection Idle Energy", "Steam Idle Rate")
-
     override fun preStateFields() = mutableListOf<String>()
     override fun postStateFields() = mutableListOf("company", "model_number", "size",
             "fuel_type", "preheat_energy", "convection_idle_rate", "convection_energy_efficiency", "convection_production_capacity",

@@ -1,7 +1,6 @@
 
 package com.gemini.energy.service
 
-import android.content.Context
 import com.gemini.energy.domain.entity.Computable
 import com.gemini.energy.domain.entity.Feature
 import com.gemini.energy.domain.gateway.AuditGateway
@@ -16,7 +15,6 @@ import io.reactivex.rxkotlin.merge
 
 
 class EnergyService(
-        private val context: Context,
         private val auditGateway: AuditGateway,
         private val utilityRateElectricity: UtilityRate,
         private val usageHours: UsageHours,
@@ -116,7 +114,7 @@ class EnergyService(
 
             val iComputable = ComputableFactory.createFactory(computable, energyUtilityGas,
                     utilityRateElectricity, usageHours,
-                    outgoingRows, context).build()
+                    outgoingRows).build()
 
             iComputable.compute().blockingLast()
 

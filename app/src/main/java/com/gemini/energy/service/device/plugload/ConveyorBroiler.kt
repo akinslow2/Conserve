@@ -1,9 +1,6 @@
 package com.gemini.energy.service.device.plugload
 
-import android.content.Context
-import com.gemini.energy.R
 import com.gemini.energy.domain.entity.Computable
-import com.gemini.energy.presentation.form.FormMapper
 import com.gemini.energy.service.DataHolder
 import com.gemini.energy.service.IComputable
 import com.gemini.energy.service.OutgoingRows
@@ -20,7 +17,7 @@ import org.json.JSONObject
 
 class ConveyorBroiler(computable: Computable<*>, utilityRateGas: UtilityRate,
                       utilityRateElectricity: UtilityRate, usageHours: UsageHours,
-                      outgoingRows: OutgoingRows, private val context: Context) :
+                      outgoingRows: OutgoingRows) :
         EBase(computable, utilityRateGas, utilityRateElectricity, usageHours, outgoingRows), IComputable {
 
     /**
@@ -194,12 +191,6 @@ class ConveyorBroiler(computable: Computable<*>, utilityRateGas: UtilityRate,
         return 0.0
     }
 
-    /**
-     * Define all the fields here - These would be used to Generate the Outgoing Rows or perform the Energy Calculation
-     * */
-    override fun preAuditFields() = mutableListOf("")
-    override fun featureDataFields() = getGFormElements().map { it.value.param!! }.toMutableList()
-
     override fun preStateFields() = mutableListOf("")
     override fun postStateFields() = mutableListOf("company","model_number","broiler_type","fuel_type",
             "conveyor_width","energy_input_rate","idle_energy_rate","rebate","pgne_measure_code",
@@ -207,9 +198,4 @@ class ConveyorBroiler(computable: Computable<*>, utilityRateGas: UtilityRate,
 
     override fun computedFields() = mutableListOf("__daily_operating_hours", "__weekly_operating_hours",
             "__yearly_operating_hours", "__electric_cost")
-
-    private fun getFormMapper() = FormMapper(context, R.raw.conveyor_broiler)
-    private fun getModel() = getFormMapper().decodeJSON()
-    private fun getGFormElements() = getFormMapper().mapIdToElements(getModel())
-
 }

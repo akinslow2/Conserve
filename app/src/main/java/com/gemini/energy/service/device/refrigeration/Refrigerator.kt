@@ -1,9 +1,6 @@
 package com.gemini.energy.service.device.refrigeration
 
-import android.content.Context
-import com.gemini.energy.R
 import com.gemini.energy.domain.entity.Computable
-import com.gemini.energy.presentation.form.FormMapper
 import com.gemini.energy.service.DataHolder
 import com.gemini.energy.service.IComputable
 import com.gemini.energy.service.OutgoingRows
@@ -18,7 +15,7 @@ import io.reactivex.Observable
 import org.json.JSONObject
 
 class Refrigerator(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateElectricity: UtilityRate,
-                   usageHours: UsageHours, outgoingRows: OutgoingRows, private val context: Context) :
+                   usageHours: UsageHours, outgoingRows: OutgoingRows) :
         EBase(computable, utilityRateGas, utilityRateElectricity, usageHours, outgoingRows), IComputable {
 
     /** year equipment was installed **/
@@ -197,22 +194,10 @@ class Refrigerator(computable: Computable<*>, utilityRateGas: UtilityRate, utili
      * */
     override fun usageHoursSpecific() = false
 
-    /**
-     * Define all the fields here - These would be used to Generate the Outgoing Rows or perform the Energy Calculation
-     * */
-    override fun preAuditFields() = mutableListOf("Number of Vacation days")
-    override fun featureDataFields() = mutableListOf("Company", "Model Number", "Fridge Capacity", "Age", "Control",
-            "Daily Energy Used", "Product Type", "Total Volume")
-
     override fun preStateFields() = mutableListOf("Daily Energy Used (kWh)")
     override fun postStateFields() = mutableListOf("company", "model_number", "style_type",
             "total_volume", "daily_energy_use", "rebate", "pgne_measure_code", "purchase_price_per_unit", "vendor")
 
     override fun computedFields() = mutableListOf("__daily_operating_hours", "__weekly_operating_hours",
             "__yearly_operating_hours", "__electric_cost")
-
-    private fun getFormMapper() = FormMapper(context, R.raw.refrigerator)
-    private fun getModel() = getFormMapper().decodeJSON()
-    private fun getGFormElements() = getFormMapper().mapIdToElements(getModel())
-
 }

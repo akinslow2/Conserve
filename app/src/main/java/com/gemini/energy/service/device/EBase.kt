@@ -149,9 +149,7 @@ abstract class EBase(val computable: Computable<*>,
     private fun calculateEnergyPreState(extra: (param: String) -> Unit): Observable<DataHolder> {
         val energyPreState = EnergyPreState()
         energyPreState.featureData = featureData
-        energyPreState.featureDataFields = featureDataFields()
         energyPreState.preAuditData = preAudit
-        energyPreState.preAuditDataFields = preAuditFields()
         energyPreState.computable = computable
 
         // ** Prepare a list of Observable - Extractor that is required by each of the Zone Type **
@@ -261,9 +259,6 @@ abstract class EBase(val computable: Computable<*>,
         wrapper.add("results", JsonArray())
         return Single.just(wrapper)
     }
-
-    abstract fun preAuditFields(): MutableList<String>
-    abstract fun featureDataFields(): MutableList<String>
 
     abstract fun preStateFields(): MutableList<String>
     abstract fun postStateFields(): MutableList<String>
