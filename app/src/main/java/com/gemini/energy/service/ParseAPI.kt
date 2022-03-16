@@ -59,18 +59,6 @@ class ParseAPI {
 
         @POST("classes/$SYNC_GRAVES")
         fun saveGraves(@Body body: JsonObject): Single<JsonObject>
-
-
-        // MARK: - image management
-
-        @Headers("Content-Type: image/jpeg")
-        @POST("files/{imageName}")
-        suspend fun uploadImage(@Path("imageName") imageName: String,  @Body imageFile: RequestBody): UploadImageResponse
-
-        // TODO: need real masterkey to be able to delete
-        @Headers("X-Parse-Master-Key: $masterKey")
-        @DELETE("files/{imageName}")
-        suspend fun deleteImage(@Path("imageName") imageName: String)
     }
 
     companion object {
