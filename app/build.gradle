@@ -1,7 +1,10 @@
 plugins {
     id 'java'
     id 'org.jetbrains.kotlin.jvm' version '1.6.10'
+    id 'application'
 }
+
+mainClassName = 'com.gemini.energy.AppKt'
 
 repositories {
     mavenCentral()
@@ -10,6 +13,9 @@ repositories {
 dependencies {
     // https://mvnrepository.com/artifact/io.javalin/javalin
     implementation group: 'io.javalin', name: 'javalin', version: '4.3.0'
+
+    // https://mvnrepository.com/artifact/org.slf4j/slf4j-simple
+    implementation group: 'org.slf4j', name: 'slf4j-simple', version: '1.7.36'
 
     // word doc generation
     implementation 'org.apache.poi:poi:4.0.1'
