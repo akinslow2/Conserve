@@ -8,6 +8,9 @@ repositories {
 }
 
 dependencies {
+    // https://mvnrepository.com/artifact/io.javalin/javalin
+    implementation group: 'io.javalin', name: 'javalin', version: '4.3.0'
+
     // word doc generation
     implementation 'org.apache.poi:poi:4.0.1'
     implementation 'org.apache.poi:poi-ooxml:4.0.1'
