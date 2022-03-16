@@ -13,7 +13,7 @@ import retrofit2.http.Query
 
 class ParseAPI {
 
-    data class ParseListResponse<T>(val result: List<T>)
+    data class ParseListResponse<T>(val results: List<T>)
 
     interface ParseAPIService {
         @GET("classes/PlugLoad")

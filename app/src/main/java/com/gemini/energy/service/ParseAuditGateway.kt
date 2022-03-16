@@ -14,16 +14,16 @@ import org.json.JSONObject
 
 class ParseAuditGateway(private val api: ParseAPI.ParseAPIService) : AuditGateway {
     override fun getFeatureByAudit(auditId: Long): Observable<List<Feature>> {
-        return api.fetchFeatures(where = JSONObject().put("auditId", auditId).toString()).map { it.result }.toObservable()
+        return api.fetchFeatures(where = JSONObject().put("auditId", auditId).toString()).map { it.results }.toObservable()
     }
 
     override fun getFeatureByType(typeId: Long): Observable<List<Feature>> {
-        return api.fetchFeatures(where = JSONObject().put("typeId", typeId).toString()).map { it.result }.toObservable()
+        return api.fetchFeatures(where = JSONObject().put("typeId", typeId).toString()).map { it.results }.toObservable()
     }
 
     override fun getComputable(auditId: Long): Observable<List<Computable<*>>> {
         return api.fetchAudits(where = JSONObject().put("auditId", auditId).toString()).map {
-            it.result.flatMap {
+            it.results.flatMap {
                 auditToComputables(it)
             }
         }.toObservable()
