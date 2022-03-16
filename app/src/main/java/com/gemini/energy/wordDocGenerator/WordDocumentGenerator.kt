@@ -1,13 +1,6 @@
 package com.gemini.energy.wordDocGenerator
 
-import android.os.Environment
-import com.dropbox.core.DbxException
-import com.dropbox.core.v2.DbxClientV2
-import com.dropbox.core.v2.files.UploadErrorException
-import com.dropbox.core.v2.files.WriteMode
-import com.gemini.energy.branch
 import com.gemini.energy.format
-import com.gemini.energy.presentation.audit.DropBox
 import com.gemini.energy.service.device.EBase
 import com.gemini.energy.wordDocGenerator.models.*
 import com.gemini.energy.wordDocGenerator.utils.*
@@ -15,11 +8,6 @@ import org.apache.poi.xwpf.usermodel.ParagraphAlignment
 import org.apache.poi.xwpf.usermodel.VerticalAlign
 import org.apache.poi.xwpf.usermodel.XWPFDocument
 import org.apache.poi.xwpf.usermodel.XWPFTableCell
-import java.io.File
-import java.io.FileInputStream
-import java.io.FileOutputStream
-import java.io.IOException
-import java.util.*
 import kotlin.math.absoluteValue
 
 
@@ -143,8 +131,6 @@ class WordDocumentGenerator {
         }
 
         document.addPageNumbers()
-
-        writeDocument(value, document)
 
         return document
     }
@@ -1089,61 +1075,6 @@ class WordDocumentGenerator {
         System.setProperty("org.apache.poi.javax.xml.stream.XMLInputFactory", "com.fasterxml.aalto.stax.InputFactoryImpl")
         System.setProperty("org.apache.poi.javax.xml.stream.XMLOutputFactory", "com.fasterxml.aalto.stax.OutputFactoryImpl")
         System.setProperty("org.apache.poi.javax.xml.stream.XMLEventFactory", "com.fasterxml.aalto.stax.EventFactoryImpl")
-    }
-
-    // document writing
-    /** writes document to dropbox and local **/
-    private fun writeDocument(value: PreparedForDocument, document: XWPFDocument) {
-        val calendar = Calendar.getInstance()
-        val dateTime = "${calendar.get(Calendar.YEAR)}-${calendar.get(Calendar.MONTH) + 1}-${calendar.get(Calendar.DAY_OF_MONTH)}T${calendar.get(Calendar.HOUR_OF_DAY)}:${calendar.get(Calendar.MINUTE)}:${calendar.get(Calendar.SECOND)}.${calendar.get(Calendar.MILLISECOND)}"
-        val docName = "${value.preAudit.bldgtype}_${value.preAudit.businessname}_$dateTime"
-
-        writeDocumentWithName(document, docName)
-        val file = File(Environment.getExternalStorageDirectory().absolutePath + "/${docName}.docx")
-
-        try {
-            uploadFile(DropBox.getClient(), file, "/Gemini/Energy/$branch/Reports/$docName.docx")
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-    }
-
-    /** writes docuemnt to local **/
-    private fun writeDocumentWithName(document: XWPFDocument, name: String) {
-        val out = FileOutputStream(File(Environment.getExternalStorageDirectory().absolutePath + "/" + name + ".docx"))
-        document.write(out)
-        out.close()
-    }
-
-    /**
-     * Uploads a file in a single request. This approach is preferred for small files since it
-     * eliminates unnecessary round-trips to the servers.
-     *
-     * @param dbxClient Dropbox user authenticated client
-     * @param localFIle local file to upload
-     * @param dropboxPath Where to upload the file to within Dropbox
-     */
-    private fun uploadFile(dbxClient: DbxClientV2, localFile: File, dropboxPath: String) {
-        try {
-            FileInputStream(localFile).use { `in` ->
-
-                val metadata = dbxClient.files().uploadBuilder(dropboxPath)
-                        .withMode(WriteMode.ADD)
-                        .withClientModified(Date(localFile.lastModified()))
-                        .uploadAndFinish(`in`)
-
-                println(metadata.toStringMultiline())
-            }
-        } catch (ex: UploadErrorException) {
-            System.err.println("Error uploading to Dropbox: " + ex.message)
-            System.exit(1)
-        } catch (ex: DbxException) {
-            System.err.println("Error uploading to Dropbox: " + ex.message)
-            System.exit(1)
-        } catch (ex: IOException) {
-            System.err.println("Error reading from file \"" + localFile + "\": " + ex.message)
-            System.exit(1)
-        }
     }
 }
 
