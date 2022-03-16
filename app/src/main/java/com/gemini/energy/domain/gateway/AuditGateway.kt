@@ -6,5 +6,5 @@ import io.reactivex.Observable
 interface AuditGateway {
     fun getFeatureByAudit(auditId: Long): Observable<List<Feature>>
     fun getFeatureByType(typeId: Long): Observable<List<Feature>>
-    fun getComputable(): Observable<List<Computable<*>>>
+    fun getComputable(auditId: Long): Observable<List<Computable<*>>>
 }

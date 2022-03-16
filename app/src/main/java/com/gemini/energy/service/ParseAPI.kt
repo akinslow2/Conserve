@@ -1,5 +1,6 @@
 package com.gemini.energy.service
 
+import com.gemini.energy.domain.entity.Audit
 import com.gemini.energy.domain.entity.Feature
 import com.google.gson.JsonObject
 import io.reactivex.Single
@@ -28,26 +29,8 @@ class ParseAPI {
         @GET("classes/Motors")
         fun fetchMotors(@Query("where") where: String): Single<JsonObject>
 
-        @POST("classes/$SYNC_AUDIT")
-        fun saveAudit(@Body body: JsonObject): Single<JsonObject>
-
-        @PUT("classes/$SYNC_AUDIT")
-        fun updateAudit(): Single<JsonObject>
-
-        @DELETE("classes/$SYNC_AUDIT/{objectId}")
-        fun deleteAudit(@Path("objectId") objectId: String): Single<JsonObject>
-
         @GET("classes/$SYNC_AUDIT")
-        fun fetchAudit(@Query("where") where: String): Single<JsonObject>
-
-        @GET("classes/$SYNC_AUDIT")
-        fun fetchAudit(@Query("limit") limit: Int = 1000): Single<JsonObject>
-
-        @POST("classes/$SYNC_FEATURE")
-        fun saveFeature(@Body body: JsonObject): Single<JsonObject>
-
-        @DELETE("classes/$SYNC_FEATURE/{objectId}")
-        fun deleteFeature(@Path("objectId") objectId: String): Single<JsonObject>
+        fun fetchAudits(@Query("where") where: String): Single<ParseListResponse<Audit>>
 
         @GET("classes/$SYNC_FEATURE")
         fun fetchFeatures(@Query("where") where: String, @Query("limit") limit: Int = 10000): Single<ParseListResponse<Feature>>
