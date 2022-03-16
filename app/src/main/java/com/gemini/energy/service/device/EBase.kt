@@ -22,7 +22,6 @@ import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.functions.Function
 import org.json.JSONObject
-import timber.log.Timber
 import java.util.*
 
 abstract class EBase(val computable: Computable<*>,
@@ -47,9 +46,6 @@ abstract class EBase(val computable: Computable<*>,
 
     private fun initialize() {
         val base = this
-
-        Timber.d("<< COMPUTE :: ${identifier()} >> [Start] - (${thread()})")
-        Timber.d(computable.toString())
 
         base.schedulers = AppSchedulers()
         base.featureData = computable.mappedFeatureAuditScope()
@@ -77,19 +73,10 @@ abstract class EBase(val computable: Computable<*>,
             base.electricCompanyCode = preAudit["$fix Utility Company"] as String
         }
 
-        Timber.d("####### RATE STRUCTURE CHECKER #######")
-        Timber.d(electricRateStructure)
-        Timber.d("####### COMPANY CODE CHECKER #######")
-        Timber.d(electricCompanyCode)
-
         //This is where we are initializing the Electricity Rate Class
         //Now we are only passing the Rate Structure
         base.electricityRate = utilityRateElectricity.initUtility(
                 Electricity(electricRateStructure)).build()
-
-        Timber.d("####### OBJECT CHECKER #######")
-        Timber.d(gasRate.toString())
-        Timber.d(electricityRate.toString())
 
     }
 
@@ -150,7 +137,6 @@ abstract class EBase(val computable: Computable<*>,
         return Observable.concat(calculateEnergyPreState(extra), calculateEnergyPostState(extra),
                 calculateEnergySavings(extra), calculateCostSavings(extra))
                 .map(Mapper()).doOnComplete {
-                    Timber.d("$$$$$$$ SUPER.COMPUTE.CONCAT.COMPLETE $$$$$$$")
                     outgoingRows.save()
                 }
 
@@ -161,7 +147,6 @@ abstract class EBase(val computable: Computable<*>,
      * Gives an Observable with the Data Holder
      * */
     private fun calculateEnergyPreState(extra: (param: String) -> Unit): Observable<DataHolder> {
-        Timber.d(identifier())
         val energyPreState = EnergyPreState()
         energyPreState.featureData = featureData
         energyPreState.featureDataFields = featureDataFields()
@@ -193,7 +178,6 @@ abstract class EBase(val computable: Computable<*>,
      * Gives an Observable with the Data Holder
      * */
     private fun calculateEnergyPostState(extra: (param: String) -> Unit): Observable<DataHolder> {
-        Timber.d(identifier())
         val mapper = EnergyPostState.Mapper()
         mapper.computable = computable
         mapper.postStateFields = postStateFields()
@@ -211,7 +195,6 @@ abstract class EBase(val computable: Computable<*>,
      * Via PowerTimeChange (helper class)
      * */
     private fun calculateEnergySavings(extra: (param: String) -> Unit): Observable<DataHolder> {
-        Timber.d(identifier())
         val mapper = EnergySavings.Mapper()
         mapper.computable = computable
         mapper.powerTimeChange = powerTimeChange
@@ -223,7 +206,6 @@ abstract class EBase(val computable: Computable<*>,
      * Energy Cost Saving
      * */
     private fun calculateCostSavings(extra: (param: String) -> Unit): Observable<DataHolder> {
-        Timber.d(identifier())
         val mapper = CostSavings.Mapper()
         mapper.computable = computable
 
@@ -380,9 +362,6 @@ abstract class EBase(val computable: Computable<*>,
     private fun efficientAlternative(isEnergyStar: Boolean): Observable<JsonArray> {
 
         // ** Load the Efficient Query for each of the Zone Type **
-        Timber.d("Energy Star -- [$isEnergyStar]")
-        Timber.d("Efficient Alternative for Type -- [${computable.auditScopeType}]")
-        Timber.d("Efficient Lookup -- [${efficientLookup()}]")
         val query = queryEfficientFilter()
 
         fun switcherHVAC() = if (efficientLookup()) parseAPIService.fetchHVAC(query) else buildPostState()
@@ -434,8 +413,6 @@ abstract class EBase(val computable: Computable<*>,
             }
         }
 
-        Timber.d(usage.toString())
-
         return EDay.values().associateBy({ it }, {
             usage[EDay.values().indexOf(it)]
         })
@@ -451,8 +428,6 @@ abstract class EBase(val computable: Computable<*>,
                 usage.add("")
             }
         }
-
-        Timber.d(usage.toString())
 
         return EDay.values().associateBy({ it }, {
             usage[EDay.values().indexOf(it)]
@@ -492,9 +467,6 @@ abstract class EBase(val computable: Computable<*>,
         val gas= gasRate.nonTimeOfUse()
         val rateFirst = (gas.summerNone() + gas.winterNone()) / 2
         val rateExcess = (gas.summerExcess() + gas.winterExcess()) / 2
-
-        Timber.d("RATE FIRST :: $rateFirst")
-        Timber.d("RATE SECOND :: $rateExcess")
 
         return (energyUsed) * (if (energyUsed > Gas.FIRST_SLAB) rateExcess else rateFirst)
     }

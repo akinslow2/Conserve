@@ -2,13 +2,11 @@ package com.gemini.energy.service
 
 import android.content.Context
 import android.os.Environment
-import android.util.Log
 import com.dropbox.core.v2.files.FileMetadata
 import com.gemini.energy.branch
 import com.gemini.energy.domain.entity.Computable
 import com.gemini.energy.presentation.audit.DropBox
 import com.gemini.energy.presentation.audit.UploadFileTask
-import timber.log.Timber
 import java.io.BufferedOutputStream
 import java.io.ByteArrayInputStream
 import java.io.File
@@ -70,8 +68,6 @@ class OutgoingRows(private val context: Context) {
         // Step 4: Collect those data string in a list
         // Step 5: Concatenate the list and writeToLocal that to the file
 
-        Log.d(TAG, "Data Holder Count - [${dataHolder.count()}] - (${thread()})")
-
         synchronized(dataHolder) {
             val iterator = dataHolder.iterator()
             while (iterator.hasNext()) {
@@ -80,13 +76,6 @@ class OutgoingRows(private val context: Context) {
 
                 val header = eachData.header
                 val rows = eachData.rows
-
-                Log.d(TAG, "## Debug :: Data Holder - (${thread()}) ##")
-                Log.d(TAG, eachData.path)
-                Log.d(TAG, eachData.fileName)
-
-                Log.d(TAG, header.toString())
-                Log.d(TAG, rows.toString())
 
                 outgoing.append(data(header, rows))
                 val file = getFile(eachData.path, eachData.fileName)
@@ -107,10 +96,8 @@ class OutgoingRows(private val context: Context) {
             if (DropBox.hasToken()) {
                 val uploadTask = UploadFileTask(DropBox.getClient(), object: UploadFileTask.Callback {
                     override fun onUploadComplete(result: FileMetadata) {
-                        Timber.d("DropBox - File Upload Complete")
                     }
                     override fun onError(e: Exception?) {
-                        Timber.d("Error - DropBox")
                         e?.printStackTrace()
                     }
                 })
@@ -173,14 +160,12 @@ class OutgoingRows(private val context: Context) {
         val folderDir: File?
 
         if (isExternalStorageWritable()) {
-            Log.d(TAG, "External - Storage :: Writable - (${thread()})")
             if (subFolderPath == null) {
                 folderDir = File(context.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS).path)
             } else {
                 folderDir = File(context.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS).path + "/$subFolderPath")
             }
         } else {
-            Log.d(TAG, "External - Storage :: Not Writable")
             if (subFolderPath == null) {
                 folderDir = File(context.filesDir.path + "/Documents")
             } else {
@@ -189,11 +174,9 @@ class OutgoingRows(private val context: Context) {
         }
 
         if (!folderDir.isDirectory) {
-            Log.d(TAG, "****** Creating Directory *******")
             folderDir.mkdirs()
         }
 
-        Log.d(TAG, folderDir.toString())
         return folderDir
     }
 
@@ -202,7 +185,6 @@ class OutgoingRows(private val context: Context) {
      * File Object where the Data gets written to
      * */
     private fun getFile(path: String, fileName: String): File {
-        Log.d(TAG, "GET FILE -- $GEMINI$path")
         val directory = getDocumentFolderPath("$GEMINI$path")!!
         return File(directory.toString(), fileName)
     }

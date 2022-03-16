@@ -17,7 +17,6 @@ import com.gemini.energy.toIntOr
 import com.gemini.energy.toStringOr
 import com.google.gson.JsonElement
 import io.reactivex.Observable
-import timber.log.Timber
 import java.util.*
 
 class Cfl(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateElectricity: UtilityRate,
@@ -28,7 +27,7 @@ class Cfl(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEle
      * Entry Point
      * */
     override fun compute(): Observable<Computable<*>> {
-        return super.compute(extra = ({ Timber.d(it) }))
+        return super.compute(extra = ({}))
     }
 
     //create variable here if you want to make it global to the class with private
@@ -151,10 +150,6 @@ class Cfl(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEle
      * Cost - Post State
      * */
     override fun costPostState(element: JsonElement, dataHolder: DataHolder): Double {
-
-        Timber.d("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
-        Timber.d("!!! COST POST STATE - CFL !!!")
-        Timber.d("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
 
         val lifeHours = lightingConfig(ELightingType.CFL)[ELightingIndex.LifeHours.value] as Double
 

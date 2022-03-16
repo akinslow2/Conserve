@@ -16,7 +16,6 @@ import com.gemini.energy.toStringOr
 import com.google.gson.JsonElement
 import io.reactivex.Observable
 import org.json.JSONObject
-import timber.log.Timber
 import java.util.*
 
 class Motors(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateElectricity: UtilityRate,
@@ -27,7 +26,7 @@ class Motors(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRate
      * Entry Point
      * */
     override fun compute(): Observable<Computable<*>> {
-        return super.compute(extra = ({ Timber.d(it) }))
+        return super.compute(extra = ({}))
     }
 
     companion object {
@@ -97,8 +96,6 @@ class Motors(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRate
         val powerUsed = if (efficiency == 0.0) 0.0 else hp * KW_CONVERSION * percentageLoad / efficiency
         val nemaPremium = 0.0
 
-        Timber.d("*** Nema Premium :: ($nemaPremium) ***")
-
         var usageHours = usageHoursSpecific
         if (peakHours != 0.0 || partPeakHours != 0.0 || offPeakHours != 0.0) {
             usageHours = UsageMotors()
@@ -120,9 +117,6 @@ class Motors(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRate
     override fun costPostState(element: JsonElement, dataHolder: DataHolder): Double {
 
         // @Anthony - Post State Implementation ?? Yet to determine.
-        Timber.d("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
-        Timber.d("!!! COST POST STATE - Motors !!!")
-        Timber.d("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
 
         //1. Energy Savings
         val energySavings = energyPowerChange()
@@ -184,8 +178,6 @@ class Motors(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRate
         // Change Motor with the same Horse Power - Overload it
         // Get a new Motor which is bigger in size and of a Premium Efficient
         // Less Load and more efficiency
-        Timber.d("*** Percentage Load Pre :: ($percentageLoadPre)")
-        Timber.d("*** Percentage Load Post :: ($percentageLoadPost)")
 
         val delta = deltaHorsePower * usageHoursPre()
         return delta

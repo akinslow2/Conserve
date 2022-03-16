@@ -20,7 +20,6 @@ import com.google.gson.JsonObject
 import io.reactivex.Observable
 import io.reactivex.Single
 import org.json.JSONObject
-import timber.log.Timber
 
 class DishWasher(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateElectricity: UtilityRate,
                       usageHours: UsageHours, outgoingRows: OutgoingRows, private val context: Context) :
@@ -30,7 +29,7 @@ class DishWasher(computable: Computable<*>, utilityRateGas: UtilityRate, utility
      * Entry Point
      * */
     override fun compute(): Observable<Computable<*>> {
-        return super.compute(extra = ({ Timber.d(it) }))
+        return super.compute(extra = ({}))
     }
 
     // TODO: correct value
@@ -73,8 +72,6 @@ class DishWasher(computable: Computable<*>, utilityRateGas: UtilityRate, utility
             suggestedPartPeakHours = featureData["Suggested Part Peak Hours"].toDoubleOr(0.0)
             suggestedOffPeakHours = featureData["Suggested Off Peak Hours"].toDoubleOr(0.0)
             usageHoursPost = UsageSimple(suggestedPeakHours, suggestedPartPeakHours, suggestedOffPeakHours)
-            Timber.d("## Suggested Time ##")
-            Timber.d(usageHoursPost.toString())
             */
             waterConsumption = featureData["Water Consumption"].toDoubleOr(0.0)
             numberOfRacks = featureData["Number of Racks"].toIntOr(0)
@@ -105,9 +102,6 @@ class DishWasher(computable: Computable<*>, utilityRateGas: UtilityRate, utility
 
         val costGas: Double
         costGas = costGas(thermsUsedGas)
-
-        Timber.d("---- THERMS USED :: $thermsUsedGas ----")
-        Timber.d("---- COST GAS :: $costGas ----")
 
         return if (isGas()) costGas else costElectricity
     }
@@ -241,7 +235,6 @@ class DishWasher(computable: Computable<*>, utilityRateGas: UtilityRate, utility
         }
 
         val delta = costElectricity(savings, usageHours, electricityRate)
-        Timber.d("HVAC :: Delta -- $delta")
 
         return delta
     }

@@ -8,7 +8,6 @@ import com.gemini.energy.service.type.Gas
 import com.gemini.energy.service.type.UsageHours
 import com.gemini.energy.service.type.UtilityRate
 import io.reactivex.functions.Function
-import timber.log.Timber
 import java.util.*
 
 class CostSavings {
@@ -45,7 +44,7 @@ class CostSavings {
                 try {
                     return getValue(computable, key)
                 } catch(exception: Exception) {
-                    Timber.d("Exception @ $key - toDouble")
+                    exception.printStackTrace()
                 }
             }
             return 0.0
@@ -118,17 +117,9 @@ class CostSavings {
             val timeChangeCheck = ptc.checkTimeChange
             val powerTimeChangeCheck = ptc.checkPowerTimeChange
 
-            Timber.d("----::::---- Power Change Check ($powerChangeCheck) ----::::----")
-            Timber.d("----::::---- Time Change Check ($timeChangeCheck) ----::::----")
-            Timber.d("----::::---- Power Time Change Check ($powerTimeChangeCheck) ----::::----")
-
             val multiplePowerCheck = false
             val multipleTimeCheck = false
             val multiplePowerTimeCheck = false
-
-            Timber.d("----::::---- Multiple Power Check ($multiplePowerCheck) ----::::----")
-            Timber.d("----::::---- Multiple Time Check ($multipleTimeCheck) ----::::----")
-            Timber.d("----::::---- Multiple Power Time Check ($multiplePowerTimeCheck) ----::::----")
 
             /**
              * Energy UsageHours - Efficient Alternative (Post State)
@@ -136,7 +127,6 @@ class CostSavings {
              * */
             fun energyUse() = resolve(computable, DAILY_ENERGY_USE)
             val energyUse = if (energyUse() == 0.0) ptc.energySaving() else energyUse()
-            Timber.d("----::::---- Energy Use ($energyUse) ----::::----")
 
             /**
              * Power Value
@@ -158,9 +148,6 @@ class CostSavings {
             if (dailyEnergyUsePre == 0.0) {
                 powerValue = ptc.energySaving() / usageHours
             }
-
-            Timber.d("----::::---- Power Value ($powerValue) ----::::----")
-            Timber.d("----::::---- Power Values ($powerValues) ----::::----")
 
             /**
              * <<< Energy Cost Saving >>>
@@ -244,7 +231,6 @@ class CostSavings {
                  * Flag to denote a gas based equipment
                  * */
                 val checkForGas = isGas()
-                Timber.d("----::::---- Check For Gas ($checkForGas) ----::::----")
 
                 /**
                  * Main Block
@@ -300,24 +286,17 @@ class CostSavings {
             val materialCost = firstNotNull(purchasePricePerUnit(), materialCost())
             val laborCost = firstNotNull(computable.laborCost, laborCost())
 
-            Timber.d("----::::---- Material Cost ($materialCost) ----::::----")
-            Timber.d("----::::---- Labor Cost ($laborCost) ----::::----")
-
             /**
              * Note: Looks like this is going to be Equipment Specific
              * */
             val maintenanceCostSavings = 0.0
             val otherEquipmentSavings = 0.0
 
-            Timber.d( "----::::---- Maintenance Cost Savings ($maintenanceCostSavings) ----::::----")
-            Timber.d( "----::::---- Other Equipment Savings ($otherEquipmentSavings) ----::::----")
-
             /**
              * Parse API Energy Efficient Database - Rebate
              * */
             fun rebate() = resolve(computable, REBATE)
             val incentives = firstNotNull(rebate(), incentives())
-            Timber.d("----::::---- Incentive ($incentives) ----::::----")
 
             /**
              * <<< Implementation Cost >>>

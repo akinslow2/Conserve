@@ -17,7 +17,6 @@ import com.gemini.energy.toIntOr
 import com.gemini.energy.toStringOr
 import com.google.gson.JsonElement
 import io.reactivex.Observable
-import timber.log.Timber
 import java.util.*
 
 class LPSodium(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateElectricity: UtilityRate,
@@ -28,7 +27,7 @@ class LPSodium(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRa
      * Entry Point
      * */
     override fun compute(): Observable<Computable<*>> {
-        return super.compute(extra = ({ Timber.d(it) }))
+        return super.compute(extra = ({}))
     }
 //create variable here if you want to make it global to the class with private
     private var percentPowerReduced = 0.0
@@ -156,10 +155,6 @@ class LPSodium(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRa
      * Cost - Post State
      * */
     override fun costPostState(element: JsonElement, dataHolder: DataHolder): Double {
-        Timber.d("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
-        Timber.d("!!! COST POST STATE - LPSodium !!!")
-        Timber.d("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
-
         val lifeHours = lightingConfig(ELightingType.LPSodium)[ELightingIndex.LifeHours.value] as Double
 
         val totalUnits = lampsPerFixtures * numberOfFixtures

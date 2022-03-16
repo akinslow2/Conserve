@@ -13,7 +13,6 @@ import com.gemini.energy.toStringOr
 import com.google.gson.JsonElement
 import io.reactivex.Observable
 import org.json.JSONObject
-import timber.log.Timber
 
 class CombinationOven(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateElectricity: UtilityRate,
                       usageHours: UsageHours, outgoingRows: OutgoingRows) :
@@ -23,7 +22,7 @@ class CombinationOven(computable: Computable<*>, utilityRateGas: UtilityRate, ut
      * Entry Point
      * */
     override fun compute(): Observable<Computable<*>> {
-        return super.compute(extra = ({ Timber.d(it) }))
+        return super.compute(extra = ({}))
     }
 
     companion object {
@@ -144,7 +143,6 @@ class CombinationOven(computable: Computable<*>, utilityRateGas: UtilityRate, ut
 
                 //@Anthony - Do you think we need to multiply by 365 as we have already multiplied by yearly daysInOperation
                 val costToPreHeat = yearlyPreHeatEnergy * rate.weightedAverage()
-                Timber.d("Cost To Pre Heat :: $costToPreHeat")
                 costElectric = getCostElectric(powerUsed, usageHours, electricityRate)
                 costElectric += costToPreHeat
 
@@ -159,12 +157,7 @@ class CombinationOven(computable: Computable<*>, utilityRateGas: UtilityRate, ut
             val averageWaterUsed = (waterUseConvection + waterUseSteam) / 2.0
             costWater = usageHoursPre() * WATER_CHARGE * averageWaterUsed
 
-            Timber.d("Electricity Cost :: $costElectric")
-            Timber.d("Gas Cost :: $costGas")
-            Timber.d("Water Cost :: $costWater")
-
             val totalCost = costElectric + costGas + costWater
-            Timber.d("Total Cost :: $totalCost")
 
             return totalCost
         }
@@ -368,11 +361,6 @@ class CombinationOven(computable: Computable<*>, utilityRateGas: UtilityRate, ut
         val deltaYearlyFanEnergy = deltaFanEnergyRate * usageHoursPre() * adjustment
 
         val delta = deltaYearlyPreHeatEnergy + deltaYearlyIdleEnergy + deltaYearlyFanEnergy
-
-        Timber.d("Delta Yearly Pre Heat Energy :: $deltaYearlyPreHeatEnergy")
-        Timber.d("Delta Yearly Idle Energy :: $deltaYearlyIdleEnergy")
-        Timber.d("Delta Yearly Fan Energy :: $deltaYearlyFanEnergy")
-        Timber.d("Delta :: $delta")
 
         return delta
     }

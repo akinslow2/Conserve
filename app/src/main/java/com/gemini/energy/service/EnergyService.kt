@@ -2,7 +2,6 @@
 package com.gemini.energy.service
 
 import android.content.Context
-import com.crashlytics.android.Crashlytics
 import com.gemini.energy.domain.Schedulers
 import com.gemini.energy.domain.entity.Computable
 import com.gemini.energy.domain.entity.Feature
@@ -15,7 +14,6 @@ import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
 import io.reactivex.functions.BiFunction
 import io.reactivex.rxkotlin.merge
-import timber.log.Timber
 
 
 class EnergyService(
@@ -53,35 +51,20 @@ class EnergyService(
 
         cleanup()
 
-        val welcome =
-
-                "------------------------------------\n" +
-                ":::: Gemini Energy - Crunch Inc ::::\n" +
-                "------------------------------------\n"
-
-        Timber.d(welcome)
-
         disposables.add(auditGateway.getComputable()
                 .subscribeOn(schedulers.subscribeOn)
                 .subscribe { computables ->
                     Observable.fromIterable(computables)
                             .subscribe({ eachComputable ->
-                                Timber.d("**** Computables Iterable - (${thread()}) ****")
-                                Timber.d(eachComputable.toString())
                                 getComputable(eachComputable)
                                         .subscribe({
                                             synchronized(taskHolder) {
                                                 taskHolder.add(it)
                                             }
                                         }, { exception ->
-
-                                            Timber.d("##### Error !! Error !! Error #####")
                                             exception.printStackTrace()
-                                            Crashlytics.logException(exception)
-
                                         }, {})
                             }, {}, {
-                                Timber.d("**** Computables Iterable - [ON COMPLETE] ****")
                                 doWork(callback) // << ** Executed Only One Time ** >> //
                             })
                 })
@@ -92,12 +75,9 @@ class EnergyService(
      * Required to Clean Up Existing Disposables before a new CRUNCH begins
      * */
     private fun cleanup() {
-        Timber.d("Cleanup - (${thread()})")
         if (disposables.count() > 0) {
-            Timber.d("DISPOSABLE COUNT - [${disposables.count()}] - (${thread()})")
             disposables.forEach {
                 it.dispose()
-                Timber.d("POST DISPOSABLE - Status - [${it.isDisposed}]")
             }
         }
 
@@ -109,18 +89,13 @@ class EnergyService(
      * Holds the Main Work - i.e Running each Energy Calculations for each of the IComputables
      * */
     private fun doWork(callback: (status: Boolean) -> Unit) {
-        Timber.d("####### DO WORK - COUNT [${taskHolder.count()}] - (${thread()}) #######")
-
         disposables.add(taskHolder.merge()
                 .observeOn(schedulers.observeOn)
                 .subscribe({
                 }, { exception ->
                     exception.printStackTrace()
-                    Crashlytics.logException(exception)
                     callback(false)
                 }, {
-                    Timber.d("**** Merge - [ON COMPLETE] ****")
-
                     WordDocumentGenerator().triggerGeneration(ebases)
 
                     callback(true) // << ** The final Exit Point ** >> //

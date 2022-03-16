@@ -15,7 +15,6 @@ import com.gemini.energy.toIntOr
 import com.gemini.energy.toStringOr
 import com.google.gson.JsonElement
 import io.reactivex.Observable
-import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -27,7 +26,7 @@ class WaterHeater(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
      * Entry Point
      * */
     override fun compute(): Observable<Computable<*>> {
-        return super.compute(extra = ({ Timber.d(it) }))
+        return super.compute(extra = ({}))
     }
 
     companion object {
@@ -186,16 +185,10 @@ class WaterHeater(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
 //        val usageHours = (3 * 365) as UsageSimple//https://energyusecalculator.com/electricity_waterheater.htm - but need to explore actual times
         val usageHours = UsageSimple(0.0, 0.0, 3.0 * 365)
         computable.udf1 = usageHours
-        Timber.d(usageHours.toString())
 
         val gascost: Double
         val ecost: Double
         val powerUsed = if (isGas()) prepowerUsedGas else prepowerUsedElectricity
-        Timber.d("HotWater :: Power Used (Electricity) -- [$prepowerUsedElectricity]")
-        Timber.d("HotWater :: Power Used (Gas) -- [$prepowerUsedGas]")
-
-
-        Timber.d("HotWater :: Pre Power Used -- [$powerUsed]")
         ecost = costElectricity(powerUsed, usageHours, electricityRate)
 
         gascost = costGas(powerUsed)
@@ -209,19 +202,13 @@ class WaterHeater(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
      * */
     override fun costPostState(element: JsonElement, dataHolder: DataHolder): Double {
 
-        Timber.d("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
-        Timber.d("!!! COST POST STATE - HVAC !!!")
-        Timber.d("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
-
         //Note Change - Newer units run's 50% less often
         val postUsageHours = UsageSimple(0.0, 0.0, 1.5 * 365.0)
 
 
             val postEcost: Double
             val powerUsed = postpowerUsedElectricity
-         Timber.d("HotWater :: Power Used (Electricity) -- [$postpowerUsedElectricity]")
 
-        Timber.d("HotWater :: Post Power Used -- [$powerUsed]")
         postEcost = costElectricity(powerUsed, postUsageHours, electricityRate)
 
 
@@ -268,8 +255,6 @@ class WaterHeater(computable: Computable<*>, utilityRateGas: UtilityRate, utilit
     override fun energyPowerChange(): Double {
 
         val delta = ElectricPowerSavings * (1.5 * 365)
-
-        Timber.d("HVAC :: Delta -- $delta")
 
         return delta
     }

@@ -17,7 +17,6 @@ import com.gemini.energy.toIntOr
 import com.gemini.energy.toStringOr
 import com.google.gson.JsonElement
 import io.reactivex.Observable
-import timber.log.Timber
 import java.util.*
 
 class LinearFluorescent(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateElectricity: UtilityRate,
@@ -28,7 +27,7 @@ class LinearFluorescent(computable: Computable<*>, utilityRateGas: UtilityRate, 
      * Entry Point
      * */
     override fun compute(): Observable<Computable<*>> {
-        return super.compute(extra = ({ Timber.d(it) }))
+        return super.compute(extra = ({}))
     }
 
     companion object {
@@ -173,10 +172,6 @@ class LinearFluorescent(computable: Computable<*>, utilityRateGas: UtilityRate, 
      * Cost - Post State
      * */
     override fun costPostState(element: JsonElement, dataHolder: DataHolder): Double {
-
-        Timber.d("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
-        Timber.d("!!! COST POST STATE - Linear Fluorescent !!!")
-        Timber.d("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
 
         val lifeHours = lightingConfig(ELightingType.LinearFluorescent)[ELightingIndex.LifeHours.value] as Double
 

@@ -16,7 +16,6 @@ import com.gemini.energy.toStringOr
 import com.google.gson.JsonElement
 import io.reactivex.Observable
 import org.json.JSONObject
-import timber.log.Timber
 
 class Freezer(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateElectricity: UtilityRate,
               usageHours: UsageHours, outgoingRows: OutgoingRows, private val context: Context) :
@@ -35,7 +34,7 @@ class Freezer(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRat
      * Entry Point
      * */
     override fun compute(): Observable<Computable<*>> {
-        return super.compute(extra = ({ Timber.d(it) }))
+        return super.compute(extra = ({}))
     }
 
     override fun setup() {

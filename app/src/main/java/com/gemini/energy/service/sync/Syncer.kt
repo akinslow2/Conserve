@@ -13,7 +13,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.merge
 import io.reactivex.schedulers.Schedulers
 import org.json.JSONObject
-import timber.log.Timber
 import java.util.*
 
 @SuppressLint("CheckResult")
@@ -35,51 +34,38 @@ class Syncer(private val parseAPIService: ParseAPI.ParseAPIService,
     private val rGraveTypeIds: MutableList<Long> = mutableListOf()
 
     fun refreshCollection(col: Collection) {
-        Timber.i("~~~~~ Syncer: refreshCollection(${col.audit.count()} audits in collection) ")
         this.col = col
     }
 
     private fun prepare() {
-        Timber.i("~~~~~ Syncer: prepare()")
-
         val audit = col.audit
 
-        Timber.i("~~~~~ Syncer: iterating through ${audit.count()} audits")
         audit.forEach { it ->
-            Timber.i("~~~~~ Syncer: checking on audit ${it.auditId} ${it.name}")
             if (rGraveIds.contains(it.auditId) || col.graveIds.contains(it.auditId)) {
-                Timber.i("~~~~~ Syncer: deleting audit that belongs in the grave")
                 deleteLocalAudit(it.auditId)
             } else {
-                Timber.i("~~~~~ Syncer: adding audit to auditList and audit task holder")
                 auditList.add(it)
                 buildFeature(it.auditId).forEach {
-                    Timber.i("~~~~~ Syncer: built feature ${it.toString()}")
-                    Timber.i("~~~~~ Syncer: adding saving feature to parse api to feature task holder")
                     featureTaskHolder.add(parseAPIService.saveFeature(it).toObservable())
                 }
 
-                Timber.i("~~~~~ Syncer: adding build and save audit to parse to audit task holder for ${it.auditId} ${it.name}")
                 auditTaskHolder.add(parseAPIService.saveAudit(buildAudit(it)).toObservable())
             }
         }
     }
 
     private fun deleteLocalType(id: Long) {
-        Timber.i("~~~~~ Syncer: deleteLocalType($id)")
         col.featureDao?.deleteByTypeId(id)
         col.typeDao?.delete(id)
     }
 
     private fun deleteLocalZone(id: Long) {
-        Timber.i("~~~~~ Syncer: deleteLocalZone($id)")
         col.featureDao?.deleteByZoneId(id)
         col.typeDao?.deleteByZoneId(id)
         col.zoneDao?.delete(id)
     }
 
     private fun deleteLocalAudit(id: Long) {
-        Timber.i("~~~~~ Syncer: deleteLocalAudit($id)")
         col.featureDao?.deleteByAuditId(id)
         col.typeDao?.deleteByAuditId(id)
         col.zoneDao?.deleteByAuditId(id)
@@ -87,10 +73,8 @@ class Syncer(private val parseAPIService: ParseAPI.ParseAPIService,
     }
 
     private fun updateGraves() {
-        Timber.i("~~~~~ Syncer: updateGraves()")
 
         fun buildGraves(grave: GraveLocalModel): JsonObject {
-            Timber.i("~~~~~ Syncer: updateGraves().buildGraves($grave)")
             val outgoing = JsonObject()
             outgoing.addProperty("usn", ++grave.usn)
             outgoing.addProperty("oid", grave.oid)
@@ -107,7 +91,7 @@ class Syncer(private val parseAPIService: ParseAPI.ParseAPIService,
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        { Timber.d(it.toString()) },
+                        {  },
                         { it.printStackTrace() },
                         {
                             col.grave.forEach {
@@ -121,7 +105,6 @@ class Syncer(private val parseAPIService: ParseAPI.ParseAPIService,
      * DOWNLOAD - MAIN
      * */
     fun gDownload() {
-        Timber.i("~~~~~ Syncer: gDownload()")
         mListener?.onPreExecute()
         download()
     }
@@ -130,7 +113,6 @@ class Syncer(private val parseAPIService: ParseAPI.ParseAPIService,
      * UPLOAD - MAIN
      * */
     fun gUpload() {
-        Timber.i("~~~~~ Syncer: gUpload()")
         mListener?.onPostExecute()
         // comment back in the following lines and remove the above line to upload data back to server
 //        prepare()
@@ -138,8 +120,6 @@ class Syncer(private val parseAPIService: ParseAPI.ParseAPIService,
     }
 
     private fun download() {
-        Timber.i("~~~~~Syncer:  download()")
-
         val toDeleteAudit: List<Long> = col.graveAudit.map { it.oid }
         val toDeleteZone: List<Long> = col.graveZone.map { it.oid }
         val toDeleteType: List<Long> = col.graveType.map { it.oid }
@@ -149,8 +129,6 @@ class Syncer(private val parseAPIService: ParseAPI.ParseAPIService,
         }
 
         fun taskFeature() {
-            Timber.i("~~~~~Syncer:  download().taskFeature()")
-
             parseAPIService.fetchFeature().toObservable()
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
@@ -158,7 +136,6 @@ class Syncer(private val parseAPIService: ParseAPI.ParseAPIService,
                         val rFeature = allFeatures.getAsJsonArray("results")
                         val models: MutableList<FeatureLocalModel> = mutableListOf()
 
-                        Timber.i("~~~~~Syncer:  download().taskFeature() got ${rFeature.count()} features from server")
                         rFeature.forEach {
 
                             val auditId = it.asJsonObject.get("auditId").asString
@@ -191,8 +168,6 @@ class Syncer(private val parseAPIService: ParseAPI.ParseAPIService,
 
                             fun addFeatureToModel(formIds: List<String>) {
                                 if (formIds.contains("lamps_fixture")) {
-                                    Timber.e("Can't add feature to model")
-                                    Timber.i("audit id $auditId")
                                     // HACK: don't add feature to model if
                                     // form id is not an underlying int
 
@@ -267,13 +242,11 @@ class Syncer(private val parseAPIService: ParseAPI.ParseAPIService,
         } // end taskFeature()
 
         fun taskAudit() {
-            Timber.i("~~~~~Syncer:  download().taskAudit()")
             parseAPIService.fetchAudit().toObservable()
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe({
                         val rAudit = it.getAsJsonArray("results")
-                        Timber.i("~~~~~ Syncer: iterating through ${rAudit.count()} audits from parse")
 
                         rAudit.forEach {
                             var auditId = ""
@@ -393,7 +366,6 @@ class Syncer(private val parseAPIService: ParseAPI.ParseAPIService,
                     }, { it.printStackTrace() }, { taskFeature() })
         } // end taskAudit()
 
-        Timber.i("~~~~~ Syncer: downloading graves from parse")
         parseAPIService.fetchGraves().toObservable()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -418,8 +390,6 @@ class Syncer(private val parseAPIService: ParseAPI.ParseAPIService,
     } // end download()
 
     private fun uploadAudit() {
-        Timber.i("~~~~~Syncer:  uploadAudit()")
-
         auditTaskHolder.merge()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -489,7 +459,6 @@ class Syncer(private val parseAPIService: ParseAPI.ParseAPIService,
                                                     .observeOn(AndroidSchedulers.mainThread())
                                                     .subscribe(
                                                             {
-                                                                Timber.d(it.toString())
                                                             },
                                                             { it.printStackTrace() },
                                                             {})
@@ -501,11 +470,8 @@ class Syncer(private val parseAPIService: ParseAPI.ParseAPIService,
     } // end uploadAudit()
 
     private fun uploadFeature() {
-        Timber.i("~~~~~ Syncer: uploadFeature()")
-
         val objectIds: MutableList<String> = mutableListOf()
         fun extract(item: JsonObject) {
-            Timber.i("~~~~~ Syncer: uploadFeature().extract(${item.prettyPrint()})")
             val rFeature = item.getAsJsonArray("results")
             rFeature.forEach {
                 objectIds.add(it.asJsonObject.get("objectId").asString)
@@ -516,36 +482,30 @@ class Syncer(private val parseAPIService: ParseAPI.ParseAPIService,
         val deletions: MutableList<Observable<JsonObject>> = mutableListOf()
 
         fun upload() {
-            Timber.i("~~~~~ Syncer: uploadFeature().upload")
             featureTaskHolder.merge()
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(
                             {
-                                Timber.d(it.toString())
                             },
                             {
                                 it.printStackTrace()
                             },
                             {
-                                Timber.d("Complete - Feature Upload")
                                 updateGraves()
                             })
 
         }
 
         fun clean() {
-            Timber.i("~~~~~ Syncer: uploadFeature().clean()")
             deletions.merge()
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(
                             {
-                                Timber.d(it.toString())
                             },
                             { it.printStackTrace() },
                             {
-                                Timber.d("Complete - Feature CleanUp ")
                                 upload()
                             })
         }
@@ -575,8 +535,6 @@ class Syncer(private val parseAPIService: ParseAPI.ParseAPIService,
      * 1. Audit
      * */
     private fun buildAudit(local: AuditLocalModel): JsonObject {
-        Timber.i("~~~~~ Syncer: buildAudit(${local})")
-
         val outgoing = JsonObject()
         outgoing.addProperty("auditId", local.auditId.toString())
         outgoing.addProperty("name", local.name)
@@ -593,10 +551,7 @@ class Syncer(private val parseAPIService: ParseAPI.ParseAPIService,
      * 2. Zone
      * */
     private fun buildZone(auditId: Long): JsonObject {
-        Timber.i("~~~~~ Syncer: buildZone($auditId)")
-
         fun associatedTypes(zoneId: Long?): JsonArray {
-            Timber.i("~~~~~ Syncer: buildZone($auditId).associatedTypes($zoneId)")
             val outgoing = JsonArray()
             if (col.type.containsKey(auditId)) {
                 val type = col.type[auditId]
@@ -639,8 +594,6 @@ class Syncer(private val parseAPIService: ParseAPI.ParseAPIService,
      * 3. Type
      * */
     private fun buildType(auditId: Long): JsonObject {
-        Timber.i("~~~~~ Syncer: buildType($auditId)")
-
         val outgoing = JsonObject()
         if (col.type.containsKey(auditId)) {
             val type = col.type[auditId]
@@ -673,8 +626,6 @@ class Syncer(private val parseAPIService: ParseAPI.ParseAPIService,
      * 4. Feature
      * */
     private fun buildFeature(auditId: Long): List<JsonObject> {
-        Timber.i("~~~~~ Syncer: buildFeature($auditId)")
-
         fun joinFields(fields: List<String?>): String {
             val result = StringBuilder(128)
             fields.forEach {
@@ -687,7 +638,6 @@ class Syncer(private val parseAPIService: ParseAPI.ParseAPIService,
         }
 
         fun create(auditId: Long, model: List<FeatureLocalModel>): JsonObject {
-            Timber.i("~~~~~ Syncer: buildFeature($auditId).create($auditId, ${model.count()} features)")
             val inner = JsonObject()
             inner.addProperty("usn", 0)
             inner.addProperty("auditId", auditId.toString())

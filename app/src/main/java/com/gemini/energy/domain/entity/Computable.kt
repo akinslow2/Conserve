@@ -1,11 +1,9 @@
 package com.gemini.energy.domain.entity
 
-import android.util.Log
 import com.gemini.energy.presentation.util.BaseRowType
 import com.gemini.energy.presentation.util.EZoneType
 import com.gemini.energy.service.OutgoingRows
 import com.google.gson.JsonElement
-import timber.log.Timber
 
 data class Computable<SubType>(
 
@@ -79,7 +77,6 @@ data class Computable<SubType>(
                         try {
                             value = typeMapper(feature.valueString, feature.dataType)
                         } catch (e: Exception) {
-                            Timber.e("Type Mapper - Failed :: $key")
                             e.printStackTrace()
                         }
 
@@ -87,7 +84,6 @@ data class Computable<SubType>(
                     }
         }
 
-        Log.d(this.javaClass.simpleName, outgoing.toString())
         return outgoing
     }
 

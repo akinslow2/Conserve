@@ -17,7 +17,6 @@ import com.gemini.energy.toStringOr
 import com.google.gson.JsonElement
 import io.reactivex.Observable
 import org.json.JSONObject
-import timber.log.Timber
 
 class ConveyorBroiler(computable: Computable<*>, utilityRateGas: UtilityRate,
                       utilityRateElectricity: UtilityRate, usageHours: UsageHours,
@@ -28,7 +27,7 @@ class ConveyorBroiler(computable: Computable<*>, utilityRateGas: UtilityRate,
      * Entry Point
      * */
     override fun compute(): Observable<Computable<*>> {
-        return super.compute(extra = ({ Timber.d(it) }))
+        return super.compute(extra = ({}))
     }
 
     // TODO: correct value

@@ -5,7 +5,6 @@ import com.gemini.energy.service.DataHolder
 import com.google.gson.JsonArray
 import com.google.gson.JsonElement
 import io.reactivex.Observable
-import timber.log.Timber
 import java.util.*
 
 class EnergyPreState {
@@ -29,7 +28,6 @@ class EnergyPreState {
 
     fun getObservable(remoteExtract: List<Observable<JsonArray>>, cost: (List<JsonElement?>) -> Double): Observable<DataHolder> {
         return Observable.zip(remoteExtract, { responses ->
-            Timber.d("##### Pre-State Energy Calculation - (${thread()}) #####")
             val jsonElement: MutableList<JsonElement?> = mutableListOf()
             responses.forEach { response ->
                 if (response is JsonArray) {
@@ -38,7 +36,6 @@ class EnergyPreState {
                     // ** 3. The Equipment Class knows what to expect and extracts the required data as applicable
                     try {
                         val jsonElements = response.map { it.asJsonObject.get("data") }
-                        Timber.d(jsonElements.toString())
                         if (jsonElements.count() > 0) {
                             jsonElement.add(jsonElements[0])
                         }
@@ -63,9 +60,6 @@ class EnergyPreState {
 
             dataHolderPreState.rows?.add(preRow)
             computable.energyPreState = preRow
-
-            Timber.d("## Data Holder - PRE STATE - (${thread()}) ##")
-            Timber.d(dataHolderPreState.toString())
 
             dataHolderPreState
         })

@@ -1,7 +1,6 @@
 package com.gemini.energy.service
 
 import com.gemini.energy.service.type.*
-import timber.log.Timber
 
 interface ICost {
     fun cost(): Double
@@ -22,7 +21,6 @@ class CostElectric(private val usageHours: UsageHours, private val utilityRate: 
         if (structure == NONE) { throw  EmptyRateStructureException("Rate Structure Empty") }
 
         initialize()
-        logIUsageType()
         return costSummer() + costWinter() + costBlendedSeason()
     }
 
@@ -43,20 +41,8 @@ class CostElectric(private val usageHours: UsageHours, private val utilityRate: 
         val costSummerPart = hours.summerPart() * power * rate.summerPart()
         val costSummerOff = hours.summerOff() * power * rate.summerOff()
 
-        if (isTOU(structure) && debug) {
-            Timber.d("## TOU Cost - Summer ##")
-            Timber.d(">>> Summer On : $costSummerOn")
-            Timber.d(">>> Summer Part : $costSummerPart")
-            Timber.d(">>> Summer Off : $costSummerOff")
-        }
-
         val summerTOU = costSummerOn + costSummerPart + costSummerOff
         val summerTOUNone = hours.summerNone() * power * rate.summerNone()
-
-        if (isNoTOU(structure) && debug) {
-            Timber.d("## Non TOU Cost - Summer ##")
-            Timber.d(">>> Cost Summer None : $summerTOUNone")
-        }
 
         return summerTOU + summerTOUNone
 
@@ -70,19 +56,8 @@ class CostElectric(private val usageHours: UsageHours, private val utilityRate: 
         val costWinterPart = hours.winterPart() * power * rate.winterPart()
         val costWinterOff = hours.winterOff() * power * rate.winterOff()
 
-        if (isTOU(structure) && debug) {
-            Timber.d("## TOU Cost - Winter ##")
-            Timber.d(">>> Winter Part : $costWinterPart")
-            Timber.d(">>> Winter Off : $costWinterOff")
-        }
-
         val winterTOU = costWinterPart + costWinterOff
         val winterTOUNone = hours.winterNone() * power * rate.winterNone()
-
-        if (isNoTOU(structure) && debug) {
-            Timber.d("## NON TOU Cost - Winter ##")
-            Timber.d(">>> Winter None : $winterTOUNone")
-        }
 
         return winterTOU + winterTOUNone
 
@@ -96,44 +71,7 @@ class CostElectric(private val usageHours: UsageHours, private val utilityRate: 
         val costPartPeak = hours.partPeak() * power * rate.weightedAverage()
         val costNoPeak = hours.noPeak() * power * rate.weightedAverage()
 
-        if (debug) {
-            Timber.d("## Blended Cost - No Season ##")
-            Timber.d(">>> Cost Peak : $costPeak")
-            Timber.d(">>> Cost Part Peak : $costPartPeak")
-            Timber.d(">>> Cost No Peak : $costNoPeak")
-        }
-
         return costPeak + costPartPeak + costNoPeak
-    }
-
-    private fun logIUsageType() {
-
-        if (isTOU(structure)) {
-
-            val hours = hours as TOU
-            val rate = rate as TOU
-
-            if (debug) {
-                Timber.d("## TOU Hours ##")
-                Timber.d(hours.toString())
-                Timber.d("## TOU Rate ##")
-                Timber.d(rate.toString())
-            }
-
-        } else {
-
-            val hours = hours as TOUNone
-            val rate = rate as TOUNone
-
-            if (debug) {
-                Timber.d("## Non TOU Hours ##")
-                Timber.d(hours.toString())
-                Timber.d("## Non TOU Rate ##")
-                Timber.d(rate.toString())
-            }
-
-        }
-
     }
 
     companion object {

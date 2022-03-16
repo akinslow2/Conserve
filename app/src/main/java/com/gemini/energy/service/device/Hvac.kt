@@ -16,7 +16,6 @@ import com.gemini.energy.toStringOr
 import com.google.gson.JsonElement
 import io.reactivex.Observable
 import org.json.JSONObject
-import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -28,7 +27,7 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
      * Entry Point
      * */
     override fun compute(): Observable<Computable<*>> {
-        return super.compute(extra = ({ Timber.d(it) }))
+        return super.compute(extra = ({}))
     }
 
     companion object {
@@ -347,10 +346,6 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
      * Cost - Pre State
      * */
     override fun costPreState(elements: List<JsonElement?>): Double {
-        Timber.d("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
-        Timber.d("!!! COST PRE STATE - HVAC !!!")
-        Timber.d("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
-
         if (offPeakHours > 0.0) return costElectricity(prePowerUsed, preUsageHours, electricityRate)
         return costElectricity(energyPre(), electricityRate) + costElectricityFromPowerAndDemand(prePowerUsed, electricityRate) + costGas(energyPreGas())
     }
@@ -360,10 +355,6 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
      * Cost - Post State
      * */
     override fun costPostState(element: JsonElement, dataHolder: DataHolder): Double {
-        Timber.d("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
-        Timber.d("!!! COST POST STATE - HVAC !!!")
-        Timber.d("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
-
         if (offPeakHours > 0.0) return costElectricity(postPowerUsed, postUsageHours, electricityRate) + costElectricityFromPowerAndDemand(postPowerUsed, electricityRate)
         return costElectricity(energyPost(), electricityRate) + costElectricityFromPowerAndDemand(postPowerUsed, electricityRate)
     }
@@ -453,10 +444,6 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
         val delta = pSavings * usageHoursPre() **/
 
         val eSavings = (energyPre() - energyPost())
-
-        //Timber.d("HVAC :: Delta -- $delta")
-        Timber.d("HVAC :: Delta -- $eSavings")
-
         return eSavings
     }
 

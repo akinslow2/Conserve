@@ -15,7 +15,6 @@ import com.gemini.energy.toIntOr
 import com.gemini.energy.toStringOr
 import com.google.gson.JsonElement
 import io.reactivex.Observable
-import timber.log.Timber
 
 class IceMaker(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateElectricity: UtilityRate,
                    usageHours: UsageHours, outgoingRows: OutgoingRows, private val context: Context) :
@@ -25,7 +24,7 @@ class IceMaker(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRa
      * Entry Point
      * */
     override fun compute(): Observable<Computable<*>> {
-        return super.compute(extra = ({ Timber.d(it) }))
+        return super.compute(extra = ({}))
     }
 
     // TODO: correct value

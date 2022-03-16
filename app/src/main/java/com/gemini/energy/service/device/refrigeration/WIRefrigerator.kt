@@ -16,7 +16,6 @@ import com.gemini.energy.toIntOr
 import com.gemini.energy.toStringOr
 import com.google.gson.JsonElement
 import io.reactivex.Observable
-import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -28,7 +27,7 @@ class WIRefrigerator(computable: Computable<*>, utilityRateGas: UtilityRate, uti
      * Entry Point
      * */
     override fun compute(): Observable<Computable<*>> {
-        return super.compute(extra = ({ Timber.d(it) }))
+        return super.compute(extra = ({}))
     }
 
     companion object {
@@ -264,18 +263,12 @@ class WIRefrigerator(computable: Computable<*>, utilityRateGas: UtilityRate, uti
 
         val usageHours = UsageSimple(peakHours, partPeakHours, offPeakHours)
         computable.udf1 = usageHours
-        Timber.d(usageHours.toString())
 
         val powerUsedGas = power(gasInput, thermaleff) * quantity
         val powerUsedElectricity = power2(kW, electriceff) * quantity
         val gascost: Double
         val ecost: Double
         val powerUsed = if (isGas()) powerUsedGas else powerUsedElectricity
-        Timber.d("HotWater :: Power Used (Electricity) -- [$powerUsedElectricity]")
-        Timber.d("HotWater :: Power Used (Gas) -- [$powerUsedGas]")
-
-
-        Timber.d("HVAC :: Pre Power Used -- [$powerUsed]")
         ecost = costElectricity(powerUsed, usageHours, electricityRate)
 
         gascost = costGas(powerUsed)
@@ -291,10 +284,6 @@ class WIRefrigerator(computable: Computable<*>, utilityRateGas: UtilityRate, uti
      * Cost - Post State
      * */
     override fun costPostState(element: JsonElement, dataHolder: DataHolder): Double {
-
-        Timber.d("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
-        Timber.d("!!! COST POST STATE - WIRefrigerator !!!")
-        Timber.d("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
 
         val cuGrossEnergySavings =
                 extractCondensingUnitCompressorkWh(element) +
@@ -364,11 +353,6 @@ class WIRefrigerator(computable: Computable<*>, utilityRateGas: UtilityRate, uti
         val postGcost: Double
         val postEcost: Double
         val powerUsed = if (isGas()) postpowerUsedGas else postpowerUsedElectricity
-        Timber.d("HotWater :: Power Used (Electricity) -- [$postpowerUsedElectricity]")
-        Timber.d("HotWater :: Power Used (Gas) -- [$postpowerUsedGas]")
-
-
-        Timber.d("HotWater :: Post Power Used -- [$powerUsed]")
         postEcost = costElectricity(powerUsed, postUsageHours, electricityRate)
 
         postGcost = costGas(powerUsed)
@@ -431,7 +415,6 @@ class WIRefrigerator(computable: Computable<*>, utilityRateGas: UtilityRate, uti
         // Step 1 : Get the Delta
         val delta = (prepowerUsed - postpowerUsed) * 1100
 
-        Timber.d("HVAC :: Delta -- $delta")
         //ToDo: Multiply by the Number of Equipment
         return delta
     }

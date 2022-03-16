@@ -17,7 +17,6 @@ import com.gemini.energy.toStringOr
 import com.google.gson.JsonElement
 import io.reactivex.Observable
 import org.json.JSONObject
-import timber.log.Timber
 
 class PreRinseSpray(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateElectricity: UtilityRate,
                     usageHours: UsageHours, outgoingRows: OutgoingRows, private val context: Context) :
@@ -27,7 +26,7 @@ class PreRinseSpray(computable: Computable<*>, utilityRateGas: UtilityRate, util
      * Entry Point
      * */
     override fun compute(): Observable<Computable<*>> {
-        return super.compute(extra = ({ Timber.d(it) }))
+        return super.compute(extra = ({}))
     }
 
     // TODO: correct value
