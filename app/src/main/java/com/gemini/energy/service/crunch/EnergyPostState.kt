@@ -47,7 +47,7 @@ class EnergyPostState {
                 computable.energyPostState?.add(postRow)
             }
 
-            val costMinimum = costCollector.min()
+            val costMinimum = costCollector.minOrNull() // FIXME handle null case
             val efficientAlternative = dataHolderPostState.rows?.filter {
                 it.getValue("__electric_cost").toDouble() == costMinimum
             }
