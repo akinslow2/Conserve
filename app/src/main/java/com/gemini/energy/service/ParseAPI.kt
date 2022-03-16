@@ -1,5 +1,6 @@
 package com.gemini.energy.service
 
+import com.gemini.energy.domain.entity.Feature
 import com.google.gson.JsonObject
 import io.reactivex.Single
 import okhttp3.OkHttpClient
@@ -11,6 +12,8 @@ import retrofit2.http.*
 import java.util.concurrent.TimeUnit
 
 class ParseAPI {
+
+    data class ParseListResponse<T>(val result: List<T>)
 
     interface ParseAPIService {
         @GET("classes/PlugLoad")
@@ -47,16 +50,7 @@ class ParseAPI {
         fun deleteFeature(@Path("objectId") objectId: String): Single<JsonObject>
 
         @GET("classes/$SYNC_FEATURE")
-        fun fetchFeature(@Query("where") where: String): Single<JsonObject>
-
-        @GET("classes/$SYNC_FEATURE")
-        fun fetchFeature(@Query("limit") limit: Int = 10000): Single<JsonObject>
-
-        @GET("classes/$SYNC_GRAVES")
-        fun fetchGraves(): Single<JsonObject>
-
-        @POST("classes/$SYNC_GRAVES")
-        fun saveGraves(@Body body: JsonObject): Single<JsonObject>
+        fun fetchFeatures(@Query("where") where: String, @Query("limit") limit: Int = 10000): Single<ParseListResponse<Feature>>
     }
 
     companion object {
