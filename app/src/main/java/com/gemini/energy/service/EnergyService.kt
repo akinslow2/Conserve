@@ -39,7 +39,7 @@ class EnergyService(
     /**
      * Energy UtilityRate Gas - Electricity
      * */
-    private val energyUtilityGas = UtilityRate(context)
+    private val energyUtilityGas = UtilityRate()
 
 
     private var ebases = mutableListOf<EBase>()

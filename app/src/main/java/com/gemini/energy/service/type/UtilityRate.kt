@@ -1,9 +1,8 @@
 package com.gemini.energy.service.type
 
-import android.content.Context
 import com.gemini.energy.presentation.util.ERateKey
 
-open class UtilityRate(private val context: Context) {
+open class UtilityRate {
 
     /**
      * The Rate Structure Gets Setup from the PreAudit
@@ -28,10 +27,8 @@ open class UtilityRate(private val context: Context) {
     fun build(): UtilityRate {
         val path = getResourcePath()
 
-        println("building utitily rate of type ${this::class} for resource path $path")
-
-        val inputStream = context.resources.assets.open(getResourcePath())
-        val text = inputStream.bufferedReader().use { it.readText() }
+        javaClass.getResourceAsStream(getResourcePath()).use {
+        val text = it.bufferedReader().use { it.readText() }
         val collection = text.lines()
         val outgoing: HashMap<String, List<String>> = hashMapOf()
 
@@ -50,6 +47,7 @@ open class UtilityRate(private val context: Context) {
         }
 
         this.structure = outgoing
+        }
         return this
     }
 
