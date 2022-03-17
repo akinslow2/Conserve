@@ -47,20 +47,20 @@ data class PreAuditValues(
             val electrificationSavings = calculateCustomerCharge(equipment)
 
             return PreAuditValues(
-                    businessname = preAudit["General Client Info Business Name"].toStringOr(""),
-                    auditmonth = preAudit["General Client Info Audit Month"].toStringOr(""),
-                    audityear = preAudit["General Client Info Audit Year"].toStringOr(""),
+                    businessname = preAudit["Business Name"].toStringOr(""),
+                    auditmonth = preAudit["Audit Month"].toStringOr(""),
+                    audityear = preAudit["Audit Year"].toStringOr(""),
                     clientaddress = address,
-                    startday = preAudit["General Client Info Assessment Start Day"].toStringOr(""),
-                    endday = preAudit["General Client Info Assessment End Day"].toStringOr(""),
+                    startday = preAudit["Assessment Start Day"].toStringOr(""),
+                    endday = preAudit["Assessment End Day"].toStringOr(""),
                     operationhours = preAudit["Operation Hours Monday Operating Hours"].toStringOr(""),
                     bldgarea = preAudit["Area Total (Sq.Ft.)"].toDoubleOr(0.0),
-                    bldgtype = preAudit["General Client Info Facility Type"].toStringOr(""),
-                    electricCompany = preAudit["Others Electric Utility Company"].toStringOr(""),
-                    gasCompany = preAudit["Others Gas Utility Company"].toStringOr(""),
-                    electricStructure = preAudit["Others Electric Rate Structure"].toStringOr(""),
-                    gasStructure = preAudit["Others Gas Rate Structure"].toStringOr(""),
-                    gasApplicableToBuilding = preAudit["General Site Access and Notes Will all gas be removed with retrofit?"].toStringOr("") != "na"
+                    bldgtype = preAudit["Facility Type"].toStringOr(""),
+                    electricCompany = preAudit["Electric Utility Company"].toStringOr(""),
+                    gasCompany = preAudit["Gas Utility Company"].toStringOr(""),
+                    electricStructure = preAudit["Electric Rate Structure"].toStringOr(""),
+                    gasStructure = preAudit["Gas Rate Structure"].toStringOr(""),
+                    gasApplicableToBuilding = preAudit["Will all gas be removed with retrofit?"].toStringOr("") != "na"
             )
         }
 
@@ -77,19 +77,19 @@ data class PreAuditValues(
 
             val preAudit = equipment.preAudit
 
-            return preAudit.containsKey("General Client Info Business Name")
-                    && preAudit.containsKey("General Client Info Audit Month")
-                    && preAudit.containsKey("General Client Info Audit Year")
-                    && preAudit.containsKey("General Client Info Assessment Start Day")
-                    && preAudit.containsKey("General Client Info Assessment End Day")
+            return preAudit.containsKey("Business Name")
+                    && preAudit.containsKey("Audit Month")
+                    && preAudit.containsKey("Audit Year")
+                    && preAudit.containsKey("Assessment Start Day")
+                    && preAudit.containsKey("Assessment End Day")
                     && preAudit.containsKey("Operation Hours Monday Operating Hours")
                     && preAudit.containsKey("Area Total (Sq.Ft.)")
-                    && preAudit.containsKey("General Client Info Facility Type")
-                    && preAudit.containsKey("Others Electric Rate Structure")
-                    && preAudit.containsKey("Others Electric Utility Company")
-                    && preAudit.containsKey("Others Gas Rate Structure")
-                    && preAudit.containsKey("Others Gas Utility Company")
-                    && preAudit.containsKey("General Site Access and Notes Will all gas be removed with retrofit?")
+                    && preAudit.containsKey("Facility Type")
+                    && preAudit.containsKey("Electric Rate Structure")
+                    && preAudit.containsKey("Electric Utility Company")
+                    && preAudit.containsKey("Gas Rate Structure")
+                    && preAudit.containsKey("Gas Utility Company")
+                    && preAudit.containsKey("Will all gas be removed with retrofit?")
         }
 
 
@@ -101,11 +101,11 @@ data class PreAuditValues(
          * @return formatted address
          */
         private fun concatenateAddress(preAudit: Map<String, Any>): String {
-            val addressLine1 = preAudit["General Client Info Address Line 1"]
-            val addressLine2 = preAudit["General Client Info Address Line 2"]
-            val city = preAudit["General Client Info City"]
-            val state = preAudit["General Client Info State"]
-            val zipCode = preAudit["General Client Info Zip Code"]
+            val addressLine1 = preAudit["Address Line 1"]
+            val addressLine2 = preAudit["Address Line 2"]
+            val city = preAudit["City"]
+            val state = preAudit["State"]
+            val zipCode = preAudit["Zip Code"]
             return "$addressLine1 $addressLine2 $city, $state $zipCode"
         }
 

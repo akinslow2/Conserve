@@ -197,20 +197,20 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
 
     override fun setup() {
         try {
-            clientname = preAudit["General Client Info Name"].toStringOr("")
-            businessname = preAudit["General Client Info Business Name"].toStringOr("")
-            auditmonth = preAudit["General Client Info Audit Month"].toStringOr("")
-            audityear = preAudit["General Client Info Audit Year"].toStringOr("")
-            clientaddress = "${preAudit["General Client Info Address Line 1"]} ${preAudit["General Client Info Address Line 2"]} ${preAudit["General Client Info Address City"]}, ${preAudit["General Client Info Address State"]} ${preAudit["General Client Info Address Zip Code"]}"
-            startday = preAudit["General Client Info Assessment Start Day"].toStringOr("")
-            endday = preAudit["General Client Info Assessment End Day"].toStringOr("")
+            clientname = preAudit["Name"].toStringOr("")
+            businessname = preAudit["Business Name"].toStringOr("")
+            auditmonth = preAudit["Audit Month"].toStringOr("")
+            audityear = preAudit["Audit Year"].toStringOr("")
+            clientaddress = "${preAudit["Address Line 1"]} ${preAudit["Address Line 2"]} ${preAudit["Address City"]}, ${preAudit["Address State"]} ${preAudit["Address Zip Code"]}"
+            startday = preAudit["Assessment Start Day"].toStringOr("")
+            endday = preAudit["Assessment End Day"].toStringOr("")
             operationhours = preAudit["Operation Hours Monday Operating Hours"].toStringOr("")
             bldgarea = preAudit["Area Total (Sq.Ft.)"].toDoubleOr(0.0)
-            electricutilitycompany = preAudit["Others Electric Utility Company"].toStringOr("")
-            electricstructure = preAudit["Others Electric Rate Structure"].toStringOr("")
-            gasUtilityCompany = preAudit["Others Gas Utility Company"].toStringOr("")
-            gasstructure = preAudit["Others Gas Rate Structure"].toStringOr("")
-            bldgtype = preAudit["General Client Info Facility Type"].toStringOr("")
+            electricutilitycompany = preAudit["Electric Utility Company"].toStringOr("")
+            electricstructure = preAudit["Electric Rate Structure"].toStringOr("")
+            gasUtilityCompany = preAudit["Gas Utility Company"].toStringOr("")
+            gasstructure = preAudit["Gas Rate Structure"].toStringOr("")
+            bldgtype = preAudit["Facility Type"].toStringOr("")
 
             typeOfUnit = featureData["Type of Package Unit"].toStringOr("")
             eer = featureData["EER"].toDoubleOr(0.0)

@@ -60,13 +60,9 @@ abstract class EBase(val computable: Computable<*>,
      * */
     private fun setupUtility(base: EBase) {
         base.gasRate = utilityRateGas.initUtility(Gas()).build()
-        //Others has been added to the Electric Rate Structure as a fix cause the Section Name
-        //is added to the Element Key
-        val fix = "Others"
-
-        if (preAudit.containsKey("$fix Electric Rate Structure") && preAudit.containsKey("$fix Utility Company")) {
-            base.electricRateStructure = preAudit["$fix Electric Rate Structure"] as String
-            base.electricCompanyCode = preAudit["$fix Utility Company"] as String
+        if (preAudit.containsKey("Electric Rate Structure") && preAudit.containsKey("Utility Company")) {
+            base.electricRateStructure = preAudit["Electric Rate Structure"] as String
+            base.electricCompanyCode = preAudit["Utility Company"] as String
         }
 
         //This is where we are initializing the Electricity Rate Class
