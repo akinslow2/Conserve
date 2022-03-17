@@ -19,8 +19,9 @@ fun main() {
             val rows = OutgoingRows()
             val service = EnergyService(ParseAuditGateway(ParseAPI.create()), UtilityRate(), UsageHours(), rows)
             service.run(auditId.toLong()) { doc ->
-                doc?.write(ctx.res.outputStream)
                 ctx.status(HttpCode.OK)
+                ctx.contentType("application/vnd.openxmlformats-officedocument.wordprocessingml.document")
+                doc?.write(ctx.res.outputStream)
             }
         }
     }
