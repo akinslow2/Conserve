@@ -96,7 +96,7 @@ class EnergyService(
                     val docs = WordDocumentGenerator().triggerGeneration(ebases)
                     // TODO the documents are grouped by audit.
                     //  Only one audit is handled at a time so we might as well get rid of the lists.
-                    callback(docs[0])
+                    callback(docs.getOrNull(0))
                 }))
     }
 
@@ -116,8 +116,7 @@ class EnergyService(
             computable.featureAuditScope = featureAuditScope
             computable.featurePreAudit = featurePreAudit
 
-            val iComputable = ComputableFactory.createFactory(computable, energyUtilityGas,
-                    utilityRateElectricity, usageHours,
+            val iComputable = ComputableFactory.createFactory(computable, usageHours,
                     outgoingRows).build()
 
             iComputable.compute().blockingLast()
