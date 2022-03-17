@@ -3,21 +3,17 @@ package com.gemini.energy.domain.entity
 import java.util.*
 
 data class Feature (
-        val id: Int?,
-        val formId: Int?,
-        val belongsTo: String?,
-        val dataType: String?,
         var usn: Int,
-
-        val auditId: Long?,
-        val zoneId: Long?,
-        val typeId: Long?,
-
-        var key: String?,
-        val valueString: String?,
-        val valueInt: Int?,
-        val valueDouble: Double?,
-
         val createdAt: Date,
-        val updatedAt: Date
+        val updatedAt: Date,
+
+        val belongsTo: String, // preaudit or type
+        val auditId: String,
+        val zoneId: String?,
+        val typeId: String?,
+
+        val dataType: String,
+        val fields: String, // display name
+        val formId: String, // id
+        val values: String,
 )

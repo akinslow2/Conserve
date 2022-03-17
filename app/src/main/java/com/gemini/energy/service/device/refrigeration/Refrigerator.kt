@@ -11,6 +11,7 @@ import com.gemini.energy.toDoubleOr
 import com.gemini.energy.toIntOr
 import com.gemini.energy.toStringOr
 import com.google.gson.JsonElement
+import com.google.gson.JsonObject
 import io.reactivex.Observable
 import org.json.JSONObject
 

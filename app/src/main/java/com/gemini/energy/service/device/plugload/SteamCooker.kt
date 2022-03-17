@@ -8,7 +8,7 @@ import io.reactivex.Observable
 class SteamCooker : IComputable {
 
     override fun compute(): Observable<Computable<*>> {
-        return Observable.just(Computable(null))
+        return Observable.empty()
     }
 
 }

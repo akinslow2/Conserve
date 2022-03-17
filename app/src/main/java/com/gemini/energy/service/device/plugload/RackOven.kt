@@ -8,6 +8,6 @@ import io.reactivex.Observable
 class RackOven : IComputable {
 
     override fun compute(): Observable<Computable<*>> {
-        return Observable.just(Computable(null))
+        return Observable.empty()
     }
 }

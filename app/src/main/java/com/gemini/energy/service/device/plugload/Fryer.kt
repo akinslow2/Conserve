@@ -8,7 +8,7 @@ import io.reactivex.Observable
 class Fryer : IComputable {
 
     override fun compute(): Observable<Computable<*>> {
-        return Observable.just(Computable(null))
+        return Observable.empty()
     }
 
 }

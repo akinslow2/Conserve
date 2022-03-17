@@ -50,75 +50,36 @@ data class Computable<SubType>(
         /**
          * These are the Outgoing Rows to be written to a file
          * */
-        var outgoingRows: OutgoingRows?) {
-
-    constructor(): this(
-            NONE.toLong(), EMPTY, NONE.toLong(), EMPTY, NONE.toLong(), EMPTY, null,
-            null, null, null, false,
-            null, mutableListOf(), mutableListOf(), null,
-            0.0, null, null)
-
-    constructor(auditScopeSubType: SubType) : this(NONE.toLong(), EMPTY, NONE.toLong(), EMPTY, NONE.toLong(), EMPTY,
-            null, auditScopeSubType, null, null,
-            false, null, mutableListOf(), mutableListOf(),
-            null, 0.0, null, null)
+        var outgoingRows: OutgoingRows?,
+) {
 
     fun mappedFeatureAuditScope(): HashMap<String, Any> = featureMapper(featureAuditScope)
     fun mappedFeaturePreAudit(): HashMap<String, Any> = featureMapper(featurePreAudit)
 
     private fun featureMapper(features: List<Feature>?): HashMap<String, Any> {
         val outgoing = hashMapOf<String, Any>()
-        features?.let { featureList ->
-            featureList
-                    .forEach { feature ->
-                        val key = feature.key!!
-                        var value: Any = EMPTY
+        if (features.isNullOrEmpty()) {
+            return outgoing
+        }
 
-                        try {
-                            value = typeMapper(feature.valueString, feature.dataType)
-                        } catch (e: Exception) {
-                            e.printStackTrace()
-                        }
-
-                        outgoing[key] = value
-                    }
+        val separator = '\u001F'
+        for (feature in features) {
+            val dataTypes = feature.dataType.split(separator)
+            val values = feature.values.split(separator)
+            // TODO all the devices use the human-readable name, but we want to transition to IDs
+            val keys = feature.fields.split(separator)
+            val count = minOf(dataTypes.size, values.size, keys.size)
+            for (index in 0 until count) {
+                val strValue = values[index]
+                outgoing[keys[index]] = when (dataTypes[index]) {
+                    BaseRowType.IntRow.value -> strValue.toInt()
+                    BaseRowType.DecimalRow.value -> strValue.toDouble()
+                    else -> strValue
+                }
+            }
         }
 
         return outgoing
-    }
-
-    private fun typeMapper(value: String?, type: String?) = cleanup(value, type)
-
-    companion object {
-        private const val EMPTY = ""
-        private const val NONE = -1
-        private fun cleanup(value: String?, type: String?) =
-                when (type) {
-                    BaseRowType.IntRow.value            -> cleanInt(value)
-                    BaseRowType.DecimalRow.value        -> cleanDecimal(value)
-                    else                                -> cleanString(value)
-                }
-
-        private fun cleanInt(value: String?): Int {
-            val default = 0
-            if (!value.isNullOrEmpty())
-                return value.toString().toInt()
-            return default
-        }
-
-        private fun cleanDecimal(value: String?): Double {
-            val default = 0.0
-            if (!value.isNullOrEmpty())
-                return value.toString().toDouble()
-            return default
-        }
-
-        private fun cleanString(value: String?): String {
-            val default = EMPTY
-            if (!value.isNullOrEmpty())
-                return value.toString()
-            return default
-        }
     }
 
     override fun toString(): String {
