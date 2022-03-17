@@ -36,10 +36,11 @@ class ParseAuditGateway(private val api: ParseAPI.ParseAPIService) : AuditGatewa
     private fun typeToComputable(audit: Audit, type: Type): Computable<*> {
         val zone = audit.zone[type.zoneId]!!
         val type1 = EZoneType.get(type.type)
+        val subtype1 = type.subtype ?: ""
         val subtype = when (type1) {
-            EZoneType.Lighting -> ELightingType.get(type.subType ?: "")
-            EZoneType.Plugload -> EApplianceType.get(type.subType ?: "")
-            EZoneType.Refrigeration -> ERefrigerationType.get(type.subType ?: "")
+            EZoneType.Lighting -> ELightingType.get(subtype1)
+            EZoneType.Plugload -> EApplianceType.get(subtype1)
+            EZoneType.Refrigeration -> ERefrigerationType.get(subtype1)
             else -> null
         }
         return Computable(audit.id, audit.name, type.zoneId, zone.name, type.id, type.name, type1, subtype, null, null, false, null, null, mutableListOf(), null, 0.0, null, null)

@@ -6,7 +6,7 @@ data class Type(
     val id: Long,
     var name: String,
     val type: String,
-    var subType: String?,
+    var subtype: String?,
     var usn: Int,
 
     val zoneId: Long,
