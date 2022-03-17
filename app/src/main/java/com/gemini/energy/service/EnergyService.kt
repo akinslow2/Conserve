@@ -116,10 +116,7 @@ class EnergyService(
             computable.featureAuditScope = featureAuditScope
             computable.featurePreAudit = featurePreAudit
 
-            val iComputable = ComputableFactory.createFactory(computable, usageHours,
-                    outgoingRows).build()
-
-            iComputable.compute().blockingLast()
+            val iComputable = ComputableFactory.createFactory(computable, usageHours, outgoingRows).build()
 
             if (iComputable is EBase) {
                 ebases.add(iComputable)
