@@ -53,8 +53,8 @@ data class PreAuditValues(
                     clientaddress = address,
                     startday = preAudit["Assessment Start Day"].toStringOr(""),
                     endday = preAudit["Assessment End Day"].toStringOr(""),
-                    operationhours = preAudit["Operation Hours Monday Operating Hours"].toStringOr(""),
-                    bldgarea = preAudit["Area Total (Sq.Ft.)"].toDoubleOr(0.0),
+                    operationhours = preAudit["Monday Operating Hours"].toStringOr(""),
+                    bldgarea = preAudit["Total (Sq.Ft.)"].toDoubleOr(0.0),
                     bldgtype = preAudit["Facility Type"].toStringOr(""),
                     electricCompany = preAudit["Electric Utility Company"].toStringOr(""),
                     gasCompany = preAudit["Gas Utility Company"].toStringOr(""),
@@ -82,8 +82,8 @@ data class PreAuditValues(
                     && preAudit.containsKey("Audit Year")
                     && preAudit.containsKey("Assessment Start Day")
                     && preAudit.containsKey("Assessment End Day")
-                    && preAudit.containsKey("Operation Hours Monday Operating Hours")
-                    && preAudit.containsKey("Area Total (Sq.Ft.)")
+                    && preAudit.containsKey("Monday Operating Hours")
+                    && preAudit.containsKey("Total (Sq.Ft.)")
                     && preAudit.containsKey("Facility Type")
                     && preAudit.containsKey("Electric Rate Structure")
                     && preAudit.containsKey("Electric Utility Company")

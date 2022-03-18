@@ -204,8 +204,8 @@ class Hvac(computable: Computable<*>, utilityRateGas: UtilityRate, utilityRateEl
             clientaddress = "${preAudit["Address Line 1"]} ${preAudit["Address Line 2"]} ${preAudit["Address City"]}, ${preAudit["Address State"]} ${preAudit["Address Zip Code"]}"
             startday = preAudit["Assessment Start Day"].toStringOr("")
             endday = preAudit["Assessment End Day"].toStringOr("")
-            operationhours = preAudit["Operation Hours Monday Operating Hours"].toStringOr("")
-            bldgarea = preAudit["Area Total (Sq.Ft.)"].toDoubleOr(0.0)
+            operationhours = preAudit["Monday Operating Hours"].toStringOr("")
+            bldgarea = preAudit["Total (Sq.Ft.)"].toDoubleOr(0.0)
             electricutilitycompany = preAudit["Electric Utility Company"].toStringOr("")
             electricstructure = preAudit["Electric Rate Structure"].toStringOr("")
             gasUtilityCompany = preAudit["Gas Utility Company"].toStringOr("")
