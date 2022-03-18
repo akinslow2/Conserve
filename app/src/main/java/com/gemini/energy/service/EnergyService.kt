@@ -43,7 +43,7 @@ class EnergyService(
     /**
      * Energy Calculation - Main Entry Point
      * */
-    fun run(auditId: Long, callback: (result: XWPFDocument?) -> Unit) {
+    fun run(auditId: String, callback: (result: XWPFDocument?) -> Unit) {
 
         cleanup()
 

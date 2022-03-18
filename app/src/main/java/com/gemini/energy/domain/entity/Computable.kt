@@ -10,7 +10,7 @@ data class Computable<SubType>(
         /**
          * Audit Section
          * */
-        var auditId: Long,
+        var auditId: String,
         var auditName: String,
 
         /**

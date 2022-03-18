@@ -18,7 +18,7 @@ fun main() {
             val auditId = ctx.pathParam("auditId")
             val rows = OutgoingRows()
             val service = EnergyService(ParseAuditGateway(ParseAPI.create()), UtilityRate(), UsageHours(), rows)
-            service.run(auditId.toLong()) { doc ->
+            service.run(auditId) { doc ->
                 if (doc != null) {
                     ctx.status(HttpCode.OK)
                     ctx.contentType("application/vnd.openxmlformats-officedocument.wordprocessingml.document")

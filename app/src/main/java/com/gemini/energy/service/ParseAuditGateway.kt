@@ -13,16 +13,16 @@ import io.reactivex.Observable
 import org.json.JSONObject
 
 class ParseAuditGateway(private val api: ParseAPI.ParseAPIService) : AuditGateway {
-    override fun getFeatureByAudit(auditId: Long): Observable<List<Feature>> {
-        return api.fetchFeatures(where = JSONObject().put("auditId", auditId.toString()).toString()).map { it.results }.toObservable()
+    override fun getFeatureByAudit(auditId: String): Observable<List<Feature>> {
+        return api.fetchFeatures(where = JSONObject().put("auditId", auditId).toString()).map { it.results }.toObservable()
     }
 
     override fun getFeatureByType(typeId: Long): Observable<List<Feature>> {
         return api.fetchFeatures(where = JSONObject().put("typeId", typeId.toString()).toString()).map { it.results }.toObservable()
     }
 
-    override fun getComputable(auditId: Long): Observable<List<Computable<*>>> {
-        return api.fetchAudits(where = JSONObject().put("auditId", auditId.toString()).toString()).map {
+    override fun getComputable(auditId: String): Observable<List<Computable<*>>> {
+        return api.fetchAudits(where = JSONObject().put("auditId", auditId).toString()).map {
             it.results.flatMap {
                 auditToComputables(it)
             }
@@ -34,7 +34,7 @@ class ParseAuditGateway(private val api: ParseAPI.ParseAPIService) : AuditGatewa
     }
 
     private fun typeToComputable(audit: Audit, type: Type): Computable<*> {
-        val zone = audit.zone[type.zoneId]!!
+        val zone = audit.zone[type.zoneId.toString()]!!
         val type1 = EZoneType.get(type.type)
         val subtype1 = type.subtype ?: ""
         val subtype = when (type1) {
@@ -43,6 +43,6 @@ class ParseAuditGateway(private val api: ParseAPI.ParseAPIService) : AuditGatewa
             EZoneType.Refrigeration -> ERefrigerationType.get(subtype1)
             else -> null
         }
-        return Computable(audit.id, audit.name, type.zoneId, zone.name, type.id, type.name, type1, subtype, null, null, false, null, null, mutableListOf(), null, 0.0, null, null)
+        return Computable(audit.auditId, audit.name, type.zoneId, zone.name, type.id, type.name, type1, subtype, null, null, false, null, null, mutableListOf(), null, 0.0, null, null)
     }
 }

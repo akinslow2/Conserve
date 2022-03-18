@@ -4,7 +4,7 @@ import com.gemini.energy.domain.entity.*
 import io.reactivex.Observable
 
 interface AuditGateway {
-    fun getFeatureByAudit(auditId: Long): Observable<List<Feature>>
+    fun getFeatureByAudit(auditId: String): Observable<List<Feature>>
     fun getFeatureByType(typeId: Long): Observable<List<Feature>>
-    fun getComputable(auditId: Long): Observable<List<Computable<*>>>
+    fun getComputable(auditId: String): Observable<List<Computable<*>>>
 }

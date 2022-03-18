@@ -126,7 +126,7 @@ class SorterForWordDocumentGenerator {
     }
 
     private fun sortEbasesIntoAudits(values: MutableList<EBase>): SortedAudits {
-        val sorted = mutableMapOf<Long, MutableMap<String, MutableList<EBase>>>()
+        val sorted = mutableMapOf<String, MutableMap<String, MutableList<EBase>>>()
 
         for (value in values) {
             if (sorted.keys.contains(value.computable.auditId)) {
