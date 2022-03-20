@@ -20,27 +20,23 @@ abstract class ComputableFactory {
     abstract fun build(): IComputable
 
     companion object {
-        lateinit var computable: Computable<*>
         fun createFactory(
                 computable: Computable<*>,
                 usageHours: UsageHours,
                 outgoingRows: OutgoingRows,
         ): ComputableFactory {
-            // FIXME global variable
-            this.computable = computable
-
             // This is to ensure every computable gets it's own copy of Utility Rate
             // Not sure how to create these instances from Dagger
-            val _utilityRateGas = UtilityRate()
-            val _utilityRateElectricity = UtilityRate()
+            val gas = UtilityRate()
+            val electric = UtilityRate()
 
             return when (computable.auditScopeType) {
-                EZoneType.Plugload -> PlugloadFactory(_utilityRateGas, _utilityRateElectricity, usageHours, outgoingRows)
-                EZoneType.HVAC -> HvacFactory(_utilityRateGas, _utilityRateElectricity, usageHours, outgoingRows)
-                EZoneType.Refrigeration -> RefrigerationFactory(_utilityRateGas, _utilityRateElectricity, usageHours, outgoingRows)
-                EZoneType.WaterHeater -> WaterHeaterFactory(_utilityRateGas, _utilityRateElectricity, usageHours, outgoingRows)
-                EZoneType.Lighting -> LightingFactory(_utilityRateGas, _utilityRateElectricity, usageHours, outgoingRows)
-                EZoneType.Motors -> MotorFactory(_utilityRateGas, _utilityRateElectricity, usageHours, outgoingRows)
+                EZoneType.Plugload -> PlugloadFactory(computable, gas, electric, usageHours, outgoingRows)
+                EZoneType.HVAC -> HvacFactory(computable, gas, electric, usageHours, outgoingRows)
+                EZoneType.Refrigeration -> RefrigerationFactory(computable, gas, electric, usageHours, outgoingRows)
+                EZoneType.WaterHeater -> WaterHeaterFactory(computable, gas, electric, usageHours, outgoingRows)
+                EZoneType.Lighting -> LightingFactory(computable, gas, electric, usageHours, outgoingRows)
+                EZoneType.Motors -> MotorFactory(computable, gas, electric, usageHours, outgoingRows)
                 else -> GeneralFactory()
             }
         }
@@ -48,6 +44,7 @@ abstract class ComputableFactory {
 }
 
 class PlugloadFactory(
+        private val computable: Computable<*>,
         private val utilityRateGas: UtilityRate,
         private val utilityRateElectricity: UtilityRate,
         private val usageHours: UsageHours,
@@ -77,6 +74,7 @@ class PlugloadFactory(
 }
 
 class RefrigerationFactory(
+        private val computable: Computable<*>,
         private val utilityRateGas: UtilityRate,
         private val utilityRateElectricity: UtilityRate,
         private val usageHours: UsageHours,
@@ -97,6 +95,7 @@ class RefrigerationFactory(
 }
 
 class LightingFactory(
+        private val computable: Computable<*>,
         private val utilityRateGas: UtilityRate,
         private val utilityRateElectricity: UtilityRate,
         private val usageHours: UsageHours,
@@ -116,6 +115,7 @@ class LightingFactory(
 }
 
 class HvacFactory(
+        private val computable: Computable<*>,
         private val utilityRateGas: UtilityRate,
         private val utilityRateElectricity: UtilityRate,
         private val usageHours: UsageHours,
@@ -126,6 +126,7 @@ class HvacFactory(
 }
 
 class WaterHeaterFactory(
+        private val computable: Computable<*>,
         private val utilityRateGas: UtilityRate,
         private val utilityRateElectricity: UtilityRate,
         private val usageHours: UsageHours,
@@ -136,6 +137,7 @@ class WaterHeaterFactory(
 }
 
 class MotorFactory(
+        private val computable: Computable<*>,
         private val utilityRateGas: UtilityRate,
         private val utilityRateElectricity: UtilityRate,
         private val usageHours: UsageHours,
