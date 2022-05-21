@@ -12,14 +12,14 @@ repositories {
 
 dependencies {
     // https://mvnrepository.com/artifact/io.javalin/javalin
-    implementation group: 'io.javalin', name: 'javalin', version: '4.3.0'
+    implementation group: 'io.javalin', name: 'javalin', version: '4.6.0'
 
     // https://mvnrepository.com/artifact/org.slf4j/slf4j-simple
     implementation group: 'org.slf4j', name: 'slf4j-simple', version: '1.7.36'
 
     // word doc generation
-    implementation 'org.apache.poi:poi:4.0.1'
-    implementation 'org.apache.poi:poi-ooxml:4.0.1'
+    implementation 'org.apache.poi:poi:4.1.2'
+    implementation 'org.apache.poi:poi-ooxml:4.1.2'
     implementation 'javax.xml.stream:stax-api:1.0'
 
     // https://mvnrepository.com/artifact/io.reactivex.rxjava2/rxkotlin
@@ -29,11 +29,11 @@ dependencies {
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
     implementation 'com.squareup.retrofit2:adapter-rxjava2:2.9.0'
-    implementation 'com.squareup.okhttp3:logging-interceptor:4.8.0'
+    implementation 'com.squareup.okhttp3:logging-interceptor:4.9.3'
 
     // TODO there is probably already another JSON library in the project
     // https://mvnrepository.com/artifact/org.json/json
-    implementation group: 'org.json', name: 'json', version: '20211205'
+    implementation group: 'org.json', name: 'json', version: '20220320'
 
     // https://mvnrepository.com/artifact/junit/junit
     testImplementation group: 'junit', name: 'junit', version: '4.13.2'
