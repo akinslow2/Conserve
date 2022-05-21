@@ -2,6 +2,9 @@ plugins {
     id 'java'
     id 'org.jetbrains.kotlin.jvm' version '1.6.10'
     id 'application'
+
+    // https://plugins.gradle.org/plugin/com.github.johnrengelman.shadow
+    id 'com.github.johnrengelman.shadow' version '7.1.2'
 }
 
 mainClassName = 'com.gemini.energy.AppKt'
@@ -38,3 +41,5 @@ dependencies {
     // https://mvnrepository.com/artifact/junit/junit
     testImplementation group: 'junit', name: 'junit', version: '4.13.2'
 }
+
+jar.manifest.attributes 'Main-Class': mainClassName
