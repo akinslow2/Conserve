@@ -35,11 +35,6 @@ dependencies {
     // https://mvnrepository.com/artifact/org.json/json
     implementation group: 'org.json', name: 'json', version: '20211205'
 
-    // aws s3
-    implementation 'com.amazonaws:aws-android-sdk-core:2.16.13'
-    implementation 'com.amazonaws:aws-android-sdk-cognito:2.16.13'
-    implementation 'com.amazonaws:aws-android-sdk-s3:2.16.13'
-
     // https://mvnrepository.com/artifact/junit/junit
     testImplementation group: 'junit', name: 'junit', version: '4.13.2'
 }
