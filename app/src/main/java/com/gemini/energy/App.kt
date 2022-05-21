@@ -11,7 +11,7 @@ import io.javalin.apibuilder.ApiBuilder.get
 import io.javalin.http.HttpCode
 
 fun main() {
-    val app = Javalin.create().start(57269)
+    val app = Javalin.create().start(Integer.getInteger("server.port", 57269))
 
     app.routes {
         get("/api/v1/audits/{auditId}/report") { ctx ->
