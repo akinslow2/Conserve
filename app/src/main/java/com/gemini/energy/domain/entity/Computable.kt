@@ -72,8 +72,18 @@ data class Computable<SubType>(
             for (index in 0 until count) {
                 val strValue = values[index]
                 outgoing[keys[index]] = when (dataTypes[index]) {
-                    BaseRowType.IntRow.value -> strValue.toInt()
-                    BaseRowType.DecimalRow.value -> strValue.toDouble()
+                    BaseRowType.IntRow.value -> try {
+                        strValue.toInt()
+                    } catch (e: NumberFormatException) {
+                        System.err.println("Unable to convert ${keys[index]}=\"$strValue\" to Int")
+                        0
+                    }
+                    BaseRowType.DecimalRow.value -> try {
+                        strValue.toDouble()
+                    } catch (e: NumberFormatException) {
+                        System.err.println("Unable to convert ${keys[index]}=\"$strValue\" to Double")
+                        0.0
+                    }
                     else -> strValue
                 }
             }
@@ -83,7 +93,7 @@ data class Computable<SubType>(
     }
 
     override fun toString(): String {
-        return  "audit: [$auditId - $auditName] | zone: [$zoneId - $zoneName]\n" +
+        return "audit: [$auditId - $auditName] | zone: [$zoneId - $zoneName]\n" +
                 "scope: [$auditScopeId - $auditScopeName] | type: [${auditScopeType?.value} - ${auditScopeSubType?.toString()}]\n" +
                 "featurePreAudit: COUNT [${featurePreAudit?.count()}]\n" +
                 "featureData: COUNT [${featureAuditScope?.count()}]"
